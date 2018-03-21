@@ -1,0 +1,293 @@
+package testdeep_test
+
+import (
+	"testing"
+
+	. "github.com/maxatome/go-testdeep"
+)
+
+func TestHash(t *testing.T) {
+	type MyMap map[string]int
+
+	//
+	// Map
+	checkOK(t, (map[string]int)(nil), Map(map[string]int{}, nil))
+
+	checkError(t, nil, Map(map[string]int{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA`),
+			Got:      mustBe("nil"),
+			Expected: mustBe("map[string]int{}"),
+		})
+
+	gotMap := map[string]int{"foo": 1, "bar": 2}
+
+	checkOK(t, gotMap, Map(map[string]int{"foo": 1, "bar": 2}, nil))
+	checkOK(t, gotMap, Map(map[string]int{"foo": 1}, MapEntries{"bar": 2}))
+	checkOK(t, gotMap, Map(map[string]int{}, MapEntries{"foo": 1, "bar": 2}))
+
+	checkError(t, gotMap, Map(map[string]int{"foo": 1, "bar": 3}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Got:      mustBe("(int) 2"),
+			Expected: mustBe("(int) 3"),
+		})
+
+	checkError(t, gotMap, Map(map[string]int{}, nil),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, gotMap, Map(map[string]int{"test": 2}, nil),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(
+				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, gotMap, Map(map[string]int{}, MapEntries{"test": 2}),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(
+				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, gotMap,
+		Map(map[string]int{}, MapEntries{"foo": 1, "bar": 2, "test": 2}),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`^Missing: .*test[^\n]+\z`),
+		})
+	checkError(t, gotMap, Map(MyMap{}, MapEntries{"foo": 1, "bar": 2}),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("map[string]int"),
+			Expected: mustBe("testdeep_test.MyMap"),
+		})
+
+	//
+	// Map type
+	gotTypedMap := MyMap{"foo": 1, "bar": 2}
+
+	checkOK(t, gotTypedMap, Map(MyMap{"foo": 1, "bar": 2}, nil))
+	checkOK(t, gotTypedMap, Map(MyMap{"foo": 1}, MapEntries{"bar": 2}))
+	checkOK(t, gotTypedMap, Map(MyMap{}, MapEntries{"foo": 1, "bar": 2}))
+
+	checkOK(t, &gotTypedMap, Map(&MyMap{"foo": 1, "bar": 2}, nil))
+	checkOK(t, &gotTypedMap, Map(&MyMap{"foo": 1}, MapEntries{"bar": 2}))
+	checkOK(t, &gotTypedMap, Map(&MyMap{}, MapEntries{"foo": 1, "bar": 2}))
+
+	checkError(t, gotTypedMap, Map(MyMap{"foo": 1, "bar": 3}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Got:      mustBe("(int) 2"),
+			Expected: mustBe("(int) 3"),
+		})
+
+	checkError(t, gotTypedMap, Map(MyMap{}, nil),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, gotTypedMap, Map(MyMap{"test": 2}, nil),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(
+				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, gotTypedMap, Map(MyMap{}, MapEntries{"test": 2}),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(
+				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, gotTypedMap,
+		Map(MyMap{}, MapEntries{"foo": 1, "bar": 2, "test": 2}),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`^Missing: .*test[^\n]+\z`),
+		})
+
+	checkError(t, &gotTypedMap, Map(&MyMap{"foo": 1, "bar": 3}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Got:      mustBe("(int) 2"),
+			Expected: mustBe("(int) 3"),
+		})
+
+	checkError(t, &gotTypedMap, Map(&MyMap{}, nil),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, &gotTypedMap, Map(&MyMap{"test": 2}, nil),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(
+				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, &gotTypedMap, Map(&MyMap{}, MapEntries{"test": 2}),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(
+				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+		})
+	checkError(t, &gotTypedMap,
+		Map(&MyMap{}, MapEntries{"foo": 1, "bar": 2, "test": 2}),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`^Missing: .*test[^\n]+\z`),
+		})
+
+	checkError(t, &gotMap, Map(&MyMap{}, nil),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*map[string]int"),
+			Expected: mustBe("*testdeep_test.MyMap"),
+		})
+	checkError(t, gotMap, Map(&MyMap{}, nil),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("map[string]int"),
+			Expected: mustBe("*testdeep_test.MyMap"),
+		})
+	checkError(t, nil, Map(&MyMap{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("*testdeep_test.MyMap{}"),
+		})
+	checkError(t, nil, Map(MyMap{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("testdeep_test.MyMap{}"),
+		})
+
+	//
+	// SuperMapOf
+	checkOK(t, gotMap, SuperMapOf(map[string]int{"foo": 1}, nil))
+	checkOK(t, gotMap,
+		SuperMapOf(map[string]int{"foo": 1}, MapEntries{"bar": 2}))
+	checkOK(t, gotMap,
+		SuperMapOf(map[string]int{}, MapEntries{"foo": 1, "bar": 2}))
+
+	checkError(t, gotMap, SuperMapOf(map[string]int{"foo": 1, "bar": 3}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Got:      mustBe("(int) 2"),
+			Expected: mustBe("(int) 3"),
+		})
+
+	checkError(t, gotMap, SuperMapOf(map[string]int{"test": 2}, nil),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`^Missing: .*test`),
+		})
+	checkError(t, gotMap, SuperMapOf(map[string]int{}, MapEntries{"test": 2}),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`^Missing: .*test`),
+		})
+
+	//
+	// SubMapOf
+	checkOK(t, gotMap,
+		SubMapOf(map[string]int{"foo": 1, "bar": 2, "tst": 3}, nil))
+	checkOK(t, gotMap,
+		SubMapOf(map[string]int{"foo": 1, "tst": 3}, MapEntries{"bar": 2}))
+	checkOK(t, gotMap,
+		SubMapOf(map[string]int{}, MapEntries{"foo": 1, "bar": 2, "tst": 3}))
+
+	checkError(t, gotMap, SubMapOf(map[string]int{"foo": 1, "bar": 3}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Got:      mustBe("(int) 2"),
+			Expected: mustBe("(int) 3"),
+		})
+
+	checkError(t, gotMap, SubMapOf(map[string]int{"foo": 1}, nil),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`^Extra: .*bar`),
+		})
+	checkError(t, gotMap,
+		SubMapOf(map[string]int{}, MapEntries{"foo": 1, "test": 2}),
+		expectedError{
+			Message: mustBe("comparing hash keys of %%"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`^Missing: .*test(.|\n)*\n  Extra: .*bar`),
+		})
+
+	//
+	// Bad usage
+	checkPanic(t, func() { Map("test", nil) }, "usage: Map(")
+	checkPanic(t, func() { SuperMapOf("test", nil) }, "usage: SuperMapOf(")
+	checkPanic(t, func() { SubMapOf("test", nil) }, "usage: SubMapOf(")
+
+	num := 12
+	checkPanic(t, func() { Map(&num, nil) }, "usage: Map(")
+	checkPanic(t, func() { SuperMapOf(&num, nil) }, "usage: SuperMapOf(")
+	checkPanic(t, func() { SubMapOf(&num, nil) }, "usage: SubMapOf(")
+
+	checkPanic(t, func() { Map(&MyMap{}, MapEntries{1: 2}) },
+		"Expected key (int) 1 type mismatch: int != model key type (string)")
+
+	checkPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": uint16(2)}) },
+		`Expected key (string) (len=3) "foo" value type mismatch: uint16 != model key type (int)`)
+
+	checkPanic(t, func() { Map(&MyMap{"foo": 1}, MapEntries{"foo": 1}) },
+		`(string) (len=3) "foo" entry exists in both model & expectedEntries`)
+
+	//
+	// String
+	equalStr(t, Map(MyMap{}, nil).String(), "testdeep_test.MyMap{}")
+	equalStr(t, Map(&MyMap{}, nil).String(), "*testdeep_test.MyMap{}")
+	equalStr(t, Map(&MyMap{"foo": 2}, nil).String(),
+		`*testdeep_test.MyMap{
+  (string) (len=3) "foo": (int) 2,
+}`)
+
+	equalStr(t, SubMapOf(MyMap{}, nil).String(),
+		"SubMapOf(testdeep_test.MyMap{})")
+	equalStr(t, SubMapOf(&MyMap{}, nil).String(),
+		"SubMapOf(*testdeep_test.MyMap{})")
+	equalStr(t, SubMapOf(&MyMap{"foo": 2}, nil).String(),
+		`SubMapOf(*testdeep_test.MyMap{
+  (string) (len=3) "foo": (int) 2,
+})`)
+
+	equalStr(t, SuperMapOf(MyMap{}, nil).String(),
+		"SuperMapOf(testdeep_test.MyMap{})")
+	equalStr(t, SuperMapOf(&MyMap{}, nil).String(),
+		"SuperMapOf(*testdeep_test.MyMap{})")
+	equalStr(t, SuperMapOf(&MyMap{"foo": 2}, nil).String(),
+		`SuperMapOf(*testdeep_test.MyMap{
+  (string) (len=3) "foo": (int) 2,
+})`)
+
+}
