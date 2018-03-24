@@ -27,16 +27,6 @@ func (s *MyStruct) MyString() string {
 	return "!"
 }
 
-var gotStruct = MyStruct{
-	MyStructMid: MyStructMid{
-		MyStructBase: MyStructBase{
-			ValBool: true,
-		},
-		ValStr: "foobar",
-	},
-	ValInt: 123,
-}
-
 type MyInterface interface {
 	MyString() string
 }

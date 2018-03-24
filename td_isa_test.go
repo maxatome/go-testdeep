@@ -7,6 +7,16 @@ import (
 )
 
 func TestIsa(t *testing.T) {
+	var gotStruct = MyStruct{
+		MyStructMid: MyStructMid{
+			MyStructBase: MyStructBase{
+				ValBool: true,
+			},
+			ValStr: "foobar",
+		},
+		ValInt: 123,
+	}
+
 	checkOK(t, &gotStruct, Isa(&MyStruct{}))
 	checkOK(t, (*MyStruct)(nil), Isa(&MyStruct{}))
 	checkOK(t, (*MyStruct)(nil), Isa((*MyStruct)(nil)))

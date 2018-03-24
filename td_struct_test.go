@@ -7,6 +7,16 @@ import (
 )
 
 func TestStruct(t *testing.T) {
+	var gotStruct = MyStruct{
+		MyStructMid: MyStructMid{
+			MyStructBase: MyStructBase{
+				ValBool: true,
+			},
+			ValStr: "foobar",
+		},
+		ValInt: 123,
+	}
+
 	//
 	// Using pointer
 	checkOK(t, &gotStruct,
