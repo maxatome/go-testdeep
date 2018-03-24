@@ -57,9 +57,7 @@ func (t TestDeepBase) ___testDeep___() {}
 func (t *TestDeepBase) setLocation(callDepth int) {
 	_, file, line, ok := runtime.Caller(callDepth)
 	if ok {
-		if index := strings.LastIndex(file, "/"); index >= 0 {
-			file = file[index+1:]
-		} else if index = strings.LastIndex(file, "\\"); index >= 0 {
+		if index := strings.LastIndexAny(file, `/\`); index >= 0 {
 			file = file[index+1:]
 		}
 		t.location.File = file

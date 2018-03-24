@@ -29,7 +29,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra: ((int) 4)"),
+				Summary: mustBe("Extra items: ((int) 4)"),
 			},
 			testName)
 
@@ -37,7 +37,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66)"),
+				Summary: mustBe("Missing items: ((int) 66)"),
 			},
 			testName)
 
@@ -45,7 +45,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66)"),
+				Summary: mustBe("Missing items: ((int) 66)"),
 			},
 			testName)
 
@@ -53,7 +53,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66,\n          (int) 66)"),
+				Summary: mustBe("Missing items: ((int) 66,\n                (int) 66)"),
 			},
 			testName)
 
@@ -61,7 +61,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66)\n  Extra: ((int) 4)"),
+				Summary: mustBe("Missing items: ((int) 66)\n  Extra items: ((int) 4)"),
 			},
 			testName)
 
@@ -74,7 +74,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a SubBagOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra: ((int) 4)"),
+				Summary: mustBe("Extra items: ((int) 4)"),
 			},
 			testName)
 
@@ -87,7 +87,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a SuperBagOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66)"),
+				Summary: mustBe("Missing items: ((int) 66)"),
 			},
 			testName)
 	}

@@ -30,7 +30,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra: ((int) 3)"),
+				Summary: mustBe("Extra items: ((int) 3)"),
 			},
 			testName)
 
@@ -38,7 +38,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66)"),
+				Summary: mustBe("Missing items: ((int) 66)"),
 			},
 			testName)
 
@@ -46,7 +46,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66)"),
+				Summary: mustBe("Missing items: ((int) 66)"),
 			},
 			testName)
 
@@ -54,7 +54,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66,\n          (int) 67)"),
+				Summary: mustBe("Missing items: ((int) 66,\n                (int) 67)"),
 			},
 			testName)
 
@@ -62,7 +62,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66)\n  Extra: ((int) 1)"),
+				Summary: mustBe("Missing items: ((int) 66)\n  Extra items: ((int) 1)"),
 			},
 			testName)
 
@@ -75,7 +75,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a SubSetOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra: ((int) 1)"),
+				Summary: mustBe("Extra items: ((int) 1)"),
 			},
 			testName)
 
@@ -88,7 +88,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a SuperSetOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing: ((int) 66)"),
+				Summary: mustBe("Missing items: ((int) 66)"),
 			},
 			testName)
 
@@ -100,7 +100,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("Comparing %% as a NoneOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra: ((int) 3)"),
+				Summary: mustBe("Extra items: ((int) 3)"),
 			},
 			testName)
 	}

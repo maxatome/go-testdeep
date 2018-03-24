@@ -39,28 +39,28 @@ func TestHash(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+			Summary: mustMatch(`^Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, gotMap, Map(map[string]int{"test": 2}, nil),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
 			Summary: mustMatch(
-				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+				`^Missing keys: .*test(.|\n)*\n  Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, gotMap, Map(map[string]int{}, MapEntries{"test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
 			Summary: mustMatch(
-				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+				`^Missing keys: .*test(.|\n)*\n  Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, gotMap,
 		Map(map[string]int{}, MapEntries{"foo": 1, "bar": 2, "test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`^Missing: .*test[^\n]+\z`),
+			Summary: mustMatch(`^Missing keys: .*test[^\n]+\z`),
 		})
 	checkError(t, gotMap, Map(MyMap{}, MapEntries{"foo": 1, "bar": 2}),
 		expectedError{
@@ -94,28 +94,28 @@ func TestHash(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+			Summary: mustMatch(`^Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, gotTypedMap, Map(MyMap{"test": 2}, nil),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
 			Summary: mustMatch(
-				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+				`^Missing keys: .*test(.|\n)*\n  Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, gotTypedMap, Map(MyMap{}, MapEntries{"test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
 			Summary: mustMatch(
-				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+				`^Missing keys: .*test(.|\n)*\n  Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, gotTypedMap,
 		Map(MyMap{}, MapEntries{"foo": 1, "bar": 2, "test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`^Missing: .*test[^\n]+\z`),
+			Summary: mustMatch(`^Missing keys: .*test[^\n]+\z`),
 		})
 
 	checkError(t, &gotTypedMap, Map(&MyMap{"foo": 1, "bar": 3}, nil),
@@ -130,28 +130,28 @@ func TestHash(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+			Summary: mustMatch(`^Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, &gotTypedMap, Map(&MyMap{"test": 2}, nil),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
 			Summary: mustMatch(
-				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+				`^Missing keys: .*test(.|\n)*\n  Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, &gotTypedMap, Map(&MyMap{}, MapEntries{"test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
 			Summary: mustMatch(
-				`^Missing: .*test(.|\n)*\n  Extra: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
+				`^Missing keys: .*test(.|\n)*\n  Extra keys: .*(foo(.|\n)*bar|bar(.|\n)*foo)`),
 		})
 	checkError(t, &gotTypedMap,
 		Map(&MyMap{}, MapEntries{"foo": 1, "bar": 2, "test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`^Missing: .*test[^\n]+\z`),
+			Summary: mustMatch(`^Missing keys: .*test[^\n]+\z`),
 		})
 
 	checkError(t, &gotMap, Map(&MyMap{}, nil),
@@ -203,13 +203,13 @@ func TestHash(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`^Missing: .*test`),
+			Summary: mustMatch(`^Missing keys: .*test`),
 		})
 	checkError(t, gotMap, SuperMapOf(map[string]int{}, MapEntries{"test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`^Missing: .*test`),
+			Summary: mustMatch(`^Missing keys: .*test`),
 		})
 
 	//
@@ -233,14 +233,14 @@ func TestHash(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`^Extra: .*bar`),
+			Summary: mustMatch(`^Extra keys: .*bar`),
 		})
 	checkError(t, gotMap,
 		SubMapOf(map[string]int{}, MapEntries{"foo": 1, "test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`^Missing: .*test(.|\n)*\n  Extra: .*bar`),
+			Summary: mustMatch(`^Missing keys: .*test(.|\n)*\n  Extra keys: .*bar`),
 		})
 
 	//

@@ -276,6 +276,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 				Context: ctx,
 				Message: "Comparing map",
 				Summary: tdSetResult{
+					Kind:    keysSetResult,
 					Missing: notFoundKeys,
 				},
 			}
@@ -287,6 +288,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 
 		// Retrieve extra keys
 		res := tdSetResult{
+			Kind:    keysSetResult,
 			Missing: notFoundKeys,
 			Extra:   make([]reflect.Value, 0, got.Len()-len(foundKeys)),
 		}

@@ -110,7 +110,9 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 			}
 		}
 
-		res := tdSetResult{}
+		res := tdSetResult{
+			Kind: itemsSetResult,
+		}
 
 		if s.kind != noneSet {
 			if len(missingItems) > 0 && s.kind != subSet {
@@ -174,36 +176,4 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 func (s *tdSetBase) String() string {
 	return sliceToBuffer(
 		bytes.NewBufferString(s.GetLocation().Func), s.expectedItems).String()
-}
-
-type tdSetResult struct {
-	Missing []reflect.Value
-	Extra   []reflect.Value
-}
-
-var _ testDeepStringer = tdSetResult{}
-
-func (r tdSetResult) ___testDeep___() {}
-
-func (r tdSetResult) IsEmpty() bool {
-	return len(r.Missing) == 0 && len(r.Extra) == 0
-}
-
-func (r tdSetResult) String() string {
-	buf := &bytes.Buffer{}
-
-	if len(r.Missing) > 0 {
-		buf.WriteString("Missing: ")
-		sliceToBuffer(buf, r.Missing)
-	}
-
-	if len(r.Extra) > 0 {
-		if buf.Len() > 0 {
-			buf.WriteString("\n  ")
-		}
-		buf.WriteString("Extra: ")
-		sliceToBuffer(buf, r.Extra)
-	}
-
-	return buf.String()
 }
