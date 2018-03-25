@@ -18,12 +18,15 @@ func toString(val interface{}) string {
 		return tval.String()
 
 	case reflect.Value:
-		val = getInterface(tval)
-		if val == nil {
-			return "nil"
-		}
-		if tdVal, ok := val.(TestDeep); ok {
-			return tdVal.String()
+		var ok bool
+		val, ok = getInterface(tval)
+		if ok {
+			if val == nil {
+				return "nil"
+			}
+			if tdVal, ok := val.(TestDeep); ok {
+				return tdVal.String()
+			}
 		}
 	}
 

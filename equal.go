@@ -210,8 +210,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 				Expected: isNilStr(expected.IsNil()),
 			}
 		}
-		return deepValueEqual(got.Elem(), expected.Elem(),
-			ctx.AddDepth(".interface{}"))
+		return deepValueEqual(got.Elem(), expected.Elem(), ctx)
 
 	case reflect.Ptr:
 		if got.Pointer() == expected.Pointer() {
@@ -274,7 +273,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 			}
 			return &Error{
 				Context: ctx,
-				Message: "Comparing map",
+				Message: "comparing map",
 				Summary: tdSetResult{
 					Kind:    keysSetResult,
 					Missing: notFoundKeys,
@@ -301,7 +300,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 
 		return &Error{
 			Context: ctx,
-			Message: "Comparing map",
+			Message: "comparing map",
 			Summary: res,
 		}
 
@@ -321,7 +320,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 
 	default:
 		// Normal equality suffices
-		if getInterface(got) == getInterface(expected) {
+		if mustGetInterface(got) == mustGetInterface(expected) {
 			return
 		}
 		if ctx.booleanError {
@@ -340,35 +339,62 @@ func deepValueEqualOK(got, expected reflect.Value) bool {
 	return deepValueEqual(got, expected, NewBooleanContext()) == nil
 }
 
-func getInterface(val reflect.Value) interface{} {
+func getInterface(val reflect.Value) (interface{}, bool) {
 	if !val.IsValid() {
-		return nil
+		return nil, true
 	}
 
 	if val.CanInterface() {
-		return val.Interface()
+		return val.Interface(), true
 	}
 
 	// Kinds not treated specifically by deepValueEqual
 	switch val.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return val.Int()
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32,
-		reflect.Uint64, reflect.Uintptr:
-		return val.Uint()
-	case reflect.Float32, reflect.Float64:
-		return val.Float()
+	case reflect.Int:
+		return int(val.Int()), true
+	case reflect.Int8:
+		return int8(val.Int()), true
+	case reflect.Int16:
+		return int16(val.Int()), true
+	case reflect.Int32:
+		return int32(val.Int()), true
+	case reflect.Int64:
+		return val.Int(), true
+	case reflect.Uint:
+		return uint(val.Uint()), true
+	case reflect.Uint8:
+		return uint8(val.Uint()), true
+	case reflect.Uint16:
+		return uint16(val.Uint()), true
+	case reflect.Uint32:
+		return uint32(val.Uint()), true
+	case reflect.Uint64, reflect.Uintptr:
+		return val.Uint(), true
+	case reflect.Float32:
+		return float32(val.Float()), true
+	case reflect.Float64:
+		return val.Float(), true
+	case reflect.Complex64:
+		return complex64(val.Complex()), true
 	case reflect.Complex128:
-		return val.Complex()
+		return val.Complex(), true
 	case reflect.String:
-		return val.String()
+		return val.String(), true
 	case reflect.Bool:
-		return val.Bool()
+		return val.Bool(), true
 	case reflect.Chan, reflect.UnsafePointer:
-		return val.Pointer()
+		return val.Pointer(), true
 	default:
-		panic("getValue() does not handle " + val.Kind().String() + " kind")
+		return nil, false
 	}
+}
+
+func mustGetInterface(val reflect.Value) interface{} {
+	ret, ok := getInterface(val)
+	if ok {
+		return ret
+	}
+	panic("getInterface() does not handle " + val.Kind().String() + " kind")
 }
 
 func EqDeeply(got, expected interface{}) bool {
