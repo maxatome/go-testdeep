@@ -28,7 +28,7 @@ func TestSet(t *testing.T) {
 
 		checkError(t, got, Set(5, 4, 1),
 			expectedError{
-				Message: mustBe("Comparing %% as a Set"),
+				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Extra items: ((int) 3)"),
 			},
@@ -36,7 +36,7 @@ func TestSet(t *testing.T) {
 
 		checkError(t, got, Set(5, 4, 1, 3, 66),
 			expectedError{
-				Message: mustBe("Comparing %% as a Set"),
+				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66)"),
 			},
@@ -44,7 +44,7 @@ func TestSet(t *testing.T) {
 
 		checkError(t, got, Set(5, 66, 4, 1, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a Set"),
+				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66)"),
 			},
@@ -52,7 +52,7 @@ func TestSet(t *testing.T) {
 
 		checkError(t, got, Set(5, 66, 4, 1, 3, 67),
 			expectedError{
-				Message: mustBe("Comparing %% as a Set"),
+				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66,\n                (int) 67)"),
 			},
@@ -60,7 +60,7 @@ func TestSet(t *testing.T) {
 
 		checkError(t, got, Set(5, 66, 4, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a Set"),
+				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66)\n  Extra items: ((int) 1)"),
 			},
@@ -73,7 +73,7 @@ func TestSet(t *testing.T) {
 
 		checkError(t, got, SubSetOf(5, 66, 4, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a SubSetOf"),
+				Message: mustBe("comparing %% as a SubSetOf"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Extra items: ((int) 1)"),
 			},
@@ -86,7 +86,7 @@ func TestSet(t *testing.T) {
 
 		checkError(t, got, SuperSetOf(5, 66, 4, 1, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a SuperSetOf"),
+				Message: mustBe("comparing %% as a SuperSetOf"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66)"),
 			},
@@ -98,7 +98,7 @@ func TestSet(t *testing.T) {
 
 		checkError(t, got, NoneOf(3, 66),
 			expectedError{
-				Message: mustBe("Comparing %% as a NoneOf"),
+				Message: mustBe("comparing %% as a NoneOf"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Extra items: ((int) 3)"),
 			},

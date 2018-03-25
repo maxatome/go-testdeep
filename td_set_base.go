@@ -147,7 +147,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 		}
 		return &Error{
 			Context:  ctx,
-			Message:  "Comparing %% as a " + s.GetLocation().Func,
+			Message:  "comparing %% as a " + s.GetLocation().Func,
 			Summary:  res,
 			Location: s.GetLocation(),
 		}

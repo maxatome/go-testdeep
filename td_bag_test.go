@@ -27,7 +27,7 @@ func TestBag(t *testing.T) {
 
 		checkError(t, got, Bag(5, 4, 1, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a Bag"),
+				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Extra items: ((int) 4)"),
 			},
@@ -35,7 +35,7 @@ func TestBag(t *testing.T) {
 
 		checkError(t, got, Bag(5, 4, 1, 4, 3, 66),
 			expectedError{
-				Message: mustBe("Comparing %% as a Bag"),
+				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66)"),
 			},
@@ -43,7 +43,7 @@ func TestBag(t *testing.T) {
 
 		checkError(t, got, Bag(5, 66, 4, 1, 4, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a Bag"),
+				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66)"),
 			},
@@ -51,7 +51,7 @@ func TestBag(t *testing.T) {
 
 		checkError(t, got, Bag(5, 66, 4, 1, 4, 3, 66),
 			expectedError{
-				Message: mustBe("Comparing %% as a Bag"),
+				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66,\n                (int) 66)"),
 			},
@@ -59,7 +59,7 @@ func TestBag(t *testing.T) {
 
 		checkError(t, got, Bag(5, 66, 4, 1, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a Bag"),
+				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66)\n  Extra items: ((int) 4)"),
 			},
@@ -72,7 +72,7 @@ func TestBag(t *testing.T) {
 
 		checkError(t, got, SubBagOf(5, 66, 4, 1, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a SubBagOf"),
+				Message: mustBe("comparing %% as a SubBagOf"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Extra items: ((int) 4)"),
 			},
@@ -85,7 +85,7 @@ func TestBag(t *testing.T) {
 
 		checkError(t, got, SuperBagOf(5, 66, 4, 1, 3),
 			expectedError{
-				Message: mustBe("Comparing %% as a SuperBagOf"),
+				Message: mustBe("comparing %% as a SuperBagOf"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Missing items: ((int) 66)"),
 			},
