@@ -12,6 +12,7 @@ const (
 	keysSetResult
 )
 
+// Implements fmt.Stringer.
 func (k tdSetResultKind) String() string {
 	switch k {
 	case itemsSetResult:

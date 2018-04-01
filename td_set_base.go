@@ -32,25 +32,8 @@ func newSetBase(kind setKind, ignoreDups bool) tdSetBase {
 
 func (s *tdSetBase) Add(items ...interface{}) {
 	for _, item := range items {
-		vitem := reflect.ValueOf(item)
-		if !s.ignoreDups || !s.existsExpectedItem(vitem) {
-			s.expectedItems = append(s.expectedItems, vitem)
-		}
+		s.expectedItems = append(s.expectedItems, reflect.ValueOf(item))
 	}
-}
-
-func (s *tdSetBase) existsExpectedItem(vitem reflect.Value) bool {
-	if len(s.expectedItems) > 0 {
-		ctx := NewBooleanContext()
-		ctx.expectVsExpect = true
-
-		for _, expected := range s.expectedItems {
-			if deepValueEqual(expected, vitem, ctx) == nil {
-				return true
-			}
-		}
-	}
-	return false
 }
 
 func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
@@ -115,11 +98,32 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 		}
 
 		if s.kind != noneSet {
-			if len(missingItems) > 0 && s.kind != subSet {
-				if ctx.booleanError {
-					return booleanError
+			if s.kind != subSet {
+				// In Set* cases with missing items, try a second pass. Perhaps
+				// an already matching got item, matches another expected item?
+				if s.ignoreDups && len(missingItems) > 0 {
+					var newMissingItems []reflect.Value
+
+				nextExpected:
+					for _, expected := range missingItems {
+						for idxGot := range foundGotIdxes {
+							if deepValueEqualOK(got.Index(idxGot), expected) {
+								continue nextExpected
+							}
+						}
+
+						newMissingItems = append(newMissingItems, expected)
+					}
+
+					missingItems = newMissingItems
 				}
-				res.Missing = missingItems
+
+				if len(missingItems) > 0 {
+					if ctx.booleanError {
+						return booleanError
+					}
+					res.Missing = missingItems
+				}
 			}
 
 			if len(foundGotIdxes) < gotLen && s.kind != superSet {

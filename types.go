@@ -10,7 +10,6 @@ import (
 )
 
 var testDeeper = reflect.TypeOf((*TestDeep)(nil)).Elem()
-var testDeepCmper = reflect.TypeOf((*testDeepCmp)(nil)).Elem()
 
 var stringerInterface = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
 var errorInterface = reflect.TypeOf((*error)(nil)).Elem()
@@ -41,11 +40,6 @@ type TestDeep interface {
 	setLocation(int)
 	GetLocation() Location
 	HandleInvalid() bool
-}
-
-type testDeepCmp interface {
-	TestDeep
-	Compare(interface{}) bool
 }
 
 type TestDeepBase struct {
@@ -123,8 +117,3 @@ func (i rawInt) ___testDeep___() {}
 func (i rawInt) String() string {
 	return strconv.Itoa(int(i))
 }
-
-//func SetLocation(td TestDeep) TestDeep {
-//	td.setLocation(0)
-//	return td
-//}

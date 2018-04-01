@@ -21,6 +21,6 @@ func newList(items ...interface{}) (ret tdList) {
 }
 
 func (l *tdList) String() string {
-	return sliceToBuffer(
-		bytes.NewBufferString(l.GetLocation().Func), l.items).String()
+	return sliceToBuffer(bytes.NewBufferString(l.GetLocation().Func), l.items).
+		String()
 }

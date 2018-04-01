@@ -32,9 +32,9 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 					return booleanError
 				}
 
-				// Special case if expected is a TestDeep operator which does
-				// not handle invalid values: the operator is not called, but
-				// for the user the error comes from it
+				// Special case if "expected" is a TestDeep operator which
+				// does not handle invalid values: the operator is not called,
+				// but for the user the error comes from it
 				err.Location = td.GetLocation()
 			} else if ctx.booleanError {
 				return booleanError
@@ -42,8 +42,8 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 
 			err.Expected = expected
 		} else { // here: !expected.IsValid() && got.IsValid()
-			// Special case: got is a nil interface, so consider as equal to
-			// expected nil.
+			// Special case: "got" is a nil interface, so consider as equal
+			// to "expected" nil.
 			if got.Kind() == reflect.Interface && got.IsNil() {
 				return nil
 			}
@@ -60,22 +60,20 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 		return
 	}
 
-	// Special case, got implements testDeeper: accept only if allowed
-	var gotTestDeeper bool
+	// Special case, "got" implements testDeeper: only if allowed
 	if got.Type().Implements(testDeeper) {
-		if !ctx.expectVsExpect {
-			panic("Found a testdeep struct in got param " +
-				ctx.Path + ", can only use it in expected one!")
-		}
-		gotTestDeeper = true
+		panic("Found a TestDeep operator in got param, " +
+			"can only use it in expected one!")
 	}
 
 	if got.Type() != expected.Type() {
-		if !gotTestDeeper && expected.Type().Implements(testDeeper) {
+		if expected.Type().Implements(testDeeper) {
 			return expected.Interface().(TestDeep).Match(ctx, got)
 		}
 
-		// If got is an interface, try to see what is behind before failing
+		// "expected" is not a TestDeep operator
+
+		// If "got" is an interface, try to see what is behind before failing
 		// Used by Set/Bag Match method in such cases:
 		//     []interface{}{123, "foo"}  →  Bag("foo", 123)
 		//    Interface kind -^-----^   but String-^ and ^- Int kinds
@@ -91,25 +89,6 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 			Message:  "type mismatch",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString(expected.Type().String()),
-		}
-	}
-
-	// got implements testDeeper, as expected as they have the same type
-	if gotTestDeeper {
-		// If they can directly handle the comparison
-		if got.Type().Implements(testDeepCmper) {
-			if got.Interface().(testDeepCmp).Compare(expected.Interface()) {
-				return
-			}
-			if ctx.booleanError {
-				return booleanError
-			}
-			return &Error{
-				Context:  ctx,
-				Message:  "TestDeep Compare",
-				Got:      got,
-				Expected: expected,
-			}
 		}
 	}
 
@@ -219,9 +198,10 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 		return deepValueEqual(got.Elem(), expected.Elem(), ctx.AddPtr(1))
 
 	case reflect.Struct:
+		sType := got.Type()
 		for i, n := 0, got.NumField(); i < n; i++ {
 			err = deepValueEqual(got.Field(i), expected.Field(i),
-				ctx.AddDepth("."+got.Type().Field(i).Name))
+				ctx.AddDepth("."+sType.Field(i).Name))
 			if err != nil {
 				return
 			}
@@ -260,7 +240,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 			if err != nil {
 				return
 			}
-			foundKeys[vkey.Interface()] = true
+			foundKeys[mustGetInterface(vkey)] = true
 		}
 
 		if got.Len() == len(foundKeys) {

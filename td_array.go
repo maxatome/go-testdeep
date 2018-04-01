@@ -146,8 +146,8 @@ func (a *tdArray) populateExpectedEntries(entries ArrayEntries) {
 	sort.Sort(a.expectedEntries)
 }
 
-func (s *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
-	if s.isPtr {
+func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
+	if a.isPtr {
 		if got.Kind() != reflect.Ptr {
 			if ctx.booleanError {
 				return booleanError
@@ -156,19 +156,19 @@ func (s *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 				Context:  ctx,
 				Message:  "type mismatch",
 				Got:      rawString(got.Type().String()),
-				Expected: rawString(s.expectedTypeStr()),
-				Location: s.GetLocation(),
+				Expected: rawString(a.expectedTypeStr()),
+				Location: a.GetLocation(),
 			}
 		}
 		got = got.Elem()
 	}
 
-	if got.Type() != s.expectedModel.Type() {
+	if got.Type() != a.expectedModel.Type() {
 		if ctx.booleanError {
 			return booleanError
 		}
 		var gotType rawString
-		if s.isPtr {
+		if a.isPtr {
 			gotType = "*"
 		}
 		gotType += rawString(got.Type().String())
@@ -176,13 +176,13 @@ func (s *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 			Context:  ctx,
 			Message:  "type mismatch",
 			Got:      gotType,
-			Expected: rawString(s.expectedTypeStr()),
-			Location: s.GetLocation(),
+			Expected: rawString(a.expectedTypeStr()),
+			Location: a.GetLocation(),
 		}
 	}
 
 	gotLen := got.Len()
-	for _, entryInfo := range s.expectedEntries {
+	for _, entryInfo := range a.expectedEntries {
 		curCtx := ctx.AddArrayIndex(entryInfo.index)
 
 		if entryInfo.index >= gotLen {
@@ -194,30 +194,30 @@ func (s *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 				Message:  "expected value out of range",
 				Got:      rawString("<non-existent value>"),
 				Expected: entryInfo.expected,
-				Location: s.GetLocation(),
+				Location: a.GetLocation(),
 			}
 		}
 
 		err = deepValueEqual(got.Index(entryInfo.index), entryInfo.expected, curCtx)
 		if err != nil {
-			return err.SetLocationIfMissing(s)
+			return err.SetLocationIfMissing(a)
 		}
 	}
 	return nil
 }
 
-func (s *tdArray) String() string {
-	buf := bytes.NewBufferString(ternStr(s.expectedModel.Kind() == reflect.Array,
+func (a *tdArray) String() string {
+	buf := bytes.NewBufferString(ternStr(a.expectedModel.Kind() == reflect.Array,
 		"Array(", "Slice("))
 
-	buf.WriteString(s.expectedTypeStr())
+	buf.WriteString(a.expectedTypeStr())
 
-	if len(s.expectedEntries) == 0 {
+	if len(a.expectedEntries) == 0 {
 		buf.WriteString("{})")
 	} else {
 		buf.WriteString("{\n")
 
-		for _, entryInfo := range s.expectedEntries {
+		for _, entryInfo := range a.expectedEntries {
 			fmt.Fprintf(buf, "  %d: %s\n",
 				entryInfo.index, toString(entryInfo.expected))
 		}
@@ -227,9 +227,9 @@ func (s *tdArray) String() string {
 	return buf.String()
 }
 
-func (s *tdArray) expectedTypeStr() string {
-	if s.isPtr {
-		return "*" + s.expectedModel.Type().String()
+func (a *tdArray) expectedTypeStr() string {
+	if a.isPtr {
+		return "*" + a.expectedModel.Type().String()
 	}
-	return s.expectedModel.Type().String()
+	return a.expectedModel.Type().String()
 }

@@ -2,6 +2,8 @@ package testdeep_test
 
 import (
 	"testing"
+
+	. "github.com/maxatome/go-testdeep"
 )
 
 type ComplexStruct struct {
@@ -16,6 +18,7 @@ type ComplexStructItem struct {
 	Name       string
 	Id         uint32
 	properties []ItemProperty
+	propByName map[string]ItemProperty
 	Enabled    bool
 }
 
@@ -438,4 +441,48 @@ func TestEqualOthers(t *testing.T) {
 			Got:      mustContain("0x"), // hexadecimal pointer
 			Expected: mustContain("0x"), // hexadecimal pointer
 		})
+}
+
+func TestEqualRecurs(t *testing.T) {
+	type S struct {
+		Next *S
+	}
+
+	expected1 := &S{}
+	expected1.Next = expected1
+
+	got := &S{}
+	got.Next = got
+
+	expected2 := &S{}
+	expected2.Next = expected2
+
+	checkOK(t, got, expected1)
+	checkOK(t, got, expected2)
+}
+
+func TestEqualPanic(t *testing.T) {
+	checkPanic(t,
+		func() {
+			EqDeeply(Ignore(), Ignore())
+		},
+		"Found a TestDeep operator in got param, can only use it in expected one!")
+}
+
+func TestCmpDeeply(t *testing.T) {
+	mockT := &testing.T{}
+	isTrue(t, CmpDeeply(mockT, 1, 1))
+	isFalse(t, mockT.Failed())
+
+	mockT = &testing.T{}
+	isFalse(t, CmpDeeply(mockT, 1, 2))
+	isTrue(t, mockT.Failed())
+
+	mockT = &testing.T{}
+	isFalse(t, CmpDeeply(mockT, 1, 2, "Basic test"))
+	isTrue(t, mockT.Failed())
+
+	mockT = &testing.T{}
+	isFalse(t, CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
+	isTrue(t, mockT.Failed())
 }

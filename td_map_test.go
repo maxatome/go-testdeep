@@ -289,5 +289,4 @@ func TestHash(t *testing.T) {
 		`SuperMapOf(*testdeep_test.MyMap{
   (string) (len=3) "foo": (int) 2,
 })`)
-
 }

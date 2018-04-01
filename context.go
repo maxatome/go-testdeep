@@ -17,8 +17,6 @@ type Context struct {
 	Path    string
 	Depth   int
 	visited map[visit]bool
-	// If true, got can contain TestDeep values. Used internally.
-	expectVsExpect bool
 	// If true, the content of the returned *Error will not be
 	// checked. Can be used to avoid filling Error{} with expensive
 	// computations.

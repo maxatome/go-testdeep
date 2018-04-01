@@ -319,38 +319,26 @@ func buildTestName(args []interface{}) string {
 	}
 }
 
-/*
-func checkTrue(t *testing.T, got, expected interface{}) bool {
-	t.Helper()
-	return isTrue(t, EqDeeply(got, expected))
-}
-
-func checkFalse(t *testing.T, got, expected interface{}) bool {
-	t.Helper()
-	return isFalse(t, EqDeeply(got, expected))
-}
-
-func isTrue(t *testing.T, got bool) bool {
+func isTrue(t *testing.T, got bool, args ...interface{}) bool {
 	if got {
 		return true
 	}
 
 	t.Helper()
-	t.Error(`Failed test
+	t.Errorf(`%sFailed test
 	     got: false
-	expected: true`)
+	expected: true`, buildTestName(args))
 	return false
 }
 
-func isFalse(t *testing.T, got bool) bool {
+func isFalse(t *testing.T, got bool, args ...interface{}) bool {
 	if !got {
 		return true
 	}
 
 	t.Helper()
-	t.Error(`Failed test
+	t.Errorf(`%sFailed test
 	     got: true
-	expected: false`)
+	expected: false`, buildTestName(args))
 	return false
 }
-*/
