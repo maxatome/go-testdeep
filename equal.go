@@ -319,7 +319,7 @@ func deepValueEqualOK(got, expected reflect.Value) bool {
 	return deepValueEqual(got, expected, NewBooleanContext()) == nil
 }
 
-func getInterface(val reflect.Value) (interface{}, bool) {
+func getInterface(val reflect.Value, force bool) (interface{}, bool) {
 	if !val.IsValid() {
 		return nil, true
 	}
@@ -365,12 +365,18 @@ func getInterface(val reflect.Value) (interface{}, bool) {
 	case reflect.Chan, reflect.UnsafePointer:
 		return val.Pointer(), true
 	default:
+		if force {
+			val = unsafeReflectValue(val)
+			if val.CanInterface() {
+				return val.Interface(), true
+			}
+		}
 		return nil, false
 	}
 }
 
 func mustGetInterface(val reflect.Value) interface{} {
-	ret, ok := getInterface(val)
+	ret, ok := getInterface(val, true)
 	if ok {
 		return ret
 	}

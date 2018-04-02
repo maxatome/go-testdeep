@@ -3,6 +3,7 @@ package testdeep
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"reflect"
 	"sort"
 )
@@ -107,9 +108,21 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 
 		vfield := vmodel.FieldByIndex(field.Index)
 
+		// Try to force access to unexported fields
+		if !vfield.CanInterface() {
+			vfield = unsafeReflectValue(vfield)
+		}
+
+		fieldIf, ok := getInterface(vfield, false) // no need to force here
+		if !ok {
+			// Probably in an environment where "unsafe" package is forbidden... :(
+			fmt.Fprintf(os.Stderr,
+				"field %s is unexported and cannot be overridden, skip it.", fieldName)
+			continue
+		}
+
 		// If non-zero field
-		if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(),
-			vfield.Interface()) {
+		if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(), fieldIf) {
 			if checkedFields[fieldName] {
 				panic(fmt.Sprintf(
 					"non zero field %s in model already exists in expectedFields",

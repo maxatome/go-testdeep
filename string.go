@@ -19,7 +19,7 @@ func toString(val interface{}) string {
 
 	case reflect.Value:
 		var ok bool
-		val, ok = getInterface(tval)
+		val, ok = getInterface(tval, false)
 		if ok {
 			if val == nil {
 				return "nil"

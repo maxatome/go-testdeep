@@ -59,6 +59,20 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
+	// Refuse to override unexported fields access in this case. It is a
+	// choice, as we think it is better to use Code() on surrounding
+	// struct instead.
+	if !got.CanInterface() {
+		if ctx.booleanError {
+			return booleanError
+		}
+		return &Error{
+			Context: ctx,
+			Message: "cannot compare unexported field",
+			Summary: rawString("use Code() on surrounding struct instead"),
+		}
+	}
+
 	ret := c.function.Call([]reflect.Value{got})
 	if ret[0].Bool() {
 		return nil

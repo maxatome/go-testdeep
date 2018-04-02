@@ -29,7 +29,7 @@ func TruncTime(val interface{}, trunc ...time.Duration) TestDeep {
 
 		t.expectedType = vval.Type()
 		if t.expectedType == timeType {
-			t.expectedTime = vval.Interface().(time.Time).Truncate(t.trunc)
+			t.expectedTime = val.(time.Time).Truncate(t.trunc)
 			return &t
 		}
 		if t.expectedType.ConvertibleTo(timeType) {
@@ -38,7 +38,7 @@ func TruncTime(val interface{}, trunc ...time.Duration) TestDeep {
 			return &t
 		}
 	}
-	panic("usage: TruncTime(time.Time[, time.Duration)")
+	panic("usage: TruncTime(time.Time[, time.Duration])")
 }
 
 func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
@@ -55,13 +55,27 @@ func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	var gotTime time.Time
+	var (
+		gotIf interface{}
+		ok    bool
+	)
 	if got.Type() == timeType {
-		gotTime = got.Interface().(time.Time)
+		gotIf, ok = getInterface(got, true)
 	} else {
-		gotTime = got.Convert(timeType).Interface().(time.Time)
+		gotIf, ok = getInterface(got.Convert(timeType), true)
+	}
+	if !ok {
+		if ctx.booleanError {
+			return booleanError
+		}
+		return &Error{
+			Context: ctx,
+			Message: "cannot compare unexported field that cannot be overridden",
+			Summary: "",
+		}
 	}
 
+	gotTime := gotIf.(time.Time)
 	gotTimeTrunc := gotTime.Truncate(t.trunc)
 
 	if gotTimeTrunc.Equal(t.expectedTime) {

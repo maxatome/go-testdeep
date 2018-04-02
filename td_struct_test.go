@@ -2,6 +2,7 @@ package testdeep_test
 
 import (
 	"testing"
+	"time"
 
 	. "github.com/maxatome/go-testdeep"
 )
@@ -218,4 +219,111 @@ func TestStruct(t *testing.T) {
 
 	equalStr(t, Struct(&MyStruct{}, StructFields{}).String(),
 		`Struct(*testdeep_test.MyStruct{})`)
+}
+
+func TestStructPrivateFields(t *testing.T) {
+	type privateKey struct {
+		num  int
+		name string
+	}
+
+	type privateValue struct {
+		value  string
+		weight int
+	}
+
+	type MyTime time.Time
+
+	type structPrivateFields struct {
+		byKey      map[privateKey]*privateValue
+		name       string
+		nameb      []byte
+		properties []int
+		birth      time.Time
+		birth2     MyTime
+		next       *structPrivateFields
+	}
+
+	d := func(rfc3339Date string) (ret time.Time) {
+		var err error
+		ret, err = time.Parse(time.RFC3339Nano, rfc3339Date)
+		if err != nil {
+			panic(err)
+		}
+		return
+	}
+
+	got := structPrivateFields{
+		byKey: map[privateKey]*privateValue{
+			privateKey{num: 1, name: "foo"}: &privateValue{value: "test", weight: 12},
+			privateKey{num: 2, name: "bar"}: &privateValue{value: "tset", weight: 23},
+			privateKey{num: 3, name: "zip"}: &privateValue{value: "ttse", weight: 34},
+		},
+		name:       "foobar",
+		nameb:      []byte("foobar"),
+		properties: []int{20, 22, 23, 21},
+		birth:      d("2018-04-01T10:11:12.123456789Z"),
+		birth2:     MyTime(d("2018-03-01T09:08:07.987654321Z")),
+		next: &structPrivateFields{
+			byKey:  map[privateKey]*privateValue{},
+			name:   "sub",
+			birth:  d("2018-04-02T10:11:12.123456789Z"),
+			birth2: MyTime(d("2018-03-02T09:08:07.987654321Z")),
+		},
+	}
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"name": "foobar",
+	}))
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"name": Re("^foo"),
+	}))
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"nameb": Re("^foo"),
+	}))
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"properties": []int{20, 22, 23, 21},
+	}))
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"properties": ArrayEach(Between(20, 23)),
+	}))
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"byKey": MapEach(Struct(&privateValue{}, StructFields{
+			"weight": Between(12, 34),
+			"value":  Any(HasPrefix("t"), HasSuffix("e")),
+		})),
+	}))
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"byKey": SuperMapOf(
+			map[privateKey]*privateValue{
+				privateKey{num: 3, name: "zip"}: &privateValue{value: "ttse", weight: 34},
+			},
+			MapEntries{
+				privateKey{num: 2, name: "bar"}: &privateValue{value: "tset", weight: 23},
+			}),
+	}))
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"birth":  TruncTime(d("2018-04-01T10:11:12Z"), time.Second),
+		"birth2": TruncTime(MyTime(d("2018-03-01T09:08:07Z")), time.Second),
+	}))
+
+	checkError(t, got,
+		Struct(structPrivateFields{}, StructFields{
+			"next": Struct(&structPrivateFields{}, StructFields{
+				"name":  "sub",
+				"birth": Code(func(t time.Time) bool { return true }),
+			}),
+		}),
+		expectedError{
+			Message: mustBe("cannot compare unexported field"),
+			Path:    mustBe("DATA.next.birth"),
+			Summary: mustBe("use Code() on surrounding struct instead"),
+		})
 }
