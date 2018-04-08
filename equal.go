@@ -328,51 +328,22 @@ func getInterface(val reflect.Value, force bool) (interface{}, bool) {
 		return val.Interface(), true
 	}
 
-	// Kinds not treated specifically by deepValueEqual
-	switch val.Kind() {
-	case reflect.Int:
-		return int(val.Int()), true
-	case reflect.Int8:
-		return int8(val.Int()), true
-	case reflect.Int16:
-		return int16(val.Int()), true
-	case reflect.Int32:
-		return int32(val.Int()), true
-	case reflect.Int64:
-		return val.Int(), true
-	case reflect.Uint:
-		return uint(val.Uint()), true
-	case reflect.Uint8:
-		return uint8(val.Uint()), true
-	case reflect.Uint16:
-		return uint16(val.Uint()), true
-	case reflect.Uint32:
-		return uint32(val.Uint()), true
-	case reflect.Uint64, reflect.Uintptr:
-		return val.Uint(), true
-	case reflect.Float32:
-		return float32(val.Float()), true
-	case reflect.Float64:
-		return val.Float(), true
-	case reflect.Complex64:
-		return complex64(val.Complex()), true
-	case reflect.Complex128:
-		return val.Complex(), true
-	case reflect.String:
-		return val.String(), true
-	case reflect.Bool:
-		return val.Bool(), true
-	case reflect.Chan, reflect.UnsafePointer:
-		return val.Pointer(), true
-	default:
-		if force {
-			val = unsafeReflectValue(val)
-			if val.CanInterface() {
-				return val.Interface(), true
-			}
+	if force {
+		val = unsafeReflectValue(val)
+		if val.CanInterface() {
+			return val.Interface(), true
 		}
-		return nil, false
 	}
+
+	// For some types, we can copy them in new visitable reflect.Value instances
+	copyVal, ok := copyValue(val)
+	if ok && copyVal.CanInterface() {
+		return copyVal.Interface(), true
+	}
+
+	// For others, in environments where "unsafe" package is not
+	// available, we cannot go further
+	return nil, false
 }
 
 func mustGetInterface(val reflect.Value) interface{} {

@@ -2,6 +2,7 @@ package testdeep
 
 import (
 	"bytes"
+	"fmt"
 	"reflect"
 	"strings"
 
@@ -14,20 +15,14 @@ func toString(val interface{}) string {
 	}
 
 	switch tval := val.(type) {
-	case testDeepStringer:
-		return tval.String()
-
 	case reflect.Value:
-		var ok bool
-		val, ok = getInterface(tval, false)
+		newVal, ok := getInterface(tval, true)
 		if ok {
-			if val == nil {
-				return "nil"
-			}
-			if tdVal, ok := val.(TestDeep); ok {
-				return tdVal.String()
-			}
+			return toString(newVal)
 		}
+
+	case fmt.Stringer:
+		return tval.String()
 	}
 
 	return strings.TrimRight(spew.Sdump(val), "\n")
