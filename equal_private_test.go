@@ -7,7 +7,7 @@ import (
 
 func TestGetInterface(t *testing.T) {
 	type Private struct {
-		private map[string]int
+		private *Private // nolint: megacheck
 	}
 
 	// Cases not tested by TestEqualOthers()

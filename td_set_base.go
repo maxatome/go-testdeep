@@ -15,7 +15,7 @@ const (
 )
 
 type tdSetBase struct {
-	TestDeepBaseOKNil
+	BaseOKNil
 	kind       setKind
 	ignoreDups bool
 
@@ -24,9 +24,9 @@ type tdSetBase struct {
 
 func newSetBase(kind setKind, ignoreDups bool) tdSetBase {
 	return tdSetBase{
-		TestDeepBaseOKNil: NewTestDeepBaseOKNil(4),
-		kind:              kind,
-		ignoreDups:        ignoreDups,
+		BaseOKNil:  NewBaseOKNil(4),
+		kind:       kind,
+		ignoreDups: ignoreDups,
 	}
 }
 

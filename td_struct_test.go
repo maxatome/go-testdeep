@@ -1,6 +1,8 @@
 package testdeep_test
 
 import (
+	"bytes"
+	"errors"
 	"testing"
 	"time"
 
@@ -238,6 +240,8 @@ func TestStructPrivateFields(t *testing.T) {
 		byKey      map[privateKey]*privateValue
 		name       string
 		nameb      []byte
+		err        error
+		iface      interface{}
 		properties []int
 		birth      time.Time
 		birth2     MyTime
@@ -255,18 +259,21 @@ func TestStructPrivateFields(t *testing.T) {
 
 	got := structPrivateFields{
 		byKey: map[privateKey]*privateValue{
-			privateKey{num: 1, name: "foo"}: &privateValue{value: "test", weight: 12},
-			privateKey{num: 2, name: "bar"}: &privateValue{value: "tset", weight: 23},
-			privateKey{num: 3, name: "zip"}: &privateValue{value: "ttse", weight: 34},
+			{num: 1, name: "foo"}: {value: "test", weight: 12},
+			{num: 2, name: "bar"}: {value: "tset", weight: 23},
+			{num: 3, name: "zip"}: {value: "ttse", weight: 34},
 		},
 		name:       "foobar",
 		nameb:      []byte("foobar"),
+		err:        errors.New("the error!"),
+		iface:      1234,
 		properties: []int{20, 22, 23, 21},
 		birth:      d("2018-04-01T10:11:12.123456789Z"),
 		birth2:     MyTime(d("2018-03-01T09:08:07.987654321Z")),
 		next: &structPrivateFields{
 			byKey:  map[privateKey]*privateValue{},
 			name:   "sub",
+			iface:  bytes.NewBufferString("buffer!"),
 			birth:  d("2018-04-02T10:11:12.123456789Z"),
 			birth2: MyTime(d("2018-03-02T09:08:07.987654321Z")),
 		},
@@ -282,6 +289,27 @@ func TestStructPrivateFields(t *testing.T) {
 
 	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
 		"nameb": Re("^foo"),
+	}))
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"err": Re("error"),
+	}))
+
+	checkError(t, got,
+		Struct(structPrivateFields{}, StructFields{
+			"iface": Re("buffer"),
+		}),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA.iface"),
+			Got:      mustBe("interface {}"),
+			Expected: mustBe("string (convertible) OR fmt.Stringer OR error OR []uint8"),
+		})
+
+	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
+		"next": Struct(&structPrivateFields{}, StructFields{
+			"iface": Re("buffer"),
+		}),
 	}))
 
 	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
@@ -302,7 +330,7 @@ func TestStructPrivateFields(t *testing.T) {
 	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
 		"byKey": SuperMapOf(
 			map[privateKey]*privateValue{
-				privateKey{num: 3, name: "zip"}: &privateValue{value: "ttse", weight: 34},
+				{num: 3, name: "zip"}: {value: "ttse", weight: 34},
 			},
 			MapEntries{
 				privateKey{num: 2, name: "bar"}: &privateValue{value: "tset", weight: 23},

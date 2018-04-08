@@ -6,12 +6,12 @@ import (
 )
 
 type tdList struct {
-	TestDeepBaseOKNil
+	BaseOKNil
 	items []reflect.Value
 }
 
 func newList(items ...interface{}) (ret tdList) {
-	ret.TestDeepBaseOKNil = NewTestDeepBaseOKNil(4)
+	ret.BaseOKNil = NewBaseOKNil(4)
 	ret.items = make([]reflect.Value, len(items))
 
 	for idx, item := range items {

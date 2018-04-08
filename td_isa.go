@@ -5,7 +5,7 @@ import (
 )
 
 type tdIsa struct {
-	TestDeepBase
+	Base
 	expectedType reflect.Type
 }
 
@@ -13,7 +13,7 @@ var _ TestDeep = &tdIsa{}
 
 func Isa(model interface{}) TestDeep {
 	return &tdIsa{
-		TestDeepBase: NewTestDeepBase(3),
+		Base:         NewBase(3),
 		expectedType: reflect.ValueOf(model).Type(),
 	}
 }

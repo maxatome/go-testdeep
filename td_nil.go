@@ -5,14 +5,14 @@ import (
 )
 
 type tdNil struct {
-	TestDeepBaseOKNil
+	BaseOKNil
 }
 
 var _ TestDeep = &tdNil{}
 
 func Nil() TestDeep {
 	return &tdNil{
-		TestDeepBaseOKNil: NewTestDeepBaseOKNil(3),
+		BaseOKNil: NewBaseOKNil(3),
 	}
 }
 
@@ -46,14 +46,14 @@ func (n *tdNil) String() string {
 }
 
 type tdNotNil struct {
-	TestDeepBaseOKNil
+	BaseOKNil
 }
 
 var _ TestDeep = &tdNotNil{}
 
 func NotNil() TestDeep {
 	return &tdNotNil{
-		TestDeepBaseOKNil: NewTestDeepBaseOKNil(3),
+		BaseOKNil: NewBaseOKNil(3),
 	}
 }
 

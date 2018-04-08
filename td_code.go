@@ -6,7 +6,7 @@ import (
 )
 
 type tdCode struct {
-	TestDeepBase
+	Base
 	function reflect.Value
 	argType  reflect.Type
 }
@@ -35,9 +35,9 @@ func Code(fn interface{}) TestDeep {
 	case 1:
 		if fnType.Out(0).Kind() == reflect.Bool {
 			return &tdCode{
-				TestDeepBase: NewTestDeepBase(3),
-				function:     vfn,
-				argType:      fnType.In(0),
+				Base:     NewBase(3),
+				function: vfn,
+				argType:  fnType.In(0),
 			}
 		}
 	}
@@ -113,7 +113,7 @@ type tdCodeResult struct {
 
 var _ testDeepStringer = tdCodeResult{}
 
-func (r tdCodeResult) ___testDeep___() {}
+func (r tdCodeResult) _TestDeep() {}
 
 func (r tdCodeResult) String() string {
 	if r.Reason == "" {

@@ -6,14 +6,13 @@ import (
 )
 
 type tdCapLen struct {
-	TestDeepBase
+	Base
 	expectedMin int
 	expectedMax int
-	cap         bool
 }
 
 func (c *tdCapLen) initCapLen(min int, max ...int) bool {
-	c.TestDeepBase = NewTestDeepBase(4)
+	c.Base = NewBase(4)
 
 	c.expectedMin = min
 

@@ -5,13 +5,13 @@ import (
 )
 
 type tdIgnore struct {
-	TestDeepBaseOKNil
+	BaseOKNil
 }
 
 var ignoreSingleton TestDeep = &tdIgnore{}
 
 func Ignore() TestDeep {
-	// NewTestDeepBase() useless
+	// NewBase() useless
 	return ignoreSingleton
 }
 

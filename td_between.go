@@ -16,7 +16,7 @@ const (
 )
 
 type tdBetween struct {
-	TestDeepBase
+	Base
 	expectedMin reflect.Value
 	expectedMax reflect.Value
 
@@ -29,9 +29,13 @@ var _ TestDeep = &tdBetween{}
 type BoundsKind uint8
 
 const (
+	// BoundsInIn allows to match between "from" and "to" both included
 	BoundsInIn BoundsKind = iota
+	// BoundsInOut allows to match between "from" included and "to" excluded
 	BoundsInOut
+	// BoundsOutIn allows to match between "from" excluded and "to" included
 	BoundsOutIn
+	// BoundsOutOut allows to match between "from" and "to" both excluded
 	BoundsOutOut
 )
 
@@ -80,7 +84,7 @@ func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 }
 
 func (b *tdBetween) initBetween(usage string) TestDeep {
-	b.TestDeepBase = NewTestDeepBase(4)
+	b.Base = NewBase(4)
 
 	if !b.expectedMax.IsValid() {
 		b.expectedMax = b.expectedMin
@@ -132,12 +136,68 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 	panic(usage)
 }
 
+func (b *tdBetween) nInt(tolerance reflect.Value) {
+	if diff := tolerance.Int(); diff != 0 {
+		base := b.expectedMin.Int()
+
+		max := base + diff
+		if max < base {
+			max = math.MaxInt64
+		}
+
+		min := base - diff
+		if min > base {
+			min = math.MinInt64
+		}
+
+		b.expectedMin = reflect.New(tolerance.Type()).Elem()
+		b.expectedMin.SetInt(min)
+
+		b.expectedMax = reflect.New(tolerance.Type()).Elem()
+		b.expectedMax.SetInt(max)
+	}
+}
+
+func (b *tdBetween) nUint(tolerance reflect.Value) {
+	if diff := tolerance.Uint(); diff != 0 {
+		base := b.expectedMin.Uint()
+
+		max := base + diff
+		if max < base {
+			max = math.MaxUint64
+		}
+
+		min := base - diff
+		if min > base {
+			min = 0
+		}
+
+		b.expectedMin = reflect.New(tolerance.Type()).Elem()
+		b.expectedMin.SetUint(min)
+
+		b.expectedMax = reflect.New(tolerance.Type()).Elem()
+		b.expectedMax.SetUint(max)
+	}
+}
+
+func (b *tdBetween) nFloat(tolerance reflect.Value) {
+	if diff := tolerance.Float(); diff != 0 {
+		base := b.expectedMin.Float()
+
+		b.expectedMin = reflect.New(tolerance.Type()).Elem()
+		b.expectedMin.SetFloat(base - diff)
+
+		b.expectedMax = reflect.New(tolerance.Type()).Elem()
+		b.expectedMax.SetFloat(base + diff)
+	}
+}
+
 func N(num interface{}, tolerance ...interface{}) TestDeep {
 	n := tdBetween{
-		TestDeepBase: NewTestDeepBase(3),
-		expectedMin:  reflect.ValueOf(num),
-		minBound:     boundIn,
-		maxBound:     boundIn,
+		Base:        NewBase(3),
+		expectedMin: reflect.ValueOf(num),
+		minBound:    boundIn,
+		maxBound:    boundIn,
 	}
 
 	const usage = "usage: N({,U}INT{,8,16,32,64}|FLOAT{32,64}[, TOLERANCE])"
@@ -164,58 +224,14 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 
 		switch tol.Kind() {
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-			if diff := tol.Int(); diff != 0 {
-				base := n.expectedMin.Int()
-
-				max := base + diff
-				if max < base {
-					max = math.MaxInt64
-				}
-
-				min := base - diff
-				if min > base {
-					min = math.MinInt64
-				}
-
-				n.expectedMin = reflect.New(tol.Type()).Elem()
-				n.expectedMin.SetInt(min)
-
-				n.expectedMax = reflect.New(tol.Type()).Elem()
-				n.expectedMax.SetInt(max)
-			}
+			n.nInt(tol)
 
 		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32,
 			reflect.Uint64:
-			if diff := tol.Uint(); diff != 0 {
-				base := n.expectedMin.Uint()
-
-				max := base + diff
-				if max < base {
-					max = math.MaxUint64
-				}
-
-				min := base - diff
-				if min > base {
-					min = 0
-				}
-
-				n.expectedMin = reflect.New(tol.Type()).Elem()
-				n.expectedMin.SetUint(min)
-
-				n.expectedMax = reflect.New(tol.Type()).Elem()
-				n.expectedMax.SetUint(max)
-			}
+			n.nUint(tol)
 
 		default: // case reflect.Float32, reflect.Float64:
-			if diff := tol.Float(); diff != 0 {
-				base := n.expectedMin.Float()
-
-				n.expectedMin = reflect.New(tol.Type()).Elem()
-				n.expectedMin.SetFloat(base - diff)
-
-				n.expectedMax = reflect.New(tol.Type()).Elem()
-				n.expectedMax.SetFloat(base + diff)
-			}
+			n.nFloat(tol)
 		}
 	}
 
@@ -254,6 +270,72 @@ func Lte(val interface{}) TestDeep {
 	return b.initBetween("usage: Lte(NUM|TIME)")
 }
 
+func (b *tdBetween) matchInt(got reflect.Value) (ok bool) {
+	switch b.minBound {
+	case boundIn:
+		ok = got.Int() >= b.expectedMin.Int()
+	case boundOut:
+		ok = got.Int() > b.expectedMin.Int()
+	default:
+		ok = true
+	}
+	if ok {
+		switch b.maxBound {
+		case boundIn:
+			ok = got.Int() <= b.expectedMax.Int()
+		case boundOut:
+			ok = got.Int() < b.expectedMax.Int()
+		default:
+			ok = true
+		}
+	}
+	return
+}
+
+func (b *tdBetween) matchUint(got reflect.Value) (ok bool) {
+	switch b.minBound {
+	case boundIn:
+		ok = got.Uint() >= b.expectedMin.Uint()
+	case boundOut:
+		ok = got.Uint() > b.expectedMin.Uint()
+	default:
+		ok = true
+	}
+	if ok {
+		switch b.maxBound {
+		case boundIn:
+			ok = got.Uint() <= b.expectedMax.Uint()
+		case boundOut:
+			ok = got.Uint() < b.expectedMax.Uint()
+		default:
+			ok = true
+		}
+	}
+	return
+}
+
+func (b *tdBetween) matchFloat(got reflect.Value) (ok bool) {
+	switch b.minBound {
+	case boundIn:
+		ok = got.Float() >= b.expectedMin.Float()
+	case boundOut:
+		ok = got.Float() > b.expectedMin.Float()
+	default:
+		ok = true
+	}
+	if ok {
+		switch b.maxBound {
+		case boundIn:
+			ok = got.Float() <= b.expectedMax.Float()
+		case boundOut:
+			ok = got.Float() < b.expectedMax.Float()
+		default:
+			ok = true
+		}
+	}
+	return
+}
+
 func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 	if got.Type() != b.expectedMin.Type() {
 		if ctx.booleanError {
@@ -272,65 +354,13 @@ func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 
 	switch got.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		switch b.minBound {
-		case boundIn:
-			ok = got.Int() >= b.expectedMin.Int()
-		case boundOut:
-			ok = got.Int() > b.expectedMin.Int()
-		default:
-			ok = true
-		}
-		if ok {
-			switch b.maxBound {
-			case boundIn:
-				ok = got.Int() <= b.expectedMax.Int()
-			case boundOut:
-				ok = got.Int() < b.expectedMax.Int()
-			default:
-				ok = true
-			}
-		}
+		ok = b.matchInt(got)
 
-	case reflect.Uint,
-		reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		switch b.minBound {
-		case boundIn:
-			ok = got.Uint() >= b.expectedMin.Uint()
-		case boundOut:
-			ok = got.Uint() > b.expectedMin.Uint()
-		default:
-			ok = true
-		}
-		if ok {
-			switch b.maxBound {
-			case boundIn:
-				ok = got.Uint() <= b.expectedMax.Uint()
-			case boundOut:
-				ok = got.Uint() < b.expectedMax.Uint()
-			default:
-				ok = true
-			}
-		}
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		ok = b.matchUint(got)
 
-	default: // == case reflect.Float32, reflect.Float64:
-		switch b.minBound {
-		case boundIn:
-			ok = got.Float() >= b.expectedMin.Float()
-		case boundOut:
-			ok = got.Float() > b.expectedMin.Float()
-		default:
-			ok = true
-		}
-		if ok {
-			switch b.maxBound {
-			case boundIn:
-				ok = got.Float() <= b.expectedMax.Float()
-			case boundOut:
-				ok = got.Float() < b.expectedMax.Float()
-			default:
-				ok = true
-			}
-		}
+	case reflect.Float32, reflect.Float64:
+		ok = b.matchFloat(got)
 	}
 
 	if ok {
@@ -394,11 +424,9 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	var cmpGot time.Time
-	if b.mustConvert {
-		cmpGot = got.Convert(timeType).Interface().(time.Time)
-	} else {
-		cmpGot = got.Interface().(time.Time)
+	cmpGot, err := getTime(ctx, got, b.mustConvert)
+	if err != nil {
+		return err
 	}
 
 	var ok bool

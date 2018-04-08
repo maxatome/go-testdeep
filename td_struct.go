@@ -9,7 +9,7 @@ import (
 )
 
 type tdStruct struct {
-	TestDeepBase
+	Base
 	expectedModel  reflect.Value
 	expectedFields fieldInfoSlice
 	isPtr          bool
@@ -35,7 +35,7 @@ func newStruct(model interface{}) *tdStruct {
 	vmodel := reflect.ValueOf(model)
 
 	st := tdStruct{
-		TestDeepBase: NewTestDeepBase(4),
+		Base: NewBase(4),
 	}
 
 	switch vmodel.Kind() {

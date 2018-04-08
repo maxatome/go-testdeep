@@ -6,24 +6,15 @@ import (
 	"strings"
 )
 
-type stringKind uint8
-
-const (
-	exactString stringKind = iota
-	prefixString
-	suffixString
-	containString
-)
-
 type tdStringBase struct {
-	TestDeepBase
+	Base
 	expected string
 }
 
 func newStringBase(expected string) tdStringBase {
 	return tdStringBase{
-		TestDeepBase: NewTestDeepBase(4),
-		expected:     expected,
+		Base:     NewBase(4),
+		expected: expected,
 	}
 }
 

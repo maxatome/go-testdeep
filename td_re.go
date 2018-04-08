@@ -7,7 +7,7 @@ import (
 )
 
 type tdRe struct {
-	TestDeepBase
+	Base
 	re         *regexp.Regexp
 	captures   reflect.Value
 	numMatches int
@@ -17,8 +17,8 @@ var _ TestDeep = &tdRe{}
 
 func newRe(usage string, opts ...interface{}) (r *tdRe) {
 	r = &tdRe{
-		TestDeepBase: NewTestDeepBase(4),
-		numMatches:   1, // only one match by default, see Global() for all
+		Base:       NewBase(4),
+		numMatches: 1, // only one match by default
 	}
 
 	switch len(opts) {
@@ -157,13 +157,13 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 
 	default:
 		var strOK bool
-		if got.CanInterface() {
-			switch iface := got.Interface().(type) {
+		if iface, ok := getInterface(got, true); ok {
+			switch gotVal := iface.(type) {
 			case fmt.Stringer:
-				str = iface.String()
+				str = gotVal.String()
 				strOK = true
 			case error:
-				str = iface.Error()
+				str = gotVal.Error()
 				strOK = true
 			default:
 			}

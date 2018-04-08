@@ -6,7 +6,7 @@ import (
 )
 
 type tdShallow struct {
-	TestDeepBase
+	Base
 	expectedKind    reflect.Kind
 	expectedPointer uintptr
 }
@@ -17,7 +17,7 @@ func Shallow(ptr interface{}) TestDeep {
 	vptr := reflect.ValueOf(ptr)
 
 	shallow := tdShallow{
-		TestDeepBase: NewTestDeepBase(3),
+		Base:         NewBase(3),
 		expectedKind: vptr.Kind(),
 	}
 

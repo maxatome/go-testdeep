@@ -6,7 +6,7 @@ import (
 )
 
 type tdMapEach struct {
-	TestDeepBaseOKNil
+	BaseOKNil
 	expected reflect.Value
 }
 
@@ -14,8 +14,8 @@ var _ TestDeep = &tdMapEach{}
 
 func MapEach(item interface{}) TestDeep {
 	return &tdMapEach{
-		TestDeepBaseOKNil: NewTestDeepBaseOKNil(3),
-		expected:          reflect.ValueOf(item),
+		BaseOKNil: NewBaseOKNil(3),
+		expected:  reflect.ValueOf(item),
 	}
 }
 

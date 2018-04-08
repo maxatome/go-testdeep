@@ -6,7 +6,7 @@ import (
 	. "github.com/maxatome/go-testdeep"
 )
 
-type ComplexStruct struct {
+type ComplexStruct struct { // nolint: megacheck
 	ItemsByName map[string]*ComplexStructItem
 	ItemsById   map[uint32]*ComplexStructItem
 	Items       []*ComplexStructItem
@@ -14,7 +14,7 @@ type ComplexStruct struct {
 	Weight      float64
 }
 
-type ComplexStructItem struct {
+type ComplexStructItem struct { // nolint: megacheck
 	Name       string
 	Id         uint32
 	properties []ItemProperty

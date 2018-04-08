@@ -7,7 +7,7 @@ import (
 )
 
 type tdTruncTime struct {
-	TestDeepBase
+	Base
 	expectedType reflect.Type
 	expectedTime time.Time
 	trunc        time.Duration
@@ -18,7 +18,7 @@ var _ TestDeep = &tdTruncTime{}
 func TruncTime(val interface{}, trunc ...time.Duration) TestDeep {
 	if len(trunc) <= 1 {
 		t := tdTruncTime{
-			TestDeepBase: NewTestDeepBase(3),
+			Base: NewBase(3),
 		}
 
 		if len(trunc) == 1 {
@@ -55,27 +55,10 @@ func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	var (
-		gotIf interface{}
-		ok    bool
-	)
-	if got.Type() == timeType {
-		gotIf, ok = getInterface(got, true)
-	} else {
-		gotIf, ok = getInterface(got.Convert(timeType), true)
+	gotTime, err := getTime(ctx, got, got.Type() != timeType)
+	if err != nil {
+		return err
 	}
-	if !ok {
-		if ctx.booleanError {
-			return booleanError
-		}
-		return &Error{
-			Context: ctx,
-			Message: "cannot compare unexported field that cannot be overridden",
-			Summary: "",
-		}
-	}
-
-	gotTime := gotIf.(time.Time)
 	gotTimeTrunc := gotTime.Truncate(t.trunc)
 
 	if gotTimeTrunc.Equal(t.expectedTime) {

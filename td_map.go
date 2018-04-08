@@ -14,13 +14,11 @@ const (
 	superMap
 )
 
-var mapKindStr = []string{"Map", "SubMapOf", "SuperMapOf"}
-
 type tdMap struct {
-	TestDeepBase
-	kind            mapKind
+	Base
 	expectedModel   reflect.Value
 	expectedEntries []mapEntryInfo
+	kind            mapKind
 	isPtr           bool
 }
 
@@ -37,8 +35,8 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 	vmodel := reflect.ValueOf(model)
 
 	m := tdMap{
-		TestDeepBase: NewTestDeepBase(4),
-		kind:         kind,
+		Base: NewBase(4),
+		kind: kind,
 	}
 
 	switch vmodel.Kind() {

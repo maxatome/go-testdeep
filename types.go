@@ -12,12 +12,11 @@ import (
 var testDeeper = reflect.TypeOf((*TestDeep)(nil)).Elem()
 
 var stringerInterface = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
-var errorInterface = reflect.TypeOf((*error)(nil)).Elem()
 
 var timeType = reflect.TypeOf(time.Time{})
 
 type testDeepStringer interface {
-	___testDeep___()
+	_TestDeep()
 	String() string
 }
 
@@ -42,13 +41,13 @@ type TestDeep interface {
 	HandleInvalid() bool
 }
 
-type TestDeepBase struct {
+type Base struct {
 	location Location
 }
 
-func (t TestDeepBase) ___testDeep___() {}
+func (t Base) _TestDeep() {}
 
-func (t *TestDeepBase) setLocation(callDepth int) {
+func (t *Base) setLocation(callDepth int) {
 	_, file, line, ok := runtime.Caller(callDepth)
 	if ok {
 		if index := strings.LastIndexAny(file, `/\`); index >= 0 {
@@ -74,28 +73,28 @@ func (t *TestDeepBase) setLocation(callDepth int) {
 	}
 }
 
-func (t *TestDeepBase) GetLocation() Location {
+func (t *Base) GetLocation() Location {
 	return t.location
 }
 
-func (t TestDeepBase) HandleInvalid() bool {
+func (t Base) HandleInvalid() bool {
 	return false
 }
 
-func NewTestDeepBase(callDepth int) (b TestDeepBase) {
+func NewBase(callDepth int) (b Base) {
 	b.setLocation(callDepth)
 	return
 }
 
-type TestDeepBaseOKNil struct {
-	TestDeepBase
+type BaseOKNil struct {
+	Base
 }
 
-func (t TestDeepBaseOKNil) HandleInvalid() bool {
+func (t BaseOKNil) HandleInvalid() bool {
 	return true
 }
 
-func NewTestDeepBaseOKNil(callDepth int) (b TestDeepBaseOKNil) {
+func NewBaseOKNil(callDepth int) (b BaseOKNil) {
 	b.setLocation(callDepth)
 	return
 }
@@ -103,7 +102,7 @@ func NewTestDeepBaseOKNil(callDepth int) (b TestDeepBaseOKNil) {
 // Implements testDeepStringer
 type rawString string
 
-func (s rawString) ___testDeep___() {}
+func (s rawString) _TestDeep() {}
 
 func (s rawString) String() string {
 	return string(s)
@@ -112,7 +111,7 @@ func (s rawString) String() string {
 // Implements testDeepStringer
 type rawInt int
 
-func (i rawInt) ___testDeep___() {}
+func (i rawInt) _TestDeep() {}
 
 func (i rawInt) String() string {
 	return strconv.Itoa(int(i))

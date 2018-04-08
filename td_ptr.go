@@ -5,7 +5,7 @@ import (
 )
 
 type tdPtr struct {
-	TestDeepBase
+	Base
 	expectedValue reflect.Value
 	isTestDeeper  bool
 }
@@ -16,7 +16,7 @@ func Ptr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
 		p := tdPtr{
-			TestDeepBase: NewTestDeepBase(3),
+			Base: NewBase(3),
 		}
 
 		if _, ok := val.(TestDeep); ok {
@@ -71,7 +71,7 @@ func PPtr(val interface{}) TestDeep {
 	if vval.IsValid() {
 		p := tdPPtr{
 			tdPtr: tdPtr{
-				TestDeepBase: NewTestDeepBase(3),
+				Base: NewBase(3),
 			},
 		}
 

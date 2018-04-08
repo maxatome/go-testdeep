@@ -8,7 +8,7 @@ import (
 )
 
 type tdArray struct {
-	TestDeepBase
+	Base
 	expectedModel   reflect.Value
 	expectedEntries entryInfoSlice
 	isPtr           bool
@@ -33,7 +33,7 @@ func Array(model interface{}, entries ArrayEntries) TestDeep {
 	vmodel := reflect.ValueOf(model)
 
 	a := tdArray{
-		TestDeepBase: NewTestDeepBase(3),
+		Base: NewBase(3),
 	}
 
 	switch vmodel.Kind() {
@@ -58,7 +58,7 @@ func Slice(model interface{}, entries ArrayEntries) TestDeep {
 	vmodel := reflect.ValueOf(model)
 
 	a := tdArray{
-		TestDeepBase: NewTestDeepBase(3),
+		Base: NewBase(3),
 	}
 
 	switch vmodel.Kind() {

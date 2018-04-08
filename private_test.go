@@ -6,8 +6,8 @@ import (
 
 // Edge cases not tested elsewhere...
 
-func TestTestDeepBase(t *testing.T) {
-	td := TestDeepBase{}
+func TestBase(t *testing.T) {
+	td := Base{}
 
 	td.setLocation(200)
 	if td.location.File != "???" && td.location.Line != 0 {

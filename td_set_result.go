@@ -32,7 +32,7 @@ type tdSetResult struct {
 
 var _ testDeepStringer = tdSetResult{}
 
-func (r tdSetResult) ___testDeep___() {}
+func (r tdSetResult) _TestDeep() {}
 
 func (r tdSetResult) IsEmpty() bool {
 	return len(r.Missing) == 0 && len(r.Extra) == 0

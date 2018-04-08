@@ -6,7 +6,7 @@ import (
 )
 
 type tdArrayEach struct {
-	TestDeepBaseOKNil
+	BaseOKNil
 	expected reflect.Value
 }
 
@@ -14,8 +14,8 @@ var _ TestDeep = &tdArrayEach{}
 
 func ArrayEach(item interface{}) TestDeep {
 	return &tdArrayEach{
-		TestDeepBaseOKNil: NewTestDeepBaseOKNil(3),
-		expected:          reflect.ValueOf(item),
+		BaseOKNil: NewBaseOKNil(3),
+		expected:  reflect.ValueOf(item),
 	}
 }
 
