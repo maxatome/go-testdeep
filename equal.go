@@ -336,7 +336,7 @@ func getInterface(val reflect.Value, force bool) (interface{}, bool) {
 	}
 
 	// For some types, we can copy them in new visitable reflect.Value instances
-	copyVal, ok := copyValue(val)
+	copyVal, ok := CopyValue(val)
 	if ok && copyVal.CanInterface() {
 		return copyVal.Interface(), true
 	}

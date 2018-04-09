@@ -2,12 +2,19 @@ package testdeep
 
 import (
 	"reflect"
+	"unicode"
+	"unicode/utf8"
 )
 
-// copyValue copies the first level of val in a new reflect.Value instance.
-func copyValue(val reflect.Value) (reflect.Value, bool) {
+// CopyValue copies val in a new reflect.Value instance.
+func CopyValue(val reflect.Value) (reflect.Value, bool) {
 	if val.Kind() == reflect.Ptr {
-		refVal, ok := copyValue(val.Elem())
+		if val.IsNil() {
+			newPtrVal := reflect.New(val.Type())
+			return newPtrVal.Elem(), true
+		}
+
+		refVal, ok := CopyValue(val.Elem())
 		if !ok {
 			return reflect.Value{}, false
 		}
@@ -52,7 +59,7 @@ func copyValue(val reflect.Value) (reflect.Value, bool) {
 			ok   bool
 		)
 		for i := val.Len() - 1; i >= 0; i-- {
-			item, ok = copyValue(val.Index(i))
+			item, ok = CopyValue(val.Index(i))
 			if !ok {
 				return reflect.Value{}, false
 			}
@@ -60,13 +67,18 @@ func copyValue(val reflect.Value) (reflect.Value, bool) {
 		}
 
 	case reflect.Slice:
+		if val.IsNil() {
+			newPtrVal := reflect.New(val.Type())
+			return newPtrVal.Elem(), true
+		}
+
 		newVal = reflect.MakeSlice(val.Type(), val.Len(), val.Cap())
 		var (
 			item reflect.Value
 			ok   bool
 		)
 		for i := val.Len() - 1; i >= 0; i-- {
-			item, ok = copyValue(val.Index(i))
+			item, ok = CopyValue(val.Index(i))
 			if !ok {
 				return reflect.Value{}, false
 			}
@@ -74,17 +86,22 @@ func copyValue(val reflect.Value) (reflect.Value, bool) {
 		}
 
 	case reflect.Map:
+		if val.IsNil() {
+			newPtrVal := reflect.New(val.Type())
+			return newPtrVal.Elem(), true
+		}
+
 		newVal = reflect.MakeMapWithSize(val.Type(), val.Len())
 		var (
 			key, value reflect.Value
 			ok         bool
 		)
 		for _, keyVal := range val.MapKeys() {
-			key, ok = copyValue(keyVal)
+			key, ok = CopyValue(keyVal)
 			if !ok {
 				return reflect.Value{}, false
 			}
-			value, ok = copyValue(val.MapIndex(key))
+			value, ok = CopyValue(val.MapIndex(key))
 			if !ok {
 				return reflect.Value{}, false
 			}
@@ -92,9 +109,14 @@ func copyValue(val reflect.Value) (reflect.Value, bool) {
 		}
 
 	case reflect.Interface:
+		if val.IsNil() {
+			newPtrVal := reflect.New(val.Type())
+			return newPtrVal.Elem(), true
+		}
+
 		newPtrVal := reflect.New(val.Type())
 		newVal = newPtrVal.Elem()
-		refVal, ok := copyValue(val.Elem())
+		refVal, ok := CopyValue(val.Elem())
 		if !ok {
 			return reflect.Value{}, false
 		}
@@ -105,6 +127,36 @@ func copyValue(val reflect.Value) (reflect.Value, bool) {
 		newVal = newPtrVal.Elem()
 		newVal.SetString(val.String())
 
+	case reflect.Struct:
+		// First, check if all fields are public
+		sType := val.Type()
+		for i, n := 0, val.NumField(); i < n; i++ {
+			r, _ := utf8.DecodeRuneInString(sType.Field(i).Name)
+			if !unicode.IsUpper(r) {
+				return reflect.Value{}, false
+			}
+		}
+
+		// OK all fields are public
+		newPtrVal := reflect.New(sType)
+		newVal = newPtrVal.Elem()
+
+		var (
+			fieldIdx []int
+			fieldVal reflect.Value
+			ok       bool
+		)
+		for i, n := 0, val.NumField(); i < n; i++ {
+			fieldIdx = sType.Field(i).Index
+
+			fieldVal, ok = CopyValue(val.FieldByIndex(fieldIdx))
+			if !ok {
+				return reflect.Value{}, false // Should not happen as already checked
+			}
+			newVal.FieldByIndex(fieldIdx).Set(fieldVal)
+		}
+
+		// Does not handle Chan, Func and UnsafePointer
 	default:
 		return reflect.Value{}, false
 	}

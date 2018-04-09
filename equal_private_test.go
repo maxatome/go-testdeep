@@ -11,7 +11,9 @@ func TestGetInterface(t *testing.T) {
 	}
 
 	// Cases not tested by TestEqualOthers()
-	s := Private{}
+	s := Private{
+		private: &Private{},
+	}
 
 	_, ok := getInterface(reflect.ValueOf(s).Field(0), false)
 	if ok {
