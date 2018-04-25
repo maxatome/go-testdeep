@@ -11,12 +11,12 @@ func TestArray(t *testing.T) {
 
 	//
 	// Simple array
-	gotArray := [...]int{1, 2, 3, 4, 5}
+	checkOK(t, [5]int{}, Array([5]int{}, nil))
+	checkOK(t, [5]int{0, 0, 0, 4}, Array([5]int{0, 0, 0, 4}, nil))
+	checkOK(t, [5]int{1, 0, 3}, Array([5]int{}, ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, [5]int{1, 2, 3}, Array([5]int{0, 2}, ArrayEntries{2: 3, 0: 1}))
 
-	checkOK(t, gotArray, Array([5]int{}, nil))
-	checkOK(t, gotArray, Array([5]int{0, 0, 0, 4}, nil))
-	checkOK(t, gotArray, Array([5]int{}, ArrayEntries{2: 3, 0: 1}))
-	checkOK(t, gotArray, Array([5]int{0, 2}, ArrayEntries{2: 3, 0: 1}))
+	gotArray := [...]int{1, 2, 3, 4, 5}
 
 	checkError(t, gotArray, Array(MyArray{}, nil),
 		expectedError{
@@ -25,14 +25,14 @@ func TestArray(t *testing.T) {
 			Got:      mustBe("[5]int"),
 			Expected: mustBe("testdeep_test.MyArray"),
 		})
-	checkError(t, gotArray, Array([5]int{0, 0, 0, 0, 6}, nil),
+	checkError(t, gotArray, Array([5]int{1, 2, 3, 4, 6}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
 			Got:      mustBe("(int) 5"),
 			Expected: mustBe("(int) 6"),
 		})
-	checkError(t, gotArray, Array([5]int{}, ArrayEntries{4: 6}),
+	checkError(t, gotArray, Array([5]int{1, 2, 3, 4}, ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
@@ -42,17 +42,17 @@ func TestArray(t *testing.T) {
 
 	//
 	// Array type
+	checkOK(t, MyArray{}, Array(MyArray{}, nil))
+	checkOK(t, MyArray{0, 0, 0, 4}, Array(MyArray{0, 0, 0, 4}, nil))
+	checkOK(t, MyArray{1, 0, 3}, Array(MyArray{}, ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, MyArray{1, 2, 3}, Array(MyArray{0, 2}, ArrayEntries{2: 3, 0: 1}))
+
+	checkOK(t, &MyArray{}, Array(&MyArray{}, nil))
+	checkOK(t, &MyArray{0, 0, 0, 4}, Array(&MyArray{0, 0, 0, 4}, nil))
+	checkOK(t, &MyArray{1, 0, 3}, Array(&MyArray{}, ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, &MyArray{1, 2, 3}, Array(&MyArray{0, 2}, ArrayEntries{2: 3, 0: 1}))
+
 	gotTypedArray := MyArray{1, 2, 3, 4, 5}
-
-	checkOK(t, gotTypedArray, Array(MyArray{}, nil))
-	checkOK(t, gotTypedArray, Array(MyArray{0, 0, 0, 4}, nil))
-	checkOK(t, gotTypedArray, Array(MyArray{}, ArrayEntries{2: 3, 0: 1}))
-	checkOK(t, gotTypedArray, Array(MyArray{0, 2}, ArrayEntries{2: 3, 0: 1}))
-
-	checkOK(t, &gotTypedArray, Array(&MyArray{}, nil))
-	checkOK(t, &gotTypedArray, Array(&MyArray{0, 0, 0, 4}, nil))
-	checkOK(t, &gotTypedArray, Array(&MyArray{}, ArrayEntries{2: 3, 0: 1}))
-	checkOK(t, &gotTypedArray, Array(&MyArray{0, 2}, ArrayEntries{2: 3, 0: 1}))
 
 	checkError(t, 123, Array(&MyArray{}, ArrayEntries{}),
 		expectedError{
@@ -77,14 +77,14 @@ func TestArray(t *testing.T) {
 			Got:      mustBe("testdeep_test.MyArray"),
 			Expected: mustBe("[5]int"),
 		})
-	checkError(t, gotTypedArray, Array(MyArray{0, 0, 0, 0, 6}, nil),
+	checkError(t, gotTypedArray, Array(MyArray{1, 2, 3, 4, 6}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
 			Got:      mustBe("(int) 5"),
 			Expected: mustBe("(int) 6"),
 		})
-	checkError(t, gotTypedArray, Array(MyArray{}, ArrayEntries{4: 6}),
+	checkError(t, gotTypedArray, Array(MyArray{1, 2, 3, 4}, ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
@@ -99,14 +99,14 @@ func TestArray(t *testing.T) {
 			Got:      mustBe("*testdeep_test.MyArray"),
 			Expected: mustBe("[5]int"),
 		})
-	checkError(t, &gotTypedArray, Array(&MyArray{0, 0, 0, 0, 6}, nil),
+	checkError(t, &gotTypedArray, Array(&MyArray{1, 2, 3, 4, 6}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
 			Got:      mustBe("(int) 5"),
 			Expected: mustBe("(int) 6"),
 		})
-	checkError(t, &gotTypedArray, Array(&MyArray{}, ArrayEntries{4: 6}),
+	checkError(t, &gotTypedArray, Array(&MyArray{1, 2, 3, 4}, ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
@@ -133,6 +133,8 @@ func TestArray(t *testing.T) {
   0: (int) 2
   1: (int) 3
   2: (int) 4
+  3: (int) 0
+  4: (int) 0
 })`)
 
 	equalStr(t, Array(&MyArray{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
@@ -140,10 +142,12 @@ func TestArray(t *testing.T) {
   0: (int) 2
   1: (int) 3
   2: (int) 4
+  3: (int) 0
+  4: (int) 0
 })`)
 
-	equalStr(t, Array(&MyArray{}, ArrayEntries{}).String(),
-		`Array(*testdeep_test.MyArray{})`)
+	equalStr(t, Array([0]int{}, ArrayEntries{}).String(),
+		`Array([0]int{})`)
 }
 
 func TestSlice(t *testing.T) {
@@ -151,12 +155,13 @@ func TestSlice(t *testing.T) {
 
 	//
 	// Simple slice
-	gotSlice := []int{2, 3, 4}
+	checkOK(t, []int{}, Slice([]int{}, nil))
+	checkOK(t, []int{0, 3}, Slice([]int{0, 3}, nil))
+	checkOK(t, []int{2, 3}, Slice([]int{}, ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, []int{2, 3, 4}, Slice([]int{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, []int{2, 3, 4}, Slice([]int{2, 3}, ArrayEntries{2: 4}))
 
-	checkOK(t, gotSlice, Slice([]int{}, nil))
-	checkOK(t, gotSlice, Slice([]int{0, 3}, nil))
-	checkOK(t, gotSlice, Slice([]int{}, ArrayEntries{1: 3, 0: 2}))
-	checkOK(t, gotSlice, Slice([]int{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
+	gotSlice := []int{2, 3, 4}
 
 	checkError(t, gotSlice, Slice(MySlice{}, nil),
 		expectedError{
@@ -165,14 +170,14 @@ func TestSlice(t *testing.T) {
 			Got:      mustBe("[]int"),
 			Expected: mustBe("testdeep_test.MySlice"),
 		})
-	checkError(t, gotSlice, Slice([]int{0, 0, 5}, nil),
+	checkError(t, gotSlice, Slice([]int{2, 3, 5}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, gotSlice, Slice([]int{}, ArrayEntries{2: 5}),
+	checkError(t, gotSlice, Slice([]int{2, 3}, ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
@@ -182,17 +187,19 @@ func TestSlice(t *testing.T) {
 
 	//
 	// Slice type
+	checkOK(t, MySlice{}, Slice(MySlice{}, nil))
+	checkOK(t, MySlice{0, 3}, Slice(MySlice{0, 3}, nil))
+	checkOK(t, MySlice{2, 3}, Slice(MySlice{}, ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, MySlice{2, 3, 4},
+		Slice(MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
+
+	checkOK(t, &MySlice{}, Slice(&MySlice{}, nil))
+	checkOK(t, &MySlice{0, 3}, Slice(&MySlice{0, 3}, nil))
+	checkOK(t, &MySlice{2, 3}, Slice(&MySlice{}, ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, &MySlice{2, 3, 4},
+		Slice(&MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
+
 	gotTypedSlice := MySlice{2, 3, 4}
-
-	checkOK(t, gotTypedSlice, Slice(MySlice{}, nil))
-	checkOK(t, gotTypedSlice, Slice(MySlice{0, 3}, nil))
-	checkOK(t, gotTypedSlice, Slice(MySlice{}, ArrayEntries{1: 3, 0: 2}))
-	checkOK(t, gotTypedSlice, Slice(MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
-
-	checkOK(t, &gotTypedSlice, Slice(&MySlice{}, nil))
-	checkOK(t, &gotTypedSlice, Slice(&MySlice{0, 3}, nil))
-	checkOK(t, &gotTypedSlice, Slice(&MySlice{}, ArrayEntries{1: 3, 0: 2}))
-	checkOK(t, &gotTypedSlice, Slice(&MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
 
 	checkError(t, 123, Slice(&MySlice{}, ArrayEntries{}),
 		expectedError{
@@ -217,26 +224,33 @@ func TestSlice(t *testing.T) {
 			Got:      mustBe("testdeep_test.MySlice"),
 			Expected: mustBe("[]int"),
 		})
-	checkError(t, gotTypedSlice, Slice(MySlice{0, 0, 5}, nil),
+	checkError(t, gotTypedSlice, Slice(MySlice{2, 3, 5}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, gotTypedSlice, Slice(MySlice{}, ArrayEntries{2: 5}),
+	checkError(t, gotTypedSlice, Slice(MySlice{2, 3}, ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, gotTypedSlice, Slice(MySlice{}, ArrayEntries{65: 5}),
+	checkError(t, gotTypedSlice, Slice(MySlice{2, 3, 4}, ArrayEntries{3: 5}),
 		expectedError{
 			Message:  mustBe("expected value out of range"),
-			Path:     mustBe("DATA[65]"),
+			Path:     mustBe("DATA[3]"),
 			Got:      mustBe("<non-existent value>"),
 			Expected: mustBe("(int) 5"),
+		})
+	checkError(t, gotTypedSlice, Slice(MySlice{2, 3}, nil),
+		expectedError{
+			Message:  mustBe("got value out of range"),
+			Path:     mustBe("DATA[2]"),
+			Got:      mustBe("(int) 4"),
+			Expected: mustBe("<non-existent value>"),
 		})
 
 	checkError(t, &gotTypedSlice, Slice([]int{}, nil),
@@ -246,19 +260,26 @@ func TestSlice(t *testing.T) {
 			Got:      mustBe("*testdeep_test.MySlice"),
 			Expected: mustBe("[]int"),
 		})
-	checkError(t, &gotTypedSlice, Slice(&MySlice{0, 0, 5}, nil),
+	checkError(t, &gotTypedSlice, Slice(&MySlice{2, 3, 5}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, &gotTypedSlice, Slice(&MySlice{}, ArrayEntries{2: 5}),
+	checkError(t, &gotTypedSlice, Slice(&MySlice{2, 3}, ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
+		})
+	checkError(t, &gotTypedSlice, Slice(&MySlice{2, 3}, nil),
+		expectedError{
+			Message:  mustBe("got value out of range"),
+			Path:     mustBe("DATA[2]"),
+			Got:      mustBe("(int) 4"),
+			Expected: mustBe("<non-existent value>"),
 		})
 
 	//

@@ -4,28 +4,16 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
-	"sort"
 )
 
 type tdArray struct {
 	Base
 	expectedModel   reflect.Value
-	expectedEntries entryInfoSlice
+	expectedEntries []reflect.Value
 	isPtr           bool
 }
 
 var _ TestDeep = &tdArray{}
-
-type entryInfo struct {
-	index    int
-	expected reflect.Value
-}
-
-type entryInfoSlice []entryInfo
-
-func (e entryInfoSlice) Len() int           { return len(e) }
-func (e entryInfoSlice) Less(i, j int) bool { return e[i].index < e[j].index }
-func (e entryInfoSlice) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
 
 type ArrayEntries map[int]interface{}
 
@@ -80,70 +68,86 @@ func Slice(model interface{}, entries ArrayEntries) TestDeep {
 }
 
 func (a *tdArray) populateExpectedEntries(entries ArrayEntries) {
-	var length int
-	if a.expectedModel.Kind() == reflect.Array {
-		length = a.expectedModel.Len()
-	} else {
-		length = -1
+	var maxLength, numEntries int
+
+	maxIndex := -1
+	for index := range entries {
+		if index > maxIndex {
+			maxIndex = index
+		}
 	}
 
-	a.expectedEntries = make([]entryInfo, 0, len(entries))
-	checkedIndexes := make(map[int]bool, len(entries))
+	if a.expectedModel.Kind() == reflect.Array {
+		maxLength = a.expectedModel.Len()
+
+		if maxLength <= maxIndex {
+			panic(fmt.Sprintf(
+				"array length is %d, so cannot have #%d expected index",
+				maxLength,
+				maxIndex))
+		}
+		numEntries = maxLength
+	} else {
+		maxLength = -1
+
+		numEntries = maxIndex + 1
+		if numEntries < a.expectedModel.Len() {
+			numEntries = a.expectedModel.Len()
+		}
+	}
+
+	a.expectedEntries = make([]reflect.Value, numEntries)
 
 	elemType := a.expectedModel.Type().Elem()
 	for index, expectedValue := range entries {
-		if length >= 0 && index >= length {
-			panic(fmt.Sprintf(
-				"array length is %d, so cannot have #%d expected index",
-				length,
-				index))
-		}
-
 		vexpectedValue := reflect.ValueOf(expectedValue)
 
 		if _, ok := expectedValue.(TestDeep); !ok {
 			if !vexpectedValue.Type().AssignableTo(elemType) {
-				arrayOrSlice := "array"
-				if length < 0 {
-					arrayOrSlice = "slice"
-				}
 				panic(fmt.Sprintf(
 					"type %s of #%d expected value differs from %s content (%s)",
 					vexpectedValue.Type(),
 					index,
-					arrayOrSlice,
+					ternStr(maxLength < 0, "slice", "array"),
 					elemType))
 			}
 		}
 
-		a.expectedEntries = append(a.expectedEntries, entryInfo{
-			index:    index,
-			expected: vexpectedValue,
-		})
-		checkedIndexes[index] = true
+		a.expectedEntries[index] = vexpectedValue
 	}
 
 	// Check initialized entries in model
-	zero := reflect.Zero(elemType).Interface()
+	vzero := reflect.Zero(elemType)
+	zero := vzero.Interface()
 	for index := a.expectedModel.Len() - 1; index >= 0; index-- {
 		ventry := a.expectedModel.Index(index)
 
-		// If non-zero entry
-		if !reflect.DeepEqual(zero, ventry.Interface()) {
-			if checkedIndexes[index] {
+		// Entry already expected
+		if _, ok := entries[index]; ok {
+			// If non-zero entry, consider it as an error (= 2 expected
+			// values for the same item)
+			if !reflect.DeepEqual(zero, ventry.Interface()) {
 				panic(fmt.Sprintf(
 					"non zero #%d entry in model already exists in expectedEntries",
 					index))
 			}
-
-			a.expectedEntries = append(a.expectedEntries, entryInfo{
-				index:    index,
-				expected: ventry,
-			})
+			continue
 		}
+
+		a.expectedEntries[index] = ventry
 	}
 
-	sort.Sort(a.expectedEntries)
+	// Array case, all is OK
+	if maxLength >= 0 {
+		return
+	}
+
+	// Slice case, initialize missing expected items to zero
+	for index := a.expectedModel.Len(); index < numEntries; index++ {
+		if _, ok := entries[index]; !ok {
+			a.expectedEntries[index] = vzero
+		}
+	}
 }
 
 func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
@@ -182,10 +186,10 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	gotLen := got.Len()
-	for _, entryInfo := range a.expectedEntries {
-		curCtx := ctx.AddArrayIndex(entryInfo.index)
+	for index, expectedValue := range a.expectedEntries {
+		curCtx := ctx.AddArrayIndex(index)
 
-		if entryInfo.index >= gotLen {
+		if index >= gotLen {
 			if ctx.booleanError {
 				return booleanError
 			}
@@ -193,16 +197,30 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 				Context:  curCtx,
 				Message:  "expected value out of range",
 				Got:      rawString("<non-existent value>"),
-				Expected: entryInfo.expected,
+				Expected: expectedValue,
 				Location: a.GetLocation(),
 			}
 		}
 
-		err = deepValueEqual(got.Index(entryInfo.index), entryInfo.expected, curCtx)
+		err = deepValueEqual(got.Index(index), expectedValue, curCtx)
 		if err != nil {
 			return err.SetLocationIfMissing(a)
 		}
 	}
+
+	if gotLen > len(a.expectedEntries) {
+		if ctx.booleanError {
+			return booleanError
+		}
+		return &Error{
+			Context:  ctx.AddArrayIndex(len(a.expectedEntries)),
+			Message:  "got value out of range",
+			Got:      got.Index(len(a.expectedEntries)),
+			Expected: rawString("<non-existent value>"),
+			Location: a.GetLocation(),
+		}
+	}
+
 	return nil
 }
 
@@ -217,9 +235,8 @@ func (a *tdArray) String() string {
 	} else {
 		buf.WriteString("{\n")
 
-		for _, entryInfo := range a.expectedEntries {
-			fmt.Fprintf(buf, "  %d: %s\n",
-				entryInfo.index, toString(entryInfo.expected))
+		for index, expectedValue := range a.expectedEntries {
+			fmt.Fprintf(buf, "  %d: %s\n", index, toString(expectedValue))
 		}
 
 		buf.WriteString("})")
