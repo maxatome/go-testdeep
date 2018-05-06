@@ -1,6 +1,8 @@
 package testdeep_test
 
 import (
+	"bytes"
+	"fmt"
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
@@ -13,6 +15,9 @@ func TestNil(t *testing.T) {
 	checkOK(t, (*int)(nil), Nil())
 	checkOK(t, (chan int)(nil), Nil())
 	checkOK(t, nil, Nil())
+
+	var got fmt.Stringer = (*bytes.Buffer)(nil)
+	checkOK(t, got, Nil())
 
 	checkError(t, 42, Nil(),
 		expectedError{
@@ -84,6 +89,15 @@ func TestNotNil(t *testing.T) {
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil"),
+			Expected: mustBe("not nil"),
+		})
+
+	var got fmt.Stringer = (*bytes.Buffer)(nil)
+	checkError(t, got, NotNil(),
+		expectedError{
+			Message:  mustBe("nil value"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("<nil>"),
 			Expected: mustBe("not nil"),
 		})
 

@@ -44,7 +44,7 @@ func (t *Base) setLocation(callDepth int) {
 
 	opDotPos := strings.LastIndex(t.location.Func, ".")
 
-	// Try to go one level deeper, to check if it is a CmpXxx function
+	// Try to go one level upper, to check if it is a CmpXxx function
 	cmpLoc, ok := NewLocation(callDepth + 1)
 	if ok {
 		cmpDotPos := strings.LastIndex(cmpLoc.Func, ".")

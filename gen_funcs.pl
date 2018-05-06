@@ -154,6 +154,8 @@ sub extract_params
     my($func, $params_str) = @_;
     my $str = substr($params_str, 1, -1);
 
+    $str ne '' or return;
+
     my @params;
     for (;;)
     {
@@ -163,8 +165,10 @@ sub extract_params
                       |&[a-zA-Z_]\w*(?:$rec)?      # &Struct{...}, &variable
                       |\[[^][]*\]\w+$rec           # []Array{...}
 	              |map${reb}\w+$rec            # map[...]Type{...}
+                      |func\([^)]*\)[^{]+$rec      # func fn (...) ... { ... }
                       |[a-zA-Z_]\w*(?:\.\w+)?(?:$rec|$rep)? # Str{...}, Fn(...), pkg.var
 	              |[\w.*+-\/]+                 # 123*pkg.var...
+	              |$rep$rep                    # (type)(value)
                       )\s*(,|\z)/msgx)
 	{
 	    push(@params, $1);

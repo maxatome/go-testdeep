@@ -49,9 +49,15 @@ func CmpBetween(t *testing.T, got interface{}, from interface{}, to interface{},
 }
 
 // CmpCap is a shortcut for:
-//   CmpDeeply(t, got, Cap(min, max...), args...)
-func CmpCap(t *testing.T, got interface{}, min int, max []int, args ...interface{}) bool {
-	return CmpDeeply(t, got, Cap(min, max...), args...)
+//   CmpDeeply(t, got, Cap(min), args...)
+func CmpCap(t *testing.T, got interface{}, min int, args ...interface{}) bool {
+	return CmpDeeply(t, got, Cap(min), args...)
+}
+
+// CmpCapBetween is a shortcut for:
+//   CmpDeeply(t, got, CapBetween(min, max), args...)
+func CmpCapBetween(t *testing.T, got interface{}, min int, max int, args ...interface{}) bool {
+	return CmpDeeply(t, got, CapBetween(min, max), args...)
 }
 
 // CmpCode is a shortcut for:
@@ -97,9 +103,15 @@ func CmpIsa(t *testing.T, got interface{}, model interface{}, args ...interface{
 }
 
 // CmpLen is a shortcut for:
-//   CmpDeeply(t, got, Len(min, max...), args...)
-func CmpLen(t *testing.T, got interface{}, min int, max []int, args ...interface{}) bool {
-	return CmpDeeply(t, got, Len(min, max...), args...)
+//   CmpDeeply(t, got, Len(min), args...)
+func CmpLen(t *testing.T, got interface{}, min int, args ...interface{}) bool {
+	return CmpDeeply(t, got, Len(min), args...)
+}
+
+// CmpLenBetween is a shortcut for:
+//   CmpDeeply(t, got, LenBetween(min, max), args...)
+func CmpLenBetween(t *testing.T, got interface{}, min int, max int, args ...interface{}) bool {
+	return CmpDeeply(t, got, LenBetween(min, max), args...)
 }
 
 // CmpLt is a shortcut for:
@@ -152,6 +164,12 @@ func CmpNone(t *testing.T, got interface{}, items []interface{}, args ...interfa
 //   CmpDeeply(t, got, NoneOf(items...), args...)
 func CmpNoneOf(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
 	return CmpDeeply(t, got, NoneOf(items...), args...)
+}
+
+// CmpNot is a shortcut for:
+//   CmpDeeply(t, got, Not(item), args...)
+func CmpNot(t *testing.T, got interface{}, item interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, Not(item), args...)
 }
 
 // CmpNotNil is a shortcut for:

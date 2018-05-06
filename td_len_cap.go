@@ -11,15 +11,12 @@ type tdCapLen struct {
 	expectedMax int
 }
 
-func (c *tdCapLen) initCapLen(min int, max ...int) bool {
+func (c *tdCapLen) initCapLen(min int, max ...int) {
 	c.Base = NewBase(4)
 
 	c.expectedMin = min
 
 	if len(max) > 0 {
-		if len(max) > 1 {
-			return false
-		}
 		c.expectedMax = max[0]
 	} else {
 		c.expectedMax = c.expectedMin
@@ -28,8 +25,6 @@ func (c *tdCapLen) initCapLen(min int, max ...int) bool {
 	if c.expectedMax < c.expectedMin {
 		c.expectedMin, c.expectedMax = c.expectedMax, c.expectedMin
 	}
-
-	return true
 }
 
 func (c *tdCapLen) toString(name string) string {
@@ -58,12 +53,18 @@ type tdLen struct {
 
 var _ TestDeep = &tdLen{}
 
-func Len(min int, max ...int) TestDeep {
+func Len(min int) TestDeep {
 	l := tdLen{}
 
-	if !l.tdCapLen.initCapLen(min, max...) {
-		panic("usage: Len(MIN_LEN[, MAX_LEN])")
-	}
+	l.tdCapLen.initCapLen(min)
+
+	return &l
+}
+
+func LenBetween(min int, max int) TestDeep {
+	l := tdLen{}
+
+	l.tdCapLen.initCapLen(min, max)
 
 	return &l
 }
@@ -112,15 +113,22 @@ type tdCap struct {
 
 var _ TestDeep = &tdCap{}
 
-func Cap(min int, max ...int) TestDeep {
+func Cap(min int) TestDeep {
 	c := tdCap{}
 
-	if !c.tdCapLen.initCapLen(min, max...) {
-		panic("usage: Cap(MIN_LEN[, MAX_LEN])")
-	}
+	c.tdCapLen.initCapLen(min)
 
 	return &c
 }
+
+func CapBetween(min int, max int) TestDeep {
+	c := tdCap{}
+
+	c.tdCapLen.initCapLen(min, max)
+
+	return &c
+}
+
 func (c *tdCap) String() string {
 	return c.toString("cap")
 }
