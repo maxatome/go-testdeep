@@ -3,34 +3,20 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
-	"runtime"
 	"strconv"
 	"strings"
 	"time"
 )
 
-var testDeeper = reflect.TypeOf((*TestDeep)(nil)).Elem()
-
-var stringerInterface = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
-
-var timeType = reflect.TypeOf(time.Time{})
+var (
+	testDeeper        = reflect.TypeOf((*TestDeep)(nil)).Elem()
+	stringerInterface = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+	timeType          = reflect.TypeOf(time.Time{})
+)
 
 type testDeepStringer interface {
 	_TestDeep()
 	String() string
-}
-
-type Location struct {
-	File string
-	Func string
-	Line int
-}
-
-func (l Location) IsInitialized() bool {
-	return l.File != ""
-}
-func (l Location) String() string {
-	return fmt.Sprintf("%s at %s:%d", l.Func, l.File, l.Line)
 }
 
 type TestDeep interface {
@@ -48,29 +34,31 @@ type Base struct {
 func (t Base) _TestDeep() {}
 
 func (t *Base) setLocation(callDepth int) {
-	_, file, line, ok := runtime.Caller(callDepth)
-	if ok {
-		if index := strings.LastIndexAny(file, `/\`); index >= 0 {
-			file = file[index+1:]
-		}
-		t.location.File = file
-		t.location.Line = line
-
-		// Try to get the involved TestDeep operator
-		pc, _, _, ok := runtime.Caller(callDepth - 1)
-		if ok {
-			fn := runtime.FuncForPC(pc)
-			if fn != nil {
-				t.location.Func = fn.Name()
-				if index := strings.LastIndex(t.location.Func, "."); index >= 0 {
-					t.location.Func = t.location.Func[index+1:]
-				}
-			}
-		}
-	} else {
+	var ok bool
+	t.location, ok = NewLocation(callDepth)
+	if !ok {
 		t.location.File = "???"
 		t.location.Line = 0
+		return
 	}
+
+	opDotPos := strings.LastIndex(t.location.Func, ".")
+
+	// Try to go one level deeper, to check if it is a CmpXxx function
+	cmpLoc, ok := NewLocation(callDepth + 1)
+	if ok {
+		cmpDotPos := strings.LastIndex(cmpLoc.Func, ".")
+
+		// Must be in same package as found operator
+		if t.location.Func[:opDotPos] == cmpLoc.Func[:cmpDotPos] &&
+			strings.HasPrefix(cmpLoc.Func[cmpDotPos+1:], "Cmp") &&
+			cmpLoc.Func != "CmpDeeply" {
+			t.location = cmpLoc
+			opDotPos = cmpDotPos
+		}
+	}
+
+	t.location.Func = t.location.Func[opDotPos+1:]
 }
 
 func (t *Base) GetLocation() Location {

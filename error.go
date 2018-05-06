@@ -56,7 +56,11 @@ func (e *Error) Error() string {
 	}
 
 	if e.Location.IsInitialized() {
-		buf.WriteString("\n[under TestDeep operator ")
+		if strings.HasPrefix(e.Location.Func, "Cmp") {
+			buf.WriteString("\n[called by ")
+		} else {
+			buf.WriteString("\n[under TestDeep operator ")
+		}
 		buf.WriteString(e.Location.String())
 		buf.WriteByte(']')
 	}

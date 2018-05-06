@@ -160,6 +160,7 @@ func TestSlice(t *testing.T) {
 	checkOK(t, []int{2, 3}, Slice([]int{}, ArrayEntries{1: 3, 0: 2}))
 	checkOK(t, []int{2, 3, 4}, Slice([]int{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
 	checkOK(t, []int{2, 3, 4}, Slice([]int{2, 3}, ArrayEntries{2: 4}))
+	checkOK(t, []int{2, 3, 4, 0, 6}, Slice([]int{2, 3}, ArrayEntries{2: 4, 4: 6}))
 
 	gotSlice := []int{2, 3, 4}
 
@@ -192,12 +193,16 @@ func TestSlice(t *testing.T) {
 	checkOK(t, MySlice{2, 3}, Slice(MySlice{}, ArrayEntries{1: 3, 0: 2}))
 	checkOK(t, MySlice{2, 3, 4},
 		Slice(MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, MySlice{2, 3, 4, 0, 6},
+		Slice(MySlice{2, 3}, ArrayEntries{2: 4, 4: 6}))
 
 	checkOK(t, &MySlice{}, Slice(&MySlice{}, nil))
 	checkOK(t, &MySlice{0, 3}, Slice(&MySlice{0, 3}, nil))
 	checkOK(t, &MySlice{2, 3}, Slice(&MySlice{}, ArrayEntries{1: 3, 0: 2}))
 	checkOK(t, &MySlice{2, 3, 4},
 		Slice(&MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, &MySlice{2, 3, 4, 0, 6},
+		Slice(&MySlice{2, 3}, ArrayEntries{2: 4, 4: 6}))
 
 	gotTypedSlice := MySlice{2, 3, 4}
 
