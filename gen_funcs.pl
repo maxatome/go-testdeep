@@ -122,6 +122,8 @@ EOF
 my $examples = do { open(my $efh, '<', 'example_test.go'); local $/; <$efh> };
 my $funcs_reg = join('|', keys %funcs);
 
+my($imports) = ($examples =~ /^(import \(.+?^\))$/ms);
+
 while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}/gms)
 {
     push(@{$funcs{$1}{examples}}, { name => $2 // '', code => $3 });
@@ -139,15 +141,7 @@ package testdeep_test
 
 $DO_NOT_EDIT_HEADER
 
-import (
-\t"fmt"
-\t"regexp"
-\t"strconv"
-\t"testing"
-\t"time"
-
-\t. "github.com/maxatome/go-testdeep"
-)
+$imports
 EOH
 
 my($rep, $reb, $rec);
@@ -166,7 +160,7 @@ sub extract_params
 	if ($str =~ /\G\s*
 	             ( "(?:\\.|[^"]+)*"            # "string"
 	              |`[^`]*`                     # `string`
-                      |&[a-zA-Z_]\w*$rec           # &Struct{...}
+                      |&[a-zA-Z_]\w*(?:$rec)?      # &Struct{...}, &variable
                       |\[[^][]*\]\w+$rec           # []Array{...}
 	              |map${reb}\w+$rec            # map[...]Type{...}
                       |[a-zA-Z_]\w*(?:\.\w+)?(?:$rec|$rep)? # Str{...}, Fn(...), pkg.var
@@ -230,4 +224,4 @@ EOF
 open($fh, "| gofmt -s > '$dir/funcs_test.go'");
 print $fh $funcs_test_content;
 close $fh;
-say "$dir/funcs_test.go → generated";
+say "$dir/funcs_test.go generated";
