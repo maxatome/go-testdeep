@@ -178,9 +178,9 @@ func (s *tdStruct) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	for _, fieldInfo := range s.expectedFields {
-		err = deepValueEqual(got.FieldByIndex(fieldInfo.index),
-			fieldInfo.expected,
-			ctx.AddDepth("."+fieldInfo.name))
+		err = deepValueEqual(ctx.AddDepth("."+fieldInfo.name),
+			got.FieldByIndex(fieldInfo.index),
+			fieldInfo.expected)
 		if err != nil {
 			return err.SetLocationIfMissing(s)
 		}

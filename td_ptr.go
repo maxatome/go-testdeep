@@ -46,9 +46,9 @@ func (p *tdPtr) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if p.isTestDeeper {
-		err = deepValueEqual(got.Elem(), p.expectedValue, ctx.AddPtr(1))
+		err = deepValueEqual(ctx.AddPtr(1), got.Elem(), p.expectedValue)
 	} else {
-		err = deepValueEqual(got, p.expectedValue, ctx)
+		err = deepValueEqual(ctx, got, p.expectedValue)
 	}
 	return err.SetLocationIfMissing(p)
 }
@@ -105,9 +105,9 @@ func (p *tdPPtr) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if p.isTestDeeper {
-		err = deepValueEqual(got.Elem().Elem(), p.expectedValue, ctx.AddPtr(2))
+		err = deepValueEqual(ctx.AddPtr(2), got.Elem().Elem(), p.expectedValue)
 	} else {
-		err = deepValueEqual(got, p.expectedValue, ctx)
+		err = deepValueEqual(ctx, got, p.expectedValue)
 	}
 	return err.SetLocationIfMissing(p)
 }

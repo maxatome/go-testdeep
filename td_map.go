@@ -167,8 +167,8 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 			continue
 		}
 
-		err = deepValueEqual(got.MapIndex(entryInfo.key), entryInfo.expected,
-			ctx.AddDepth("["+toString(entryInfo.key)+"]"))
+		err = deepValueEqual(ctx.AddDepth("["+toString(entryInfo.key)+"]"),
+			got.MapIndex(entryInfo.key), entryInfo.expected)
 		if err != nil {
 			return err.SetLocationIfMissing(m)
 		}

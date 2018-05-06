@@ -59,7 +59,7 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 		gotLen := got.Len()
 
 		for idx := 0; idx < gotLen; idx++ {
-			err = deepValueEqual(got.Index(idx), a.expected, ctx.AddArrayIndex(idx))
+			err = deepValueEqual(ctx.AddArrayIndex(idx), got.Index(idx), a.expected)
 			if err != nil {
 				return err.SetLocationIfMissing(a)
 			}

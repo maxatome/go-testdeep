@@ -19,8 +19,9 @@ func All(items ...interface{}) TestDeep {
 
 func (a *tdAll) Match(ctx Context, got reflect.Value) (err *Error) {
 	for idx, item := range a.items {
-		origErr := deepValueEqual(got, item,
-			ctx.AddDepth(fmt.Sprintf("<All#%d/%d>", idx+1, len(a.items))))
+		origErr := deepValueEqual(
+			ctx.AddDepth(fmt.Sprintf("<All#%d/%d>", idx+1, len(a.items))),
+			got, item)
 		if origErr != nil {
 			if ctx.booleanError {
 				return booleanError

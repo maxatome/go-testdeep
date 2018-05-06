@@ -202,7 +202,7 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 			}
 		}
 
-		err = deepValueEqual(got.Index(index), expectedValue, curCtx)
+		err = deepValueEqual(curCtx, got.Index(index), expectedValue)
 		if err != nil {
 			return err.SetLocationIfMissing(a)
 		}

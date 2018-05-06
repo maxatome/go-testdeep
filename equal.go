@@ -14,7 +14,7 @@ func isNilStr(isNil bool) rawString {
 	return "not nil"
 }
 
-func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
+func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 	if !got.IsValid() || !expected.IsValid() {
 		if got.IsValid() == expected.IsValid() {
 			return
@@ -78,7 +78,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 		//     []interface{}{123, "foo"}  →  Bag("foo", 123)
 		//    Interface kind -^-----^   but String-^ and ^- Int kinds
 		if got.Kind() == reflect.Interface {
-			return deepValueEqual(got.Elem(), expected, ctx)
+			return deepValueEqual(ctx, got.Elem(), expected)
 		}
 
 		if ctx.booleanError {
@@ -131,8 +131,8 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 	switch got.Kind() {
 	case reflect.Array:
 		for i := 0; i < got.Len(); i++ {
-			err = deepValueEqual(got.Index(i), expected.Index(i),
-				ctx.AddArrayIndex(i))
+			err = deepValueEqual(ctx.AddArrayIndex(i),
+				got.Index(i), expected.Index(i))
 			if err != nil {
 				return
 			}
@@ -166,8 +166,8 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 			return
 		}
 		for i := 0; i < got.Len(); i++ {
-			err = deepValueEqual(got.Index(i), expected.Index(i),
-				ctx.AddArrayIndex(i))
+			err = deepValueEqual(ctx.AddArrayIndex(i),
+				got.Index(i), expected.Index(i))
 			if err != nil {
 				return
 			}
@@ -189,19 +189,19 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 				Expected: isNilStr(expected.IsNil()),
 			}
 		}
-		return deepValueEqual(got.Elem(), expected.Elem(), ctx)
+		return deepValueEqual(ctx, got.Elem(), expected.Elem())
 
 	case reflect.Ptr:
 		if got.Pointer() == expected.Pointer() {
 			return
 		}
-		return deepValueEqual(got.Elem(), expected.Elem(), ctx.AddPtr(1))
+		return deepValueEqual(ctx.AddPtr(1), got.Elem(), expected.Elem())
 
 	case reflect.Struct:
 		sType := got.Type()
 		for i, n := 0, got.NumField(); i < n; i++ {
-			err = deepValueEqual(got.Field(i), expected.Field(i),
-				ctx.AddDepth("."+sType.Field(i).Name))
+			err = deepValueEqual(ctx.AddDepth("."+sType.Field(i).Name),
+				got.Field(i), expected.Field(i))
 			if err != nil {
 				return
 			}
@@ -235,8 +235,8 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 				continue
 			}
 
-			err = deepValueEqual(gotValue, expected.MapIndex(vkey),
-				ctx.AddDepth("["+toString(vkey)+"]"))
+			err = deepValueEqual(ctx.AddDepth("["+toString(vkey)+"]"),
+				gotValue, expected.MapIndex(vkey))
 			if err != nil {
 				return
 			}
@@ -316,7 +316,7 @@ func deepValueEqual(got, expected reflect.Value, ctx Context) (err *Error) {
 }
 
 func deepValueEqualOK(got, expected reflect.Value) bool {
-	return deepValueEqual(got, expected, NewBooleanContext()) == nil
+	return deepValueEqual(NewBooleanContext(), got, expected) == nil
 }
 
 func getInterface(val reflect.Value, force bool) (interface{}, bool) {
@@ -359,8 +359,8 @@ func EqDeeply(got, expected interface{}) bool {
 }
 
 func EqDeeplyError(got, expected interface{}) *Error {
-	return deepValueEqual(reflect.ValueOf(got), reflect.ValueOf(expected),
-		NewContext("DATA"))
+	return deepValueEqual(NewContext("DATA"),
+		reflect.ValueOf(got), reflect.ValueOf(expected))
 }
 
 func CmpDeeply(t *testing.T, got, expected interface{},

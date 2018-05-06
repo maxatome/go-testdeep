@@ -106,7 +106,7 @@ func (r *tdRe) matchCaptures(ctx Context, captures []string) *Error {
 		newCtx.booleanError = true
 	}
 
-	return deepValueEqual(reflect.ValueOf(captures), r.captures, newCtx)
+	return deepValueEqual(newCtx, reflect.ValueOf(captures), r.captures)
 }
 
 func (r *tdRe) matchBool(ctx Context, got interface{}, result bool) *Error {
