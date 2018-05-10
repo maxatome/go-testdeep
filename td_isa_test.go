@@ -1,6 +1,9 @@
 package testdeep_test
 
 import (
+	"bytes"
+	"fmt"
+	"regexp"
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
@@ -21,6 +24,12 @@ func TestIsa(t *testing.T) {
 	checkOK(t, (*MyStruct)(nil), Isa(&MyStruct{}))
 	checkOK(t, (*MyStruct)(nil), Isa((*MyStruct)(nil)))
 	checkOK(t, gotStruct, Isa(MyStruct{}))
+
+	checkOK(t, bytes.NewBufferString("foobar"), Isa((*fmt.Stringer)(nil)),
+		"checks bytes.NewBufferString() implements fmt.Stringer")
+
+	var ifstr fmt.Stringer = regexp.MustCompile("aa")
+	checkOK(t, bytes.NewBufferString("foobar"), Isa(&ifstr))
 
 	checkError(t, &gotStruct, Isa(&MyStructBase{}), expectedError{
 		Message:  mustBe("type mismatch"),
