@@ -29,3 +29,26 @@ func TestNone(t *testing.T) {
 	equalStr(t, None(6).String(), "None((int) 6)")
 	equalStr(t, None(6, 7).String(), "None((int) 6,\n     (int) 7)")
 }
+
+func TestNot(t *testing.T) {
+	checkOK(t, 6, Not(7))
+	checkOK(t, nil, Not(7))
+
+	checkError(t, 6, Not(6), expectedError{
+		Message:  mustBe("comparing with Not"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("(int) 6"),
+		Expected: mustBe("Not((int) 6)"),
+	})
+
+	checkError(t, nil, Not(nil), expectedError{
+		Message:  mustBe("comparing with Not"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("nil"),
+		Expected: mustBe("Not(nil)"),
+	})
+
+	//
+	// String
+	equalStr(t, Not(6).String(), "Not((int) 6)")
+}
