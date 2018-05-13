@@ -13,9 +13,10 @@ type visit struct {
 	typ reflect.Type
 }
 
+// Context is used to keep track of the CmpDeeply in-depth traversal.
 type Context struct {
-	Path    string
-	Depth   int
+	path    string
+	depth   int
 	visited map[visit]bool
 	// If true, the content of the returned *Error will not be
 	// checked. Can be used to avoid filling Error{} with expensive
@@ -23,12 +24,15 @@ type Context struct {
 	booleanError bool
 }
 
+// NewContext creates a new Context using path.
 func NewContext(path string) Context {
 	return Context{
-		Path:    path,
+		path:    path,
 		visited: map[visit]bool{},
 	}
 }
+
+// NewBooleanContext creates a new boolean Context.
 func NewBooleanContext() Context {
 	return Context{
 		visited:      map[visit]bool{},
@@ -36,23 +40,32 @@ func NewBooleanContext() Context {
 	}
 }
 
+// AddDepth creates a new Context from current one plus pathAdd.
 func (c Context) AddDepth(pathAdd string) (new Context) {
 	new = c
-	if strings.HasPrefix(new.Path, "*") {
-		new.Path = "(" + new.Path + ")" + pathAdd
+	if strings.HasPrefix(new.path, "*") {
+		new.path = "(" + new.path + ")" + pathAdd
 	} else {
-		new.Path += pathAdd
+		new.path += pathAdd
 	}
-	new.Depth++
+	new.depth++
 	return
 }
+
+// AddArrayIndex creates a new Context from current one plus an array
+// dereference for index-th item.
 func (c Context) AddArrayIndex(index int) (new Context) {
 	return c.AddDepth(fmt.Sprintf("[%d]", index))
 }
 
+// AddPtr creates a new Context from current one plus a pointer dereference.
 func (c Context) AddPtr(num int) (new Context) {
 	new = c
-	new.Path = strings.Repeat("*", num) + new.Path
-	new.Depth++
+	new.path = strings.Repeat("*", num) + new.path
+	new.depth++
 	return
+}
+
+func (c Context) Path() string {
+	return c.path
 }

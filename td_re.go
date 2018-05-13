@@ -101,7 +101,7 @@ func (r *tdRe) matchStringCaptures(ctx Context, got string, result [][]string) *
 }
 
 func (r *tdRe) matchCaptures(ctx Context, captures []string) *Error {
-	newCtx := NewContext("(" + ctx.Path + " =~ " + r.String() + ")")
+	newCtx := NewContext("(" + ctx.path + " =~ " + r.String() + ")")
 	if ctx.booleanError {
 		newCtx.booleanError = true
 	}

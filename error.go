@@ -35,10 +35,10 @@ func (e *Error) Error() string {
 
 	if pos := strings.Index(e.Message, "%%"); pos >= 0 {
 		buf.WriteString(e.Message[:pos])
-		buf.WriteString(e.Context.Path)
+		buf.WriteString(e.Context.path)
 		buf.WriteString(e.Message[pos+2:])
 	} else {
-		buf.WriteString(e.Context.Path)
+		buf.WriteString(e.Context.path)
 		buf.WriteString(": ")
 		buf.WriteString(e.Message)
 	}
