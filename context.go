@@ -13,7 +13,8 @@ type visit struct {
 	typ reflect.Type
 }
 
-// Context is used to keep track of the CmpDeeply in-depth traversal.
+// Context is used internally to keep track of the CmpDeeply in-depth
+// traversal.
 type Context struct {
 	path    string
 	depth   int
@@ -66,6 +67,7 @@ func (c Context) AddPtr(num int) (new Context) {
 	return
 }
 
+// Path returns the Context path.
 func (c Context) Path() string {
 	return c.path
 }

@@ -354,15 +354,32 @@ func mustGetInterface(val reflect.Value) interface{} {
 	panic("getInterface() does not handle " + val.Kind().String() + " kind")
 }
 
+// EqDeeply returns true if "got" matches "expected". "expected" can
+// be the same type as "got" is, or contains some TestDeep operators.
 func EqDeeply(got, expected interface{}) bool {
 	return deepValueEqualOK(reflect.ValueOf(got), reflect.ValueOf(expected))
 }
 
+// EqDeeplyError returns nil if "got" matches "expected". "expected"
+// can be the same type as got is, or contains some TestDeep
+// operators. If "got" does not match "expected", the returned *Error
+// contains the reason of the first mismatch detected.
 func EqDeeplyError(got, expected interface{}) *Error {
 	return deepValueEqual(NewContext("DATA"),
 		reflect.ValueOf(got), reflect.ValueOf(expected))
 }
 
+// CmpDeeply returns true if "got" matches "expected". "expected" can
+// be the same type as "got" is, or contains some TestDeep
+// operators. If "got" does not match "expected", it returns false and
+// the reason of failure is logged with the help of "t" Error()
+// method.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as well in case of error. The first arg must be a string. If
+// more than one arg is passed, the first one is supposed to be a
+// fmt.Sprintf format with remaining args the format parameters. See
+// fmt.Sprintf for details.
 func CmpDeeply(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
 	err := EqDeeplyError(got, expected)

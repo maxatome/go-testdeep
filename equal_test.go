@@ -1,6 +1,7 @@
 package testdeep_test
 
 import (
+	"fmt"
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
@@ -485,4 +486,65 @@ func TestCmpDeeply(t *testing.T) {
 	mockT = &testing.T{}
 	isFalse(t, CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
 	isTrue(t, mockT.Failed())
+}
+
+func ExampleEqDeeply() {
+	type MyStruct struct {
+		Name  string
+		Num   int
+		Items []int
+	}
+
+	got := &MyStruct{
+		Name:  "Foobar",
+		Num:   12,
+		Items: []int{4, 5, 9, 3, 8},
+	}
+
+	if EqDeeply(got,
+		Struct(&MyStruct{},
+			StructFields{
+				"Name":  Re("^Foo"),
+				"Num":   Between(10, 20),
+				"Items": ArrayEach(Between(3, 9)),
+			})) {
+		fmt.Println("Match!")
+	} else {
+		fmt.Println("NO!")
+	}
+
+	// Output:
+	// Match!
+}
+
+func ExampleEqDeeplyError() {
+	type MyStruct struct {
+		Name  string
+		Num   int
+		Items []int
+	}
+
+	got := &MyStruct{
+		Name:  "Foobar",
+		Num:   12,
+		Items: []int{4, 5, 9, 3, 8},
+	}
+
+	err := EqDeeplyError(got,
+		Struct(&MyStruct{},
+			StructFields{
+				"Name":  Re("^Foo"),
+				"Num":   Between(10, 20),
+				"Items": ArrayEach(Between(3, 8)),
+			}))
+	if err != nil {
+		err.Location.Line = 17 // only to be sure the line number will match example
+		fmt.Println(err)
+	}
+
+	// Output:
+	// DATA.Items[2]: values differ
+	// 	     got: 9
+	// 	expected: 3 ≤ got ≤ 8
+	// [under TestDeep operator Between at equal_test.go:17]
 }
