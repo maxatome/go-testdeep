@@ -376,10 +376,10 @@ func EqDeeplyError(got, expected interface{}) *Error {
 // method.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as well in case of error. The first arg must be a string. If
-// more than one arg is passed, the first one is supposed to be a
-// fmt.Sprintf format with remaining args the format parameters. See
-// fmt.Sprintf for details.
+// logged as well in case of failure. The first arg must be a
+// string. If more than one arg is passed, the first one is supposed
+// to be a fmt.Sprintf format with remaining args the format
+// parameters. See fmt.Sprintf for details.
 func CmpDeeply(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
 	err := EqDeeplyError(got, expected)

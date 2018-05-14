@@ -98,6 +98,7 @@ foreach my $func (sort keys %funcs)
     $funcs_content .= <<EOF;
 
 // Cmp$func is a shortcut for:
+//
 //   CmpDeeply(t, got, $func($call_args), args...)
 EOF
 
@@ -113,6 +114,8 @@ EOF
     }
 
     $funcs_content .= <<EOF;
+//
+// Returns true if the test is OK, false if it fails.
 func Cmp$func(t *testing.T, $cmp_args, args ...interface{}) bool {
 \treturn CmpDeeply(t, got, $func($call_args), args...)
 }
@@ -189,9 +192,9 @@ foreach my $func (sort keys %funcs)
     {
 	my($name, $code) = @$example{qw(name code)};
 
-        $code =~ s%CmpDeeply\(t,\s+got,\s+$func($rep)%
-                   my @params = extract_params("$func$name", $1);
-                   my $repl = "Cmp$func(t, got";
+        $code =~ s%CmpDeeply\(t,\s+(\S+),\s+$func($rep)%
+                   my @params = extract_params("$func$name", $2);
+                   my $repl = "Cmp$func(t, $1";
                    for (my $i = 0; $i < @$args; $i++)
                    {
                        $repl .= ', ';
@@ -229,3 +232,6 @@ open($fh, "| gofmt -s > '$dir/funcs_test.go'");
 print $fh $funcs_test_content;
 close $fh;
 say "$dir/funcs_test.go generated";
+
+#$funcs_test_content !~ /CmpDeeply/
+#    or die "At least one CmpDeeply() occurrence has not been replaced!\n";

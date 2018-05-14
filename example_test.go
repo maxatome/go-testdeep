@@ -12,6 +12,108 @@ import (
 	. "github.com/maxatome/go-testdeep"
 )
 
+func Example() {
+	t := &testing.T{}
+
+	dateToTime := func(str string) time.Time {
+		t, err := time.Parse(time.RFC3339, str)
+		if err != nil {
+			panic(err)
+		}
+		return t
+	}
+
+	type PetFamily uint8
+
+	const (
+		Canidae PetFamily = 1
+		Felidae PetFamily = 2
+	)
+
+	type Pet struct {
+		Name     string
+		Birthday time.Time
+		Family   PetFamily
+	}
+
+	type Master struct {
+		Name         string
+		AnnualIncome int
+		Pets         []*Pet
+	}
+
+	// Imagine a function returning a Master slice...
+	masters := []Master{
+		{
+			Name:         "Bob Smith",
+			AnnualIncome: 25000,
+			Pets: []*Pet{
+				{
+					Name:     "Quizz",
+					Birthday: dateToTime("2010-11-05T10:00:00Z"),
+					Family:   Canidae,
+				},
+				{
+					Name:     "Charlie",
+					Birthday: dateToTime("2013-05-11T08:00:00Z"),
+					Family:   Canidae,
+				},
+			},
+		},
+		{
+			Name:         "John Doe",
+			AnnualIncome: 38000,
+			Pets: []*Pet{
+				{
+					Name:     "Coco",
+					Birthday: dateToTime("2015-08-05T18:00:00Z"),
+					Family:   Felidae,
+				},
+				{
+					Name:     "Lucky",
+					Birthday: dateToTime("2014-04-17T07:00:00Z"),
+					Family:   Canidae,
+				},
+			},
+		},
+	}
+
+	// Let's check masters slice content
+	ok := CmpDeeply(t, masters, All(
+		Len(Gt(0)), // len(masters) should be > 0
+		ArrayEach(
+			// For each Master
+			Struct(Master{}, StructFields{
+				// Master Name should be composed of 2 words, with 1st letter uppercased
+				"Name": Re(`^[A-Z][a-z]+ [A-Z][a-z]+\z`),
+				// Annual income should be greater than $10000
+				"AnnualIncome": Gt(10000),
+				"Pets": ArrayEach(
+					// For each Pet
+					Struct(&Pet{}, StructFields{
+						// Pet Name should be composed of 1 word, with 1st letter uppercased
+						"Name": Re(`^[A-Z][a-z]+\z`),
+						"Birthday": All(
+							// Pet should be born after 2010, January 1st, but before now!
+							Between(dateToTime("2010-01-01T00:00:00Z"), time.Now()),
+							// AND minutes, seconds and nanoseconds should be 0
+							Code(func(t time.Time) bool {
+								return t.Minute() == 0 && t.Second() == 0 && t.Nanosecond() == 0
+							}),
+						),
+						// Only dogs and cats allowed
+						"Family": Any(Canidae, Felidae),
+					}),
+				),
+			}),
+		),
+	))
+	fmt.Println(ok)
+
+	// Output:
+	// true
+}
+
 func ExampleIgnore() {
 	t := &testing.T{}
 
@@ -265,16 +367,16 @@ func ExampleCap() {
 	// true
 }
 
-func ExampleCapBetween() {
+func ExampleCap_operator() {
 	t := &testing.T{}
 
 	got := make([]int, 0, 12)
 
-	ok := CmpDeeply(t, got, CapBetween(10, 12),
+	ok := CmpDeeply(t, got, Cap(Between(10, 12)),
 		"checks %v capacity is in [10 .. 12]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, CapBetween(12, 10),
+	ok = CmpDeeply(t, got, Cap(Gt(10)),
 		"checks %v capacity is in [10 .. 12]", got)
 	fmt.Println(ok)
 
@@ -434,15 +536,16 @@ func ExampleLen_map() {
 	// true
 }
 
-func ExampleLenBetween_slice() {
+func ExampleLen_operatorSlice() {
 	t := &testing.T{}
 
 	got := []int{11, 22, 33}
 
-	ok := CmpDeeply(t, got, LenBetween(3, 8), "checks %v len is in [3 .. 8]", got)
+	ok := CmpDeeply(t, got, Len(Between(3, 8)),
+		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, LenBetween(8, 3), "checks %v len is in [3 .. 8]", got)
+	ok = CmpDeeply(t, got, Len(Lt(5)), "checks %v len is < 5", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -450,15 +553,16 @@ func ExampleLenBetween_slice() {
 	// true
 }
 
-func ExampleLenBetween_map() {
+func ExampleLen_operatorMap() {
 	t := &testing.T{}
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := CmpDeeply(t, got, LenBetween(3, 8), "checks %v len is in [3 .. 8]", got)
+	ok := CmpDeeply(t, got, Len(Between(3, 8)),
+		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, LenBetween(8, 3), "checks %v len is in [3 .. 8]", got)
+	ok = CmpDeeply(t, got, Len(Gte(3)), "checks %v len is ≥ 3", got)
 	fmt.Println(ok)
 
 	// Output:

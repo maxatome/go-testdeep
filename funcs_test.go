@@ -82,7 +82,7 @@ func ExampleCmpArray_typedArray() {
 		"checks typed array %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, Array(&MyArray{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok = CmpArray(t, &got, &MyArray{42}, ArrayEntries{1: 58, 2: Ignore()},
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
@@ -115,7 +115,7 @@ func ExampleCmpArrayEach_typedArray() {
 		"checks each item of typed array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, ArrayEach(Between(25, 60)),
+	ok = CmpArrayEach(t, &got, Between(25, 60),
 		"checks each item of typed array pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -148,7 +148,7 @@ func ExampleCmpArrayEach_typedSlice() {
 		"checks each item of typed slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, ArrayEach(Between(25, 60)),
+	ok = CmpArrayEach(t, &got, Between(25, 60),
 		"checks each item of typed slice pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -248,16 +248,16 @@ func ExampleCmpCap() {
 	// true
 }
 
-func ExampleCmpCapBetween() {
+func ExampleCmpCap_operator() {
 	t := &testing.T{}
 
 	got := make([]int, 0, 12)
 
-	ok := CmpCapBetween(t, got, 10, 12,
+	ok := CmpCap(t, got, Between(10, 12),
 		"checks %v capacity is in [10 .. 12]", got)
 	fmt.Println(ok)
 
-	ok = CmpCapBetween(t, got, 12, 10,
+	ok = CmpCap(t, got, Gt(10),
 		"checks %v capacity is in [10 .. 12]", got)
 	fmt.Println(ok)
 
@@ -438,7 +438,7 @@ func ExampleCmpIsa() {
 		"checks got is a pointer on a TstStruct")
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, Isa(&TstStruct{}),
+	ok = CmpIsa(t, &got, &TstStruct{},
 		"checks &got is a pointer on a TstStruct")
 	fmt.Println(ok)
 
@@ -459,7 +459,7 @@ func ExampleCmpIsa_interface() {
 
 	errGot := fmt.Errorf("An error #%d occurred", 123)
 
-	ok = CmpDeeply(t, errGot, Isa((*error)(nil)),
+	ok = CmpIsa(t, errGot, (*error)(nil),
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
@@ -467,12 +467,12 @@ func ExampleCmpIsa_interface() {
 	// does not match
 	errGot = nil
 
-	ok = CmpDeeply(t, errGot, Isa((*error)(nil)),
+	ok = CmpIsa(t, errGot, (*error)(nil),
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
 	// BUT if its address is passed, now it is OK as the types match
-	ok = CmpDeeply(t, &errGot, Isa((*error)(nil)),
+	ok = CmpIsa(t, &errGot, (*error)(nil),
 		"checks &errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
@@ -527,15 +527,16 @@ func ExampleCmpLen_map() {
 	// true
 }
 
-func ExampleCmpLenBetween_slice() {
+func ExampleCmpLen_operatorSlice() {
 	t := &testing.T{}
 
 	got := []int{11, 22, 33}
 
-	ok := CmpLenBetween(t, got, 3, 8, "checks %v len is in [3 .. 8]", got)
+	ok := CmpLen(t, got, Between(3, 8),
+		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = CmpLenBetween(t, got, 8, 3, "checks %v len is in [3 .. 8]", got)
+	ok = CmpLen(t, got, Lt(5), "checks %v len is < 5", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -543,15 +544,16 @@ func ExampleCmpLenBetween_slice() {
 	// true
 }
 
-func ExampleCmpLenBetween_map() {
+func ExampleCmpLen_operatorMap() {
 	t := &testing.T{}
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := CmpLenBetween(t, got, 3, 8, "checks %v len is in [3 .. 8]", got)
+	ok := CmpLen(t, got, Between(3, 8),
+		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = CmpLenBetween(t, got, 8, 3, "checks %v len is in [3 .. 8]", got)
+	ok = CmpLen(t, got, Gte(3), "checks %v len is ≥ 3", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -611,8 +613,7 @@ func ExampleCmpMap_typedMap() {
 		"checks typed map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
-		Map(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()}),
+	ok = CmpMap(t, &got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()},
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
@@ -645,7 +646,7 @@ func ExampleCmpMapEach_typedMap() {
 		"checks each value of typed map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, MapEach(Between(10, 90)),
+	ok = CmpMapEach(t, &got, Between(10, 90),
 		"checks each value of typed map pointer %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
@@ -803,10 +804,10 @@ func ExampleCmpPPtr() {
 	num := 12
 	got := &num
 
-	ok := CmpDeeply(t, &got, PPtr(12))
+	ok := CmpPPtr(t, &got, 12)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, PPtr(Between(4, 15)))
+	ok = CmpPPtr(t, &got, Between(4, 15))
 	fmt.Println(ok)
 
 	// Output:
@@ -819,10 +820,10 @@ func ExampleCmpPtr() {
 
 	got := 12
 
-	ok := CmpDeeply(t, &got, Ptr(12))
+	ok := CmpPtr(t, &got, 12)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, Ptr(Between(4, 15)))
+	ok = CmpPtr(t, &got, Between(4, 15))
 	fmt.Println(ok)
 
 	// Output:
@@ -1116,7 +1117,7 @@ func ExampleCmpSlice_typedSlice() {
 		"checks typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, Slice(&MySlice{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok = CmpSlice(t, &got, &MySlice{42}, ArrayEntries{1: 58, 2: Ignore()},
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
@@ -1194,12 +1195,11 @@ func ExampleCmpStruct() {
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = CmpDeeply(t, &got,
-		Struct(&Person{}, StructFields{
-			"Name":        "Foobar",
-			"Age":         Between(40, 50),
-			"NumChildren": Not(0),
-		}),
+	ok = CmpStruct(t, &got, &Person{}, StructFields{
+		"Name":        "Foobar",
+		"Age":         Between(40, 50),
+		"NumChildren": Not(0),
+	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
@@ -1259,8 +1259,7 @@ func ExampleCmpSubMapOf_typedMap() {
 		"checks typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
-		SubMapOf(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666}),
+	ok = CmpSubMapOf(t, &got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666},
 		"checks pointed typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
@@ -1332,8 +1331,7 @@ func ExampleCmpSuperMapOf_typedMap() {
 		"checks typed map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
-		SuperMapOf(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15)}),
+	ok = CmpSuperMapOf(t, &got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15)},
 		"checks pointed typed map %v contains at leat all expected keys/values",
 		got)
 	fmt.Println(ok)

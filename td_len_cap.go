@@ -5,79 +5,52 @@ import (
 	"reflect"
 )
 
-type tdCapLen struct {
-	Base
-	expectedMin int
-	expectedMax int
-}
-
-func (c *tdCapLen) initCapLen(min int, max ...int) {
-	c.Base = NewBase(4)
-
-	c.expectedMin = min
-
-	if len(max) > 0 {
-		c.expectedMax = max[0]
-	} else {
-		c.expectedMax = c.expectedMin
-	}
-
-	if c.expectedMax < c.expectedMin {
-		c.expectedMin, c.expectedMax = c.expectedMax, c.expectedMin
-	}
-}
-
-func (c *tdCapLen) toString(name string) string {
-	if c.expectedMin == c.expectedMax {
-		return fmt.Sprintf("%s=%d", name, c.expectedMin)
-	}
-	return fmt.Sprintf("%d ≤ %s ≤ %d", c.expectedMin, name, c.expectedMax)
-}
-
-func (c *tdCapLen) checkVal(val int) bool {
-	return val >= c.expectedMin && val <= c.expectedMax
-}
-
-func (c *tdCapLen) expectedRaw(name string) testDeepStringer {
-	if c.expectedMin == c.expectedMax {
-		return rawInt(c.expectedMin)
-	}
-	return rawString(c.toString(name))
-}
-
-//
-//
 type tdLen struct {
-	tdCapLen
+	tdSmuggler
 }
 
 var _ TestDeep = &tdLen{}
 
-func Len(min int) TestDeep {
-	l := tdLen{}
+func Len(val interface{}) TestDeep {
+	vval := reflect.ValueOf(val)
+	if vval.IsValid() {
+		l := tdLen{
+			tdSmuggler: newSmuggler(val),
+		}
 
-	l.tdCapLen.initCapLen(min)
+		if l.isTestDeeper {
+			return &l
+		}
 
-	return &l
-}
-
-func LenBetween(min int, max int) TestDeep {
-	l := tdLen{}
-
-	l.tdCapLen.initCapLen(min, max)
-
-	return &l
+		// A len is always an int
+		if vval.Type() == intType {
+			l.expectedValue = vval
+			return &l
+		}
+	}
+	panic("usage: Len(TESTDEEP_OPERATOR|INT)")
 }
 
 func (l *tdLen) String() string {
-	return l.toString("len")
+	if l.isTestDeeper {
+		return "len: " + l.expectedValue.Interface().(TestDeep).String()
+	}
+	return fmt.Sprintf("len=%d", l.expectedValue.Int())
 }
 
 func (l *tdLen) Match(ctx Context, got reflect.Value) (err *Error) {
 	switch got.Kind() {
-	case reflect.Array, reflect.Chan, reflect.Map,
-		reflect.Slice, reflect.String:
-		if l.checkVal(got.Len()) {
+	case reflect.Array, reflect.Chan, reflect.Map, reflect.Slice, reflect.String:
+		if l.isTestDeeper {
+			vlen := reflect.New(intType)
+			vlen.Elem().SetInt(int64(got.Len()))
+
+			err = deepValueEqual(ctx.AddFunctionCall("len"),
+				vlen.Elem(), l.expectedValue)
+			return err.SetLocationIfMissing(l)
+		}
+
+		if got.Len() == int(l.expectedValue.Int()) {
 			return nil
 		}
 		if ctx.booleanError {
@@ -87,7 +60,7 @@ func (l *tdLen) Match(ctx Context, got reflect.Value) (err *Error) {
 			Context:  ctx,
 			Message:  "bad length",
 			Got:      rawInt(got.Len()),
-			Expected: l.expectedRaw("len"),
+			Expected: rawInt(l.expectedValue.Int()),
 			Location: l.GetLocation(),
 		}
 
@@ -105,38 +78,52 @@ func (l *tdLen) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 }
 
-//
-//
 type tdCap struct {
-	tdCapLen
+	tdSmuggler
 }
 
 var _ TestDeep = &tdCap{}
 
-func Cap(min int) TestDeep {
-	c := tdCap{}
+func Cap(val interface{}) TestDeep {
+	vval := reflect.ValueOf(val)
+	if vval.IsValid() {
+		c := tdCap{
+			tdSmuggler: newSmuggler(val),
+		}
 
-	c.tdCapLen.initCapLen(min)
+		if c.isTestDeeper {
+			return &c
+		}
 
-	return &c
-}
-
-func CapBetween(min int, max int) TestDeep {
-	c := tdCap{}
-
-	c.tdCapLen.initCapLen(min, max)
-
-	return &c
+		// A len is always an int
+		if vval.Type() == intType {
+			c.expectedValue = vval
+			return &c
+		}
+	}
+	panic("usage: Cap(TESTDEEP_OPERATOR|INT)")
 }
 
 func (c *tdCap) String() string {
-	return c.toString("cap")
+	if c.isTestDeeper {
+		return "cap: " + c.expectedValue.Interface().(TestDeep).String()
+	}
+	return fmt.Sprintf("cap=%d", c.expectedValue.Int())
 }
 
 func (c *tdCap) Match(ctx Context, got reflect.Value) (err *Error) {
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Slice:
-		if c.checkVal(got.Cap()) {
+		if c.isTestDeeper {
+			vcap := reflect.New(intType)
+			vcap.Elem().SetInt(int64(got.Cap()))
+
+			err = deepValueEqual(ctx.AddFunctionCall("cap"),
+				vcap.Elem(), c.expectedValue)
+			return err.SetLocationIfMissing(c)
+		}
+
+		if got.Cap() == int(c.expectedValue.Int()) {
 			return nil
 		}
 		if ctx.booleanError {
@@ -146,7 +133,7 @@ func (c *tdCap) Match(ctx Context, got reflect.Value) (err *Error) {
 			Context:  ctx,
 			Message:  "bad capacity",
 			Got:      rawInt(got.Cap()),
-			Expected: c.expectedRaw("cap"),
+			Expected: rawInt(c.expectedValue.Int()),
 			Location: c.GetLocation(),
 		}
 

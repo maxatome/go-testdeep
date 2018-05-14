@@ -67,6 +67,15 @@ func (c Context) AddPtr(num int) (new Context) {
 	return
 }
 
+// AddFunctionCall creates a new Context from current one inside a
+// function call.
+func (c Context) AddFunctionCall(fn string) (new Context) {
+	new = c
+	new.path = fn + "(" + new.path + ")"
+	new.depth++
+	return
+}
+
 // Path returns the Context path.
 func (c Context) Path() string {
 	return c.path
