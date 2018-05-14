@@ -11,6 +11,14 @@ type tdLen struct {
 
 var _ TestDeep = &tdLen{}
 
+// Len is a smuggler operator. It takes data, applies len() function
+// on it and compares its result to "val". Of course, the compared
+// value must be an array, a channel, a map, a slice or a string.
+//
+// "val" can be an int value:
+//   Len(12)
+// as well as an other operator:
+//   Len(Between(3, 4))
 func Len(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
@@ -84,6 +92,14 @@ type tdCap struct {
 
 var _ TestDeep = &tdCap{}
 
+// Cap is a smuggler operator. It takes data, applies cap() function
+// on it and compares its result to "val". Of course, the compared
+// value must be an array, a channel or a slice.
+//
+// "val" can be an int value:
+//   Cap(12)
+// as well as an other operator:
+//   Cap(Between(3, 4))
 func Cap(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {

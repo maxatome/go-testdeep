@@ -20,54 +20,65 @@
 // database layer. In this case we have to do something like that to
 // check the record content:
 //
-//   before := time.Now()
-//   record, err := CreateRecord()
+//   import (
+//     "testing"
+//   )
 //
-//   if err != nil {
-//     t.Errorf("An error occurred: %s", err)
-//   } else {
-//     expected := Record{Name: "Bob", Age: 23}
+//   ...
 //
-//     if record.Id == 0 {
-//       t.Error("Id probably not initialized")
-//     }
-//     if before.After(record.CreatedAt) ||
-//       time.Now().Before(record.CreatedAt) {
-//       t.Errorf("CreatedAt field not expected: %s", record.CreatedAt)
-//     }
-//     if record.Name != expected.Name {
-//       t.Errorf("Name field differ, got=%s, expected=%s",
-//         record.Name, expected.Name)
-//     }
-//     if record.Age != expected.Age {
-//       t.Errorf("Age field differ, got=%s, expected=%s",
-//         record.Age, expected.Age)
+//   func TestCreateRecord(t *testing.T) {
+//     before := time.Now()
+//     record, err := CreateRecord()
+//
+//     if err != nil {
+//       t.Errorf("An error occurred: %s", err)
+//     } else {
+//       expected := Record{Name: "Bob", Age: 23}
+//
+//       if record.Id == 0 {
+//         t.Error("Id probably not initialized")
+//       }
+//       if before.After(record.CreatedAt) ||
+//         time.Now().Before(record.CreatedAt) {
+//         t.Errorf("CreatedAt field not expected: %s", record.CreatedAt)
+//       }
+//       if record.Name != expected.Name {
+//         t.Errorf("Name field differ, got=%s, expected=%s",
+//           record.Name, expected.Name)
+//       }
+//       if record.Age != expected.Age {
+//         t.Errorf("Age field differ, got=%s, expected=%s",
+//           record.Age, expected.Age)
+//       }
 //     }
 //   }
 //
 // With testdeep, it is a way simple, thanks to CmpDeeply function:
 //
 //   import (
+//     "testing"
 //     td "github.com/maxatome/go-testdeep"
 //   )
 //
 //   ...
 //
-//   before := time.Now()
-//   record, err := CreateRecord()
+//   func TestCreateRecord(t *testing.T) {
+//     before := time.Now()
+//     record, err := CreateRecord()
 //
-//   if td.CmpDeeply(t, err, nil) {
-//     td.CmpDeeply(t, record,
-//       Struct(
-//         Record{
-//           Name: "Bob",
-//           Age:  23,
-//         },
-//         StructFields{
-//           Id:        td.Not(0),
-//           CreatedAt: td.Between(before, time.Now()),
-//         }),
-//       "Newly created record")
+//     if td.CmpDeeply(t, err, nil) {
+//       td.CmpDeeply(t, record,
+//         Struct(
+//           Record{
+//             Name: "Bob",
+//             Age:  23,
+//           },
+//           StructFields{
+//             Id:        td.Not(0),
+//             CreatedAt: td.Between(before, time.Now()),
+//           }),
+//         "Newly created record")
+//     }
 //   }
 //
 // Of course not only structs can be compared. A lot of operators can
@@ -75,22 +86,24 @@
 //
 // The CmpDeeply function is the keystone of this package, but to make
 // the writing of tests even easier, the family of Cmp* functions are
-// provided and act as shortcuts. Using CmpStruct function, the
-// previous example can be written as:
+// provided and act as shortcuts. Using CmpNil and CmpStruct function,
+// the previous example can be written as:
 //
-//   before := time.Now()
-//   record, err := CreateRecord()
+//   func TestCreateRecord(t *testing.T) {
+//     before := time.Now()
+//     record, err := CreateRecord()
 //
-//   if td.CmpDeeply(t, err, nil) {
-//     td.CmpStruct(t, record,
-//       Record{
-//         Name: "Bob",
-//         Age:  23,
-//       },
-//       StructFields{
-//         Id:        td.Not(0),
-//         CreatedAt: td.Between(before, time.Now()),
-//       },
-//       "Newly created record")
+//     if td.CmpNil(t, err) {
+//       td.CmpStruct(t, record,
+//         Record{
+//           Name: "Bob",
+//           Age:  23,
+//         },
+//         StructFields{
+//           Id:        td.Not(0),
+//           CreatedAt: td.Between(before, time.Now()),
+//         },
+//         "Newly created record")
+//     }
 //   }
 package testdeep

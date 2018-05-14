@@ -6,11 +6,17 @@ type tdBag struct {
 
 var _ TestDeep = &tdBag{}
 
-func Bag(items ...interface{}) TestDeep {
+// Bag operator compares the content of an array or a slice (or a
+// pointer on array/slice) without taking care of the order of items.
+//
+// During a match, each expected item should match in the compared
+// array/slice, and each array/slice item should be matched by an
+// expected item to succeed.
+func Bag(expectedItems ...interface{}) TestDeep {
 	bag := &tdBag{
 		tdSetBase: newSetBase(allSet, false),
 	}
-	bag.Add(items...)
+	bag.Add(expectedItems...)
 	return bag
 }
 
@@ -20,11 +26,20 @@ type tdSubBagOf struct {
 
 var _ TestDeep = &tdSubBagOf{}
 
-func SubBagOf(items ...interface{}) TestDeep {
+// SubBagOf operator compares the content of an array or a slice (or a
+// pointer on array/slice) without taking care of the order of items.
+//
+// During a match, each array/slice item should be matched by an
+// expected item to succeed. But some expected items can be missing
+// from the compared array/slice.
+//
+//   CmpDeeply(t, []int{1}, SubBagOf(1, 1, 2))       // is true
+//   CmpDeeply(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // is false
+func SubBagOf(expectedItems ...interface{}) TestDeep {
 	bag := &tdSubBagOf{
 		tdSetBase: newSetBase(subSet, false),
 	}
-	bag.Add(items...)
+	bag.Add(expectedItems...)
 	return bag
 }
 
@@ -34,10 +49,19 @@ type tdSuperBagOf struct {
 
 var _ TestDeep = &tdSuperBagOf{}
 
-func SuperBagOf(items ...interface{}) TestDeep {
+// SuperBagOf operator compares the content of an array or a slice (or a
+// pointer on array/slice) without taking care of the order of items.
+//
+// During a match, each expected item should match in the compared
+// array/slice. But some items in the compared array/slice may not be
+// expected.
+//
+//   CmpDeeply(t, []int{1, 1, 2}, SuperBagOf(1))       // is true
+//   CmpDeeply(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // is false
+func SuperBagOf(expectedItems ...interface{}) TestDeep {
 	bag := &tdSuperBagOf{
 		tdSetBase: newSetBase(superSet, false),
 	}
-	bag.Add(items...)
+	bag.Add(expectedItems...)
 	return bag
 }

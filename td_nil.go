@@ -10,6 +10,8 @@ type tdNil struct {
 
 var _ TestDeep = &tdNil{}
 
+// Nil operator checks that data is nil (or is a non-nil interface,
+// but containing a nil pointer.)
 func Nil() TestDeep {
 	return &tdNil{
 		BaseOKNil: NewBaseOKNil(3),
@@ -51,6 +53,8 @@ type tdNotNil struct {
 
 var _ TestDeep = &tdNotNil{}
 
+// Not Nil operator checks that data is not nil (or is a non-nil
+// interface, containing a non-nil pointer.)
 func NotNil() TestDeep {
 	return &tdNotNil{
 		BaseOKNil: NewBaseOKNil(3),

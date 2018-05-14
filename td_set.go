@@ -6,11 +6,11 @@ type tdSet struct {
 
 var _ TestDeep = &tdSet{}
 
-func Set(items ...interface{}) TestDeep {
+func Set(expectedItems ...interface{}) TestDeep {
 	set := &tdSet{
 		tdSetBase: newSetBase(allSet, true),
 	}
-	set.Add(items...)
+	set.Add(expectedItems...)
 	return set
 }
 
@@ -20,11 +20,11 @@ type tdSubSetOf struct {
 
 var _ TestDeep = &tdSubSetOf{}
 
-func SubSetOf(items ...interface{}) TestDeep {
+func SubSetOf(expectedItems ...interface{}) TestDeep {
 	set := &tdSubSetOf{
 		tdSetBase: newSetBase(subSet, true),
 	}
-	set.Add(items...)
+	set.Add(expectedItems...)
 	return set
 }
 
@@ -34,11 +34,11 @@ type tdSuperSetOf struct {
 
 var _ TestDeep = &tdSuperSetOf{}
 
-func SuperSetOf(items ...interface{}) TestDeep {
+func SuperSetOf(expectedItems ...interface{}) TestDeep {
 	set := &tdSuperSetOf{
 		tdSetBase: newSetBase(superSet, true),
 	}
-	set.Add(items...)
+	set.Add(expectedItems...)
 	return set
 }
 
@@ -48,10 +48,10 @@ type tdNoneOf struct {
 
 var _ TestDeep = &tdNoneOf{}
 
-func NoneOf(items ...interface{}) TestDeep {
+func NoneOf(expectedItems ...interface{}) TestDeep {
 	set := &tdNoneOf{
 		tdSetBase: newSetBase(noneSet, true),
 	}
-	set.Add(items...)
+	set.Add(expectedItems...)
 	return set
 }

@@ -26,6 +26,7 @@ type tdBetween struct {
 
 var _ TestDeep = &tdBetween{}
 
+// BoundsKind type qualifies the "Between" bounds.
 type BoundsKind uint8
 
 const (
@@ -47,6 +48,13 @@ type tdBetweenTime struct {
 
 var _ TestDeep = &tdBetweenTime{}
 
+// Between operator checks that data is between "from" and
+// "to". "from" and "to" can be any numeric or time.Time (or
+// assignable) value. "from" and "to" must be the same kind as the
+// compared value if numeric, and the same type if time.Time (or
+// assignable). "bounds" allows to specify whether bounds are included
+// or not. See Bounds* constants for details. If "bounds" is missing,
+// it defaults to BoundsInIn.
 func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 	b := tdBetween{
 		expectedMin: reflect.ValueOf(from),
@@ -192,6 +200,9 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 	}
 }
 
+// N operator compares a numeric data against "num" ± "tolerance". If
+// "tolerance" is missing, it defaults to 0. "num" and "tolerance"
+// must be the same kind as the compared value.
 func N(num interface{}, tolerance ...interface{}) TestDeep {
 	n := tdBetween{
 		Base:        NewBase(3),
@@ -238,6 +249,10 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 	return &n
 }
 
+// Gt operator checks that data is greater than "val". "val" can be
+// any numeric or time.Time (or assignable) value. "val" must be the
+// same kind as the compared value if numeric, and the same type if
+// time.Time (or assignable).
 func Gt(val interface{}) TestDeep {
 	b := &tdBetween{
 		expectedMin: reflect.ValueOf(val),
@@ -246,6 +261,10 @@ func Gt(val interface{}) TestDeep {
 	return b.initBetween("usage: Gt(NUM|TIME)")
 }
 
+// Gte operator checks that data is greater or equal than "val". "val"
+// can be any numeric or time.Time (or assignable) value. "val" must
+// be the same kind as the compared value if numeric, and the same
+// type if time.Time (or assignable).
 func Gte(val interface{}) TestDeep {
 	b := &tdBetween{
 		expectedMin: reflect.ValueOf(val),
@@ -254,6 +273,10 @@ func Gte(val interface{}) TestDeep {
 	return b.initBetween("usage: Gte(NUM|TIME)")
 }
 
+// Lt operator checks that data is lesser than "val". "val" can be
+// any numeric or time.Time (or assignable) value. "val" must be the
+// same kind as the compared value if numeric, and the same type if
+// time.Time (or assignable).
 func Lt(val interface{}) TestDeep {
 	b := &tdBetween{
 		expectedMin: reflect.ValueOf(val),
@@ -262,6 +285,10 @@ func Lt(val interface{}) TestDeep {
 	return b.initBetween("usage: Lt(NUM|TIME)")
 }
 
+// Lte operator checks that data is lesser or equal than "val". "val"
+// can be any numeric or time.Time (or assignable) value. "val" must
+// be the same kind as the compared value if numeric, and the same
+// type if time.Time (or assignable).
 func Lte(val interface{}) TestDeep {
 	b := &tdBetween{
 		expectedMin: reflect.ValueOf(val),

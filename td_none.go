@@ -11,17 +11,23 @@ type tdNone struct {
 
 var _ TestDeep = &tdNone{}
 
-func None(items ...interface{}) TestDeep {
+// None operator compares data against several expected values. During
+// a match, none of them have to match to succeed.
+func None(expectedValues ...interface{}) TestDeep {
 	return &tdNone{
-		tdList: newList(items...),
+		tdList: newList(expectedValues...),
 	}
 }
 
-// Not is the same as None() with only one argument. It is provided as
-// a more readable function when only one argument is needed.
-func Not(item interface{}) TestDeep {
+// Not operator compares data against the expected value. During a
+// match, it must not match to succeed.
+//
+// Not is the same operator as None() with only one argument. It is
+// provided as a more readable function when only one argument is
+// needed.
+func Not(expected interface{}) TestDeep {
 	return &tdNone{
-		tdList: newList(item),
+		tdList: newList(expected),
 	}
 }
 

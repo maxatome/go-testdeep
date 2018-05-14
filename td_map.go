@@ -110,16 +110,59 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries) {
 	}
 }
 
-func Map(model interface{}, entries MapEntries) TestDeep {
-	return newMap(model, entries, allMap)
+// Map operator compares the content of a map against the non-zero
+// values of "model" (if any) and the values of "expectedEntries".
+//
+// "model" must be the same type as compared data.
+//
+// "expectedEntries" can be nil, if no zero entries are expected and
+// no TestDeep operator are involved.
+//
+// During a match, all expected entries must be found and all data
+// entries must be expected to succeed.
+func Map(model interface{}, expectedEntries MapEntries) TestDeep {
+	return newMap(model, expectedEntries, allMap)
 }
 
-func SubMapOf(model interface{}, entries MapEntries) TestDeep {
-	return newMap(model, entries, subMap)
+// SubMapOf operator compares the content of a map against the non-zero
+// values of "model" (if any) and the values of "expectedEntries".
+//
+// "model" must be the same type as compared data.
+//
+// "expectedEntries" can be nil, if no zero entries are expected and
+// no TestDeep operator are involved.
+//
+// During a match, each map entry should be matched by an expected
+// entry to succeed. But some expected entries can be missing from the
+// compared map.
+//
+//   CmpDeeply(t, map[string]int{"a": 1},
+//     SubMapOf(map[string]int{"a": 1, "b":2}, nil) // is true
+//
+//   CmpDeeply(t, map[string]int{"a": 1, "c": 3},
+//     SubMapOf(map[string]int{"a": 1, "b":2}, nil) // is false
+func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
+	return newMap(model, expectedEntries, subMap)
 }
 
-func SuperMapOf(model interface{}, entries MapEntries) TestDeep {
-	return newMap(model, entries, superMap)
+// SuperMapOf operator compares the content of a map against the non-zero
+// values of "model" (if any) and the values of "expectedEntries".
+//
+// "model" must be the same type as compared data.
+//
+// "expectedEntries" can be nil, if no zero entries are expected and
+// no TestDeep operator are involved.
+//
+// During a match, each expected entry should match in the compared
+// map. But some entries in the compared map may not be expected.
+//
+//   CmpDeeply(t, map[string]int{"a": 1, "b":2},
+//     SuperMapOf(map[string]int{"a": 1}, nil) // is true
+//
+//   CmpDeeply(t, map[string]int{"a": 1, "c": 3},
+//     SuperMapOf(map[string]int{"a": 1, "b":2}, nil) // is false
+func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
+	return newMap(model, expectedEntries, superMap)
 }
 
 func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
@@ -263,7 +306,7 @@ func (m *tdMap) String() string {
 		buf.WriteString("{\n")
 
 		for _, entryInfo := range m.expectedEntries {
-			fmt.Fprintf(buf, "  %s: %s,\n",
+			fmt.Fprintf(buf, "  %s: %s,\n", // nolint: errcheck
 				toString(entryInfo.key),
 				toString(entryInfo.expected))
 		}

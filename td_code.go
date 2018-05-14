@@ -13,6 +13,28 @@ type tdCode struct {
 
 var _ TestDeep = &tdCode{}
 
+// Code operator allows to checks data using a custom function. So
+// "fn" is a function that must take one parameter whose type must be
+// the same as the type of the compared value.
+//
+// "fn" can return a single bool kind value, telling that yes or no
+// the custom test is successful:
+//   Code(func (date time.Time) bool {
+//       return date.Year() == 2018
+//     })
+//
+// or two values (bool, string) kinds. The bool value has the same
+// meaning as above, and the string value is used to describe the
+// test when it fails:
+//   Code(func (date time.Time) bool {
+//       if date.Year() == 2018 {
+//         return true, ""
+//       }
+//       return false, "year must be 2018"
+//     })
+//
+// This operator allows to handle any specific comparison not handled
+// by standard operators.
 func Code(fn interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 

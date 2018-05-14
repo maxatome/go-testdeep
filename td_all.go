@@ -11,9 +11,11 @@ type tdAll struct {
 
 var _ TestDeep = &tdAll{}
 
-func All(items ...interface{}) TestDeep {
+// All operator compares data against several expected values. During
+// a match, all of them have to match to succeed.
+func All(expectedValues ...interface{}) TestDeep {
 	return &tdAll{
-		tdList: newList(items...),
+		tdList: newList(expectedValues...),
 	}
 }
 

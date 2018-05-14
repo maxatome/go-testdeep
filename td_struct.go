@@ -116,7 +116,7 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 		fieldIf, ok := getInterface(vfield, false) // no need to force here
 		if !ok {
 			// Probably in an environment where "unsafe" package is forbidden... :(
-			fmt.Fprintf(os.Stderr,
+			fmt.Fprintf(os.Stderr, // nolint: errcheck
 				"field %s is unexported and cannot be overridden, skip it.", fieldName)
 			continue
 		}
@@ -203,7 +203,7 @@ func (s *tdStruct) String() string {
 		buf.WriteString("{\n")
 
 		for _, fieldInfo := range s.expectedFields {
-			fmt.Fprintf(buf, "  %s: %s\n",
+			fmt.Fprintf(buf, "  %s: %s\n", // nolint: errcheck
 				fieldInfo.name, toString(fieldInfo.expected))
 		}
 

@@ -17,7 +17,15 @@ var _ TestDeep = &tdArray{}
 
 type ArrayEntries map[int]interface{}
 
-func Array(model interface{}, entries ArrayEntries) TestDeep {
+// Array operator compares the content of an array or a pointer on an
+// array against the non-zero values of "model" (if any) and the
+// values of "expectedEntries".
+//
+// "model" must be the same type as compared data.
+//
+// "expectedEntries" can be nil, if no zero entries are expected and
+// no TestDeep operator are involved.
+func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	vmodel := reflect.ValueOf(model)
 
 	a := tdArray{
@@ -35,7 +43,7 @@ func Array(model interface{}, entries ArrayEntries) TestDeep {
 
 	case reflect.Array:
 		a.expectedModel = vmodel
-		a.populateExpectedEntries(entries)
+		a.populateExpectedEntries(expectedEntries)
 		return &a
 	}
 
@@ -236,7 +244,8 @@ func (a *tdArray) String() string {
 		buf.WriteString("{\n")
 
 		for index, expectedValue := range a.expectedEntries {
-			fmt.Fprintf(buf, "  %d: %s\n", index, toString(expectedValue))
+			fmt.Fprintf(buf, "  %d: %s\n", // nolint: errcheck
+				index, toString(expectedValue))
 		}
 
 		buf.WriteString("})")

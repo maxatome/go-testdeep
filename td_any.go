@@ -10,9 +10,11 @@ type tdAny struct {
 
 var _ TestDeep = &tdAny{}
 
-func Any(items ...interface{}) TestDeep {
+// Any operator compares data against several expected values. During
+// a match, at least one of them has to match to succeed.
+func Any(expectedValues ...interface{}) TestDeep {
 	return &tdAny{
-		tdList: newList(items...),
+		tdList: newList(expectedValues...),
 	}
 }
 

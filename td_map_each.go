@@ -12,10 +12,13 @@ type tdMapEach struct {
 
 var _ TestDeep = &tdMapEach{}
 
-func MapEach(item interface{}) TestDeep {
+// MapEach operator has to be applied on maps. It compares each value
+// of data map against expected value. During a match, all values have
+// to match to succeed.
+func MapEach(expectedValue interface{}) TestDeep {
 	return &tdMapEach{
 		BaseOKNil: NewBaseOKNil(3),
-		expected:  reflect.ValueOf(item),
+		expected:  reflect.ValueOf(expectedValue),
 	}
 }
 

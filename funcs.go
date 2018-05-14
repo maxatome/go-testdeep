@@ -10,47 +10,47 @@ import (
 
 // CmpAll is a shortcut for:
 //
-//   CmpDeeply(t, got, All(items...), args...)
+//   CmpDeeply(t, got, All(expectedValues...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpAll(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, All(items...), args...)
+func CmpAll(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, All(expectedValues...), args...)
 }
 
 // CmpAny is a shortcut for:
 //
-//   CmpDeeply(t, got, Any(items...), args...)
+//   CmpDeeply(t, got, Any(expectedValues...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpAny(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, Any(items...), args...)
+func CmpAny(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, Any(expectedValues...), args...)
 }
 
 // CmpArray is a shortcut for:
 //
-//   CmpDeeply(t, got, Array(model, entries), args...)
+//   CmpDeeply(t, got, Array(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpArray(t *testing.T, got interface{}, model interface{}, entries ArrayEntries, args ...interface{}) bool {
-	return CmpDeeply(t, got, Array(model, entries), args...)
+func CmpArray(t *testing.T, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+	return CmpDeeply(t, got, Array(model, expectedEntries), args...)
 }
 
 // CmpArrayEach is a shortcut for:
 //
-//   CmpDeeply(t, got, ArrayEach(item), args...)
+//   CmpDeeply(t, got, ArrayEach(expectedValue), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpArrayEach(t *testing.T, got interface{}, item interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, ArrayEach(item), args...)
+func CmpArrayEach(t *testing.T, got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, ArrayEach(expectedValue), args...)
 }
 
 // CmpBag is a shortcut for:
 //
-//   CmpDeeply(t, got, Bag(items...), args...)
+//   CmpDeeply(t, got, Bag(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpBag(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, Bag(items...), args...)
+func CmpBag(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, Bag(expectedItems...), args...)
 }
 
 // CmpBetween is a shortcut for:
@@ -167,20 +167,20 @@ func CmpLte(t *testing.T, got interface{}, val interface{}, args ...interface{})
 
 // CmpMap is a shortcut for:
 //
-//   CmpDeeply(t, got, Map(model, entries), args...)
+//   CmpDeeply(t, got, Map(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpMap(t *testing.T, got interface{}, model interface{}, entries MapEntries, args ...interface{}) bool {
-	return CmpDeeply(t, got, Map(model, entries), args...)
+func CmpMap(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	return CmpDeeply(t, got, Map(model, expectedEntries), args...)
 }
 
 // CmpMapEach is a shortcut for:
 //
-//   CmpDeeply(t, got, MapEach(item), args...)
+//   CmpDeeply(t, got, MapEach(expectedValue), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpMapEach(t *testing.T, got interface{}, item interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, MapEach(item), args...)
+func CmpMapEach(t *testing.T, got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, MapEach(expectedValue), args...)
 }
 
 // CmpN is a shortcut for:
@@ -207,29 +207,29 @@ func CmpNil(t *testing.T, got interface{}, args ...interface{}) bool {
 
 // CmpNone is a shortcut for:
 //
-//   CmpDeeply(t, got, None(items...), args...)
+//   CmpDeeply(t, got, None(expectedValues...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNone(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, None(items...), args...)
+func CmpNone(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, None(expectedValues...), args...)
 }
 
 // CmpNoneOf is a shortcut for:
 //
-//   CmpDeeply(t, got, NoneOf(items...), args...)
+//   CmpDeeply(t, got, NoneOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNoneOf(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, NoneOf(items...), args...)
+func CmpNoneOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, NoneOf(expectedItems...), args...)
 }
 
 // CmpNot is a shortcut for:
 //
-//   CmpDeeply(t, got, Not(item), args...)
+//   CmpDeeply(t, got, Not(expected), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNot(t *testing.T, got interface{}, item interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, Not(item), args...)
+func CmpNot(t *testing.T, got interface{}, expected interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, Not(expected), args...)
 }
 
 // CmpNotNil is a shortcut for:
@@ -279,11 +279,11 @@ func CmpRex(t *testing.T, got interface{}, re *regexp.Regexp, opts []interface{}
 
 // CmpSet is a shortcut for:
 //
-//   CmpDeeply(t, got, Set(items...), args...)
+//   CmpDeeply(t, got, Set(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSet(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, Set(items...), args...)
+func CmpSet(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, Set(expectedItems...), args...)
 }
 
 // CmpShallow is a shortcut for:
@@ -324,56 +324,56 @@ func CmpStruct(t *testing.T, got interface{}, model interface{}, expectedFields 
 
 // CmpSubBagOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SubBagOf(items...), args...)
+//   CmpDeeply(t, got, SubBagOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSubBagOf(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, SubBagOf(items...), args...)
+func CmpSubBagOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, SubBagOf(expectedItems...), args...)
 }
 
 // CmpSubMapOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SubMapOf(model, entries), args...)
+//   CmpDeeply(t, got, SubMapOf(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSubMapOf(t *testing.T, got interface{}, model interface{}, entries MapEntries, args ...interface{}) bool {
-	return CmpDeeply(t, got, SubMapOf(model, entries), args...)
+func CmpSubMapOf(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	return CmpDeeply(t, got, SubMapOf(model, expectedEntries), args...)
 }
 
 // CmpSubSetOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SubSetOf(items...), args...)
+//   CmpDeeply(t, got, SubSetOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSubSetOf(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, SubSetOf(items...), args...)
+func CmpSubSetOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, SubSetOf(expectedItems...), args...)
 }
 
 // CmpSuperBagOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SuperBagOf(items...), args...)
+//   CmpDeeply(t, got, SuperBagOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSuperBagOf(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, SuperBagOf(items...), args...)
+func CmpSuperBagOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, SuperBagOf(expectedItems...), args...)
 }
 
 // CmpSuperMapOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SuperMapOf(model, entries), args...)
+//   CmpDeeply(t, got, SuperMapOf(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSuperMapOf(t *testing.T, got interface{}, model interface{}, entries MapEntries, args ...interface{}) bool {
-	return CmpDeeply(t, got, SuperMapOf(model, entries), args...)
+func CmpSuperMapOf(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	return CmpDeeply(t, got, SuperMapOf(model, expectedEntries), args...)
 }
 
 // CmpSuperSetOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SuperSetOf(items...), args...)
+//   CmpDeeply(t, got, SuperSetOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSuperSetOf(t *testing.T, got interface{}, items []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, SuperSetOf(items...), args...)
+func CmpSuperSetOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, SuperSetOf(expectedItems...), args...)
 }
 
 // CmpTruncTime is a shortcut for:

@@ -12,10 +12,14 @@ type tdArrayEach struct {
 
 var _ TestDeep = &tdArrayEach{}
 
-func ArrayEach(item interface{}) TestDeep {
+// ArrayEach operator has to be applied on arrays or slices or on
+// pointers on array/slice. It compares each item of data array/slice
+// against expected value. During a match, all items have to match to
+// succeed.
+func ArrayEach(expectedValue interface{}) TestDeep {
 	return &tdArrayEach{
 		BaseOKNil: NewBaseOKNil(3),
-		expected:  reflect.ValueOf(item),
+		expected:  reflect.ValueOf(expectedValue),
 	}
 }
 
