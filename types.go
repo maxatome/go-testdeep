@@ -20,6 +20,8 @@ type testDeepStringer interface {
 	String() string
 }
 
+// TestDeep is the representation of a testdeep operator. It is not
+// intended to be used directly, but through Cmp* functions.
 type TestDeep interface {
 	testDeepStringer
 	Match(ctx Context, got reflect.Value) *Error
@@ -28,6 +30,8 @@ type TestDeep interface {
 	HandleInvalid() bool
 }
 
+// Base is a base type providing some methods needed by the TestDeep
+// interface.
 type Base struct {
 	location Location
 }
@@ -62,27 +66,39 @@ func (t *Base) setLocation(callDepth int) {
 	t.location.Func = t.location.Func[opDotPos+1:]
 }
 
+// GetLocation returns a copy of the Location where the TestDeep
+// operator has been created.
 func (t *Base) GetLocation() Location {
 	return t.location
 }
 
+// HandleInvalid tells testdeep internals that this operator does not
+// handle nil values directly.
 func (t Base) HandleInvalid() bool {
 	return false
 }
 
+// NewBase returns a new Base struct with Location set to the
+// "callDepth" depth.
 func NewBase(callDepth int) (b Base) {
 	b.setLocation(callDepth)
 	return
 }
 
+// BaseOKNil is a base type providing some methods needed by the TestDeep
+// interface, for operators handling nil values.
 type BaseOKNil struct {
 	Base
 }
 
+// HandleInvalid tells testdeep internals that this operator handles
+// nil values directly.
 func (t BaseOKNil) HandleInvalid() bool {
 	return true
 }
 
+// NewBaseOKNil returns a new BaseOKNil struct with Location set to
+// the "callDepth" depth.
 func NewBaseOKNil(callDepth int) (b BaseOKNil) {
 	b.setLocation(callDepth)
 	return

@@ -54,11 +54,11 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 // depending the original matched data. Note that an other operator
 // can be used here.
 //
-//   CmpDeeply(t, "foobar zip!", Re(`^foobar`))     // is true
+//   CmpDeeply(t, "foobar zip!", Re(`^foobar`))     // succeeds
 //   CmpDeeply(t, "John Doe",
-//     Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // is true
+//     Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
 //   CmpDeeply(t, "John Doe",
-//     Re(`^(\w+) (\w+)`, Bag("Doe", "John"))       // is true
+//     Re(`^(\w+) (\w+)`, Bag("Doe", "John"))       // succeeds
 func Re(reg interface{}, capture ...interface{}) TestDeep {
 	r := newRe(reg, capture...)
 	r.numMatches = 1
@@ -78,9 +78,9 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 // matched data. Note that an other operator can be used here.
 //
 //   CmpDeeply(t, "John Doe",
-//     ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // is true
+//     ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
 //   CmpDeeply(t, "John Doe",
-//     ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))       // is true
+//     ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))       // succeeds
 func ReAll(reg interface{}, capture interface{}) TestDeep {
 	r := newRe(reg, capture)
 	r.numMatches = -1

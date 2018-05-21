@@ -29,6 +29,10 @@ func (e fieldInfoSlice) Len() int           { return len(e) }
 func (e fieldInfoSlice) Less(i, j int) bool { return e[i].name < e[j].name }
 func (e fieldInfoSlice) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
 
+// StructFields allows to pass struct fields to check in function
+// Struct. It is a map whose each key is the expected field name and
+// the corresponding value the expected field value (which can be a
+// TestDeep operator as well as a zero value.)
 type StructFields map[string]interface{}
 
 func newStruct(model interface{}) *tdStruct {
@@ -55,6 +59,17 @@ func newStruct(model interface{}) *tdStruct {
 	panic("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)")
 }
 
+// Struct operator compares the content of a struct or a pointer on a
+// struct against the non-zero values of "model" (if any) and the
+// values of "expectedFields".
+//
+// "model" must be the same type as compared data.
+//
+// "expectedFields" can be nil, if no zero entries are expected and
+// no TestDeep operator are involved.
+//
+// During a match, all expected fields must be found to
+// succeed. Non-expected fields are ignored.
 func Struct(model interface{}, expectedFields StructFields) TestDeep {
 	st := newStruct(model)
 

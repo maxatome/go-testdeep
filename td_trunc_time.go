@@ -15,7 +15,15 @@ type tdTruncTime struct {
 
 var _ TestDeep = &tdTruncTime{}
 
-func TruncTime(val interface{}, trunc ...time.Duration) TestDeep {
+// TruncTime operator compares time.Time (or assignable) values after
+// truncating them to the optional "trunc" duration. See time.Truncate
+// for details about the truncation.
+//
+// If "trunc" is missing, it defaults to 0.
+//
+// Whatever the "trunc" value is, the monotonic clock is stripped
+// before the comparison against "expectedTime".
+func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	if len(trunc) <= 1 {
 		t := tdTruncTime{
 			Base: NewBase(3),
@@ -25,11 +33,11 @@ func TruncTime(val interface{}, trunc ...time.Duration) TestDeep {
 			t.trunc = trunc[0]
 		}
 
-		vval := reflect.ValueOf(val)
+		vval := reflect.ValueOf(expectedTime)
 
 		t.expectedType = vval.Type()
 		if t.expectedType == timeType {
-			t.expectedTime = val.(time.Time).Truncate(t.trunc)
+			t.expectedTime = expectedTime.(time.Time).Truncate(t.trunc)
 			return &t
 		}
 		if t.expectedType.ConvertibleTo(timeType) {

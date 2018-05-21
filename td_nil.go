@@ -53,7 +53,7 @@ type tdNotNil struct {
 
 var _ TestDeep = &tdNotNil{}
 
-// Not Nil operator checks that data is not nil (or is a non-nil
+// NotNil operator checks that data is not nil (or is a non-nil
 // interface, containing a non-nil pointer.)
 func NotNil() TestDeep {
 	return &tdNotNil{

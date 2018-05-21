@@ -43,7 +43,7 @@ func TestCopyValue(t *testing.T) {
 	}
 
 	type SubPrivate struct {
-		private int
+		private int // nolint: unused
 	}
 
 	type Private struct {

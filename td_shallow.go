@@ -13,15 +13,25 @@ type tdShallow struct {
 
 var _ TestDeep = &tdShallow{}
 
-func Shallow(ptr interface{}) TestDeep {
-	vptr := reflect.ValueOf(ptr)
+// Shallow operator compares pointers only, not their contents. It
+// applies on channels, functions (with some restrictions), maps,
+// pointers and slices.
+//
+// During a match, the compared data must be the same as
+// "expectedPointer" to succeed.
+//
+//   a, b := 123, 123
+//   CmpDeeply(t, &a, Shallow(&a)) // succeeds
+//   CmpDeeply(t, &a, Shallow(&b)) // fails even if a == b as &a != &b
+func Shallow(expectedPtr interface{}) TestDeep {
+	vptr := reflect.ValueOf(expectedPtr)
 
 	shallow := tdShallow{
 		Base:         NewBase(3),
 		expectedKind: vptr.Kind(),
 	}
 
-	// Note form reflect documentation:
+	// Note from reflect documentation:
 	// If v's Kind is Func, the returned pointer is an underlying code
 	// pointer, but not necessarily enough to identify a single function
 	// uniquely. The only guarantee is that the result is zero if and

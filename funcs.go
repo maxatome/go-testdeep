@@ -275,10 +275,6 @@ func CmpRe(t *testing.T, got interface{}, reg interface{}, capture interface{}, 
 //
 //   CmpDeeply(t, got, ReAll(reg, capture), args...)
 //
-// ReAll() optional parameter "capture" is here mandatory.
-// nil value should be passed to mimic its absence in
-// original ReAll() call.
-//
 // Returns true if the test is OK, false if it fails.
 func CmpReAll(t *testing.T, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
 	return CmpDeeply(t, got, ReAll(reg, capture), args...)
@@ -295,20 +291,20 @@ func CmpSet(t *testing.T, got interface{}, expectedItems []interface{}, args ...
 
 // CmpShallow is a shortcut for:
 //
-//   CmpDeeply(t, got, Shallow(ptr), args...)
+//   CmpDeeply(t, got, Shallow(expectedPtr), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpShallow(t *testing.T, got interface{}, ptr interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, Shallow(ptr), args...)
+func CmpShallow(t *testing.T, got interface{}, expectedPtr interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, Shallow(expectedPtr), args...)
 }
 
 // CmpSlice is a shortcut for:
 //
-//   CmpDeeply(t, got, Slice(model, entries), args...)
+//   CmpDeeply(t, got, Slice(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSlice(t *testing.T, got interface{}, model interface{}, entries ArrayEntries, args ...interface{}) bool {
-	return CmpDeeply(t, got, Slice(model, entries), args...)
+func CmpSlice(t *testing.T, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+	return CmpDeeply(t, got, Slice(model, expectedEntries), args...)
 }
 
 // CmpString is a shortcut for:
@@ -385,13 +381,13 @@ func CmpSuperSetOf(t *testing.T, got interface{}, expectedItems []interface{}, a
 
 // CmpTruncTime is a shortcut for:
 //
-//   CmpDeeply(t, got, TruncTime(val, trunc), args...)
+//   CmpDeeply(t, got, TruncTime(expectedTime, trunc), args...)
 //
 // TruncTime() optional parameter "trunc" is here mandatory.
 // 0 value should be passed to mimic its absence in
 // original TruncTime() call.
 //
 // Returns true if the test is OK, false if it fails.
-func CmpTruncTime(t *testing.T, got interface{}, val interface{}, trunc time.Duration, args ...interface{}) bool {
-	return CmpDeeply(t, got, TruncTime(val, trunc), args...)
+func CmpTruncTime(t *testing.T, got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
+	return CmpDeeply(t, got, TruncTime(expectedTime, trunc), args...)
 }

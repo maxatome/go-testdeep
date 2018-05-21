@@ -10,6 +10,14 @@ type tdPtr struct {
 
 var _ TestDeep = &tdPtr{}
 
+// Ptr is a smuggler operator. It takes the address of data and
+// compares it to "val".
+//
+// "val" depends on data type. For example, if the compared data is an
+// *int, one can have:
+//   Ptr(12)
+// as well as an other operator:
+//   Ptr(Between(3, 4))
 func Ptr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
@@ -61,6 +69,17 @@ type tdPPtr struct {
 
 var _ TestDeep = &tdPPtr{}
 
+// PPtr is a smuggler operator. It takes the address of the address of
+// data and compares it to "val".
+//
+// "val" depends on data type. For example, if the compared data is an
+// **int, one can have:
+//   PPtr(12)
+// as well as an other operator:
+//   PPtr(Between(3, 4))
+//
+// It is more efficient and shorter to write than:
+//   Ptr(Ptr(val))
 func PPtr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {

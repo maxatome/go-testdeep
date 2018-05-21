@@ -15,7 +15,6 @@ my $DO_NOT_EDIT_HEADER = '// DO NOT EDIT!!! AUTOMATICALLY GENERATED!!!';
 my %IGNORE_VARIADIC = (Between   => 'BoundsInIn',
 		       N         => 0,
 		       Re        => 'nil',
-		       ReAll     => 'nil',
 		       TruncTime => 0);
 
 my $dir = shift;
@@ -62,7 +61,7 @@ while (readdir $dh)
 
 closedir($dh);
 
-my $funcs_content = <<EOH;
+my $funcs_contents = <<EOH;
 package testdeep
 
 $DO_NOT_EDIT_HEADER
@@ -96,7 +95,7 @@ foreach my $func (sort keys %funcs)
 	$cmp_args .= $arg->{type};
     }
 
-    $funcs_content .= <<EOF;
+    $funcs_contents .= <<EOF;
 
 // Cmp$func is a shortcut for:
 //
@@ -106,7 +105,7 @@ EOF
     my $last_arg = $funcs{$func}{args}[-1];
     if (exists $last_arg->{default})
     {
-	$funcs_content .= <<EOF
+	$funcs_contents .= <<EOF
 //
 // $func() optional parameter "$last_arg->{name}" is here mandatory.
 // $last_arg->{default} value should be passed to mimic its absence in
@@ -114,7 +113,7 @@ EOF
 EOF
     }
 
-    $funcs_content .= <<EOF;
+    $funcs_contents .= <<EOF;
 //
 // Returns true if the test is OK, false if it fails.
 func Cmp$func(t *testing.T, $cmp_args, args ...interface{}) bool {
@@ -134,13 +133,13 @@ while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}/gms)
 }
 
 open(my $fh, "| gofmt -s > '$dir/funcs.go'");
-print $fh $funcs_content;
+print $fh $funcs_contents;
 close $fh;
 say "$dir/funcs.go generated";
 undef $fh;
 
 
-my $funcs_test_content = <<EOH;
+my $funcs_test_contents = <<EOH;
 package testdeep_test
 
 $DO_NOT_EDIT_HEADER
@@ -221,7 +220,7 @@ foreach my $func (sort keys %funcs)
                    $repl
                   %egs;
 
-	$funcs_test_content .= <<EOF;
+	$funcs_test_contents .= <<EOF;
 
 func ExampleCmp$func$name() {
 $code}
@@ -230,9 +229,9 @@ EOF
 }
 
 open($fh, "| gofmt -s > '$dir/funcs_test.go'");
-print $fh $funcs_test_content;
+print $fh $funcs_test_contents;
 close $fh;
 say "$dir/funcs_test.go generated";
 
-#$funcs_test_content !~ /CmpDeeply/
+#$funcs_test_contents !~ /CmpDeeply/
 #    or die "At least one CmpDeeply() occurrence has not been replaced!\n";

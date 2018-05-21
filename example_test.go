@@ -795,7 +795,7 @@ func ExampleNotNil() {
 	got = (*bytes.Buffer)(nil)
 
 	// In the case of an interface containing a nil pointer, comparing
-	// with Not(nil) succeed, as the interface is not nil
+	// with Not(nil) succeeds, as the interface is not nil
 	ok = CmpDeeply(t, got, Not(nil))
 	fmt.Println(ok)
 

@@ -29,6 +29,10 @@ type mapEntryInfo struct {
 	expected reflect.Value
 }
 
+// MapEntries allows to pass map entries to check in function Map. It
+// is a map whose each key is the expected entry key and the
+// corresponding value the expected entry value (which can be a
+// TestDeep operator as well as a zero value.)
 type MapEntries map[interface{}]interface{}
 
 func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
@@ -137,10 +141,10 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 // compared map.
 //
 //   CmpDeeply(t, map[string]int{"a": 1},
-//     SubMapOf(map[string]int{"a": 1, "b":2}, nil) // is true
+//     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // succeeds
 //
 //   CmpDeeply(t, map[string]int{"a": 1, "c": 3},
-//     SubMapOf(map[string]int{"a": 1, "b":2}, nil) // is false
+//     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, extra {"c": 3}
 func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, subMap)
 }
@@ -156,11 +160,11 @@ func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 // During a match, each expected entry should match in the compared
 // map. But some entries in the compared map may not be expected.
 //
-//   CmpDeeply(t, map[string]int{"a": 1, "b":2},
-//     SuperMapOf(map[string]int{"a": 1}, nil) // is true
+//   CmpDeeply(t, map[string]int{"a": 1, "b": 2},
+//     SuperMapOf(map[string]int{"a": 1}, nil) // succeeds
 //
 //   CmpDeeply(t, map[string]int{"a": 1, "c": 3},
-//     SuperMapOf(map[string]int{"a": 1, "b":2}, nil) // is false
+//     SuperMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, missing {"b": 2}
 func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, superMap)
 }

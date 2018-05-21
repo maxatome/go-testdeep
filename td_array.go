@@ -15,6 +15,10 @@ type tdArray struct {
 
 var _ TestDeep = &tdArray{}
 
+// ArrayEntries allows to pass array or slice entries to check in
+// functions Array and Slice. It is a map whose each key is the item
+// index and the corresponding value the expected item value (which
+// can be a TestDeep operator as well as a zero value.)
 type ArrayEntries map[int]interface{}
 
 // Array operator compares the content of an array or a pointer on an
@@ -50,7 +54,15 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	panic("usage: Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)")
 }
 
-func Slice(model interface{}, entries ArrayEntries) TestDeep {
+// Slice operator compares the content of a slice or a pointer on a
+// slice against the non-zero values of "model" (if any) and the
+// values of "expectedEntries".
+//
+// "model" must be the same type as compared data.
+//
+// "expectedEntries" can be nil, if no zero entries are expected and
+// no TestDeep operator are involved.
+func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	vmodel := reflect.ValueOf(model)
 
 	a := tdArray{
@@ -68,18 +80,18 @@ func Slice(model interface{}, entries ArrayEntries) TestDeep {
 
 	case reflect.Slice:
 		a.expectedModel = vmodel
-		a.populateExpectedEntries(entries)
+		a.populateExpectedEntries(expectedEntries)
 		return &a
 	}
 
 	panic("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES)")
 }
 
-func (a *tdArray) populateExpectedEntries(entries ArrayEntries) {
+func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries) {
 	var maxLength, numEntries int
 
 	maxIndex := -1
-	for index := range entries {
+	for index := range expectedEntries {
 		if index > maxIndex {
 			maxIndex = index
 		}
@@ -107,7 +119,7 @@ func (a *tdArray) populateExpectedEntries(entries ArrayEntries) {
 	a.expectedEntries = make([]reflect.Value, numEntries)
 
 	elemType := a.expectedModel.Type().Elem()
-	for index, expectedValue := range entries {
+	for index, expectedValue := range expectedEntries {
 		vexpectedValue := reflect.ValueOf(expectedValue)
 
 		if _, ok := expectedValue.(TestDeep); !ok {
@@ -131,7 +143,7 @@ func (a *tdArray) populateExpectedEntries(entries ArrayEntries) {
 		ventry := a.expectedModel.Index(index)
 
 		// Entry already expected
-		if _, ok := entries[index]; ok {
+		if _, ok := expectedEntries[index]; ok {
 			// If non-zero entry, consider it as an error (= 2 expected
 			// values for the same item)
 			if !reflect.DeepEqual(zero, ventry.Interface()) {
@@ -152,7 +164,7 @@ func (a *tdArray) populateExpectedEntries(entries ArrayEntries) {
 
 	// Slice case, initialize missing expected items to zero
 	for index := a.expectedModel.Len(); index < numEntries; index++ {
-		if _, ok := entries[index]; !ok {
+		if _, ok := expectedEntries[index]; !ok {
 			a.expectedEntries[index] = vzero
 		}
 	}
