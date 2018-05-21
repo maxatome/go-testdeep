@@ -14,6 +14,8 @@ my $DO_NOT_EDIT_HEADER = '// DO NOT EDIT!!! AUTOMATICALLY GENERATED!!!';
 # this optional parameter.
 my %IGNORE_VARIADIC = (Between   => 'BoundsInIn',
 		       N         => 0,
+		       Re        => 'nil',
+		       ReAll     => 'nil',
 		       TruncTime => 0);
 
 my $dir = shift;
@@ -66,7 +68,6 @@ package testdeep
 $DO_NOT_EDIT_HEADER
 
 import (
-\t"regexp"
 \t"testing"
 \t"time"
 )

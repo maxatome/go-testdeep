@@ -874,12 +874,12 @@ func ExampleCmpRe_capture() {
 	t := &testing.T{}
 
 	got := "foo bar biz"
-	ok := CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, []interface{}{Set("biz", "foo", "bar")},
+	ok := CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, []interface{}{Set("biz", "foo", "bar")},
+	ok = CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -888,60 +888,17 @@ func ExampleCmpRe_capture() {
 	// false
 }
 
-func ExampleCmpRe_captureAll() {
-	t := &testing.T{}
-
-	got := "foo bar biz"
-	ok := CmpRe(t, got, `(\w+)`, []interface{}{Set("biz", "foo", "bar"), true},
-		"checks value %s", got)
-	fmt.Println(ok)
-
-	// Matches, but all catured groups do not match Set
-	got = "foo BAR biz"
-	ok = CmpRe(t, got, `(\w+)`, []interface{}{Set("biz", "foo", "bar"), true},
-		"checks value %s", got)
-	fmt.Println(ok)
-
-	// Output:
-	// true
-	// false
-}
-
-func ExampleCmpRe_captureAllComplex() {
-	t := &testing.T{}
-
-	got := "11 45 23 56 85 96"
-	ok := CmpRe(t, got, `(\d+)`, []interface{}{ArrayEach(Code(func(num string) bool {
-		n, err := strconv.Atoi(num)
-		return err == nil && n > 10 && n < 100
-	})), true},
-		"checks value %s", got)
-	fmt.Println(ok)
-
-	// Matches, but 11 is not greater than 20
-	ok = CmpRe(t, got, `(\d+)`, []interface{}{ArrayEach(Code(func(num string) bool {
-		n, err := strconv.Atoi(num)
-		return err == nil && n > 20 && n < 100
-	})), true},
-		"checks value %s", got)
-	fmt.Println(ok)
-
-	// Output:
-	// true
-	// false
-}
-
-func ExampleCmpRex() {
+func ExampleCmpRe_compiled() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := "foo bar"
-	ok := CmpRex(t, got, expected, nil, "checks value %s", got)
+	ok := CmpRe(t, got, expected, nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	got = "bar foo"
-	ok = CmpRex(t, got, expected, nil, "checks value %s", got)
+	ok = CmpRe(t, got, expected, nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -949,45 +906,45 @@ func ExampleCmpRex() {
 	// false
 }
 
-func ExampleCmpRex_stringer() {
+func ExampleCmpRe_compiledStringer() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
-	ok := CmpRex(t, got, expected, nil, "checks value %s", got)
+	ok := CmpRe(t, got, expected, nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
 	// true
 }
 
-func ExampleCmpRex_error() {
+func ExampleCmpRe_compiledError() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := errors.New("foo bar")
-	ok := CmpRex(t, got, expected, nil, "checks value %s", got)
+	ok := CmpRe(t, got, expected, nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
 	// true
 }
 
-func ExampleCmpRex_capture() {
+func ExampleCmpRe_compiledCapture() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
 	got := "foo bar biz"
-	ok := CmpRex(t, got, expected, []interface{}{Set("biz", "foo", "bar")},
+	ok := CmpRe(t, got, expected, Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = CmpRex(t, got, expected, []interface{}{Set("biz", "foo", "bar")},
+	ok = CmpRe(t, got, expected, Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -996,19 +953,17 @@ func ExampleCmpRex_capture() {
 	// false
 }
 
-func ExampleCmpRex_captureAll() {
+func ExampleCmpReAll_capture() {
 	t := &testing.T{}
 
-	expected := regexp.MustCompile(`(\w+)`)
-
 	got := "foo bar biz"
-	ok := CmpRex(t, got, expected, []interface{}{Set("biz", "foo", "bar"), true},
+	ok := CmpReAll(t, got, `(\w+)`, Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = CmpRex(t, got, expected, []interface{}{Set("biz", "foo", "bar"), true},
+	ok = CmpReAll(t, got, `(\w+)`, Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -1017,24 +972,69 @@ func ExampleCmpRex_captureAll() {
 	// false
 }
 
-func ExampleCmpRex_captureAllComplex() {
+func ExampleCmpReAll_captureComplex() {
+	t := &testing.T{}
+
+	got := "11 45 23 56 85 96"
+	ok := CmpReAll(t, got, `(\d+)`, ArrayEach(Code(func(num string) bool {
+		n, err := strconv.Atoi(num)
+		return err == nil && n > 10 && n < 100
+	})),
+		"checks value %s", got)
+	fmt.Println(ok)
+
+	// Matches, but 11 is not greater than 20
+	ok = CmpReAll(t, got, `(\d+)`, ArrayEach(Code(func(num string) bool {
+		n, err := strconv.Atoi(num)
+		return err == nil && n > 20 && n < 100
+	})),
+		"checks value %s", got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleCmpReAll_compiledCapture() {
+	t := &testing.T{}
+
+	expected := regexp.MustCompile(`(\w+)`)
+
+	got := "foo bar biz"
+	ok := CmpReAll(t, got, expected, Set("biz", "foo", "bar"),
+		"checks value %s", got)
+	fmt.Println(ok)
+
+	// Matches, but all catured groups do not match Set
+	got = "foo BAR biz"
+	ok = CmpReAll(t, got, expected, Set("biz", "foo", "bar"),
+		"checks value %s", got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleCmpReAll_compiledCaptureComplex() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile(`(\d+)`)
 
 	got := "11 45 23 56 85 96"
-	ok := CmpRex(t, got, expected, []interface{}{ArrayEach(Code(func(num string) bool {
+	ok := CmpReAll(t, got, expected, ArrayEach(Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 10 && n < 100
-	})), true},
+	})),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = CmpRex(t, got, expected, []interface{}{ArrayEach(Code(func(num string) bool {
+	ok = CmpReAll(t, got, expected, ArrayEach(Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 20 && n < 100
-	})), true},
+	})),
 		"checks value %s", got)
 	fmt.Println(ok)
 

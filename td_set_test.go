@@ -24,8 +24,9 @@ func TestSet(t *testing.T) {
 		//
 		// Set
 		checkOK(t, got, Set(5, 4, 1, 3), testName)
-		checkOK(t, got, Set(5, 4, 1, 3, 3, 3, 3), testName)               // duplicated fields
-		checkOK(t, got, Set(Between(0, 5), Between(0, 5), Between(0, 5))) // dup too
+		checkOK(t, got, Set(5, 4, 1, 3, 3, 3, 3), testName) // duplicated fields
+		checkOK(t, got,
+			Set(Between(0, 5), Between(0, 5), Between(0, 5))) // dup too
 
 		checkError(t, got, Set(5, 4, 1),
 			expectedError{

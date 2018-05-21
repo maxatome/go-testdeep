@@ -15,46 +15,81 @@ type tdRe struct {
 
 var _ TestDeep = &tdRe{}
 
-func newRe(usage string, opts ...interface{}) (r *tdRe) {
+func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 	r = &tdRe{
-		Base:       NewBase(4),
-		numMatches: 1, // only one match by default
+		Base: NewBase(4),
 	}
 
-	switch len(opts) {
+	switch len(capture) {
 	case 0:
-		return
-
-	case 2:
-		isGlobal, ok := opts[1].(bool)
-		if !ok {
-			break
-		}
-		if isGlobal {
-			r.numMatches = -1
-		}
-		fallthrough
-
 	case 1:
-		if opts[0] != nil {
-			r.captures = reflect.ValueOf(opts[0])
-			return
+		if capture[0] != nil {
+			r.captures = reflect.ValueOf(capture[0])
 		}
+		break
+	default:
+		r.usage()
 	}
 
-	panic(usage)
+	switch reg := regIf.(type) {
+	case *regexp.Regexp:
+		r.re = reg
+	case string:
+		r.re = regexp.MustCompile(reg)
+	default:
+		r.usage()
+	}
+	return
 }
 
-func Re(reg string, opts ...interface{}) TestDeep {
-	r := newRe("usage: Re(REGEXP_STR[, NON_NIL_CAPTURE[, IS_GLOBAL]])", opts...)
-	r.re = regexp.MustCompile(reg)
+// Re operator allows to apply a regexp on a string (or convertible),
+// []byte, error or fmt.Stringer interface (error interface is tested
+// before fmt.Stringer.)
+//
+// "reg" is the regexp. It can be a string that is automatically
+// compiled using regexp.MustCompile, or a *regexp.Regexp.
+//
+// Optional "capture" parameter can be used to match the contents of
+// regexp groups. Groups are presented as a []string or [][]byte
+// depending the original matched data. Note that an other operator
+// can be used here.
+//
+//   CmpDeeply(t, "foobar zip!", Re(`^foobar`))     // is true
+//   CmpDeeply(t, "John Doe",
+//     Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // is true
+//   CmpDeeply(t, "John Doe",
+//     Re(`^(\w+) (\w+)`, Bag("Doe", "John"))       // is true
+func Re(reg interface{}, capture ...interface{}) TestDeep {
+	r := newRe(reg, capture...)
+	r.numMatches = 1
 	return r
 }
 
-func Rex(re *regexp.Regexp, opts ...interface{}) TestDeep {
-	r := newRe("usage: Rex(*Regexp, NON_NIL_CAPTURE[, IS_GLOBAL]])", opts...)
-	r.re = re
+// ReAll operator allows to successively apply a regexp on a string
+// (or convertible), []byte, error or fmt.Stringer interface (error
+// interface is tested before fmt.Stringer) and to match its groups
+// contents.
+//
+// "reg" is the regexp. It can be a string that is automatically
+// compiled using regexp.MustCompile, or a *regexp.Regexp.
+//
+// "capture" is used to match the contents of regexp groups. Groups
+// are presented as a []string or [][]byte depending the original
+// matched data. Note that an other operator can be used here.
+//
+//   CmpDeeply(t, "John Doe",
+//     ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // is true
+//   CmpDeeply(t, "John Doe",
+//     ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))       // is true
+func ReAll(reg interface{}, capture interface{}) TestDeep {
+	r := newRe(reg, capture)
+	r.numMatches = -1
 	return r
+}
+
+func (r *tdRe) usage() {
+	panic(fmt.Sprintf("usage: %s(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])",
+		r.location.Func))
 }
 
 func (r *tdRe) needCaptures() bool {
@@ -159,11 +194,11 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 		var strOK bool
 		if iface, ok := getInterface(got, true); ok {
 			switch gotVal := iface.(type) {
-			case fmt.Stringer:
-				str = gotVal.String()
-				strOK = true
 			case error:
 				str = gotVal.Error()
+				strOK = true
+			case fmt.Stringer:
+				str = gotVal.String()
 				strOK = true
 			default:
 			}

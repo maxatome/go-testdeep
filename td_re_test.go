@@ -12,14 +12,14 @@ func TestRe(t *testing.T) {
 	//
 	// string
 	checkOK(t, "foo bar test", Re("bar"))
-	checkOK(t, "foo bar test", Rex(regexp.MustCompile("test$")))
+	checkOK(t, "foo bar test", Re(regexp.MustCompile("test$")))
 
 	checkOK(t, "foo bar test",
-		Re(`(\w+)`, Bag("bar", "test", "foo"), true))
+		ReAll(`(\w+)`, Bag("bar", "test", "foo")))
 
 	type MyString string
 	checkOK(t, MyString("Ho zz hoho"),
-		Re("(?i)(ho)", []string{"Ho", "ho", "ho"}, true))
+		ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
 
 	// error interface
 	checkOK(t, errors.New("pipo bingo"), Re("bin"))
@@ -54,11 +54,11 @@ func TestRe(t *testing.T) {
 	checkOK(t, []byte("foo bar test"), Re("bar"))
 
 	checkOK(t, []byte("foo bar test"),
-		Re(`(\w+)`, Bag("bar", "test", "foo"), true))
+		ReAll(`(\w+)`, Bag("bar", "test", "foo")))
 
 	type MySlice []byte
 	checkOK(t, MySlice("Ho zz hoho"),
-		Re("(?i)(ho)", []string{"Ho", "ho", "ho"}, true))
+		ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
 
 	checkError(t, []int{12}, Re("bar"), expectedError{
 		Message:  mustBe("bad slice type"),
@@ -75,7 +75,7 @@ func TestRe(t *testing.T) {
 	})
 
 	checkError(t, []byte("foo bar test"),
-		Re("(pi)(po)", []string{"pi", "po"}, false),
+		Re("(pi)(po)", []string{"pi", "po"}),
 		expectedError{
 			Message:  mustBe("does not match Regexp"),
 			Path:     mustBe("DATA"),
@@ -86,13 +86,9 @@ func TestRe(t *testing.T) {
 	//
 	// Bad usage
 	const reUsage = "usage: Re("
-	checkPanic(t, func() { Re("bar", nil) }, reUsage)
+	checkPanic(t, func() { Re(123) }, reUsage)
 	checkPanic(t, func() { Re("bar", []string{}, 1) }, reUsage)
-	checkPanic(t, func() { Re("bar", []string{}, true, 123) }, reUsage)
 
-	const rexUsage = "usage: Rex("
-	re := regexp.MustCompile("bar")
-	checkPanic(t, func() { Rex(re, nil) }, rexUsage)
-	checkPanic(t, func() { Rex(re, []string{}, 1) }, rexUsage)
-	checkPanic(t, func() { Rex(re, []string{}, true, 123) }, rexUsage)
+	const reAllUsage = "usage: ReAll("
+	checkPanic(t, func() { ReAll(123, 456) }, reAllUsage)
 }

@@ -3,7 +3,6 @@ package testdeep
 // DO NOT EDIT!!! AUTOMATICALLY GENERATED!!!
 
 import (
-	"regexp"
 	"testing"
 	"time"
 )
@@ -261,20 +260,28 @@ func CmpPtr(t *testing.T, got interface{}, val interface{}, args ...interface{})
 
 // CmpRe is a shortcut for:
 //
-//   CmpDeeply(t, got, Re(reg, opts...), args...)
+//   CmpDeeply(t, got, Re(reg, capture), args...)
+//
+// Re() optional parameter "capture" is here mandatory.
+// nil value should be passed to mimic its absence in
+// original Re() call.
 //
 // Returns true if the test is OK, false if it fails.
-func CmpRe(t *testing.T, got interface{}, reg string, opts []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, Re(reg, opts...), args...)
+func CmpRe(t *testing.T, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, Re(reg, capture), args...)
 }
 
-// CmpRex is a shortcut for:
+// CmpReAll is a shortcut for:
 //
-//   CmpDeeply(t, got, Rex(re, opts...), args...)
+//   CmpDeeply(t, got, ReAll(reg, capture), args...)
+//
+// ReAll() optional parameter "capture" is here mandatory.
+// nil value should be passed to mimic its absence in
+// original ReAll() call.
 //
 // Returns true if the test is OK, false if it fails.
-func CmpRex(t *testing.T, got interface{}, re *regexp.Regexp, opts []interface{}, args ...interface{}) bool {
-	return CmpDeeply(t, got, Rex(re, opts...), args...)
+func CmpReAll(t *testing.T, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
+	return CmpDeeply(t, got, ReAll(reg, capture), args...)
 }
 
 // CmpSet is a shortcut for:

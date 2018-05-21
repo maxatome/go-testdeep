@@ -900,17 +900,17 @@ func ExampleRe_capture() {
 	// false
 }
 
-func ExampleRe_captureAll() {
+func ExampleReAll_capture() {
 	t := &testing.T{}
 
 	got := "foo bar biz"
-	ok := CmpDeeply(t, got, Re(`(\w+)`, Set("biz", "foo", "bar"), true),
+	ok := CmpDeeply(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = CmpDeeply(t, got, Re(`(\w+)`, Set("biz", "foo", "bar"), true),
+	ok = CmpDeeply(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -919,24 +919,24 @@ func ExampleRe_captureAll() {
 	// false
 }
 
-func ExampleRe_captureAllComplex() {
+func ExampleReAll_captureComplex() {
 	t := &testing.T{}
 
 	got := "11 45 23 56 85 96"
 	ok := CmpDeeply(t, got,
-		Re(`(\d+)`, ArrayEach(Code(func(num string) bool {
+		ReAll(`(\d+)`, ArrayEach(Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 10 && n < 100
-		})), true),
+		}))),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
 	ok = CmpDeeply(t, got,
-		Re(`(\d+)`, ArrayEach(Code(func(num string) bool {
+		ReAll(`(\d+)`, ArrayEach(Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 20 && n < 100
-		})), true),
+		}))),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -945,17 +945,17 @@ func ExampleRe_captureAllComplex() {
 	// false
 }
 
-func ExampleRex() {
+func ExampleRe_compiled() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := "foo bar"
-	ok := CmpDeeply(t, got, Rex(expected), "checks value %s", got)
+	ok := CmpDeeply(t, got, Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	got = "bar foo"
-	ok = CmpDeeply(t, got, Rex(expected), "checks value %s", got)
+	ok = CmpDeeply(t, got, Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -963,45 +963,45 @@ func ExampleRex() {
 	// false
 }
 
-func ExampleRex_stringer() {
+func ExampleRe_compiledStringer() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
-	ok := CmpDeeply(t, got, Rex(expected), "checks value %s", got)
+	ok := CmpDeeply(t, got, Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
 	// true
 }
 
-func ExampleRex_error() {
+func ExampleRe_compiledError() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := errors.New("foo bar")
-	ok := CmpDeeply(t, got, Rex(expected), "checks value %s", got)
+	ok := CmpDeeply(t, got, Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
 	// true
 }
 
-func ExampleRex_capture() {
+func ExampleRe_compiledCapture() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
 	got := "foo bar biz"
-	ok := CmpDeeply(t, got, Rex(expected, Set("biz", "foo", "bar")),
+	ok := CmpDeeply(t, got, Re(expected, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = CmpDeeply(t, got, Rex(expected, Set("biz", "foo", "bar")),
+	ok = CmpDeeply(t, got, Re(expected, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -1010,19 +1010,19 @@ func ExampleRex_capture() {
 	// false
 }
 
-func ExampleRex_captureAll() {
+func ExampleReAll_compiledCapture() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile(`(\w+)`)
 
 	got := "foo bar biz"
-	ok := CmpDeeply(t, got, Rex(expected, Set("biz", "foo", "bar"), true),
+	ok := CmpDeeply(t, got, ReAll(expected, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = CmpDeeply(t, got, Rex(expected, Set("biz", "foo", "bar"), true),
+	ok = CmpDeeply(t, got, ReAll(expected, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -1031,26 +1031,26 @@ func ExampleRex_captureAll() {
 	// false
 }
 
-func ExampleRex_captureAllComplex() {
+func ExampleReAll_compiledCaptureComplex() {
 	t := &testing.T{}
 
 	expected := regexp.MustCompile(`(\d+)`)
 
 	got := "11 45 23 56 85 96"
 	ok := CmpDeeply(t, got,
-		Rex(expected, ArrayEach(Code(func(num string) bool {
+		ReAll(expected, ArrayEach(Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 10 && n < 100
-		})), true),
+		}))),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
 	ok = CmpDeeply(t, got,
-		Rex(expected, ArrayEach(Code(func(num string) bool {
+		ReAll(expected, ArrayEach(Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 20 && n < 100
-		})), true),
+		}))),
 		"checks value %s", got)
 	fmt.Println(ok)
 
