@@ -1,3 +1,13 @@
+// Copyright (c) 2018, Maxime Soulé
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+// deepValueEqual function is heavily based on reflect.deepValueEqual function
+// licensed under the BSD-style license found in the LICENSE file in the
+// golang repository: https://github.com/golang/go/blob/master/LICENSE
+
 package testdeep
 
 import (

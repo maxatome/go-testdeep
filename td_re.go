@@ -1,3 +1,9 @@
+// Copyright (c) 2018, Maxime Soulé
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+
 package testdeep
 
 import (
@@ -26,7 +32,6 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 		if capture[0] != nil {
 			r.captures = reflect.ValueOf(capture[0])
 		}
-		break
 	default:
 		r.usage()
 	}
