@@ -144,10 +144,10 @@ while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}/gms)
     push(@{$funcs{$1}{examples}}, { name => $2 // '', code => $3 });
 }
 
-open(my $fh, "| gofmt -s > '$dir/funcs.go'");
+open(my $fh, "| gofmt -s > '$dir/cmp_funcs.go'");
 print $fh $funcs_contents;
 close $fh;
-say "$dir/funcs.go generated";
+say "$dir/cmp_funcs.go generated";
 undef $fh;
 
 
@@ -246,10 +246,10 @@ EOF
     }
 }
 
-open($fh, "| gofmt -s > '$dir/funcs_test.go'");
+open($fh, "| gofmt -s > '$dir/cmp_funcs_test.go'");
 print $fh $funcs_test_contents;
 close $fh;
-say "$dir/funcs_test.go generated";
+say "$dir/cmp_funcs_test.go generated";
 
 #$funcs_test_contents !~ /CmpDeeply/
 #    or die "At least one CmpDeeply() occurrence has not been replaced!\n";
