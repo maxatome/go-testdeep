@@ -63,7 +63,8 @@ exit status 1
 FAIL  github.com/maxatome/go-testdeep  0.006s
 ```
 
-If `CreateRecord` did not set correctly `Id` field, output would be:
+If `CreateRecord` had not set correctly `Id` field, output would have
+been:
 ```
 --- FAIL: TestCreateRecord (0.00s)
   test_test.go:22: Failed test 'Newly created record'
@@ -76,8 +77,8 @@ exit status 1
 FAIL  github.com/maxatome/go-testdeep  0.006s
 ```
 
-If `CreateRecord` set `Name` field to "Alice" value instead of
-expected "Bob", output would be:
+If `CreateRecord` had not set `Name` field to "Alice" value instead of
+expected "Bob", output would have been:
 ```
 --- FAIL: TestCreateRecord (0.00s)
   test_test.go:22: Failed test 'Newly created record'
@@ -156,7 +157,7 @@ func TestCreateRecord(t *testing.T) {
 }
 ```
 
-With `testdeep`, it is a way simple, thanks to `CmpDeeply` function:
+With `testdeep`, it is a way simple, thanks to [`CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#CmpDeeply) function:
 
 ```go
 import (
@@ -189,9 +190,12 @@ func TestCreateRecord(t *testing.T) {
 Of course not only structs can be compared. A lot of operators can
 be found below to cover most (all?) needed tests.
 
-The `CmpDeeply` function is the keystone of this package, but to make
-the writing of tests even easier, the family of `Cmp*` functions are
-provided and act as shortcuts. Using `CmpNil` and `CmpStruct`
+The [`CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#CmpDeeply)
+function is the keystone of this package, but to make the writing of
+tests even easier, the family of `Cmp*` functions are provided and act
+as shortcuts. Using
+[`CmpNil`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNil)
+and [`CmpStruct`](https://godoc.org/github.com/maxatome/go-testdeep#CmpStruct)
 function, the previous example can be written as:
 
 ```go
