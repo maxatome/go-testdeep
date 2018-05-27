@@ -6,6 +6,99 @@ go-testdeep
 [![Go Report Card](https://goreportcard.com/badge/github.com/maxatome/go-testdeep)](https://goreportcard.com/report/github.com/maxatome/go-testdeep)
 [![GoDoc](https://godoc.org/github.com/maxatome/go-testdeep?status.svg)](https://godoc.org/github.com/maxatome/go-testdeep)
 
+
+## Synopsis
+
+```go
+import (
+  "testing"
+  td "github.com/maxatome/go-testdeep"
+)
+
+type Record struct {
+  Id        uint64
+  Name      string
+  Age       int
+  CreatedAt time.Time
+}
+
+func CreateRecord(name string, age int) (*Record, error) {
+  ...
+}
+
+func TestCreateRecord(t *testing.T) {
+  before := time.Now()
+  record, err := CreateRecord("Bob", 23)
+
+  if td.CmpNil(t, err) {
+    td.CmpStruct(t, record,
+      Record{
+        Name: "Bob",
+        Age:  23,
+      },
+      StructFields{
+        "Id":        td.Not(uint64(0)),
+        "CreatedAt": td.Between(before, time.Now()),
+      },
+      "Newly created record")
+  }
+}
+```
+
+Imagine `CreateRecord` does not set correctly `CreatedAt` field, then:
+```sh
+go test -run=TestCreateRecord
+```
+
+outputs:
+```
+--- FAIL: TestCreateRecord (0.00s)
+  test_test.go:22: Failed test 'Newly created record'
+    DATA.CreatedAt: values differ
+           got: 2018-05-27 10:55:50.788166932 +0200 CEST m=-2.998149554
+      expected: 2018-05-27 10:55:53.788163509 +0200 CEST m=+0.001848002 ≤ got ≤ 2018-05-27 10:55:53.788464176 +0200 CEST m=+0.002148179
+    [under TestDeep operator Between at test_test.go:29]
+FAIL
+exit status 1
+FAIL  github.com/maxatome/go-testdeep  0.006s
+```
+
+If `CreateRecord` did not set correctly `Id` field, output would be:
+```
+--- FAIL: TestCreateRecord (0.00s)
+  test_test.go:22: Failed test 'Newly created record'
+    DATA.Id: comparing with Not
+           got: (uint64) 0
+      expected: Not((uint64) 0)
+    [under TestDeep operator Not at test_test.go:28]
+FAIL
+exit status 1
+FAIL  github.com/maxatome/go-testdeep  0.006s
+```
+
+If `CreateRecord` set `Name` field to "Alice" value instead of
+expected "Bob", output would be:
+```
+--- FAIL: TestCreateRecord (0.00s)
+  test_test.go:22: Failed test 'Newly created record'
+    DATA.Name: values differ
+           got: (string) (len=5) "Alice"
+      expected: (string) (len=3) "Bob"
+    [called by CmpStruct at td_between_test.go:37]
+FAIL
+exit status 1
+FAIL  github.com/maxatome/go-testdeep  0.006s
+```
+
+## Installation
+
+```sh
+$ go get github.com/maxatome/go-testdeep
+```
+
+
+## Presentation
+
 Package `testdeep` allows extremely flexible deep comparison, built
 for testing.
 
@@ -37,7 +130,7 @@ import (
 
 func TestCreateRecord(t *testing.T) {
   before := time.Now()
-  record, err := CreateRecord()
+  record, err := CreateRecord("Bob", 23)
 
   if err != nil {
     t.Errorf("An error occurred: %s", err)
@@ -75,7 +168,7 @@ import (
 
 func TestCreateRecord(t *testing.T) {
   before := time.Now()
-  record, err := CreateRecord()
+  record, err := CreateRecord("Bob", 23)
 
   if td.CmpDeeply(t, err, nil) {
     td.CmpDeeply(t, record,
@@ -85,8 +178,8 @@ func TestCreateRecord(t *testing.T) {
           Age:  23,
         },
         StructFields{
-          Id:        td.Not(0),
-          CreatedAt: td.Between(before, time.Now()),
+          "Id":        td.Not(uint64(0)),
+          "CreatedAt": td.Between(before, time.Now()),
         }),
       "Newly created record")
   }
@@ -102,9 +195,16 @@ provided and act as shortcuts. Using `CmpNil` and `CmpStruct`
 function, the previous example can be written as:
 
 ```go
+import (
+  "testing"
+  td "github.com/maxatome/go-testdeep"
+)
+
+...
+
 func TestCreateRecord(t *testing.T) {
   before := time.Now()
-  record, err := CreateRecord()
+  record, err := CreateRecord("Bob", 23)
 
   if td.CmpNil(t, err) {
     td.CmpStruct(t, record,
@@ -113,8 +213,8 @@ func TestCreateRecord(t *testing.T) {
         Age:  23,
       },
       StructFields{
-        Id:        td.Not(0),
-        CreatedAt: td.Between(before, time.Now()),
+        "Id":        td.Not(uint64(0)),
+        "CreatedAt": td.Between(before, time.Now()),
       },
       "Newly created record")
   }
