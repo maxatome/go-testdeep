@@ -27,7 +27,7 @@ var _ TestDeep = &tdArray{}
 // can be a TestDeep operator as well as a zero value.)
 type ArrayEntries map[int]interface{}
 
-// Array operator compares the content of an array or a pointer on an
+// Array operator compares the contents of an array or a pointer on an
 // array against the non-zero values of "model" (if any) and the
 // values of "expectedEntries".
 //
@@ -60,7 +60,7 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	panic("usage: Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)")
 }
 
-// Slice operator compares the content of a slice or a pointer on a
+// Slice operator compares the contents of a slice or a pointer on a
 // slice against the non-zero values of "model" (if any) and the
 // values of "expectedEntries".
 //
@@ -131,7 +131,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries) {
 		if _, ok := expectedValue.(TestDeep); !ok {
 			if !vexpectedValue.Type().AssignableTo(elemType) {
 				panic(fmt.Sprintf(
-					"type %s of #%d expected value differs from %s content (%s)",
+					"type %s of #%d expected value differs from %s contents (%s)",
 					vexpectedValue.Type(),
 					index,
 					ternStr(maxLength < 0, "slice", "array"),

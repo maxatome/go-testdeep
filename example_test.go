@@ -84,7 +84,7 @@ func Example() {
 		},
 	}
 
-	// Let's check masters slice content
+	// Let's check masters slice contents
 	ok := CmpDeeply(t, masters, All(
 		Len(Gt(0)), // len(masters) should be > 0
 		ArrayEach(
@@ -1102,12 +1102,12 @@ func ExampleShallow() {
 	got := &data
 
 	ok := CmpDeeply(t, got, Shallow(&data),
-		"checks pointers only, not content")
+		"checks pointers only, not contents")
 	fmt.Println(ok)
 
-	// Same content, but not same pointer
+	// Same contents, but not same pointer
 	ok = CmpDeeply(t, got, Shallow(&MyStruct{Value: 12}),
-		"checks pointers only, not content")
+		"checks pointers only, not contents")
 	fmt.Println(ok)
 
 	// Output:

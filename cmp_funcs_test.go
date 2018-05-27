@@ -1086,12 +1086,12 @@ func ExampleCmpShallow() {
 	got := &data
 
 	ok := CmpShallow(t, got, &data,
-		"checks pointers only, not content")
+		"checks pointers only, not contents")
 	fmt.Println(ok)
 
-	// Same content, but not same pointer
+	// Same contents, but not same pointer
 	ok = CmpShallow(t, got, &MyStruct{Value: 12},
-		"checks pointers only, not content")
+		"checks pointers only, not contents")
 	fmt.Println(ok)
 
 	// Output:

@@ -65,7 +65,7 @@ func newStruct(model interface{}) *tdStruct {
 	panic("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)")
 }
 
-// Struct operator compares the content of a struct or a pointer on a
+// Struct operator compares the contents of a struct or a pointer on a
 // struct against the non-zero values of "model" (if any) and the
 // values of "expectedFields".
 //

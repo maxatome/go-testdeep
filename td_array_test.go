@@ -128,7 +128,7 @@ func TestArray(t *testing.T) {
 	checkPanic(t, func() { Array([1]int{}, ArrayEntries{1: 34}) },
 		"array length is 1, so cannot have #1 expected index")
 	checkPanic(t, func() { Array([3]int{}, ArrayEntries{1: "bad"}) },
-		"type string of #1 expected value differs from array content (int)")
+		"type string of #1 expected value differs from array contents (int)")
 	checkPanic(t, func() { Array([1]int{12}, ArrayEntries{0: 21}) },
 		"non zero #0 entry in model already exists in expectedEntries")
 
@@ -299,7 +299,7 @@ func TestSlice(t *testing.T) {
 	checkPanic(t, func() { Slice(&MyStruct{}, nil) }, "usage: Slice(")
 	checkPanic(t, func() { Slice([0]int{}, nil) }, "usage: Slice(")
 	checkPanic(t, func() { Slice([]int{}, ArrayEntries{1: "bad"}) },
-		"type string of #1 expected value differs from slice content (int)")
+		"type string of #1 expected value differs from slice contents (int)")
 	checkPanic(t, func() { Slice([]int{12}, ArrayEntries{0: 21}) },
 		"non zero #0 entry in model already exists in expectedEntries")
 

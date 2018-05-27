@@ -24,7 +24,7 @@
 // Imagine a function returning a struct containing a newly created
 // database record. The Id and the CreatedAt fields are set by the
 // database layer. In this case we have to do something like that to
-// check the record content:
+// check the record contents:
 //
 //   import (
 //     "testing"

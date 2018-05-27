@@ -12,7 +12,7 @@ type tdBag struct {
 
 var _ TestDeep = &tdBag{}
 
-// Bag operator compares the content of an array or a slice (or a
+// Bag operator compares the contents of an array or a slice (or a
 // pointer on array/slice) without taking care of the order of items.
 //
 // During a match, each expected item should match in the compared
@@ -38,7 +38,7 @@ type tdSubBagOf struct {
 
 var _ TestDeep = &tdSubBagOf{}
 
-// SubBagOf operator compares the content of an array or a slice (or a
+// SubBagOf operator compares the contents of an array or a slice (or a
 // pointer on array/slice) without taking care of the order of items.
 //
 // During a match, each array/slice item should be matched by an
@@ -61,7 +61,7 @@ type tdSuperBagOf struct {
 
 var _ TestDeep = &tdSuperBagOf{}
 
-// SuperBagOf operator compares the content of an array or a slice (or a
+// SuperBagOf operator compares the contents of an array or a slice (or a
 // pointer on array/slice) without taking care of the order of items.
 //
 // During a match, each expected item should match in the compared

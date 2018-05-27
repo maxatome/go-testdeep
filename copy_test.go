@@ -25,7 +25,8 @@ func checkFieldValueOK(t *testing.T,
 	fieldCopy, ok := CopyValue(fieldOrig)
 	if isTrue(t, ok, "Can copy "+testName) {
 		if isTrue(t, fieldCopy.CanInterface(), testName+" + fieldCopy.CanInterface()") {
-			CmpDeeply(t, fieldCopy.Interface(), value, testName+" + fieldCopy content")
+			CmpDeeply(t, fieldCopy.Interface(), value,
+				testName+" + fieldCopy contents")
 		}
 	}
 }

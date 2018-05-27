@@ -25,7 +25,7 @@ type Context struct {
 	path    string
 	depth   int
 	visited map[visit]bool
-	// If true, the content of the returned *Error will not be
+	// If true, the contents of the returned *Error will not be
 	// checked. Can be used to avoid filling Error{} with expensive
 	// computations.
 	booleanError bool

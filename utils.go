@@ -26,7 +26,7 @@ func ternStr(cond bool, a, b string) string {
 }
 
 // getTime returns the time.Time that is inside got or that can be
-// converted from got content.
+// converted from got contents.
 func getTime(ctx Context, got reflect.Value, mustConvert bool) (time.Time, *Error) {
 	var (
 		gotIf interface{}
