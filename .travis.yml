@@ -1,0 +1,17 @@
+language: go
+
+sudo: false
+
+go:
+  - 1.9.x
+  - 1.10.x
+  - tip
+
+script:
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
+  - go get -t ./...
+  - go test -v -covermode=count -coverprofile=coverage.out
+
+after_success:
+  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci
