@@ -13,7 +13,15 @@ use 5.010;
 
 die "usage $0 [-h] DIR" if @ARGV == 0 or $ARGV[0] =~ /^--?h/;
 
-my $DO_NOT_EDIT_HEADER = '// DO NOT EDIT!!! AUTOMATICALLY GENERATED!!!';
+my $HEADER = <<EOH;
+// Copyright (c) 2018, Maxime Soulé
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+// DO NOT EDIT!!! AUTOMATICALLY GENERATED!!!
+EOH
 
 # These functions are variadics, but only with one possible param. In
 # this case, discard the variadic property and use a default value for
@@ -68,18 +76,20 @@ while (readdir $dh)
 closedir($dh);
 
 my $funcs_contents = <<EOH;
-// Copyright (c) 2018, Maxime Soulé
-// All rights reserved.
-//
-// This source code is licensed under the BSD-style license found in the
-// LICENSE file in the root directory of this source tree.
-
+$HEADER
 package testdeep
-
-$DO_NOT_EDIT_HEADER
 
 import (
 \t"testing"
+\t"time"
+)
+EOH
+
+my $t_contents = <<EOH;
+$HEADER
+package testdeep
+
+import (
 \t"time"
 )
 EOH
@@ -114,10 +124,19 @@ foreach my $func (sort keys %funcs)
 //   CmpDeeply(t, got, $func($call_args), args...)
 EOF
 
+    $t_contents .= <<EOF;
+
+// $func is a shortcut for:
+//
+//   t.CmpDeeply(got, $func($call_args), args...)
+EOF
+
+
+    my $func_comment;
     my $last_arg = $funcs{$func}{args}[-1];
     if (exists $last_arg->{default})
     {
-	$funcs_contents .= <<EOF
+	$func_comment .= <<EOF;
 //
 // $func() optional parameter "$last_arg->{name}" is here mandatory.
 // $last_arg->{default} value should be passed to mimic its absence in
@@ -125,11 +144,20 @@ EOF
 EOF
     }
 
-    $funcs_contents .= <<EOF;
+    $func_comment .= <<EOF;
 //
 // Returns true if the test is OK, false if it fails.
+EOF
+
+    $funcs_contents .= $func_comment . <<EOF;
 func Cmp$func(t *testing.T, $cmp_args, args ...interface{}) bool {
 \treturn CmpDeeply(t, got, $func($call_args), args...)
+}
+EOF
+
+    $t_contents .= $func_comment . <<EOF;
+func (t *T)$func($cmp_args, args ...interface{}) bool {
+\treturn t.CmpDeeply(got, $func($call_args), args...)
 }
 EOF
 }
@@ -144,26 +172,29 @@ while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}/gms)
     push(@{$funcs{$1}{examples}}, { name => $2 // '', code => $3 });
 }
 
-open(my $fh, "| gofmt -s > '$dir/cmp_funcs.go'");
-print $fh $funcs_contents;
-close $fh;
-say "$dir/cmp_funcs.go generated";
-undef $fh;
+{
+    open(my $fh, "| gofmt -s > '$dir/cmp_funcs.go'");
+    print $fh $funcs_contents;
+    close $fh;
+    say "$dir/cmp_funcs.go generated";
+}
+
+{
+    open(my $fh, "| gofmt -s > '$dir/t.go'");
+    print $fh $t_contents;
+    close $fh;
+    say "$dir/t.go generated";
+}
 
 
 my $funcs_test_contents = <<EOH;
-// Copyright (c) 2018, Maxime Soulé
-// All rights reserved.
-//
-// This source code is licensed under the BSD-style license found in the
-// LICENSE file in the root directory of this source tree.
-
+$HEADER
 package testdeep_test
-
-$DO_NOT_EDIT_HEADER
 
 $imports
 EOH
+
+my $t_test_contents = $funcs_test_contents;
 
 my($rep, $reb, $rec);
 $rep = qr/\( [^()]* (?:(??{ $rep }) [^()]* )* \)/x; # recursively matches (...)
@@ -208,48 +239,65 @@ foreach my $func (sort keys %funcs)
 
     foreach my $example (@{$funcs{$func}{examples}})
     {
-	my($name, $code) = @$example{qw(name code)};
+	my $name = $example->{name};
 
-        $code =~ s%CmpDeeply\(t,\s+(\S+),\s+$func($rep)%
-                   my @params = extract_params("$func$name", $2);
-                   my $repl = "Cmp$func(t, $1";
-                   for (my $i = 0; $i < @$args; $i++)
-                   {
-                       $repl .= ', ';
-                       if ($args->[$i]{variadic})
-                       {
-                           if (defined $params[$i])
-                           {
-                               $repl .= '[]' . $args->[$i]{type} . '{'
-                                      . join(', ', @params[$i .. $#params])
-                                      . '}';
-                           }
-                           else
-                           {
-                               $repl .= 'nil';
-                           }
-                           last
-                       }
-                       $repl .= $params[$i]
-                           // $args->[$i]{default}
-			   // die("Internal error, no param: "
-				  . "$func$name -> #$i/$args->[$i]{name}!\n");
-                   }
-                   $repl
+	foreach my $info ([ "Cmp$func(t, ", "Cmp$func", \$funcs_test_contents ],
+			  [ "t.$func(",     "T_$func",  \$t_test_contents ])
+	{
+	    (my $code = $example->{code}) =~
+		s%CmpDeeply\(t,\s+(\S+),\s+$func($rep)%
+                  my @params = extract_params("$func$name", $2);
+                  my $repl = $info->[0] . $1;
+                  for (my $i = 0; $i < @$args; $i++)
+                  {
+                      $repl .= ', ';
+                      if ($args->[$i]{variadic})
+                      {
+                          if (defined $params[$i])
+                          {
+                              $repl .= '[]' . $args->[$i]{type} . '{'
+                                     . join(', ', @params[$i .. $#params])
+                                     . '}';
+                          }
+                          else
+                          {
+                              $repl .= 'nil';
+                          }
+                          last
+                      }
+                      $repl .= $params[$i]
+                          // $args->[$i]{default}
+		  	   // die("Internal error, no param: "
+		  		  . "$func$name -> #$i/$args->[$i]{name}!\n");
+                  }
+                  $repl
                   %egs;
 
-	$funcs_test_contents .= <<EOF;
+	    ${$info->[2]} .= <<EOF;
 
-func ExampleCmp$func$name() {
+func Example$info->[1]$name() {
 $code}
 EOF
+	}
     }
 }
 
-open($fh, "| gofmt -s > '$dir/cmp_funcs_test.go'");
-print $fh $funcs_test_contents;
-close $fh;
-say "$dir/cmp_funcs_test.go generated";
+{
+    open(my $fh, "| gofmt -s > '$dir/cmp_funcs_test.go'");
+    print $fh $funcs_test_contents;
+    close $fh;
+    say "$dir/cmp_funcs_test.go generated";
+}
+
+{
+    $t_test_contents =~ s/t := &testing\.T\{\}/t := NewT(&testing\.T\{\})/g;
+    $t_test_contents =~ s/CmpDeeply\(t,/t.CmpDeeply(/g;
+
+    open(my $fh, "| gofmt -s > '$dir/t_test.go'");
+    print $fh $t_test_contents;
+    close $fh;
+    say "$dir/t_test.go generated";
+}
 
 #$funcs_test_contents !~ /CmpDeeply/
 #    or die "At least one CmpDeeply() occurrence has not been replaced!\n";

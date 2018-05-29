@@ -88,7 +88,8 @@
 //   }
 //
 // Of course not only structs can be compared. A lot of operators can
-// be found below to cover most (all?) needed tests.
+// be found below to cover most (all?) needed tests. See
+// https://godoc.org/github.com/maxatome/go-testdeep#TestDeep
 //
 // The CmpDeeply function is the keystone of this package, but to make
 // the writing of tests even easier, the family of Cmp* functions are
@@ -101,6 +102,28 @@
 //
 //     if td.CmpNil(t, err) {
 //       td.CmpStruct(t, record,
+//         Record{
+//           Name: "Bob",
+//           Age:  23,
+//         },
+//         StructFields{
+//           Id:        td.Not(0),
+//           CreatedAt: td.Between(before, time.Now()),
+//         },
+//         "Newly created record")
+//     }
+//   }
+//
+// Last, testing.T can be encapsulated in T type, simplifying again the test:
+//
+//   func TestCreateRecord(tt *testing.T) {
+//     t := td.NewT(tt)
+//
+//     before := time.Now()
+//     record, err := CreateRecord()
+//
+//     if t.Nil(err) {
+//       t.Struct(record,
 //         Record{
 //           Name: "Bob",
 //           Age:  23,

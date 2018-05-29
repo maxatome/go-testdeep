@@ -94,6 +94,48 @@ exit status 1
 FAIL  github.com/maxatome/go-testdeep  0.006s
 ```
 
+Using [`testdeep.T`](https://godoc.org/github.com/maxatome/go-testdeep#T)
+type, `TestCreateRecord` can also be written as:
+
+```go
+import (
+  "testing"
+  td "github.com/maxatome/go-testdeep"
+)
+
+type Record struct {
+  Id        uint64
+  Name      string
+  Age       int
+  CreatedAt time.Time
+}
+
+func CreateRecord(name string, age int) (*Record, error) {
+  ...
+}
+
+func TestCreateRecord(tt *testing.T) {
+  t := td.NewT(tt)
+
+  before := time.Now()
+  record, err := CreateRecord("Bob", 23)
+
+  if t.Nil(err) {
+    t.Struct(record,
+      Record{
+        Name: "Bob",
+        Age:  23,
+      },
+      StructFields{
+        "Id":        td.Not(uint64(0)),
+        "CreatedAt": td.Between(before, time.Now()),
+      },
+      "Newly created record")
+  }
+}
+```
+
+
 ## Installation
 
 ```sh
@@ -228,8 +270,43 @@ func TestCreateRecord(t *testing.T) {
 }
 ```
 
+Last, [`testing.T`](https://golang.org/pkg/testing/#T) can be encapsulated in
+[`T`](https://godoc.org/github.com/maxatome/go-testdeep#T) type,
+simplifying again the test:
+
+```go
+import (
+  "testing"
+  td "github.com/maxatome/go-testdeep"
+)
+
+...
+
+func TestCreateRecord(tt *testing.T) {
+  t := td.NewT(tt)
+
+  before := time.Now()
+  record, err := CreateRecord()
+
+  if t.Nil(err) {
+    t.Struct(record,
+      Record{
+        Name: "Bob",
+        Age:  23,
+      },
+      StructFields{
+        Id:        td.Not(0),
+        CreatedAt: td.Between(before, time.Now()),
+      },
+      "Newly created record")
+  }
+}
+```
+
 
 ## Available operators
+
+See functions returning [`TestDeep` interface](https://godoc.org/github.com/maxatome/go-testdeep#TestDeep):
 
 - [`All`](https://godoc.org/github.com/maxatome/go-testdeep#All)
 all expected values have to match;
