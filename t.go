@@ -437,3 +437,13 @@ func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Dura
 	t.Helper()
 	return t.CmpDeeply(got, TruncTime(expectedTime, trunc), args...)
 }
+
+// Zero is a shortcut for:
+//
+//   t.CmpDeeply(got, Zero(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+func (t *T) Zero(got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return t.CmpDeeply(got, Zero(), args...)
+}

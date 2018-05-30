@@ -1401,3 +1401,53 @@ func ExampleCmpTruncTime() {
 	// true
 	// true
 }
+
+func ExampleCmpZero() {
+	t := &testing.T{}
+
+	ok := CmpZero(t, 0)
+	fmt.Println(ok)
+
+	ok = CmpZero(t, float64(0))
+	fmt.Println(ok)
+
+	ok = CmpZero(t, 12) // fails, as 12 is not 0 :)
+	fmt.Println(ok)
+
+	ok = CmpZero(t, (map[string]int)(nil))
+	fmt.Println(ok)
+
+	ok = CmpZero(t, map[string]int{}) // fails, as not nil
+	fmt.Println(ok)
+
+	ok = CmpZero(t, ([]int)(nil))
+	fmt.Println(ok)
+
+	ok = CmpZero(t, []int{}) // fails, as not nil
+	fmt.Println(ok)
+
+	ok = CmpZero(t, [3]int{})
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
+	fmt.Println(ok)
+
+	ok = CmpZero(t, bytes.Buffer{})
+	fmt.Println(ok)
+
+	ok = CmpZero(t, &bytes.Buffer{}) // fails, as pointer not nil
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+}
