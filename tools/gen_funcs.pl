@@ -151,12 +151,14 @@ EOF
 
     $funcs_contents .= $func_comment . <<EOF;
 func Cmp$func(t *testing.T, $cmp_args, args ...interface{}) bool {
+\tt.Helper()
 \treturn CmpDeeply(t, got, $func($call_args), args...)
 }
 EOF
 
     $t_contents .= $func_comment . <<EOF;
 func (t *T)$func($cmp_args, args ...interface{}) bool {
+\tt.Helper()
 \treturn t.CmpDeeply(got, $func($call_args), args...)
 }
 EOF

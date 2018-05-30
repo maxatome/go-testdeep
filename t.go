@@ -18,6 +18,7 @@ import (
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, All(expectedValues...), args...)
 }
 
@@ -27,6 +28,7 @@ func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Any(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Any(expectedValues...), args...)
 }
 
@@ -36,6 +38,7 @@ func (t *T) Any(got interface{}, expectedValues []interface{}, args ...interface
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Array(got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Array(model, expectedEntries), args...)
 }
 
@@ -45,6 +48,7 @@ func (t *T) Array(got interface{}, model interface{}, expectedEntries ArrayEntri
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) ArrayEach(got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, ArrayEach(expectedValue), args...)
 }
 
@@ -54,6 +58,7 @@ func (t *T) ArrayEach(got interface{}, expectedValue interface{}, args ...interf
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Bag(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Bag(expectedItems...), args...)
 }
 
@@ -67,6 +72,7 @@ func (t *T) Bag(got interface{}, expectedItems []interface{}, args ...interface{
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Between(got interface{}, from interface{}, to interface{}, bounds BoundsKind, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Between(from, to, bounds), args...)
 }
 
@@ -76,6 +82,7 @@ func (t *T) Between(got interface{}, from interface{}, to interface{}, bounds Bo
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Cap(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Cap(val), args...)
 }
 
@@ -85,6 +92,7 @@ func (t *T) Cap(got interface{}, val interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Code(fn), args...)
 }
 
@@ -94,6 +102,7 @@ func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Contains(got interface{}, expected string, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Contains(expected), args...)
 }
 
@@ -103,6 +112,7 @@ func (t *T) Contains(got interface{}, expected string, args ...interface{}) bool
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Gt(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Gt(val), args...)
 }
 
@@ -112,6 +122,7 @@ func (t *T) Gt(got interface{}, val interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Gte(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Gte(val), args...)
 }
 
@@ -121,6 +132,7 @@ func (t *T) Gte(got interface{}, val interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) HasPrefix(got interface{}, expected string, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, HasPrefix(expected), args...)
 }
 
@@ -130,6 +142,7 @@ func (t *T) HasPrefix(got interface{}, expected string, args ...interface{}) boo
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, HasSuffix(expected), args...)
 }
 
@@ -139,6 +152,7 @@ func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) boo
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Isa(model), args...)
 }
 
@@ -148,6 +162,7 @@ func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Len(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Len(val), args...)
 }
 
@@ -157,6 +172,7 @@ func (t *T) Len(got interface{}, val interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Lt(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Lt(val), args...)
 }
 
@@ -166,6 +182,7 @@ func (t *T) Lt(got interface{}, val interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Lte(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Lte(val), args...)
 }
 
@@ -175,6 +192,7 @@ func (t *T) Lte(got interface{}, val interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Map(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Map(model, expectedEntries), args...)
 }
 
@@ -184,6 +202,7 @@ func (t *T) Map(got interface{}, model interface{}, expectedEntries MapEntries, 
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) MapEach(got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, MapEach(expectedValue), args...)
 }
 
@@ -197,6 +216,7 @@ func (t *T) MapEach(got interface{}, expectedValue interface{}, args ...interfac
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, N(num, tolerance), args...)
 }
 
@@ -206,6 +226,7 @@ func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...i
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Nil(got interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Nil(), args...)
 }
 
@@ -215,6 +236,7 @@ func (t *T) Nil(got interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) None(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, None(expectedValues...), args...)
 }
 
@@ -224,6 +246,7 @@ func (t *T) None(got interface{}, expectedValues []interface{}, args ...interfac
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) NoneOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, NoneOf(expectedItems...), args...)
 }
 
@@ -233,6 +256,7 @@ func (t *T) NoneOf(got interface{}, expectedItems []interface{}, args ...interfa
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Not(expected), args...)
 }
 
@@ -242,6 +266,7 @@ func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) NotNil(got interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, NotNil(), args...)
 }
 
@@ -251,6 +276,7 @@ func (t *T) NotNil(got interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) PPtr(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, PPtr(val), args...)
 }
 
@@ -260,6 +286,7 @@ func (t *T) PPtr(got interface{}, val interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Ptr(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Ptr(val), args...)
 }
 
@@ -273,6 +300,7 @@ func (t *T) Ptr(got interface{}, val interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Re(got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Re(reg, capture), args...)
 }
 
@@ -282,6 +310,7 @@ func (t *T) Re(got interface{}, reg interface{}, capture interface{}, args ...in
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) ReAll(got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, ReAll(reg, capture), args...)
 }
 
@@ -291,6 +320,7 @@ func (t *T) ReAll(got interface{}, reg interface{}, capture interface{}, args ..
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Set(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Set(expectedItems...), args...)
 }
 
@@ -300,6 +330,7 @@ func (t *T) Set(got interface{}, expectedItems []interface{}, args ...interface{
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Shallow(got interface{}, expectedPtr interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Shallow(expectedPtr), args...)
 }
 
@@ -309,6 +340,7 @@ func (t *T) Shallow(got interface{}, expectedPtr interface{}, args ...interface{
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Slice(got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Slice(model, expectedEntries), args...)
 }
 
@@ -318,6 +350,7 @@ func (t *T) Slice(got interface{}, model interface{}, expectedEntries ArrayEntri
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) String(got interface{}, expected string, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, String(expected), args...)
 }
 
@@ -327,6 +360,7 @@ func (t *T) String(got interface{}, expected string, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, Struct(model, expectedFields), args...)
 }
 
@@ -336,6 +370,7 @@ func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFiel
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) SubBagOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, SubBagOf(expectedItems...), args...)
 }
 
@@ -345,6 +380,7 @@ func (t *T) SubBagOf(got interface{}, expectedItems []interface{}, args ...inter
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) SubMapOf(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, SubMapOf(model, expectedEntries), args...)
 }
 
@@ -354,6 +390,7 @@ func (t *T) SubMapOf(got interface{}, model interface{}, expectedEntries MapEntr
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) SubSetOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, SubSetOf(expectedItems...), args...)
 }
 
@@ -363,6 +400,7 @@ func (t *T) SubSetOf(got interface{}, expectedItems []interface{}, args ...inter
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) SuperBagOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, SuperBagOf(expectedItems...), args...)
 }
 
@@ -372,6 +410,7 @@ func (t *T) SuperBagOf(got interface{}, expectedItems []interface{}, args ...int
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) SuperMapOf(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, SuperMapOf(model, expectedEntries), args...)
 }
 
@@ -381,6 +420,7 @@ func (t *T) SuperMapOf(got interface{}, model interface{}, expectedEntries MapEn
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, SuperSetOf(expectedItems...), args...)
 }
 
@@ -394,5 +434,6 @@ func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...int
 //
 // Returns true if the test is OK, false if it fails.
 func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
+	t.Helper()
 	return t.CmpDeeply(got, TruncTime(expectedTime, trunc), args...)
 }

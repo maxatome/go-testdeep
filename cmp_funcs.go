@@ -19,6 +19,7 @@ import (
 //
 // Returns true if the test is OK, false if it fails.
 func CmpAll(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, All(expectedValues...), args...)
 }
 
@@ -28,6 +29,7 @@ func CmpAll(t *testing.T, got interface{}, expectedValues []interface{}, args ..
 //
 // Returns true if the test is OK, false if it fails.
 func CmpAny(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Any(expectedValues...), args...)
 }
 
@@ -37,6 +39,7 @@ func CmpAny(t *testing.T, got interface{}, expectedValues []interface{}, args ..
 //
 // Returns true if the test is OK, false if it fails.
 func CmpArray(t *testing.T, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Array(model, expectedEntries), args...)
 }
 
@@ -46,6 +49,7 @@ func CmpArray(t *testing.T, got interface{}, model interface{}, expectedEntries 
 //
 // Returns true if the test is OK, false if it fails.
 func CmpArrayEach(t *testing.T, got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, ArrayEach(expectedValue), args...)
 }
 
@@ -55,6 +59,7 @@ func CmpArrayEach(t *testing.T, got interface{}, expectedValue interface{}, args
 //
 // Returns true if the test is OK, false if it fails.
 func CmpBag(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Bag(expectedItems...), args...)
 }
 
@@ -68,6 +73,7 @@ func CmpBag(t *testing.T, got interface{}, expectedItems []interface{}, args ...
 //
 // Returns true if the test is OK, false if it fails.
 func CmpBetween(t *testing.T, got interface{}, from interface{}, to interface{}, bounds BoundsKind, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Between(from, to, bounds), args...)
 }
 
@@ -77,6 +83,7 @@ func CmpBetween(t *testing.T, got interface{}, from interface{}, to interface{},
 //
 // Returns true if the test is OK, false if it fails.
 func CmpCap(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Cap(val), args...)
 }
 
@@ -86,6 +93,7 @@ func CmpCap(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //
 // Returns true if the test is OK, false if it fails.
 func CmpCode(t *testing.T, got interface{}, fn interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Code(fn), args...)
 }
 
@@ -95,6 +103,7 @@ func CmpCode(t *testing.T, got interface{}, fn interface{}, args ...interface{})
 //
 // Returns true if the test is OK, false if it fails.
 func CmpContains(t *testing.T, got interface{}, expected string, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Contains(expected), args...)
 }
 
@@ -104,6 +113,7 @@ func CmpContains(t *testing.T, got interface{}, expected string, args ...interfa
 //
 // Returns true if the test is OK, false if it fails.
 func CmpGt(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Gt(val), args...)
 }
 
@@ -113,6 +123,7 @@ func CmpGt(t *testing.T, got interface{}, val interface{}, args ...interface{}) 
 //
 // Returns true if the test is OK, false if it fails.
 func CmpGte(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Gte(val), args...)
 }
 
@@ -122,6 +133,7 @@ func CmpGte(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //
 // Returns true if the test is OK, false if it fails.
 func CmpHasPrefix(t *testing.T, got interface{}, expected string, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, HasPrefix(expected), args...)
 }
 
@@ -131,6 +143,7 @@ func CmpHasPrefix(t *testing.T, got interface{}, expected string, args ...interf
 //
 // Returns true if the test is OK, false if it fails.
 func CmpHasSuffix(t *testing.T, got interface{}, expected string, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, HasSuffix(expected), args...)
 }
 
@@ -140,6 +153,7 @@ func CmpHasSuffix(t *testing.T, got interface{}, expected string, args ...interf
 //
 // Returns true if the test is OK, false if it fails.
 func CmpIsa(t *testing.T, got interface{}, model interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Isa(model), args...)
 }
 
@@ -149,6 +163,7 @@ func CmpIsa(t *testing.T, got interface{}, model interface{}, args ...interface{
 //
 // Returns true if the test is OK, false if it fails.
 func CmpLen(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Len(val), args...)
 }
 
@@ -158,6 +173,7 @@ func CmpLen(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //
 // Returns true if the test is OK, false if it fails.
 func CmpLt(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Lt(val), args...)
 }
 
@@ -167,6 +183,7 @@ func CmpLt(t *testing.T, got interface{}, val interface{}, args ...interface{}) 
 //
 // Returns true if the test is OK, false if it fails.
 func CmpLte(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Lte(val), args...)
 }
 
@@ -176,6 +193,7 @@ func CmpLte(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //
 // Returns true if the test is OK, false if it fails.
 func CmpMap(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Map(model, expectedEntries), args...)
 }
 
@@ -185,6 +203,7 @@ func CmpMap(t *testing.T, got interface{}, model interface{}, expectedEntries Ma
 //
 // Returns true if the test is OK, false if it fails.
 func CmpMapEach(t *testing.T, got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, MapEach(expectedValue), args...)
 }
 
@@ -198,6 +217,7 @@ func CmpMapEach(t *testing.T, got interface{}, expectedValue interface{}, args .
 //
 // Returns true if the test is OK, false if it fails.
 func CmpN(t *testing.T, got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, N(num, tolerance), args...)
 }
 
@@ -207,6 +227,7 @@ func CmpN(t *testing.T, got interface{}, num interface{}, tolerance interface{},
 //
 // Returns true if the test is OK, false if it fails.
 func CmpNil(t *testing.T, got interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Nil(), args...)
 }
 
@@ -216,6 +237,7 @@ func CmpNil(t *testing.T, got interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func CmpNone(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, None(expectedValues...), args...)
 }
 
@@ -225,6 +247,7 @@ func CmpNone(t *testing.T, got interface{}, expectedValues []interface{}, args .
 //
 // Returns true if the test is OK, false if it fails.
 func CmpNoneOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, NoneOf(expectedItems...), args...)
 }
 
@@ -234,6 +257,7 @@ func CmpNoneOf(t *testing.T, got interface{}, expectedItems []interface{}, args 
 //
 // Returns true if the test is OK, false if it fails.
 func CmpNot(t *testing.T, got interface{}, expected interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Not(expected), args...)
 }
 
@@ -243,6 +267,7 @@ func CmpNot(t *testing.T, got interface{}, expected interface{}, args ...interfa
 //
 // Returns true if the test is OK, false if it fails.
 func CmpNotNil(t *testing.T, got interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, NotNil(), args...)
 }
 
@@ -252,6 +277,7 @@ func CmpNotNil(t *testing.T, got interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func CmpPPtr(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, PPtr(val), args...)
 }
 
@@ -261,6 +287,7 @@ func CmpPPtr(t *testing.T, got interface{}, val interface{}, args ...interface{}
 //
 // Returns true if the test is OK, false if it fails.
 func CmpPtr(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Ptr(val), args...)
 }
 
@@ -274,6 +301,7 @@ func CmpPtr(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //
 // Returns true if the test is OK, false if it fails.
 func CmpRe(t *testing.T, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Re(reg, capture), args...)
 }
 
@@ -283,6 +311,7 @@ func CmpRe(t *testing.T, got interface{}, reg interface{}, capture interface{}, 
 //
 // Returns true if the test is OK, false if it fails.
 func CmpReAll(t *testing.T, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, ReAll(reg, capture), args...)
 }
 
@@ -292,6 +321,7 @@ func CmpReAll(t *testing.T, got interface{}, reg interface{}, capture interface{
 //
 // Returns true if the test is OK, false if it fails.
 func CmpSet(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Set(expectedItems...), args...)
 }
 
@@ -301,6 +331,7 @@ func CmpSet(t *testing.T, got interface{}, expectedItems []interface{}, args ...
 //
 // Returns true if the test is OK, false if it fails.
 func CmpShallow(t *testing.T, got interface{}, expectedPtr interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Shallow(expectedPtr), args...)
 }
 
@@ -310,6 +341,7 @@ func CmpShallow(t *testing.T, got interface{}, expectedPtr interface{}, args ...
 //
 // Returns true if the test is OK, false if it fails.
 func CmpSlice(t *testing.T, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Slice(model, expectedEntries), args...)
 }
 
@@ -319,6 +351,7 @@ func CmpSlice(t *testing.T, got interface{}, model interface{}, expectedEntries 
 //
 // Returns true if the test is OK, false if it fails.
 func CmpString(t *testing.T, got interface{}, expected string, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, String(expected), args...)
 }
 
@@ -328,6 +361,7 @@ func CmpString(t *testing.T, got interface{}, expected string, args ...interface
 //
 // Returns true if the test is OK, false if it fails.
 func CmpStruct(t *testing.T, got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, Struct(model, expectedFields), args...)
 }
 
@@ -337,6 +371,7 @@ func CmpStruct(t *testing.T, got interface{}, model interface{}, expectedFields 
 //
 // Returns true if the test is OK, false if it fails.
 func CmpSubBagOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, SubBagOf(expectedItems...), args...)
 }
 
@@ -346,6 +381,7 @@ func CmpSubBagOf(t *testing.T, got interface{}, expectedItems []interface{}, arg
 //
 // Returns true if the test is OK, false if it fails.
 func CmpSubMapOf(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, SubMapOf(model, expectedEntries), args...)
 }
 
@@ -355,6 +391,7 @@ func CmpSubMapOf(t *testing.T, got interface{}, model interface{}, expectedEntri
 //
 // Returns true if the test is OK, false if it fails.
 func CmpSubSetOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, SubSetOf(expectedItems...), args...)
 }
 
@@ -364,6 +401,7 @@ func CmpSubSetOf(t *testing.T, got interface{}, expectedItems []interface{}, arg
 //
 // Returns true if the test is OK, false if it fails.
 func CmpSuperBagOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, SuperBagOf(expectedItems...), args...)
 }
 
@@ -373,6 +411,7 @@ func CmpSuperBagOf(t *testing.T, got interface{}, expectedItems []interface{}, a
 //
 // Returns true if the test is OK, false if it fails.
 func CmpSuperMapOf(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, SuperMapOf(model, expectedEntries), args...)
 }
 
@@ -382,6 +421,7 @@ func CmpSuperMapOf(t *testing.T, got interface{}, model interface{}, expectedEnt
 //
 // Returns true if the test is OK, false if it fails.
 func CmpSuperSetOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, SuperSetOf(expectedItems...), args...)
 }
 
@@ -395,5 +435,6 @@ func CmpSuperSetOf(t *testing.T, got interface{}, expectedItems []interface{}, a
 //
 // Returns true if the test is OK, false if it fails.
 func CmpTruncTime(t *testing.T, got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, TruncTime(expectedTime, trunc), args...)
 }
