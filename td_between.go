@@ -483,7 +483,7 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 		min := b.expectedMin.Interface().(time.Time)
 
 		if b.minBound == boundIn {
-			ok = min.Before(cmpGot)
+			ok = !min.After(cmpGot)
 		} else {
 			ok = cmpGot.After(min)
 		}
@@ -495,7 +495,7 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 		max := b.expectedMax.Interface().(time.Time)
 
 		if b.maxBound == boundIn {
-			ok = max.After(cmpGot)
+			ok = !max.Before(cmpGot)
 		} else {
 			ok = cmpGot.Before(max)
 		}

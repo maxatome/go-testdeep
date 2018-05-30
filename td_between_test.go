@@ -316,6 +316,24 @@ func TestLGt(t *testing.T) {
 		Expected: mustBe("≤ 11"),
 	})
 
+	gotDate := time.Date(2018, time.March, 4, 1, 2, 3, 0, time.UTC)
+	expectedDate := gotDate
+	checkOK(t, gotDate, Gte(expectedDate))
+	checkOK(t, gotDate, Lte(expectedDate))
+
+	checkError(t, gotDate, Gt(expectedDate), expectedError{
+		Message:  mustBe("values differ"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("2018-03-04 01:02:03 +0000 UTC"),
+		Expected: mustBe("> 2018-03-04 01:02:03 +0000 UTC"),
+	})
+	checkError(t, gotDate, Lt(expectedDate), expectedError{
+		Message:  mustBe("values differ"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("2018-03-04 01:02:03 +0000 UTC"),
+		Expected: mustBe("< 2018-03-04 01:02:03 +0000 UTC"),
+	})
+
 	//
 	// Bad usage
 	checkPanic(t, func() { Gt("test") }, "usage: Gt(")
@@ -329,6 +347,7 @@ func TestBetweenTime(t *testing.T) {
 
 	now := time.Now()
 
+	checkOK(t, now, Between(now, now))
 	checkOK(t, now, Between(now.Add(-time.Second), now.Add(time.Second)))
 	checkOK(t, now, Between(now.Add(time.Second), now.Add(-time.Second)))
 
