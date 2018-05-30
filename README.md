@@ -415,7 +415,9 @@ compares the contents of an array or a slice ignoring duplicates and
 without taking care of the order of items but with potentially some extra
 items;
 - [`TruncTime`](https://godoc.org/github.com/maxatome/go-testdeep#TruncTime)
-compares time.Time (or assignable) values after truncating them.
+compares time.Time (or assignable) values after truncating them;
+- [`Zero`](https://godoc.org/github.com/maxatome/go-testdeep#Zero)
+checks data against its zero'ed conterpart.
 
 
 ## License

@@ -1543,3 +1543,53 @@ func ExampleTruncTime() {
 	// true
 	// true
 }
+
+func ExampleZero() {
+	t := &testing.T{}
+
+	ok := CmpDeeply(t, 0, Zero())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, float64(0), Zero())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, 12, Zero()) // fails, as 12 is not 0 :)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, (map[string]int)(nil), Zero())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, map[string]int{}, Zero()) // fails, as not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, ([]int)(nil), Zero())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, []int{}, Zero()) // fails, as not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{}, Zero())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, bytes.Buffer{}, Zero())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &bytes.Buffer{}, Zero()) // fails, as pointer not nil
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+}

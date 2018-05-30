@@ -438,3 +438,13 @@ func CmpTruncTime(t *testing.T, got interface{}, expectedTime interface{}, trunc
 	t.Helper()
 	return CmpDeeply(t, got, TruncTime(expectedTime, trunc), args...)
 }
+
+// CmpZero is a shortcut for:
+//
+//   CmpDeeply(t, got, Zero(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+func CmpZero(t *testing.T, got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return CmpDeeply(t, got, Zero(), args...)
+}

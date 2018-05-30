@@ -1401,3 +1401,53 @@ func ExampleT_TruncTime() {
 	// true
 	// true
 }
+
+func ExampleT_Zero() {
+	t := NewT(&testing.T{})
+
+	ok := t.Zero(0)
+	fmt.Println(ok)
+
+	ok = t.Zero(float64(0))
+	fmt.Println(ok)
+
+	ok = t.Zero(12) // fails, as 12 is not 0 :)
+	fmt.Println(ok)
+
+	ok = t.Zero((map[string]int)(nil))
+	fmt.Println(ok)
+
+	ok = t.Zero(map[string]int{}) // fails, as not nil
+	fmt.Println(ok)
+
+	ok = t.Zero(([]int)(nil))
+	fmt.Println(ok)
+
+	ok = t.Zero([]int{}) // fails, as not nil
+	fmt.Println(ok)
+
+	ok = t.Zero([3]int{})
+	fmt.Println(ok)
+
+	ok = t.CmpDeeply([3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
+	fmt.Println(ok)
+
+	ok = t.Zero(bytes.Buffer{})
+	fmt.Println(ok)
+
+	ok = t.Zero(&bytes.Buffer{}) // fails, as pointer not nil
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+}
