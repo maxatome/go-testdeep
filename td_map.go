@@ -131,7 +131,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries) {
 // During a match, all expected entries must be found and all data
 // entries must be expected to succeed.
 //
-// TypeOf method returns the reflect.Type of "model".
+// TypeBehind method returns the reflect.Type of "model".
 func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, allMap)
 }
@@ -154,7 +154,7 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 //   CmpDeeply(t, map[string]int{"a": 1, "c": 3},
 //     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, extra {"c": 3}
 //
-// TypeOf method returns the reflect.Type of "model".
+// TypeBehind method returns the reflect.Type of "model".
 func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, subMap)
 }
@@ -176,7 +176,7 @@ func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 //   CmpDeeply(t, map[string]int{"a": 1, "c": 3},
 //     SuperMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, missing {"b": 2}
 //
-// TypeOf method returns the reflect.Type of "model".
+// TypeBehind method returns the reflect.Type of "model".
 func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, superMap)
 }
@@ -337,7 +337,7 @@ func (m *tdMap) String() string {
 	return buf.String()
 }
 
-func (s *tdMap) TypeOf() reflect.Type {
+func (s *tdMap) TypeBehind() reflect.Type {
 	if s.isPtr {
 		return reflect.New(s.expectedModel.Type()).Type()
 	}

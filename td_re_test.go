@@ -99,6 +99,6 @@ func TestRe(t *testing.T) {
 	checkPanic(t, func() { ReAll(123, 456) }, reAllUsage)
 }
 
-func TestReTypeOf(t *testing.T) {
+func TestReTypeBehind(t *testing.T) {
 	equalTypes(t, Re("x"), nil)
 }

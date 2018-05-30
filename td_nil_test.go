@@ -112,7 +112,7 @@ func TestNotNil(t *testing.T) {
 	equalStr(t, NotNil().String(), "not nil")
 }
 
-func TestNilTypeOf(t *testing.T) {
+func TestNilTypeBehind(t *testing.T) {
 	equalTypes(t, Nil(), nil)
 	equalTypes(t, NotNil(), nil)
 }

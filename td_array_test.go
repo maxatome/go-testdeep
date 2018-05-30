@@ -156,7 +156,7 @@ func TestArray(t *testing.T) {
 		`Array([0]int{})`)
 }
 
-func TestArrayTypeOf(t *testing.T) {
+func TestArrayTypeBehind(t *testing.T) {
 	type MyArray [12]int
 
 	equalTypes(t, Array([12]int{}, nil), [12]int{})
@@ -331,7 +331,7 @@ func TestSlice(t *testing.T) {
 		`Slice(*testdeep_test.MySlice{})`)
 }
 
-func TestSliceTypeOf(t *testing.T) {
+func TestSliceTypeBehind(t *testing.T) {
 	type MySlice []int
 
 	equalTypes(t, Slice([]int{}, nil), []int{})

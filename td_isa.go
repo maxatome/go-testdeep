@@ -37,7 +37,7 @@ var _ TestDeep = &tdIsa{}
 // will match too (in fact before checking whether it implements
 // fmt.Stringer or not.)
 //
-// TypeOf method returns the reflect.Type of "model".
+// TypeBehind method returns the reflect.Type of "model".
 func Isa(model interface{}) TestDeep {
 	modelType := reflect.ValueOf(model).Type()
 
@@ -78,6 +78,6 @@ func (i *tdIsa) String() string {
 	return i.expectedType.String()
 }
 
-func (i *tdIsa) TypeOf() reflect.Type {
+func (i *tdIsa) TypeBehind() reflect.Type {
 	return i.expectedType
 }

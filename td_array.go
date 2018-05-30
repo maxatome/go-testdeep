@@ -36,7 +36,7 @@ type ArrayEntries map[int]interface{}
 // "expectedEntries" can be nil, if no zero entries are expected and
 // no TestDeep operator are involved.
 //
-// TypeOf method returns the reflect.Type of "model".
+// TypeBehind method returns the reflect.Type of "model".
 func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	vmodel := reflect.ValueOf(model)
 
@@ -71,7 +71,7 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 // "expectedEntries" can be nil, if no zero entries are expected and
 // no TestDeep operator are involved.
 //
-// TypeOf method returns the reflect.Type of "model".
+// TypeBehind method returns the reflect.Type of "model".
 func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	vmodel := reflect.ValueOf(model)
 
@@ -275,7 +275,7 @@ func (a *tdArray) String() string {
 	return buf.String()
 }
 
-func (s *tdArray) TypeOf() reflect.Type {
+func (s *tdArray) TypeBehind() reflect.Type {
 	if s.isPtr {
 		return reflect.New(s.expectedModel.Type()).Type()
 	}

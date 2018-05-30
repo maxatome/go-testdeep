@@ -122,7 +122,7 @@ func TestTruncTime(t *testing.T) {
 	checkPanic(t, func() { TruncTime("test") }, "usage: TruncTime(")
 }
 
-func TestTruncTimeTypeOf(t *testing.T) {
+func TestTruncTimeTypeBehind(t *testing.T) {
 	type MyTime time.Time
 
 	equalTypes(t, TruncTime(time.Time{}), time.Time{})

@@ -117,7 +117,7 @@ func TestContains(t *testing.T) {
 	})
 }
 
-func TestStringTypeOf(t *testing.T) {
+func TestStringTypeBehind(t *testing.T) {
 	equalTypes(t, String("x"), nil)
 	equalTypes(t, HasPrefix("x"), nil)
 	equalTypes(t, HasSuffix("x"), nil)

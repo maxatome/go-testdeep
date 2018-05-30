@@ -362,7 +362,7 @@ func TestStructPrivateFields(t *testing.T) {
 		})
 }
 
-func TestStructTypeOf(t *testing.T) {
+func TestStructTypeBehind(t *testing.T) {
 	equalTypes(t, Struct(MyStruct{}, nil), MyStruct{})
 	equalTypes(t, Struct(&MyStruct{}, nil), &MyStruct{})
 }

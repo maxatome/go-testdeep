@@ -34,7 +34,7 @@ type TestDeep interface {
 	setLocation(int)
 	GetLocation() Location
 	HandleInvalid() bool
-	TypeOf() reflect.Type
+	TypeBehind() reflect.Type
 }
 
 // Base is a base type providing some methods needed by the TestDeep
@@ -85,10 +85,10 @@ func (t Base) HandleInvalid() bool {
 	return false
 }
 
-// TypeOf returns the type handled by the operator. Only few operators
+// TypeBehind returns the type handled by the operator. Only few operators
 // knows the type they are handling. If they do not know, nil is
 // returned.
-func (t Base) TypeOf() reflect.Type {
+func (t Base) TypeBehind() reflect.Type {
 	return nil
 }
 

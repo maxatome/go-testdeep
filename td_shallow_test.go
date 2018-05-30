@@ -114,6 +114,6 @@ func TestShallow(t *testing.T) {
 	}
 }
 
-func TestShallowTypeOf(t *testing.T) {
+func TestShallowTypeBehind(t *testing.T) {
 	equalTypes(t, Shallow(t), nil)
 }

@@ -30,7 +30,7 @@ var _ TestDeep = &tdTruncTime{}
 // Whatever the "trunc" value is, the monotonic clock is stripped
 // before the comparison against "expectedTime".
 //
-// TypeOf method returns the reflect.Type of "expectedTime".
+// TypeBehind method returns the reflect.Type of "expectedTime".
 func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	if len(trunc) <= 1 {
 		t := tdTruncTime{
@@ -114,6 +114,6 @@ func (t *tdTruncTime) String() string {
 	return t.expectedTime.String()
 }
 
-func (t *tdTruncTime) TypeOf() reflect.Type {
+func (t *tdTruncTime) TypeBehind() reflect.Type {
 	return t.expectedType
 }

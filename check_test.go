@@ -314,7 +314,7 @@ func equalStr(t *testing.T, got, expected string, args ...interface{}) bool {
 }
 
 func equalTypes(t *testing.T, got TestDeep, expected interface{}, args ...interface{}) bool {
-	gotType := got.TypeOf()
+	gotType := got.TypeBehind()
 	expectedType := reflect.TypeOf(expected)
 
 	if gotType == expectedType {

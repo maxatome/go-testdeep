@@ -163,7 +163,7 @@ func TestPtr(t *testing.T) {
 	equalStr(t, PPtr(Ptr(13)).String(), "**<something>")
 }
 
-func TestPtrTypeOf(t *testing.T) {
+func TestPtrTypeBehind(t *testing.T) {
 	equalTypes(t, Ptr(6), nil)
 	equalTypes(t, PPtr(6), nil)
 }

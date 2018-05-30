@@ -87,6 +87,6 @@ func TestZero(t *testing.T) {
 	equalStr(t, Zero().String(), "Zero()")
 }
 
-func TestZeroTypeOf(t *testing.T) {
+func TestZeroTypeBehind(t *testing.T) {
 	equalTypes(t, Zero(), nil)
 }
