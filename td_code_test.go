@@ -113,3 +113,7 @@ func TestCode(t *testing.T) {
 		Code(func(n int) (MyBool, MyString) { return false, "" }).String(),
 		"Code(func(int) (testdeep_test.MyBool, testdeep_test.MyString))")
 }
+
+func TestCodeTypeOf(t *testing.T) {
+	equalTypes(t, Code(func(n int) bool { return false }), nil)
+}

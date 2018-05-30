@@ -22,3 +22,7 @@ func TestIgnore(t *testing.T) {
 	// String
 	equalStr(t, Ignore().String(), "Ignore()")
 }
+
+func TestIgnoreTypeOf(t *testing.T) {
+	equalTypes(t, Ignore(), nil)
+}

@@ -58,3 +58,8 @@ func TestNot(t *testing.T) {
 	// String
 	equalStr(t, Not(6).String(), "Not((int) 6)")
 }
+
+func TestNoneTypeOf(t *testing.T) {
+	equalTypes(t, None(6), nil)
+	equalTypes(t, Not(6), nil)
+}

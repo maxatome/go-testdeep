@@ -61,6 +61,8 @@ var _ TestDeep = &tdBetweenTime{}
 // assignable). "bounds" allows to specify whether bounds are included
 // or not. See Bounds* constants for details. If "bounds" is missing,
 // it defaults to BoundsInIn.
+//
+// TypeOf method returns the reflect.Type of "from" (same as the "to" one.)
 func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 	b := tdBetween{
 		expectedMin: reflect.ValueOf(from),
@@ -209,6 +211,8 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 // N operator compares a numeric data against "num" ± "tolerance". If
 // "tolerance" is missing, it defaults to 0. "num" and "tolerance"
 // must be the same kind as the compared value.
+//
+// TypeOf method returns the reflect.Type of "num".
 func N(num interface{}, tolerance ...interface{}) TestDeep {
 	n := tdBetween{
 		Base:        NewBase(3),
@@ -259,6 +263,8 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 // any numeric or time.Time (or assignable) value. "val" must be the
 // same kind as the compared value if numeric, and the same type if
 // time.Time (or assignable).
+//
+// TypeOf method returns the reflect.Type of "val".
 func Gt(val interface{}) TestDeep {
 	b := &tdBetween{
 		expectedMin: reflect.ValueOf(val),
@@ -271,6 +277,8 @@ func Gt(val interface{}) TestDeep {
 // can be any numeric or time.Time (or assignable) value. "val" must
 // be the same kind as the compared value if numeric, and the same
 // type if time.Time (or assignable).
+//
+// TypeOf method returns the reflect.Type of "val".
 func Gte(val interface{}) TestDeep {
 	b := &tdBetween{
 		expectedMin: reflect.ValueOf(val),
@@ -283,6 +291,8 @@ func Gte(val interface{}) TestDeep {
 // any numeric or time.Time (or assignable) value. "val" must be the
 // same kind as the compared value if numeric, and the same type if
 // time.Time (or assignable).
+//
+// TypeOf method returns the reflect.Type of "val".
 func Lt(val interface{}) TestDeep {
 	b := &tdBetween{
 		expectedMin: reflect.ValueOf(val),
@@ -295,6 +305,8 @@ func Lt(val interface{}) TestDeep {
 // can be any numeric or time.Time (or assignable) value. "val" must
 // be the same kind as the compared value if numeric, and the same
 // type if time.Time (or assignable).
+//
+// TypeOf method returns the reflect.Type of "val".
 func Lte(val interface{}) TestDeep {
 	b := &tdBetween{
 		expectedMin: reflect.ValueOf(val),
@@ -441,6 +453,10 @@ func (b *tdBetween) String() string {
 		ternRune(b.maxBound == boundIn, '≤', '<'), max)
 }
 
+func (b *tdBetween) TypeOf() reflect.Type {
+	return b.expectedMin.Type()
+}
+
 var _ TestDeep = &tdBetweenTime{}
 
 func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
@@ -499,4 +515,8 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 		Expected: rawString(b.String()),
 		Location: b.GetLocation(),
 	}
+}
+
+func (b *tdBetweenTime) TypeOf() reflect.Type {
+	return b.expectedType
 }

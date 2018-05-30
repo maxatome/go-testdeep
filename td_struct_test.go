@@ -361,3 +361,8 @@ func TestStructPrivateFields(t *testing.T) {
 			Summary: mustBe("use Code() on surrounding struct instead"),
 		})
 }
+
+func TestStructTypeOf(t *testing.T) {
+	equalTypes(t, Struct(MyStruct{}, nil), MyStruct{})
+	equalTypes(t, Struct(&MyStruct{}, nil), &MyStruct{})
+}

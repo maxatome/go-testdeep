@@ -36,6 +36,8 @@ var _ TestDeep = &tdIsa{}
 // Of course, in the latter case, if data type is *fmt.Stringer, Isa
 // will match too (in fact before checking whether it implements
 // fmt.Stringer or not.)
+//
+// TypeOf method returns the reflect.Type of "model".
 func Isa(model interface{}) TestDeep {
 	modelType := reflect.ValueOf(model).Type()
 
@@ -74,4 +76,8 @@ func (i *tdIsa) Match(ctx Context, got reflect.Value) (err *Error) {
 
 func (i *tdIsa) String() string {
 	return i.expectedType.String()
+}
+
+func (i *tdIsa) TypeOf() reflect.Type {
+	return i.expectedType
 }

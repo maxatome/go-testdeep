@@ -98,3 +98,7 @@ func TestRe(t *testing.T) {
 	const reAllUsage = "usage: ReAll("
 	checkPanic(t, func() { ReAll(123, 456) }, reAllUsage)
 }
+
+func TestReTypeOf(t *testing.T) {
+	equalTypes(t, Re("x"), nil)
+}

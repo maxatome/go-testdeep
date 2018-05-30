@@ -8,6 +8,7 @@ package testdeep_test
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 	"testing"
@@ -309,6 +310,36 @@ func equalStr(t *testing.T, got, expected string, args ...interface{}) bool {
 	     got: %s
 	expected: %s`,
 		buildTestName(args), got, expected)
+	return false
+}
+
+func equalTypes(t *testing.T, got TestDeep, expected interface{}, args ...interface{}) bool {
+	gotType := got.TypeOf()
+	expectedType := reflect.TypeOf(expected)
+
+	if gotType == expectedType {
+		return true
+	}
+
+	var gotStr, expectedStr string
+
+	if gotType == nil {
+		gotStr = "nil"
+	} else {
+		gotStr = gotType.String()
+	}
+
+	if expected == nil {
+		expectedStr = "nil"
+	} else {
+		expectedStr = expectedType.String()
+	}
+
+	t.Helper()
+	t.Errorf(`%sFailed test
+	     got: %s
+	expected: %s`,
+		buildTestName(args), gotStr, expectedStr)
 	return false
 }
 

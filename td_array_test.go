@@ -156,6 +156,14 @@ func TestArray(t *testing.T) {
 		`Array([0]int{})`)
 }
 
+func TestArrayTypeOf(t *testing.T) {
+	type MyArray [12]int
+
+	equalTypes(t, Array([12]int{}, nil), [12]int{})
+	equalTypes(t, Array(MyArray{}, nil), MyArray{})
+	equalTypes(t, Array(&MyArray{}, nil), &MyArray{})
+}
+
 func TestSlice(t *testing.T) {
 	type MySlice []int
 
@@ -321,4 +329,12 @@ func TestSlice(t *testing.T) {
 
 	equalStr(t, Slice(&MySlice{}, ArrayEntries{}).String(),
 		`Slice(*testdeep_test.MySlice{})`)
+}
+
+func TestSliceTypeOf(t *testing.T) {
+	type MySlice []int
+
+	equalTypes(t, Slice([]int{}, nil), []int{})
+	equalTypes(t, Slice(MySlice{}, nil), MySlice{})
+	equalTypes(t, Slice(&MySlice{}, nil), &MySlice{})
 }
