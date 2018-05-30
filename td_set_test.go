@@ -191,7 +191,7 @@ func TestSet(t *testing.T) {
 	equalStr(t, NoneOf(1, 2).String(), "NoneOf((int) 1,\n       (int) 2)")
 }
 
-func TestSetTypeOf(t *testing.T) {
+func TestSetTypeBehind(t *testing.T) {
 	equalTypes(t, Set(6), nil)
 	equalTypes(t, SubSetOf(6), nil)
 	equalTypes(t, SuperSetOf(6), nil)

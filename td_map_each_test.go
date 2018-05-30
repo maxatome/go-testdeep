@@ -108,6 +108,6 @@ func TestMapEach(t *testing.T) {
             (int) 2))`)
 }
 
-func TestMapEachTypeOf(t *testing.T) {
+func TestMapEachTypeBehind(t *testing.T) {
 	equalTypes(t, MapEach(4), nil)
 }

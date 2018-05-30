@@ -128,6 +128,6 @@ func TestArrayEach(t *testing.T) {
               (int) 2))`)
 }
 
-func TestArrayEachTypeOf(t *testing.T) {
+func TestArrayEachTypeBehind(t *testing.T) {
 	equalTypes(t, ArrayEach(6), nil)
 }

@@ -114,6 +114,6 @@ func TestCode(t *testing.T) {
 		"Code(func(int) (testdeep_test.MyBool, testdeep_test.MyString))")
 }
 
-func TestCodeTypeOf(t *testing.T) {
+func TestCodeTypeBehind(t *testing.T) {
 	equalTypes(t, Code(func(n int) bool { return false }), nil)
 }

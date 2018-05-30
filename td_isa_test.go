@@ -95,6 +95,6 @@ func TestIsa(t *testing.T) {
 	equalStr(t, Isa((*MyStruct)(nil)).String(), "*testdeep_test.MyStruct")
 }
 
-func TestIsaTypeOf(t *testing.T) {
+func TestIsaTypeBehind(t *testing.T) {
 	equalTypes(t, Isa(([]int)(nil)), []int{})
 }

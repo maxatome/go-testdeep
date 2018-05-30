@@ -101,7 +101,7 @@ func TestCap(t *testing.T) {
 	checkPanic(t, func() { Cap(int64(12)) }, "usage: Cap(")
 }
 
-func TestLenCapTypeOf(t *testing.T) {
+func TestLenCapTypeBehind(t *testing.T) {
 	equalTypes(t, Cap(3), nil)
 	equalTypes(t, Len(3), nil)
 }

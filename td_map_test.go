@@ -297,7 +297,7 @@ func TestMap(t *testing.T) {
 })`)
 }
 
-func TestMapTypeOf(t *testing.T) {
+func TestMapTypeBehind(t *testing.T) {
 	type MyMap map[string]int
 
 	// Map
