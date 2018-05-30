@@ -57,8 +57,24 @@ func NewT(t *testing.T) *T {
 
 // CmpDeeply is shortcut for:
 //
-//    CmpDeeply(t.T, got, expected, args...)
+//   CmpDeeply(t.T, got, expected, args...)
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t.T, got, expected, args...)
+}
+
+// True is shortcut for:
+//
+//   CmpDeeply(t.T, got, true, args...)
+func (t *T) True(got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return CmpDeeply(t.T, got, true, args...)
+}
+
+// False is shortcut for:
+//
+//   CmpDeeply(t.T, got, false, args...)
+func (t *T) False(got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return CmpDeeply(t.T, got, false, args...)
 }
