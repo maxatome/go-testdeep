@@ -62,3 +62,7 @@ func TestAll(t *testing.T) {
 	equalStr(t, All(6).String(), "All((int) 6)")
 	equalStr(t, All(6, 7).String(), "All((int) 6,\n    (int) 7)")
 }
+
+func TestAllTypeOf(t *testing.T) {
+	equalTypes(t, All(6), nil)
+}

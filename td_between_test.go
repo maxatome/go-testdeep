@@ -395,3 +395,19 @@ func TestBetweenTime(t *testing.T) {
 	checkOK(t, now, Gt(now.Add(-time.Second)))
 	checkOK(t, now, Lt(now.Add(time.Second)))
 }
+
+func TestBetweenTypeOf(t *testing.T) {
+	equalTypes(t, Between(0, 10), 23)
+	equalTypes(t, Between(int64(0), int64(10)), int64(23))
+
+	type MyTime time.Time
+
+	equalTypes(t, Between(time.Time{}, time.Time{}), time.Time{})
+	equalTypes(t, Between(MyTime{}, MyTime{}), MyTime{})
+
+	equalTypes(t, N(int64(23), int64(5)), int64(0))
+	equalTypes(t, Gt(int32(23)), int32(0))
+	equalTypes(t, Gte(int32(23)), int32(0))
+	equalTypes(t, Lt(int32(23)), int32(0))
+	equalTypes(t, Lte(int32(23)), int32(0))
+}

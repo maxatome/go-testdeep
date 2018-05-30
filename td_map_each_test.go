@@ -107,3 +107,7 @@ func TestMapEach(t *testing.T) {
 		`MapEach(All((int) 1,
             (int) 2))`)
 }
+
+func TestMapEachTypeOf(t *testing.T) {
+	equalTypes(t, MapEach(4), nil)
+}

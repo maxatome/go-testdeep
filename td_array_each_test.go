@@ -127,3 +127,7 @@ func TestArrayEach(t *testing.T) {
 		`ArrayEach(All((int) 1,
               (int) 2))`)
 }
+
+func TestArrayEachTypeOf(t *testing.T) {
+	equalTypes(t, ArrayEach(6), nil)
+}

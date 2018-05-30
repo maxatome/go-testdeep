@@ -42,3 +42,7 @@ func TestAny(t *testing.T) {
 	equalStr(t, Any(6).String(), "Any((int) 6)")
 	equalStr(t, Any(6, 7).String(), "Any((int) 6,\n    (int) 7)")
 }
+
+func TestAnyTypeOf(t *testing.T) {
+	equalTypes(t, Any(6), nil)
+}

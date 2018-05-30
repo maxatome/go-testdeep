@@ -169,3 +169,9 @@ func TestBag(t *testing.T) {
 	equalStr(t, SuperBagOf(1, 2).String(),
 		"SuperBagOf((int) 1,\n           (int) 2)")
 }
+
+func TestBagTypeOf(t *testing.T) {
+	equalTypes(t, Bag(6), nil)
+	equalTypes(t, SubBagOf(6), nil)
+	equalTypes(t, SuperBagOf(6), nil)
+}

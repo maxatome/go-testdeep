@@ -113,3 +113,7 @@ func TestShallow(t *testing.T) {
 			Shallow(expectedMap).String(), reg)
 	}
 }
+
+func TestShallowTypeOf(t *testing.T) {
+	equalTypes(t, Shallow(t), nil)
+}

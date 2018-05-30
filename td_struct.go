@@ -76,6 +76,8 @@ func newStruct(model interface{}) *tdStruct {
 //
 // During a match, all expected fields must be found to
 // succeed. Non-expected fields are ignored.
+//
+// TypeOf method returns the reflect.Type of "model".
 func Struct(model interface{}, expectedFields StructFields) TestDeep {
 	st := newStruct(model)
 
@@ -232,6 +234,13 @@ func (s *tdStruct) String() string {
 	}
 
 	return buf.String()
+}
+
+func (s *tdStruct) TypeOf() reflect.Type {
+	if s.isPtr {
+		return reflect.New(s.expectedModel.Type()).Type()
+	}
+	return s.expectedModel.Type()
 }
 
 func (s *tdStruct) expectedTypeStr() string {

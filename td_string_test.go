@@ -37,7 +37,6 @@ func TestString(t *testing.T) {
 		Got:      mustBe("int"),
 		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
 	})
-
 }
 
 func TestHasPrefix(t *testing.T) {
@@ -64,7 +63,6 @@ func TestHasPrefix(t *testing.T) {
 		Got:      mustBe("int"),
 		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
 	})
-
 }
 
 func TestHasSuffix(t *testing.T) {
@@ -91,7 +89,6 @@ func TestHasSuffix(t *testing.T) {
 		Got:      mustBe("int"),
 		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
 	})
-
 }
 
 func TestContains(t *testing.T) {
@@ -118,5 +115,11 @@ func TestContains(t *testing.T) {
 		Got:      mustBe("int"),
 		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
 	})
+}
 
+func TestStringTypeOf(t *testing.T) {
+	equalTypes(t, String("x"), nil)
+	equalTypes(t, HasPrefix("x"), nil)
+	equalTypes(t, HasSuffix("x"), nil)
+	equalTypes(t, Contains("x"), nil)
 }

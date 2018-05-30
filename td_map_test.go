@@ -12,7 +12,7 @@ import (
 	. "github.com/maxatome/go-testdeep"
 )
 
-func TestHash(t *testing.T) {
+func TestMap(t *testing.T) {
 	type MyMap map[string]int
 
 	//
@@ -295,4 +295,23 @@ func TestHash(t *testing.T) {
 		`SuperMapOf(*testdeep_test.MyMap{
   (string) (len=3) "foo": (int) 2,
 })`)
+}
+
+func TestMapTypeOf(t *testing.T) {
+	type MyMap map[string]int
+
+	// Map
+	equalTypes(t, Map(map[string]int{}, nil), map[string]int{})
+	equalTypes(t, Map(MyMap{}, nil), MyMap{})
+	equalTypes(t, Map(&MyMap{}, nil), &MyMap{})
+
+	// SubMap
+	equalTypes(t, SubMapOf(map[string]int{}, nil), map[string]int{})
+	equalTypes(t, SubMapOf(MyMap{}, nil), MyMap{})
+	equalTypes(t, SubMapOf(&MyMap{}, nil), &MyMap{})
+
+	// SuperMap
+	equalTypes(t, SuperMapOf(map[string]int{}, nil), map[string]int{})
+	equalTypes(t, SuperMapOf(MyMap{}, nil), MyMap{})
+	equalTypes(t, SuperMapOf(&MyMap{}, nil), &MyMap{})
 }
