@@ -59,5 +59,6 @@ func NewT(t *testing.T) *T {
 //
 //    CmpDeeply(t.T, got, expected, args...)
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t.T, got, expected, args...)
 }

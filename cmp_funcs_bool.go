@@ -16,6 +16,7 @@ import (
 //
 // Returns true if the test is OK, false if it fails.
 func CmpTrue(t *testing.T, got interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, true, args...)
 }
 
@@ -25,5 +26,6 @@ func CmpTrue(t *testing.T, got interface{}, args ...interface{}) bool {
 //
 // Returns true if the test is OK, false if it fails.
 func CmpFalse(t *testing.T, got interface{}, args ...interface{}) bool {
+	t.Helper()
 	return CmpDeeply(t, got, false, args...)
 }
