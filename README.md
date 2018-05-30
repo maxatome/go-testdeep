@@ -295,7 +295,7 @@ func TestCreateRecord(tt *testing.T) {
         Age:  23,
       },
       StructFields{
-        Id:        td.Not(0),
+        Id:        td.Not(uint64(0)),
         CreatedAt: td.Between(before, time.Now()),
       },
       "Newly created record")

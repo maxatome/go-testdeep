@@ -18,6 +18,13 @@ type T struct {
 
 // NewT returns a new T instance. Typically used as:
 //
+//   type Record struct {
+//     Id        uint64
+//     Name      string
+//     Age       int
+//     CreatedAt time.Time
+//   }
+//
 //   func TestCreateRecord(tt *testing.T) {
 //     t := NewT(tt)
 //
@@ -33,7 +40,7 @@ type T struct {
 //           Age:  23,
 //         },
 //         StructFields{
-//           Id:        td.Not(0),
+//           Id:        td.Not(uint64(0)),
 //           CreatedAt: td.Between(before, time.Now()),
 //         },
 //         "Newly created record")

@@ -30,7 +30,16 @@
 //     "testing"
 //   )
 //
-//   ...
+//   type Record struct {
+//     Id        uint64
+//     Name      string
+//     Age       int
+//     CreatedAt time.Time
+//   }
+//
+//   func CreateRecord(name string, age int) (*Record, error) {
+//     ...
+//   }
 //
 //   func TestCreateRecord(t *testing.T) {
 //     before := time.Now()
@@ -80,7 +89,7 @@
 //             Age:  23,
 //           },
 //           StructFields{
-//             Id:        td.Not(0),
+//             Id:        td.Not(uint64(0)),
 //             CreatedAt: td.Between(before, time.Now()),
 //           }),
 //         "Newly created record")
@@ -96,6 +105,13 @@
 // provided and act as shortcuts. Using CmpNil and CmpStruct function,
 // the previous example can be written as:
 //
+//   import (
+//     "testing"
+//     td "github.com/maxatome/go-testdeep"
+//   )
+//
+//   ...
+//
 //   func TestCreateRecord(t *testing.T) {
 //     before := time.Now()
 //     record, err := CreateRecord()
@@ -107,7 +123,7 @@
 //           Age:  23,
 //         },
 //         StructFields{
-//           Id:        td.Not(0),
+//           Id:        td.Not(uint64(0)),
 //           CreatedAt: td.Between(before, time.Now()),
 //         },
 //         "Newly created record")
@@ -115,6 +131,13 @@
 //   }
 //
 // Last, testing.T can be encapsulated in T type, simplifying again the test:
+//
+//   import (
+//     "testing"
+//     td "github.com/maxatome/go-testdeep"
+//   )
+//
+//   ...
 //
 //   func TestCreateRecord(tt *testing.T) {
 //     t := td.NewT(tt)
@@ -129,7 +152,7 @@
 //           Age:  23,
 //         },
 //         StructFields{
-//           Id:        td.Not(0),
+//           Id:        td.Not(uint64(0)),
 //           CreatedAt: td.Between(before, time.Now()),
 //         },
 //         "Newly created record")
