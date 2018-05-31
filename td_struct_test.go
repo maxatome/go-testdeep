@@ -33,6 +33,7 @@ func TestStruct(t *testing.T) {
 			"ValBool": true,
 			"ValStr":  "foobar",
 			"ValInt":  123,
+			"Ptr":     nil,
 		}))
 
 	checkError(t, 123, Struct(&MyStruct{}, StructFields{}),
@@ -179,6 +180,10 @@ func TestStruct(t *testing.T) {
 	checkPanic(t,
 		func() { Struct(&MyStruct{}, StructFields{"ValBool": 123}) },
 		"type int of field expected value ValBool differs from struct one (bool)")
+
+	checkPanic(t,
+		func() { Struct(&MyStruct{}, StructFields{"ValBool": nil}) },
+		"expected value of field ValBool cannot be nil as it is a bool")
 
 	checkPanic(t,
 		func() {

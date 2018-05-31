@@ -129,17 +129,31 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries) {
 	a.expectedEntries = make([]reflect.Value, numEntries)
 
 	elemType := a.expectedModel.Type().Elem()
+	var vexpectedValue reflect.Value
 	for index, expectedValue := range expectedEntries {
-		vexpectedValue := reflect.ValueOf(expectedValue)
-
-		if _, ok := expectedValue.(TestDeep); !ok {
-			if !vexpectedValue.Type().AssignableTo(elemType) {
+		if expectedValue == nil {
+			switch elemType.Kind() {
+			case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
+				reflect.Ptr, reflect.Slice:
+				vexpectedValue = reflect.New(elemType).Elem() // change to a typed nil
+			default:
 				panic(fmt.Sprintf(
-					"type %s of #%d expected value differs from %s contents (%s)",
-					vexpectedValue.Type(),
+					"expected value of #%d cannot be nil as items type is %s",
 					index,
-					ternStr(maxLength < 0, "slice", "array"),
 					elemType))
+			}
+		} else {
+			vexpectedValue = reflect.ValueOf(expectedValue)
+
+			if _, ok := expectedValue.(TestDeep); !ok {
+				if !vexpectedValue.Type().AssignableTo(elemType) {
+					panic(fmt.Sprintf(
+						"type %s of #%d expected value differs from %s contents (%s)",
+						vexpectedValue.Type(),
+						index,
+						ternStr(maxLength < 0, "slice", "array"),
+						elemType))
+				}
 			}
 		}
 

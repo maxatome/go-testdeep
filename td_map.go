@@ -83,21 +83,35 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries) {
 		vkey := reflect.ValueOf(key)
 		if !vkey.Type().AssignableTo(keyType) {
 			panic(fmt.Sprintf(
-				"Expected key %s type mismatch: %s != model key type (%s)",
+				"expected key %s type mismatch: %s != model key type (%s)",
 				toString(key),
 				vkey.Type(),
 				keyType))
 		}
 
-		entryInfo.expected = reflect.ValueOf(expectedValue)
-
-		if _, ok := expectedValue.(TestDeep); !ok {
-			if !entryInfo.expected.Type().AssignableTo(valueType) {
+		if expectedValue == nil {
+			switch valueType.Kind() {
+			case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
+				reflect.Ptr, reflect.Slice:
+				// change to a typed nil
+				entryInfo.expected = reflect.New(valueType).Elem()
+			default:
 				panic(fmt.Sprintf(
-					"Expected key %s value type mismatch: %s != model key type (%s)",
+					"expected key %s value cannot be nil as entries value type is %s",
 					toString(key),
-					entryInfo.expected.Type(),
 					valueType))
+			}
+		} else {
+			entryInfo.expected = reflect.ValueOf(expectedValue)
+
+			if _, ok := expectedValue.(TestDeep); !ok {
+				if !entryInfo.expected.Type().AssignableTo(valueType) {
+					panic(fmt.Sprintf(
+						"expected key %s value type mismatch: %s != model key type (%s)",
+						toString(key),
+						entryInfo.expected.Type(),
+						valueType))
+				}
 			}
 		}
 

@@ -88,6 +88,7 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 
 	// Check that all given fields are available in model
 	stType := vmodel.Type()
+	var vexpectedValue reflect.Value
 	for fieldName, expectedValue := range expectedFields {
 		field, found := stType.FieldByName(fieldName)
 		if !found {
@@ -95,15 +96,28 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 				vmodel.Type(), fieldName))
 		}
 
-		vexpectedValue := reflect.ValueOf(expectedValue)
-
-		if _, ok := expectedValue.(TestDeep); !ok {
-			if !vexpectedValue.Type().AssignableTo(field.Type) {
+		if expectedValue == nil {
+			switch field.Type.Kind() {
+			case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
+				reflect.Ptr, reflect.Slice:
+				vexpectedValue = reflect.New(field.Type).Elem() // change to a typed nil
+			default:
 				panic(fmt.Sprintf(
-					"type %s of field expected value %s differs from struct one (%s)",
-					vexpectedValue.Type(),
+					"expected value of field %s cannot be nil as it is a %s",
 					fieldName,
 					field.Type))
+			}
+		} else {
+			vexpectedValue = reflect.ValueOf(expectedValue)
+
+			if _, ok := expectedValue.(TestDeep); !ok {
+				if !vexpectedValue.Type().AssignableTo(field.Type) {
+					panic(fmt.Sprintf(
+						"type %s of field expected value %s differs from struct one (%s)",
+						vexpectedValue.Type(),
+						fieldName,
+						field.Type))
+				}
 			}
 		}
 

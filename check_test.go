@@ -28,6 +28,7 @@ type MyStructMid struct {
 type MyStruct struct {
 	MyStructMid
 	ValInt int
+	Ptr    *int
 }
 
 func (s *MyStruct) MyString() string {

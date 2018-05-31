@@ -22,6 +22,10 @@ func TestArray(t *testing.T) {
 	checkOK(t, [5]int{1, 0, 3}, Array([5]int{}, ArrayEntries{2: 3, 0: 1}))
 	checkOK(t, [5]int{1, 2, 3}, Array([5]int{0, 2}, ArrayEntries{2: 3, 0: 1}))
 
+	zero, one, two := 0, 1, 2
+	checkOK(t, [5]*int{nil, &zero, &one, &two},
+		Array([5]*int{}, ArrayEntries{1: &zero, 2: &one, 3: &two, 4: nil}))
+
 	gotArray := [...]int{1, 2, 3, 4, 5}
 
 	checkError(t, gotArray, Array(MyArray{}, nil),
@@ -127,6 +131,8 @@ func TestArray(t *testing.T) {
 	checkPanic(t, func() { Array([]int{}, nil) }, "usage: Array(")
 	checkPanic(t, func() { Array([1]int{}, ArrayEntries{1: 34}) },
 		"array length is 1, so cannot have #1 expected index")
+	checkPanic(t, func() { Array([3]int{}, ArrayEntries{1: nil}) },
+		"expected value of #1 cannot be nil as items type is int")
 	checkPanic(t, func() { Array([3]int{}, ArrayEntries{1: "bad"}) },
 		"type string of #1 expected value differs from array contents (int)")
 	checkPanic(t, func() { Array([1]int{12}, ArrayEntries{0: 21}) },

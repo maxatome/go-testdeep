@@ -33,6 +33,10 @@ func TestMap(t *testing.T) {
 	checkOK(t, gotMap, Map(map[string]int{"foo": 1}, MapEntries{"bar": 2}))
 	checkOK(t, gotMap, Map(map[string]int{}, MapEntries{"foo": 1, "bar": 2}))
 
+	one := 1
+	checkOK(t, map[string]*int{"foo": nil, "bar": &one},
+		Map(map[string]*int{}, MapEntries{"foo": nil, "bar": &one}))
+
 	checkError(t, gotMap, Map(map[string]int{"foo": 1, "bar": 3}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
@@ -261,10 +265,13 @@ func TestMap(t *testing.T) {
 	checkPanic(t, func() { SubMapOf(&num, nil) }, "usage: SubMapOf(")
 
 	checkPanic(t, func() { Map(&MyMap{}, MapEntries{1: 2}) },
-		"Expected key (int) 1 type mismatch: int != model key type (string)")
+		"expected key (int) 1 type mismatch: int != model key type (string)")
+
+	checkPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": nil}) },
+		`expected key (string) (len=3) "foo" value cannot be nil as entries value type is int`)
 
 	checkPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": uint16(2)}) },
-		`Expected key (string) (len=3) "foo" value type mismatch: uint16 != model key type (int)`)
+		`expected key (string) (len=3) "foo" value type mismatch: uint16 != model key type (int)`)
 
 	checkPanic(t, func() { Map(&MyMap{"foo": 1}, MapEntries{"foo": 1}) },
 		`(string) (len=3) "foo" entry exists in both model & expectedEntries`)
