@@ -39,7 +39,7 @@ type T struct {
 //           Name: "Bob",
 //           Age:  23,
 //         },
-//         StructFields{
+//         td.StructFields{
 //           Id:        td.Not(uint64(0)),
 //           CreatedAt: td.Between(before, time.Now()),
 //         },
