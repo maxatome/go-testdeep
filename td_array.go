@@ -135,7 +135,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries) {
 			switch elemType.Kind() {
 			case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
 				reflect.Ptr, reflect.Slice:
-				vexpectedValue = reflect.New(elemType).Elem() // change to a typed nil
+				vexpectedValue = reflect.Zero(elemType) // change to a typed nil
 			default:
 				panic(fmt.Sprintf(
 					"expected value of #%d cannot be nil as items type is %s",

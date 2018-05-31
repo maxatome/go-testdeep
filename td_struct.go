@@ -100,7 +100,7 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 			switch field.Type.Kind() {
 			case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
 				reflect.Ptr, reflect.Slice:
-				vexpectedValue = reflect.New(field.Type).Elem() // change to a typed nil
+				vexpectedValue = reflect.Zero(field.Type) // change to a typed nil
 			default:
 				panic(fmt.Sprintf(
 					"expected value of field %s cannot be nil as it is a %s",

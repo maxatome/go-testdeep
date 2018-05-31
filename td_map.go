@@ -93,8 +93,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries) {
 			switch valueType.Kind() {
 			case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
 				reflect.Ptr, reflect.Slice:
-				// change to a typed nil
-				entryInfo.expected = reflect.New(valueType).Elem()
+				entryInfo.expected = reflect.Zero(valueType) // change to a typed nil
 			default:
 				panic(fmt.Sprintf(
 					"expected key %s value cannot be nil as entries value type is %s",
