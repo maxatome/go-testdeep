@@ -92,7 +92,17 @@ func ExampleT_Array_typedArray() {
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
+	ok = t.Array(&got, &MyArray{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+		"checks pointer on typed array %v", got)
+	fmt.Println(ok)
+
+	ok = t.Array(&got, (*MyArray)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+		"checks pointer on typed array %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 	// true
 }
@@ -604,7 +614,17 @@ func ExampleT_Map_map() {
 		"checks map %v", got)
 	fmt.Println(ok)
 
+	ok = t.Map(got, map[string]int{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+		"checks map %v", got)
+	fmt.Println(ok)
+
+	ok = t.Map(got, (map[string]int)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+		"checks map %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 }
 
@@ -623,7 +643,17 @@ func ExampleT_Map_typedMap() {
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
+	ok = t.Map(&got, &MyMap{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+		"checks pointer on typed map %v", got)
+	fmt.Println(ok)
+
+	ok = t.Map(&got, (*MyMap)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+		"checks pointer on typed map %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 	// true
 }
@@ -1108,7 +1138,17 @@ func ExampleT_Slice_slice() {
 		"checks slice %v", got)
 	fmt.Println(ok)
 
+	ok = t.Slice(got, []int{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+		"checks slice %v", got)
+	fmt.Println(ok)
+
+	ok = t.Slice(got, ([]int)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+		"checks slice %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 }
 
@@ -1127,7 +1167,17 @@ func ExampleT_Slice_typedSlice() {
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
+	ok = t.Slice(&got, &MySlice{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+		"checks pointer on typed slice %v", got)
+	fmt.Println(ok)
+
+	ok = t.Slice(&got, (*MySlice)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+		"checks pointer on typed slice %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 	// true
 }
@@ -1209,7 +1259,17 @@ func ExampleT_Struct() {
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
+	// Model does not need to be instanciated
+	ok = t.Struct(&got, (*Person)(nil), StructFields{
+		"Name":        "Foobar",
+		"Age":         Between(40, 50),
+		"NumChildren": Not(0),
+	},
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 	// true

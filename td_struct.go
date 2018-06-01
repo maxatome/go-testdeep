@@ -16,7 +16,7 @@ import (
 
 type tdStruct struct {
 	Base
-	expectedModel  reflect.Value
+	expectedType   reflect.Type
 	expectedFields fieldInfoSlice
 	isPtr          bool
 }
@@ -41,7 +41,7 @@ func (e fieldInfoSlice) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
 // TestDeep operator as well as a zero value.)
 type StructFields map[string]interface{}
 
-func newStruct(model interface{}) *tdStruct {
+func newStruct(model interface{}) (*tdStruct, reflect.Value) {
 	vmodel := reflect.ValueOf(model)
 
 	st := tdStruct{
@@ -50,16 +50,23 @@ func newStruct(model interface{}) *tdStruct {
 
 	switch vmodel.Kind() {
 	case reflect.Ptr:
-		vmodel = vmodel.Elem()
-		if vmodel.Kind() != reflect.Struct {
+		if vmodel.Type().Elem().Kind() != reflect.Struct {
 			break
 		}
+
 		st.isPtr = true
+
+		if vmodel.IsNil() {
+			st.expectedType = vmodel.Type().Elem()
+			return &st, reflect.Value{}
+		}
+
+		vmodel = vmodel.Elem()
 		fallthrough
 
 	case reflect.Struct:
-		st.expectedModel = vmodel
-		return &st
+		st.expectedType = vmodel.Type()
+		return &st, vmodel
 	}
 
 	panic("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)")
@@ -79,21 +86,18 @@ func newStruct(model interface{}) *tdStruct {
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Struct(model interface{}, expectedFields StructFields) TestDeep {
-	st := newStruct(model)
+	st, vmodel := newStruct(model)
 
 	st.expectedFields = make([]fieldInfo, 0, len(expectedFields))
 	checkedFields := make(map[string]bool, len(expectedFields))
 
-	vmodel := st.expectedModel
-
 	// Check that all given fields are available in model
-	stType := vmodel.Type()
+	stType := st.expectedType
 	var vexpectedValue reflect.Value
 	for fieldName, expectedValue := range expectedFields {
 		field, found := stType.FieldByName(fieldName)
 		if !found {
-			panic(fmt.Sprintf("struct %s has no field `%s'",
-				vmodel.Type(), fieldName))
+			panic(fmt.Sprintf("struct %s has no field `%s'", stType, fieldName))
 		}
 
 		if expectedValue == nil {
@@ -137,40 +141,43 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 	})
 
 	// Check initialized fields in model
-	for _, fieldName := range allFields {
-		field, _ := stType.FieldByName(fieldName)
-		if field.Anonymous {
-			continue
-		}
-
-		vfield := vmodel.FieldByIndex(field.Index)
-
-		// Try to force access to unexported fields
-		if !vfield.CanInterface() {
-			vfield = unsafeReflectValue(vfield)
-		}
-
-		fieldIf, ok := getInterface(vfield, false) // no need to force here
-		if !ok {
-			// Probably in an environment where "unsafe" package is forbidden... :(
-			fmt.Fprintf(os.Stderr, // nolint: errcheck
-				"field %s is unexported and cannot be overridden, skip it.", fieldName)
-			continue
-		}
-
-		// If non-zero field
-		if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(), fieldIf) {
-			if checkedFields[fieldName] {
-				panic(fmt.Sprintf(
-					"non zero field %s in model already exists in expectedFields",
-					fieldName))
+	if vmodel.IsValid() {
+		for _, fieldName := range allFields {
+			field, _ := stType.FieldByName(fieldName)
+			if field.Anonymous {
+				continue
 			}
 
-			st.expectedFields = append(st.expectedFields, fieldInfo{
-				name:     fieldName,
-				expected: vfield,
-				index:    field.Index,
-			})
+			vfield := vmodel.FieldByIndex(field.Index)
+
+			// Try to force access to unexported fields
+			if !vfield.CanInterface() {
+				vfield = unsafeReflectValue(vfield)
+			}
+
+			fieldIf, ok := getInterface(vfield, false) // no need to force here
+			if !ok {
+				// Probably in an environment where "unsafe" package is forbidden... :(
+				fmt.Fprintf(os.Stderr, // nolint: errcheck
+					"field %s is unexported and cannot be overridden, skip it.",
+					fieldName)
+				continue
+			}
+
+			// If non-zero field
+			if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(), fieldIf) {
+				if checkedFields[fieldName] {
+					panic(fmt.Sprintf(
+						"non zero field %s in model already exists in expectedFields",
+						fieldName))
+				}
+
+				st.expectedFields = append(st.expectedFields, fieldInfo{
+					name:     fieldName,
+					expected: vfield,
+					index:    field.Index,
+				})
+			}
 		}
 	}
 
@@ -196,7 +203,7 @@ func (s *tdStruct) Match(ctx Context, got reflect.Value) (err *Error) {
 		got = got.Elem()
 	}
 
-	if got.Type() != s.expectedModel.Type() {
+	if got.Type() != s.expectedType {
 		if ctx.booleanError {
 			return booleanError
 		}
@@ -232,7 +239,7 @@ func (s *tdStruct) String() string {
 		buf.WriteByte('*')
 	}
 
-	buf.WriteString(s.expectedModel.Type().String())
+	buf.WriteString(s.expectedType.String())
 
 	if len(s.expectedFields) == 0 {
 		buf.WriteString("{})")
@@ -252,14 +259,14 @@ func (s *tdStruct) String() string {
 
 func (s *tdStruct) TypeBehind() reflect.Type {
 	if s.isPtr {
-		return reflect.New(s.expectedModel.Type()).Type()
+		return reflect.New(s.expectedType).Type()
 	}
-	return s.expectedModel.Type()
+	return s.expectedType
 }
 
 func (s *tdStruct) expectedTypeStr() string {
 	if s.isPtr {
-		return "*" + s.expectedModel.Type().String()
+		return "*" + s.expectedType.String()
 	}
-	return s.expectedModel.Type().String()
+	return s.expectedType.String()
 }

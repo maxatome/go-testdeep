@@ -32,6 +32,7 @@ func TestMap(t *testing.T) {
 	checkOK(t, gotMap, Map(map[string]int{"foo": 1, "bar": 2}, nil))
 	checkOK(t, gotMap, Map(map[string]int{"foo": 1}, MapEntries{"bar": 2}))
 	checkOK(t, gotMap, Map(map[string]int{}, MapEntries{"foo": 1, "bar": 2}))
+	checkOK(t, gotMap, Map((map[string]int)(nil), MapEntries{"foo": 1, "bar": 2}))
 
 	one := 1
 	checkOK(t, map[string]*int{"foo": nil, "bar": &one},
@@ -87,10 +88,12 @@ func TestMap(t *testing.T) {
 	checkOK(t, gotTypedMap, Map(MyMap{"foo": 1, "bar": 2}, nil))
 	checkOK(t, gotTypedMap, Map(MyMap{"foo": 1}, MapEntries{"bar": 2}))
 	checkOK(t, gotTypedMap, Map(MyMap{}, MapEntries{"foo": 1, "bar": 2}))
+	checkOK(t, gotTypedMap, Map((MyMap)(nil), MapEntries{"foo": 1, "bar": 2}))
 
 	checkOK(t, &gotTypedMap, Map(&MyMap{"foo": 1, "bar": 2}, nil))
 	checkOK(t, &gotTypedMap, Map(&MyMap{"foo": 1}, MapEntries{"bar": 2}))
 	checkOK(t, &gotTypedMap, Map(&MyMap{}, MapEntries{"foo": 1, "bar": 2}))
+	checkOK(t, &gotTypedMap, Map((*MyMap)(nil), MapEntries{"foo": 1, "bar": 2}))
 
 	checkError(t, gotTypedMap, Map(MyMap{"foo": 1, "bar": 3}, nil),
 		expectedError{

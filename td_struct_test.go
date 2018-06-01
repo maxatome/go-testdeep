@@ -36,6 +36,14 @@ func TestStruct(t *testing.T) {
 			"Ptr":     nil,
 		}))
 
+	checkOK(t, &gotStruct,
+		Struct((*MyStruct)(nil), StructFields{
+			"ValBool": true,
+			"ValStr":  "foobar",
+			"ValInt":  123,
+			"Ptr":     nil,
+		}))
+
 	checkError(t, 123, Struct(&MyStruct{}, StructFields{}),
 		expectedError{
 			Message:  mustBe("type mismatch"),

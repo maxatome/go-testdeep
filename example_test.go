@@ -211,7 +211,19 @@ func ExampleArray_typedArray() {
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, &got,
+		Array(&MyArray{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+		"checks pointer on typed array %v", got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &got,
+		Array((*MyArray)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+		"checks pointer on typed array %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 	// true
 }
@@ -614,7 +626,21 @@ func ExampleMap_map() {
 		"checks map %v", got)
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, got,
+		Map(map[string]int{},
+			MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
+		"checks map %v", got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got,
+		Map((map[string]int)(nil),
+			MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
+		"checks map %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 }
 
@@ -635,7 +661,19 @@ func ExampleMap_typedMap() {
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, &got,
+		Map(&MyMap{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
+		"checks pointer on typed map %v", got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &got,
+		Map((*MyMap)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
+		"checks pointer on typed map %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 	// true
 }
@@ -1124,7 +1162,19 @@ func ExampleSlice_slice() {
 		"checks slice %v", got)
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, got,
+		Slice([]int{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+		"checks slice %v", got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got,
+		Slice(([]int)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+		"checks slice %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 }
 
@@ -1143,7 +1193,19 @@ func ExampleSlice_typedSlice() {
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, &got,
+		Slice(&MySlice{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+		"checks pointer on typed slice %v", got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &got,
+		Slice((*MySlice)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+		"checks pointer on typed slice %v", got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 	// true
 }
@@ -1339,7 +1401,18 @@ func ExampleStruct() {
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
+	// Model does not need to be instanciated
+	ok = CmpDeeply(t, &got,
+		Struct((*Person)(nil), StructFields{
+			"Name":        "Foobar",
+			"Age":         Between(40, 50),
+			"NumChildren": Not(0),
+		}),
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 	// true
