@@ -7,7 +7,7 @@ go:
   - 1.10.x
   - tip
 
-#go_import_path: github.com/maxatome/go-deeptest
+go_import_path: github.com/maxatome/go-testdeep
 
 script:
   - go get golang.org/x/tools/cmd/cover
@@ -16,4 +16,4 @@ script:
   - go test -v -covermode=count -coverprofile=coverage.out
 
 after_success:
-  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci
+  - goveralls -coverprofile=coverage.out -service=travis-ci
