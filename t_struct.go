@@ -18,6 +18,11 @@ type T struct {
 
 // NewT returns a new T instance. Typically used as:
 //
+//   import (
+//     "testing"
+//     td "github.com/maxatome/go-testdeep"
+//   )
+//
 //   type Record struct {
 //     Id        uint64
 //     Name      string
@@ -39,7 +44,7 @@ type T struct {
 //           Name: "Bob",
 //           Age:  23,
 //         },
-//         StructFields{
+//         td.StructFields{
 //           Id:        td.Not(uint64(0)),
 //           CreatedAt: td.Between(before, time.Now()),
 //         },
