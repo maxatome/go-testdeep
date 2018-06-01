@@ -7,7 +7,7 @@ go:
   - 1.10.x
   - tip
 
-go_import_path: github.com/maxatome/go-deeptest
+#go_import_path: github.com/maxatome/go-deeptest
 
 script:
   - go get golang.org/x/tools/cmd/cover
