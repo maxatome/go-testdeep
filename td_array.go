@@ -14,7 +14,7 @@ import (
 
 type tdArray struct {
 	Base
-	expectedModel   reflect.Value
+	expectedType    reflect.Type
 	expectedEntries []reflect.Value
 	isPtr           bool
 }
@@ -46,16 +46,24 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 
 	switch vmodel.Kind() {
 	case reflect.Ptr:
-		vmodel = vmodel.Elem()
-		if vmodel.Kind() != reflect.Array {
+		if vmodel.Type().Elem().Kind() != reflect.Array {
 			break
 		}
+
 		a.isPtr = true
+
+		if vmodel.IsNil() {
+			a.expectedType = vmodel.Type().Elem()
+			a.populateExpectedEntries(expectedEntries, reflect.Value{})
+			return &a
+		}
+
+		vmodel = vmodel.Elem()
 		fallthrough
 
 	case reflect.Array:
-		a.expectedModel = vmodel
-		a.populateExpectedEntries(expectedEntries)
+		a.expectedType = vmodel.Type()
+		a.populateExpectedEntries(expectedEntries, vmodel)
 		return &a
 	}
 
@@ -81,23 +89,31 @@ func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
 
 	switch vmodel.Kind() {
 	case reflect.Ptr:
-		vmodel = vmodel.Elem()
-		if vmodel.Kind() != reflect.Slice {
+		if vmodel.Type().Elem().Kind() != reflect.Slice {
 			break
 		}
+
 		a.isPtr = true
+
+		if vmodel.IsNil() {
+			a.expectedType = vmodel.Type().Elem()
+			a.populateExpectedEntries(expectedEntries, reflect.Value{})
+			return &a
+		}
+
+		vmodel = vmodel.Elem()
 		fallthrough
 
 	case reflect.Slice:
-		a.expectedModel = vmodel
-		a.populateExpectedEntries(expectedEntries)
+		a.expectedType = vmodel.Type()
+		a.populateExpectedEntries(expectedEntries, vmodel)
 		return &a
 	}
 
 	panic("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES)")
 }
 
-func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries) {
+func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expectedModel reflect.Value) {
 	var maxLength, numEntries int
 
 	maxIndex := -1
@@ -107,8 +123,8 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries) {
 		}
 	}
 
-	if a.expectedModel.Kind() == reflect.Array {
-		maxLength = a.expectedModel.Len()
+	if a.expectedType.Kind() == reflect.Array {
+		maxLength = a.expectedType.Len()
 
 		if maxLength <= maxIndex {
 			panic(fmt.Sprintf(
@@ -121,14 +137,18 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries) {
 		maxLength = -1
 
 		numEntries = maxIndex + 1
-		if numEntries < a.expectedModel.Len() {
-			numEntries = a.expectedModel.Len()
+
+		// If slice is non-nil
+		if expectedModel.IsValid() {
+			if numEntries < expectedModel.Len() {
+				numEntries = expectedModel.Len()
+			}
 		}
 	}
 
 	a.expectedEntries = make([]reflect.Value, numEntries)
 
-	elemType := a.expectedModel.Type().Elem()
+	elemType := a.expectedType.Elem()
 	var vexpectedValue reflect.Value
 	for index, expectedValue := range expectedEntries {
 		if expectedValue == nil {
@@ -160,34 +180,49 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries) {
 		a.expectedEntries[index] = vexpectedValue
 	}
 
-	// Check initialized entries in model
 	vzero := reflect.Zero(elemType)
-	zero := vzero.Interface()
-	for index := a.expectedModel.Len() - 1; index >= 0; index-- {
-		ventry := a.expectedModel.Index(index)
+	// Check initialized entries in model
+	if expectedModel.IsValid() {
+		zero := vzero.Interface()
+		for index := expectedModel.Len() - 1; index >= 0; index-- {
+			ventry := expectedModel.Index(index)
 
-		// Entry already expected
-		if _, ok := expectedEntries[index]; ok {
-			// If non-zero entry, consider it as an error (= 2 expected
-			// values for the same item)
-			if !reflect.DeepEqual(zero, ventry.Interface()) {
-				panic(fmt.Sprintf(
-					"non zero #%d entry in model already exists in expectedEntries",
-					index))
+			// Entry already expected
+			if _, ok := expectedEntries[index]; ok {
+				// If non-zero entry, consider it as an error (= 2 expected
+				// values for the same item)
+				if !reflect.DeepEqual(zero, ventry.Interface()) {
+					panic(fmt.Sprintf(
+						"non zero #%d entry in model already exists in expectedEntries",
+						index))
+				}
+				continue
 			}
-			continue
-		}
 
-		a.expectedEntries[index] = ventry
+			a.expectedEntries[index] = ventry
+		}
+	} else if a.expectedType.Kind() == reflect.Slice {
+		return // nil slice
 	}
+
+	var index int
 
 	// Array case, all is OK
 	if maxLength >= 0 {
-		return
+		// Non-nil array => a.expectedEntries already fully initialized
+		if expectedModel.IsValid() {
+			return
+		}
+		// nil array => a.expectedEntries must be initialized from index=0
+		// to numEntries - 1 below
+	} else {
+		// Non-nil slice => a.expectedEntries must be initialized from
+		// index=len(slice) to last entry index of expectedEntries
+		index = expectedModel.Len()
 	}
 
 	// Slice case, initialize missing expected items to zero
-	for index := a.expectedModel.Len(); index < numEntries; index++ {
+	for ; index < numEntries; index++ {
 		if _, ok := expectedEntries[index]; !ok {
 			a.expectedEntries[index] = vzero
 		}
@@ -211,7 +246,7 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 		got = got.Elem()
 	}
 
-	if got.Type() != a.expectedModel.Type() {
+	if got.Type() != a.expectedType {
 		if ctx.booleanError {
 			return booleanError
 		}
@@ -269,7 +304,7 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 }
 
 func (a *tdArray) String() string {
-	buf := bytes.NewBufferString(ternStr(a.expectedModel.Kind() == reflect.Array,
+	buf := bytes.NewBufferString(ternStr(a.expectedType.Kind() == reflect.Array,
 		"Array(", "Slice("))
 
 	buf.WriteString(a.expectedTypeStr())
@@ -291,14 +326,14 @@ func (a *tdArray) String() string {
 
 func (s *tdArray) TypeBehind() reflect.Type {
 	if s.isPtr {
-		return reflect.New(s.expectedModel.Type()).Type()
+		return reflect.New(s.expectedType).Type()
 	}
-	return s.expectedModel.Type()
+	return s.expectedType
 }
 
 func (a *tdArray) expectedTypeStr() string {
 	if a.isPtr {
-		return "*" + a.expectedModel.Type().String()
+		return "*" + a.expectedType.String()
 	}
-	return a.expectedModel.Type().String()
+	return a.expectedType.String()
 }

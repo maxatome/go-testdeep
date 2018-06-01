@@ -22,7 +22,7 @@ const (
 
 type tdMap struct {
 	Base
-	expectedModel   reflect.Value
+	expectedType    reflect.Type
 	expectedEntries []mapEntryInfo
 	kind            mapKind
 	isPtr           bool
@@ -51,16 +51,24 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 
 	switch vmodel.Kind() {
 	case reflect.Ptr:
-		vmodel = vmodel.Elem()
-		if vmodel.Kind() != reflect.Map {
+		if vmodel.Type().Elem().Kind() != reflect.Map {
 			break
 		}
+
 		m.isPtr = true
+
+		if vmodel.IsNil() {
+			m.expectedType = vmodel.Type().Elem()
+			m.populateExpectedEntries(entries, reflect.Value{})
+			return &m
+		}
+
+		vmodel = vmodel.Elem()
 		fallthrough
 
 	case reflect.Map:
-		m.expectedModel = vmodel
-		m.populateExpectedEntries(entries)
+		m.expectedType = vmodel.Type()
+		m.populateExpectedEntries(entries, vmodel)
 		return &m
 	}
 
@@ -68,14 +76,17 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 		m.GetLocation().Func))
 }
 
-func (m *tdMap) populateExpectedEntries(entries MapEntries) {
-	expectedKeys := m.expectedModel.MapKeys()
+func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflect.Value) {
+	var expectedKeys []reflect.Value
+	if expectedModel.IsValid() {
+		expectedKeys = expectedModel.MapKeys()
+	}
 
 	m.expectedEntries = make([]mapEntryInfo, 0, len(expectedKeys)+len(entries))
 	checkedEntries := make(map[interface{}]bool, len(entries))
 
-	keyType := m.expectedModel.Type().Key()
-	valueType := m.expectedModel.Type().Elem()
+	keyType := m.expectedType.Key()
+	valueType := m.expectedType.Elem()
 
 	var entryInfo mapEntryInfo
 
@@ -121,7 +132,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries) {
 
 	// Check entries in model
 	for _, vkey := range expectedKeys {
-		entryInfo.expected = m.expectedModel.MapIndex(vkey)
+		entryInfo.expected = expectedModel.MapIndex(vkey)
 
 		if checkedEntries[vkey.Interface()] {
 			panic(fmt.Sprintf(
@@ -211,7 +222,7 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		got = got.Elem()
 	}
 
-	if got.Type() != m.expectedModel.Type() {
+	if got.Type() != m.expectedType {
 		if ctx.booleanError {
 			return booleanError
 		}
@@ -352,14 +363,14 @@ func (m *tdMap) String() string {
 
 func (s *tdMap) TypeBehind() reflect.Type {
 	if s.isPtr {
-		return reflect.New(s.expectedModel.Type()).Type()
+		return reflect.New(s.expectedType).Type()
 	}
-	return s.expectedModel.Type()
+	return s.expectedType
 }
 
 func (m *tdMap) expectedTypeStr() string {
 	if m.isPtr {
-		return "*" + m.expectedModel.Type().String()
+		return "*" + m.expectedType.String()
 	}
-	return m.expectedModel.Type().String()
+	return m.expectedType.String()
 }
