@@ -49,7 +49,7 @@ func Isa(model interface{}) TestDeep {
 	}
 }
 
-func (i *tdIsa) Match(ctx Context, got reflect.Value) (err *Error) {
+func (i *tdIsa) Match(ctx Context, got reflect.Value) *Error {
 	gotType := got.Type()
 
 	if gotType == i.expectedType {
@@ -65,13 +65,11 @@ func (i *tdIsa) Match(ctx Context, got reflect.Value) (err *Error) {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "type mismatch",
 		Got:      rawString(gotType.String()),
 		Expected: rawString(i.expectedType.String()),
-		Location: i.GetLocation(),
-	}
+	})
 }
 
 func (i *tdIsa) String() string {

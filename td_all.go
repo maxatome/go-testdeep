@@ -26,27 +26,29 @@ func All(expectedValues ...interface{}) TestDeep {
 }
 
 func (a *tdAll) Match(ctx Context, got reflect.Value) (err *Error) {
+	var origErr *Error
 	for idx, item := range a.items {
-		origErr := deepValueEqual(
-			ctx.AddDepth(fmt.Sprintf("<All#%d/%d>", idx+1, len(a.items))),
+		// Use deepValueEqualFinal here instead of deepValueEqual as we
+		// want to know whether an error occurred or not, we do not want
+		// to accumulate it silently
+		origErr = deepValueEqualFinal(
+			ctx.resetErrors().
+				AddDepth(fmt.Sprintf("<All#%d/%d>", idx+1, len(a.items))),
 			got, item)
 		if origErr != nil {
 			if ctx.booleanError {
 				return booleanError
 			}
-			err = &Error{
-				Context:  ctx,
+			err := &Error{
 				Message:  fmt.Sprintf("compared (part %d of %d)", idx+1, len(a.items)),
 				Got:      got,
 				Expected: item,
-				Location: a.GetLocation(),
 			}
-
 			if item.IsValid() && item.Type().Implements(testDeeper) {
 				err.Origin = origErr
 			}
-			return
+			return ctx.CollectError(err)
 		}
 	}
-	return
+	return nil
 }

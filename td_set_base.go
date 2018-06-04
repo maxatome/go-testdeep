@@ -50,13 +50,11 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "nil pointer",
 				Got:      rawString("nil " + got.Type().String()),
 				Expected: rawString("Slice OR Array OR *Slice OR *Array"),
-				Location: s.GetLocation(),
-			}
+			})
 		}
 
 		if gotElem.Kind() != reflect.Array && gotElem.Kind() != reflect.Slice {
@@ -155,12 +153,10 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 		if res.IsEmpty() {
 			return nil
 		}
-		return &Error{
-			Context:  ctx,
-			Message:  "comparing %% as a " + s.GetLocation().Func,
-			Summary:  res,
-			Location: s.GetLocation(),
-		}
+		return ctx.CollectError(&Error{
+			Message: "comparing %% as a " + s.GetLocation().Func,
+			Summary: res,
+		})
 	}
 
 	if ctx.booleanError {
@@ -174,13 +170,11 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 		gotStr = "nil"
 	}
 
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "bad type",
 		Got:      gotStr,
 		Expected: rawString("Slice OR Array OR *Slice OR *Array"),
-		Location: s.GetLocation(),
-	}
+	})
 }
 
 func (s *tdSetBase) String() string {

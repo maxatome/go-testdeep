@@ -49,6 +49,126 @@ func TestEqualArray(t *testing.T) {
 			Got:      mustBe("(int) 2"),
 			Expected: mustBe("(int) 3"),
 		})
+
+	oldMaxErrors := DefaultContextConfig.MaxErrors
+	defer func() { DefaultContextConfig.MaxErrors = oldMaxErrors }()
+
+	t.Run("DefaultContextConfig.MaxErrors = 2",
+		func(t *testing.T) {
+			DefaultContextConfig.MaxErrors = 2
+			err := EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
+
+			// First error
+			ok := t.Run("First error",
+				func(t *testing.T) {
+					if err == nil {
+						t.Errorf("An Error should have occurred")
+						return
+					}
+					if !matchError(t, err, expectedError{
+						Message:  mustBe("values differ"),
+						Path:     mustBe("DATA[1]"),
+						Got:      mustBe("(int) 2"),
+						Expected: mustBe("(int) 42"),
+					}, false) {
+						return
+					}
+				})
+			if !ok {
+				return
+			}
+
+			// Second error
+			err = err.Next
+			t.Run("Second error",
+				func(t *testing.T) {
+					if err == nil {
+						t.Errorf("A second Error should have occurred")
+						return
+					}
+					if !matchError(t, err, expectedError{
+						Message:  mustBe("values differ"),
+						Path:     mustBe("DATA[2]"),
+						Got:      mustBe("(int) 3"),
+						Expected: mustBe("(int) 43"),
+					}, false) {
+						return
+					}
+					if err.Next != nil {
+						t.Errorf("Only 2 Errors should have occurred")
+						return
+					}
+				})
+		})
+
+	t.Run("DefaultContextConfig.MaxErrors = -1 (aka. all errors)",
+		func(t *testing.T) {
+			DefaultContextConfig.MaxErrors = -1
+			err := EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
+
+			// First error
+			ok := t.Run("First error",
+				func(t *testing.T) {
+					if err == nil {
+						t.Errorf("An Error should have occurred")
+						return
+					}
+					if !matchError(t, err, expectedError{
+						Message:  mustBe("values differ"),
+						Path:     mustBe("DATA[1]"),
+						Got:      mustBe("(int) 2"),
+						Expected: mustBe("(int) 42"),
+					}, false) {
+						return
+					}
+				})
+			if !ok {
+				return
+			}
+
+			// Second error
+			err = err.Next
+			ok = t.Run("Second error",
+				func(t *testing.T) {
+					if err == nil {
+						t.Errorf("A second Error should have occurred")
+						return
+					}
+					if !matchError(t, err, expectedError{
+						Message:  mustBe("values differ"),
+						Path:     mustBe("DATA[2]"),
+						Got:      mustBe("(int) 3"),
+						Expected: mustBe("(int) 43"),
+					}, false) {
+						return
+					}
+				})
+			if !ok {
+				return
+			}
+
+			// Third error
+			err = err.Next
+			t.Run("Third error",
+				func(t *testing.T) {
+					if err == nil {
+						t.Errorf("A third Error should have occurred")
+						return
+					}
+					if !matchError(t, err, expectedError{
+						Message:  mustBe("values differ"),
+						Path:     mustBe("DATA[3]"),
+						Got:      mustBe("(int) 4"),
+						Expected: mustBe("(int) 44"),
+					}, false) {
+						return
+					}
+					if err.Next != nil {
+						t.Errorf("Only 3 Errors should have occurred")
+						return
+					}
+				})
+		})
 }
 
 //

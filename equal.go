@@ -11,6 +11,7 @@
 package testdeep
 
 import (
+	"bytes"
 	"fmt"
 	"reflect"
 	"testing"
@@ -24,6 +25,18 @@ func isNilStr(isNil bool) rawString {
 	return "not nil"
 }
 
+func deepValueEqualFinal(ctx Context, got, expected reflect.Value) (err *Error) {
+	err = deepValueEqual(ctx, got, expected)
+	if err == nil {
+		// Try to merge pending errors
+		errMerge := ctx.mergeErrors()
+		if errMerge != nil {
+			return errMerge
+		}
+	}
+	return
+}
+
 func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 	if !got.IsValid() || !expected.IsValid() {
 		if got.IsValid() == expected.IsValid() {
@@ -34,9 +47,9 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 		if expected.IsValid() { // here: !got.IsValid()
 			if expected.Type().Implements(testDeeper) {
-				td := expected.Interface().(TestDeep)
-				if td.HandleInvalid() {
-					return td.Match(ctx, got)
+				ctx.curOperator = expected.Interface().(TestDeep)
+				if ctx.curOperator.HandleInvalid() {
+					return ctx.curOperator.Match(ctx, got)
 				}
 				if ctx.booleanError {
 					return booleanError
@@ -45,7 +58,6 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 				// Special case if "expected" is a TestDeep operator which
 				// does not handle invalid values: the operator is not called,
 				// but for the user the error comes from it
-				err.Location = td.GetLocation()
 			} else if ctx.booleanError {
 				return booleanError
 			}
@@ -65,9 +77,8 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			err.Got = got
 		}
 
-		err.Context = ctx
 		err.Message = "values differ"
-		return
+		return ctx.CollectError(err)
 	}
 
 	// Special case, "got" implements testDeeper: only if allowed
@@ -78,7 +89,8 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	if got.Type() != expected.Type() {
 		if expected.Type().Implements(testDeeper) {
-			return expected.Interface().(TestDeep).Match(ctx, got)
+			ctx.curOperator = expected.Interface().(TestDeep)
+			return ctx.curOperator.Match(ctx, got)
 		}
 
 		// "expected" is not a TestDeep operator
@@ -94,12 +106,11 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString(expected.Type().String()),
-		}
+		})
 	}
 
 	// if ctx.Depth > 10 { panic("deepValueEqual") }	// for debugging
@@ -154,23 +165,21 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "nil slice",
 				Got:      isNilStr(got.IsNil()),
 				Expected: isNilStr(expected.IsNil()),
-			}
+			})
 		}
 		if got.Len() != expected.Len() {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "slice len",
 				Got:      rawInt(got.Len()),
 				Expected: rawInt(expected.Len()),
-			}
+			})
 		}
 		if got.Pointer() == expected.Pointer() {
 			return
@@ -192,12 +201,11 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "nil interface",
 				Got:      isNilStr(got.IsNil()),
 				Expected: isNilStr(expected.IsNil()),
-			}
+			})
 		}
 		return deepValueEqual(ctx, got.Elem(), expected.Elem())
 
@@ -223,12 +231,11 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "nil map",
 				Got:      isNilStr(got.IsNil()),
 				Expected: isNilStr(expected.IsNil()),
-			}
+			})
 		}
 
 		if got.Pointer() == expected.Pointer() {
@@ -261,14 +268,13 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context: ctx,
+			return ctx.CollectError(&Error{
 				Message: "comparing map",
 				Summary: tdSetResult{
 					Kind:    keysSetResult,
 					Missing: notFoundKeys,
 				},
-			}
+			})
 		}
 
 		if ctx.booleanError {
@@ -288,11 +294,10 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			}
 		}
 
-		return &Error{
-			Context: ctx,
+		return ctx.CollectError(&Error{
 			Message: "comparing map",
 			Summary: res,
-		}
+		})
 
 	case reflect.Func:
 		if got.IsNil() && expected.IsNil() {
@@ -302,11 +307,10 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			return booleanError
 		}
 		// Can't do better than this:
-		return &Error{
-			Context: ctx,
+		return ctx.CollectError(&Error{
 			Message: "functions mismatch",
 			Summary: rawString("<can not be compared>"),
-		}
+		})
 
 	default:
 		// Normal equality suffices
@@ -316,17 +320,16 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "values differ",
 			Got:      got,
 			Expected: expected,
-		}
+		})
 	}
 }
 
 func deepValueEqualOK(got, expected reflect.Value) bool {
-	return deepValueEqual(NewBooleanContext(), got, expected) == nil
+	return deepValueEqualFinal(NewBooleanContext(), got, expected) == nil
 }
 
 func getInterface(val reflect.Value, force bool) (interface{}, bool) {
@@ -374,9 +377,39 @@ func EqDeeply(got, expected interface{}) bool {
 // can be the same type as got is, or contains some TestDeep
 // operators. If "got" does not match "expected", the returned *Error
 // contains the reason of the first mismatch detected.
-func EqDeeplyError(got, expected interface{}) *Error {
-	return deepValueEqual(NewContext("DATA"),
+func EqDeeplyError(got, expected interface{}) (err *Error) {
+	return deepValueEqualFinal(NewContext(),
 		reflect.ValueOf(got), reflect.ValueOf(expected))
+}
+
+func cmpDeeply(ctx Context, t *testing.T, got, expected interface{},
+	args ...interface{}) bool {
+	t.Helper()
+
+	err := deepValueEqualFinal(ctx,
+		reflect.ValueOf(got), reflect.ValueOf(expected))
+	if err == nil {
+		return true
+	}
+
+	const failedTest = "Failed test"
+
+	var buf *bytes.Buffer
+	switch len(args) {
+	case 0:
+		buf = bytes.NewBufferString(failedTest + "\n")
+	case 1:
+		buf = bytes.NewBufferString(failedTest + " '" + args[0].(string) + "'\n")
+	default:
+		buf = bytes.NewBufferString(failedTest + " '")
+		fmt.Fprintf(buf, args[0].(string), args[1:]...)
+		buf.WriteString("'\n")
+	}
+
+	err.Append(buf, "")
+
+	t.Error(buf.String())
+	return false
 }
 
 // CmpDeeply returns true if "got" matches "expected". "expected" can
@@ -392,25 +425,6 @@ func EqDeeplyError(got, expected interface{}) *Error {
 // parameters. See fmt.Sprintf for details.
 func CmpDeeply(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
-	err := EqDeeplyError(got, expected)
-	if err == nil {
-		return true
-	}
-
 	t.Helper()
-
-	const failedTest = "Failed test"
-
-	var label string
-	switch len(args) {
-	case 0:
-		label = failedTest + "\n"
-	case 1:
-		label = failedTest + " '" + args[0].(string) + "'\n"
-	default:
-		label = fmt.Sprintf(failedTest+" '"+args[0].(string)+"'\n", args[1:]...)
-	}
-
-	t.Error(label + err.Error())
-	return false
+	return cmpDeeply(NewContext(), t, got, expected, args...)
 }

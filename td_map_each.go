@@ -28,18 +28,16 @@ func MapEach(expectedValue interface{}) TestDeep {
 	}
 }
 
-func (m *tdMapEach) Match(ctx Context, got reflect.Value) (err *Error) {
+func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
 	if !got.IsValid() {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "nil value",
 			Got:      rawString("nil"),
 			Expected: rawString("Map OR *Map"),
-			Location: m.GetLocation(),
-		}
+		})
 	}
 
 	switch got.Kind() {
@@ -49,13 +47,11 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "nil pointer",
 				Got:      rawString("nil " + got.Type().String()),
 				Expected: rawString("Map OR *Map"),
-				Location: m.GetLocation(),
-			}
+			})
 		}
 
 		if gotElem.Kind() != reflect.Map {
@@ -65,11 +61,12 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) (err *Error) {
 		fallthrough
 
 	case reflect.Map:
+		var err *Error
 		for _, key := range got.MapKeys() {
 			err = deepValueEqual(ctx.AddDepth("["+toString(key)+"]"),
 				got.MapIndex(key), m.expected)
 			if err != nil {
-				return err.SetLocationIfMissing(m)
+				return err
 			}
 		}
 		return nil
@@ -78,13 +75,11 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "bad type",
 		Got:      rawString(got.Type().String()),
 		Expected: rawString("Map OR *Map"),
-		Location: m.GetLocation(),
-	}
+	})
 }
 
 func (m *tdMapEach) String() string {

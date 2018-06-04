@@ -146,7 +146,7 @@
 //     record, err := CreateRecord()
 //
 //     if t.Nil(err) {
-//       t.Struct(record,
+//       t.RootName("RECORD").Struct(record,
 //         Record{
 //           Name: "Bob",
 //           Age:  23,

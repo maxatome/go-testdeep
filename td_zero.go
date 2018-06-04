@@ -33,8 +33,7 @@ func (z *tdZero) Match(ctx Context, got reflect.Value) (err *Error) {
 	if !got.IsValid() {
 		return nil
 	}
-	return deepValueEqual(ctx, got, reflect.New(got.Type()).Elem()).
-		SetLocationIfMissing(z)
+	return deepValueEqual(ctx, got, reflect.New(got.Type()).Elem())
 }
 
 func (z *tdZero) String() string {

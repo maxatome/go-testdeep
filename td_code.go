@@ -78,13 +78,11 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "incompatible parameter type",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString(c.argType.String()),
-			Location: c.GetLocation(),
-		}
+		})
 	}
 
 	// Refuse to override unexported fields access in this case. It is a
@@ -94,11 +92,10 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context: ctx,
+		return ctx.CollectError(&Error{
 			Message: "cannot compare unexported field",
 			Summary: rawString("use Code() on surrounding struct instead"),
-		}
+		})
 	}
 
 	ret := c.function.Call([]reflect.Value{got})
@@ -111,9 +108,7 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	err := Error{
-		Context:  ctx,
-		Message:  "ran code with %% as argument",
-		Location: c.GetLocation(),
+		Message: "ran code with %% as argument",
 	}
 
 	if len(ret) > 1 {
@@ -127,7 +122,7 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	return &err
+	return ctx.CollectError(&err)
 }
 
 func (c *tdCode) String() string {

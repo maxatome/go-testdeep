@@ -121,7 +121,7 @@ func TestCreateRecord(tt *testing.T) {
   record, err := CreateRecord("Bob", 23)
 
   if t.Nil(err) {
-    t.Struct(record,
+    t.RootName("RECORD").Struct(record,
       Record{
         Name: "Bob",
         Age:  23,
@@ -139,7 +139,7 @@ func TestCreateRecord(tt *testing.T) {
 ## Installation
 
 ```sh
-$ go get github.com/maxatome/go-testdeep
+$ go get -u github.com/maxatome/go-testdeep
 ```
 
 

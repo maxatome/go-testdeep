@@ -186,19 +186,17 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 	return st
 }
 
-func (s *tdStruct) Match(ctx Context, got reflect.Value) (err *Error) {
+func (s *tdStruct) Match(ctx Context, got reflect.Value) *Error {
 	if s.isPtr {
 		if got.Kind() != reflect.Ptr {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "type mismatch",
 				Got:      rawString(got.Type().String()),
 				Expected: rawString(s.expectedTypeStr()),
-				Location: s.GetLocation(),
-			}
+			})
 		}
 		got = got.Elem()
 	}
@@ -212,21 +210,19 @@ func (s *tdStruct) Match(ctx Context, got reflect.Value) (err *Error) {
 			gotType = "*"
 		}
 		gotType += rawString(got.Type().String())
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
 			Got:      gotType,
 			Expected: rawString(s.expectedTypeStr()),
-			Location: s.GetLocation(),
-		}
+		})
 	}
 
+	var err *Error
 	for _, fieldInfo := range s.expectedFields {
 		err = deepValueEqual(ctx.AddDepth("."+fieldInfo.name),
-			got.FieldByIndex(fieldInfo.index),
-			fieldInfo.expected)
+			got.FieldByIndex(fieldInfo.index), fieldInfo.expected)
 		if err != nil {
-			return err.SetLocationIfMissing(s)
+			return err
 		}
 	}
 	return nil

@@ -44,7 +44,6 @@ func getString(ctx Context, got reflect.Value) (string, *Error) {
 		return "", booleanError
 	}
 	return "", &Error{
-		Context: ctx,
 		Message: "bad type",
 		Got:     rawString(got.Type().String()),
 		Expected: rawString(
@@ -76,8 +75,7 @@ func String(expected string) TestDeep {
 func (s *tdString) Match(ctx Context, got reflect.Value) *Error {
 	str, err := getString(ctx, got)
 	if err != nil {
-		err.Location = s.GetLocation()
-		return err
+		return ctx.CollectError(err)
 	}
 
 	if str == s.expected {
@@ -86,13 +84,11 @@ func (s *tdString) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "does not match",
 		Got:      str,
 		Expected: s,
-		Location: s.GetLocation(),
-	}
+	})
 }
 
 func (s *tdString) String() string {
@@ -126,8 +122,7 @@ func HasPrefix(expected string) TestDeep {
 func (s *tdHasPrefix) Match(ctx Context, got reflect.Value) *Error {
 	str, err := getString(ctx, got)
 	if err != nil {
-		err.Location = s.GetLocation()
-		return err
+		return ctx.CollectError(err)
 	}
 
 	if strings.HasPrefix(str, s.expected) {
@@ -136,13 +131,11 @@ func (s *tdHasPrefix) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "has not prefix",
 		Got:      str,
 		Expected: s,
-		Location: s.GetLocation(),
-	}
+	})
 }
 
 func (s *tdHasPrefix) String() string {
@@ -176,8 +169,7 @@ func HasSuffix(expected string) TestDeep {
 func (s *tdHasSuffix) Match(ctx Context, got reflect.Value) *Error {
 	str, err := getString(ctx, got)
 	if err != nil {
-		err.Location = s.GetLocation()
-		return err
+		return ctx.CollectError(err)
 	}
 
 	if strings.HasSuffix(str, s.expected) {
@@ -186,13 +178,11 @@ func (s *tdHasSuffix) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "has not suffix",
 		Got:      str,
 		Expected: s,
-		Location: s.GetLocation(),
-	}
+	})
 }
 
 func (s *tdHasSuffix) String() string {
@@ -226,8 +216,7 @@ func Contains(expected string) TestDeep {
 func (s *tdContains) Match(ctx Context, got reflect.Value) *Error {
 	str, err := getString(ctx, got)
 	if err != nil {
-		err.Location = s.GetLocation()
-		return err
+		return ctx.CollectError(err)
 	}
 
 	if strings.Contains(str, s.expected) {
@@ -236,13 +225,11 @@ func (s *tdContains) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "does not contain",
 		Got:      str,
 		Expected: s,
-		Location: s.GetLocation(),
-	}
+	})
 }
 
 func (s *tdContains) String() string {
