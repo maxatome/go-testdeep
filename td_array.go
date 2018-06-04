@@ -235,13 +235,11 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "type mismatch",
 				Got:      rawString(got.Type().String()),
 				Expected: rawString(a.expectedTypeStr()),
-				Location: a.GetLocation(),
-			}
+			})
 		}
 		got = got.Elem()
 	}
@@ -255,13 +253,11 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 			gotType = "*"
 		}
 		gotType += rawString(got.Type().String())
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
 			Got:      gotType,
 			Expected: rawString(a.expectedTypeStr()),
-			Location: a.GetLocation(),
-		}
+		})
 	}
 
 	gotLen := got.Len()
@@ -272,18 +268,16 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  curCtx,
+			return curCtx.CollectError(&Error{
 				Message:  "expected value out of range",
 				Got:      rawString("<non-existent value>"),
 				Expected: expectedValue,
-				Location: a.GetLocation(),
-			}
+			})
 		}
 
 		err = deepValueEqual(curCtx, got.Index(index), expectedValue)
 		if err != nil {
-			return err.SetLocationIfMissing(a)
+			return err
 		}
 	}
 
@@ -291,13 +285,11 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx.AddArrayIndex(len(a.expectedEntries)),
+		return ctx.AddArrayIndex(len(a.expectedEntries)).CollectError(&Error{
 			Message:  "got value out of range",
 			Got:      got.Index(len(a.expectedEntries)),
 			Expected: rawString("<non-existent value>"),
-			Location: a.GetLocation(),
-		}
+		})
 	}
 
 	return nil
@@ -324,11 +316,11 @@ func (a *tdArray) String() string {
 	return buf.String()
 }
 
-func (s *tdArray) TypeBehind() reflect.Type {
-	if s.isPtr {
-		return reflect.New(s.expectedType).Type()
+func (a *tdArray) TypeBehind() reflect.Type {
+	if a.isPtr {
+		return reflect.New(a.expectedType).Type()
 	}
-	return s.expectedType
+	return a.expectedType
 }
 
 func (a *tdArray) expectedTypeStr() string {

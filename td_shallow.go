@@ -63,26 +63,22 @@ func (s *tdShallow) Match(ctx Context, got reflect.Value) *Error {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "bad kind",
 			Got:      rawString(got.Kind().String()),
 			Expected: rawString(s.expectedKind.String()),
-			Location: s.GetLocation(),
-		}
+		})
 	}
 
 	if got.Pointer() != s.expectedPointer {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  fmt.Sprintf("%s pointer mismatch", s.expectedKind),
 			Got:      rawString(fmt.Sprintf("0x%x", got.Pointer())),
 			Expected: rawString(fmt.Sprintf("0x%x", s.expectedPointer)),
-			Location: s.GetLocation(),
-		}
+		})
 	}
 	return nil
 }

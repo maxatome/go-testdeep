@@ -62,18 +62,16 @@ func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString(t.expectedType.String()),
-			Location: t.GetLocation(),
-		}
+		})
 	}
 
 	gotTime, err := getTime(ctx, got, got.Type() != timeType)
 	if err != nil {
-		return err
+		return ctx.CollectError(err)
 	}
 	gotTimeTrunc := gotTime.Truncate(t.trunc)
 
@@ -97,13 +95,11 @@ func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
 		gotTruncStr = gotTimeTrunc.String()
 	}
 
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "values differ",
 		Got:      rawString(gotRawStr + "\ntruncated to:\n" + gotTruncStr),
 		Expected: t,
-		Location: t.GetLocation(),
-	}
+	})
 }
 
 func (t *tdTruncTime) String() string {

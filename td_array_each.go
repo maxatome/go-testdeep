@@ -34,13 +34,11 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "nil value",
 			Got:      rawString("nil"),
 			Expected: rawString("Slice OR Array OR *Slice OR *Array"),
-			Location: a.GetLocation(),
-		}
+		})
 	}
 
 	switch got.Kind() {
@@ -50,13 +48,11 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "nil pointer",
 				Got:      rawString("nil " + got.Type().String()),
 				Expected: rawString("Slice OR Array OR *Slice OR *Array"),
-				Location: a.GetLocation(),
-			}
+			})
 		}
 
 		if gotElem.Kind() != reflect.Array && gotElem.Kind() != reflect.Slice {
@@ -68,10 +64,11 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	case reflect.Array, reflect.Slice:
 		gotLen := got.Len()
 
+		var err *Error
 		for idx := 0; idx < gotLen; idx++ {
 			err = deepValueEqual(ctx.AddArrayIndex(idx), got.Index(idx), a.expected)
 			if err != nil {
-				return err.SetLocationIfMissing(a)
+				return err
 			}
 		}
 		return nil
@@ -80,13 +77,11 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "bad type",
 		Got:      rawString(got.Type().String()),
 		Expected: rawString("Slice OR Array OR *Slice OR *Array"),
-		Location: a.GetLocation(),
-	}
+	})
 }
 
 func (a *tdArrayEach) String() string {

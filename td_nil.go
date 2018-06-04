@@ -40,13 +40,11 @@ func (n *tdNil) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "non-nil",
 		Got:      got,
 		Expected: n,
-		Location: n.GetLocation(),
-	}
+	})
 }
 
 func (n *tdNil) String() string {
@@ -85,13 +83,11 @@ func (n *tdNotNil) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "nil value",
 		Got:      got,
 		Expected: n,
-		Location: n.GetLocation(),
-	}
+	})
 }
 
 func (n *tdNotNil) String() string {

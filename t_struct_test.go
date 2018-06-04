@@ -44,3 +44,31 @@ func ExampleT_False() {
 	// true
 	// false
 }
+
+func TestT(tt *testing.T) {
+	t := NewT(tt)
+	CmpDeeply(tt, t.Config, DefaultContextConfig)
+
+	t = NewT(tt, ContextConfig{})
+	CmpDeeply(tt, t.Config, DefaultContextConfig)
+
+	conf := ContextConfig{
+		RootName:  "TEST",
+		MaxErrors: 33,
+	}
+	t = NewT(tt, conf)
+	CmpDeeply(tt, t.Config, conf)
+
+	t2 := t.RootName("T2")
+	CmpDeeply(tt, t.Config, conf)
+	CmpDeeply(tt, t2.Config, ContextConfig{
+		RootName:  "T2",
+		MaxErrors: 33,
+	})
+
+	//
+	// Bad usage
+	checkPanic(tt,
+		func() { NewT(tt, ContextConfig{}, ContextConfig{}) },
+		"usage: NewT")
+}

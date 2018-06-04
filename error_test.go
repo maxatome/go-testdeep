@@ -14,7 +14,7 @@ import (
 
 func TestError(t *testing.T) {
 	err := Error{
-		Context:  NewContext("DATA[12].Field"),
+		Context:  NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
 		Message:  "Error message",
 		Got:      1,
 		Expected: 2,
@@ -43,7 +43,7 @@ func TestError(t *testing.T) {
 	expected: (int) 2`)
 
 	err = Error{
-		Context:  NewContext("DATA[12].Field"),
+		Context:  NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
 		Message:  "Error message",
 		Got:      1,
 		Expected: 2,
@@ -60,7 +60,7 @@ func TestError(t *testing.T) {
 [under TestDeep operator Operator at file.go:23]`)
 
 	err = Error{
-		Context: NewContext("DATA[12].Field"),
+		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
 		Message: "Error message",
 		Summary: 666,
 		Location: Location{
@@ -69,7 +69,8 @@ func TestError(t *testing.T) {
 			Line: 23,
 		},
 		Origin: &Error{
-			Context: NewContext("DATA[12].Field<All#1/2>"),
+			Context: NewContextWithConfig(
+				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
 			Message: "Origin error message",
 			Summary: 42,
 			Location: Location{
@@ -82,9 +83,96 @@ func TestError(t *testing.T) {
 	equalStr(t, err.Error(),
 		`DATA[12].Field: Error message
 	(int) 666
-[under TestDeep operator Operator at file.go:23]
 Originates from following error:
 	DATA[12].Field<All#1/2>: Origin error message
 		(int) 42
-	[under TestDeep operator SubOperator at file2.go:236]`)
+	[under TestDeep operator SubOperator at file2.go:236]
+[under TestDeep operator Operator at file.go:23]`)
+
+	err = Error{
+		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
+		Message: "Error message",
+		Summary: 666,
+		Location: Location{
+			File: "file.go",
+			Func: "Operator",
+			Line: 23,
+		},
+		Origin: &Error{
+			Context: NewContextWithConfig(
+				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
+			Message: "Origin error message",
+			Summary: 42,
+			Location: Location{
+				File: "file2.go",
+				Func: "SubOperator",
+				Line: 236,
+			},
+		},
+		// Next error at same location
+		Next: &Error{
+			Context: NewContextWithConfig(ContextConfig{RootName: "DATA[13].Field"}),
+			Message: "Error message",
+			Summary: 888,
+			Location: Location{
+				File: "file.go",
+				Func: "Operator",
+				Line: 23,
+			},
+		},
+	}
+	equalStr(t, err.Error(),
+		`DATA[12].Field: Error message
+	(int) 666
+Originates from following error:
+	DATA[12].Field<All#1/2>: Origin error message
+		(int) 42
+	[under TestDeep operator SubOperator at file2.go:236]
+DATA[13].Field: Error message
+	(int) 888
+[under TestDeep operator Operator at file.go:23]`)
+
+	err = Error{
+		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
+		Message: "Error message",
+		Summary: 666,
+		Location: Location{
+			File: "file.go",
+			Func: "Operator",
+			Line: 23,
+		},
+		Origin: &Error{
+			Context: NewContextWithConfig(
+				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
+			Message: "Origin error message",
+			Summary: 42,
+			Location: Location{
+				File: "file2.go",
+				Func: "SubOperator",
+				Line: 236,
+			},
+		},
+		// Next error at different location
+		Next: &Error{
+			Context: NewContextWithConfig(ContextConfig{RootName: "DATA[13].Field"}),
+			Message: "Error message",
+			Summary: 888,
+			Location: Location{
+				File: "file.go",
+				Func: "Operator",
+				Line: 24,
+			},
+		},
+	}
+	equalStr(t, err.Error(),
+		`DATA[12].Field: Error message
+	(int) 666
+Originates from following error:
+	DATA[12].Field<All#1/2>: Origin error message
+		(int) 42
+	[under TestDeep operator SubOperator at file2.go:236]
+[under TestDeep operator Operator at file.go:23]
+DATA[13].Field: Error message
+	(int) 888
+[under TestDeep operator Operator at file.go:24]`)
 }

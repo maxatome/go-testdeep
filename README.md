@@ -35,7 +35,7 @@ func TestCreateRecord(t *testing.T) {
 
   if td.CmpNil(t, err) {
     td.CmpStruct(t, record,
-      Record{
+      &Record{
         Name: "Bob",
         Age:  23,
       },
@@ -88,7 +88,6 @@ expected "Bob", output would have been:
     DATA.Name: values differ
            got: (string) (len=5) "Alice"
       expected: (string) (len=3) "Bob"
-    [called by CmpStruct at td_between_test.go:37]
 FAIL
 exit status 1
 FAIL  github.com/maxatome/go-testdeep  0.006s
@@ -121,7 +120,7 @@ func TestCreateRecord(tt *testing.T) {
   record, err := CreateRecord("Bob", 23)
 
   if t.Nil(err) {
-    t.Struct(record,
+    t.RootName("RECORD").Struct(record,
       Record{
         Name: "Bob",
         Age:  23,
@@ -139,7 +138,7 @@ func TestCreateRecord(tt *testing.T) {
 ## Installation
 
 ```sh
-$ go get github.com/maxatome/go-testdeep
+$ go get -u github.com/maxatome/go-testdeep
 ```
 
 

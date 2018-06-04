@@ -52,16 +52,15 @@ func (l *tdLen) String() string {
 	return fmt.Sprintf("len=%d", l.expectedValue.Int())
 }
 
-func (l *tdLen) Match(ctx Context, got reflect.Value) (err *Error) {
+func (l *tdLen) Match(ctx Context, got reflect.Value) *Error {
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Map, reflect.Slice, reflect.String:
 		if l.isTestDeeper {
 			vlen := reflect.New(intType)
 			vlen.Elem().SetInt(int64(got.Len()))
 
-			err = deepValueEqual(ctx.AddFunctionCall("len"),
+			return deepValueEqual(ctx.AddFunctionCall("len"),
 				vlen.Elem(), l.expectedValue)
-			return err.SetLocationIfMissing(l)
 		}
 
 		if got.Len() == int(l.expectedValue.Int()) {
@@ -70,25 +69,21 @@ func (l *tdLen) Match(ctx Context, got reflect.Value) (err *Error) {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "bad length",
 			Got:      rawInt(got.Len()),
 			Expected: rawInt(l.expectedValue.Int()),
-			Location: l.GetLocation(),
-		}
+		})
 
 	default:
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "bad type",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString("Array, Chan, Map, Slice or string"),
-			Location: l.GetLocation(),
-		}
+		})
 	}
 }
 
@@ -133,16 +128,15 @@ func (c *tdCap) String() string {
 	return fmt.Sprintf("cap=%d", c.expectedValue.Int())
 }
 
-func (c *tdCap) Match(ctx Context, got reflect.Value) (err *Error) {
+func (c *tdCap) Match(ctx Context, got reflect.Value) *Error {
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Slice:
 		if c.isTestDeeper {
 			vcap := reflect.New(intType)
 			vcap.Elem().SetInt(int64(got.Cap()))
 
-			err = deepValueEqual(ctx.AddFunctionCall("cap"),
+			return deepValueEqual(ctx.AddFunctionCall("cap"),
 				vcap.Elem(), c.expectedValue)
-			return err.SetLocationIfMissing(c)
 		}
 
 		if got.Cap() == int(c.expectedValue.Int()) {
@@ -151,24 +145,20 @@ func (c *tdCap) Match(ctx Context, got reflect.Value) (err *Error) {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "bad capacity",
 			Got:      rawInt(got.Cap()),
 			Expected: rawInt(c.expectedValue.Int()),
-			Location: c.GetLocation(),
-		}
+		})
 
 	default:
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "bad type",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString("Array, Chan or Slice"),
-			Location: c.GetLocation(),
-		}
+		})
 	}
 }

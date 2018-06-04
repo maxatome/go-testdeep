@@ -386,13 +386,11 @@ func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString(b.expectedMin.Type().String()),
-			Location: b.GetLocation(),
-		}
+		})
 	}
 
 	var ok bool
@@ -415,13 +413,11 @@ func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "values differ",
 		Got:      rawString(fmt.Sprintf("%v", got.Interface())),
 		Expected: rawString(b.String()),
-		Location: b.GetLocation(),
-	}
+	})
 }
 
 func (b *tdBetween) String() string {
@@ -464,18 +460,16 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString(b.expectedType.String()),
-			Location: b.GetLocation(),
-		}
+		})
 	}
 
 	cmpGot, err := getTime(ctx, got, b.mustConvert)
 	if err != nil {
-		return err
+		return ctx.CollectError(err)
 	}
 
 	var ok bool
@@ -508,13 +502,11 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "values differ",
 		Got:      rawString(fmt.Sprintf("%v", got.Interface())),
 		Expected: rawString(b.String()),
-		Location: b.GetLocation(),
-	}
+	})
 }
 
 func (b *tdBetweenTime) TypeBehind() reflect.Type {

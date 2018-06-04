@@ -141,9 +141,16 @@ func (r *tdRe) matchStringCaptures(ctx Context, got string, result [][]string) *
 }
 
 func (r *tdRe) matchCaptures(ctx Context, captures []string) *Error {
-	newCtx := NewContext("(" + ctx.path + " =~ " + r.String() + ")")
+	var newCtx Context
+
 	if ctx.booleanError {
+		newCtx = NewContext()
 		newCtx.booleanError = true
+	} else {
+		newCtx = NewContextWithConfig(ContextConfig{
+			RootName: "(" + ctx.path + " =~ " + r.String() + ")",
+			// Do not initialize MaxErrors => will fail on first error
+		})
 	}
 
 	return deepValueEqual(newCtx, reflect.ValueOf(captures), r.captures)
@@ -160,13 +167,11 @@ func (r *tdRe) doesNotMatch(ctx Context, got interface{}) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "does not match Regexp",
 		Got:      got,
 		Expected: rawString(r.re.String()),
-		Location: r.GetLocation(),
-	}
+	})
 }
 
 func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
@@ -187,13 +192,11 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "bad slice type",
 			Got:      rawString("[]" + got.Type().Elem().Kind().String()),
 			Expected: rawString("[]uint8"),
-			Location: r.GetLocation(),
-		}
+		})
 
 	default:
 		var strOK bool
@@ -213,14 +216,12 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context: ctx,
+			return ctx.CollectError(&Error{
 				Message: "bad type",
 				Got:     rawString(got.Type().String()),
 				Expected: rawString(
 					"string (convertible) OR fmt.Stringer OR error OR []uint8"),
-				Location: r.GetLocation(),
-			}
+			})
 		}
 	}
 

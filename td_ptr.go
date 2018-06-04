@@ -40,26 +40,22 @@ func Ptr(val interface{}) TestDeep {
 	panic("usage: Ptr(NON_NIL_VALUE)")
 }
 
-func (p *tdPtr) Match(ctx Context, got reflect.Value) (err *Error) {
+func (p *tdPtr) Match(ctx Context, got reflect.Value) *Error {
 	if got.Kind() != reflect.Ptr {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "pointer type mismatch",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString(p.String()),
-			Location: p.GetLocation(),
-		}
+		})
 	}
 
 	if p.isTestDeeper {
-		err = deepValueEqual(ctx.AddPtr(1), got.Elem(), p.expectedValue)
-	} else {
-		err = deepValueEqual(ctx, got, p.expectedValue)
+		return deepValueEqual(ctx.AddPtr(1), got.Elem(), p.expectedValue)
 	}
-	return err.SetLocationIfMissing(p)
+	return deepValueEqual(ctx, got, p.expectedValue)
 }
 
 func (p *tdPtr) String() string {
@@ -105,26 +101,22 @@ func PPtr(val interface{}) TestDeep {
 	panic("usage: PPtr(NON_NIL_VALUE)")
 }
 
-func (p *tdPPtr) Match(ctx Context, got reflect.Value) (err *Error) {
+func (p *tdPPtr) Match(ctx Context, got reflect.Value) *Error {
 	if got.Kind() != reflect.Ptr || got.Elem().Kind() != reflect.Ptr {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "pointer type mismatch",
 			Got:      rawString(got.Type().String()),
 			Expected: rawString(p.String()),
-			Location: p.GetLocation(),
-		}
+		})
 	}
 
 	if p.isTestDeeper {
-		err = deepValueEqual(ctx.AddPtr(2), got.Elem().Elem(), p.expectedValue)
-	} else {
-		err = deepValueEqual(ctx, got, p.expectedValue)
+		return deepValueEqual(ctx.AddPtr(2), got.Elem().Elem(), p.expectedValue)
 	}
-	return err.SetLocationIfMissing(p)
+	return deepValueEqual(ctx, got, p.expectedValue)
 }
 
 func (p *tdPPtr) String() string {

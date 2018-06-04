@@ -211,13 +211,11 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  "type mismatch",
 				Got:      rawString(got.Type().String()),
 				Expected: rawString(m.expectedTypeStr()),
-				Location: m.GetLocation(),
-			}
+			})
 		}
 		got = got.Elem()
 	}
@@ -231,13 +229,11 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 			gotType = "*"
 		}
 		gotType += rawString(got.Type().String())
-		return &Error{
-			Context:  ctx,
+		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
 			Got:      gotType,
 			Expected: rawString(m.expectedTypeStr()),
-			Location: m.GetLocation(),
-		}
+		})
 	}
 
 	var notFoundKeys []reflect.Value
@@ -253,7 +249,7 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		err = deepValueEqual(ctx.AddDepth("["+toString(entryInfo.key)+"]"),
 			got.MapIndex(entryInfo.key), entryInfo.expected)
 		if err != nil {
-			return err.SetLocationIfMissing(m)
+			return err
 		}
 		foundKeys[entryInfo.key.Interface()] = true
 	}
@@ -269,15 +265,13 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context: ctx,
+		return ctx.CollectError(&Error{
 			Message: errorMessage,
 			Summary: tdSetResult{
 				Kind:    keysSetResult,
 				Missing: notFoundKeys,
 			},
-			Location: m.GetLocation(),
-		}
+		})
 	}
 
 	// No extra key to search, all got keys have been found
@@ -294,15 +288,13 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		if ctx.booleanError {
 			return booleanError
 		}
-		return &Error{
-			Context: ctx,
+		return ctx.CollectError(&Error{
 			Message: errorMessage,
 			Summary: tdSetResult{
 				Kind:    keysSetResult,
 				Missing: notFoundKeys,
 			},
-			Location: m.GetLocation(),
-		}
+		})
 	}
 
 	if ctx.booleanError {
@@ -322,12 +314,10 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		}
 	}
 
-	return &Error{
-		Context:  ctx,
-		Message:  errorMessage,
-		Summary:  res,
-		Location: m.GetLocation(),
-	}
+	return ctx.CollectError(&Error{
+		Message: errorMessage,
+		Summary: res,
+	})
 }
 
 func (m *tdMap) String() string {
@@ -361,11 +351,11 @@ func (m *tdMap) String() string {
 	return buf.String()
 }
 
-func (s *tdMap) TypeBehind() reflect.Type {
-	if s.isPtr {
-		return reflect.New(s.expectedType).Type()
+func (m *tdMap) TypeBehind() reflect.Type {
+	if m.isPtr {
+		return reflect.New(m.expectedType).Type()
 	}
-	return s.expectedType
+	return m.expectedType
 }
 
 func (m *tdMap) expectedTypeStr() string {

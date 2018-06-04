@@ -34,11 +34,9 @@ func (a *tdAny) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return &Error{
-		Context:  ctx,
+	return ctx.CollectError(&Error{
 		Message:  "comparing with Any",
 		Got:      got,
 		Expected: a,
-		Location: a.GetLocation(),
-	}
+	})
 }

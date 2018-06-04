@@ -84,7 +84,7 @@
 //     if td.CmpDeeply(t, err, nil) {
 //       td.CmpDeeply(t, record,
 //         Struct(
-//           Record{
+//           &Record{
 //             Name: "Bob",
 //             Age:  23,
 //           },
@@ -118,7 +118,7 @@
 //
 //     if td.CmpNil(t, err) {
 //       td.CmpStruct(t, record,
-//         Record{
+//         &Record{
 //           Name: "Bob",
 //           Age:  23,
 //         },
@@ -146,8 +146,8 @@
 //     record, err := CreateRecord()
 //
 //     if t.Nil(err) {
-//       t.Struct(record,
-//         Record{
+//       t.RootName("RECORD").Struct(record,
+//         &Record{
 //           Name: "Bob",
 //           Age:  23,
 //         },

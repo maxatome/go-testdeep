@@ -28,17 +28,43 @@ type Error struct {
 	Location Location
 	// If defined, the current Error comes from this Error
 	Origin *Error
+	// If defined, points to the next Error
+	Next *Error
 }
 
 var booleanError = &Error{}
 
 // Error implements error interface.
 func (e *Error) Error() string {
+	buf := bytes.Buffer{}
+
+	e.Append(&buf, "")
+
+	return buf.String()
+}
+
+// Append appends the Error contents to "buf" using prefix "prefix"
+// for each line.
+func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 	if e == booleanError {
-		return ""
+		return
 	}
 
-	buf := &bytes.Buffer{}
+	var writeEolPrefix func()
+	if prefix != "" {
+		eolPrefix := make([]byte, 1+len(prefix))
+		eolPrefix[0] = '\n'
+		copy(eolPrefix[1:], prefix)
+
+		writeEolPrefix = func() {
+			buf.Write(eolPrefix)
+		}
+		buf.WriteString(prefix)
+	} else {
+		writeEolPrefix = func() {
+			buf.WriteByte('\n')
+		}
+	}
 
 	if pos := strings.Index(e.Message, "%%"); pos >= 0 {
 		buf.WriteString(e.Message[:pos])
@@ -50,35 +76,40 @@ func (e *Error) Error() string {
 		buf.WriteString(e.Message)
 	}
 
-	buf.WriteByte('\n')
+	writeEolPrefix()
 
 	if e.Summary != nil {
 		buf.WriteByte('\t')
-		buf.WriteString(indentString(e.SummaryString(), "\t"))
+		buf.WriteString(indentString(e.SummaryString(), prefix+"\t"))
 	} else {
 		buf.WriteString("\t     got: ")
-		buf.WriteString(indentString(e.GotString(), "\t          "))
-		buf.WriteString("\n\texpected: ")
-		buf.WriteString(indentString(e.ExpectedString(), "\t          "))
-	}
-
-	if e.Location.IsInitialized() {
-		if strings.HasPrefix(e.Location.Func, "Cmp") {
-			buf.WriteString("\n[called by ")
-		} else {
-			buf.WriteString("\n[under TestDeep operator ")
-		}
-		buf.WriteString(e.Location.String())
-		buf.WriteByte(']')
+		buf.WriteString(indentString(e.GotString(), prefix+"\t          "))
+		writeEolPrefix()
+		buf.WriteString("\texpected: ")
+		buf.WriteString(indentString(e.ExpectedString(), prefix+"\t          "))
 	}
 
 	// This error comes from another one
 	if e.Origin != nil {
-		buf.WriteString("\nOriginates from following error:\n\t")
-		buf.WriteString(indentString(e.Origin.Error(), "\t"))
+		writeEolPrefix()
+		buf.WriteString("Originates from following error:\n")
+
+		e.Origin.Append(buf, prefix+"\t")
 	}
 
-	return buf.String()
+	if e.Location.IsInitialized() &&
+		!strings.HasPrefix(e.Location.Func, "Cmp") && // no need to log Cmp* func
+		(e.Next == nil || e.Next.Location != e.Location) {
+		writeEolPrefix()
+		buf.WriteString("[under TestDeep operator ")
+		buf.WriteString(e.Location.String())
+		buf.WriteByte(']')
+	}
+
+	if e.Next != nil {
+		buf.WriteByte('\n')
+		e.Next.Append(buf, prefix) // next error at same level
+	}
 }
 
 // GotString returns the string corresponding to the Got
@@ -108,13 +139,4 @@ func (e *Error) SummaryString() string {
 		return ""
 	}
 	return toString(e.Summary)
-}
-
-// SetLocationIfMissing initializes the Error Location field if it not
-// initialized yet, with the location of the passed TestDeep operator.
-func (e *Error) SetLocationIfMissing(t TestDeep) *Error {
-	if e != nil && !e.Location.IsInitialized() {
-		e.Location = t.GetLocation()
-	}
-	return e
 }

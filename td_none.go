@@ -51,13 +51,11 @@ func (n *tdNone) Match(ctx Context, got reflect.Value) *Error {
 				mesg = fmt.Sprintf("comparing with None (part %d of %d is OK)",
 					idx+1, len(n.items))
 			}
-			return &Error{
-				Context:  ctx,
+			return ctx.CollectError(&Error{
 				Message:  mesg,
 				Got:      got,
 				Expected: n,
-				Location: n.GetLocation(),
-			}
+			})
 		}
 	}
 	return nil

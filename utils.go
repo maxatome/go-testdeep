@@ -42,7 +42,6 @@ func getTime(ctx Context, got reflect.Value, mustConvert bool) (time.Time, *Erro
 			return time.Time{}, booleanError
 		}
 		return time.Time{}, &Error{
-			Context: ctx,
 			Message: "cannot compare unexported field that cannot be overridden",
 		}
 	}
