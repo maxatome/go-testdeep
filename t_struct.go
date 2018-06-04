@@ -43,7 +43,7 @@ type T struct {
 //       t.Log("No error, can now check struct contents")
 //
 //       ok := t.Struct(record,
-//         Record{
+//         &Record{
 //           Name: "Bob",
 //           Age:  23,
 //         },
@@ -137,7 +137,7 @@ func NewT(t *testing.T, config ...ContextConfig) *T {
 //
 //   t.RootName("RECORD").
 //     Struct(record,
-//       Record{
+//       &Record{
 //         Name: "Bob",
 //         Age:  23,
 //       },

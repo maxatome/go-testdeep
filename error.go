@@ -98,14 +98,10 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 	}
 
 	if e.Location.IsInitialized() &&
-		//!strings.HasPrefix(e.Location.Func, "Cmp") && // no need to log Cmp* func
+		!strings.HasPrefix(e.Location.Func, "Cmp") && // no need to log Cmp* func
 		(e.Next == nil || e.Next.Location != e.Location) {
 		writeEolPrefix()
-		if strings.HasPrefix(e.Location.Func, "Cmp") {
-			buf.WriteString("[called by ")
-		} else {
-			buf.WriteString("[under TestDeep operator ")
-		}
+		buf.WriteString("[under TestDeep operator ")
 		buf.WriteString(e.Location.String())
 		buf.WriteByte(']')
 	}
