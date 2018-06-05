@@ -336,6 +336,89 @@ func ExampleCmpContains_error() {
 	// true
 }
 
+func ExampleCmpEmpty() {
+	t := &testing.T{}
+
+	ok := CmpEmpty(t, nil) // special case: nil is considered empty
+	fmt.Println(ok)
+
+	// fails, typed nil is not empty (expect for channel, map, slice or
+	// pointers on array, channel, map slice and strings)
+	ok = CmpEmpty(t, (*int)(nil))
+	fmt.Println(ok)
+
+	ok = CmpEmpty(t, "")
+	fmt.Println(ok)
+
+	// Fails as 0 is a number, so not empty. Use Zero() instead
+	ok = CmpEmpty(t, 0)
+	fmt.Println(ok)
+
+	ok = CmpEmpty(t, (map[string]int)(nil))
+	fmt.Println(ok)
+
+	ok = CmpEmpty(t, map[string]int{})
+	fmt.Println(ok)
+
+	ok = CmpEmpty(t, ([]int)(nil))
+	fmt.Println(ok)
+
+	ok = CmpEmpty(t, []int{})
+	fmt.Println(ok)
+
+	ok = CmpEmpty(t, []int{3}) // fails, as not empty
+	fmt.Println(ok)
+
+	ok = CmpEmpty(t, [3]int{}) // fails, Empty() is not Zero()!
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+	// true
+	// false
+	// true
+	// true
+	// true
+	// true
+	// false
+	// false
+}
+
+func ExampleCmpEmpty_pointers() {
+	t := &testing.T{}
+
+	type MySlice []int
+
+	ok := CmpEmpty(t, MySlice{}) // Ptr() not needed
+	fmt.Println(ok)
+
+	ok = CmpEmpty(t, &MySlice{})
+	fmt.Println(ok)
+
+	l1 := &MySlice{}
+	l2 := &l1
+	l3 := &l2
+	ok = CmpEmpty(t, &l3)
+	fmt.Println(ok)
+
+	// Works the same for array, map, channel and string
+
+	// But not for others types as:
+	type MyStruct struct {
+		Value int
+	}
+
+	ok = CmpEmpty(t, &MyStruct{}) // fails, use Zero() instead
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// true
+	// false
+}
+
 func ExampleCmpGt() {
 	t := &testing.T{}
 
@@ -798,6 +881,71 @@ func ExampleCmpNot() {
 	fmt.Println(ok)
 
 	// Output:
+	// true
+	// true
+	// false
+}
+
+func ExampleCmpNotEmpty() {
+	t := &testing.T{}
+
+	ok := CmpNotEmpty(t, nil) // fails, as nil is considered empty
+	fmt.Println(ok)
+
+	ok = CmpNotEmpty(t, "foobar")
+	fmt.Println(ok)
+
+	// Fails as 0 is a number, so not empty. Use NotZero() instead
+	ok = CmpNotEmpty(t, 0)
+	fmt.Println(ok)
+
+	ok = CmpNotEmpty(t, map[string]int{"foobar": 42})
+	fmt.Println(ok)
+
+	ok = CmpNotEmpty(t, []int{1})
+	fmt.Println(ok)
+
+	ok = CmpNotEmpty(t, [3]int{}) // succeeds, NotEmpty() is not NotZero()!
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// true
+	// false
+	// true
+	// true
+	// true
+}
+
+func ExampleCmpNotEmpty_pointers() {
+	t := &testing.T{}
+
+	type MySlice []int
+
+	ok := CmpNotEmpty(t, MySlice{12})
+	fmt.Println(ok)
+
+	ok = CmpNotEmpty(t, &MySlice{12}) // Ptr() not needed
+	fmt.Println(ok)
+
+	l1 := &MySlice{12}
+	l2 := &l1
+	l3 := &l2
+	ok = CmpNotEmpty(t, &l3)
+	fmt.Println(ok)
+
+	// Works the same for array, map, channel and string
+
+	// But not for others types as:
+	type MyStruct struct {
+		Value int
+	}
+
+	ok = CmpNotEmpty(t, &MyStruct{}) // fails, use NotZero() instead
+	fmt.Println(ok)
+
+	// Output:
+	// true
 	// true
 	// true
 	// false

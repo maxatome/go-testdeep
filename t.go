@@ -106,6 +106,16 @@ func (t *T) Contains(got interface{}, expected string, args ...interface{}) bool
 	return t.CmpDeeply(got, Contains(expected), args...)
 }
 
+// Empty is a shortcut for:
+//
+//   t.CmpDeeply(got, Empty(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+func (t *T) Empty(got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return t.CmpDeeply(got, Empty(), args...)
+}
+
 // Gt is a shortcut for:
 //
 //   t.CmpDeeply(got, Gt(val), args...)
@@ -258,6 +268,16 @@ func (t *T) NoneOf(got interface{}, expectedItems []interface{}, args ...interfa
 func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.CmpDeeply(got, Not(expected), args...)
+}
+
+// NotEmpty is a shortcut for:
+//
+//   t.CmpDeeply(got, NotEmpty(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+func (t *T) NotEmpty(got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return t.CmpDeeply(got, NotEmpty(), args...)
 }
 
 // NotNil is a shortcut for:

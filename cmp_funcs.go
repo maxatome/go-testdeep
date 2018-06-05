@@ -107,6 +107,16 @@ func CmpContains(t *testing.T, got interface{}, expected string, args ...interfa
 	return CmpDeeply(t, got, Contains(expected), args...)
 }
 
+// CmpEmpty is a shortcut for:
+//
+//   CmpDeeply(t, got, Empty(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+func CmpEmpty(t *testing.T, got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return CmpDeeply(t, got, Empty(), args...)
+}
+
 // CmpGt is a shortcut for:
 //
 //   CmpDeeply(t, got, Gt(val), args...)
@@ -259,6 +269,16 @@ func CmpNoneOf(t *testing.T, got interface{}, expectedItems []interface{}, args 
 func CmpNot(t *testing.T, got interface{}, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Not(expected), args...)
+}
+
+// CmpNotEmpty is a shortcut for:
+//
+//   CmpDeeply(t, got, NotEmpty(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+func CmpNotEmpty(t *testing.T, got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return CmpDeeply(t, got, NotEmpty(), args...)
 }
 
 // CmpNotNil is a shortcut for:
