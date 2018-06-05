@@ -22,6 +22,7 @@ func TestZero(t *testing.T) {
 	checkOK(t, [3]int{}, Zero())
 	checkOK(t, MyStruct{}, Zero())
 	checkOK(t, (*MyStruct)(nil), Zero())
+	checkOK(t, &MyStruct{}, Ptr(Zero()))
 	checkOK(t, (chan int)(nil), Zero())
 	checkOK(t, (func())(nil), Zero())
 	checkOK(t, false, Zero())
@@ -87,6 +88,87 @@ func TestZero(t *testing.T) {
 	equalStr(t, Zero().String(), "Zero()")
 }
 
+func TestNotZero(t *testing.T) {
+	checkOK(t, 12, NotZero())
+	checkOK(t, int64(12), NotZero())
+	checkOK(t, float64(12), NotZero())
+	checkOK(t, map[string]int{}, NotZero())
+	checkOK(t, []int{}, NotZero())
+	checkOK(t, [3]int{1}, NotZero())
+	checkOK(t, MyStruct{ValInt: 1}, NotZero())
+	checkOK(t, &MyStruct{}, NotZero())
+	checkOK(t, make(chan int), NotZero())
+	checkOK(t, func() {}, NotZero())
+	checkOK(t, true, NotZero())
+
+	checkError(t, nil, NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("nil"),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, 0, NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("(int) 0"),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, int64(0), NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("(int64) 0"),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, float64(0), NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("(float64) 0"),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, (map[string]int)(nil), NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("(map[string]int) <nil>"),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, ([]int)(nil), NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("([]int) <nil>"),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, [3]int{}, NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustContain("(int) 0"),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, MyStruct{}, NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustContain(`ValInt: (int) 0`),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, &MyStruct{}, Ptr(NotZero()), expectedError{
+		Message: mustBe("zero value"),
+		Path:    mustBe("*DATA"),
+		// in fact, pointer on 0'ed struct contents
+		Got:      mustContain(`ValInt: (int) 0`),
+		Expected: mustBe("NotZero()"),
+	})
+	checkError(t, false, NotZero(), expectedError{
+		Message:  mustBe("zero value"),
+		Path:     mustBe("DATA"),
+		Got:      mustBe("(bool) false"),
+		Expected: mustBe("NotZero()"),
+	})
+
+	//
+	// String
+	equalStr(t, NotZero().String(), "NotZero()")
+}
+
 func TestZeroTypeBehind(t *testing.T) {
 	equalTypes(t, Zero(), nil)
+	equalTypes(t, NotZero(), nil)
 }

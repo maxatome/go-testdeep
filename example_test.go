@@ -421,6 +421,89 @@ func ExampleCode() {
 	// true
 }
 
+func ExampleEmpty() {
+	t := &testing.T{}
+
+	ok := CmpDeeply(t, nil, Empty()) // special case: nil is considered empty
+	fmt.Println(ok)
+
+	// fails, typed nil is not empty (expect for channel, map, slice or
+	// pointers on array, channel, map slice and strings)
+	ok = CmpDeeply(t, (*int)(nil), Empty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, "", Empty())
+	fmt.Println(ok)
+
+	// Fails as 0 is a number, so not empty. Use Zero() instead
+	ok = CmpDeeply(t, 0, Empty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, (map[string]int)(nil), Empty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, map[string]int{}, Empty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, ([]int)(nil), Empty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, []int{}, Empty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, []int{3}, Empty()) // fails, as not empty
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{}, Empty()) // fails, Empty() is not Zero()!
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+	// true
+	// false
+	// true
+	// true
+	// true
+	// true
+	// false
+	// false
+}
+
+func ExampleEmpty_pointers() {
+	t := &testing.T{}
+
+	type MySlice []int
+
+	ok := CmpDeeply(t, MySlice{}, Empty()) // Ptr() not needed
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &MySlice{}, Empty())
+	fmt.Println(ok)
+
+	l1 := &MySlice{}
+	l2 := &l1
+	l3 := &l2
+	ok = CmpDeeply(t, &l3, Empty())
+	fmt.Println(ok)
+
+	// Works the same for array, map, channel and string
+
+	// But not for others types as:
+	type MyStruct struct {
+		Value int
+	}
+
+	ok = CmpDeeply(t, &MyStruct{}, Empty()) // fails, use Zero() instead
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// true
+	// false
+}
+
 func ExampleGt() {
 	t := &testing.T{}
 
@@ -823,6 +906,71 @@ func ExampleNot() {
 	// false
 }
 
+func ExampleNotEmpty() {
+	t := &testing.T{}
+
+	ok := CmpDeeply(t, nil, NotEmpty()) // fails, as nil is considered empty
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, "foobar", NotEmpty())
+	fmt.Println(ok)
+
+	// Fails as 0 is a number, so not empty. Use NotZero() instead
+	ok = CmpDeeply(t, 0, NotEmpty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, map[string]int{"foobar": 42}, NotEmpty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, []int{1}, NotEmpty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{}, NotEmpty()) // succeeds, NotEmpty() is not NotZero()!
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// true
+	// false
+	// true
+	// true
+	// true
+}
+
+func ExampleNotEmpty_pointers() {
+	t := &testing.T{}
+
+	type MySlice []int
+
+	ok := CmpDeeply(t, MySlice{12}, NotEmpty())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &MySlice{12}, NotEmpty()) // Ptr() not needed
+	fmt.Println(ok)
+
+	l1 := &MySlice{12}
+	l2 := &l1
+	l3 := &l2
+	ok = CmpDeeply(t, &l3, NotEmpty())
+	fmt.Println(ok)
+
+	// Works the same for array, map, channel and string
+
+	// But not for others types as:
+	type MyStruct struct {
+		Value int
+	}
+
+	ok = CmpDeeply(t, &MyStruct{}, NotEmpty()) // fails, use NotZero() instead
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// true
+	// false
+}
+
 func ExampleNotNil() {
 	t := &testing.T{}
 
@@ -850,6 +998,60 @@ func ExampleNotNil() {
 	// Output:
 	// true
 	// true
+	// true
+	// false
+}
+
+func ExampleNotZero() {
+	t := &testing.T{}
+
+	ok := CmpDeeply(t, 0, NotZero()) // fails
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, float64(0), NotZero()) // fails
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, 12, NotZero())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, (map[string]int)(nil), NotZero()) // fails, as nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, map[string]int{}, NotZero()) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, ([]int)(nil), NotZero()) // fails, as nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, []int{}, NotZero()) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{}, NotZero()) // fails
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{0, 1}, NotZero()) // succeeds, DATA[1] is not 0
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, bytes.Buffer{}, NotZero()) // fails
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &bytes.Buffer{}, NotZero()) // succeeds, as pointer not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
 	// true
 	// false
 }
@@ -1653,6 +1855,9 @@ func ExampleZero() {
 	ok = CmpDeeply(t, &bytes.Buffer{}, Zero()) // fails, as pointer not nil
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// true
@@ -1665,4 +1870,5 @@ func ExampleZero() {
 	// false
 	// true
 	// false
+	// true
 }

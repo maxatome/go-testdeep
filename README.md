@@ -329,6 +329,8 @@ allows to use a custom function;
 checks that a string, [`error`](https://golang.org/ref/spec#Errors) or
 [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces contain
 a sub-string;
+- [`Empty`](https://godoc.org/github.com/maxatome/go-testdeep#Empty)
+checks that an array, a channel, a map, a slice or a string is empty;
 - [`Gt`](https://godoc.org/github.com/maxatome/go-testdeep#Gt)
 checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
 greater than a value;
@@ -367,8 +369,12 @@ no values have to match;
 compares the contents of an array or a slice, no values have to match;
 - [`Not`](https://godoc.org/github.com/maxatome/go-testdeep#Not)
 value must not match;
+- [`NotEmpty`](https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty)
+checks that an array, a channel, a map, a slice or a string is not empty;
 - [`NotNil`](https://godoc.org/github.com/maxatome/go-testdeep#NotNil)
 checks that data is not `nil`;
+- [`NotZero`](https://godoc.org/github.com/maxatome/go-testdeep#NotZero)
+checks that data is not zero regarding its type;
 - [`PPtr`](https://godoc.org/github.com/maxatome/go-testdeep#PPtr)
 allows to easily test a pointer of pointer value,
 - [`Ptr`](https://godoc.org/github.com/maxatome/go-testdeep#Ptr)

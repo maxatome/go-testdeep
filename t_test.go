@@ -336,6 +336,89 @@ func ExampleT_Contains_error() {
 	// true
 }
 
+func ExampleT_Empty() {
+	t := NewT(&testing.T{})
+
+	ok := t.Empty(nil) // special case: nil is considered empty
+	fmt.Println(ok)
+
+	// fails, typed nil is not empty (expect for channel, map, slice or
+	// pointers on array, channel, map slice and strings)
+	ok = t.Empty((*int)(nil))
+	fmt.Println(ok)
+
+	ok = t.Empty("")
+	fmt.Println(ok)
+
+	// Fails as 0 is a number, so not empty. Use Zero() instead
+	ok = t.Empty(0)
+	fmt.Println(ok)
+
+	ok = t.Empty((map[string]int)(nil))
+	fmt.Println(ok)
+
+	ok = t.Empty(map[string]int{})
+	fmt.Println(ok)
+
+	ok = t.Empty(([]int)(nil))
+	fmt.Println(ok)
+
+	ok = t.Empty([]int{})
+	fmt.Println(ok)
+
+	ok = t.Empty([]int{3}) // fails, as not empty
+	fmt.Println(ok)
+
+	ok = t.Empty([3]int{}) // fails, Empty() is not Zero()!
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+	// true
+	// false
+	// true
+	// true
+	// true
+	// true
+	// false
+	// false
+}
+
+func ExampleT_Empty_pointers() {
+	t := NewT(&testing.T{})
+
+	type MySlice []int
+
+	ok := t.Empty(MySlice{}) // Ptr() not needed
+	fmt.Println(ok)
+
+	ok = t.Empty(&MySlice{})
+	fmt.Println(ok)
+
+	l1 := &MySlice{}
+	l2 := &l1
+	l3 := &l2
+	ok = t.Empty(&l3)
+	fmt.Println(ok)
+
+	// Works the same for array, map, channel and string
+
+	// But not for others types as:
+	type MyStruct struct {
+		Value int
+	}
+
+	ok = t.Empty(&MyStruct{}) // fails, use Zero() instead
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// true
+	// false
+}
+
 func ExampleT_Gt() {
 	t := NewT(&testing.T{})
 
@@ -803,6 +886,71 @@ func ExampleT_Not() {
 	// false
 }
 
+func ExampleT_NotEmpty() {
+	t := NewT(&testing.T{})
+
+	ok := t.NotEmpty(nil) // fails, as nil is considered empty
+	fmt.Println(ok)
+
+	ok = t.NotEmpty("foobar")
+	fmt.Println(ok)
+
+	// Fails as 0 is a number, so not empty. Use NotZero() instead
+	ok = t.NotEmpty(0)
+	fmt.Println(ok)
+
+	ok = t.NotEmpty(map[string]int{"foobar": 42})
+	fmt.Println(ok)
+
+	ok = t.NotEmpty([]int{1})
+	fmt.Println(ok)
+
+	ok = t.NotEmpty([3]int{}) // succeeds, NotEmpty() is not NotZero()!
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// true
+	// false
+	// true
+	// true
+	// true
+}
+
+func ExampleT_NotEmpty_pointers() {
+	t := NewT(&testing.T{})
+
+	type MySlice []int
+
+	ok := t.NotEmpty(MySlice{12})
+	fmt.Println(ok)
+
+	ok = t.NotEmpty(&MySlice{12}) // Ptr() not needed
+	fmt.Println(ok)
+
+	l1 := &MySlice{12}
+	l2 := &l1
+	l3 := &l2
+	ok = t.NotEmpty(&l3)
+	fmt.Println(ok)
+
+	// Works the same for array, map, channel and string
+
+	// But not for others types as:
+	type MyStruct struct {
+		Value int
+	}
+
+	ok = t.NotEmpty(&MyStruct{}) // fails, use NotZero() instead
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// true
+	// false
+}
+
 func ExampleT_NotNil() {
 	t := NewT(&testing.T{})
 
@@ -830,6 +978,60 @@ func ExampleT_NotNil() {
 	// Output:
 	// true
 	// true
+	// true
+	// false
+}
+
+func ExampleT_NotZero() {
+	t := NewT(&testing.T{})
+
+	ok := t.NotZero(0) // fails
+	fmt.Println(ok)
+
+	ok = t.NotZero(float64(0)) // fails
+	fmt.Println(ok)
+
+	ok = t.NotZero(12)
+	fmt.Println(ok)
+
+	ok = t.NotZero((map[string]int)(nil)) // fails, as nil
+	fmt.Println(ok)
+
+	ok = t.NotZero(map[string]int{}) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = t.NotZero(([]int)(nil)) // fails, as nil
+	fmt.Println(ok)
+
+	ok = t.NotZero([]int{}) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = t.NotZero([3]int{}) // fails
+	fmt.Println(ok)
+
+	ok = t.NotZero([3]int{0, 1}) // succeeds, DATA[1] is not 0
+	fmt.Println(ok)
+
+	ok = t.NotZero(bytes.Buffer{}) // fails
+	fmt.Println(ok)
+
+	ok = t.NotZero(&bytes.Buffer{}) // succeeds, as pointer not nil
+	fmt.Println(ok)
+
+	ok = t.CmpDeeply(&bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
 	// true
 	// false
 }
@@ -1489,13 +1691,16 @@ func ExampleT_Zero() {
 	ok = t.Zero([3]int{})
 	fmt.Println(ok)
 
-	ok = t.CmpDeeply([3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
+	ok = t.Zero([3]int{0, 1}) // fails, DATA[1] is not 0
 	fmt.Println(ok)
 
 	ok = t.Zero(bytes.Buffer{})
 	fmt.Println(ok)
 
 	ok = t.Zero(&bytes.Buffer{}) // fails, as pointer not nil
+	fmt.Println(ok)
+
+	ok = t.CmpDeeply(&bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -1510,4 +1715,5 @@ func ExampleT_Zero() {
 	// false
 	// true
 	// false
+	// true
 }
