@@ -854,6 +854,60 @@ func ExampleNotNil() {
 	// false
 }
 
+func ExampleNotZero() {
+	t := &testing.T{}
+
+	ok := CmpDeeply(t, 0, NotZero()) // fails
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, float64(0), NotZero()) // fails
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, 12, NotZero())
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, (map[string]int)(nil), NotZero()) // fails, as nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, map[string]int{}, NotZero()) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, ([]int)(nil), NotZero()) // fails, as nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, []int{}, NotZero()) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{}, NotZero()) // fails
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, [3]int{0, 1}, NotZero()) // succeeds, DATA[1] is not 0
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, bytes.Buffer{}, NotZero()) // fails
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &bytes.Buffer{}, NotZero()) // succeeds, as pointer not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+}
+
 func ExamplePPtr() {
 	t := &testing.T{}
 
@@ -1653,6 +1707,9 @@ func ExampleZero() {
 	ok = CmpDeeply(t, &bytes.Buffer{}, Zero()) // fails, as pointer not nil
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// true
@@ -1665,4 +1722,5 @@ func ExampleZero() {
 	// false
 	// true
 	// false
+	// true
 }

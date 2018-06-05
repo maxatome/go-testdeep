@@ -203,6 +203,17 @@ $rep = qr/\( [^()]* (?:(??{ $rep }) [^()]* )* \)/x; # recursively matches (...)
 $reb = qr/\[ [^][]* (?:(??{ $reb }) [^][]* )* \]/x; # recursively matches [...]
 $rec = qr/\{ [^{}]* (?:(??{ $rec }) [^{}]* )* \}/x; # recursively matches {...}
 
+my $rparam =qr/"(?:\\.|[^"]+)*"            # "string"
+	      |`[^`]*`                     # `string`
+              |&[a-zA-Z_]\w*(?:\.\w+)?(?:$rec)? # &Struct{...}, &variable
+              |\[[^][]*\]\w+$rec           # []Array{...}
+	      |map${reb}\w+$rec            # map[...]Type{...}
+              |func\([^)]*\)[^{]+$rec      # func fn (...) ... { ... }
+              |[a-zA-Z_]\w*(?:\.\w+)?(?:$rec|$rep)? # Str{...}, Fn(...), pkg.var
+	      |[\w.*+-\/]+                 # 123*pkg.var...
+	      |$rep$rep                    # (type)(value)
+              /x;
+
 sub extract_params
 {
     my($func, $params_str) = @_;
@@ -213,17 +224,7 @@ sub extract_params
     my @params;
     for (;;)
     {
-	if ($str =~ /\G\s*
-	             ( "(?:\\.|[^"]+)*"            # "string"
-	              |`[^`]*`                     # `string`
-                      |&[a-zA-Z_]\w*(?:$rec)?      # &Struct{...}, &variable
-                      |\[[^][]*\]\w+$rec           # []Array{...}
-	              |map${reb}\w+$rec            # map[...]Type{...}
-                      |func\([^)]*\)[^{]+$rec      # func fn (...) ... { ... }
-                      |[a-zA-Z_]\w*(?:\.\w+)?(?:$rec|$rep)? # Str{...}, Fn(...), pkg.var
-	              |[\w.*+-\/]+                 # 123*pkg.var...
-	              |$rep$rep                    # (type)(value)
-                      )\s*(,|\z)/msgx)
+	if ($str =~ /\G\s*($rparam)\s*(,|\z)/omsgx)
 	{
 	    push(@params, $1);
 	    $2 or return @params;
@@ -247,7 +248,7 @@ foreach my $func (sort keys %funcs)
 			  [ "t.$func(",     "T_$func",  \$t_test_contents ])
 	{
 	    (my $code = $example->{code}) =~
-		s%CmpDeeply\(t,\s+(\S+),\s+$func($rep)%
+		s%CmpDeeply\(t,\s+($rparam),\s+$func($rep)%
                   my @params = extract_params("$func$name", $2);
                   my $repl = $info->[0] . $1;
                   for (my $i = 0; $i < @$args; $i++)

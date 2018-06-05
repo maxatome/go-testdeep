@@ -369,6 +369,8 @@ compares the contents of an array or a slice, no values have to match;
 value must not match;
 - [`NotNil`](https://godoc.org/github.com/maxatome/go-testdeep#NotNil)
 checks that data is not `nil`;
+- [`NotZero`](https://godoc.org/github.com/maxatome/go-testdeep#NotZero)
+checks that data is not zero regarding its type;
 - [`PPtr`](https://godoc.org/github.com/maxatome/go-testdeep#PPtr)
 allows to easily test a pointer of pointer value,
 - [`Ptr`](https://godoc.org/github.com/maxatome/go-testdeep#Ptr)

@@ -834,6 +834,60 @@ func ExampleCmpNotNil() {
 	// false
 }
 
+func ExampleCmpNotZero() {
+	t := &testing.T{}
+
+	ok := CmpNotZero(t, 0) // fails
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, float64(0)) // fails
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, 12)
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, (map[string]int)(nil)) // fails, as nil
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, map[string]int{}) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, ([]int)(nil)) // fails, as nil
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, []int{}) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, [3]int{}) // fails
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, [3]int{0, 1}) // succeeds, DATA[1] is not 0
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, bytes.Buffer{}) // fails
+	fmt.Println(ok)
+
+	ok = CmpNotZero(t, &bytes.Buffer{}) // succeeds, as pointer not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+}
+
 func ExampleCmpPPtr() {
 	t := &testing.T{}
 
@@ -1489,13 +1543,16 @@ func ExampleCmpZero() {
 	ok = CmpZero(t, [3]int{})
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, [3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
+	ok = CmpZero(t, [3]int{0, 1}) // fails, DATA[1] is not 0
 	fmt.Println(ok)
 
 	ok = CmpZero(t, bytes.Buffer{})
 	fmt.Println(ok)
 
 	ok = CmpZero(t, &bytes.Buffer{}) // fails, as pointer not nil
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -1510,4 +1567,5 @@ func ExampleCmpZero() {
 	// false
 	// true
 	// false
+	// true
 }

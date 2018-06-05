@@ -270,6 +270,16 @@ func (t *T) NotNil(got interface{}, args ...interface{}) bool {
 	return t.CmpDeeply(got, NotNil(), args...)
 }
 
+// NotZero is a shortcut for:
+//
+//   t.CmpDeeply(got, NotZero(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+func (t *T) NotZero(got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return t.CmpDeeply(got, NotZero(), args...)
+}
+
 // PPtr is a shortcut for:
 //
 //   t.CmpDeeply(got, PPtr(val), args...)

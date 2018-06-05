@@ -271,6 +271,16 @@ func CmpNotNil(t *testing.T, got interface{}, args ...interface{}) bool {
 	return CmpDeeply(t, got, NotNil(), args...)
 }
 
+// CmpNotZero is a shortcut for:
+//
+//   CmpDeeply(t, got, NotZero(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+func CmpNotZero(t *testing.T, got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return CmpDeeply(t, got, NotZero(), args...)
+}
+
 // CmpPPtr is a shortcut for:
 //
 //   CmpDeeply(t, got, PPtr(val), args...)

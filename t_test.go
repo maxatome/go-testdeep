@@ -834,6 +834,60 @@ func ExampleT_NotNil() {
 	// false
 }
 
+func ExampleT_NotZero() {
+	t := NewT(&testing.T{})
+
+	ok := t.NotZero(0) // fails
+	fmt.Println(ok)
+
+	ok = t.NotZero(float64(0)) // fails
+	fmt.Println(ok)
+
+	ok = t.NotZero(12)
+	fmt.Println(ok)
+
+	ok = t.NotZero((map[string]int)(nil)) // fails, as nil
+	fmt.Println(ok)
+
+	ok = t.NotZero(map[string]int{}) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = t.NotZero(([]int)(nil)) // fails, as nil
+	fmt.Println(ok)
+
+	ok = t.NotZero([]int{}) // succeeds, as not nil
+	fmt.Println(ok)
+
+	ok = t.NotZero([3]int{}) // fails
+	fmt.Println(ok)
+
+	ok = t.NotZero([3]int{0, 1}) // succeeds, DATA[1] is not 0
+	fmt.Println(ok)
+
+	ok = t.NotZero(bytes.Buffer{}) // fails
+	fmt.Println(ok)
+
+	ok = t.NotZero(&bytes.Buffer{}) // succeeds, as pointer not nil
+	fmt.Println(ok)
+
+	ok = t.CmpDeeply(&bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+}
+
 func ExampleT_PPtr() {
 	t := NewT(&testing.T{})
 
@@ -1489,13 +1543,16 @@ func ExampleT_Zero() {
 	ok = t.Zero([3]int{})
 	fmt.Println(ok)
 
-	ok = t.CmpDeeply([3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
+	ok = t.Zero([3]int{0, 1}) // fails, DATA[1] is not 0
 	fmt.Println(ok)
 
 	ok = t.Zero(bytes.Buffer{})
 	fmt.Println(ok)
 
 	ok = t.Zero(&bytes.Buffer{}) // fails, as pointer not nil
+	fmt.Println(ok)
+
+	ok = t.CmpDeeply(&bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -1510,4 +1567,5 @@ func ExampleT_Zero() {
 	// false
 	// true
 	// false
+	// true
 }
