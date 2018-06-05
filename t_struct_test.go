@@ -72,3 +72,22 @@ func TestT(tt *testing.T) {
 		func() { NewT(tt, ContextConfig{}, ContextConfig{}) },
 		"usage: NewT")
 }
+
+func TestRun(tt *testing.T) {
+	t := NewT(tt)
+
+	runPassed := false
+
+	ok := t.Run("Test level1",
+		func(t *T) {
+			ok := t.Run("Test level2",
+				func(t *T) {
+					runPassed = t.True(true) // test succeeds!
+				})
+
+			t.True(ok)
+		})
+
+	t.True(ok)
+	t.True(runPassed)
+}

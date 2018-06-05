@@ -187,3 +187,21 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.CmpDeeply(got, false, args...)
 }
+
+// Run runs "f" as a subtest of t called "name". It runs "f" in a separate
+// goroutine and blocks until "f" returns or calls t.Parallel to become
+// a parallel test. Run reports whether "f" succeeded (or at least did
+// not fail before calling t.Parallel).
+//
+// Run may be called simultaneously from multiple goroutines, but all
+// such calls must return before the outer test function for t
+// returns.
+//
+// Under the hood, Run delegates all this stuff to testing.Run. That
+// is why this documentation is a copy/paste of testing.Run one.
+func (t *T) Run(name string, f func(t *T)) bool {
+	t.Helper()
+	return t.T.Run(name, func(tt *testing.T) {
+		f(NewT(tt))
+	})
+}
