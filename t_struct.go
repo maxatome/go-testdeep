@@ -39,7 +39,7 @@ type T struct {
 //     before := time.Now()
 //     record, err := CreateRecord()
 //
-//     if t.Nil(err) {
+//     if t.CmpNoError(err) {
 //       t.Log("No error, can now check struct contents")
 //
 //       ok := t.Struct(record,
@@ -186,6 +186,30 @@ func (t *T) True(got interface{}, args ...interface{}) bool {
 func (t *T) False(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.CmpDeeply(got, false, args...)
+}
+
+// CmpError checks that "got" is non-nil error.
+//
+//   _, err := MyFunction(1, 2, 3)
+//   t.CmpError(err, "MyFunction(1, 2, 3) should return an error")
+//
+// CmpError and not Error to avoid collision with t.T.Error method.
+func (t *T) CmpError(got error, args ...interface{}) bool {
+	t.Helper()
+	return cmpError(NewContextWithConfig(t.Config), t.T, got, args...)
+}
+
+// CmpNoError checks that "got" is nil error.
+//
+//   value, err := MyFunction(1, 2, 3)
+//   if t.CmpNoError(err) {
+//     // one can now check value...
+//   }
+//
+// CmpNoError and not NoError to be consistent with CmpError method.
+func (t *T) CmpNoError(got error, args ...interface{}) bool {
+	t.Helper()
+	return cmpNoError(NewContextWithConfig(t.Config), t.T, got, args...)
 }
 
 // Run runs "f" as a subtest of t called "name". It runs "f" in a separate

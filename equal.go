@@ -391,7 +391,11 @@ func cmpDeeply(ctx Context, t *testing.T, got, expected interface{},
 	if err == nil {
 		return true
 	}
+	formatError(t, err, args...)
+	return false
+}
 
+func formatError(t *testing.T, err *Error, args ...interface{}) {
 	const failedTest = "Failed test"
 
 	var buf *bytes.Buffer
@@ -409,7 +413,6 @@ func cmpDeeply(ctx Context, t *testing.T, got, expected interface{},
 	err.Append(buf, "")
 
 	t.Error(buf.String())
-	return false
 }
 
 // CmpDeeply returns true if "got" matches "expected". "expected" can

@@ -33,7 +33,7 @@ func TestCreateRecord(t *testing.T) {
   before := time.Now()
   record, err := CreateRecord("Bob", 23)
 
-  if td.CmpNil(t, err) {
+  if td.CmpNoError(t, err) {
     td.CmpStruct(t, record,
       &Record{
         Name: "Bob",
@@ -119,7 +119,7 @@ func TestCreateRecord(tt *testing.T) {
   before := time.Now()
   record, err := CreateRecord("Bob", 23)
 
-  if t.Nil(err) {
+  if t.CmpNoError(err) {
     t.RootName("RECORD").Struct(record,
       Record{
         Name: "Bob",
@@ -254,7 +254,7 @@ func TestCreateRecord(t *testing.T) {
   before := time.Now()
   record, err := CreateRecord("Bob", 23)
 
-  if td.CmpNil(t, err) {
+  if td.CmpNoError(t, err) {
     td.CmpStruct(t, record,
       Record{
         Name: "Bob",
@@ -287,7 +287,7 @@ func TestCreateRecord(tt *testing.T) {
   before := time.Now()
   record, err := CreateRecord()
 
-  if t.Nil(err) {
+  if t.CmpNoError(err) {
     t.Struct(record,
       Record{
         Name: "Bob",

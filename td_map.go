@@ -21,11 +21,9 @@ const (
 )
 
 type tdMap struct {
-	Base
-	expectedType    reflect.Type
+	tdExpectedType
 	expectedEntries []mapEntryInfo
 	kind            mapKind
-	isPtr           bool
 }
 
 var _ TestDeep = &tdMap{}
@@ -45,7 +43,9 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 	vmodel := reflect.ValueOf(model)
 
 	m := tdMap{
-		Base: NewBase(4),
+		tdExpectedType: tdExpectedType{
+			Base: NewBase(4),
+		},
 		kind: kind,
 	}
 
@@ -206,34 +206,14 @@ func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 }
 
 func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
-	if m.isPtr {
-		if got.Kind() != reflect.Ptr {
-			if ctx.booleanError {
-				return booleanError
-			}
-			return ctx.CollectError(&Error{
-				Message:  "type mismatch",
-				Got:      rawString(got.Type().String()),
-				Expected: rawString(m.expectedTypeStr()),
-			})
-		}
-		got = got.Elem()
+	err = m.checkPtr(ctx, &got)
+	if err != nil {
+		return
 	}
 
-	if got.Type() != m.expectedType {
-		if ctx.booleanError {
-			return booleanError
-		}
-		var gotType rawString
-		if m.isPtr {
-			gotType = "*"
-		}
-		gotType += rawString(got.Type().String())
-		return ctx.CollectError(&Error{
-			Message:  "type mismatch",
-			Got:      gotType,
-			Expected: rawString(m.expectedTypeStr()),
-		})
+	err = m.checkType(ctx, got)
+	if err != nil {
+		return
 	}
 
 	var notFoundKeys []reflect.Value
@@ -349,18 +329,4 @@ func (m *tdMap) String() string {
 	}
 
 	return buf.String()
-}
-
-func (m *tdMap) TypeBehind() reflect.Type {
-	if m.isPtr {
-		return reflect.New(m.expectedType).Type()
-	}
-	return m.expectedType
-}
-
-func (m *tdMap) expectedTypeStr() string {
-	if m.isPtr {
-		return "*" + m.expectedType.String()
-	}
-	return m.expectedType.String()
 }

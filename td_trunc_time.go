@@ -13,8 +13,7 @@ import (
 )
 
 type tdTruncTime struct {
-	Base
-	expectedType reflect.Type
+	tdExpectedType
 	expectedTime time.Time
 	trunc        time.Duration
 }
@@ -34,7 +33,9 @@ var _ TestDeep = &tdTruncTime{}
 func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	if len(trunc) <= 1 {
 		t := tdTruncTime{
-			Base: NewBase(3),
+			tdExpectedType: tdExpectedType{
+				Base: NewBase(3),
+			},
 		}
 
 		if len(trunc) == 1 {
@@ -58,15 +59,9 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 }
 
 func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
-	if got.Type() != t.expectedType {
-		if ctx.booleanError {
-			return booleanError
-		}
-		return ctx.CollectError(&Error{
-			Message:  "type mismatch",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(t.expectedType.String()),
-		})
+	err := t.checkType(ctx, got)
+	if err != nil {
+		return err
 	}
 
 	gotTime, err := getTime(ctx, got, got.Type() != timeType)
@@ -108,8 +103,4 @@ func (t *tdTruncTime) String() string {
 			Interface().(fmt.Stringer).String()
 	}
 	return t.expectedTime.String()
-}
-
-func (t *tdTruncTime) TypeBehind() reflect.Type {
-	return t.expectedType
 }
