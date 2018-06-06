@@ -68,7 +68,8 @@
 //     }
 //   }
 //
-// With testdeep, it is a way simple, thanks to CmpDeeply function:
+// With testdeep, it is a way simple, thanks to CmpDeeply and
+// CmpNoError functions:
 //
 //   import (
 //     "testing"
@@ -81,7 +82,7 @@
 //     before := time.Now()
 //     record, err := CreateRecord()
 //
-//     if td.CmpDeeply(t, err, nil) {
+//     if td.CmpNoError(t, err) {
 //       td.CmpDeeply(t, record,
 //         Struct(
 //           &Record{
@@ -102,8 +103,8 @@
 //
 // The CmpDeeply function is the keystone of this package, but to make
 // the writing of tests even easier, the family of Cmp* functions are
-// provided and act as shortcuts. Using CmpNil and CmpStruct function,
-// the previous example can be written as:
+// provided and act as shortcuts. Using CmpStruct function, the
+// previous example can be written as:
 //
 //   import (
 //     "testing"
@@ -116,7 +117,7 @@
 //     before := time.Now()
 //     record, err := CreateRecord()
 //
-//     if td.CmpNil(t, err) {
+//     if td.CmpNoError(t, err) {
 //       td.CmpStruct(t, record,
 //         &Record{
 //           Name: "Bob",
@@ -130,7 +131,8 @@
 //     }
 //   }
 //
-// Last, testing.T can be encapsulated in T type, simplifying again the test:
+// Last, testing.T can be encapsulated in testdeep T type, simplifying
+// again the test:
 //
 //   import (
 //     "testing"
@@ -145,7 +147,7 @@
 //     before := time.Now()
 //     record, err := CreateRecord()
 //
-//     if t.Nil(err) {
+//     if t.CmpNoError(err) {
 //       t.RootName("RECORD").Struct(record,
 //         &Record{
 //           Name: "Bob",

@@ -45,6 +45,38 @@ func ExampleT_False() {
 	// false
 }
 
+func ExampleT_CmpError() {
+	t := NewT(&testing.T{})
+
+	got := fmt.Errorf("Error #%d", 42)
+	ok := t.CmpError(got, "An error occurred")
+	fmt.Println(ok)
+
+	got = nil
+	ok = t.CmpError(got, "An error occurred") // fails
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleT_CmpNoError() {
+	t := NewT(&testing.T{})
+
+	got := fmt.Errorf("Error #%d", 42)
+	ok := t.CmpNoError(got, "An error occurred") // fails
+	fmt.Println(ok)
+
+	got = nil
+	ok = t.CmpNoError(got, "An error occurred")
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// true
+}
+
 func TestT(tt *testing.T) {
 	t := NewT(tt)
 	CmpDeeply(tt, t.Config, DefaultContextConfig)

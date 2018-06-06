@@ -44,3 +44,35 @@ func ExampleCmpFalse() {
 	// true
 	// false
 }
+
+func ExampleCmpError() {
+	t := &testing.T{}
+
+	got := fmt.Errorf("Error #%d", 42)
+	ok := CmpError(t, got, "An error occurred")
+	fmt.Println(ok)
+
+	got = nil
+	ok = CmpError(t, got, "An error occurred") // fails
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleCmpNoError() {
+	t := &testing.T{}
+
+	got := fmt.Errorf("Error #%d", 42)
+	ok := CmpNoError(t, got, "An error occurred") // fails
+	fmt.Println(ok)
+
+	got = nil
+	ok = CmpNoError(t, got, "An error occurred")
+	fmt.Println(ok)
+
+	// Output:
+	// false
+	// true
+}
