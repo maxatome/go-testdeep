@@ -13,10 +13,8 @@ import (
 )
 
 type tdArray struct {
-	Base
-	expectedType    reflect.Type
+	tdExpectedType
 	expectedEntries []reflect.Value
-	isPtr           bool
 }
 
 var _ TestDeep = &tdArray{}
@@ -27,26 +25,18 @@ var _ TestDeep = &tdArray{}
 // can be a TestDeep operator as well as a zero value.)
 type ArrayEntries map[int]interface{}
 
-// Array operator compares the contents of an array or a pointer on an
-// array against the non-zero values of "model" (if any) and the
-// values of "expectedEntries".
-//
-// "model" must be the same type as compared data.
-//
-// "expectedEntries" can be nil, if no zero entries are expected and
-// no TestDeep operator are involved.
-//
-// TypeBehind method returns the reflect.Type of "model".
-func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
+func newArray(kind reflect.Kind, model interface{}, expectedEntries ArrayEntries) *tdArray {
 	vmodel := reflect.ValueOf(model)
 
 	a := tdArray{
-		Base: NewBase(3),
+		tdExpectedType: tdExpectedType{
+			Base: NewBase(4),
+		},
 	}
 
 	switch vmodel.Kind() {
 	case reflect.Ptr:
-		if vmodel.Type().Elem().Kind() != reflect.Array {
+		if vmodel.Type().Elem().Kind() != kind {
 			break
 		}
 
@@ -61,13 +51,31 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 		vmodel = vmodel.Elem()
 		fallthrough
 
-	case reflect.Array:
+	case kind:
 		a.expectedType = vmodel.Type()
 		a.populateExpectedEntries(expectedEntries, vmodel)
 		return &a
 	}
 
-	panic("usage: Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)")
+	return nil
+}
+
+// Array operator compares the contents of an array or a pointer on an
+// array against the non-zero values of "model" (if any) and the
+// values of "expectedEntries".
+//
+// "model" must be the same type as compared data.
+//
+// "expectedEntries" can be nil, if no zero entries are expected and
+// no TestDeep operator are involved.
+//
+// TypeBehind method returns the reflect.Type of "model".
+func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
+	a := newArray(reflect.Array, model, expectedEntries)
+	if a == nil {
+		panic("usage: Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)")
+	}
+	return a
 }
 
 // Slice operator compares the contents of a slice or a pointer on a
@@ -81,36 +89,11 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
-	vmodel := reflect.ValueOf(model)
-
-	a := tdArray{
-		Base: NewBase(3),
+	a := newArray(reflect.Slice, model, expectedEntries)
+	if a == nil {
+		panic("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES)")
 	}
-
-	switch vmodel.Kind() {
-	case reflect.Ptr:
-		if vmodel.Type().Elem().Kind() != reflect.Slice {
-			break
-		}
-
-		a.isPtr = true
-
-		if vmodel.IsNil() {
-			a.expectedType = vmodel.Type().Elem()
-			a.populateExpectedEntries(expectedEntries, reflect.Value{})
-			return &a
-		}
-
-		vmodel = vmodel.Elem()
-		fallthrough
-
-	case reflect.Slice:
-		a.expectedType = vmodel.Type()
-		a.populateExpectedEntries(expectedEntries, vmodel)
-		return &a
-	}
-
-	panic("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES)")
+	return a
 }
 
 func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expectedModel reflect.Value) {
@@ -230,34 +213,14 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 }
 
 func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
-	if a.isPtr {
-		if got.Kind() != reflect.Ptr {
-			if ctx.booleanError {
-				return booleanError
-			}
-			return ctx.CollectError(&Error{
-				Message:  "type mismatch",
-				Got:      rawString(got.Type().String()),
-				Expected: rawString(a.expectedTypeStr()),
-			})
-		}
-		got = got.Elem()
+	err = a.checkPtr(ctx, &got)
+	if err != nil {
+		return
 	}
 
-	if got.Type() != a.expectedType {
-		if ctx.booleanError {
-			return booleanError
-		}
-		var gotType rawString
-		if a.isPtr {
-			gotType = "*"
-		}
-		gotType += rawString(got.Type().String())
-		return ctx.CollectError(&Error{
-			Message:  "type mismatch",
-			Got:      gotType,
-			Expected: rawString(a.expectedTypeStr()),
-		})
+	err = a.checkType(ctx, got)
+	if err != nil {
+		return
 	}
 
 	gotLen := got.Len()
@@ -277,7 +240,7 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 
 		err = deepValueEqual(curCtx, got.Index(index), expectedValue)
 		if err != nil {
-			return err
+			return
 		}
 	}
 
@@ -314,18 +277,4 @@ func (a *tdArray) String() string {
 		buf.WriteString("})")
 	}
 	return buf.String()
-}
-
-func (a *tdArray) TypeBehind() reflect.Type {
-	if a.isPtr {
-		return reflect.New(a.expectedType).Type()
-	}
-	return a.expectedType
-}
-
-func (a *tdArray) expectedTypeStr() string {
-	if a.isPtr {
-		return "*" + a.expectedType.String()
-	}
-	return a.expectedType.String()
 }

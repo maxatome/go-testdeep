@@ -15,10 +15,8 @@ import (
 )
 
 type tdStruct struct {
-	Base
-	expectedType   reflect.Type
+	tdExpectedType
 	expectedFields fieldInfoSlice
-	isPtr          bool
 }
 
 var _ TestDeep = &tdStruct{}
@@ -45,7 +43,9 @@ func newStruct(model interface{}) (*tdStruct, reflect.Value) {
 	vmodel := reflect.ValueOf(model)
 
 	st := tdStruct{
-		Base: NewBase(4),
+		tdExpectedType: tdExpectedType{
+			Base: NewBase(4),
+		},
 	}
 
 	switch vmodel.Kind() {
@@ -186,43 +186,22 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 	return st
 }
 
-func (s *tdStruct) Match(ctx Context, got reflect.Value) *Error {
-	if s.isPtr {
-		if got.Kind() != reflect.Ptr {
-			if ctx.booleanError {
-				return booleanError
-			}
-			return ctx.CollectError(&Error{
-				Message:  "type mismatch",
-				Got:      rawString(got.Type().String()),
-				Expected: rawString(s.expectedTypeStr()),
-			})
-		}
-		got = got.Elem()
+func (s *tdStruct) Match(ctx Context, got reflect.Value) (err *Error) {
+	err = s.checkPtr(ctx, &got)
+	if err != nil {
+		return
 	}
 
-	if got.Type() != s.expectedType {
-		if ctx.booleanError {
-			return booleanError
-		}
-		var gotType rawString
-		if s.isPtr {
-			gotType = "*"
-		}
-		gotType += rawString(got.Type().String())
-		return ctx.CollectError(&Error{
-			Message:  "type mismatch",
-			Got:      gotType,
-			Expected: rawString(s.expectedTypeStr()),
-		})
+	err = s.checkType(ctx, got)
+	if err != nil {
+		return
 	}
 
-	var err *Error
 	for _, fieldInfo := range s.expectedFields {
 		err = deepValueEqual(ctx.AddDepth("."+fieldInfo.name),
 			got.FieldByIndex(fieldInfo.index), fieldInfo.expected)
 		if err != nil {
-			return err
+			return
 		}
 	}
 	return nil
@@ -251,18 +230,4 @@ func (s *tdStruct) String() string {
 	}
 
 	return buf.String()
-}
-
-func (s *tdStruct) TypeBehind() reflect.Type {
-	if s.isPtr {
-		return reflect.New(s.expectedType).Type()
-	}
-	return s.expectedType
-}
-
-func (s *tdStruct) expectedTypeStr() string {
-	if s.isPtr {
-		return "*" + s.expectedType.String()
-	}
-	return s.expectedType.String()
 }

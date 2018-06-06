@@ -17,8 +17,12 @@ type tdSmuggler struct {
 	isTestDeeper  bool
 }
 
-func newSmuggler(val interface{}) (ret tdSmuggler) {
-	ret.Base = NewBase(4)
+func newSmuggler(val interface{}, depth ...int) (ret tdSmuggler) {
+	callDepth := 4
+	if len(depth) > 0 {
+		callDepth = depth[0]
+	}
+	ret.Base = NewBase(callDepth)
 
 	// Initializes only if TestDeep operator. Other cases are specific.
 	if _, ok := val.(TestDeep); ok {

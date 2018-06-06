@@ -11,8 +11,45 @@ import (
 	"reflect"
 )
 
-type tdLen struct {
+type tdLenCapBase struct {
 	tdSmuggler
+}
+
+func (b *tdLenCapBase) initLenCapBase(val interface{}) bool {
+	vval := reflect.ValueOf(val)
+	if vval.IsValid() {
+		b.tdSmuggler = newSmuggler(val, 5)
+
+		if b.isTestDeeper {
+			return true
+		}
+
+		// A len or capacity is always an int
+		if vval.Type() == intType {
+			b.expectedValue = vval
+			return true
+		}
+	}
+	return false
+}
+
+func (b *tdLenCapBase) isEqual(ctx Context, got int) (bool, *Error) {
+	if b.isTestDeeper {
+		vlen := reflect.New(intType)
+		vlen.Elem().SetInt(int64(got))
+
+		return true, deepValueEqual(ctx, vlen.Elem(), b.expectedValue)
+	}
+
+	if int64(got) == b.expectedValue.Int() {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+type tdLen struct {
+	tdLenCapBase
 }
 
 var _ TestDeep = &tdLen{}
@@ -26,21 +63,9 @@ var _ TestDeep = &tdLen{}
 // as well as an other operator:
 //   Len(Between(3, 4))
 func Len(val interface{}) TestDeep {
-	vval := reflect.ValueOf(val)
-	if vval.IsValid() {
-		l := tdLen{
-			tdSmuggler: newSmuggler(val),
-		}
-
-		if l.isTestDeeper {
-			return &l
-		}
-
-		// A len is always an int
-		if vval.Type() == intType {
-			l.expectedValue = vval
-			return &l
-		}
+	l := tdLen{}
+	if l.initLenCapBase(val) {
+		return &l
 	}
 	panic("usage: Len(TESTDEEP_OPERATOR|INT)")
 }
@@ -55,16 +80,9 @@ func (l *tdLen) String() string {
 func (l *tdLen) Match(ctx Context, got reflect.Value) *Error {
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Map, reflect.Slice, reflect.String:
-		if l.isTestDeeper {
-			vlen := reflect.New(intType)
-			vlen.Elem().SetInt(int64(got.Len()))
-
-			return deepValueEqual(ctx.AddFunctionCall("len"),
-				vlen.Elem(), l.expectedValue)
-		}
-
-		if got.Len() == int(l.expectedValue.Int()) {
-			return nil
+		ret, err := l.isEqual(ctx.AddFunctionCall("len"), got.Len())
+		if ret {
+			return err
 		}
 		if ctx.booleanError {
 			return booleanError
@@ -88,7 +106,7 @@ func (l *tdLen) Match(ctx Context, got reflect.Value) *Error {
 }
 
 type tdCap struct {
-	tdSmuggler
+	tdLenCapBase
 }
 
 var _ TestDeep = &tdCap{}
@@ -102,21 +120,9 @@ var _ TestDeep = &tdCap{}
 // as well as an other operator:
 //   Cap(Between(3, 4))
 func Cap(val interface{}) TestDeep {
-	vval := reflect.ValueOf(val)
-	if vval.IsValid() {
-		c := tdCap{
-			tdSmuggler: newSmuggler(val),
-		}
-
-		if c.isTestDeeper {
-			return &c
-		}
-
-		// A len is always an int
-		if vval.Type() == intType {
-			c.expectedValue = vval
-			return &c
-		}
+	c := tdCap{}
+	if c.initLenCapBase(val) {
+		return &c
 	}
 	panic("usage: Cap(TESTDEEP_OPERATOR|INT)")
 }
@@ -131,16 +137,9 @@ func (c *tdCap) String() string {
 func (c *tdCap) Match(ctx Context, got reflect.Value) *Error {
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Slice:
-		if c.isTestDeeper {
-			vcap := reflect.New(intType)
-			vcap.Elem().SetInt(int64(got.Cap()))
-
-			return deepValueEqual(ctx.AddFunctionCall("cap"),
-				vcap.Elem(), c.expectedValue)
-		}
-
-		if got.Cap() == int(c.expectedValue.Int()) {
-			return nil
+		ret, err := c.isEqual(ctx.AddFunctionCall("cap"), got.Cap())
+		if ret {
+			return err
 		}
 		if ctx.booleanError {
 			return booleanError

@@ -11,8 +11,7 @@ import (
 )
 
 type tdIsa struct {
-	Base
-	expectedType   reflect.Type
+	tdExpectedType
 	checkImplement bool
 }
 
@@ -42,8 +41,10 @@ func Isa(model interface{}) TestDeep {
 	modelType := reflect.ValueOf(model).Type()
 
 	return &tdIsa{
-		Base:         NewBase(3),
-		expectedType: modelType,
+		tdExpectedType: tdExpectedType{
+			Base:         NewBase(3),
+			expectedType: modelType,
+		},
 		checkImplement: modelType.Kind() == reflect.Ptr &&
 			modelType.Elem().Kind() == reflect.Interface,
 	}
@@ -65,17 +66,9 @@ func (i *tdIsa) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return ctx.CollectError(&Error{
-		Message:  "type mismatch",
-		Got:      rawString(gotType.String()),
-		Expected: rawString(i.expectedType.String()),
-	})
+	return i.errorTypeMismatch(ctx, rawString(gotType.String()))
 }
 
 func (i *tdIsa) String() string {
 	return i.expectedType.String()
-}
-
-func (i *tdIsa) TypeBehind() reflect.Type {
-	return i.expectedType
 }

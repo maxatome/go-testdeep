@@ -43,12 +43,12 @@ func getString(ctx Context, got reflect.Value) (string, *Error) {
 	if ctx.booleanError {
 		return "", booleanError
 	}
-	return "", &Error{
+	return "", ctx.CollectError(&Error{
 		Message: "bad type",
 		Got:     rawString(got.Type().String()),
 		Expected: rawString(
 			"string (convertible) OR fmt.Stringer OR error"),
-	}
+	})
 }
 
 type tdString struct {
@@ -75,7 +75,7 @@ func String(expected string) TestDeep {
 func (s *tdString) Match(ctx Context, got reflect.Value) *Error {
 	str, err := getString(ctx, got)
 	if err != nil {
-		return ctx.CollectError(err)
+		return err
 	}
 
 	if str == s.expected {
@@ -122,7 +122,7 @@ func HasPrefix(expected string) TestDeep {
 func (s *tdHasPrefix) Match(ctx Context, got reflect.Value) *Error {
 	str, err := getString(ctx, got)
 	if err != nil {
-		return ctx.CollectError(err)
+		return err
 	}
 
 	if strings.HasPrefix(str, s.expected) {
@@ -169,7 +169,7 @@ func HasSuffix(expected string) TestDeep {
 func (s *tdHasSuffix) Match(ctx Context, got reflect.Value) *Error {
 	str, err := getString(ctx, got)
 	if err != nil {
-		return ctx.CollectError(err)
+		return err
 	}
 
 	if strings.HasSuffix(str, s.expected) {
@@ -216,7 +216,7 @@ func Contains(expected string) TestDeep {
 func (s *tdContains) Match(ctx Context, got reflect.Value) *Error {
 	str, err := getString(ctx, got)
 	if err != nil {
-		return ctx.CollectError(err)
+		return err
 	}
 
 	if strings.Contains(str, s.expected) {
