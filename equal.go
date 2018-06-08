@@ -396,6 +396,8 @@ func cmpDeeply(ctx Context, t *testing.T, got, expected interface{},
 }
 
 func formatError(t *testing.T, err *Error, args ...interface{}) {
+	t.Helper()
+
 	const failedTest = "Failed test"
 
 	var buf *bytes.Buffer
