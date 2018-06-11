@@ -75,13 +75,19 @@ type T struct {
 //   		DATA.Id: values differ
 //   			     got: (uint64) 12
 //   			expected: (uint64) 28
+//   		RECORD.Name: values differ
+//   			     got: (string) (len=3) "Bob"
+//   			expected: (string) (len=4) "John"
+//   		RECORD.Age: values differ
+//   			     got: (int) 12
+//   			expected: (int) 28
 //   FAIL
 //
 // Now with a special configuration:
 //
 //   t := NewT(tt, ContextConfig{
 //       RootName:  "RECORD", // got data named "RECORD" instead of "DATA"
-//       MaxErrors: 2,        // stops after 2 errors instead of 1
+//       MaxErrors: 2,        // stops after 2 errors instead of 10
 //     })
 //   t.CmpDeeply(
 //     Record{Age: 12, Name: "Bob", Id: 12},  // got
@@ -98,6 +104,7 @@ type T struct {
 //   		RECORD.Name: values differ
 //   			     got: (string) (len=3) "Bob"
 //   			expected: (string) (len=4) "John"
+//   		Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)
 //   FAIL
 //
 // See RootName method to configure RootName in a more specific fashion.
@@ -168,8 +175,7 @@ func (t *T) RootName(rootName string) *T {
 // Context.
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
-	return cmpDeeply(NewContextWithConfig(t.Config),
-		t.T, got, expected, args...)
+	return cmpDeeply(NewContextWithConfig(t.Config), t.T, got, expected, args...)
 }
 
 // True is shortcut for:
@@ -225,7 +231,5 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 // is why this documentation is a copy/paste of testing.Run one.
 func (t *T) Run(name string, f func(t *T)) bool {
 	t.Helper()
-	return t.T.Run(name, func(tt *testing.T) {
-		f(NewT(tt))
-	})
+	return t.T.Run(name, func(tt *testing.T) { f(NewT(tt)) })
 }
