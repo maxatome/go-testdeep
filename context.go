@@ -26,31 +26,40 @@ type ContextConfig struct {
 	// MaxErrors is the maximal number of errors to dump in case of Cmp*
 	// failure.
 	//
-	// It defaults to 1 except if the environment variable
+	// It defaults to 10 except if the environment variable
 	// TESTDEEP_MAX_ERRORS is set. In this latter case, the
 	// TESTDEEP_MAX_ERRORS value is converted to an int and used as is.
 	//
-	// Setting it to 0 has the same effect as 1.
+	// Setting it to 0 has the same effect as 1: only the first error
+	// will be dumped without the "Too many errors" error.
 	//
 	// Setting it to a negative number means no limit: all errors
 	// will be dumped.
 	MaxErrors int
 }
 
-const contextDefaultRootName = "DATA"
+const (
+	contextDefaultRootName = "DATA"
+	envMaxErrors           = "TESTDEEP_MAX_ERRORS"
+)
+
+func getMaxErrorsFromEnv() int {
+	env := os.Getenv(envMaxErrors)
+	if env != "" {
+		n, err := strconv.Atoi(env)
+		if err == nil {
+			return n
+		}
+	}
+	return 10
+}
 
 // DefaultContextConfig is the default configuration used to render
 // tests failures. If overridden, new settings will impact all Cmp*
 // functions and *T methods (if not specifically configured.)
 var DefaultContextConfig = ContextConfig{
-	RootName: contextDefaultRootName,
-	MaxErrors: func() (n int) {
-		n, err := strconv.Atoi(os.Getenv("TESTDEEP_MAX_ERRORS"))
-		if err != nil || n == 0 {
-			n = 1
-		}
-		return
-	}(),
+	RootName:  contextDefaultRootName,
+	MaxErrors: getMaxErrorsFromEnv(),
 }
 
 func (c *ContextConfig) sanitize() {
@@ -79,9 +88,11 @@ type Context struct {
 	// checked. Can be used to avoid filling Error{} with expensive
 	// computations.
 	booleanError bool
-	// 0 ≤ maxErrors ≤ 1 stops when first error encoutered, else accumulate
-	// maxErrors > 1 stops when maxErrors'th error encoutered
-	// < 0 do not stop until comparison ends
+	// 0 ≤ maxErrors ≤ 1 stops when first error encoutered (without the
+	// "Too many errors" error);
+	// maxErrors > 1 stops when maxErrors'th error encoutered (with a
+	// last "Too many errors" error);
+	// < 0 do not stop until comparison ends.
 	maxErrors int
 	errors    *[]*Error
 }
@@ -150,6 +161,7 @@ func (c Context) CollectError(err *Error) *Error {
 	// Else, accumulate...
 	*c.errors = append(*c.errors, err)
 	if c.maxErrors >= 0 && len(*c.errors) >= c.maxErrors {
+		*c.errors = append(*c.errors, ErrTooManyErrors)
 		return c.mergeErrors()
 	}
 	return nil

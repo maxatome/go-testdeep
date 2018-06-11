@@ -7,6 +7,7 @@
 package testdeep
 
 import (
+	"os"
 	"testing"
 )
 
@@ -19,6 +20,18 @@ func equalStr(t *testing.T, got, expected string) bool {
 	t.Errorf(`Failed test
 	     got: %s
 	expected: %s`, got, expected)
+	return false
+}
+
+func equalInt(t *testing.T, got, expected int) bool {
+	if got == expected {
+		return true
+	}
+
+	t.Helper()
+	t.Errorf(`Failed test
+	     got: %d
+	expected: %d`, got, expected)
 	return false
 }
 
@@ -82,4 +95,18 @@ func TestContext(t *testing.T) {
 	if ctx != DefaultContextConfig {
 		t.Errorf("Sanitized empty ContextConfig should be = to DefaultContextConfig")
 	}
+}
+
+func TestGetMaxErrorsFromEnv(t *testing.T) {
+	oldEnv := os.Getenv(envMaxErrors)
+	defer func() { os.Setenv(envMaxErrors, oldEnv) }()
+
+	os.Setenv(envMaxErrors, "")
+	equalInt(t, getMaxErrorsFromEnv(), 10)
+
+	os.Setenv(envMaxErrors, "aaa")
+	equalInt(t, getMaxErrorsFromEnv(), 10)
+
+	os.Setenv(envMaxErrors, "-8")
+	equalInt(t, getMaxErrorsFromEnv(), -8)
 }

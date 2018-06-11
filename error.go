@@ -32,7 +32,15 @@ type Error struct {
 	Next *Error
 }
 
-var booleanError = &Error{}
+var (
+	booleanError = &Error{}
+
+	// ErrTooManyErrors is chained to the last error encountered when
+	// the maximum number of errors has been reached.
+	ErrTooManyErrors = &Error{
+		Message: "Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)",
+	}
+)
 
 // Error implements error interface.
 func (e *Error) Error() string {
@@ -64,6 +72,11 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 		writeEolPrefix = func() {
 			buf.WriteByte('\n')
 		}
+	}
+
+	if e == ErrTooManyErrors {
+		buf.WriteString(e.Message)
+		return
 	}
 
 	if pos := strings.Index(e.Message, "%%"); pos >= 0 {

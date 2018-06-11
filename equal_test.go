@@ -94,8 +94,13 @@ func TestEqualArray(t *testing.T) {
 					}, false) {
 						return
 					}
-					if err.Next != nil {
-						t.Errorf("Only 2 Errors should have occurred")
+					if err.Next != ErrTooManyErrors {
+						if err.Next == nil {
+							t.Error("ErrTooManyErrors should follow the 2 errors")
+						} else {
+							t.Errorf("Only 2 Errors should have occurred. Found 3rd: %s",
+								err.Next)
+						}
 						return
 					}
 				})
