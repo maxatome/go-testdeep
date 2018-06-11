@@ -208,12 +208,12 @@ func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 	err = m.checkPtr(ctx, &got)
 	if err != nil {
-		return
+		return ctx.CollectError(err)
 	}
 
 	err = m.checkType(ctx, got)
 	if err != nil {
-		return
+		return ctx.CollectError(err)
 	}
 
 	var notFoundKeys []reflect.Value

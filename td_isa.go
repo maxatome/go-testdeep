@@ -66,7 +66,7 @@ func (i *tdIsa) Match(ctx Context, got reflect.Value) *Error {
 	if ctx.booleanError {
 		return booleanError
 	}
-	return i.errorTypeMismatch(ctx, rawString(gotType.String()))
+	return ctx.CollectError(i.errorTypeMismatch(rawString(gotType.String())))
 }
 
 func (i *tdIsa) String() string {

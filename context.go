@@ -203,6 +203,14 @@ func (c Context) AddFunctionCall(fn string) (new Context) {
 	return
 }
 
+// ResetPath creates a new Context from current one but reinitializing path.
+func (c Context) ResetPath(newPath string) (new Context) {
+	new = c
+	new.path = newPath
+	new.depth++
+	return
+}
+
 // Path returns the Context path.
 func (c Context) Path() string {
 	return c.path

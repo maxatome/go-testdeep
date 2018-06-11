@@ -215,12 +215,12 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 	err = a.checkPtr(ctx, &got)
 	if err != nil {
-		return
+		return ctx.CollectError(err)
 	}
 
 	err = a.checkType(ctx, got)
 	if err != nil {
-		return
+		return ctx.CollectError(err)
 	}
 
 	gotLen := got.Len()
