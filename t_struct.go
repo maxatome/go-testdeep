@@ -107,8 +107,8 @@ type T struct {
 //
 // If MaxErrors is not set (or set to 0), it is set to
 // DefaultContextConfig.MaxErrors which is potentially dependent from
-// the TESTDEEP_MAX_ERRORS environment variable. See ContextConfig
-// documentation for details.
+// the TESTDEEP_MAX_ERRORS environment variable (else defaults to 10.)
+// See ContextConfig documentation for details.
 func NewT(t *testing.T, config ...ContextConfig) *T {
 	switch len(config) {
 	case 0:

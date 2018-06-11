@@ -16,12 +16,12 @@ type tdExpectedType struct {
 	isPtr        bool
 }
 
-func (t *tdExpectedType) errorTypeMismatch(ctx Context, gotType rawString) *Error {
-	return ctx.CollectError(&Error{
+func (t *tdExpectedType) errorTypeMismatch(gotType rawString) *Error {
+	return &Error{
 		Message:  "type mismatch",
 		Got:      gotType,
 		Expected: rawString(t.expectedTypeStr()),
-	})
+	}
 }
 
 func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value) *Error {
@@ -31,7 +31,7 @@ func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value) *Error {
 			if ctx.booleanError {
 				return booleanError
 			}
-			return t.errorTypeMismatch(ctx, rawString(got.Type().String()))
+			return t.errorTypeMismatch(rawString(got.Type().String()))
 		}
 		*pGot = got.Elem()
 	}
@@ -48,7 +48,7 @@ func (t *tdExpectedType) checkType(ctx Context, got reflect.Value) *Error {
 			gotType = "*"
 		}
 		gotType += rawString(got.Type().String())
-		return t.errorTypeMismatch(ctx, gotType)
+		return t.errorTypeMismatch(gotType)
 	}
 	return nil
 }

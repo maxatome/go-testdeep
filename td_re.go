@@ -140,20 +140,9 @@ func (r *tdRe) matchStringCaptures(ctx Context, got string, result [][]string) *
 	return r.matchCaptures(ctx, captures)
 }
 
-func (r *tdRe) matchCaptures(ctx Context, captures []string) *Error {
-	var newCtx Context
-
-	if ctx.booleanError {
-		newCtx = NewContext()
-		newCtx.booleanError = true
-	} else {
-		newCtx = NewContextWithConfig(ContextConfig{
-			RootName: "(" + ctx.path + " =~ " + r.String() + ")",
-			// Do not initialize MaxErrors => will fail on first error
-		})
-	}
-
-	return deepValueEqual(newCtx, reflect.ValueOf(captures), r.captures)
+func (r *tdRe) matchCaptures(ctx Context, captures []string) (err *Error) {
+	return deepValueEqual(ctx.ResetPath("("+ctx.path+" =~ "+r.String()+")"),
+		reflect.ValueOf(captures), r.captures)
 }
 
 func (r *tdRe) matchBool(ctx Context, got interface{}, result bool) *Error {

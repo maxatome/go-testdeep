@@ -61,7 +61,7 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
 	err := t.checkType(ctx, got)
 	if err != nil {
-		return err
+		return ctx.CollectError(err)
 	}
 
 	gotTime, err := getTime(ctx, got, got.Type() != timeType)

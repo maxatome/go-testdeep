@@ -175,4 +175,9 @@ Originates from following error:
 DATA[13].Field: Error message
 	(int) 888
 [under TestDeep operator Operator at file.go:24]`)
+
+	//
+	// ErrTooManyErrors
+	equalStr(t, ErrTooManyErrors.Error(),
+		`Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)`)
 }
