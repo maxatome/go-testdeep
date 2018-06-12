@@ -171,25 +171,57 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 				Expected: isNilStr(expected.IsNil()),
 			})
 		}
-		if got.Len() != expected.Len() {
-			if ctx.booleanError {
-				return booleanError
-			}
-			return ctx.CollectError(&Error{
-				Message:  "slice len",
-				Got:      rawInt(got.Len()),
-				Expected: rawInt(expected.Len()),
-			})
+
+		var (
+			gotLen      = got.Len()
+			expectedLen = expected.Len()
+		)
+
+		// Shortcut in boolean context
+		if ctx.booleanError && gotLen != expectedLen {
+			return booleanError
 		}
+
 		if got.Pointer() == expected.Pointer() {
 			return
 		}
-		for i := 0; i < got.Len(); i++ {
+
+		var maxLen int
+		if gotLen >= expectedLen {
+			maxLen = expectedLen
+		} else {
+			maxLen = gotLen
+		}
+
+		for i := 0; i < maxLen; i++ {
 			err = deepValueEqual(ctx.AddArrayIndex(i),
 				got.Index(i), expected.Index(i))
 			if err != nil {
 				return
 			}
+		}
+
+		if gotLen != expectedLen {
+			res := tdSetResult{
+				Kind: itemsSetResult,
+			}
+
+			if gotLen > expectedLen {
+				res.Extra = make([]reflect.Value, gotLen-expectedLen)
+				for i := expectedLen; i < gotLen; i++ {
+					res.Extra[i-expectedLen] = got.Index(i)
+				}
+			} else {
+				res.Missing = make([]reflect.Value, expectedLen-gotLen)
+				for i := gotLen; i < expectedLen; i++ {
+					res.Missing[i-gotLen] = expected.Index(i)
+				}
+			}
+
+			return ctx.CollectError(&Error{
+				Message: fmt.Sprintf("comparing slices, from index #%d", maxLen),
+				Summary: res,
+			})
 		}
 		return
 
@@ -238,6 +270,11 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			})
 		}
 
+		// Shortcut in boolean context
+		if ctx.booleanError && got.Len() != expected.Len() {
+			return booleanError
+		}
+
 		if got.Pointer() == expected.Pointer() {
 			return
 		}
@@ -263,10 +300,6 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		if got.Len() == len(foundKeys) {
 			if len(notFoundKeys) == 0 {
 				return
-			}
-
-			if ctx.booleanError {
-				return booleanError
 			}
 			return ctx.CollectError(&Error{
 				Message: "comparing map",

@@ -188,10 +188,16 @@ func TestEqualSlice(t *testing.T) {
 
 	checkError(t, []int{1, 2}, []int{1, 2, 3},
 		expectedError{
-			Message:  mustBe("slice len"),
-			Path:     mustBe("DATA"),
-			Got:      mustBe("2"),
-			Expected: mustBe("3"),
+			Message: mustBe("comparing slices, from index #2"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`Missing items: ((int) 3)`),
+		})
+
+	checkError(t, []int{1, 2, 3}, []int{1, 2},
+		expectedError{
+			Message: mustBe("comparing slices, from index #2"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`Extra items: ((int) 3)`),
 		})
 
 	checkError(t, []int{1, 2}, ([]int)(nil),
