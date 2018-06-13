@@ -6,16 +6,17 @@
 
 package testdeep
 
-import (
-	"testing"
-)
-
 // CmpTrue is a shortcut for:
 //
 //   CmpDeeply(t, got, true, args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpTrue(t *testing.T, got interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, true, args...)
 }
@@ -25,12 +26,17 @@ func CmpTrue(t *testing.T, got interface{}, args ...interface{}) bool {
 //   CmpDeeply(t, got, false, args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpFalse(t *testing.T, got interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, false, args...)
 }
 
-func cmpError(ctx Context, t *testing.T, got error, args ...interface{}) bool {
+func cmpError(ctx Context, t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 
 	if got != nil {
@@ -49,7 +55,7 @@ func cmpError(ctx Context, t *testing.T, got error, args ...interface{}) bool {
 	return false
 }
 
-func cmpNoError(ctx Context, t *testing.T, got error, args ...interface{}) bool {
+func cmpNoError(ctx Context, t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 
 	if got == nil {
@@ -72,7 +78,12 @@ func cmpNoError(ctx Context, t *testing.T, got error, args ...interface{}) bool 
 //
 //   _, err := MyFunction(1, 2, 3)
 //   CmpError(t, err, "MyFunction(1, 2, 3) should return an error")
-func CmpError(t *testing.T, got error, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 	return cmpError(NewContext(), t, got, args...)
 }
@@ -83,7 +94,12 @@ func CmpError(t *testing.T, got error, args ...interface{}) bool {
 //   if CmpNoError(t, err) {
 //     // one can now check value...
 //   }
-func CmpNoError(t *testing.T, got error, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNoError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 	return cmpNoError(NewContext(), t, got, args...)
 }

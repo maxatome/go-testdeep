@@ -9,7 +9,6 @@
 package testdeep
 
 import (
-	"testing"
 	"time"
 )
 
@@ -18,7 +17,12 @@ import (
 //   CmpDeeply(t, got, All(expectedValues...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpAll(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpAll(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, All(expectedValues...), args...)
 }
@@ -28,7 +32,12 @@ func CmpAll(t *testing.T, got interface{}, expectedValues []interface{}, args ..
 //   CmpDeeply(t, got, Any(expectedValues...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpAny(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpAny(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Any(expectedValues...), args...)
 }
@@ -38,7 +47,12 @@ func CmpAny(t *testing.T, got interface{}, expectedValues []interface{}, args ..
 //   CmpDeeply(t, got, Array(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpArray(t *testing.T, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpArray(t TestingT, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Array(model, expectedEntries), args...)
 }
@@ -48,7 +62,12 @@ func CmpArray(t *testing.T, got interface{}, model interface{}, expectedEntries 
 //   CmpDeeply(t, got, ArrayEach(expectedValue), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpArrayEach(t *testing.T, got interface{}, expectedValue interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpArrayEach(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, ArrayEach(expectedValue), args...)
 }
@@ -58,7 +77,12 @@ func CmpArrayEach(t *testing.T, got interface{}, expectedValue interface{}, args
 //   CmpDeeply(t, got, Bag(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpBag(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpBag(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Bag(expectedItems...), args...)
 }
@@ -72,7 +96,12 @@ func CmpBag(t *testing.T, got interface{}, expectedItems []interface{}, args ...
 // original Between() call.
 //
 // Returns true if the test is OK, false if it fails.
-func CmpBetween(t *testing.T, got interface{}, from interface{}, to interface{}, bounds BoundsKind, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpBetween(t TestingT, got interface{}, from interface{}, to interface{}, bounds BoundsKind, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Between(from, to, bounds), args...)
 }
@@ -82,7 +111,12 @@ func CmpBetween(t *testing.T, got interface{}, from interface{}, to interface{},
 //   CmpDeeply(t, got, Cap(val), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpCap(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpCap(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Cap(val), args...)
 }
@@ -92,7 +126,12 @@ func CmpCap(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //   CmpDeeply(t, got, Code(fn), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpCode(t *testing.T, got interface{}, fn interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpCode(t TestingT, got interface{}, fn interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Code(fn), args...)
 }
@@ -102,7 +141,12 @@ func CmpCode(t *testing.T, got interface{}, fn interface{}, args ...interface{})
 //   CmpDeeply(t, got, Contains(expected), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpContains(t *testing.T, got interface{}, expected string, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpContains(t TestingT, got interface{}, expected string, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Contains(expected), args...)
 }
@@ -112,7 +156,12 @@ func CmpContains(t *testing.T, got interface{}, expected string, args ...interfa
 //   CmpDeeply(t, got, Empty(), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpEmpty(t *testing.T, got interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Empty(), args...)
 }
@@ -122,7 +171,12 @@ func CmpEmpty(t *testing.T, got interface{}, args ...interface{}) bool {
 //   CmpDeeply(t, got, Gt(val), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpGt(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpGt(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Gt(val), args...)
 }
@@ -132,7 +186,12 @@ func CmpGt(t *testing.T, got interface{}, val interface{}, args ...interface{}) 
 //   CmpDeeply(t, got, Gte(val), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpGte(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpGte(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Gte(val), args...)
 }
@@ -142,7 +201,12 @@ func CmpGte(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //   CmpDeeply(t, got, HasPrefix(expected), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpHasPrefix(t *testing.T, got interface{}, expected string, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpHasPrefix(t TestingT, got interface{}, expected string, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, HasPrefix(expected), args...)
 }
@@ -152,7 +216,12 @@ func CmpHasPrefix(t *testing.T, got interface{}, expected string, args ...interf
 //   CmpDeeply(t, got, HasSuffix(expected), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpHasSuffix(t *testing.T, got interface{}, expected string, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, HasSuffix(expected), args...)
 }
@@ -162,7 +231,12 @@ func CmpHasSuffix(t *testing.T, got interface{}, expected string, args ...interf
 //   CmpDeeply(t, got, Isa(model), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpIsa(t *testing.T, got interface{}, model interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpIsa(t TestingT, got interface{}, model interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Isa(model), args...)
 }
@@ -172,7 +246,12 @@ func CmpIsa(t *testing.T, got interface{}, model interface{}, args ...interface{
 //   CmpDeeply(t, got, Len(val), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpLen(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpLen(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Len(val), args...)
 }
@@ -182,7 +261,12 @@ func CmpLen(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //   CmpDeeply(t, got, Lt(val), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpLt(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpLt(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Lt(val), args...)
 }
@@ -192,7 +276,12 @@ func CmpLt(t *testing.T, got interface{}, val interface{}, args ...interface{}) 
 //   CmpDeeply(t, got, Lte(val), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpLte(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpLte(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Lte(val), args...)
 }
@@ -202,7 +291,12 @@ func CmpLte(t *testing.T, got interface{}, val interface{}, args ...interface{})
 //   CmpDeeply(t, got, Map(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpMap(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpMap(t TestingT, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Map(model, expectedEntries), args...)
 }
@@ -212,7 +306,12 @@ func CmpMap(t *testing.T, got interface{}, model interface{}, expectedEntries Ma
 //   CmpDeeply(t, got, MapEach(expectedValue), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpMapEach(t *testing.T, got interface{}, expectedValue interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpMapEach(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, MapEach(expectedValue), args...)
 }
@@ -226,7 +325,12 @@ func CmpMapEach(t *testing.T, got interface{}, expectedValue interface{}, args .
 // original N() call.
 //
 // Returns true if the test is OK, false if it fails.
-func CmpN(t *testing.T, got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpN(t TestingT, got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, N(num, tolerance), args...)
 }
@@ -236,7 +340,12 @@ func CmpN(t *testing.T, got interface{}, num interface{}, tolerance interface{},
 //   CmpDeeply(t, got, Nil(), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNil(t *testing.T, got interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNil(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Nil(), args...)
 }
@@ -246,7 +355,12 @@ func CmpNil(t *testing.T, got interface{}, args ...interface{}) bool {
 //   CmpDeeply(t, got, None(expectedValues...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNone(t *testing.T, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNone(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, None(expectedValues...), args...)
 }
@@ -256,7 +370,12 @@ func CmpNone(t *testing.T, got interface{}, expectedValues []interface{}, args .
 //   CmpDeeply(t, got, NoneOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNoneOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNoneOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, NoneOf(expectedItems...), args...)
 }
@@ -266,7 +385,12 @@ func CmpNoneOf(t *testing.T, got interface{}, expectedItems []interface{}, args 
 //   CmpDeeply(t, got, Not(expected), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNot(t *testing.T, got interface{}, expected interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNot(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Not(expected), args...)
 }
@@ -276,7 +400,12 @@ func CmpNot(t *testing.T, got interface{}, expected interface{}, args ...interfa
 //   CmpDeeply(t, got, NotEmpty(), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNotEmpty(t *testing.T, got interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNotEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, NotEmpty(), args...)
 }
@@ -286,7 +415,12 @@ func CmpNotEmpty(t *testing.T, got interface{}, args ...interface{}) bool {
 //   CmpDeeply(t, got, NotNil(), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNotNil(t *testing.T, got interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, NotNil(), args...)
 }
@@ -296,7 +430,12 @@ func CmpNotNil(t *testing.T, got interface{}, args ...interface{}) bool {
 //   CmpDeeply(t, got, NotZero(), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpNotZero(t *testing.T, got interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNotZero(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, NotZero(), args...)
 }
@@ -306,7 +445,12 @@ func CmpNotZero(t *testing.T, got interface{}, args ...interface{}) bool {
 //   CmpDeeply(t, got, PPtr(val), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpPPtr(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpPPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, PPtr(val), args...)
 }
@@ -316,7 +460,12 @@ func CmpPPtr(t *testing.T, got interface{}, val interface{}, args ...interface{}
 //   CmpDeeply(t, got, Ptr(val), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpPtr(t *testing.T, got interface{}, val interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Ptr(val), args...)
 }
@@ -330,7 +479,12 @@ func CmpPtr(t *testing.T, got interface{}, val interface{}, args ...interface{})
 // original Re() call.
 //
 // Returns true if the test is OK, false if it fails.
-func CmpRe(t *testing.T, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpRe(t TestingT, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Re(reg, capture), args...)
 }
@@ -340,7 +494,12 @@ func CmpRe(t *testing.T, got interface{}, reg interface{}, capture interface{}, 
 //   CmpDeeply(t, got, ReAll(reg, capture), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpReAll(t *testing.T, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpReAll(t TestingT, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, ReAll(reg, capture), args...)
 }
@@ -350,7 +509,12 @@ func CmpReAll(t *testing.T, got interface{}, reg interface{}, capture interface{
 //   CmpDeeply(t, got, Set(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSet(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpSet(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Set(expectedItems...), args...)
 }
@@ -360,7 +524,12 @@ func CmpSet(t *testing.T, got interface{}, expectedItems []interface{}, args ...
 //   CmpDeeply(t, got, Shallow(expectedPtr), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpShallow(t *testing.T, got interface{}, expectedPtr interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpShallow(t TestingT, got interface{}, expectedPtr interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Shallow(expectedPtr), args...)
 }
@@ -370,7 +539,12 @@ func CmpShallow(t *testing.T, got interface{}, expectedPtr interface{}, args ...
 //   CmpDeeply(t, got, Slice(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSlice(t *testing.T, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpSlice(t TestingT, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Slice(model, expectedEntries), args...)
 }
@@ -380,7 +554,12 @@ func CmpSlice(t *testing.T, got interface{}, model interface{}, expectedEntries 
 //   CmpDeeply(t, got, String(expected), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpString(t *testing.T, got interface{}, expected string, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpString(t TestingT, got interface{}, expected string, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, String(expected), args...)
 }
@@ -390,7 +569,12 @@ func CmpString(t *testing.T, got interface{}, expected string, args ...interface
 //   CmpDeeply(t, got, Struct(model, expectedFields), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpStruct(t *testing.T, got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpStruct(t TestingT, got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Struct(model, expectedFields), args...)
 }
@@ -400,7 +584,12 @@ func CmpStruct(t *testing.T, got interface{}, model interface{}, expectedFields 
 //   CmpDeeply(t, got, SubBagOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSubBagOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, SubBagOf(expectedItems...), args...)
 }
@@ -410,7 +599,12 @@ func CmpSubBagOf(t *testing.T, got interface{}, expectedItems []interface{}, arg
 //   CmpDeeply(t, got, SubMapOf(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSubMapOf(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpSubMapOf(t TestingT, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, SubMapOf(model, expectedEntries), args...)
 }
@@ -420,7 +614,12 @@ func CmpSubMapOf(t *testing.T, got interface{}, model interface{}, expectedEntri
 //   CmpDeeply(t, got, SubSetOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSubSetOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, SubSetOf(expectedItems...), args...)
 }
@@ -430,7 +629,12 @@ func CmpSubSetOf(t *testing.T, got interface{}, expectedItems []interface{}, arg
 //   CmpDeeply(t, got, SuperBagOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSuperBagOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, SuperBagOf(expectedItems...), args...)
 }
@@ -440,7 +644,12 @@ func CmpSuperBagOf(t *testing.T, got interface{}, expectedItems []interface{}, a
 //   CmpDeeply(t, got, SuperMapOf(model, expectedEntries), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSuperMapOf(t *testing.T, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpSuperMapOf(t TestingT, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, SuperMapOf(model, expectedEntries), args...)
 }
@@ -450,7 +659,12 @@ func CmpSuperMapOf(t *testing.T, got interface{}, model interface{}, expectedEnt
 //   CmpDeeply(t, got, SuperSetOf(expectedItems...), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpSuperSetOf(t *testing.T, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, SuperSetOf(expectedItems...), args...)
 }
@@ -464,7 +678,12 @@ func CmpSuperSetOf(t *testing.T, got interface{}, expectedItems []interface{}, a
 // original TruncTime() call.
 //
 // Returns true if the test is OK, false if it fails.
-func CmpTruncTime(t *testing.T, got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpTruncTime(t TestingT, got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, TruncTime(expectedTime, trunc), args...)
 }
@@ -474,7 +693,12 @@ func CmpTruncTime(t *testing.T, got interface{}, expectedTime interface{}, trunc
 //   CmpDeeply(t, got, Zero(), args...)
 //
 // Returns true if the test is OK, false if it fails.
-func CmpZero(t *testing.T, got interface{}, args ...interface{}) bool {
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpZero(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Zero(), args...)
 }
