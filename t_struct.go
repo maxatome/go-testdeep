@@ -6,14 +6,13 @@
 
 package testdeep
 
-import (
-	"testing"
-)
+import "testing"
 
-// T is a type that encapsulates testing.T allowing to easily use
-// testing.T methods as well as T ones.
+// T is a type that encapsulates testing.T (in fact TestingFT which is
+// implemented by *testing.T) allowing to easily use testing.T methods
+// as well as T ones.
 type T struct {
-	*testing.T
+	TestingFT
 	Config ContextConfig // defaults to DefaultContextConfig
 }
 
@@ -116,19 +115,19 @@ type T struct {
 // DefaultContextConfig.MaxErrors which is potentially dependent from
 // the TESTDEEP_MAX_ERRORS environment variable (else defaults to 10.)
 // See ContextConfig documentation for details.
-func NewT(t *testing.T, config ...ContextConfig) *T {
+func NewT(t TestingFT, config ...ContextConfig) *T {
 	switch len(config) {
 	case 0:
 		return &T{
-			T:      t,
-			Config: DefaultContextConfig,
+			TestingFT: t,
+			Config:    DefaultContextConfig,
 		}
 
 	case 1:
 		config[0].sanitize()
 		return &T{
-			T:      t,
-			Config: config[0],
+			TestingFT: t,
+			Config:    config[0],
 		}
 
 	default:
@@ -169,18 +168,29 @@ func (t *T) RootName(rootName string) *T {
 
 // CmpDeeply is mostly a shortcut for:
 //
-//   CmpDeeply(t.T, got, expected, args...)
+//   CmpDeeply(t.TestingFT, got, expected, args...)
 //
 // with the exception that t.Config is used to configure the test
 // Context.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
-	return cmpDeeply(NewContextWithConfig(t.Config), t.T, got, expected, args...)
+	return cmpDeeply(NewContextWithConfig(t.Config),
+		t.TestingFT, got, expected, args...)
 }
 
 // True is shortcut for:
 //
 //   t.CmpDeeply(got, true, args...)
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) True(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.CmpDeeply(got, true, args...)
@@ -189,6 +199,11 @@ func (t *T) True(got interface{}, args ...interface{}) bool {
 // False is shortcut for:
 //
 //   t.CmpDeeply(got, false, args...)
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) False(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.CmpDeeply(got, false, args...)
@@ -199,10 +214,15 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 //   _, err := MyFunction(1, 2, 3)
 //   t.CmpError(err, "MyFunction(1, 2, 3) should return an error")
 //
-// CmpError and not Error to avoid collision with t.T.Error method.
+// CmpError and not Error to avoid collision with t.TestingFT.Error method.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpError(got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpError(NewContextWithConfig(t.Config), t.T, got, args...)
+	return cmpError(NewContextWithConfig(t.Config), t.TestingFT, got, args...)
 }
 
 // CmpNoError checks that "got" is nil error.
@@ -213,9 +233,14 @@ func (t *T) CmpError(got error, args ...interface{}) bool {
 //   }
 //
 // CmpNoError and not NoError to be consistent with CmpError method.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpNoError(got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpNoError(NewContextWithConfig(t.Config), t.T, got, args...)
+	return cmpNoError(NewContextWithConfig(t.Config), t.TestingFT, got, args...)
 }
 
 // Run runs "f" as a subtest of t called "name". It runs "f" in a separate
@@ -231,5 +256,5 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 // is why this documentation is a copy/paste of testing.Run one.
 func (t *T) Run(name string, f func(t *T)) bool {
 	t.Helper()
-	return t.T.Run(name, func(tt *testing.T) { f(NewT(tt)) })
+	return t.TestingFT.Run(name, func(tt *testing.T) { f(NewT(tt)) })
 }

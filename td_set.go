@@ -79,19 +79,19 @@ func SuperSetOf(expectedItems ...interface{}) TestDeep {
 	return set
 }
 
-type tdNoneOf struct {
+type tdNotAny struct {
 	tdSetBase
 }
 
-var _ TestDeep = &tdNoneOf{}
+var _ TestDeep = &tdNotAny{}
 
-// NoneOf operator checks that the contents of an array or a slice (or
+// NotAny operator checks that the contents of an array or a slice (or
 // a pointer on array/slice) does not contain any of "expectedItems".
 //
-//   CmpDeeply(t, []int{1}, NoneOf(1, 2, 3)) // fails
-//   CmpDeeply(t, []int{5}, NoneOf(1, 2, 3)) // succeeds
-func NoneOf(expectedItems ...interface{}) TestDeep {
-	set := &tdNoneOf{
+//   CmpDeeply(t, []int{1}, NotAny(1, 2, 3)) // fails
+//   CmpDeeply(t, []int{5}, NotAny(1, 2, 3)) // succeeds
+func NotAny(expectedItems ...interface{}) TestDeep {
+	set := &tdNotAny{
 		tdSetBase: newSetBase(noneSet, true),
 	}
 	set.Add(expectedItems...)

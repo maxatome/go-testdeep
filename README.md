@@ -365,7 +365,7 @@ compares a number with a tolerance value;
 compares to `nil`;
 - [`None`](https://godoc.org/github.com/maxatome/go-testdeep#None)
 no values have to match;
-- [`NoneOf`](https://godoc.org/github.com/maxatome/go-testdeep#NoneOf)
+- [`NotAny`](https://godoc.org/github.com/maxatome/go-testdeep#NotAny)
 compares the contents of an array or a slice, no values have to match;
 - [`Not`](https://godoc.org/github.com/maxatome/go-testdeep#Not)
 value must not match;

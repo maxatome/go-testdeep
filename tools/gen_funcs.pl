@@ -13,7 +13,7 @@ use 5.010;
 
 die "usage $0 [-h] DIR" if @ARGV == 0 or $ARGV[0] =~ /^--?h/;
 
-my $HEADER = <<EOH;
+my $HEADER = <<'EOH';
 // Copyright (c) 2018, Maxime Soulé
 // All rights reserved.
 //
@@ -22,6 +22,14 @@ my $HEADER = <<EOH;
 //
 // DO NOT EDIT!!! AUTOMATICALLY GENERATED!!!
 EOH
+
+chop(my $ARGS_COMMENT = <<'EOC');
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+EOC
 
 # These functions are variadics, but only with one possible param. In
 # this case, discard the variadic property and use a default value for
@@ -75,17 +83,7 @@ while (readdir $dh)
 
 closedir($dh);
 
-my $funcs_contents = <<EOH;
-$HEADER
-package testdeep
-
-import (
-\t"testing"
-\t"time"
-)
-EOH
-
-my $t_contents = <<EOH;
+my $funcs_contents = my $t_contents = <<EOH;
 $HEADER
 package testdeep
 
@@ -150,13 +148,15 @@ EOF
 EOF
 
     $funcs_contents .= $func_comment . <<EOF;
-func Cmp$func(t *testing.T, $cmp_args, args ...interface{}) bool {
+$ARGS_COMMENT
+func Cmp$func(t TestingT, $cmp_args, args ...interface{}) bool {
 \tt.Helper()
 \treturn CmpDeeply(t, got, $func($call_args), args...)
 }
 EOF
 
     $t_contents .= $func_comment . <<EOF;
+$ARGS_COMMENT
 func (t *T)$func($cmp_args, args ...interface{}) bool {
 \tt.Helper()
 \treturn t.CmpDeeply(got, $func($call_args), args...)
@@ -300,6 +300,37 @@ EOF
     print $fh $t_test_contents;
     close $fh;
     say "$dir/t_test.go generated";
+}
+
+#
+# Check "args..." comment is the same everywhere it needs to be
+my @args_errors;
+#foreach my $go_file (qw(cmp_funcs.go cmp_funcs_misc.go equal.go t.go))
+foreach my $go_file (do { opendir(my $dh, $dir);
+			  grep /(?<!_test)\.go\z/, readdir $dh })
+{
+    my $contents = do { local $/; open(my $fh, '<', "$dir/$go_file"); <$fh> };
+
+    while ($contents =~ m,\n((?://[^\n]*\n)*)
+	                    func\ ([A-Z]\w+|\(t\ \*T\)\ [A-Z]\w+)($rep),xg)
+    {
+	my($comment, $func, $params) = ($1, $2, $3);
+
+	if ($params =~ /\Qargs ...interface{})\E\z/)
+	{
+	    chomp $comment;
+	    if (substr($comment, - length($ARGS_COMMENT)) ne $ARGS_COMMENT)
+	    {
+		push(@args_errors, "$go_file: $func");
+	    }
+	}
+    }
+}
+if (@args_errors)
+{
+    die "*** At least one args comment is missing or not conform:\n- "
+	. join("\n- ", @args_errors)
+	. "\n";
 }
 
 #$funcs_test_contents !~ /CmpDeeply/

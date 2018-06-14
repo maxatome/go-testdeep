@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"testing"
 	"time"
 )
 
@@ -20,6 +21,21 @@ var (
 	timeType          = reflect.TypeOf(time.Time{})
 	intType           = reflect.TypeOf(int(0))
 )
+
+// TestingT is the minimal interface used by CmpDeeply to report
+// errors. It is commonly implemented by *testing.T and testing.TB.
+type TestingT interface {
+	Error(args ...interface{})
+	Helper()
+}
+
+// TestingFT (aka. TestingF<ull>T) is the interface used by T to
+// delegate common *testing.T functions to it. Of course, *testing.T
+// implements it.
+type TestingFT interface {
+	testing.TB
+	Run(name string, f func(t *testing.T)) bool
+}
 
 type testDeepStringer interface {
 	_TestDeep()

@@ -11,10 +11,8 @@
 package testdeep
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
-	"testing"
 	"unsafe"
 )
 
@@ -413,56 +411,4 @@ func EqDeeply(got, expected interface{}) bool {
 func EqDeeplyError(got, expected interface{}) (err *Error) {
 	return deepValueEqualFinal(NewContext(),
 		reflect.ValueOf(got), reflect.ValueOf(expected))
-}
-
-func cmpDeeply(ctx Context, t *testing.T, got, expected interface{},
-	args ...interface{}) bool {
-	t.Helper()
-
-	err := deepValueEqualFinal(ctx,
-		reflect.ValueOf(got), reflect.ValueOf(expected))
-	if err == nil {
-		return true
-	}
-	formatError(t, err, args...)
-	return false
-}
-
-func formatError(t *testing.T, err *Error, args ...interface{}) {
-	t.Helper()
-
-	const failedTest = "Failed test"
-
-	var buf *bytes.Buffer
-	switch len(args) {
-	case 0:
-		buf = bytes.NewBufferString(failedTest + "\n")
-	case 1:
-		buf = bytes.NewBufferString(failedTest + " '" + args[0].(string) + "'\n")
-	default:
-		buf = bytes.NewBufferString(failedTest + " '")
-		fmt.Fprintf(buf, args[0].(string), args[1:]...)
-		buf.WriteString("'\n")
-	}
-
-	err.Append(buf, "")
-
-	t.Error(buf.String())
-}
-
-// CmpDeeply returns true if "got" matches "expected". "expected" can
-// be the same type as "got" is, or contains some TestDeep
-// operators. If "got" does not match "expected", it returns false and
-// the reason of failure is logged with the help of "t" Error()
-// method.
-//
-// "args..." are optional and allow to name the test. This name is
-// logged as well in case of failure. The first arg must be a
-// string. If more than one arg is passed, the first one is supposed
-// to be a fmt.Sprintf format with remaining args the format
-// parameters. See fmt.Sprintf for details.
-func CmpDeeply(t *testing.T, got, expected interface{},
-	args ...interface{}) bool {
-	t.Helper()
-	return cmpDeeply(NewContext(), t, got, expected, args...)
 }

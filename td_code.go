@@ -32,7 +32,7 @@ var _ TestDeep = &tdCode{}
 // or two values (bool, string) kinds. The bool value has the same
 // meaning as above, and the string value is used to describe the
 // test when it fails:
-//   Code(func (date time.Time) bool {
+//   Code(func (date time.Time) (bool, string) {
 //       if date.Year() == 2018 {
 //         return true, ""
 //       }
