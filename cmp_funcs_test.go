@@ -1384,6 +1384,87 @@ func ExampleCmpSlice_typedSlice() {
 	// true
 }
 
+func ExampleCmpSmuggle_convert() {
+	t := &testing.T{}
+
+	got := int64(123)
+
+	ok := CmpSmuggle(t, got, func(n int64) int { return int(n) }, 123,
+		"checks int64 got against an int value")
+	fmt.Println(ok)
+
+	ok = CmpSmuggle(t, "123", func(numStr string) (int, bool) {
+		n, err := strconv.Atoi(numStr)
+		return n, err == nil
+	}, Between(120, 130),
+		"checks that number in %#v is in [120 .. 130]")
+	fmt.Println(ok)
+
+	ok = CmpSmuggle(t, "123", func(numStr string) (int, bool, string) {
+		n, err := strconv.Atoi(numStr)
+		if err != nil {
+			return 0, false, "string must contain a number"
+		}
+		return n, true, ""
+	}, Between(120, 130),
+		"checks that number in %#v is in [120 .. 130]")
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// true
+}
+
+func ExampleCmpSmuggle_complex() {
+	t := &testing.T{}
+
+	// No end date but a start date and a duration
+	type StartDuration struct {
+		StartDate time.Time
+		Duration  time.Duration
+	}
+
+	// Checks that end date is between 17th and 19th February both at 0h
+	// for each of these durations in hours
+
+	for _, duration := range []time.Duration{48, 72, 96} {
+		got := StartDuration{
+			StartDate: time.Date(2018, time.February, 14, 12, 13, 14, 0, time.UTC),
+			Duration:  duration * time.Hour,
+		}
+
+		// Simplest way, but in case of Between() failure, error will be bound
+		// to DATA<smuggled>, not very clear...
+		ok := CmpSmuggle(t, got, func(sd StartDuration) time.Time {
+			return sd.StartDate.Add(sd.Duration)
+		}, Between(
+			time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
+			time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
+		fmt.Println(ok)
+
+		// Name the computed value "ComputedEndDate" to render a Between() failure
+		// more understandable, so error will be bound to DATA.ComputedEndDate
+		ok = CmpSmuggle(t, got, func(sd StartDuration) SmuggledGot {
+			return SmuggledGot{
+				Name: "ComputedEndDate",
+				Got:  sd.StartDate.Add(sd.Duration),
+			}
+		}, Between(
+			time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
+			time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
+		fmt.Println(ok)
+	}
+
+	// Output:
+	// false
+	// false
+	// true
+	// true
+	// true
+	// true
+}
+
 func ExampleCmpString() {
 	t := &testing.T{}
 

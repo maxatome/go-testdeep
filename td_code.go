@@ -19,7 +19,7 @@ type tdCode struct {
 
 var _ TestDeep = &tdCode{}
 
-// Code operator allows to checks data using a custom function. So
+// Code operator allows to check data using a custom function. So
 // "fn" is a function that must take one parameter whose type must be
 // the same as the type of the compared value.
 //
@@ -41,6 +41,12 @@ var _ TestDeep = &tdCode{}
 //
 // This operator allows to handle any specific comparison not handled
 // by standard operators.
+//
+// It is not recommended to call CmpDeeply (or any other Cmp*
+// functions or *T methods) inside the body of "fn", because of
+// confusion produced by output in case of failure. When the data
+// needs to be transformed before being compared again, Smuggle
+// operator should be used instead.
 func Code(fn interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 

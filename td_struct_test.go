@@ -373,6 +373,21 @@ func TestStructPrivateFields(t *testing.T) {
 			Path:    mustBe("DATA.next.birth"),
 			Summary: mustBe("use Code() on surrounding struct instead"),
 		})
+
+	checkError(t, got,
+		Struct(structPrivateFields{}, StructFields{
+			"next": Struct(&structPrivateFields{}, StructFields{
+				"name": "sub",
+				"birth": Smuggle(
+					func(t time.Time) string { return t.String() },
+					"2018-04-01T10:11:12.123456789Z"),
+			}),
+		}),
+		expectedError{
+			Message: mustBe("cannot smuggle unexported field"),
+			Path:    mustBe("DATA.next.birth"),
+			Summary: mustBe("work on surrounding struct instead"),
+		})
 }
 
 func TestStructTypeBehind(t *testing.T) {

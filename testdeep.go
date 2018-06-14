@@ -90,7 +90,7 @@
 //             Age:  23,
 //           },
 //           td.StructFields{
-//             Id:        td.Not(uint64(0)),
+//             Id:        td.NotZero(),
 //             CreatedAt: td.Between(before, time.Now()),
 //           }),
 //         "Newly created record")
@@ -124,7 +124,7 @@
 //           Age:  23,
 //         },
 //         td.StructFields{
-//           Id:        td.Not(uint64(0)),
+//           Id:        td.NotZero(),
 //           CreatedAt: td.Between(before, time.Now()),
 //         },
 //         "Newly created record")
@@ -154,7 +154,7 @@
 //           Age:  23,
 //         },
 //         td.StructFields{
-//           Id:        td.Not(uint64(0)),
+//           Id:        td.NotZero(),
 //           CreatedAt: td.Between(before, time.Now()),
 //         },
 //         "Newly created record")

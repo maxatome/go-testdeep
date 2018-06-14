@@ -16,10 +16,12 @@ import (
 )
 
 var (
-	testDeeper        = reflect.TypeOf((*TestDeep)(nil)).Elem()
-	stringerInterface = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
-	timeType          = reflect.TypeOf(time.Time{})
-	intType           = reflect.TypeOf(int(0))
+	testDeeper         = reflect.TypeOf((*TestDeep)(nil)).Elem()
+	stringerInterface  = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+	timeType           = reflect.TypeOf(time.Time{})
+	intType            = reflect.TypeOf(int(0))
+	smuggledGotType    = reflect.TypeOf(SmuggledGot{})
+	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
 )
 
 // TestingT is the minimal interface used by CmpDeeply to report
