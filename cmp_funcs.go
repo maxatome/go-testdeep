@@ -365,21 +365,6 @@ func CmpNone(t TestingT, got interface{}, expectedValues []interface{}, args ...
 	return CmpDeeply(t, got, None(expectedValues...), args...)
 }
 
-// CmpNoneOf is a shortcut for:
-//
-//   CmpDeeply(t, got, NoneOf(expectedItems...), args...)
-//
-// Returns true if the test is OK, false if it fails.
-//
-// "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func CmpNoneOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	t.Helper()
-	return CmpDeeply(t, got, NoneOf(expectedItems...), args...)
-}
-
 // CmpNot is a shortcut for:
 //
 //   CmpDeeply(t, got, Not(expected), args...)
@@ -393,6 +378,21 @@ func CmpNoneOf(t TestingT, got interface{}, expectedItems []interface{}, args ..
 func CmpNot(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	return CmpDeeply(t, got, Not(expected), args...)
+}
+
+// CmpNotAny is a shortcut for:
+//
+//   CmpDeeply(t, got, NotAny(expectedItems...), args...)
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+	t.Helper()
+	return CmpDeeply(t, got, NotAny(expectedItems...), args...)
 }
 
 // CmpNotEmpty is a shortcut for:

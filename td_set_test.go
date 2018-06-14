@@ -101,12 +101,12 @@ func TestSet(t *testing.T) {
 			testName)
 
 		//
-		// NoneOf
-		checkOK(t, got, NoneOf(10, 20, 30), testName)
+		// NotAny
+		checkOK(t, got, NotAny(10, 20, 30), testName)
 
-		checkError(t, got, NoneOf(3, 66),
+		checkError(t, got, NotAny(3, 66),
 			expectedError{
-				Message: mustBe("comparing %% as a NoneOf"),
+				Message: mustBe("comparing %% as a NotAny"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Extra items: ((int) 3)"),
 			},
@@ -124,15 +124,15 @@ func TestSet(t *testing.T) {
 		checkOK(t, got, SubSetOf(), testName)
 		checkOK(t, got, SubSetOf(1, 2), testName)
 		checkOK(t, got, SuperSetOf(), testName)
-		checkOK(t, got, NoneOf(), testName)
-		checkOK(t, got, NoneOf(1, 2), testName)
+		checkOK(t, got, NotAny(), testName)
+		checkOK(t, got, NotAny(1, 2), testName)
 	}
 
 	for idx, set := range []TestDeep{
 		Set(123),
 		SubSetOf(123),
 		SuperSetOf(123),
-		NoneOf(123),
+		NotAny(123),
 	} {
 		testName := fmt.Sprintf("Test #%d → %s", idx, set)
 
@@ -187,13 +187,13 @@ func TestSet(t *testing.T) {
 	equalStr(t, SuperSetOf(1, 2).String(),
 		"SuperSetOf((int) 1,\n           (int) 2)")
 
-	equalStr(t, NoneOf(1).String(), "NoneOf((int) 1)")
-	equalStr(t, NoneOf(1, 2).String(), "NoneOf((int) 1,\n       (int) 2)")
+	equalStr(t, NotAny(1).String(), "NotAny((int) 1)")
+	equalStr(t, NotAny(1, 2).String(), "NotAny((int) 1,\n       (int) 2)")
 }
 
 func TestSetTypeBehind(t *testing.T) {
 	equalTypes(t, Set(6), nil)
 	equalTypes(t, SubSetOf(6), nil)
 	equalTypes(t, SuperSetOf(6), nil)
-	equalTypes(t, NoneOf(6), nil)
+	equalTypes(t, NotAny(6), nil)
 }

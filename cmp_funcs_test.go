@@ -845,24 +845,6 @@ func ExampleCmpNone() {
 	// false
 }
 
-func ExampleCmpNoneOf() {
-	t := &testing.T{}
-
-	got := []int{4, 5, 9, 42}
-
-	ok := CmpNoneOf(t, got, []interface{}{3, 6, 8, 41, 43},
-		"checks %v contains no item listed in NoneOf()", got)
-	fmt.Println(ok)
-
-	ok = CmpNoneOf(t, got, []interface{}{3, 6, 8, 42, 43},
-		"checks %v contains no item listed in NoneOf()", got)
-	fmt.Println(ok)
-
-	// Output:
-	// true
-	// false
-}
-
 func ExampleCmpNot() {
 	t := &testing.T{}
 
@@ -882,6 +864,24 @@ func ExampleCmpNot() {
 
 	// Output:
 	// true
+	// true
+	// false
+}
+
+func ExampleCmpNotAny() {
+	t := &testing.T{}
+
+	got := []int{4, 5, 9, 42}
+
+	ok := CmpNotAny(t, got, []interface{}{3, 6, 8, 41, 43},
+		"checks %v contains no item listed in NotAny()", got)
+	fmt.Println(ok)
+
+	ok = CmpNotAny(t, got, []interface{}{3, 6, 8, 42, 43},
+		"checks %v contains no item listed in NotAny()", got)
+	fmt.Println(ok)
+
+	// Output:
 	// true
 	// false
 }

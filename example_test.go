@@ -865,17 +865,17 @@ func ExampleNone() {
 	// false
 }
 
-func ExampleNoneOf() {
+func ExampleNotAny() {
 	t := &testing.T{}
 
 	got := []int{4, 5, 9, 42}
 
-	ok := CmpDeeply(t, got, NoneOf(3, 6, 8, 41, 43),
-		"checks %v contains no item listed in NoneOf()", got)
+	ok := CmpDeeply(t, got, NotAny(3, 6, 8, 41, 43),
+		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, NoneOf(3, 6, 8, 42, 43),
-		"checks %v contains no item listed in NoneOf()", got)
+	ok = CmpDeeply(t, got, NotAny(3, 6, 8, 42, 43),
+		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
 	// Output:

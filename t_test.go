@@ -845,24 +845,6 @@ func ExampleT_None() {
 	// false
 }
 
-func ExampleT_NoneOf() {
-	t := NewT(&testing.T{})
-
-	got := []int{4, 5, 9, 42}
-
-	ok := t.NoneOf(got, []interface{}{3, 6, 8, 41, 43},
-		"checks %v contains no item listed in NoneOf()", got)
-	fmt.Println(ok)
-
-	ok = t.NoneOf(got, []interface{}{3, 6, 8, 42, 43},
-		"checks %v contains no item listed in NoneOf()", got)
-	fmt.Println(ok)
-
-	// Output:
-	// true
-	// false
-}
-
 func ExampleT_Not() {
 	t := NewT(&testing.T{})
 
@@ -882,6 +864,24 @@ func ExampleT_Not() {
 
 	// Output:
 	// true
+	// true
+	// false
+}
+
+func ExampleT_NotAny() {
+	t := NewT(&testing.T{})
+
+	got := []int{4, 5, 9, 42}
+
+	ok := t.NotAny(got, []interface{}{3, 6, 8, 41, 43},
+		"checks %v contains no item listed in NotAny()", got)
+	fmt.Println(ok)
+
+	ok = t.NotAny(got, []interface{}{3, 6, 8, 42, 43},
+		"checks %v contains no item listed in NotAny()", got)
+	fmt.Println(ok)
+
+	// Output:
 	// true
 	// false
 }
