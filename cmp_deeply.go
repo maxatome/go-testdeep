@@ -31,7 +31,9 @@ func formatError(t TestingT, err *Error, args ...interface{}) {
 		if str, ok := args[0].(string); ok && strings.ContainsRune(str, '%') {
 			fmt.Fprintf(buf, str, args[1:]...)
 		} else {
-			fmt.Fprint(buf, args...)
+			// create a new slice to fool govet and avoid "call has possible
+			// formatting directive" errors
+			fmt.Fprint(buf, args[:]...)
 		}
 		buf.WriteString("'\n")
 	}
