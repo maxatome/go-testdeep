@@ -11,7 +11,7 @@ import (
 )
 
 type tdPtr struct {
-	tdSmuggler
+	tdSmugglerBase
 }
 
 var _ TestDeep = &tdPtr{}
@@ -28,7 +28,7 @@ func Ptr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
 		p := tdPtr{
-			tdSmuggler: newSmuggler(val),
+			tdSmugglerBase: newSmugglerBase(val),
 		}
 
 		if !p.isTestDeeper {
@@ -66,7 +66,7 @@ func (p *tdPtr) String() string {
 }
 
 type tdPPtr struct {
-	tdSmuggler
+	tdSmugglerBase
 }
 
 var _ TestDeep = &tdPPtr{}
@@ -86,7 +86,7 @@ func PPtr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
 		p := tdPPtr{
-			tdSmuggler: newSmuggler(val),
+			tdSmugglerBase: newSmugglerBase(val),
 		}
 
 		if !p.isTestDeeper {

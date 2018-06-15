@@ -40,7 +40,7 @@ func TestCreateRecord(t *testing.T) {
         Age:  23,
       },
       td.StructFields{
-        "Id":        td.Not(uint64(0)),
+        "Id":        td.NotZero(),
         "CreatedAt": td.Between(before, time.Now()),
       },
       "Newly created record")
@@ -126,7 +126,7 @@ func TestCreateRecord(tt *testing.T) {
         Age:  23,
       },
       td.StructFields{
-        "Id":        td.Not(uint64(0)),
+        "Id":        td.NotZero(),
         "CreatedAt": td.Between(before, time.Now()),
       },
       "Newly created record")
@@ -223,7 +223,7 @@ func TestCreateRecord(t *testing.T) {
           Age:  23,
         },
         td.StructFields{
-          "Id":        td.Not(uint64(0)),
+          "Id":        td.NotZero(),
           "CreatedAt": td.Between(before, time.Now()),
         }),
       "Newly created record")
@@ -261,7 +261,7 @@ func TestCreateRecord(t *testing.T) {
         Age:  23,
       },
       td.StructFields{
-        "Id":        td.Not(uint64(0)),
+        "Id":        td.NotZero(),
         "CreatedAt": td.Between(before, time.Now()),
       },
       "Newly created record")
@@ -294,7 +294,7 @@ func TestCreateRecord(tt *testing.T) {
         Age:  23,
       },
       td.StructFields{
-        Id:        td.Not(uint64(0)),
+        Id:        td.NotZero(),
         CreatedAt: td.Between(before, time.Now()),
       },
       "Newly created record")
@@ -396,6 +396,9 @@ without taking care of the order of items;
 compares pointers only, not their contents;
 - [`Slice`](https://godoc.org/github.com/maxatome/go-testdeep#Slice)
 compares the contents of a slice or a pointer on a slice;
+- [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
+changes data contents or mutates it into another type via a custom
+function before stepping down in favor of generic comparison process;
 - [`String`](https://godoc.org/github.com/maxatome/go-testdeep#String)
 checks a string, [`error`](https://golang.org/ref/spec#Errors) or
 [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces

@@ -10,14 +10,14 @@ import (
 	"reflect"
 )
 
-// tdSmuggler is the base class of all smuggler TestDeep operators.
-type tdSmuggler struct {
+// tdSmugglerBase is the base class of all smuggler TestDeep operators.
+type tdSmugglerBase struct {
 	Base
 	expectedValue reflect.Value
 	isTestDeeper  bool
 }
 
-func newSmuggler(val interface{}, depth ...int) (ret tdSmuggler) {
+func newSmugglerBase(val interface{}, depth ...int) (ret tdSmugglerBase) {
 	callDepth := 4
 	if len(depth) > 0 {
 		callDepth = depth[0]

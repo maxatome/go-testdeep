@@ -12,13 +12,13 @@ import (
 )
 
 type tdLenCapBase struct {
-	tdSmuggler
+	tdSmugglerBase
 }
 
 func (b *tdLenCapBase) initLenCapBase(val interface{}) bool {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
-		b.tdSmuggler = newSmuggler(val, 5)
+		b.tdSmugglerBase = newSmugglerBase(val, 5)
 
 		if b.isTestDeeper {
 			return true
