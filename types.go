@@ -22,6 +22,7 @@ var (
 	intType            = reflect.TypeOf(int(0))
 	smuggledGotType    = reflect.TypeOf(SmuggledGot{})
 	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
+	reflectValueType   = reflect.TypeOf(reflect.Value{})
 )
 
 // TestingT is the minimal interface used by CmpDeeply to report

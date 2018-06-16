@@ -45,13 +45,12 @@ func formatError(t TestingT, err *Error, args ...interface{}) {
 
 func cmpDeeply(ctx Context, t TestingT, got, expected interface{},
 	args ...interface{}) bool {
-	t.Helper()
-
 	err := deepValueEqualFinal(ctx,
 		reflect.ValueOf(got), reflect.ValueOf(expected))
 	if err == nil {
 		return true
 	}
+	t.Helper()
 	formatError(t, err, args...)
 	return false
 }

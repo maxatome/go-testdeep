@@ -37,12 +37,11 @@ func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool {
 }
 
 func cmpError(ctx Context, t TestingT, got error, args ...interface{}) bool {
-	t.Helper()
-
 	if got != nil {
 		return true
 	}
 
+	t.Helper()
 	formatError(t,
 		&Error{
 			Context:  ctx,
@@ -56,12 +55,11 @@ func cmpError(ctx Context, t TestingT, got error, args ...interface{}) bool {
 }
 
 func cmpNoError(ctx Context, t TestingT, got error, args ...interface{}) bool {
-	t.Helper()
-
 	if got == nil {
 		return true
 	}
 
+	t.Helper()
 	formatError(t,
 		&Error{
 			Context:  ctx,
