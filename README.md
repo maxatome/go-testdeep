@@ -71,9 +71,9 @@ been:
 ```
 --- FAIL: TestCreateRecord (0.00s)
   test_test.go:22: Failed test 'Newly created record'
-    DATA.Id: comparing with Not
+    DATA.Id: zero value
            got: (uint64) 0
-      expected: Not((uint64) 0)
+      expected: NotZero()
     [under TestDeep operator Not at test_test.go:28]
 FAIL
 exit status 1
@@ -120,7 +120,10 @@ func TestCreateRecord(tt *testing.T) {
   record, err := CreateRecord("Bob", 23)
 
   if t.CmpNoError(err) {
-    t.RootName("RECORD").Struct(record,
+    t := t.RootName("RECORD") // Use RECORD instead of DATA in failure reports
+
+    // Using Struct method
+    t.Struct(record,
       Record{
         Name: "Bob",
         Age:  23,
@@ -129,6 +132,19 @@ func TestCreateRecord(tt *testing.T) {
         "Id":        td.NotZero(),
         "CreatedAt": td.Between(before, time.Now()),
       },
+      "Newly created record")
+
+    // Or using CmpDeeply method, it's a matter of taste
+    t.CmpDeeply(record,
+      td.Struct(
+        Record{
+          Name: "Bob",
+          Age:  23,
+        },
+        td.StructFields{
+          "Id":        td.NotZero(),
+          "CreatedAt": td.Between(before, time.Now()),
+        }),
       "Newly created record")
   }
 }
