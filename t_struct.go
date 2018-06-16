@@ -8,9 +8,9 @@ package testdeep
 
 import "testing"
 
-// T is a type that encapsulates testing.T (in fact TestingFT which is
-// implemented by *testing.T) allowing to easily use testing.T methods
-// as well as T ones.
+// T is a type that encapsulates *testing.T (in fact TestingFT
+// interface which is implemented by *testing.T) allowing to easily
+// use *testing.T methods as well as T ones.
 type T struct {
 	TestingFT
 	Config ContextConfig // defaults to DefaultContextConfig
@@ -74,10 +74,10 @@ type T struct {
 //   		DATA.Id: values differ
 //   			     got: (uint64) 12
 //   			expected: (uint64) 28
-//   		RECORD.Name: values differ
+//   		DATA.Name: values differ
 //   			     got: (string) (len=3) "Bob"
 //   			expected: (string) (len=4) "John"
-//   		RECORD.Age: values differ
+//   		DATA.Age: values differ
 //   			     got: (int) 12
 //   			expected: (int) 28
 //   FAIL
@@ -86,7 +86,7 @@ type T struct {
 //
 //   t := NewT(tt, ContextConfig{
 //       RootName:  "RECORD", // got data named "RECORD" instead of "DATA"
-//       MaxErrors: 2,        // stops after 2 errors instead of 10
+//       MaxErrors: 2,        // stops after 2 errors instead of default 10
 //     })
 //   t.CmpDeeply(
 //     Record{Age: 12, Name: "Bob", Id: 12},  // got
