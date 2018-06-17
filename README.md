@@ -10,6 +10,28 @@ Golang package `testdeep` allows extremely flexible deep comparison,
 built for testing.
 
 
+## Latest news
+
+- 2018/06/17: new
+  [`CmpPanic`](https://godoc.org/github.com/maxatome/go-testdeep#CmpPanic)
+  &
+  [`CmpNoPanic`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNoPanic)
+  functions and
+  [`T.CmpPanic`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpPanic)
+  &
+  [`T.CmpNoPanic`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNoPanic)
+  methods
+- 2018/06/15: new
+  [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
+  operator (and its friends
+  [`CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle)
+  &
+  [`T.CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpSmuggle));
+- 2018/06/11: `DefaultContextConfig.MaxErrors` defaults to 10 (was 1);
+- see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
+  for other/older changes.
+
+
 ## Synopsis
 
 ```go

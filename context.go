@@ -40,6 +40,7 @@ type ContextConfig struct {
 
 const (
 	contextDefaultRootName = "DATA"
+	contextPanicRootName   = "FUNCTION"
 	envMaxErrors           = "TESTDEEP_MAX_ERRORS"
 )
 
