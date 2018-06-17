@@ -15,11 +15,11 @@ built for testing.
 - 2018/06/17: new
   [`CmpPanic`](https://godoc.org/github.com/maxatome/go-testdeep#CmpPanic)
   &
-  [`CmpNoPanic`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNoPanic)
+  [`CmpNotPanic`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotPanic)
   functions and
   [`T.CmpPanic`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpPanic)
   &
-  [`T.CmpNoPanic`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNoPanic)
+  [`T.CmpNotPanic`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNotPanic)
   methods
 - 2018/06/15: new
   [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
