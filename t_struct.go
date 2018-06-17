@@ -243,6 +243,37 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 	return cmpNoError(NewContextWithConfig(t.Config), t.TestingFT, got, args...)
 }
 
+// CmpPanic calls "fn" and checks a panic() occurred with the
+// "expectedPanic" parameter. It returns true only if both conditions
+// are fulfilled.
+//
+// Note that calling panic(nil) in "fn" body is detected as a panic
+// (in this case "expectedPanic" has to be nil.)
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool {
+	t.Helper()
+	return cmpPanic(NewContextWithConfig(t.Config), t, fn, expected, args...)
+}
+
+// CmpNotPanic calls "fn" and checks no panic() occurred. If a panic()
+// occurred false is returned then the panic() parameter and the stack
+// trace appear in the test report.
+//
+// Note that calling panic(nil) in "fn" body is detected as a panic.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
+	t.Helper()
+	return cmpNotPanic(NewContextWithConfig(t.Config), t, fn, args...)
+}
+
 // Run runs "f" as a subtest of t called "name". It runs "f" in a separate
 // goroutine and blocks until "f" returns or calls t.Parallel to become
 // a parallel test. Run reports whether "f" succeeded (or at least did

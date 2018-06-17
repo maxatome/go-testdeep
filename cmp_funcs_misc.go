@@ -6,6 +6,8 @@
 
 package testdeep
 
+import "runtime"
+
 // CmpTrue is a shortcut for:
 //
 //   CmpDeeply(t, got, true, args...)
@@ -100,4 +102,115 @@ func CmpError(t TestingT, got error, args ...interface{}) bool {
 func CmpNoError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 	return cmpNoError(NewContext(), t, got, args...)
+}
+
+func cmpPanic(ctx Context, t TestingT, fn func(), expected interface{}, args ...interface{}) bool {
+	t.Helper()
+
+	if ctx.path == contextDefaultRootName {
+		ctx.path = contextPanicRootName
+	}
+
+	var (
+		panicked   bool
+		panicParam interface{}
+	)
+
+	func() {
+		defer func() { panicParam = recover() }()
+		panicked = true
+		fn()
+		panicked = false
+	}()
+
+	if !panicked {
+		formatError(t,
+			&Error{
+				Context: ctx,
+				Message: "should have panicked",
+				Summary: rawString("did not panic"),
+			},
+			args...)
+		return false
+	}
+
+	return cmpDeeply(ctx.AddDepth("→panic()"), t, panicParam, expected, args...)
+}
+
+func cmpNotPanic(ctx Context, t TestingT, fn func(), args ...interface{}) bool {
+	var (
+		panicked   bool
+		stackTrace rawString
+	)
+
+	func() {
+		defer func() {
+			panicParam := recover()
+			if panicked {
+				buf := make([]byte, 8192)
+				n := runtime.Stack(buf, false)
+				for ; n > 0; n-- {
+					if buf[n-1] != '\n' {
+						break
+					}
+				}
+				stackTrace = rawString("panic: " + toString(panicParam) + "\n\n" +
+					string(buf[:n]))
+			}
+		}()
+		panicked = true
+		fn()
+		panicked = false
+	}()
+
+	if !panicked {
+		return true
+	}
+
+	t.Helper()
+
+	if ctx.path == contextDefaultRootName {
+		ctx.path = contextPanicRootName
+	}
+
+	formatError(t,
+		&Error{
+			Context:  ctx,
+			Message:  "should NOT have panicked",
+			Got:      stackTrace,
+			Expected: rawString("not panicking at all"),
+		})
+	return false
+}
+
+// CmpPanic calls "fn" and checks a panic() occurred with the
+// "expectedPanic" parameter. It returns true only if both conditions
+// are fulfilled.
+//
+// Note that calling panic(nil) in "fn" body is detected as a panic
+// (in this case "expectedPanic" has to be nil.)
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
+	args ...interface{}) bool {
+	t.Helper()
+	return cmpPanic(NewContext(), t, fn, expectedPanic, args...)
+}
+
+// CmpNotPanic calls "fn" and checks no panic() occurred. If a panic()
+// occurred false is returned then the panic() parameter and the stack
+// trace appear in the test report.
+//
+// Note that calling panic(nil) in "fn" body is detected as a panic.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool {
+	t.Helper()
+	return cmpNotPanic(NewContext(), t, fn, args...)
 }
