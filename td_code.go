@@ -135,6 +135,10 @@ func (c *tdCode) String() string {
 	return "Code(" + c.function.Type().String() + ")"
 }
 
+func (c *tdCode) TypeBehind() reflect.Type {
+	return c.argType
+}
+
 type tdCodeResult struct {
 	Value  reflect.Value
 	Reason string

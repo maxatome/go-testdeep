@@ -9,6 +9,7 @@ package testdeep_test
 import (
 	"errors"
 	"testing"
+	"time"
 
 	. "github.com/maxatome/go-testdeep"
 )
@@ -115,5 +116,12 @@ func TestCode(t *testing.T) {
 }
 
 func TestCodeTypeBehind(t *testing.T) {
-	equalTypes(t, Code(func(n int) bool { return false }), nil)
+	// Type behind is the code function parameter one
+
+	equalTypes(t, Code(func(n int) bool { return n != 0 }), 23)
+
+	type MyTime time.Time
+
+	equalTypes(t,
+		Code(func(t MyTime) bool { return time.Time(t).IsZero() }), MyTime{})
 }
