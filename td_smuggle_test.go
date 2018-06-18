@@ -295,3 +295,15 @@ func TestSmuggle(t *testing.T) {
 			String(),
 		"Smuggle(func(int) (int, testdeep_test.MyBool, testdeep_test.MyString))")
 }
+
+func TestSmuggleTypeBehind(t *testing.T) {
+	// Type behind is the smuggle function parameter one
+
+	equalTypes(t, Smuggle(func(n int) bool { return n != 0 }, true), 23)
+
+	type MyTime time.Time
+
+	equalTypes(t,
+		Smuggle(func(t MyTime) time.Time { return time.Time(t) }, time.Now()),
+		MyTime{})
+}

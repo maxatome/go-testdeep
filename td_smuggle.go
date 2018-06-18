@@ -252,3 +252,7 @@ func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 func (s *tdSmuggle) String() string {
 	return "Smuggle(" + s.function.Type().String() + ")"
 }
+
+func (s *tdSmuggle) TypeBehind() reflect.Type {
+	return s.argType
+}
