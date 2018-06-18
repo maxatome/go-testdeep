@@ -26,7 +26,7 @@ built for testing.
   operator (and its friends
   [`CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle)
   &
-  [`T.CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpSmuggle));
+  [`T.Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle));
 - 2018/06/11: `DefaultContextConfig.MaxErrors` defaults to 10 (was 1);
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
