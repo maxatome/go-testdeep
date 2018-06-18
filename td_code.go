@@ -47,6 +47,8 @@ var _ TestDeep = &tdCode{}
 // confusion produced by output in case of failure. When the data
 // needs to be transformed before being compared again, Smuggle
 // operator should be used instead.
+//
+// TypeBehind method returns the reflect.Type of only parameter of "fn".
 func Code(fn interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 

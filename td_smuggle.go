@@ -135,6 +135,8 @@ var _ TestDeep = &tdSmuggle{}
 // The difference between Smuggle and Code operators is that Code is
 // used to do a final comparison while Smuggle transforms the data and
 // then steps down in favor of generic comparison process.
+//
+// TypeBehind method returns the reflect.Type of only parameter of "fn".
 func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
