@@ -6,12 +6,25 @@ go-testdeep
 [![Go Report Card](https://goreportcard.com/badge/github.com/maxatome/go-testdeep)](https://goreportcard.com/report/github.com/maxatome/go-testdeep)
 [![GoDoc](https://godoc.org/github.com/maxatome/go-testdeep?status.svg)](https://godoc.org/github.com/maxatome/go-testdeep)
 
-Golang package `testdeep` allows extremely flexible deep comparison,
-built for testing.
+Extremely flexible golang deep comparison, extends the go testing package.
+
+- [Latest new](#latest-news)
+- [Synopsis](#synopsis)
+- [Installation](#installation)
+- [Presentation](#presentation)
+- [Available operators](#available-operators)
+- [License](#license)
 
 
 ## Latest news
 
+- 2018/06/19: new
+  [ContextConfig](https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig)
+  feature `FailureIsFatal` available. See
+  [DefaultContextConfig](https://godoc.org/github.com/maxatome/go-testdeep#pkg-variables)
+  for default global value and
+  [`T.FailureIsFatal`](https://godoc.org/github.com/maxatome/go-testdeep#T.FailureIsFatal)
+  method;
 - 2018/06/17: new
   [`CmpPanic`](https://godoc.org/github.com/maxatome/go-testdeep#CmpPanic)
   &
@@ -27,7 +40,6 @@ built for testing.
   [`CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle)
   &
   [`T.Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle));
-- 2018/06/11: `DefaultContextConfig.MaxErrors` defaults to 10 (was 1);
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -56,15 +68,16 @@ func TestCreateRecord(t *testing.T) {
   record, err := CreateRecord("Bob", 23)
 
   if td.CmpNoError(t, err) {
-    td.CmpStruct(t, record,
-      &Record{
-        Name: "Bob",
-        Age:  23,
-      },
-      td.StructFields{
-        "Id":        td.NotZero(),
-        "CreatedAt": td.Between(before, time.Now()),
-      },
+    td.CmpDeeply(t, record,
+      td.Struct(
+        &Record{
+          Name: "Bob",
+          Age:  23,
+        },
+        td.StructFields{
+          "Id":        td.NotZero(),
+          "CreatedAt": td.Between(before, time.Now()),
+        }),
       "Newly created record")
   }
 }
@@ -255,7 +268,7 @@ func TestCreateRecord(t *testing.T) {
 
   if td.CmpDeeply(t, err, nil) {
     td.CmpDeeply(t, record,
-      Struct(
+      td.Struct(
         Record{
           Name: "Bob",
           Age:  23,

@@ -8,21 +8,8 @@ package testdeep
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 )
-
-type TestTestingT struct {
-	LastMessage string
-}
-
-func (t *TestTestingT) Error(args ...interface{}) {
-	t.LastMessage = fmt.Sprint(args...)
-}
-
-func (t *TestTestingT) Helper() {
-	// Do nothing
-}
 
 func TestFormatError(t *testing.T) {
 	ttt := &TestTestingT{}
@@ -35,41 +22,49 @@ func TestFormatError(t *testing.T) {
 
 	nonStringName := bytes.NewBufferString("zip!")
 
-	//
-	// Without args
-	formatError(ttt, err)
-	equalStr(t, ttt.LastMessage, `Failed test
+	for _, fatal := range []bool{false, true} {
+		//
+		// Without args
+		formatError(ttt, fatal, err)
+		equalStr(t, ttt.LastMessage, `Failed test
 DATA: test error message
 	test error summary`)
+		equalBool(t, ttt.IsFatal, fatal)
 
-	//
-	// With one arg
-	formatError(ttt, err, "foo bar!")
-	equalStr(t, ttt.LastMessage, `Failed test 'foo bar!'
+		//
+		// With one arg
+		formatError(ttt, fatal, err, "foo bar!")
+		equalStr(t, ttt.LastMessage, `Failed test 'foo bar!'
 DATA: test error message
 	test error summary`)
+		equalBool(t, ttt.IsFatal, fatal)
 
-	formatError(ttt, err, nonStringName)
-	equalStr(t, ttt.LastMessage, `Failed test 'zip!'
+		formatError(ttt, fatal, err, nonStringName)
+		equalStr(t, ttt.LastMessage, `Failed test 'zip!'
 DATA: test error message
 	test error summary`)
+		equalBool(t, ttt.IsFatal, fatal)
 
-	//
-	// With several args & Printf format
-	formatError(ttt, err, "hello %d!", 123)
-	equalStr(t, ttt.LastMessage, `Failed test 'hello 123!'
+		//
+		// With several args & Printf format
+		formatError(ttt, fatal, err, "hello %d!", 123)
+		equalStr(t, ttt.LastMessage, `Failed test 'hello 123!'
 DATA: test error message
 	test error summary`)
+		equalBool(t, ttt.IsFatal, fatal)
 
-	//
-	// With several args without Printf format
-	formatError(ttt, err, "hello ", "world! ", 123)
-	equalStr(t, ttt.LastMessage, `Failed test 'hello world! 123'
+		//
+		// With several args without Printf format
+		formatError(ttt, fatal, err, "hello ", "world! ", 123)
+		equalStr(t, ttt.LastMessage, `Failed test 'hello world! 123'
 DATA: test error message
 	test error summary`)
+		equalBool(t, ttt.IsFatal, fatal)
 
-	formatError(ttt, err, nonStringName, "hello ", "world! ", 123)
-	equalStr(t, ttt.LastMessage, `Failed test 'zip!hello world! 123'
+		formatError(ttt, fatal, err, nonStringName, "hello ", "world! ", 123)
+		equalStr(t, ttt.LastMessage, `Failed test 'zip!hello world! 123'
 DATA: test error message
 	test error summary`)
+		equalBool(t, ttt.IsFatal, fatal)
+	}
 }

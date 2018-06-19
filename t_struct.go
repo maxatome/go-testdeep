@@ -166,6 +166,37 @@ func (t *T) RootName(rootName string) *T {
 	return &new
 }
 
+// FailureIsFatal allows to choose whether t.TestingFT.Fatal() or
+// t.TestingFT.Error() will be used to print the next failure
+// reports. When "enable" is true (or missing) testing.Fatal() will be
+// called, else testing.Error(). Using *testing.T instance as
+// t.TestingFT value, FailNow() is called behind the scenes when
+// Fatal() is called. See testing documentation for details.
+//
+// It returns a new instance of *T so does not alter the original t
+// and used as follows:
+//
+//   // Following t.CmpDeeply() will call Fatal() if failure
+//   t = t.FailureIsFatal()
+//   t.CmpDeeply(...)
+//   t.CmpDeeply(...)
+//   // Following t.CmpDeeply() won't call Fatal() if failure
+//   t = t.FailureIsFatal(false)
+//   t.CmpDeeply(...)
+//
+// or, if only one call is critic:
+//
+//   // This CmpDeeply() call will call Fatal() if failure
+//   t.FailureIsFatal().CmpDeeply(...)
+//   // Following t.CmpDeeply() won't call Fatal() if failure
+//   t.CmpDeeply(...)
+//   t.CmpDeeply(...)
+func (t *T) FailureIsFatal(enable ...bool) *T {
+	new := *t
+	new.Config.FailureIsFatal = len(enable) == 0 || enable[0]
+	return &new
+}
+
 // CmpDeeply is mostly a shortcut for:
 //
 //   CmpDeeply(t.TestingFT, got, expected, args...)

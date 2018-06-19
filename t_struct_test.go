@@ -200,3 +200,39 @@ func TestRun(tt *testing.T) {
 	t.True(ok)
 	t.True(runPassed)
 }
+
+func TestFailureIsFatal(tt *testing.T) {
+	ttt := &TestTestingFT{}
+
+	// All t.True(false) tests of course fail
+
+	// Using default config
+	t := NewT(ttt)
+	t.True(false) // failure
+	CmpNotEmpty(tt, ttt.LastMessage)
+	CmpFalse(tt, ttt.IsFatal, "by default it not fatal")
+
+	// Using specific config
+	t = NewT(ttt, ContextConfig{FailureIsFatal: true})
+	t.True(false) // failure
+	CmpNotEmpty(tt, ttt.LastMessage)
+	CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+
+	// Using FailureIsFatal()
+	t = NewT(ttt).FailureIsFatal()
+	t.True(false) // failure
+	CmpNotEmpty(tt, ttt.LastMessage)
+	CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+
+	// Using FailureIsFatal(true)
+	t = NewT(ttt).FailureIsFatal(true)
+	t.True(false) // failure
+	CmpNotEmpty(tt, ttt.LastMessage)
+	CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+
+	// Canceling specific config
+	t = NewT(ttt, ContextConfig{FailureIsFatal: false}).FailureIsFatal(false)
+	t.True(false) // failure
+	CmpNotEmpty(tt, ttt.LastMessage)
+	CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+}

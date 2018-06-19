@@ -45,6 +45,7 @@ func cmpError(ctx Context, t TestingT, got error, args ...interface{}) bool {
 
 	t.Helper()
 	formatError(t,
+		ctx.failureIsFatal,
 		&Error{
 			Context:  ctx,
 			Message:  "should be an error",
@@ -63,6 +64,7 @@ func cmpNoError(ctx Context, t TestingT, got error, args ...interface{}) bool {
 
 	t.Helper()
 	formatError(t,
+		ctx.failureIsFatal,
 		&Error{
 			Context:  ctx,
 			Message:  "should NOT be an error",
@@ -125,6 +127,7 @@ func cmpPanic(ctx Context, t TestingT, fn func(), expected interface{}, args ...
 
 	if !panicked {
 		formatError(t,
+			ctx.failureIsFatal,
 			&Error{
 				Context: ctx,
 				Message: "should have panicked",
@@ -174,6 +177,7 @@ func cmpNotPanic(ctx Context, t TestingT, fn func(), args ...interface{}) bool {
 	}
 
 	formatError(t,
+		ctx.failureIsFatal,
 		&Error{
 			Context:  ctx,
 			Message:  "should NOT have panicked",

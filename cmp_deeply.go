@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-func formatError(t TestingT, err *Error, args ...interface{}) {
+func formatError(t TestingT, isFatal bool, err *Error, args ...interface{}) {
 	t.Helper()
 
 	const failedTest = "Failed test"
@@ -40,7 +40,11 @@ func formatError(t TestingT, err *Error, args ...interface{}) {
 
 	err.Append(buf, "")
 
-	t.Error(buf.String())
+	if isFatal {
+		t.Fatal(buf.String())
+	} else {
+		t.Error(buf.String())
+	}
 }
 
 func cmpDeeply(ctx Context, t TestingT, got, expected interface{},
@@ -51,7 +55,7 @@ func cmpDeeply(ctx Context, t TestingT, got, expected interface{},
 		return true
 	}
 	t.Helper()
-	formatError(t, err, args...)
+	formatError(t, ctx.failureIsFatal, err, args...)
 	return false
 }
 
