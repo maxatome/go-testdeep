@@ -29,6 +29,7 @@ var (
 // errors. It is commonly implemented by *testing.T and testing.TB.
 type TestingT interface {
 	Error(args ...interface{})
+	Fatal(args ...interface{})
 	Helper()
 }
 
@@ -36,7 +37,21 @@ type TestingT interface {
 // delegate common *testing.T functions to it. Of course, *testing.T
 // implements it.
 type TestingFT interface {
-	testing.TB
+	Error(args ...interface{})
+	Errorf(format string, args ...interface{})
+	Fail()
+	FailNow()
+	Failed() bool
+	Fatal(args ...interface{})
+	Fatalf(format string, args ...interface{})
+	Log(args ...interface{})
+	Logf(format string, args ...interface{})
+	Name() string
+	Skip(args ...interface{})
+	SkipNow()
+	Skipf(format string, args ...interface{})
+	Skipped() bool
+	Helper()
 	Run(name string, f func(t *testing.T)) bool
 }
 

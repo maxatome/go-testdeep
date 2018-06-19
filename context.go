@@ -36,6 +36,11 @@ type ContextConfig struct {
 	// Setting it to a negative number means no limit: all errors
 	// will be dumped.
 	MaxErrors int
+	// FailureIsFatal allows to Fatal() (instead of Error()) when a test
+	// fails. Using *testing.T instance as
+	// t.TestingFT value, FailNow() is called behind the scenes when
+	// Fatal() is called. See testing documentation for details.
+	FailureIsFatal bool
 }
 
 const (
@@ -59,8 +64,9 @@ func getMaxErrorsFromEnv() int {
 // tests failures. If overridden, new settings will impact all Cmp*
 // functions and *T methods (if not specifically configured.)
 var DefaultContextConfig = ContextConfig{
-	RootName:  contextDefaultRootName,
-	MaxErrors: getMaxErrorsFromEnv(),
+	RootName:       contextDefaultRootName,
+	MaxErrors:      getMaxErrorsFromEnv(),
+	FailureIsFatal: false,
 }
 
 func (c *ContextConfig) sanitize() {
@@ -96,6 +102,8 @@ type Context struct {
 	// < 0 do not stop until comparison ends.
 	maxErrors int
 	errors    *[]*Error
+	// See ContextConfig.FailureIsFatal for details
+	failureIsFatal bool
 }
 
 // NewContext creates a new Context using DefaultContextConfig configuration.
@@ -108,9 +116,10 @@ func NewContextWithConfig(config ContextConfig) (ctx Context) {
 	config.sanitize()
 
 	ctx = Context{
-		path:      config.RootName,
-		visited:   map[visit]bool{},
-		maxErrors: config.MaxErrors,
+		path:           config.RootName,
+		visited:        map[visit]bool{},
+		maxErrors:      config.MaxErrors,
+		failureIsFatal: config.FailureIsFatal,
 	}
 
 	ctx.initErrors()

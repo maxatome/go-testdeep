@@ -35,6 +35,18 @@ func equalInt(t *testing.T, got, expected int) bool {
 	return false
 }
 
+func equalBool(t *testing.T, got, expected bool) bool {
+	if got == expected {
+		return true
+	}
+
+	t.Helper()
+	t.Errorf(`Failed test
+	     got: %t
+	expected: %t`, got, expected)
+	return false
+}
+
 func TestContext(t *testing.T) {
 	equalStr(t, NewContext().path, "DATA")
 	equalStr(t, NewBooleanContext().path, "")
