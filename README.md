@@ -13,6 +13,7 @@ Extremely flexible golang deep comparison, extends the go testing package.
 - [Installation](#installation)
 - [Presentation](#presentation)
 - [Available operators](#available-operators)
+- [See also](#see-also)
 - [License](#license)
 
 
@@ -282,14 +283,15 @@ func TestCreateRecord(t *testing.T) {
 }
 ```
 
-Of course not only structs can be compared. A lot of operators can
-be found below to cover most (all?) needed tests.
+Of course not only structs can be compared. A lot of
+[operators](#available-operators) can be found below to cover most
+(all?) needed tests.
 
 The [`CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#CmpDeeply)
 function is the keystone of this package, but to make the writing of
 tests even easier, the family of `Cmp*` functions are provided and act
 as shortcuts. Using
-[`CmpNil`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNil)
+[`CmpNoError`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNoError)
 and [`CmpStruct`](https://godoc.org/github.com/maxatome/go-testdeep#CmpStruct)
 function, the previous example can be written as:
 
@@ -477,6 +479,12 @@ items;
 compares time.Time (or assignable) values after truncating them;
 - [`Zero`](https://godoc.org/github.com/maxatome/go-testdeep#Zero)
 checks data against its zero'ed conterpart.
+
+
+## See also
+
+- [testify](https://github.com/stretchr/testify): a toolkit with common assertions and mocks that plays nicely with the standard library
+- [go-cmp](https://github.com/google/go-cmp): package for comparing Go values in tests
 
 
 ## License
