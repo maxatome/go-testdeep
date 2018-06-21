@@ -38,6 +38,13 @@ func TestTruncTime(t *testing.T) {
 	//
 	// time.Time
 	gotDate := time.Date(2018, time.March, 9, 1, 2, 3, 4, time.UTC)
+
+	// Time zone / location does not matter
+	UTCp2 := time.FixedZone("UTC+2", 2)
+	UTCm2 := time.FixedZone("UTC-2", 2)
+	checkOK(t, gotDate, TruncTime(gotDate.In(UTCp2)))
+	checkOK(t, gotDate, TruncTime(gotDate.In(UTCm2)))
+
 	expDate := gotDate
 
 	checkOK(t, gotDate, TruncTime(expDate))

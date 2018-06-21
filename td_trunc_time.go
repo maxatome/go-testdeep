@@ -26,6 +26,10 @@ var _ TestDeep = &tdTruncTime{}
 //
 // If "trunc" is missing, it defaults to 0.
 //
+// During comparison, location does not matter as time.Equal method is
+// used behind the scenes: a time instant in two different locations
+// is the same time instant.
+//
 // Whatever the "trunc" value is, the monotonic clock is stripped
 // before the comparison against "expectedTime".
 //
