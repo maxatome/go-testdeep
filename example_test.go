@@ -421,6 +421,147 @@ func ExampleCode() {
 	// true
 }
 
+func ExampleContains_arraySlice() {
+	t := &testing.T{}
+
+	ok := CmpDeeply(t, [...]int{11, 22, 33, 44}, Contains(22))
+	fmt.Println("array contains 22:", ok)
+
+	ok = CmpDeeply(t, [...]int{11, 22, 33, 44}, Contains(Between(20, 25)))
+	fmt.Println("array contains at least one item in [20 .. 25]:", ok)
+
+	ok = CmpDeeply(t, []int{11, 22, 33, 44}, Contains(22))
+	fmt.Println("slice contains 22:", ok)
+
+	ok = CmpDeeply(t, []int{11, 22, 33, 44}, Contains(Between(20, 25)))
+	fmt.Println("slice contains at least one item in [20 .. 25]:", ok)
+
+	// Output:
+	// array contains 22: true
+	// array contains at least one item in [20 .. 25]: true
+	// slice contains 22: true
+	// slice contains at least one item in [20 .. 25]: true
+}
+
+func ExampleContains_nil() {
+	t := &testing.T{}
+
+	num := 123
+	got := [...]*int{&num, nil}
+
+	ok := CmpDeeply(t, got, Contains(nil))
+	fmt.Println("array contains untyped nil:", ok)
+
+	ok = CmpDeeply(t, got, Contains((*int)(nil)))
+	fmt.Println("array contains *int nil:", ok)
+
+	ok = CmpDeeply(t, got, Contains(Nil()))
+	fmt.Println("array contains Nil():", ok)
+
+	ok = CmpDeeply(t, got, Contains((*byte)(nil)))
+	fmt.Println("array contains *byte nil:", ok) // types differ: *byte ≠ *int
+
+	// Output:
+	// array contains untyped nil: true
+	// array contains *int nil: true
+	// array contains Nil(): true
+	// array contains *byte nil: false
+}
+
+func ExampleContains_map() {
+	t := &testing.T{}
+
+	ok := CmpDeeply(t,
+		map[string]int{"foo": 11, "bar": 22, "zip": 33}, Contains(22))
+	fmt.Println("map contains value 22:", ok)
+
+	ok = CmpDeeply(t,
+		map[string]int{"foo": 11, "bar": 22, "zip": 33},
+		Contains(Between(20, 25)))
+	fmt.Println("map contains at least one value in [20 .. 25]:", ok)
+
+	// Output:
+	// map contains value 22: true
+	// map contains at least one value in [20 .. 25]: true
+}
+
+func ExampleContains_string() {
+	t := &testing.T{}
+
+	got := "foobar"
+
+	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
+	fmt.Println("contains `oob` string:", ok)
+
+	ok = CmpDeeply(t, got, Contains('b'), "checks %s", got)
+	fmt.Println("contains 'b' rune:", ok)
+
+	ok = CmpDeeply(t, got, Contains(byte('a')), "checks %s", got)
+	fmt.Println("contains 'a' byte:", ok)
+
+	ok = CmpDeeply(t, got, Contains(Between('n', 'p')), "checks %s", got)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
+
+	// Output:
+	// contains `oob` string: true
+	// contains 'b' rune: true
+	// contains 'a' byte: true
+	// contains at least one character ['n' .. 'p']: true
+}
+
+func ExampleContains_stringer() {
+	t := &testing.T{}
+
+	// bytes.Buffer implements fmt.Stringer
+	got := bytes.NewBufferString("foobar")
+
+	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
+	fmt.Println("contains `oob` string:", ok)
+
+	ok = CmpDeeply(t, got, Contains('b'), "checks %s", got)
+	fmt.Println("contains 'b' rune:", ok)
+
+	ok = CmpDeeply(t, got, Contains(byte('a')), "checks %s", got)
+	fmt.Println("contains 'a' byte:", ok)
+
+	// Be careful! TestDeep operators in Contains() do not work with
+	// fmt.Stringer nor error interfaces
+	ok = CmpDeeply(t, got, Contains(Between('n', 'p')), "checks %s", got)
+	fmt.Println("try TestDeep operator:", ok)
+
+	// Output:
+	// contains `oob` string: true
+	// contains 'b' rune: true
+	// contains 'a' byte: true
+	// try TestDeep operator: false
+}
+
+func ExampleContains_error() {
+	t := &testing.T{}
+
+	got := errors.New("foobar")
+
+	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
+	fmt.Println("contains `oob` string:", ok)
+
+	ok = CmpDeeply(t, got, Contains('b'), "checks %s", got)
+	fmt.Println("contains 'b' rune:", ok)
+
+	ok = CmpDeeply(t, got, Contains(byte('a')), "checks %s", got)
+	fmt.Println("contains 'a' byte:", ok)
+
+	// Be careful! TestDeep operators in Contains() do not work with
+	// fmt.Stringer nor error interfaces
+	ok = CmpDeeply(t, got, Contains(Between('n', 'p')), "checks %s", got)
+	fmt.Println("try TestDeep operator:", ok)
+
+	// Output:
+	// contains `oob` string: true
+	// contains 'b' rune: true
+	// contains 'a' byte: true
+	// try TestDeep operator: false
+}
+
 func ExampleEmpty() {
 	t := &testing.T{}
 
@@ -1611,43 +1752,6 @@ func ExampleHasSuffix_error() {
 	got := errors.New("foobar")
 
 	ok := CmpDeeply(t, got, HasSuffix("bar"), "checks %s", got)
-	fmt.Println(ok)
-
-	// Output:
-	// true
-}
-
-func ExampleContains() {
-	t := &testing.T{}
-
-	got := "foobar"
-
-	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
-	fmt.Println(ok)
-
-	// Output:
-	// true
-}
-
-func ExampleContains_stringer() {
-	t := &testing.T{}
-
-	// bytes.Buffer implements fmt.Stringer
-	got := bytes.NewBufferString("foobar")
-
-	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
-	fmt.Println(ok)
-
-	// Output:
-	// true
-}
-
-func ExampleContains_error() {
-	t := &testing.T{}
-
-	got := errors.New("foobar")
-
-	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:

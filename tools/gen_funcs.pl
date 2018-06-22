@@ -204,6 +204,7 @@ $reb = qr/\[ [^][]* (?:(??{ $reb }) [^][]* )* \]/x; # recursively matches [...]
 $rec = qr/\{ [^{}]* (?:(??{ $rec }) [^{}]* )* \}/x; # recursively matches {...}
 
 my $rparam =qr/"(?:\\.|[^"]+)*"            # "string"
+              |'(?:\\.|[^']+)*'            # 'char'
 	      |`[^`]*`                     # `string`
               |&[a-zA-Z_]\w*(?:\.\w+)?(?:$rec)? # &Struct{...}, &variable
               |\[[^][]*\]\w+$rec           # []Array{...}

@@ -19,6 +19,12 @@ Extremely flexible golang deep comparison, extends the go testing package.
 
 ## Latest news
 
+- 2018/06/24: [`Contains`](https://godoc.org/github.com/maxatome/go-testdeep#Contains)
+  (and its friends
+  [`CmpContains`](https://godoc.org/github.com/maxatome/go-testdeep#CmpContains)
+  &
+  [`T.Contains`](https://godoc.org/github.com/maxatome/go-testdeep#T.Contains))
+  reworked to handle arrays, slices and maps;
 - 2018/06/19: new
   [ContextConfig](https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig)
   feature `FailureIsFatal` available. See
@@ -35,12 +41,6 @@ Extremely flexible golang deep comparison, extends the go testing package.
   &
   [`T.CmpNotPanic`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNotPanic)
   methods
-- 2018/06/15: new
-  [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
-  operator (and its friends
-  [`CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle)
-  &
-  [`T.Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle));
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 

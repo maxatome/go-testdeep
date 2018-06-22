@@ -138,7 +138,7 @@ func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
 
 // Contains is a shortcut for:
 //
-//   t.CmpDeeply(got, Contains(expected), args...)
+//   t.CmpDeeply(got, Contains(expectedValue), args...)
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -146,9 +146,9 @@ func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
 // logged as is in case of failure. If len(args) > 1 and the first
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) Contains(got interface{}, expected string, args ...interface{}) bool {
+func (t *T) Contains(got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.CmpDeeply(got, Contains(expected), args...)
+	return t.CmpDeeply(got, Contains(expectedValue), args...)
 }
 
 // Empty is a shortcut for:

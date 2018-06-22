@@ -91,35 +91,8 @@ func TestHasSuffix(t *testing.T) {
 	})
 }
 
-func TestContains(t *testing.T) {
-	checkOK(t, "foobar", Contains("ooba"))
-
-	type MyString string
-	checkOK(t, MyString("foobar"), Contains("ooba"))
-
-	// error interface
-	checkOK(t, errors.New("pipo bingo"), Contains("po bi"))
-	// fmt.Stringer interface
-	checkOK(t, MyStringer{}, Contains("po bi"))
-
-	checkError(t, "foo bar test", Contains("pipo"), expectedError{
-		Message:  mustBe("does not contain"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`"foo bar test"`),
-		Expected: mustMatch(`^Contains\(.*"pipo"`),
-	})
-
-	checkError(t, 12, Contains("bar"), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
-	})
-}
-
 func TestStringTypeBehind(t *testing.T) {
 	equalTypes(t, String("x"), nil)
 	equalTypes(t, HasPrefix("x"), nil)
 	equalTypes(t, HasSuffix("x"), nil)
-	equalTypes(t, Contains("x"), nil)
 }
