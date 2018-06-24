@@ -160,4 +160,4 @@
 //         "Newly created record")
 //     }
 //   }
-package testdeep
+package testdeep // import "github.com/maxatome/go-testdeep"
