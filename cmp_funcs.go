@@ -138,7 +138,7 @@ func CmpCode(t TestingT, got interface{}, fn interface{}, args ...interface{}) b
 
 // CmpContains is a shortcut for:
 //
-//   CmpDeeply(t, got, Contains(expected), args...)
+//   CmpDeeply(t, got, Contains(expectedValue), args...)
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -146,9 +146,9 @@ func CmpCode(t TestingT, got interface{}, fn interface{}, args ...interface{}) b
 // logged as is in case of failure. If len(args) > 1 and the first
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
-func CmpContains(t TestingT, got interface{}, expected string, args ...interface{}) bool {
+func CmpContains(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
-	return CmpDeeply(t, got, Contains(expected), args...)
+	return CmpDeeply(t, got, Contains(expectedValue), args...)
 }
 
 // CmpEmpty is a shortcut for:

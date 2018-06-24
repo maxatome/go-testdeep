@@ -299,16 +299,89 @@ func ExampleCmpCode() {
 	// true
 }
 
-func ExampleCmpContains() {
+func ExampleCmpContains_arraySlice() {
+	t := &testing.T{}
+
+	ok := CmpContains(t, [...]int{11, 22, 33, 44}, 22)
+	fmt.Println("array contains 22:", ok)
+
+	ok = CmpContains(t, [...]int{11, 22, 33, 44}, Between(20, 25))
+	fmt.Println("array contains at least one item in [20 .. 25]:", ok)
+
+	ok = CmpContains(t, []int{11, 22, 33, 44}, 22)
+	fmt.Println("slice contains 22:", ok)
+
+	ok = CmpContains(t, []int{11, 22, 33, 44}, Between(20, 25))
+	fmt.Println("slice contains at least one item in [20 .. 25]:", ok)
+
+	// Output:
+	// array contains 22: true
+	// array contains at least one item in [20 .. 25]: true
+	// slice contains 22: true
+	// slice contains at least one item in [20 .. 25]: true
+}
+
+func ExampleCmpContains_nil() {
+	t := &testing.T{}
+
+	num := 123
+	got := [...]*int{&num, nil}
+
+	ok := CmpContains(t, got, nil)
+	fmt.Println("array contains untyped nil:", ok)
+
+	ok = CmpContains(t, got, (*int)(nil))
+	fmt.Println("array contains *int nil:", ok)
+
+	ok = CmpContains(t, got, Nil())
+	fmt.Println("array contains Nil():", ok)
+
+	ok = CmpContains(t, got, (*byte)(nil))
+	fmt.Println("array contains *byte nil:", ok) // types differ: *byte ≠ *int
+
+	// Output:
+	// array contains untyped nil: true
+	// array contains *int nil: true
+	// array contains Nil(): true
+	// array contains *byte nil: false
+}
+
+func ExampleCmpContains_map() {
+	t := &testing.T{}
+
+	ok := CmpContains(t, map[string]int{"foo": 11, "bar": 22, "zip": 33}, 22)
+	fmt.Println("map contains value 22:", ok)
+
+	ok = CmpContains(t, map[string]int{"foo": 11, "bar": 22, "zip": 33}, Between(20, 25))
+	fmt.Println("map contains at least one value in [20 .. 25]:", ok)
+
+	// Output:
+	// map contains value 22: true
+	// map contains at least one value in [20 .. 25]: true
+}
+
+func ExampleCmpContains_string() {
 	t := &testing.T{}
 
 	got := "foobar"
 
 	ok := CmpContains(t, got, "oob", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("contains `oob` string:", ok)
+
+	ok = CmpContains(t, got, 'b', "checks %s", got)
+	fmt.Println("contains 'b' rune:", ok)
+
+	ok = CmpContains(t, got, byte('a'), "checks %s", got)
+	fmt.Println("contains 'a' byte:", ok)
+
+	ok = CmpContains(t, got, Between('n', 'p'), "checks %s", got)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
-	// true
+	// contains `oob` string: true
+	// contains 'b' rune: true
+	// contains 'a' byte: true
+	// contains at least one character ['n' .. 'p']: true
 }
 
 func ExampleCmpContains_stringer() {
@@ -318,10 +391,24 @@ func ExampleCmpContains_stringer() {
 	got := bytes.NewBufferString("foobar")
 
 	ok := CmpContains(t, got, "oob", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("contains `oob` string:", ok)
+
+	ok = CmpContains(t, got, 'b', "checks %s", got)
+	fmt.Println("contains 'b' rune:", ok)
+
+	ok = CmpContains(t, got, byte('a'), "checks %s", got)
+	fmt.Println("contains 'a' byte:", ok)
+
+	// Be careful! TestDeep operators in Contains() do not work with
+	// fmt.Stringer nor error interfaces
+	ok = CmpContains(t, got, Between('n', 'p'), "checks %s", got)
+	fmt.Println("try TestDeep operator:", ok)
 
 	// Output:
-	// true
+	// contains `oob` string: true
+	// contains 'b' rune: true
+	// contains 'a' byte: true
+	// try TestDeep operator: false
 }
 
 func ExampleCmpContains_error() {
@@ -330,10 +417,24 @@ func ExampleCmpContains_error() {
 	got := errors.New("foobar")
 
 	ok := CmpContains(t, got, "oob", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("contains `oob` string:", ok)
+
+	ok = CmpContains(t, got, 'b', "checks %s", got)
+	fmt.Println("contains 'b' rune:", ok)
+
+	ok = CmpContains(t, got, byte('a'), "checks %s", got)
+	fmt.Println("contains 'a' byte:", ok)
+
+	// Be careful! TestDeep operators in Contains() do not work with
+	// fmt.Stringer nor error interfaces
+	ok = CmpContains(t, got, Between('n', 'p'), "checks %s", got)
+	fmt.Println("try TestDeep operator:", ok)
 
 	// Output:
-	// true
+	// contains `oob` string: true
+	// contains 'b' rune: true
+	// contains 'a' byte: true
+	// try TestDeep operator: false
 }
 
 func ExampleCmpEmpty() {
