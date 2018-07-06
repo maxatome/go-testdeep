@@ -347,8 +347,8 @@ func TestCreateRecord(tt *testing.T) {
         Age:  23,
       },
       td.StructFields{
-        Id:        td.NotZero(),
-        CreatedAt: td.Between(before, time.Now()),
+        "Id":        td.NotZero(),
+        "CreatedAt": td.Between(before, time.Now()),
       },
       "Newly created record")
   }
