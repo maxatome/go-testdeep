@@ -50,6 +50,8 @@ Extremely flexible golang deep comparison, extends the go testing package.
 ```go
 import (
   "testing"
+  "time"
+
   td "github.com/maxatome/go-testdeep"
 )
 
@@ -69,6 +71,28 @@ func TestCreateRecord(t *testing.T) {
   record, err := CreateRecord("Bob", 23)
 
   if td.CmpNoError(t, err) {
+    // If you know the exact value of all fields of newly created record
+    td.CmpDeeply(t, record,
+      &Record{
+        Id:        245,
+        Name:      "Bob",
+        Age:       23,
+        CreatedAt: time.Date(2018, time.May, 1, 11, 12, 13, 0, time.UTC),
+      },
+      "Fixed value for each field of newly created record")
+
+    // But as often you cannot guess the values of DB generated fields,
+    // you can choose to ignore them and only test the non-zero ones
+    td.CmpDeeply(t, record,
+      td.Struct(
+        &Record{
+          Name: "Bob",
+          Age:  23,
+        },
+        nil),
+      "Name & Age fields of newly created record")
+
+    // Anyway, it is better to be able to test all fields!
     td.CmpDeeply(t, record,
       td.Struct(
         &Record{
@@ -89,14 +113,14 @@ Imagine `CreateRecord` does not set correctly `CreatedAt` field, then:
 go test -run=TestCreateRecord
 ```
 
-outputs:
+outputs for last `td.CmpDeeply` call:
 ```
 --- FAIL: TestCreateRecord (0.00s)
-  test_test.go:22: Failed test 'Newly created record'
+  test_test.go:46: Failed test 'Newly created record'
     DATA.CreatedAt: values differ
            got: 2018-05-27 10:55:50.788166932 +0200 CEST m=-2.998149554
       expected: 2018-05-27 10:55:53.788163509 +0200 CEST m=+0.001848002 ≤ got ≤ 2018-05-27 10:55:53.788464176 +0200 CEST m=+0.002148179
-    [under TestDeep operator Between at test_test.go:29]
+    [under TestDeep operator Between at test_test.go:54]
 FAIL
 exit status 1
 FAIL  github.com/maxatome/go-testdeep  0.006s
@@ -106,11 +130,11 @@ If `CreateRecord` had not set correctly `Id` field, output would have
 been:
 ```
 --- FAIL: TestCreateRecord (0.00s)
-  test_test.go:22: Failed test 'Newly created record'
+  test_test.go:46: Failed test 'Newly created record'
     DATA.Id: zero value
            got: (uint64) 0
       expected: NotZero()
-    [under TestDeep operator Not at test_test.go:28]
+    [under TestDeep operator Not at test_test.go:53]
 FAIL
 exit status 1
 FAIL  github.com/maxatome/go-testdeep  0.006s
@@ -120,7 +144,7 @@ If `CreateRecord` had not set `Name` field to "Alice" value instead of
 expected "Bob", output would have been:
 ```
 --- FAIL: TestCreateRecord (0.00s)
-  test_test.go:22: Failed test 'Newly created record'
+  test_test.go:46: Failed test 'Newly created record'
     DATA.Name: values differ
            got: (string) (len=5) "Alice"
       expected: (string) (len=3) "Bob"
@@ -135,6 +159,8 @@ type, `TestCreateRecord` can also be written as:
 ```go
 import (
   "testing"
+  "time"
+
   td "github.com/maxatome/go-testdeep"
 )
 
@@ -158,6 +184,17 @@ func TestCreateRecord(tt *testing.T) {
   if t.CmpNoError(err) {
     t := t.RootName("RECORD") // Use RECORD instead of DATA in failure reports
 
+    // If you know the exact value of all fields of newly created record
+    t.CmpDeeply(record,
+      &Record{
+        Id:        245,
+        Name:      "Bob",
+        Age:       23,
+        CreatedAt: time.Date(2018, time.May, 1, 11, 12, 13, 0, time.UTC),
+      },
+      "Fixed value for each field of newly created record")
+
+    // Anyway, it is better to be able to test all fields in a generic way!
     // Using Struct method
     t.Struct(record,
       Record{
