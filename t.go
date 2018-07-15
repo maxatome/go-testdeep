@@ -335,6 +335,21 @@ func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...i
 	return t.CmpDeeply(got, N(num, tolerance), args...)
 }
 
+// NaN is a shortcut for:
+//
+//   t.CmpDeeply(got, NaN(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func (t *T) NaN(got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return t.CmpDeeply(got, NaN(), args...)
+}
+
 // Nil is a shortcut for:
 //
 //   t.CmpDeeply(got, Nil(), args...)
@@ -408,6 +423,21 @@ func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interfa
 func (t *T) NotEmpty(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.CmpDeeply(got, NotEmpty(), args...)
+}
+
+// NotNaN is a shortcut for:
+//
+//   t.CmpDeeply(got, NotNaN(), args...)
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func (t *T) NotNaN(got interface{}, args ...interface{}) bool {
+	t.Helper()
+	return t.CmpDeeply(got, NotNaN(), args...)
 }
 
 // NotNil is a shortcut for:

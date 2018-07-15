@@ -10,6 +10,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math"
 	"regexp"
 	"strconv"
 	"testing"
@@ -948,6 +949,49 @@ func ExampleN() {
 	// true
 }
 
+func ExampleNaN_float32() {
+	t := &testing.T{}
+
+	got := float32(math.NaN())
+
+	ok := CmpDeeply(t, got, NaN(),
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float32(math.NaN()) is float32 not-a-number:", ok)
+
+	got = 12
+
+	ok = CmpDeeply(t, got, NaN(),
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float32(12) is float32 not-a-number:", ok)
+
+	// Output:
+	// float32(math.NaN()) is float32 not-a-number: true
+	// float32(12) is float32 not-a-number: false
+}
+
+func ExampleNaN_float64() {
+	t := &testing.T{}
+
+	got := math.NaN()
+
+	ok := CmpDeeply(t, got, NaN(),
+		"checks %v is not-a-number", got)
+
+	fmt.Println("math.NaN() is not-a-number:", ok)
+
+	got = 12
+
+	ok = CmpDeeply(t, got, NaN(),
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float64(12) is not-a-number:", ok)
+
+	// math.NaN() is not-a-number: true
+	// float64(12) is not-a-number: false
+}
+
 func ExampleNil() {
 	t := &testing.T{}
 
@@ -1110,6 +1154,49 @@ func ExampleNotEmpty_pointers() {
 	// true
 	// true
 	// false
+}
+
+func ExampleNotNaN_float32() {
+	t := &testing.T{}
+
+	got := float32(math.NaN())
+
+	ok := CmpDeeply(t, got, NotNaN(),
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float32(math.NaN()) is NOT float32 not-a-number:", ok)
+
+	got = 12
+
+	ok = CmpDeeply(t, got, NotNaN(),
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float32(12) is NOT float32 not-a-number:", ok)
+
+	// Output:
+	// float32(math.NaN()) is NOT float32 not-a-number: false
+	// float32(12) is NOT float32 not-a-number: true
+}
+
+func ExampleNotNaN_float64() {
+	t := &testing.T{}
+
+	got := math.NaN()
+
+	ok := CmpDeeply(t, got, NotNaN(),
+		"checks %v is not-a-number", got)
+
+	fmt.Println("math.NaN() is not-a-number:", ok)
+
+	got = 12
+
+	ok = CmpDeeply(t, got, NotNaN(),
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float64(12) is not-a-number:", ok)
+
+	// math.NaN() is NOT not-a-number: false
+	// float64(12) is NOT not-a-number: true
 }
 
 func ExampleNotNil() {
