@@ -19,6 +19,15 @@ Extremely flexible golang deep comparison, extends the go testing package.
 
 ## Latest news
 
+- 2018/07/15: new
+  [`NaN`](https://godoc.org/github.com/maxatome/go-testdeep#NaN) &
+  [`NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#NotNaN) &
+  operators (and their friends
+  [`CmpNaN`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNaN),
+  [`CmpNotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNaN),
+  [`T.CmpNaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNaN)
+  &
+  [`T.CmpNotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNotNaN));
 - 2018/06/24: [`Contains`](https://godoc.org/github.com/maxatome/go-testdeep#Contains)
   (and its friends
   [`CmpContains`](https://godoc.org/github.com/maxatome/go-testdeep#CmpContains)
@@ -32,15 +41,6 @@ Extremely flexible golang deep comparison, extends the go testing package.
   for default global value and
   [`T.FailureIsFatal`](https://godoc.org/github.com/maxatome/go-testdeep#T.FailureIsFatal)
   method;
-- 2018/06/17: new
-  [`CmpPanic`](https://godoc.org/github.com/maxatome/go-testdeep#CmpPanic)
-  &
-  [`CmpNotPanic`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotPanic)
-  functions and
-  [`T.CmpPanic`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpPanic)
-  &
-  [`T.CmpNotPanic`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNotPanic)
-  methods
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -398,124 +398,129 @@ func TestCreateRecord(tt *testing.T) {
 See functions returning [`TestDeep` interface](https://godoc.org/github.com/maxatome/go-testdeep#TestDeep):
 
 - [`All`](https://godoc.org/github.com/maxatome/go-testdeep#All)
-all expected values have to match;
+  all expected values have to match;
 - [`Any`](https://godoc.org/github.com/maxatome/go-testdeep#Any)
-at least one expected value have to match;
+  at least one expected value have to match;
 - [`Array`](https://godoc.org/github.com/maxatome/go-testdeep#Array)
-compares the contents of an array or a pointer on an array;
+  compares the contents of an array or a pointer on an array;
 - [`ArrayEach`](https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach)
-compares each array or slice item;
+  compares each array or slice item;
 - [`Bag`](https://godoc.org/github.com/maxatome/go-testdeep#Bag)
-compares the contents of an array or a slice without taking care of the order
-of items;
+  compares the contents of an array or a slice without taking care of the order
+  of items;
 - [`Between`](https://godoc.org/github.com/maxatome/go-testdeep#Between)
-checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
-between two bounds;
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  between two bounds;
 - [`Cap`](https://godoc.org/github.com/maxatome/go-testdeep#Cap)
-checks an array, slice or channel capacity;
+  checks an array, slice or channel capacity;
 - [`Code`](https://godoc.org/github.com/maxatome/go-testdeep#Code)
-allows to use a custom function;
+  allows to use a custom function;
 - [`Contains`](https://godoc.org/github.com/maxatome/go-testdeep#Contains)
-checks that a string, [`error`](https://golang.org/ref/spec#Errors) or
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces contain
-a sub-string;
+  checks that a string, [`error`](https://golang.org/ref/spec#Errors) or
+  [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces contain
+  a sub-string;
 - [`Empty`](https://godoc.org/github.com/maxatome/go-testdeep#Empty)
-checks that an array, a channel, a map, a slice or a string is empty;
+  checks that an array, a channel, a map, a slice or a string is empty;
 - [`Gt`](https://godoc.org/github.com/maxatome/go-testdeep#Gt)
-checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
-greater than a value;
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  greater than a value;
 - [`Gte`](https://godoc.org/github.com/maxatome/go-testdeep#Gte)
-checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
-greater or equal than a value;
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  greater or equal than a value;
 - [`HasPrefix`](https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix)
-checks the prefix of a string, [`error`](https://golang.org/ref/spec#Errors)
-or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces;
+  checks the prefix of a string, [`error`](https://golang.org/ref/spec#Errors)
+  or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces;
 - [`HasSuffix`](https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix)
-checks the suffix of a string, [`error`](https://golang.org/ref/spec#Errors)
-or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces;
+  checks the suffix of a string, [`error`](https://golang.org/ref/spec#Errors)
+  or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces;
 - [`Ignore`](https://godoc.org/github.com/maxatome/go-testdeep#Isa)
-allows to ignore a comparison;
+  allows to ignore a comparison;
 - [`Isa`](https://godoc.org/github.com/maxatome/go-testdeep#Isa)
-checks the data type or whether data implements an interface or not;
+  checks the data type or whether data implements an interface or not;
 - [`Len`](https://godoc.org/github.com/maxatome/go-testdeep#Len)
-checks an array, slice, map, string or channel length;
+  checks an array, slice, map, string or channel length;
 - [`Lt`](https://godoc.org/github.com/maxatome/go-testdeep#Lt)
-checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
-lesser than a value;
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  lesser than a value;
 - [`Lte`](https://godoc.org/github.com/maxatome/go-testdeep#Lte)
-checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
-lesser or equal than a value;
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  lesser or equal than a value;
 - [`Map`](https://godoc.org/github.com/maxatome/go-testdeep#Map)
-compares the contents of a map;
+  compares the contents of a map;
 - [`MapEach`](https://godoc.org/github.com/maxatome/go-testdeep#MapEach)
-compares each map entry;
+  compares each map entry;
 - [`N`](https://godoc.org/github.com/maxatome/go-testdeep#N)
-compares a number with a tolerance value;
+  compares a number with a tolerance value;
+- [`NaN`](https://godoc.org/github.com/maxatome/go-testdeep#NaN)
+  checks a floating number is [`math.NaN`](https://golang.org/pkg/math/#NaN);
 - [`Nil`](https://godoc.org/github.com/maxatome/go-testdeep#Nil)
-compares to `nil`;
+  compares to `nil`;
 - [`None`](https://godoc.org/github.com/maxatome/go-testdeep#None)
-no values have to match;
+  no values have to match;
 - [`NotAny`](https://godoc.org/github.com/maxatome/go-testdeep#NotAny)
-compares the contents of an array or a slice, no values have to match;
+  compares the contents of an array or a slice, no values have to match;
 - [`Not`](https://godoc.org/github.com/maxatome/go-testdeep#Not)
-value must not match;
+  value must not match;
 - [`NotEmpty`](https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty)
-checks that an array, a channel, a map, a slice or a string is not empty;
+  checks that an array, a channel, a map, a slice or a string is not empty;
+- [`NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#NotNaN)
+  checks a floating number is not
+  [`math.NaN`](https://golang.org/pkg/math/#NaN);
 - [`NotNil`](https://godoc.org/github.com/maxatome/go-testdeep#NotNil)
-checks that data is not `nil`;
+  checks that data is not `nil`;
 - [`NotZero`](https://godoc.org/github.com/maxatome/go-testdeep#NotZero)
-checks that data is not zero regarding its type;
+  checks that data is not zero regarding its type;
 - [`PPtr`](https://godoc.org/github.com/maxatome/go-testdeep#PPtr)
-allows to easily test a pointer of pointer value,
+  allows to easily test a pointer of pointer value,
 - [`Ptr`](https://godoc.org/github.com/maxatome/go-testdeep#Ptr)
-allows to easily test a pointer value,
+  allows to easily test a pointer value,
 - [`Re`](https://godoc.org/github.com/maxatome/go-testdeep#Re) allows
-to apply a regexp on a string (or convertible), `[]byte`,
-[`error`](https://golang.org/ref/spec#Errors) or
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces, and even
-test the captured groups;
+  to apply a regexp on a string (or convertible), `[]byte`,
+  [`error`](https://golang.org/ref/spec#Errors) or
+  [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces, and even
+  test the captured groups;
 - [`ReAll`](https://godoc.org/github.com/maxatome/go-testdeep#ReAll) allows
-to successively apply a regexp on a string (or convertible), `[]byte`,
-[`error`](https://golang.org/ref/spec#Errors) or
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces, and even
-test the captured groups;
+  to successively apply a regexp on a string (or convertible), `[]byte`,
+  [`error`](https://golang.org/ref/spec#Errors) or
+  [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces, and even
+  test the captured groups;
 - [`Set`](https://godoc.org/github.com/maxatome/go-testdeep#Set)
-compares the contents of an array or a slice ignoring duplicates and
-without taking care of the order of items;
+  compares the contents of an array or a slice ignoring duplicates and
+  without taking care of the order of items;
 - [`Shallow`](https://godoc.org/github.com/maxatome/go-testdeep#Shallow)
-compares pointers only, not their contents;
+  compares pointers only, not their contents;
 - [`Slice`](https://godoc.org/github.com/maxatome/go-testdeep#Slice)
-compares the contents of a slice or a pointer on a slice;
+  compares the contents of a slice or a pointer on a slice;
 - [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
-changes data contents or mutates it into another type via a custom
-function before stepping down in favor of generic comparison process;
+  changes data contents or mutates it into another type via a custom
+  function before stepping down in favor of generic comparison process;
 - [`String`](https://godoc.org/github.com/maxatome/go-testdeep#String)
-checks a string, [`error`](https://golang.org/ref/spec#Errors) or
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces
-string contents;
+  checks a string, [`error`](https://golang.org/ref/spec#Errors) or
+  [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces
+  string contents;
 - [`Struct`](https://godoc.org/github.com/maxatome/go-testdeep#Struct)
-compares the contents of a struct or a pointer on a struct;
+  compares the contents of a struct or a pointer on a struct;
 - [`SubBagOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf)
-compares the contents of an array or a slice without taking care of the order
-of items but with potentially some exclusions;
+  compares the contents of an array or a slice without taking care of the order
+  of items but with potentially some exclusions;
 - [`SubMapOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubMapOf)
-compares the contents of a map but with potentially some exclusions;
+  compares the contents of a map but with potentially some exclusions;
 - [`SubSetOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf)
-compares the contents of an array or a slice ignoring duplicates and
-without taking care of the order of items but with potentially some exclusions;
+  compares the contents of an array or a slice ignoring duplicates and
+  without taking care of the order of items but with potentially some exclusions;
 - [`SuperBagOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf)
-compares the contents of an array or a slice without taking care of the order
-of items but with potentially some extra items;
+  compares the contents of an array or a slice without taking care of the order
+  of items but with potentially some extra items;
 - [`SuperMapOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf)
-compares the contents of a map but with potentially some extra entries;
+  compares the contents of a map but with potentially some extra entries;
 - [`SuperSetOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf)
-compares the contents of an array or a slice ignoring duplicates and
-without taking care of the order of items but with potentially some extra
-items;
+  compares the contents of an array or a slice ignoring duplicates and
+  without taking care of the order of items but with potentially some extra
+  items;
 - [`TruncTime`](https://godoc.org/github.com/maxatome/go-testdeep#TruncTime)
-compares time.Time (or assignable) values after truncating them;
+  compares time.Time (or assignable) values after truncating them;
 - [`Zero`](https://godoc.org/github.com/maxatome/go-testdeep#Zero)
-checks data against its zero'ed conterpart.
+  checks data against its zero'ed conterpart.
 
 
 ## See also

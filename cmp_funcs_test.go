@@ -12,6 +12,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math"
 	"regexp"
 	"strconv"
 	"testing"
@@ -888,6 +889,49 @@ func ExampleCmpN() {
 	// true
 }
 
+func ExampleCmpNaN_float32() {
+	t := &testing.T{}
+
+	got := float32(math.NaN())
+
+	ok := CmpNaN(t, got,
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float32(math.NaN()) is float32 not-a-number:", ok)
+
+	got = 12
+
+	ok = CmpNaN(t, got,
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float32(12) is float32 not-a-number:", ok)
+
+	// Output:
+	// float32(math.NaN()) is float32 not-a-number: true
+	// float32(12) is float32 not-a-number: false
+}
+
+func ExampleCmpNaN_float64() {
+	t := &testing.T{}
+
+	got := math.NaN()
+
+	ok := CmpNaN(t, got,
+		"checks %v is not-a-number", got)
+
+	fmt.Println("math.NaN() is not-a-number:", ok)
+
+	got = 12
+
+	ok = CmpNaN(t, got,
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float64(12) is not-a-number:", ok)
+
+	// math.NaN() is not-a-number: true
+	// float64(12) is not-a-number: false
+}
+
 func ExampleCmpNil() {
 	t := &testing.T{}
 
@@ -1050,6 +1094,49 @@ func ExampleCmpNotEmpty_pointers() {
 	// true
 	// true
 	// false
+}
+
+func ExampleCmpNotNaN_float32() {
+	t := &testing.T{}
+
+	got := float32(math.NaN())
+
+	ok := CmpNotNaN(t, got,
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float32(math.NaN()) is NOT float32 not-a-number:", ok)
+
+	got = 12
+
+	ok = CmpNotNaN(t, got,
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float32(12) is NOT float32 not-a-number:", ok)
+
+	// Output:
+	// float32(math.NaN()) is NOT float32 not-a-number: false
+	// float32(12) is NOT float32 not-a-number: true
+}
+
+func ExampleCmpNotNaN_float64() {
+	t := &testing.T{}
+
+	got := math.NaN()
+
+	ok := CmpNotNaN(t, got,
+		"checks %v is not-a-number", got)
+
+	fmt.Println("math.NaN() is not-a-number:", ok)
+
+	got = 12
+
+	ok = CmpNotNaN(t, got,
+		"checks %v is not-a-number", got)
+
+	fmt.Println("float64(12) is not-a-number:", ok)
+
+	// math.NaN() is NOT not-a-number: false
+	// float64(12) is NOT not-a-number: true
 }
 
 func ExampleCmpNotNil() {
