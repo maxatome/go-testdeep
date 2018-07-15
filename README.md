@@ -25,9 +25,9 @@ Extremely flexible golang deep comparison, extends the go testing package.
   operators (and their friends
   [`CmpNaN`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNaN),
   [`CmpNotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNaN),
-  [`T.CmpNaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNaN)
+  [`T.NaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.NaN)
   &
-  [`T.CmpNotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNotNaN));
+  [`T.NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.NotNaN));
 - 2018/06/24: [`Contains`](https://godoc.org/github.com/maxatome/go-testdeep#Contains)
   (and its friends
   [`CmpContains`](https://godoc.org/github.com/maxatome/go-testdeep#CmpContains)
