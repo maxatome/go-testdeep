@@ -254,7 +254,7 @@ func TestStruct(t *testing.T) {
 		`Struct(testdeep_test.MyStruct{
   ValBool: (bool) false
   ValInt: (int) 123
-  ValStr: (string) (len=6) "foobar"
+  ValStr: "foobar"
 })`)
 
 	equalStr(t, Struct(&MyStruct{
@@ -269,7 +269,7 @@ func TestStruct(t *testing.T) {
 		`Struct(*testdeep_test.MyStruct{
   ValBool: (bool) false
   ValInt: (int) 123
-  ValStr: (string) (len=6) "foobar"
+  ValStr: "foobar"
 })`)
 
 	equalStr(t, Struct(&MyStruct{}, StructFields{}).String(),

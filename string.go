@@ -8,9 +8,9 @@ package testdeep
 
 import (
 	"bytes"
-	"fmt"
 	"reflect"
 	"strings"
+	"unicode"
 
 	"github.com/davecgh/go-spew/spew"
 )
@@ -20,6 +20,7 @@ func toString(val interface{}) string {
 		return "nil"
 	}
 
+typeSwitch:
 	switch tval := val.(type) {
 	case reflect.Value:
 		newVal, ok := getInterface(tval, true)
@@ -27,7 +28,15 @@ func toString(val interface{}) string {
 			return toString(newVal)
 		}
 
-	case fmt.Stringer:
+	case string:
+		for _, chr := range tval {
+			if !unicode.IsPrint(chr) {
+				break typeSwitch
+			}
+		}
+		return `"` + tval + `"`
+
+	case testDeepStringer:
 		return tval.String()
 	}
 

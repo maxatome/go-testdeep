@@ -103,7 +103,7 @@ func TestNotNil(t *testing.T) {
 		expectedError{
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("<nil>"),
+			Got:      mustContain("<nil>"),
 			Expected: mustBe("not nil"),
 		})
 
