@@ -206,7 +206,7 @@ func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 }
 
 func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
-	err = m.checkPtr(ctx, &got)
+	err = m.checkPtr(ctx, &got, true)
 	if err != nil {
 		return ctx.CollectError(err)
 	}
@@ -226,7 +226,7 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 			continue
 		}
 
-		err = deepValueEqual(ctx.AddDepth("["+toString(entryInfo.key)+"]"),
+		err = deepValueEqual(ctx.AddMapKey(entryInfo.key),
 			got.MapIndex(entryInfo.key), entryInfo.expected)
 		if err != nil {
 			return err

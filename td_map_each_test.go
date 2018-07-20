@@ -69,7 +69,7 @@ func TestMapEach(t *testing.T) {
 		MapEach(4),
 		expectedError{
 			Message:  mustBe("values differ"),
-			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Path:     mustBe(`DATA["bar"]`),
 			Got:      mustBe("(int) 5"),
 			Expected: mustBe("(int) 4"),
 		})
@@ -95,7 +95,7 @@ func TestMapEach(t *testing.T) {
 		MapEach(nil),
 		expectedError{
 			Message:  mustBe("values differ"),
-			Path:     mustBe(`DATA[(string) (len=1) "d"]`),
+			Path:     mustBe(`DATA["d"]`),
 			Got:      mustBe("(int) 66"),
 			Expected: mustBe("nil"),
 		})

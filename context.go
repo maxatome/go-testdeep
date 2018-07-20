@@ -204,8 +204,14 @@ func (c Context) AddDepth(pathAdd string) (new Context) {
 
 // AddArrayIndex creates a new Context from current one plus an array
 // dereference for index-th item.
-func (c Context) AddArrayIndex(index int) (new Context) {
+func (c Context) AddArrayIndex(index int) Context {
 	return c.AddDepth(fmt.Sprintf("[%d]", index))
+}
+
+// AddMapKey creates a new Context from current one plus a map
+// dereference for key key.
+func (c Context) AddMapKey(key interface{}) Context {
+	return c.AddDepth("[" + toString(key) + "]")
 }
 
 // AddPtr creates a new Context from current one plus a pointer dereference.

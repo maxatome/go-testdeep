@@ -287,7 +287,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 				continue
 			}
 
-			err = deepValueEqual(ctx.AddDepth("["+toString(vkey)+"]"),
+			err = deepValueEqual(ctx.AddMapKey(vkey),
 				gotValue, expected.MapIndex(vkey))
 			if err != nil {
 				return

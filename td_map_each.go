@@ -63,8 +63,7 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
 	case reflect.Map:
 		var err *Error
 		for _, key := range got.MapKeys() {
-			err = deepValueEqual(ctx.AddDepth("["+toString(key)+"]"),
-				got.MapIndex(key), m.expected)
+			err = deepValueEqual(ctx.AddMapKey(key), got.MapIndex(key), m.expected)
 			if err != nil {
 				return err
 			}

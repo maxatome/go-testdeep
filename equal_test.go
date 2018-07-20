@@ -339,7 +339,7 @@ func TestEqualMap(t *testing.T) {
 		map[string]int{"foo": 1, "bar": 5},
 		expectedError{
 			Message:  mustBe("values differ"),
-			Path:     mustMatch(`^DATA\[[^"]+"bar"\]\z`),
+			Path:     mustBe(`DATA["bar"]`),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})

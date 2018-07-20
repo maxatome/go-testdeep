@@ -109,6 +109,23 @@ func TestStruct(t *testing.T) {
 			"ValInt":  0,
 		}))
 
+	// nil cases
+	checkError(t, nil, Struct(&MyStruct{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("nil"),
+			Expected: mustContain("*testdeep_test.MyStruct"),
+		})
+
+	checkError(t, (*MyStruct)(nil), Struct(&MyStruct{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("nil"),
+			Expected: mustBe("non-nil"),
+		})
+
 	//
 	// Without pointer
 	checkOK(t, gotStruct,
@@ -174,6 +191,23 @@ func TestStruct(t *testing.T) {
 			"ValInt":  0,
 		}))
 
+	// nil cases
+	checkError(t, nil, Struct(MyStruct{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("nil"),
+			Expected: mustContain("testdeep_test.MyStruct"),
+		})
+
+	checkError(t, (*MyStruct)(nil), Struct(MyStruct{}, nil),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*testdeep_test.MyStruct"),
+			Expected: mustBe("testdeep_test.MyStruct"),
+		})
+
 	//
 	// Bad usage
 	checkPanic(t, func() { Struct("test", nil) }, "usage: Struct")
@@ -220,7 +254,7 @@ func TestStruct(t *testing.T) {
 		`Struct(testdeep_test.MyStruct{
   ValBool: (bool) false
   ValInt: (int) 123
-  ValStr: (string) (len=6) "foobar"
+  ValStr: "foobar"
 })`)
 
 	equalStr(t, Struct(&MyStruct{
@@ -235,7 +269,7 @@ func TestStruct(t *testing.T) {
 		`Struct(*testdeep_test.MyStruct{
   ValBool: (bool) false
   ValInt: (int) 123
-  ValStr: (string) (len=6) "foobar"
+  ValStr: "foobar"
 })`)
 
 	equalStr(t, Struct(&MyStruct{}, StructFields{}).String(),

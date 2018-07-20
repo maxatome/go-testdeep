@@ -41,7 +41,7 @@ func TestMap(t *testing.T) {
 	checkError(t, gotMap, Map(map[string]int{"foo": 1, "bar": 3}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
-			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Path:     mustBe(`DATA["bar"]`),
 			Got:      mustBe("(int) 2"),
 			Expected: mustBe("(int) 3"),
 		})
@@ -98,7 +98,7 @@ func TestMap(t *testing.T) {
 	checkError(t, gotTypedMap, Map(MyMap{"foo": 1, "bar": 3}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
-			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Path:     mustBe(`DATA["bar"]`),
 			Got:      mustBe("(int) 2"),
 			Expected: mustBe("(int) 3"),
 		})
@@ -134,7 +134,7 @@ func TestMap(t *testing.T) {
 	checkError(t, &gotTypedMap, Map(&MyMap{"foo": 1, "bar": 3}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
-			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Path:     mustBe(`DATA["bar"]`),
 			Got:      mustBe("(int) 2"),
 			Expected: mustBe("(int) 3"),
 		})
@@ -197,6 +197,17 @@ func TestMap(t *testing.T) {
 		})
 
 	//
+	// nil cases
+	var (
+		gotNilMap      map[string]int
+		gotNilTypedMap MyMap
+	)
+
+	checkOK(t, gotNilMap, Map(map[string]int{}, nil))
+	checkOK(t, gotNilTypedMap, Map(MyMap{}, nil))
+	checkOK(t, &gotNilTypedMap, Map(&MyMap{}, nil))
+
+	//
 	// SuperMapOf
 	checkOK(t, gotMap, SuperMapOf(map[string]int{"foo": 1}, nil))
 	checkOK(t, gotMap,
@@ -207,7 +218,7 @@ func TestMap(t *testing.T) {
 	checkError(t, gotMap, SuperMapOf(map[string]int{"foo": 1, "bar": 3}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
-			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Path:     mustBe(`DATA["bar"]`),
 			Got:      mustBe("(int) 2"),
 			Expected: mustBe("(int) 3"),
 		})
@@ -225,6 +236,10 @@ func TestMap(t *testing.T) {
 			Summary: mustMatch(`^Missing keys: .*test`),
 		})
 
+	checkOK(t, gotNilMap, SuperMapOf(map[string]int{}, nil))
+	checkOK(t, gotNilTypedMap, SuperMapOf(MyMap{}, nil))
+	checkOK(t, &gotNilTypedMap, SuperMapOf(&MyMap{}, nil))
+
 	//
 	// SubMapOf
 	checkOK(t, gotMap,
@@ -237,7 +252,7 @@ func TestMap(t *testing.T) {
 	checkError(t, gotMap, SubMapOf(map[string]int{"foo": 1, "bar": 3}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
-			Path:     mustBe(`DATA[(string) (len=3) "bar"]`),
+			Path:     mustBe(`DATA["bar"]`),
 			Got:      mustBe("(int) 2"),
 			Expected: mustBe("(int) 3"),
 		})
@@ -256,6 +271,10 @@ func TestMap(t *testing.T) {
 			Summary: mustMatch(`^Missing keys: .*test(.|\n)*\n  Extra keys: .*bar`),
 		})
 
+	checkOK(t, gotNilMap, SubMapOf(map[string]int{"foo": 1}, nil))
+	checkOK(t, gotNilTypedMap, SubMapOf(MyMap{"foo": 1}, nil))
+	checkOK(t, &gotNilTypedMap, SubMapOf(&MyMap{"foo": 1}, nil))
+
 	//
 	// Bad usage
 	checkPanic(t, func() { Map("test", nil) }, "usage: Map(")
@@ -271,13 +290,13 @@ func TestMap(t *testing.T) {
 		"expected key (int) 1 type mismatch: int != model key type (string)")
 
 	checkPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": nil}) },
-		`expected key (string) (len=3) "foo" value cannot be nil as entries value type is int`)
+		`expected key "foo" value cannot be nil as entries value type is int`)
 
 	checkPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": uint16(2)}) },
-		`expected key (string) (len=3) "foo" value type mismatch: uint16 != model key type (int)`)
+		`expected key "foo" value type mismatch: uint16 != model key type (int)`)
 
 	checkPanic(t, func() { Map(&MyMap{"foo": 1}, MapEntries{"foo": 1}) },
-		`(string) (len=3) "foo" entry exists in both model & expectedEntries`)
+		`"foo" entry exists in both model & expectedEntries`)
 
 	//
 	// String
@@ -285,7 +304,7 @@ func TestMap(t *testing.T) {
 	equalStr(t, Map(&MyMap{}, nil).String(), "*testdeep_test.MyMap{}")
 	equalStr(t, Map(&MyMap{"foo": 2}, nil).String(),
 		`*testdeep_test.MyMap{
-  (string) (len=3) "foo": (int) 2,
+  "foo": (int) 2,
 }`)
 
 	equalStr(t, SubMapOf(MyMap{}, nil).String(),
@@ -294,7 +313,7 @@ func TestMap(t *testing.T) {
 		"SubMapOf(*testdeep_test.MyMap{})")
 	equalStr(t, SubMapOf(&MyMap{"foo": 2}, nil).String(),
 		`SubMapOf(*testdeep_test.MyMap{
-  (string) (len=3) "foo": (int) 2,
+  "foo": (int) 2,
 })`)
 
 	equalStr(t, SuperMapOf(MyMap{}, nil).String(),
@@ -303,7 +322,7 @@ func TestMap(t *testing.T) {
 		"SuperMapOf(*testdeep_test.MyMap{})")
 	equalStr(t, SuperMapOf(&MyMap{"foo": 2}, nil).String(),
 		`SuperMapOf(*testdeep_test.MyMap{
-  (string) (len=3) "foo": (int) 2,
+  "foo": (int) 2,
 })`)
 }
 

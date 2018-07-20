@@ -24,7 +24,7 @@ func (t *tdExpectedType) errorTypeMismatch(gotType rawString) *Error {
 	}
 }
 
-func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value) *Error {
+func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value, nilAllowed bool) *Error {
 	if t.isPtr {
 		got := *pGot
 		if got.Kind() != reflect.Ptr {
@@ -33,6 +33,18 @@ func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value) *Error {
 			}
 			return t.errorTypeMismatch(rawString(got.Type().String()))
 		}
+
+		if !nilAllowed && got.IsNil() {
+			if ctx.booleanError {
+				return booleanError
+			}
+			return &Error{
+				Message:  "values differ",
+				Got:      got,
+				Expected: rawString("non-nil"),
+			}
+		}
+
 		*pGot = got.Elem()
 	}
 	return nil

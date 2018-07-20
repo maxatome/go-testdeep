@@ -75,8 +75,8 @@ type T struct {
 //   			     got: (uint64) 12
 //   			expected: (uint64) 28
 //   		DATA.Name: values differ
-//   			     got: (string) (len=3) "Bob"
-//   			expected: (string) (len=4) "John"
+//   			     got: "Bob"
+//   			expected: "John"
 //   		DATA.Age: values differ
 //   			     got: (int) 12
 //   			expected: (int) 28
@@ -101,8 +101,8 @@ type T struct {
 //   			     got: (uint64) 12
 //   			expected: (uint64) 28
 //   		RECORD.Name: values differ
-//   			     got: (string) (len=3) "Bob"
-//   			expected: (string) (len=4) "John"
+//   			     got: "Bob"
+//   			expected: "John"
 //   		Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)
 //   FAIL
 //

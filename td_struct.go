@@ -187,7 +187,7 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 }
 
 func (s *tdStruct) Match(ctx Context, got reflect.Value) (err *Error) {
-	err = s.checkPtr(ctx, &got)
+	err = s.checkPtr(ctx, &got, false)
 	if err != nil {
 		return ctx.CollectError(err)
 	}

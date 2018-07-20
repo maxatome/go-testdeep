@@ -213,7 +213,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 }
 
 func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
-	err = a.checkPtr(ctx, &got)
+	err = a.checkPtr(ctx, &got, true)
 	if err != nil {
 		return ctx.CollectError(err)
 	}
