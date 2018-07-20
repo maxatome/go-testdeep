@@ -197,6 +197,17 @@ func TestMap(t *testing.T) {
 		})
 
 	//
+	// nil cases
+	var (
+		gotNilMap      map[string]int
+		gotNilTypedMap MyMap
+	)
+
+	checkOK(t, gotNilMap, Map(map[string]int{}, nil))
+	checkOK(t, gotNilTypedMap, Map(MyMap{}, nil))
+	checkOK(t, &gotNilTypedMap, Map(&MyMap{}, nil))
+
+	//
 	// SuperMapOf
 	checkOK(t, gotMap, SuperMapOf(map[string]int{"foo": 1}, nil))
 	checkOK(t, gotMap,
@@ -224,6 +235,10 @@ func TestMap(t *testing.T) {
 			Path:    mustBe("DATA"),
 			Summary: mustMatch(`^Missing keys: .*test`),
 		})
+
+	checkOK(t, gotNilMap, SuperMapOf(map[string]int{}, nil))
+	checkOK(t, gotNilTypedMap, SuperMapOf(MyMap{}, nil))
+	checkOK(t, &gotNilTypedMap, SuperMapOf(&MyMap{}, nil))
 
 	//
 	// SubMapOf
@@ -255,6 +270,10 @@ func TestMap(t *testing.T) {
 			Path:    mustBe("DATA"),
 			Summary: mustMatch(`^Missing keys: .*test(.|\n)*\n  Extra keys: .*bar`),
 		})
+
+	checkOK(t, gotNilMap, SubMapOf(map[string]int{"foo": 1}, nil))
+	checkOK(t, gotNilTypedMap, SubMapOf(MyMap{"foo": 1}, nil))
+	checkOK(t, &gotNilTypedMap, SubMapOf(&MyMap{"foo": 1}, nil))
 
 	//
 	// Bad usage

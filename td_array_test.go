@@ -312,6 +312,17 @@ func TestSlice(t *testing.T) {
 		})
 
 	//
+	// nil cases
+	var (
+		gotNilSlice      []int
+		gotNilTypedSlice MySlice
+	)
+
+	checkOK(t, gotNilSlice, Slice([]int{}, nil))
+	checkOK(t, gotNilTypedSlice, Slice(MySlice{}, nil))
+	checkOK(t, &gotNilTypedSlice, Slice(&MySlice{}, nil))
+
+	//
 	// Bad usage
 	checkPanic(t, func() { Slice("test", nil) }, "usage: Slice(")
 	checkPanic(t, func() { Slice(&MyStruct{}, nil) }, "usage: Slice(")
