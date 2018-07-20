@@ -147,8 +147,8 @@ expected "Bob", output would have been:
 --- FAIL: TestCreateRecord (0.00s)
   test_test.go:46: Failed test 'Newly created record'
     DATA.Name: values differ
-           got: (string) (len=5) "Alice"
-      expected: (string) (len=3) "Bob"
+           got: "Alice"
+      expected: "Bob"
 FAIL
 exit status 1
 FAIL  github.com/maxatome/go-testdeep  0.006s
