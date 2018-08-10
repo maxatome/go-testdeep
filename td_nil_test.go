@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestNil(t *testing.T) {
@@ -44,7 +45,7 @@ func TestNil(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Nil().String(), "nil")
+	test.EqualStr(t, Nil().String(), "nil")
 }
 
 func TestNotNil(t *testing.T) {
@@ -109,7 +110,7 @@ func TestNotNil(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, NotNil().String(), "not nil")
+	test.EqualStr(t, NotNil().String(), "not nil")
 }
 
 func TestNilTypeBehind(t *testing.T) {

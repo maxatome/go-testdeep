@@ -12,6 +12,7 @@ import (
 	"time"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestCode(t *testing.T) {
@@ -106,11 +107,11 @@ func TestCode(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Code(func(n int) bool { return false }).String(),
+	test.EqualStr(t, Code(func(n int) bool { return false }).String(),
 		"Code(func(int) bool)")
-	equalStr(t, Code(func(n int) (bool, string) { return false, "" }).String(),
+	test.EqualStr(t, Code(func(n int) (bool, string) { return false, "" }).String(),
 		"Code(func(int) (bool, string))")
-	equalStr(t,
+	test.EqualStr(t,
 		Code(func(n int) (MyBool, MyString) { return false, "" }).String(),
 		"Code(func(int) (testdeep_test.MyBool, testdeep_test.MyString))")
 }

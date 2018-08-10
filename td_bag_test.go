@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestBag(t *testing.T) {
@@ -159,14 +160,14 @@ func TestBag(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Bag(1).String(), "Bag((int) 1)")
-	equalStr(t, Bag(1, 2).String(), "Bag((int) 1,\n    (int) 2)")
+	test.EqualStr(t, Bag(1).String(), "Bag((int) 1)")
+	test.EqualStr(t, Bag(1, 2).String(), "Bag((int) 1,\n    (int) 2)")
 
-	equalStr(t, SubBagOf(1).String(), "SubBagOf((int) 1)")
-	equalStr(t, SubBagOf(1, 2).String(), "SubBagOf((int) 1,\n         (int) 2)")
+	test.EqualStr(t, SubBagOf(1).String(), "SubBagOf((int) 1)")
+	test.EqualStr(t, SubBagOf(1, 2).String(), "SubBagOf((int) 1,\n         (int) 2)")
 
-	equalStr(t, SuperBagOf(1).String(), "SuperBagOf((int) 1)")
-	equalStr(t, SuperBagOf(1, 2).String(),
+	test.EqualStr(t, SuperBagOf(1).String(), "SuperBagOf((int) 1)")
+	test.EqualStr(t, SuperBagOf(1, 2).String(),
 		"SuperBagOf((int) 1,\n           (int) 2)")
 }
 

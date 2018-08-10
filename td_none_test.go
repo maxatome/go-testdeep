@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestNone(t *testing.T) {
@@ -32,8 +33,8 @@ func TestNone(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, None(6).String(), "None((int) 6)")
-	equalStr(t, None(6, 7).String(), "None((int) 6,\n     (int) 7)")
+	test.EqualStr(t, None(6).String(), "None((int) 6)")
+	test.EqualStr(t, None(6, 7).String(), "None((int) 6,\n     (int) 7)")
 }
 
 func TestNot(t *testing.T) {
@@ -56,7 +57,7 @@ func TestNot(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Not(6).String(), "Not((int) 6)")
+	test.EqualStr(t, Not(6).String(), "Not((int) 6)")
 }
 
 func TestNoneTypeBehind(t *testing.T) {

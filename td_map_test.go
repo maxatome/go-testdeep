@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestMap(t *testing.T) {
@@ -300,27 +301,27 @@ func TestMap(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Map(MyMap{}, nil).String(), "testdeep_test.MyMap{}")
-	equalStr(t, Map(&MyMap{}, nil).String(), "*testdeep_test.MyMap{}")
-	equalStr(t, Map(&MyMap{"foo": 2}, nil).String(),
+	test.EqualStr(t, Map(MyMap{}, nil).String(), "testdeep_test.MyMap{}")
+	test.EqualStr(t, Map(&MyMap{}, nil).String(), "*testdeep_test.MyMap{}")
+	test.EqualStr(t, Map(&MyMap{"foo": 2}, nil).String(),
 		`*testdeep_test.MyMap{
   "foo": (int) 2,
 }`)
 
-	equalStr(t, SubMapOf(MyMap{}, nil).String(),
+	test.EqualStr(t, SubMapOf(MyMap{}, nil).String(),
 		"SubMapOf(testdeep_test.MyMap{})")
-	equalStr(t, SubMapOf(&MyMap{}, nil).String(),
+	test.EqualStr(t, SubMapOf(&MyMap{}, nil).String(),
 		"SubMapOf(*testdeep_test.MyMap{})")
-	equalStr(t, SubMapOf(&MyMap{"foo": 2}, nil).String(),
+	test.EqualStr(t, SubMapOf(&MyMap{"foo": 2}, nil).String(),
 		`SubMapOf(*testdeep_test.MyMap{
   "foo": (int) 2,
 })`)
 
-	equalStr(t, SuperMapOf(MyMap{}, nil).String(),
+	test.EqualStr(t, SuperMapOf(MyMap{}, nil).String(),
 		"SuperMapOf(testdeep_test.MyMap{})")
-	equalStr(t, SuperMapOf(&MyMap{}, nil).String(),
+	test.EqualStr(t, SuperMapOf(&MyMap{}, nil).String(),
 		"SuperMapOf(*testdeep_test.MyMap{})")
-	equalStr(t, SuperMapOf(&MyMap{"foo": 2}, nil).String(),
+	test.EqualStr(t, SuperMapOf(&MyMap{"foo": 2}, nil).String(),
 		`SuperMapOf(*testdeep_test.MyMap{
   "foo": (int) 2,
 })`)

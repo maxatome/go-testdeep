@@ -9,88 +9,54 @@ package testdeep
 import (
 	"os"
 	"testing"
+
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
-func equalStr(t *testing.T, got, expected string) bool {
-	if got == expected {
-		return true
-	}
-
-	t.Helper()
-	t.Errorf(`Failed test
-	     got: %s
-	expected: %s`, got, expected)
-	return false
-}
-
-func equalInt(t *testing.T, got, expected int) bool {
-	if got == expected {
-		return true
-	}
-
-	t.Helper()
-	t.Errorf(`Failed test
-	     got: %d
-	expected: %d`, got, expected)
-	return false
-}
-
-func equalBool(t *testing.T, got, expected bool) bool {
-	if got == expected {
-		return true
-	}
-
-	t.Helper()
-	t.Errorf(`Failed test
-	     got: %t
-	expected: %t`, got, expected)
-	return false
-}
-
 func TestContext(t *testing.T) {
-	equalStr(t, NewContext().path, "DATA")
-	equalStr(t, NewBooleanContext().path, "")
+	test.EqualStr(t, NewContext().path, "DATA")
+	test.EqualStr(t, NewBooleanContext().path, "")
 
-	equalStr(t,
+	test.EqualStr(t,
 		NewContextWithConfig(ContextConfig{RootName: "test"}).
 			AddDepth(".foo").
 			path,
 		"test.foo")
 
-	equalStr(t,
+	test.EqualStr(t,
 		NewContextWithConfig(ContextConfig{RootName: "test"}).
 			AddDepth(".foo").
 			AddDepth(".bar").
 			path,
 		"test.foo.bar")
 
-	equalStr(t,
+	test.EqualStr(t,
 		NewContextWithConfig(ContextConfig{RootName: "*test"}).
 			AddDepth(".foo").
 			path,
 		"(*test).foo")
 
-	equalStr(t,
+	test.EqualStr(t,
 		NewContextWithConfig(ContextConfig{RootName: "test"}).
 			AddArrayIndex(12).path,
 		"test[12]")
 
-	equalStr(t,
+	test.EqualStr(t,
 		NewContextWithConfig(ContextConfig{RootName: "*test"}).
 			AddArrayIndex(12).path,
 		"(*test)[12]")
 
-	equalStr(t,
+	test.EqualStr(t,
 		NewContextWithConfig(ContextConfig{RootName: "test"}).
 			AddPtr(2).
 			path,
 		"**test")
 
-	equalStr(t,
+	test.EqualStr(t,
 		NewContextWithConfig(ContextConfig{RootName: "test.foo"}).
 			AddPtr(1).path, "*test.foo")
 
-	equalStr(t,
+	test.EqualStr(t,
 		NewContextWithConfig(ContextConfig{RootName: "test[3]"}).
 			AddPtr(1).path,
 		"*test[3]")
@@ -114,11 +80,11 @@ func TestGetMaxErrorsFromEnv(t *testing.T) {
 	defer func() { os.Setenv(envMaxErrors, oldEnv) }()
 
 	os.Setenv(envMaxErrors, "")
-	equalInt(t, getMaxErrorsFromEnv(), 10)
+	test.EqualInt(t, getMaxErrorsFromEnv(), 10)
 
 	os.Setenv(envMaxErrors, "aaa")
-	equalInt(t, getMaxErrorsFromEnv(), 10)
+	test.EqualInt(t, getMaxErrorsFromEnv(), 10)
 
 	os.Setenv(envMaxErrors, "-8")
-	equalInt(t, getMaxErrorsFromEnv(), -8)
+	test.EqualInt(t, getMaxErrorsFromEnv(), -8)
 }

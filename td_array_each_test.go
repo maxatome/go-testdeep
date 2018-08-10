@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestArrayEach(t *testing.T) {
@@ -122,8 +123,8 @@ func TestArrayEach(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, ArrayEach(4).String(), "ArrayEach((int) 4)")
-	equalStr(t, ArrayEach(All(1, 2)).String(),
+	test.EqualStr(t, ArrayEach(4).String(), "ArrayEach((int) 4)")
+	test.EqualStr(t, ArrayEach(All(1, 2)).String(),
 		`ArrayEach(All((int) 1,
               (int) 2))`)
 }

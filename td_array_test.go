@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestArray(t *testing.T) {
@@ -141,7 +142,7 @@ func TestArray(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Array(MyArray{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
+	test.EqualStr(t, Array(MyArray{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
 		`Array(testdeep_test.MyArray{
   0: (int) 2
   1: (int) 3
@@ -150,7 +151,7 @@ func TestArray(t *testing.T) {
   4: (int) 0
 })`)
 
-	equalStr(t, Array(&MyArray{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
+	test.EqualStr(t, Array(&MyArray{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
 		`Array(*testdeep_test.MyArray{
   0: (int) 2
   1: (int) 3
@@ -159,7 +160,7 @@ func TestArray(t *testing.T) {
   4: (int) 0
 })`)
 
-	equalStr(t, Array([0]int{}, ArrayEntries{}).String(),
+	test.EqualStr(t, Array([0]int{}, ArrayEntries{}).String(),
 		`Array([0]int{})`)
 }
 
@@ -334,21 +335,21 @@ func TestSlice(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Slice(MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
+	test.EqualStr(t, Slice(MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
 		`Slice(testdeep_test.MySlice{
   0: (int) 2
   1: (int) 3
   2: (int) 4
 })`)
 
-	equalStr(t, Slice(&MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
+	test.EqualStr(t, Slice(&MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
 		`Slice(*testdeep_test.MySlice{
   0: (int) 2
   1: (int) 3
   2: (int) 4
 })`)
 
-	equalStr(t, Slice(&MySlice{}, ArrayEntries{}).String(),
+	test.EqualStr(t, Slice(&MySlice{}, ArrayEntries{}).String(),
 		`Slice(*testdeep_test.MySlice{})`)
 }
 

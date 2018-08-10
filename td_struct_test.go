@@ -13,6 +13,7 @@ import (
 	"time"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestStruct(t *testing.T) {
@@ -242,7 +243,7 @@ func TestStruct(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Struct(MyStruct{
+	test.EqualStr(t, Struct(MyStruct{
 		MyStructMid: MyStructMid{
 			ValStr: "foobar",
 		},
@@ -257,7 +258,7 @@ func TestStruct(t *testing.T) {
   ValStr: "foobar"
 })`)
 
-	equalStr(t, Struct(&MyStruct{
+	test.EqualStr(t, Struct(&MyStruct{
 		MyStructMid: MyStructMid{
 			ValStr: "foobar",
 		},
@@ -272,7 +273,7 @@ func TestStruct(t *testing.T) {
   ValStr: "foobar"
 })`)
 
-	equalStr(t, Struct(&MyStruct{}, StructFields{}).String(),
+	test.EqualStr(t, Struct(&MyStruct{}, StructFields{}).String(),
 		`Struct(*testdeep_test.MyStruct{})`)
 }
 

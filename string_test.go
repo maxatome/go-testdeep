@@ -9,10 +9,12 @@ package testdeep
 import (
 	"reflect"
 	"testing"
+
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestToString(t *testing.T) {
-	for _, test := range []struct {
+	for _, curTest := range []struct {
 		Got      interface{}
 		Expected string
 	}{
@@ -25,6 +27,6 @@ func TestToString(t *testing.T) {
 		{Got: Nil(), Expected: "nil"},
 		{Got: 42, Expected: "(int) 42"},
 	} {
-		equalStr(t, toString(test.Got), test.Expected)
+		test.EqualStr(t, toString(curTest.Got), curTest.Expected)
 	}
 }

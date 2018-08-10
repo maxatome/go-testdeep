@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestMapEach(t *testing.T) {
@@ -102,8 +103,8 @@ func TestMapEach(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, MapEach(4).String(), "MapEach((int) 4)")
-	equalStr(t, MapEach(All(1, 2)).String(),
+	test.EqualStr(t, MapEach(4).String(), "MapEach((int) 4)")
+	test.EqualStr(t, MapEach(All(1, 2)).String(),
 		`MapEach(All((int) 1,
             (int) 2))`)
 }

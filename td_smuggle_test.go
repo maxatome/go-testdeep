@@ -11,6 +11,7 @@ import (
 	"time"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestSmuggle(t *testing.T) {
@@ -282,15 +283,15 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// String
-	equalStr(t,
+	test.EqualStr(t,
 		Smuggle(func(n int) int { return 0 }, 12).String(),
 		"Smuggle(func(int) int)")
 
-	equalStr(t,
+	test.EqualStr(t,
 		Smuggle(func(n int) (int, bool) { return 23, false }, 12).String(),
 		"Smuggle(func(int) (int, bool))")
 
-	equalStr(t,
+	test.EqualStr(t,
 		Smuggle(func(n int) (int, MyBool, MyString) { return 23, false, "" }, 12).
 			String(),
 		"Smuggle(func(int) (int, testdeep_test.MyBool, testdeep_test.MyString))")

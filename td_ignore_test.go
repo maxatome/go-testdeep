@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestIgnore(t *testing.T) {
@@ -20,7 +21,7 @@ func TestIgnore(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Ignore().String(), "Ignore()")
+	test.EqualStr(t, Ignore().String(), "Ignore()")
 }
 
 func TestIgnoreTypeBehind(t *testing.T) {

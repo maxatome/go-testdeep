@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestEmpty(t *testing.T) {
@@ -98,7 +99,7 @@ func TestEmpty(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Empty().String(), "Empty()")
+	test.EqualStr(t, Empty().String(), "Empty()")
 }
 
 func TestNotEmpty(t *testing.T) {
@@ -184,7 +185,7 @@ func TestNotEmpty(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, NotEmpty().String(), "NotEmpty()")
+	test.EqualStr(t, NotEmpty().String(), "NotEmpty()")
 }
 
 func TestEmptyTypeBehind(t *testing.T) {

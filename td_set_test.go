@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestSet(t *testing.T) {
@@ -177,18 +178,18 @@ func TestSet(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Set(1).String(), "Set((int) 1)")
-	equalStr(t, Set(1, 2).String(), "Set((int) 1,\n    (int) 2)")
+	test.EqualStr(t, Set(1).String(), "Set((int) 1)")
+	test.EqualStr(t, Set(1, 2).String(), "Set((int) 1,\n    (int) 2)")
 
-	equalStr(t, SubSetOf(1).String(), "SubSetOf((int) 1)")
-	equalStr(t, SubSetOf(1, 2).String(), "SubSetOf((int) 1,\n         (int) 2)")
+	test.EqualStr(t, SubSetOf(1).String(), "SubSetOf((int) 1)")
+	test.EqualStr(t, SubSetOf(1, 2).String(), "SubSetOf((int) 1,\n         (int) 2)")
 
-	equalStr(t, SuperSetOf(1).String(), "SuperSetOf((int) 1)")
-	equalStr(t, SuperSetOf(1, 2).String(),
+	test.EqualStr(t, SuperSetOf(1).String(), "SuperSetOf((int) 1)")
+	test.EqualStr(t, SuperSetOf(1, 2).String(),
 		"SuperSetOf((int) 1,\n           (int) 2)")
 
-	equalStr(t, NotAny(1).String(), "NotAny((int) 1)")
-	equalStr(t, NotAny(1, 2).String(), "NotAny((int) 1,\n       (int) 2)")
+	test.EqualStr(t, NotAny(1).String(), "NotAny((int) 1)")
+	test.EqualStr(t, NotAny(1, 2).String(), "NotAny((int) 1,\n       (int) 2)")
 }
 
 func TestSetTypeBehind(t *testing.T) {

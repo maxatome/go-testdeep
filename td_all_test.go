@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestAll(t *testing.T) {
@@ -59,8 +60,8 @@ func TestAll(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, All(6).String(), "All((int) 6)")
-	equalStr(t, All(6, 7).String(), "All((int) 6,\n    (int) 7)")
+	test.EqualStr(t, All(6).String(), "All((int) 6)")
+	test.EqualStr(t, All(6, 7).String(), "All((int) 6,\n    (int) 7)")
 }
 
 func TestAllTypeBehind(t *testing.T) {

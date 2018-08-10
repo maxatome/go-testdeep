@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestZero(t *testing.T) {
@@ -85,7 +86,7 @@ func TestZero(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Zero().String(), "Zero()")
+	test.EqualStr(t, Zero().String(), "Zero()")
 }
 
 func TestNotZero(t *testing.T) {
@@ -165,7 +166,7 @@ func TestNotZero(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, NotZero().String(), "NotZero()")
+	test.EqualStr(t, NotZero().String(), "NotZero()")
 }
 
 func TestZeroTypeBehind(t *testing.T) {

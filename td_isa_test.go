@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestIsa(t *testing.T) {
@@ -92,7 +93,7 @@ func TestIsa(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Isa((*MyStruct)(nil)).String(), "*testdeep_test.MyStruct")
+	test.EqualStr(t, Isa((*MyStruct)(nil)).String(), "*testdeep_test.MyStruct")
 }
 
 func TestIsaTypeBehind(t *testing.T) {

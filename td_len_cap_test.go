@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestLen(t *testing.T) {
@@ -51,9 +52,9 @@ func TestLen(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Len(3).String(), "len=3")
-	equalStr(t, Len(Between(3, 8)).String(), "len: 3 ≤ got ≤ 8")
-	equalStr(t, Len(Gt(8)).String(), "len: > 8")
+	test.EqualStr(t, Len(3).String(), "len=3")
+	test.EqualStr(t, Len(Between(3, 8)).String(), "len: 3 ≤ got ≤ 8")
+	test.EqualStr(t, Len(Gt(8)).String(), "len: > 8")
 
 	//
 	// Bad usage
@@ -92,9 +93,9 @@ func TestCap(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Cap(3).String(), "cap=3")
-	equalStr(t, Cap(Between(3, 8)).String(), "cap: 3 ≤ got ≤ 8")
-	equalStr(t, Cap(Gt(8)).String(), "cap: > 8")
+	test.EqualStr(t, Cap(3).String(), "cap=3")
+	test.EqualStr(t, Cap(Between(3, 8)).String(), "cap: 3 ≤ got ≤ 8")
+	test.EqualStr(t, Cap(Gt(8)).String(), "cap: > 8")
 
 	//
 	// Bad usage

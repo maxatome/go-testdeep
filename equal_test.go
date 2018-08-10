@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 type ComplexStruct struct { // nolint: megacheck
@@ -609,20 +610,20 @@ func TestEqualPanic(t *testing.T) {
 
 func TestCmpDeeply(t *testing.T) {
 	mockT := &testing.T{}
-	isTrue(t, CmpDeeply(mockT, 1, 1))
-	isFalse(t, mockT.Failed())
+	test.IsTrue(t, CmpDeeply(mockT, 1, 1))
+	test.IsFalse(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	isFalse(t, CmpDeeply(mockT, 1, 2))
-	isTrue(t, mockT.Failed())
+	test.IsFalse(t, CmpDeeply(mockT, 1, 2))
+	test.IsTrue(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	isFalse(t, CmpDeeply(mockT, 1, 2, "Basic test"))
-	isTrue(t, mockT.Failed())
+	test.IsFalse(t, CmpDeeply(mockT, 1, 2, "Basic test"))
+	test.IsTrue(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	isFalse(t, CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
-	isTrue(t, mockT.Failed())
+	test.IsFalse(t, CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
+	test.IsTrue(t, mockT.Failed())
 }
 
 func ExampleEqDeeply() {

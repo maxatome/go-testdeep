@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 type MyStructBase struct {
@@ -120,7 +121,7 @@ func cmpErrorStr(t *testing.T, err *Error,
 	expected: %s
 	Full error:
 	> %s`,
-			buildTestName(args),
+			test.BuildTestName(args),
 			fieldName, indent(got, 10), indent(expected.Exact, 10),
 			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
 		return false
@@ -132,7 +133,7 @@ func cmpErrorStr(t *testing.T, err *Error,
 	should contain: %s
 	Full error:
 	> %s`,
-			buildTestName(args),
+			test.BuildTestName(args),
 			fieldName,
 			indent(got, 16), indent(expected.Contain, 16),
 			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
@@ -145,7 +146,7 @@ func cmpErrorStr(t *testing.T, err *Error,
 	should match: %s
 	Full error:
 	> %s`,
-			buildTestName(args),
+			test.BuildTestName(args),
 			fieldName,
 			indent(got, 14), indent(expected.Match.String(), 14),
 			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
@@ -191,7 +192,7 @@ func matchError(t *testing.T, err *Error, expectedError expectedError,
 		t.Errorf(`%sLocation of the origin of the error
 	     got: %v
 	expected: %v`,
-			buildTestName(args), err.Location.IsInitialized(), expectedError.Located)
+			test.BuildTestName(args), err.Location.IsInitialized(), expectedError.Located)
 		return false
 	}
 
@@ -200,14 +201,14 @@ func matchError(t *testing.T, err *Error, expectedError expectedError,
 		t.Errorf(`%sFile of the origin of the error
 	     got: line %d of %s
 	expected: *_test.go`,
-			buildTestName(args), err.Location.Line, err.Location.File)
+			test.BuildTestName(args), err.Location.Line, err.Location.File)
 		return false
 	}
 
 	if expectedError.Origin != nil {
 		if err.Origin == nil {
 			t.Errorf(`%sError should originate from another Error`,
-				buildTestName(args))
+				test.BuildTestName(args))
 			return false
 		}
 
@@ -216,7 +217,7 @@ func matchError(t *testing.T, err *Error, expectedError expectedError,
 	}
 	if err.Origin != nil {
 		t.Errorf(`%sError should NOT originate from another Error`,
-			buildTestName(args))
+			test.BuildTestName(args))
 		return false
 	}
 
@@ -229,7 +230,7 @@ func checkError(t *testing.T, got, expected interface{},
 
 	err := EqDeeplyError(got, expected)
 	if err == nil {
-		t.Errorf("%sAn Error should have occurred", buildTestName(args))
+		t.Errorf("%sAn Error should have occurred", test.BuildTestName(args))
 		return false
 	}
 
@@ -241,7 +242,7 @@ func checkError(t *testing.T, got, expected interface{},
 	if EqDeeply(got, expected) {
 		t.Errorf(`%sBoolean context failed
 	     got: true
-	expected: false`, buildTestName(args))
+	expected: false`, test.BuildTestName(args))
 		return false
 	}
 
@@ -253,7 +254,7 @@ func checkErrorForEach(t *testing.T,
 	expectedError expectedError, args ...interface{}) (ret bool) {
 	t.Helper()
 
-	globalTestName := buildTestName(args)
+	globalTestName := test.BuildTestName(args)
 	ret = true
 
 	for idx, got := range gotList {
@@ -277,7 +278,7 @@ func checkOK(t *testing.T, got, expected interface{},
 	if !EqDeeply(got, expected) {
 		t.Errorf(`%sBoolean context failed
 	     got: false
-	expected: true`, buildTestName(args))
+	expected: true`, test.BuildTestName(args))
 		return false
 	}
 
@@ -288,7 +289,7 @@ func checkOKForEach(t *testing.T, gotList []interface{}, expected interface{},
 	args ...interface{}) (ret bool) {
 	t.Helper()
 
-	globalTestName := buildTestName(args)
+	globalTestName := test.BuildTestName(args)
 	ret = true
 
 	for idx, got := range gotList {
@@ -299,19 +300,6 @@ func checkOKForEach(t *testing.T, gotList []interface{}, expected interface{},
 		ret = checkOK(t, got, expected, testName) && ret
 	}
 	return
-}
-
-func equalStr(t *testing.T, got, expected string, args ...interface{}) bool {
-	if got == expected {
-		return true
-	}
-
-	t.Helper()
-	t.Errorf(`%sFailed test
-	     got: %s
-	expected: %s`,
-		buildTestName(args), got, expected)
-	return false
 }
 
 func equalTypes(t *testing.T, got TestDeep, expected interface{}, args ...interface{}) bool {
@@ -340,43 +328,6 @@ func equalTypes(t *testing.T, got TestDeep, expected interface{}, args ...interf
 	t.Errorf(`%sFailed test
 	     got: %s
 	expected: %s`,
-		buildTestName(args), gotStr, expectedStr)
-	return false
-}
-
-func buildTestName(args []interface{}) string {
-	switch len(args) {
-	case 0:
-		return ""
-
-	case 1:
-		return args[0].(string) + "\n"
-
-	default:
-		return fmt.Sprintf(args[0].(string)+"\n", args[1:]...)
-	}
-}
-
-func isTrue(t *testing.T, got bool, args ...interface{}) bool {
-	if got {
-		return true
-	}
-
-	t.Helper()
-	t.Errorf(`%sFailed test
-	     got: false
-	expected: true`, buildTestName(args))
-	return false
-}
-
-func isFalse(t *testing.T, got bool, args ...interface{}) bool {
-	if !got {
-		return true
-	}
-
-	t.Helper()
-	t.Errorf(`%sFailed test
-	     got: true
-	expected: false`, buildTestName(args))
+		test.BuildTestName(args), gotStr, expectedStr)
 	return false
 }

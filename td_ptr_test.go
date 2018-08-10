@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestPtr(t *testing.T) {
@@ -157,10 +158,10 @@ func TestPtr(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Ptr(13).String(), "*int")
-	equalStr(t, PPtr(13).String(), "**int")
-	equalStr(t, Ptr(Ptr(13)).String(), "*<something>")
-	equalStr(t, PPtr(Ptr(13)).String(), "**<something>")
+	test.EqualStr(t, Ptr(13).String(), "*int")
+	test.EqualStr(t, PPtr(13).String(), "**int")
+	test.EqualStr(t, Ptr(Ptr(13)).String(), "*<something>")
+	test.EqualStr(t, PPtr(Ptr(13)).String(), "**<something>")
 }
 
 func TestPtrTypeBehind(t *testing.T) {
