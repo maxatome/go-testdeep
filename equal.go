@@ -408,7 +408,11 @@ func EqDeeply(got, expected interface{}) bool {
 // can be the same type as got is, or contains some TestDeep
 // operators. If "got" does not match "expected", the returned *Error
 // contains the reason of the first mismatch detected.
-func EqDeeplyError(got, expected interface{}) (err *Error) {
-	return deepValueEqualFinal(NewContext(),
+func EqDeeplyError(got, expected interface{}) error {
+	err := deepValueEqualFinal(NewContext(),
 		reflect.ValueOf(got), reflect.ValueOf(expected))
+	if err == nil {
+		return nil
+	}
+	return err
 }

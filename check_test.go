@@ -235,7 +235,7 @@ func checkError(t *testing.T, got, expected interface{},
 	}
 
 	_, expectedIsTestDeep := expected.(TestDeep)
-	if !matchError(t, err, expectedError, expectedIsTestDeep, args...) {
+	if !matchError(t, err.(*Error), expectedError, expectedIsTestDeep, args...) {
 		return false
 	}
 

@@ -66,7 +66,7 @@ func TestEqualArray(t *testing.T) {
 						t.Errorf("An Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
+					if !matchError(t, err.(*Error), expectedError{
 						Message:  mustBe("values differ"),
 						Path:     mustBe("DATA[1]"),
 						Got:      mustBe("(int) 2"),
@@ -80,14 +80,14 @@ func TestEqualArray(t *testing.T) {
 			}
 
 			// Second error
-			err = err.Next
+			eErr := err.(*Error).Next
 			t.Run("Second error",
 				func(t *testing.T) {
-					if err == nil {
+					if eErr == nil {
 						t.Errorf("A second Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
+					if !matchError(t, eErr, expectedError{
 						Message:  mustBe("values differ"),
 						Path:     mustBe("DATA[2]"),
 						Got:      mustBe("(int) 3"),
@@ -95,12 +95,12 @@ func TestEqualArray(t *testing.T) {
 					}, false) {
 						return
 					}
-					if err.Next != ErrTooManyErrors {
-						if err.Next == nil {
+					if eErr.Next != ErrTooManyErrors {
+						if eErr.Next == nil {
 							t.Error("ErrTooManyErrors should follow the 2 errors")
 						} else {
 							t.Errorf("Only 2 Errors should have occurred. Found 3rd: %s",
-								err.Next)
+								eErr.Next)
 						}
 						return
 					}
@@ -119,7 +119,7 @@ func TestEqualArray(t *testing.T) {
 						t.Errorf("An Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
+					if !matchError(t, err.(*Error), expectedError{
 						Message:  mustBe("values differ"),
 						Path:     mustBe("DATA[1]"),
 						Got:      mustBe("(int) 2"),
@@ -133,14 +133,14 @@ func TestEqualArray(t *testing.T) {
 			}
 
 			// Second error
-			err = err.Next
+			eErr := err.(*Error).Next
 			ok = t.Run("Second error",
 				func(t *testing.T) {
-					if err == nil {
+					if eErr == nil {
 						t.Errorf("A second Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
+					if !matchError(t, eErr, expectedError{
 						Message:  mustBe("values differ"),
 						Path:     mustBe("DATA[2]"),
 						Got:      mustBe("(int) 3"),
@@ -154,14 +154,14 @@ func TestEqualArray(t *testing.T) {
 			}
 
 			// Third error
-			err = err.Next
+			eErr = eErr.Next
 			t.Run("Third error",
 				func(t *testing.T) {
-					if err == nil {
+					if eErr == nil {
 						t.Errorf("A third Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
+					if !matchError(t, eErr, expectedError{
 						Message:  mustBe("values differ"),
 						Path:     mustBe("DATA[3]"),
 						Got:      mustBe("(int) 4"),
@@ -169,7 +169,7 @@ func TestEqualArray(t *testing.T) {
 					}, false) {
 						return
 					}
-					if err.Next != nil {
+					if eErr.Next != nil {
 						t.Errorf("Only 3 Errors should have occurred")
 						return
 					}
@@ -676,11 +676,10 @@ func ExampleEqDeeplyError() {
 				"Items": ArrayEach(Between(3, 8)),
 			}))
 	if err != nil {
-		err.Location.Line = 17 // only to be sure the line number will match example
 		fmt.Println(err)
 	}
 
-	// Output:
+	// Output something like:
 	// DATA.Items[2]: values differ
 	// 	     got: 9
 	// 	expected: 3 ≤ got ≤ 8
