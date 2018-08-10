@@ -28,14 +28,14 @@ func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value, nilAllowed b
 	if t.isPtr {
 		got := *pGot
 		if got.Kind() != reflect.Ptr {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return t.errorTypeMismatch(rawString(got.Type().String()))
 		}
 
 		if !nilAllowed && got.IsNil() {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return &Error{
@@ -52,7 +52,7 @@ func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value, nilAllowed b
 
 func (t *tdExpectedType) checkType(ctx Context, got reflect.Value) *Error {
 	if got.Type() != t.expectedType {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		var gotType rawString

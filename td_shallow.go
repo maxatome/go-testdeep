@@ -60,7 +60,7 @@ func Shallow(expectedPtr interface{}) TestDeep {
 
 func (s *tdShallow) Match(ctx Context, got reflect.Value) *Error {
 	if got.Kind() != s.expectedKind {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -71,7 +71,7 @@ func (s *tdShallow) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if got.Pointer() != s.expectedPointer {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{

@@ -182,7 +182,7 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 
 func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 	if !got.Type().AssignableTo(s.argType) {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -196,7 +196,7 @@ func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 	// choice, as we think it is better to work on surrounding struct
 	// instead.
 	if !got.CanInterface() {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -229,7 +229,7 @@ func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 		return deepValueEqual(newCtx, newGot, s.expectedValue)
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 

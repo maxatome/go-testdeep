@@ -36,7 +36,7 @@ func (a *tdAll) Match(ctx Context, got reflect.Value) (err *Error) {
 				AddDepth(fmt.Sprintf("<All#%d/%d>", idx+1, len(a.items))),
 			got, item)
 		if origErr != nil {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			err := &Error{

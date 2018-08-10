@@ -38,7 +38,7 @@ func getTime(ctx Context, got reflect.Value, mustConvert bool) (time.Time, *Erro
 		gotIf, ok = getInterface(got, true)
 	}
 	if !ok {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return time.Time{}, booleanError
 		}
 		return time.Time{}, &Error{

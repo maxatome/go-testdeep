@@ -83,7 +83,7 @@ func Contains(expectedValue interface{}) TestDeep {
 }
 
 func (c *tdContains) doesNotContains(ctx Context, got interface{}) *Error {
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{
@@ -176,7 +176,7 @@ func (c *tdContains) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	var expectedType interface{}

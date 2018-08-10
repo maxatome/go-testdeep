@@ -69,7 +69,7 @@ func (e *tdEmpty) Match(ctx Context, got reflect.Value) (err *Error) {
 		return nil
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 
@@ -113,7 +113,7 @@ func NotEmpty() TestDeep {
 func (e *tdNotEmpty) Match(ctx Context, got reflect.Value) (err *Error) {
 	ok, badType := isEmpty(got)
 	if ok {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -124,7 +124,7 @@ func (e *tdNotEmpty) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if badType {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{

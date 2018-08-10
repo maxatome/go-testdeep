@@ -31,7 +31,7 @@ func ArrayEach(expectedValue interface{}) TestDeep {
 
 func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	if !got.IsValid() {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -45,7 +45,7 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	case reflect.Ptr:
 		gotElem := got.Elem()
 		if !gotElem.IsValid() {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return ctx.CollectError(&Error{
@@ -74,7 +74,7 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 		return nil
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{

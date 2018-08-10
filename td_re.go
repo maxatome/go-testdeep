@@ -141,7 +141,7 @@ func (r *tdRe) matchStringCaptures(ctx Context, got string, result [][]string) *
 }
 
 func (r *tdRe) matchCaptures(ctx Context, captures []string) (err *Error) {
-	return deepValueEqual(ctx.ResetPath("("+ctx.path+" =~ "+r.String()+")"),
+	return deepValueEqual(ctx.ResetPath("("+ctx.Path+" =~ "+r.String()+")"),
 		reflect.ValueOf(captures), r.captures)
 }
 
@@ -153,7 +153,7 @@ func (r *tdRe) matchBool(ctx Context, got interface{}, result bool) *Error {
 }
 
 func (r *tdRe) doesNotMatch(ctx Context, got interface{}) *Error {
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{
@@ -178,7 +178,7 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 			}
 			return r.matchBool(ctx, gotBytes, r.re.Match(gotBytes))
 		}
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -202,7 +202,7 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 		}
 
 		if !strOK {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return ctx.CollectError(&Error{

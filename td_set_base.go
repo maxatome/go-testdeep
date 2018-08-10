@@ -47,7 +47,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 	case reflect.Ptr:
 		gotElem := got.Elem()
 		if !gotElem.IsValid() {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return ctx.CollectError(&Error{
@@ -123,7 +123,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 				}
 
 				if len(missingItems) > 0 {
-					if ctx.booleanError {
+					if ctx.BooleanError {
 						return booleanError
 					}
 					res.Missing = missingItems
@@ -131,7 +131,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 			}
 
 			if len(foundGotIdxes) < gotLen && s.kind != superSet {
-				if ctx.booleanError {
+				if ctx.BooleanError {
 					return booleanError
 				}
 				notFoundRemain := gotLen - len(foundGotIdxes)
@@ -144,7 +144,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 				}
 			}
 		} else if len(foundItems) > 0 {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			res.Extra = foundItems
@@ -159,7 +159,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 		})
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 

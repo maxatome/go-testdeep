@@ -228,7 +228,7 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 		curCtx := ctx.AddArrayIndex(index)
 
 		if index >= gotLen {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return curCtx.CollectError(&Error{
@@ -245,7 +245,7 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if gotLen > len(a.expectedEntries) {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.AddArrayIndex(len(a.expectedEntries)).CollectError(&Error{

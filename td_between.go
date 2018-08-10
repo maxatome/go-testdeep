@@ -383,7 +383,7 @@ func (b *tdBetween) matchFloat(got reflect.Value) (ok bool) {
 
 func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 	if got.Type() != b.expectedMin.Type() {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -410,7 +410,7 @@ func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{
@@ -457,7 +457,7 @@ var _ TestDeep = &tdBetweenTime{}
 
 func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 	if got.Type() != b.expectedType {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -499,7 +499,7 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{

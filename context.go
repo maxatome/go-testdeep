@@ -8,142 +8,49 @@ package testdeep
 
 import (
 	"fmt"
-	"os"
 	"reflect"
-	"strconv"
 	"strings"
 	"unsafe"
 )
 
-// ContextConfig allows to configure finely how tests failures are rendered.
-//
-// See NewT function to use it.
-type ContextConfig struct {
-	// RootName is the string used to represent the root of got data. It
-	// defaults to "DATA". For an HTTP response body, it could be "BODY"
-	// for example.
-	RootName string
-	// MaxErrors is the maximal number of errors to dump in case of Cmp*
-	// failure.
-	//
-	// It defaults to 10 except if the environment variable
-	// TESTDEEP_MAX_ERRORS is set. In this latter case, the
-	// TESTDEEP_MAX_ERRORS value is converted to an int and used as is.
-	//
-	// Setting it to 0 has the same effect as 1: only the first error
-	// will be dumped without the "Too many errors" error.
-	//
-	// Setting it to a negative number means no limit: all errors
-	// will be dumped.
-	MaxErrors int
-	// FailureIsFatal allows to Fatal() (instead of Error()) when a test
-	// fails. Using *testing.T instance as
-	// t.TestingFT value, FailNow() is called behind the scenes when
-	// Fatal() is called. See testing documentation for details.
-	FailureIsFatal bool
+type Visit struct {
+	A1  unsafe.Pointer
+	A2  unsafe.Pointer
+	Typ reflect.Type
 }
 
-const (
-	contextDefaultRootName = "DATA"
-	contextPanicRootName   = "FUNCTION"
-	envMaxErrors           = "TESTDEEP_MAX_ERRORS"
-)
-
-func getMaxErrorsFromEnv() int {
-	env := os.Getenv(envMaxErrors)
-	if env != "" {
-		n, err := strconv.Atoi(env)
-		if err == nil {
-			return n
-		}
-	}
-	return 10
-}
-
-// DefaultContextConfig is the default configuration used to render
-// tests failures. If overridden, new settings will impact all Cmp*
-// functions and *T methods (if not specifically configured.)
-var DefaultContextConfig = ContextConfig{
-	RootName:       contextDefaultRootName,
-	MaxErrors:      getMaxErrorsFromEnv(),
-	FailureIsFatal: false,
-}
-
-func (c *ContextConfig) sanitize() {
-	if c.RootName == "" {
-		c.RootName = DefaultContextConfig.RootName
-	}
-	if c.MaxErrors == 0 {
-		c.MaxErrors = DefaultContextConfig.MaxErrors
-	}
-}
-
-type visit struct {
-	a1  unsafe.Pointer
-	a2  unsafe.Pointer
-	typ reflect.Type
-}
-
-// Context is used internally to keep track of the CmpDeeply in-depth
+// Context is used internally to keep track of the CmpDeeply in-Depth
 // traversal.
 type Context struct {
-	path        string
-	depth       int
-	visited     map[visit]bool
-	curOperator TestDeep
+	Path        string
+	Depth       int
+	Visited     map[Visit]bool
+	CurOperator TestDeep
 	// If true, the contents of the returned *Error will not be
 	// checked. Can be used to avoid filling Error{} with expensive
 	// computations.
-	booleanError bool
-	// 0 ≤ maxErrors ≤ 1 stops when first error encoutered (without the
+	BooleanError bool
+	// 0 ≤ MaxErrors ≤ 1 stops when first error encoutered (without the
 	// "Too many errors" error);
-	// maxErrors > 1 stops when maxErrors'th error encoutered (with a
+	// MaxErrors > 1 stops when MaxErrors'th error encoutered (with a
 	// last "Too many errors" error);
 	// < 0 do not stop until comparison ends.
-	maxErrors int
-	errors    *[]*Error
+	MaxErrors int
+	Errors    *[]*Error
 	// See ContextConfig.FailureIsFatal for details
-	failureIsFatal bool
+	FailureIsFatal bool
 }
 
-// NewContext creates a new Context using DefaultContextConfig configuration.
-func NewContext() Context {
-	return NewContextWithConfig(DefaultContextConfig)
-}
-
-// NewContextWithConfig creates a new Context using a specific configuration.
-func NewContextWithConfig(config ContextConfig) (ctx Context) {
-	config.sanitize()
-
-	ctx = Context{
-		path:           config.RootName,
-		visited:        map[visit]bool{},
-		maxErrors:      config.MaxErrors,
-		failureIsFatal: config.FailureIsFatal,
-	}
-
-	ctx.initErrors()
-	return
-}
-
-// NewBooleanContext creates a new boolean Context.
-func NewBooleanContext() Context {
-	return Context{
-		visited:      map[visit]bool{},
-		booleanError: true,
-	}
-}
-
-func (c *Context) initErrors() {
-	if c.maxErrors != 0 && c.maxErrors != 1 {
+func (c *Context) InitErrors() {
+	if c.MaxErrors != 0 && c.MaxErrors != 1 {
 		errors := make([]*Error, 0)
-		c.errors = &errors
+		c.Errors = &errors
 	}
 }
 
 func (c Context) resetErrors() (new Context) {
 	new = c
-	new.initErrors()
+	new.InitErrors()
 	return
 }
 
@@ -155,50 +62,50 @@ func (c Context) CollectError(err *Error) *Error {
 	}
 
 	// Error context not initialized yet
-	if err.Context.depth == 0 {
+	if err.Context.Depth == 0 {
 		err.Context = c
 	}
 
-	if !err.Location.IsInitialized() && c.curOperator != nil {
-		err.Location = c.curOperator.GetLocation()
+	if !err.Location.IsInitialized() && c.CurOperator != nil {
+		err.Location = c.CurOperator.GetLocation()
 	}
 
 	// Stop when first error encoutered
-	if c.errors == nil {
+	if c.Errors == nil {
 		return err
 	}
 
 	// Else, accumulate...
-	*c.errors = append(*c.errors, err)
-	if c.maxErrors >= 0 && len(*c.errors) >= c.maxErrors {
-		*c.errors = append(*c.errors, ErrTooManyErrors)
+	*c.Errors = append(*c.Errors, err)
+	if c.MaxErrors >= 0 && len(*c.Errors) >= c.MaxErrors {
+		*c.Errors = append(*c.Errors, ErrTooManyErrors)
 		return c.mergeErrors()
 	}
 	return nil
 }
 
 func (c Context) mergeErrors() *Error {
-	if c.errors == nil || len(*c.errors) == 0 {
+	if c.Errors == nil || len(*c.Errors) == 0 {
 		return nil
 	}
 
-	if len(*c.errors) > 1 {
-		for idx, last := 0, len(*c.errors)-2; idx <= last; idx++ {
-			(*c.errors)[idx].Next = (*c.errors)[idx+1]
+	if len(*c.Errors) > 1 {
+		for idx, last := 0, len(*c.Errors)-2; idx <= last; idx++ {
+			(*c.Errors)[idx].Next = (*c.Errors)[idx+1]
 		}
 	}
-	return (*c.errors)[0]
+	return (*c.Errors)[0]
 }
 
 // AddDepth creates a new Context from current one plus pathAdd.
 func (c Context) AddDepth(pathAdd string) (new Context) {
 	new = c
-	if strings.HasPrefix(new.path, "*") {
-		new.path = "(" + new.path + ")" + pathAdd
+	if strings.HasPrefix(new.Path, "*") {
+		new.Path = "(" + new.Path + ")" + pathAdd
 	} else {
-		new.path += pathAdd
+		new.Path += pathAdd
 	}
-	new.depth++
+	new.Depth++
 	return
 }
 
@@ -217,8 +124,8 @@ func (c Context) AddMapKey(key interface{}) Context {
 // AddPtr creates a new Context from current one plus a pointer dereference.
 func (c Context) AddPtr(num int) (new Context) {
 	new = c
-	new.path = strings.Repeat("*", num) + new.path
-	new.depth++
+	new.Path = strings.Repeat("*", num) + new.Path
+	new.Depth++
 	return
 }
 
@@ -226,20 +133,15 @@ func (c Context) AddPtr(num int) (new Context) {
 // function call.
 func (c Context) AddFunctionCall(fn string) (new Context) {
 	new = c
-	new.path = fn + "(" + new.path + ")"
-	new.depth++
+	new.Path = fn + "(" + new.Path + ")"
+	new.Depth++
 	return
 }
 
-// ResetPath creates a new Context from current one but reinitializing path.
+// ResetPath creates a new Context from current one but reinitializing Path.
 func (c Context) ResetPath(newPath string) (new Context) {
 	new = c
-	new.path = newPath
-	new.depth++
+	new.Path = newPath
+	new.Depth++
 	return
-}
-
-// Path returns the Context path.
-func (c Context) Path() string {
-	return c.path
 }

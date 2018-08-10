@@ -55,7 +55,7 @@ func cmpDeeply(ctx Context, t TestingT, got, expected interface{},
 		return true
 	}
 	t.Helper()
-	formatError(t, ctx.failureIsFatal, err, args...)
+	formatError(t, ctx.FailureIsFatal, err, args...)
 	return false
 }
 

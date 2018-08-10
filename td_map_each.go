@@ -30,7 +30,7 @@ func MapEach(expectedValue interface{}) TestDeep {
 
 func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
 	if !got.IsValid() {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -44,7 +44,7 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
 	case reflect.Ptr:
 		gotElem := got.Elem()
 		if !gotElem.IsValid() {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return ctx.CollectError(&Error{
@@ -71,7 +71,7 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{

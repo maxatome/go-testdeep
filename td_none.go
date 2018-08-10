@@ -40,7 +40,7 @@ func Not(expected interface{}) TestDeep {
 func (n *tdNone) Match(ctx Context, got reflect.Value) *Error {
 	for idx, item := range n.items {
 		if deepValueEqualOK(got, item) {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 

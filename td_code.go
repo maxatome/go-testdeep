@@ -83,7 +83,7 @@ func Code(fn interface{}) TestDeep {
 
 func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	if !got.Type().AssignableTo(c.argType) {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -97,7 +97,7 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	// choice, as we think it is better to use Code() on surrounding
 	// struct instead.
 	if !got.CanInterface() {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -111,7 +111,7 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 

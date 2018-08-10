@@ -84,7 +84,7 @@ func (l *tdLen) Match(ctx Context, got reflect.Value) *Error {
 		if ret {
 			return err
 		}
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -94,7 +94,7 @@ func (l *tdLen) Match(ctx Context, got reflect.Value) *Error {
 		})
 
 	default:
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -141,7 +141,7 @@ func (c *tdCap) Match(ctx Context, got reflect.Value) *Error {
 		if ret {
 			return err
 		}
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -151,7 +151,7 @@ func (c *tdCap) Match(ctx Context, got reflect.Value) *Error {
 		})
 
 	default:
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{

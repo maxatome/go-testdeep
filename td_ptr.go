@@ -42,7 +42,7 @@ func Ptr(val interface{}) TestDeep {
 
 func (p *tdPtr) Match(ctx Context, got reflect.Value) *Error {
 	if got.Kind() != reflect.Ptr {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -103,7 +103,7 @@ func PPtr(val interface{}) TestDeep {
 
 func (p *tdPPtr) Match(ctx Context, got reflect.Value) *Error {
 	if got.Kind() != reflect.Ptr || got.Elem().Kind() != reflect.Ptr {
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{

@@ -45,18 +45,18 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 		if expected.IsValid() { // here: !got.IsValid()
 			if expected.Type().Implements(testDeeper) {
-				ctx.curOperator = expected.Interface().(TestDeep)
-				if ctx.curOperator.HandleInvalid() {
-					return ctx.curOperator.Match(ctx, got)
+				ctx.CurOperator = expected.Interface().(TestDeep)
+				if ctx.CurOperator.HandleInvalid() {
+					return ctx.CurOperator.Match(ctx, got)
 				}
-				if ctx.booleanError {
+				if ctx.BooleanError {
 					return booleanError
 				}
 
 				// Special case if "expected" is a TestDeep operator which
 				// does not handle invalid values: the operator is not called,
 				// but for the user the error comes from it
-			} else if ctx.booleanError {
+			} else if ctx.BooleanError {
 				return booleanError
 			}
 
@@ -68,7 +68,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 				return nil
 			}
 
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 
@@ -87,8 +87,8 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	if got.Type() != expected.Type() {
 		if expected.Type().Implements(testDeeper) {
-			ctx.curOperator = expected.Interface().(TestDeep)
-			return ctx.curOperator.Match(ctx, got)
+			ctx.CurOperator = expected.Interface().(TestDeep)
+			return ctx.CurOperator.Match(ctx, got)
 		}
 
 		// "expected" is not a TestDeep operator
@@ -101,7 +101,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			return deepValueEqual(ctx, got.Elem(), expected)
 		}
 
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{
@@ -113,7 +113,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	// if ctx.Depth > 10 { panic("deepValueEqual") }	// for debugging
 
-	// We want to avoid putting more in the visited map than we need to.
+	// We want to avoid putting more in the Visited map than we need to.
 	// For any possible reference cycle that might be encountered,
 	// hard(t) needs to return true for at least one of the types in the cycle.
 	hard := func(k reflect.Kind) bool {
@@ -128,23 +128,23 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		addr1 := unsafe.Pointer(got.UnsafeAddr())
 		addr2 := unsafe.Pointer(expected.UnsafeAddr())
 		if uintptr(addr1) > uintptr(addr2) {
-			// Canonicalize order to reduce number of entries in visited.
+			// Canonicalize order to reduce number of entries in Visited.
 			// Assumes non-moving garbage collector.
 			addr1, addr2 = addr2, addr1
 		}
 
 		// Short circuit if references are already seen.
-		v := visit{
-			a1:  addr1,
-			a2:  addr2,
-			typ: got.Type(),
+		v := Visit{
+			A1:  addr1,
+			A2:  addr2,
+			Typ: got.Type(),
 		}
-		if ctx.visited[v] {
+		if ctx.Visited[v] {
 			return
 		}
 
 		// Remember for later.
-		ctx.visited[v] = true
+		ctx.Visited[v] = true
 	}
 
 	switch got.Kind() {
@@ -160,7 +160,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	case reflect.Slice:
 		if got.IsNil() != expected.IsNil() {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return ctx.CollectError(&Error{
@@ -176,7 +176,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		)
 
 		// Shortcut in boolean context
-		if ctx.booleanError && gotLen != expectedLen {
+		if ctx.BooleanError && gotLen != expectedLen {
 			return booleanError
 		}
 
@@ -228,7 +228,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			if got.IsNil() == expected.IsNil() {
 				return
 			}
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return ctx.CollectError(&Error{
@@ -258,7 +258,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	case reflect.Map:
 		if got.IsNil() != expected.IsNil() {
-			if ctx.booleanError {
+			if ctx.BooleanError {
 				return booleanError
 			}
 			return ctx.CollectError(&Error{
@@ -269,7 +269,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		}
 
 		// Shortcut in boolean context
-		if ctx.booleanError && got.Len() != expected.Len() {
+		if ctx.BooleanError && got.Len() != expected.Len() {
 			return booleanError
 		}
 
@@ -308,7 +308,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			})
 		}
 
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 
@@ -334,7 +334,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		if got.IsNil() && expected.IsNil() {
 			return
 		}
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		// Can't do better than this:
@@ -348,7 +348,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		if mustGetInterface(got) == mustGetInterface(expected) {
 			return
 		}
-		if ctx.booleanError {
+		if ctx.BooleanError {
 			return booleanError
 		}
 		return ctx.CollectError(&Error{

@@ -40,7 +40,7 @@ func getString(ctx Context, got reflect.Value) (string, *Error) {
 		}
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return "", booleanError
 	}
 	return "", ctx.CollectError(&Error{
@@ -81,7 +81,7 @@ func (s *tdString) Match(ctx Context, got reflect.Value) *Error {
 	if str == s.expected {
 		return nil
 	}
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{
@@ -128,7 +128,7 @@ func (s *tdHasPrefix) Match(ctx Context, got reflect.Value) *Error {
 	if strings.HasPrefix(str, s.expected) {
 		return nil
 	}
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{
@@ -175,7 +175,7 @@ func (s *tdHasSuffix) Match(ctx Context, got reflect.Value) *Error {
 	if strings.HasSuffix(str, s.expected) {
 		return nil
 	}
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{

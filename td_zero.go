@@ -74,7 +74,7 @@ func (z *tdNotZero) Match(ctx Context, got reflect.Value) (err *Error) {
 	if got.IsValid() && !deepValueEqualOK(got, reflect.New(got.Type()).Elem()) {
 		return nil
 	}
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{

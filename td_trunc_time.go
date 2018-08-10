@@ -79,7 +79,7 @@ func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	// Fail
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 

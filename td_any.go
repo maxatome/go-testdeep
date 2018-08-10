@@ -31,7 +31,7 @@ func (a *tdAny) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{

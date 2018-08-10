@@ -37,7 +37,7 @@ func (n *tdNil) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{
@@ -80,7 +80,7 @@ func (n *tdNotNil) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	if ctx.booleanError {
+	if ctx.BooleanError {
 		return booleanError
 	}
 	return ctx.CollectError(&Error{
