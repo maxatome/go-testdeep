@@ -45,9 +45,10 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 		if expected.IsValid() { // here: !got.IsValid()
 			if expected.Type().Implements(testDeeper) {
-				ctx.CurOperator = expected.Interface().(TestDeep)
-				if ctx.CurOperator.HandleInvalid() {
-					return ctx.CurOperator.Match(ctx, got)
+				curOperator := expected.Interface().(TestDeep)
+				ctx.CurOperator = curOperator
+				if curOperator.HandleInvalid() {
+					return curOperator.Match(ctx, got)
 				}
 				if ctx.BooleanError {
 					return BooleanError
@@ -87,8 +88,9 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	if got.Type() != expected.Type() {
 		if expected.Type().Implements(testDeeper) {
-			ctx.CurOperator = expected.Interface().(TestDeep)
-			return ctx.CurOperator.Match(ctx, got)
+			curOperator := expected.Interface().(TestDeep)
+			ctx.CurOperator = curOperator
+			return curOperator.Match(ctx, got)
 		}
 
 		// "expected" is not a TestDeep operator

@@ -67,8 +67,8 @@ type testDeepStringer interface {
 type TestDeep interface {
 	testDeepStringer
 	Match(ctx Context, got reflect.Value) *Error
+	location.GetLocationer
 	setLocation(int)
-	GetLocation() location.Location
 	HandleInvalid() bool
 	TypeBehind() reflect.Type
 }

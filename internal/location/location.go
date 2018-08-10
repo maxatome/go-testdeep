@@ -19,6 +19,10 @@ type Location struct {
 	Line int    // Line number inside file
 }
 
+type GetLocationer interface {
+	GetLocation() Location
+}
+
 // New returns a new Location. "callDepth" is the number of
 // stack frames to ascend to get the calling function (Func field),
 // added to 1 to get the File & Line fields.

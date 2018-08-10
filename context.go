@@ -11,6 +11,8 @@ import (
 	"reflect"
 	"strings"
 	"unsafe"
+
+	"github.com/maxatome/go-testdeep/internal/location"
 )
 
 type Visit struct {
@@ -25,7 +27,7 @@ type Context struct {
 	Path        string
 	Depth       int
 	Visited     map[Visit]bool
-	CurOperator TestDeep
+	CurOperator location.GetLocationer
 	// If true, the contents of the returned *Error will not be
 	// checked. Can be used to avoid filling Error{} with expensive
 	// computations.
