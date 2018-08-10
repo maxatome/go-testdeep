@@ -43,7 +43,7 @@ func Ptr(val interface{}) TestDeep {
 func (p *tdPtr) Match(ctx Context, got reflect.Value) *Error {
 	if got.Kind() != reflect.Ptr {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "pointer type mismatch",
@@ -104,7 +104,7 @@ func PPtr(val interface{}) TestDeep {
 func (p *tdPPtr) Match(ctx Context, got reflect.Value) *Error {
 	if got.Kind() != reflect.Ptr || got.Elem().Kind() != reflect.Ptr {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "pointer type mismatch",

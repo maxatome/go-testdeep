@@ -84,7 +84,7 @@ func Code(fn interface{}) TestDeep {
 func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	if !got.Type().AssignableTo(c.argType) {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "incompatible parameter type",
@@ -98,7 +98,7 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	// struct instead.
 	if !got.CanInterface() {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message: "cannot compare unexported field",
@@ -112,7 +112,7 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 
 	err := Error{

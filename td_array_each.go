@@ -32,7 +32,7 @@ func ArrayEach(expectedValue interface{}) TestDeep {
 func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	if !got.IsValid() {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "nil value",
@@ -46,7 +46,7 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 		gotElem := got.Elem()
 		if !gotElem.IsValid() {
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			return ctx.CollectError(&Error{
 				Message:  "nil pointer",
@@ -75,7 +75,7 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "bad type",

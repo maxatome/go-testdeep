@@ -33,7 +33,7 @@ type Error struct {
 }
 
 var (
-	booleanError = &Error{}
+	BooleanError = &Error{}
 
 	// ErrTooManyErrors is chained to the last error encountered when
 	// the maximum number of errors has been reached.
@@ -54,7 +54,7 @@ func (e *Error) Error() string {
 // Append appends the Error contents to "buf" using prefix "prefix"
 // for each line.
 func (e *Error) Append(buf *bytes.Buffer, prefix string) {
-	if e == booleanError {
+	if e == BooleanError {
 		return
 	}
 

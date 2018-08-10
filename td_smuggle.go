@@ -183,7 +183,7 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 	if !got.Type().AssignableTo(s.argType) {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "incompatible parameter type",
@@ -197,7 +197,7 @@ func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 	// instead.
 	if !got.CanInterface() {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message: "cannot smuggle unexported field",
@@ -230,7 +230,7 @@ func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 
 	err := Error{

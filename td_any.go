@@ -32,7 +32,7 @@ func (a *tdAny) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "comparing with Any",

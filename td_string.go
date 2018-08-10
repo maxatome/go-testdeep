@@ -41,7 +41,7 @@ func getString(ctx Context, got reflect.Value) (string, *Error) {
 	}
 
 	if ctx.BooleanError {
-		return "", booleanError
+		return "", BooleanError
 	}
 	return "", ctx.CollectError(&Error{
 		Message: "bad type",
@@ -82,7 +82,7 @@ func (s *tdString) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "does not match",
@@ -129,7 +129,7 @@ func (s *tdHasPrefix) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "has not prefix",
@@ -176,7 +176,7 @@ func (s *tdHasSuffix) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "has not suffix",

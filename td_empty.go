@@ -70,7 +70,7 @@ func (e *tdEmpty) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 
 	if badType {
@@ -114,7 +114,7 @@ func (e *tdNotEmpty) Match(ctx Context, got reflect.Value) (err *Error) {
 	ok, badType := isEmpty(got)
 	if ok {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "empty",
@@ -125,7 +125,7 @@ func (e *tdNotEmpty) Match(ctx Context, got reflect.Value) (err *Error) {
 
 	if badType {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "bad type",

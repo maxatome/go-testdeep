@@ -37,7 +37,7 @@ func (a *tdAll) Match(ctx Context, got reflect.Value) (err *Error) {
 			got, item)
 		if origErr != nil {
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			err := &Error{
 				Message:  fmt.Sprintf("compared (part %d of %d)", idx+1, len(a.items)),

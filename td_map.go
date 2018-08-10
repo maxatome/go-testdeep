@@ -243,7 +243,7 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		}
 
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message: errorMessage,
@@ -266,7 +266,7 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		}
 
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message: errorMessage,
@@ -278,7 +278,7 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 
 	// Retrieve extra keys

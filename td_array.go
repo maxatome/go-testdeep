@@ -229,7 +229,7 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 
 		if index >= gotLen {
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			return curCtx.CollectError(&Error{
 				Message:  "expected value out of range",
@@ -246,7 +246,7 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 
 	if gotLen > len(a.expectedEntries) {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.AddArrayIndex(len(a.expectedEntries)).CollectError(&Error{
 			Message:  "got value out of range",

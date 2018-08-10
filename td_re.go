@@ -154,7 +154,7 @@ func (r *tdRe) matchBool(ctx Context, got interface{}, result bool) *Error {
 
 func (r *tdRe) doesNotMatch(ctx Context, got interface{}) *Error {
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "does not match Regexp",
@@ -179,7 +179,7 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 			return r.matchBool(ctx, gotBytes, r.re.Match(gotBytes))
 		}
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "bad slice type",
@@ -203,7 +203,7 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 
 		if !strOK {
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			return ctx.CollectError(&Error{
 				Message: "bad type",

@@ -61,7 +61,7 @@ func Shallow(expectedPtr interface{}) TestDeep {
 func (s *tdShallow) Match(ctx Context, got reflect.Value) *Error {
 	if got.Kind() != s.expectedKind {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "bad kind",
@@ -72,7 +72,7 @@ func (s *tdShallow) Match(ctx Context, got reflect.Value) *Error {
 
 	if got.Pointer() != s.expectedPointer {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  fmt.Sprintf("%s pointer mismatch", s.expectedKind),

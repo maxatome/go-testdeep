@@ -85,7 +85,7 @@ func (l *tdLen) Match(ctx Context, got reflect.Value) *Error {
 			return err
 		}
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "bad length",
@@ -95,7 +95,7 @@ func (l *tdLen) Match(ctx Context, got reflect.Value) *Error {
 
 	default:
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "bad type",
@@ -142,7 +142,7 @@ func (c *tdCap) Match(ctx Context, got reflect.Value) *Error {
 			return err
 		}
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "bad capacity",
@@ -152,7 +152,7 @@ func (c *tdCap) Match(ctx Context, got reflect.Value) *Error {
 
 	default:
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "bad type",

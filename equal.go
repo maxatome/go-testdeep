@@ -50,14 +50,14 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 					return ctx.CurOperator.Match(ctx, got)
 				}
 				if ctx.BooleanError {
-					return booleanError
+					return BooleanError
 				}
 
 				// Special case if "expected" is a TestDeep operator which
 				// does not handle invalid values: the operator is not called,
 				// but for the user the error comes from it
 			} else if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 
 			err.Expected = expected
@@ -69,7 +69,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			}
 
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 
 			err.Got = got
@@ -102,7 +102,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		}
 
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
@@ -161,7 +161,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 	case reflect.Slice:
 		if got.IsNil() != expected.IsNil() {
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			return ctx.CollectError(&Error{
 				Message:  "nil slice",
@@ -177,7 +177,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 		// Shortcut in boolean context
 		if ctx.BooleanError && gotLen != expectedLen {
-			return booleanError
+			return BooleanError
 		}
 
 		if got.Pointer() == expected.Pointer() {
@@ -229,7 +229,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 				return
 			}
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			return ctx.CollectError(&Error{
 				Message:  "nil interface",
@@ -259,7 +259,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 	case reflect.Map:
 		if got.IsNil() != expected.IsNil() {
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			return ctx.CollectError(&Error{
 				Message:  "nil map",
@@ -270,7 +270,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 		// Shortcut in boolean context
 		if ctx.BooleanError && got.Len() != expected.Len() {
-			return booleanError
+			return BooleanError
 		}
 
 		if got.Pointer() == expected.Pointer() {
@@ -309,7 +309,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		}
 
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 
 		// Retrieve extra keys
@@ -335,7 +335,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			return
 		}
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		// Can't do better than this:
 		return ctx.CollectError(&Error{
@@ -349,7 +349,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			return
 		}
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "values differ",

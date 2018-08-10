@@ -11,8 +11,8 @@ import (
 )
 
 func TestErrorPrivate(t *testing.T) {
-	if booleanError.Error() != "" {
+	if BooleanError.Error() != "" {
 		t.Errorf("booleanError should stringify to empty string, not `%s'",
-			booleanError.Error())
+			BooleanError.Error())
 	}
 }

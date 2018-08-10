@@ -384,7 +384,7 @@ func (b *tdBetween) matchFloat(got reflect.Value) (ok bool) {
 func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 	if got.Type() != b.expectedMin.Type() {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
@@ -411,7 +411,7 @@ func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "values differ",
@@ -458,7 +458,7 @@ var _ TestDeep = &tdBetweenTime{}
 func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 	if got.Type() != b.expectedType {
 		if ctx.BooleanError {
-			return booleanError
+			return BooleanError
 		}
 		return ctx.CollectError(&Error{
 			Message:  "type mismatch",
@@ -500,7 +500,7 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "values differ",

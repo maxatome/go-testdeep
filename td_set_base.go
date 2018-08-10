@@ -48,7 +48,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 		gotElem := got.Elem()
 		if !gotElem.IsValid() {
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			return ctx.CollectError(&Error{
 				Message:  "nil pointer",
@@ -124,7 +124,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 
 				if len(missingItems) > 0 {
 					if ctx.BooleanError {
-						return booleanError
+						return BooleanError
 					}
 					res.Missing = missingItems
 				}
@@ -132,7 +132,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 
 			if len(foundGotIdxes) < gotLen && s.kind != superSet {
 				if ctx.BooleanError {
-					return booleanError
+					return BooleanError
 				}
 				notFoundRemain := gotLen - len(foundGotIdxes)
 				res.Extra = make([]reflect.Value, 0, notFoundRemain)
@@ -145,7 +145,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 			}
 		} else if len(foundItems) > 0 {
 			if ctx.BooleanError {
-				return booleanError
+				return BooleanError
 			}
 			res.Extra = foundItems
 		}
@@ -160,7 +160,7 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 
 	var gotStr rawString

@@ -75,7 +75,7 @@ func (z *tdNotZero) Match(ctx Context, got reflect.Value) (err *Error) {
 		return nil
 	}
 	if ctx.BooleanError {
-		return booleanError
+		return BooleanError
 	}
 	return ctx.CollectError(&Error{
 		Message:  "zero value",
