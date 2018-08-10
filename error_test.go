@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -48,7 +49,7 @@ func TestError(t *testing.T) {
 		Message:  "Error message",
 		Got:      1,
 		Expected: 2,
-		Location: Location{
+		Location: location.Location{
 			File: "file.go",
 			Func: "Operator",
 			Line: 23,
@@ -64,7 +65,7 @@ func TestError(t *testing.T) {
 		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
 		Message: "Error message",
 		Summary: 666,
-		Location: Location{
+		Location: location.Location{
 			File: "file.go",
 			Func: "Operator",
 			Line: 23,
@@ -74,7 +75,7 @@ func TestError(t *testing.T) {
 				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
 			Message: "Origin error message",
 			Summary: 42,
-			Location: Location{
+			Location: location.Location{
 				File: "file2.go",
 				Func: "SubOperator",
 				Line: 236,
@@ -94,7 +95,7 @@ Originates from following error:
 		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
 		Message: "Error message",
 		Summary: 666,
-		Location: Location{
+		Location: location.Location{
 			File: "file.go",
 			Func: "Operator",
 			Line: 23,
@@ -104,7 +105,7 @@ Originates from following error:
 				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
 			Message: "Origin error message",
 			Summary: 42,
-			Location: Location{
+			Location: location.Location{
 				File: "file2.go",
 				Func: "SubOperator",
 				Line: 236,
@@ -115,7 +116,7 @@ Originates from following error:
 			Context: NewContextWithConfig(ContextConfig{RootName: "DATA[13].Field"}),
 			Message: "Error message",
 			Summary: 888,
-			Location: Location{
+			Location: location.Location{
 				File: "file.go",
 				Func: "Operator",
 				Line: 23,
@@ -137,7 +138,7 @@ DATA[13].Field: Error message
 		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
 		Message: "Error message",
 		Summary: 666,
-		Location: Location{
+		Location: location.Location{
 			File: "file.go",
 			Func: "Operator",
 			Line: 23,
@@ -147,7 +148,7 @@ DATA[13].Field: Error message
 				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
 			Message: "Origin error message",
 			Summary: 42,
-			Location: Location{
+			Location: location.Location{
 				File: "file2.go",
 				Func: "SubOperator",
 				Line: 236,
@@ -158,7 +159,7 @@ DATA[13].Field: Error message
 			Context: NewContextWithConfig(ContextConfig{RootName: "DATA[13].Field"}),
 			Message: "Error message",
 			Summary: 888,
-			Location: Location{
+			Location: location.Location{
 				File: "file.go",
 				Func: "Operator",
 				Line: 24,
