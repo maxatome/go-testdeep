@@ -20,7 +20,7 @@ foreach my $file (qw(bypass.go bypasssafe.go))
     my $resp = HTTP::Tiny::->new->get("$SPEW_BASE_URL$file");
     $resp->{success} or die "Failed to retrieve $file!\n";
 
-    unless ($resp->{content} =~ s/^package \Kspew$/testdeep/m)
+    unless ($resp->{content} =~ s/^package \Kspew$/dark/m)
     {
         die "'package spew' line not found in $file!\n";
     }

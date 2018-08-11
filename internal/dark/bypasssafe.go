@@ -21,7 +21,7 @@
 // tag is deprecated and thus should not be used.
 // +build js appengine safe disableunsafe !go1.4
 
-package testdeep
+package dark
 
 import "reflect"
 

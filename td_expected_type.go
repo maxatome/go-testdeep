@@ -8,6 +8,9 @@ package testdeep
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdExpectedType struct {
@@ -16,32 +19,32 @@ type tdExpectedType struct {
 	isPtr        bool
 }
 
-func (t *tdExpectedType) errorTypeMismatch(gotType rawString) *Error {
-	return &Error{
+func (t *tdExpectedType) errorTypeMismatch(gotType types.RawString) *ctxerr.Error {
+	return &ctxerr.Error{
 		Message:  "type mismatch",
 		Got:      gotType,
-		Expected: rawString(t.expectedTypeStr()),
+		Expected: types.RawString(t.expectedTypeStr()),
 	}
 }
 
-func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value, nilAllowed bool) *Error {
+func (t *tdExpectedType) checkPtr(ctx ctxerr.Context, pGot *reflect.Value, nilAllowed bool) *ctxerr.Error {
 	if t.isPtr {
 		got := *pGot
 		if got.Kind() != reflect.Ptr {
 			if ctx.BooleanError {
-				return BooleanError
+				return ctxerr.BooleanError
 			}
-			return t.errorTypeMismatch(rawString(got.Type().String()))
+			return t.errorTypeMismatch(types.RawString(got.Type().String()))
 		}
 
 		if !nilAllowed && got.IsNil() {
 			if ctx.BooleanError {
-				return BooleanError
+				return ctxerr.BooleanError
 			}
-			return &Error{
+			return &ctxerr.Error{
 				Message:  "values differ",
 				Got:      got,
-				Expected: rawString("non-nil"),
+				Expected: types.RawString("non-nil"),
 			}
 		}
 
@@ -50,16 +53,16 @@ func (t *tdExpectedType) checkPtr(ctx Context, pGot *reflect.Value, nilAllowed b
 	return nil
 }
 
-func (t *tdExpectedType) checkType(ctx Context, got reflect.Value) *Error {
+func (t *tdExpectedType) checkType(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Type() != t.expectedType {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		var gotType rawString
+		var gotType types.RawString
 		if t.isPtr {
 			gotType = "*"
 		}
-		gotType += rawString(got.Type().String())
+		gotType += types.RawString(got.Type().String())
 		return t.errorTypeMismatch(gotType)
 	}
 	return nil

@@ -9,6 +9,8 @@ package testdeep
 import (
 	"os"
 	"strconv"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 // ContextConfig allows to configure finely how tests failures are rendered.
@@ -74,18 +76,18 @@ func (c *ContextConfig) sanitize() {
 	}
 }
 
-// NewContext creates a new Context using DefaultContextConfig configuration.
-func NewContext() Context {
+// NewContext creates a new ctxerr.Context using DefaultContextConfig configuration.
+func NewContext() ctxerr.Context {
 	return NewContextWithConfig(DefaultContextConfig)
 }
 
-// NewContextWithConfig creates a new Context using a specific configuration.
-func NewContextWithConfig(config ContextConfig) (ctx Context) {
+// NewContextWithConfig creates a new ctxerr.Context using a specific configuration.
+func NewContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 	config.sanitize()
 
-	ctx = Context{
+	ctx = ctxerr.Context{
 		Path:           config.RootName,
-		Visited:        map[Visit]bool{},
+		Visited:        map[ctxerr.Visit]bool{},
 		MaxErrors:      config.MaxErrors,
 		FailureIsFatal: config.FailureIsFatal,
 	}
@@ -94,10 +96,10 @@ func NewContextWithConfig(config ContextConfig) (ctx Context) {
 	return
 }
 
-// NewBooleanContext creates a new boolean Context.
-func NewBooleanContext() Context {
-	return Context{
-		Visited:      map[Visit]bool{},
+// NewBooleanContext creates a new boolean ctxerr.Context.
+func NewBooleanContext() ctxerr.Context {
+	return ctxerr.Context{
+		Visited:      map[ctxerr.Visit]bool{},
 		BooleanError: true,
 	}
 }

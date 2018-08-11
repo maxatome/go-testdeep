@@ -4,13 +4,13 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package testdeep_test
+package testdeep
 
 import (
 	"fmt"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func ExampleT_True() {
@@ -177,7 +177,7 @@ func TestT(tt *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(tt,
+	test.CheckPanic(tt,
 		func() { NewT(tt, ContextConfig{}, ContextConfig{}) },
 		"usage: NewT")
 }

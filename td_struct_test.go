@@ -211,24 +211,24 @@ func TestStruct(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Struct("test", nil) }, "usage: Struct")
+	test.CheckPanic(t, func() { Struct("test", nil) }, "usage: Struct")
 
 	i := 12
-	checkPanic(t, func() { Struct(&i, nil) }, "usage: Struct")
+	test.CheckPanic(t, func() { Struct(&i, nil) }, "usage: Struct")
 
-	checkPanic(t,
+	test.CheckPanic(t,
 		func() { Struct(&MyStruct{}, StructFields{"UnknownField": 123}) },
 		"struct testdeep_test.MyStruct has no field `UnknownField'")
 
-	checkPanic(t,
+	test.CheckPanic(t,
 		func() { Struct(&MyStruct{}, StructFields{"ValBool": 123}) },
 		"type int of field expected value ValBool differs from struct one (bool)")
 
-	checkPanic(t,
+	test.CheckPanic(t,
 		func() { Struct(&MyStruct{}, StructFields{"ValBool": nil}) },
 		"expected value of field ValBool cannot be nil as it is a bool")
 
-	checkPanic(t,
+	test.CheckPanic(t,
 		func() {
 			Struct(&MyStruct{
 				MyStructMid: MyStructMid{

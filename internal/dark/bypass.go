@@ -23,7 +23,7 @@
 // for interfaces which make the implementation of unsafeReflectValue more complex.
 // +build !js,!appengine,!safe,!disableunsafe,go1.4
 
-package testdeep
+package dark
 
 import (
 	"reflect"

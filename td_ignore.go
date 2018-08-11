@@ -8,6 +8,8 @@ package testdeep
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 type tdIgnore struct {
@@ -23,7 +25,7 @@ func Ignore() TestDeep {
 	return ignoreSingleton
 }
 
-func (i *tdIgnore) Match(ctx Context, got reflect.Value) *Error {
+func (i *tdIgnore) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	return nil
 }
 

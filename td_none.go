@@ -9,6 +9,8 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 type tdNone struct {
@@ -37,11 +39,11 @@ func Not(expected interface{}) TestDeep {
 	}
 }
 
-func (n *tdNone) Match(ctx Context, got reflect.Value) *Error {
+func (n *tdNone) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	for idx, item := range n.items {
 		if deepValueEqualOK(got, item) {
 			if ctx.BooleanError {
-				return BooleanError
+				return ctxerr.BooleanError
 			}
 
 			var mesg string
@@ -51,7 +53,7 @@ func (n *tdNone) Match(ctx Context, got reflect.Value) *Error {
 				mesg = fmt.Sprintf("comparing with None (part %d of %d is OK)",
 					idx+1, len(n.items))
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message:  mesg,
 				Got:      got,
 				Expected: n,

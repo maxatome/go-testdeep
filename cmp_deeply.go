@@ -11,9 +11,11 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
-func formatError(t TestingT, isFatal bool, err *Error, args ...interface{}) {
+func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{}) {
 	t.Helper()
 
 	const failedTest = "Failed test"
@@ -47,7 +49,7 @@ func formatError(t TestingT, isFatal bool, err *Error, args ...interface{}) {
 	}
 }
 
-func cmpDeeply(ctx Context, t TestingT, got, expected interface{},
+func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected interface{},
 	args ...interface{}) bool {
 	err := deepValueEqualFinal(ctx,
 		reflect.ValueOf(got), reflect.ValueOf(expected))

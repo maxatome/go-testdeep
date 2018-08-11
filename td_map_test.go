@@ -278,25 +278,25 @@ func TestMap(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Map("test", nil) }, "usage: Map(")
-	checkPanic(t, func() { SuperMapOf("test", nil) }, "usage: SuperMapOf(")
-	checkPanic(t, func() { SubMapOf("test", nil) }, "usage: SubMapOf(")
+	test.CheckPanic(t, func() { Map("test", nil) }, "usage: Map(")
+	test.CheckPanic(t, func() { SuperMapOf("test", nil) }, "usage: SuperMapOf(")
+	test.CheckPanic(t, func() { SubMapOf("test", nil) }, "usage: SubMapOf(")
 
 	num := 12
-	checkPanic(t, func() { Map(&num, nil) }, "usage: Map(")
-	checkPanic(t, func() { SuperMapOf(&num, nil) }, "usage: SuperMapOf(")
-	checkPanic(t, func() { SubMapOf(&num, nil) }, "usage: SubMapOf(")
+	test.CheckPanic(t, func() { Map(&num, nil) }, "usage: Map(")
+	test.CheckPanic(t, func() { SuperMapOf(&num, nil) }, "usage: SuperMapOf(")
+	test.CheckPanic(t, func() { SubMapOf(&num, nil) }, "usage: SubMapOf(")
 
-	checkPanic(t, func() { Map(&MyMap{}, MapEntries{1: 2}) },
+	test.CheckPanic(t, func() { Map(&MyMap{}, MapEntries{1: 2}) },
 		"expected key (int) 1 type mismatch: int != model key type (string)")
 
-	checkPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": nil}) },
+	test.CheckPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": nil}) },
 		`expected key "foo" value cannot be nil as entries value type is int`)
 
-	checkPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": uint16(2)}) },
+	test.CheckPanic(t, func() { Map(&MyMap{}, MapEntries{"foo": uint16(2)}) },
 		`expected key "foo" value type mismatch: uint16 != model key type (int)`)
 
-	checkPanic(t, func() { Map(&MyMap{"foo": 1}, MapEntries{"foo": 1}) },
+	test.CheckPanic(t, func() { Map(&MyMap{"foo": 1}, MapEntries{"foo": 1}) },
 		`"foo" entry exists in both model & expectedEntries`)
 
 	//

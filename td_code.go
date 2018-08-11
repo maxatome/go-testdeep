@@ -9,6 +9,10 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdCode struct {
@@ -81,15 +85,15 @@ func Code(fn interface{}) TestDeep {
 	panic("Code(FUNC): FUNC must return bool or (bool, string)")
 }
 
-func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
+func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if !got.Type().AssignableTo(c.argType) {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "incompatible parameter type",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(c.argType.String()),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString(c.argType.String()),
 		})
 	}
 
@@ -98,11 +102,11 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	// struct instead.
 	if !got.CanInterface() {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message: "cannot compare unexported field",
-			Summary: rawString("use Code() on surrounding struct instead"),
+			Summary: types.RawString("use Code() on surrounding struct instead"),
 		})
 	}
 
@@ -112,10 +116,10 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if ctx.BooleanError {
-		return BooleanError
+		return ctxerr.BooleanError
 	}
 
-	err := Error{
+	err := ctxerr.Error{
 		Message: "ran code with %% as argument",
 	}
 
@@ -142,19 +146,20 @@ func (c *tdCode) TypeBehind() reflect.Type {
 }
 
 type tdCodeResult struct {
+	types.TestDeepStamp
 	Value  reflect.Value
 	Reason string
 }
 
-var _ testDeepStringer = tdCodeResult{}
+var _ types.TestDeepStringer = tdCodeResult{}
 
 func (r tdCodeResult) _TestDeep() {}
 
 func (r tdCodeResult) String() string {
 	if r.Reason == "" {
 		return fmt.Sprintf("  value: %s\nit failed but didn't say why",
-			toString(r.Value))
+			str.ToString(r.Value))
 	}
 	return fmt.Sprintf("        value: %s\nit failed coz: %s",
-		toString(r.Value), r.Reason)
+		str.ToString(r.Value), r.Reason)
 }

@@ -9,6 +9,10 @@ package testdeep
 import (
 	"reflect"
 	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdContains struct {
@@ -82,11 +86,11 @@ func Contains(expectedValue interface{}) TestDeep {
 	return &c
 }
 
-func (c *tdContains) doesNotContains(ctx Context, got interface{}) *Error {
+func (c *tdContains) doesNotContains(ctx ctxerr.Context, got interface{}) *ctxerr.Error {
 	if ctx.BooleanError {
-		return BooleanError
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "does not contain",
 		Got:      got,
 		Expected: c,
@@ -111,7 +115,7 @@ func (c *tdContains) getExpectedValue(got reflect.Value) reflect.Value {
 	return c.expectedValue
 }
 
-func (c *tdContains) Match(ctx Context, got reflect.Value) *Error {
+func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	switch got.Kind() {
 	case reflect.Array, reflect.Slice:
 		expectedValue := c.getExpectedValue(got)
@@ -177,22 +181,22 @@ func (c *tdContains) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	if ctx.BooleanError {
-		return BooleanError
+		return ctxerr.BooleanError
 	}
 	var expectedType interface{}
 	if c.expectedValue.IsValid() {
-		expectedType = rawString(c.expectedValue.Type().String())
+		expectedType = types.RawString(c.expectedValue.Type().String())
 	} else {
 		expectedType = c
 	}
 
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "cannot check contains",
-		Got:      rawString(got.Type().String()),
+		Got:      types.RawString(got.Type().String()),
 		Expected: expectedType,
 	})
 }
 
 func (c *tdContains) String() string {
-	return "Contains(" + toString(c.expectedValue) + ")"
+	return "Contains(" + str.ToString(c.expectedValue) + ")"
 }

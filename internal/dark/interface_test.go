@@ -4,7 +4,7 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package testdeep
+package dark
 
 import (
 	"reflect"
@@ -21,18 +21,18 @@ func TestGetInterface(t *testing.T) {
 		private: &Private{},
 	}
 
-	_, ok := getInterface(reflect.ValueOf(s).Field(0), false)
+	_, ok := GetInterface(reflect.ValueOf(s).Field(0), false)
 	if ok {
-		t.Error("getInterface() should return false for private field")
+		t.Error("GetInterface() should return false for private field")
 	}
 
-	_, ok = getInterface(reflect.ValueOf(s).Field(0), true)
+	_, ok = GetInterface(reflect.ValueOf(s).Field(0), true)
 	if UnsafeDisabled {
 		if ok {
-			t.Error("unsafe package is disabled, getInterface should fail")
+			t.Error("unsafe package is disabled, GetInterface should fail")
 		}
 	} else if !ok {
-		t.Error("unsafe package is available, getInterface should succeed")
+		t.Error("unsafe package is available, GetInterface should succeed")
 	}
 
 	//var (
@@ -43,14 +43,14 @@ func TestGetInterface(t *testing.T) {
 	//func() {
 	//	defer func() { panicParam = recover() }()
 	//	panicked = true
-	//	mustGetInterface(reflect.ValueOf(s).Field(0))
+	//	MustGetInterface(reflect.ValueOf(s).Field(0))
 	//	panicked = false
 	//}()
 	//
 	//if panicked {
 	//	panicStr, ok := panicParam.(string)
 	//	if ok {
-	//		const expectedPanic = "getInterface() does not handle map kind"
+	//		const expectedPanic = "GetInterface() does not handle map kind"
 	//		if panicStr != expectedPanic {
 	//			t.Errorf("panic() string `%s' ≠ `%s'", panicStr, expectedPanic)
 	//		}

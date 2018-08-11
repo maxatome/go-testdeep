@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -43,40 +44,6 @@ type MyInterface interface {
 type MyStringer struct{}
 
 func (s MyStringer) String() string { return "pipo bingo" }
-
-func checkPanic(t *testing.T, fn func(), contains string) bool {
-	t.Helper()
-
-	var (
-		panicked   bool
-		panicParam interface{}
-	)
-
-	func() {
-		defer func() { panicParam = recover() }()
-		panicked = true
-		fn()
-		panicked = false
-	}()
-
-	if !panicked {
-		t.Error("panic() did not occur")
-		return false
-	}
-
-	panicStr, ok := panicParam.(string)
-	if !ok {
-		t.Errorf("panic() occurred but recover()d %T type instead of string",
-			panicParam)
-		return false
-	}
-
-	if !strings.Contains(panicStr, contains) {
-		t.Errorf("panic() string `%s'\ndoes not contain `%s'", panicStr, contains)
-		return false
-	}
-	return true
-}
 
 type expectedError struct {
 	Path     expectedErrorMatch
@@ -110,7 +77,7 @@ func indent(str string, numSpc int) string {
 	return strings.Replace(str, "\n", "\n\t"+strings.Repeat(" ", numSpc), -1)
 }
 
-func cmpErrorStr(t *testing.T, err *Error,
+func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	got string, expected expectedErrorMatch, fieldName string,
 	args ...interface{}) bool {
 	t.Helper()
@@ -156,7 +123,7 @@ func cmpErrorStr(t *testing.T, err *Error,
 	return true
 }
 
-func matchError(t *testing.T, err *Error, expectedError expectedError,
+func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 	expectedIsTestDeep bool, args ...interface{}) bool {
 	t.Helper()
 
@@ -235,7 +202,7 @@ func checkError(t *testing.T, got, expected interface{},
 	}
 
 	_, expectedIsTestDeep := expected.(TestDeep)
-	if !matchError(t, err.(*Error), expectedError, expectedIsTestDeep, args...) {
+	if !matchError(t, err.(*ctxerr.Error), expectedError, expectedIsTestDeep, args...) {
 		return false
 	}
 

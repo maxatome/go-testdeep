@@ -4,14 +4,23 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package testdeep
+package str
 
 import (
 	"reflect"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
+
+type myTestDeepStringer struct {
+	types.TestDeepStamp
+}
+
+func (m myTestDeepStringer) String() string {
+	return "TesT!"
+}
 
 func TestToString(t *testing.T) {
 	for _, curTest := range []struct {
@@ -22,11 +31,11 @@ func TestToString(t *testing.T) {
 		{Got: "foo\rbar", Expected: `(string) (len=7) "foo\rbar"`},
 		{Got: "foo\u2028bar", Expected: `(string) (len=9) "foo\u2028bar"`},
 		{Got: reflect.ValueOf("foobar"), Expected: `"foobar"`},
-		{Got: rawString("test"), Expected: "test"},
-		{Got: rawInt(42), Expected: "42"},
-		{Got: Nil(), Expected: "nil"},
+		{Got: types.RawString("test"), Expected: "test"},
+		{Got: types.RawInt(42), Expected: "42"},
+		{Got: myTestDeepStringer{}, Expected: "TesT!"},
 		{Got: 42, Expected: "(int) 42"},
 	} {
-		test.EqualStr(t, toString(curTest.Got), curTest.Expected)
+		test.EqualStr(t, ToString(curTest.Got), curTest.Expected)
 	}
 }

@@ -10,6 +10,10 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdStringBase struct {
@@ -24,7 +28,7 @@ func newStringBase(expected string) tdStringBase {
 	}
 }
 
-func getString(ctx Context, got reflect.Value) (string, *Error) {
+func getString(ctx ctxerr.Context, got reflect.Value) (string, *ctxerr.Error) {
 	switch got.Kind() {
 	case reflect.String:
 		return got.String(), nil
@@ -41,12 +45,12 @@ func getString(ctx Context, got reflect.Value) (string, *Error) {
 	}
 
 	if ctx.BooleanError {
-		return "", BooleanError
+		return "", ctxerr.BooleanError
 	}
-	return "", ctx.CollectError(&Error{
+	return "", ctx.CollectError(&ctxerr.Error{
 		Message: "bad type",
-		Got:     rawString(got.Type().String()),
-		Expected: rawString(
+		Got:     types.RawString(got.Type().String()),
+		Expected: types.RawString(
 			"string (convertible) OR fmt.Stringer OR error"),
 	})
 }
@@ -72,7 +76,7 @@ func String(expected string) TestDeep {
 	}
 }
 
-func (s *tdString) Match(ctx Context, got reflect.Value) *Error {
+func (s *tdString) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	str, err := getString(ctx, got)
 	if err != nil {
 		return err
@@ -82,9 +86,9 @@ func (s *tdString) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 	if ctx.BooleanError {
-		return BooleanError
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "does not match",
 		Got:      str,
 		Expected: s,
@@ -92,7 +96,7 @@ func (s *tdString) Match(ctx Context, got reflect.Value) *Error {
 }
 
 func (s *tdString) String() string {
-	return toString(s.expected)
+	return str.ToString(s.expected)
 }
 
 type tdHasPrefix struct {
@@ -119,7 +123,7 @@ func HasPrefix(expected string) TestDeep {
 	}
 }
 
-func (s *tdHasPrefix) Match(ctx Context, got reflect.Value) *Error {
+func (s *tdHasPrefix) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	str, err := getString(ctx, got)
 	if err != nil {
 		return err
@@ -129,9 +133,9 @@ func (s *tdHasPrefix) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 	if ctx.BooleanError {
-		return BooleanError
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "has not prefix",
 		Got:      str,
 		Expected: s,
@@ -139,7 +143,7 @@ func (s *tdHasPrefix) Match(ctx Context, got reflect.Value) *Error {
 }
 
 func (s *tdHasPrefix) String() string {
-	return "HasPrefix(" + toString(s.expected) + ")"
+	return "HasPrefix(" + str.ToString(s.expected) + ")"
 }
 
 type tdHasSuffix struct {
@@ -166,7 +170,7 @@ func HasSuffix(expected string) TestDeep {
 	}
 }
 
-func (s *tdHasSuffix) Match(ctx Context, got reflect.Value) *Error {
+func (s *tdHasSuffix) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	str, err := getString(ctx, got)
 	if err != nil {
 		return err
@@ -176,9 +180,9 @@ func (s *tdHasSuffix) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 	if ctx.BooleanError {
-		return BooleanError
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "has not suffix",
 		Got:      str,
 		Expected: s,
@@ -186,5 +190,5 @@ func (s *tdHasSuffix) Match(ctx Context, got reflect.Value) *Error {
 }
 
 func (s *tdHasSuffix) String() string {
-	return "HasSuffix(" + toString(s.expected) + ")"
+	return "HasSuffix(" + str.ToString(s.expected) + ")"
 }

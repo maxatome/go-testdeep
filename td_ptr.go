@@ -8,6 +8,9 @@ package testdeep
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdPtr struct {
@@ -40,15 +43,15 @@ func Ptr(val interface{}) TestDeep {
 	panic("usage: Ptr(NON_NIL_VALUE)")
 }
 
-func (p *tdPtr) Match(ctx Context, got reflect.Value) *Error {
+func (p *tdPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Kind() != reflect.Ptr {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "pointer type mismatch",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(p.String()),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString(p.String()),
 		})
 	}
 
@@ -101,15 +104,15 @@ func PPtr(val interface{}) TestDeep {
 	panic("usage: PPtr(NON_NIL_VALUE)")
 }
 
-func (p *tdPPtr) Match(ctx Context, got reflect.Value) *Error {
+func (p *tdPPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Kind() != reflect.Ptr || got.Elem().Kind() != reflect.Ptr {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "pointer type mismatch",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(p.String()),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString(p.String()),
 		})
 	}
 

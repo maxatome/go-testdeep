@@ -9,6 +9,8 @@ package testdeep
 import (
 	"bytes"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/str"
 )
 
 type tdList struct {
@@ -27,6 +29,6 @@ func newList(items ...interface{}) (ret tdList) {
 }
 
 func (l *tdList) String() string {
-	return sliceToBuffer(bytes.NewBufferString(l.GetLocation().Func), l.items).
+	return str.SliceToBuffer(bytes.NewBufferString(l.GetLocation().Func), l.items).
 		String()
 }

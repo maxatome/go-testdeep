@@ -9,6 +9,9 @@ package testdeep
 import (
 	"bytes"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdSetResultKind uint8
@@ -31,14 +34,13 @@ func (k tdSetResultKind) String() string {
 }
 
 type tdSetResult struct {
+	types.TestDeepStamp
 	Missing []reflect.Value
 	Extra   []reflect.Value
 	Kind    tdSetResultKind
 }
 
-var _ testDeepStringer = tdSetResult{}
-
-func (r tdSetResult) _TestDeep() {}
+var _ types.TestDeepStringer = tdSetResult{}
 
 func (r tdSetResult) IsEmpty() bool {
 	return len(r.Missing) == 0 && len(r.Extra) == 0
@@ -51,7 +53,7 @@ func (r tdSetResult) String() string {
 		buf.WriteString("Missing ")
 		buf.WriteString(r.Kind.String())
 		buf.WriteString(": ")
-		sliceToBuffer(buf, r.Missing)
+		str.SliceToBuffer(buf, r.Missing)
 	}
 
 	if len(r.Extra) > 0 {
@@ -61,7 +63,7 @@ func (r tdSetResult) String() string {
 		buf.WriteString("Extra ")
 		buf.WriteString(r.Kind.String())
 		buf.WriteString(": ")
-		sliceToBuffer(buf, r.Extra)
+		str.SliceToBuffer(buf, r.Extra)
 	}
 
 	return buf.String()

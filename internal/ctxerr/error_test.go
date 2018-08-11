@@ -4,19 +4,19 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package testdeep_test
+package ctxerr_test
 
 import (
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestError(t *testing.T) {
-	err := Error{
-		Context:  NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
+	err := ctxerr.Error{
+		Context:  ctxerr.Context{Path: "DATA[12].Field"},
 		Message:  "Error message",
 		Got:      1,
 		Expected: 2,
@@ -44,8 +44,8 @@ func TestError(t *testing.T) {
 	     got: (int) 1
 	expected: (int) 2`)
 
-	err = Error{
-		Context:  NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
+	err = ctxerr.Error{
+		Context:  ctxerr.Context{Path: "DATA[12].Field"},
 		Message:  "Error message",
 		Got:      1,
 		Expected: 2,
@@ -61,8 +61,8 @@ func TestError(t *testing.T) {
 	expected: (int) 2
 [under TestDeep operator Operator at file.go:23]`)
 
-	err = Error{
-		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
+	err = ctxerr.Error{
+		Context: ctxerr.Context{Path: "DATA[12].Field"},
 		Message: "Error message",
 		Summary: 666,
 		Location: location.Location{
@@ -70,9 +70,8 @@ func TestError(t *testing.T) {
 			Func: "Operator",
 			Line: 23,
 		},
-		Origin: &Error{
-			Context: NewContextWithConfig(
-				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
+		Origin: &ctxerr.Error{
+			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
 			Message: "Origin error message",
 			Summary: 42,
 			Location: location.Location{
@@ -91,8 +90,8 @@ Originates from following error:
 	[under TestDeep operator SubOperator at file2.go:236]
 [under TestDeep operator Operator at file.go:23]`)
 
-	err = Error{
-		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
+	err = ctxerr.Error{
+		Context: ctxerr.Context{Path: "DATA[12].Field"},
 		Message: "Error message",
 		Summary: 666,
 		Location: location.Location{
@@ -100,9 +99,8 @@ Originates from following error:
 			Func: "Operator",
 			Line: 23,
 		},
-		Origin: &Error{
-			Context: NewContextWithConfig(
-				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
+		Origin: &ctxerr.Error{
+			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
 			Message: "Origin error message",
 			Summary: 42,
 			Location: location.Location{
@@ -112,8 +110,8 @@ Originates from following error:
 			},
 		},
 		// Next error at same location
-		Next: &Error{
-			Context: NewContextWithConfig(ContextConfig{RootName: "DATA[13].Field"}),
+		Next: &ctxerr.Error{
+			Context: ctxerr.Context{Path: "DATA[13].Field"},
 			Message: "Error message",
 			Summary: 888,
 			Location: location.Location{
@@ -134,8 +132,8 @@ DATA[13].Field: Error message
 	(int) 888
 [under TestDeep operator Operator at file.go:23]`)
 
-	err = Error{
-		Context: NewContextWithConfig(ContextConfig{RootName: "DATA[12].Field"}),
+	err = ctxerr.Error{
+		Context: ctxerr.Context{Path: "DATA[12].Field"},
 		Message: "Error message",
 		Summary: 666,
 		Location: location.Location{
@@ -143,9 +141,8 @@ DATA[13].Field: Error message
 			Func: "Operator",
 			Line: 23,
 		},
-		Origin: &Error{
-			Context: NewContextWithConfig(
-				ContextConfig{RootName: "DATA[12].Field<All#1/2>"}),
+		Origin: &ctxerr.Error{
+			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
 			Message: "Origin error message",
 			Summary: 42,
 			Location: location.Location{
@@ -155,8 +152,8 @@ DATA[13].Field: Error message
 			},
 		},
 		// Next error at different location
-		Next: &Error{
-			Context: NewContextWithConfig(ContextConfig{RootName: "DATA[13].Field"}),
+		Next: &ctxerr.Error{
+			Context: ctxerr.Context{Path: "DATA[13].Field"},
 			Message: "Error message",
 			Summary: 888,
 			Location: location.Location{
@@ -180,6 +177,6 @@ DATA[13].Field: Error message
 
 	//
 	// ErrTooManyErrors
-	test.EqualStr(t, ErrTooManyErrors.Error(),
+	test.EqualStr(t, ctxerr.ErrTooManyErrors.Error(),
 		`Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)`)
 }

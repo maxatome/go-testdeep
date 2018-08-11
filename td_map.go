@@ -10,6 +10,9 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/str"
 )
 
 type mapKind uint8
@@ -95,7 +98,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 		if !vkey.Type().AssignableTo(keyType) {
 			panic(fmt.Sprintf(
 				"expected key %s type mismatch: %s != model key type (%s)",
-				toString(key),
+				str.ToString(key),
 				vkey.Type(),
 				keyType))
 		}
@@ -108,7 +111,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 			default:
 				panic(fmt.Sprintf(
 					"expected key %s value cannot be nil as entries value type is %s",
-					toString(key),
+					str.ToString(key),
 					valueType))
 			}
 		} else {
@@ -118,7 +121,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 				if !entryInfo.expected.Type().AssignableTo(valueType) {
 					panic(fmt.Sprintf(
 						"expected key %s value type mismatch: %s != model key type (%s)",
-						toString(key),
+						str.ToString(key),
 						entryInfo.expected.Type(),
 						valueType))
 				}
@@ -136,7 +139,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 
 		if checkedEntries[vkey.Interface()] {
 			panic(fmt.Sprintf(
-				"%s entry exists in both model & expectedEntries", toString(vkey)))
+				"%s entry exists in both model & expectedEntries", str.ToString(vkey)))
 		}
 
 		entryInfo.key = vkey
@@ -205,7 +208,7 @@ func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, superMap)
 }
 
-func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
+func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	err = m.checkPtr(ctx, &got, true)
 	if err != nil {
 		return ctx.CollectError(err)
@@ -243,9 +246,9 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		}
 
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message: errorMessage,
 			Summary: tdSetResult{
 				Kind:    keysSetResult,
@@ -266,9 +269,9 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		}
 
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message: errorMessage,
 			Summary: tdSetResult{
 				Kind:    keysSetResult,
@@ -278,7 +281,7 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if ctx.BooleanError {
-		return BooleanError
+		return ctxerr.BooleanError
 	}
 
 	// Retrieve extra keys
@@ -294,7 +297,7 @@ func (m *tdMap) Match(ctx Context, got reflect.Value) (err *Error) {
 		}
 	}
 
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message: errorMessage,
 		Summary: res,
 	})
@@ -317,8 +320,8 @@ func (m *tdMap) String() string {
 
 		for _, entryInfo := range m.expectedEntries {
 			fmt.Fprintf(buf, "  %s: %s,\n", // nolint: errcheck
-				toString(entryInfo.key),
-				toString(entryInfo.expected))
+				str.ToString(entryInfo.key),
+				str.ToString(entryInfo.expected))
 		}
 
 		buf.WriteByte('}')

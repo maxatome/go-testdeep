@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -66,7 +67,7 @@ func TestEqualArray(t *testing.T) {
 						t.Errorf("An Error should have occurred")
 						return
 					}
-					if !matchError(t, err.(*Error), expectedError{
+					if !matchError(t, err.(*ctxerr.Error), expectedError{
 						Message:  mustBe("values differ"),
 						Path:     mustBe("DATA[1]"),
 						Got:      mustBe("(int) 2"),
@@ -80,7 +81,7 @@ func TestEqualArray(t *testing.T) {
 			}
 
 			// Second error
-			eErr := err.(*Error).Next
+			eErr := err.(*ctxerr.Error).Next
 			t.Run("Second error",
 				func(t *testing.T) {
 					if eErr == nil {
@@ -95,7 +96,7 @@ func TestEqualArray(t *testing.T) {
 					}, false) {
 						return
 					}
-					if eErr.Next != ErrTooManyErrors {
+					if eErr.Next != ctxerr.ErrTooManyErrors {
 						if eErr.Next == nil {
 							t.Error("ErrTooManyErrors should follow the 2 errors")
 						} else {
@@ -119,7 +120,7 @@ func TestEqualArray(t *testing.T) {
 						t.Errorf("An Error should have occurred")
 						return
 					}
-					if !matchError(t, err.(*Error), expectedError{
+					if !matchError(t, err.(*ctxerr.Error), expectedError{
 						Message:  mustBe("values differ"),
 						Path:     mustBe("DATA[1]"),
 						Got:      mustBe("(int) 2"),
@@ -133,7 +134,7 @@ func TestEqualArray(t *testing.T) {
 			}
 
 			// Second error
-			eErr := err.(*Error).Next
+			eErr := err.(*ctxerr.Error).Next
 			ok = t.Run("Second error",
 				func(t *testing.T) {
 					if eErr == nil {
@@ -601,7 +602,7 @@ func TestEqualRecurs(t *testing.T) {
 }
 
 func TestEqualPanic(t *testing.T) {
-	checkPanic(t,
+	test.CheckPanic(t,
 		func() {
 			EqDeeply(Ignore(), Ignore())
 		},

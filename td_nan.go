@@ -9,6 +9,9 @@ package testdeep
 import (
 	"math"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdNaN struct {
@@ -24,24 +27,24 @@ func NaN() TestDeep {
 	}
 }
 
-func (n *tdNaN) Match(ctx Context, got reflect.Value) *Error {
+func (n *tdNaN) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	switch got.Kind() {
 	case reflect.Float32, reflect.Float64:
 		if math.IsNaN(got.Float()) {
 			return nil
 		}
 
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "values differ",
 			Got:      got,
 			Expected: n,
 		})
 	}
 
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "type mismatch",
-		Got:      rawString(got.Type().String()),
-		Expected: rawString("float32 OR float64"),
+		Got:      types.RawString(got.Type().String()),
+		Expected: types.RawString("float32 OR float64"),
 	})
 }
 
@@ -62,24 +65,24 @@ func NotNaN() TestDeep {
 	}
 }
 
-func (n *tdNotNaN) Match(ctx Context, got reflect.Value) *Error {
+func (n *tdNotNaN) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	switch got.Kind() {
 	case reflect.Float32, reflect.Float64:
 		if !math.IsNaN(got.Float()) {
 			return nil
 		}
 
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "values differ",
 			Got:      got,
 			Expected: n,
 		})
 	}
 
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "type mismatch",
-		Got:      rawString(got.Type().String()),
-		Expected: rawString("float32 OR float64"),
+		Got:      types.RawString(got.Type().String()),
+		Expected: types.RawString("float32 OR float64"),
 	})
 }
 

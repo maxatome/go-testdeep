@@ -11,6 +11,7 @@ import (
 	"time"
 
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 type MyTime time.Time
@@ -126,7 +127,7 @@ func TestTruncTime(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { TruncTime("test") }, "usage: TruncTime(")
+	test.CheckPanic(t, func() { TruncTime("test") }, "usage: TruncTime(")
 }
 
 func TestTruncTimeTypeBehind(t *testing.T) {

@@ -13,7 +13,7 @@ script:
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/mattn/goveralls
   - go get -t ./...
-  - go test -v -covermode=count -coverprofile=coverage.out
+  - 'go test -v -covermode=count -coverprofile=coverage.out $(if ! expr "$(go version)" : ".* go1\.9\." >/dev/null; then echo ./...; fi)'
 
 after_success:
   - goveralls -coverprofile=coverage.out -service=travis-ci

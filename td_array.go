@@ -10,6 +10,10 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdArray struct {
@@ -212,7 +216,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 	}
 }
 
-func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
+func (a *tdArray) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	err = a.checkPtr(ctx, &got, true)
 	if err != nil {
 		return ctx.CollectError(err)
@@ -229,11 +233,11 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 
 		if index >= gotLen {
 			if ctx.BooleanError {
-				return BooleanError
+				return ctxerr.BooleanError
 			}
-			return curCtx.CollectError(&Error{
+			return curCtx.CollectError(&ctxerr.Error{
 				Message:  "expected value out of range",
-				Got:      rawString("<non-existent value>"),
+				Got:      types.RawString("<non-existent value>"),
 				Expected: expectedValue,
 			})
 		}
@@ -246,12 +250,12 @@ func (a *tdArray) Match(ctx Context, got reflect.Value) (err *Error) {
 
 	if gotLen > len(a.expectedEntries) {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.AddArrayIndex(len(a.expectedEntries)).CollectError(&Error{
+		return ctx.AddArrayIndex(len(a.expectedEntries)).CollectError(&ctxerr.Error{
 			Message:  "got value out of range",
 			Got:      got.Index(len(a.expectedEntries)),
-			Expected: rawString("<non-existent value>"),
+			Expected: types.RawString("<non-existent value>"),
 		})
 	}
 
@@ -271,7 +275,7 @@ func (a *tdArray) String() string {
 
 		for index, expectedValue := range a.expectedEntries {
 			fmt.Fprintf(buf, "  %d: %s\n", // nolint: errcheck
-				index, toString(expectedValue))
+				index, str.ToString(expectedValue))
 		}
 
 		buf.WriteString("})")

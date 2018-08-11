@@ -7,12 +7,13 @@
 package testdeep_test
 
 import (
+	"fmt"
 	"math"
 	"testing"
 	"time"
 
-	"fmt"
 	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestBetween(t *testing.T) {
@@ -67,12 +68,12 @@ func TestBetween(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Between("test", "test") }, "usage: Between(")
-	checkPanic(t, func() { Between(12, "test") },
+	test.CheckPanic(t, func() { Between("test", "test") }, "usage: Between(")
+	test.CheckPanic(t, func() { Between(12, "test") },
 		"from and to params must have the same type")
-	checkPanic(t, func() { Between("test", 12) },
+	test.CheckPanic(t, func() { Between("test", 12) },
 		"from and to params must have the same type")
-	checkPanic(t, func() { Between(1, 2, BoundsInIn, BoundsInOut) },
+	test.CheckPanic(t, func() { Between(1, 2, BoundsInIn, BoundsInOut) },
 		"usage: Between(")
 }
 
@@ -269,9 +270,9 @@ func TestN(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { N("test") }, "usage: N(")
-	checkPanic(t, func() { N(10, 1, 2) }, "usage: N(")
-	checkPanic(t, func() { N(10, "test") },
+	test.CheckPanic(t, func() { N("test") }, "usage: N(")
+	test.CheckPanic(t, func() { N(10, 1, 2) }, "usage: N(")
+	test.CheckPanic(t, func() { N(10, "test") },
 		"tolerance param must have the same type as num one")
 }
 
@@ -336,10 +337,10 @@ func TestLGt(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Gt("test") }, "usage: Gt(")
-	checkPanic(t, func() { Gte("test") }, "usage: Gte(")
-	checkPanic(t, func() { Lt("test") }, "usage: Lt(")
-	checkPanic(t, func() { Lte("test") }, "usage: Lte(")
+	test.CheckPanic(t, func() { Gt("test") }, "usage: Gt(")
+	test.CheckPanic(t, func() { Gte("test") }, "usage: Gte(")
+	test.CheckPanic(t, func() { Lt("test") }, "usage: Lt(")
+	test.CheckPanic(t, func() { Lte("test") }, "usage: Lte(")
 }
 
 func TestBetweenTime(t *testing.T) {

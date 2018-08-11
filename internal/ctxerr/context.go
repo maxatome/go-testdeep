@@ -4,7 +4,7 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package testdeep
+package ctxerr
 
 import (
 	"fmt"
@@ -13,6 +13,7 @@ import (
 	"unsafe"
 
 	"github.com/maxatome/go-testdeep/internal/location"
+	"github.com/maxatome/go-testdeep/internal/str"
 )
 
 type Visit struct {
@@ -39,7 +40,7 @@ type Context struct {
 	// < 0 do not stop until comparison ends.
 	MaxErrors int
 	Errors    *[]*Error
-	// See ContextConfig.FailureIsFatal for details
+	// See ContexConfig.FailureIsFatal for details
 	FailureIsFatal bool
 }
 
@@ -50,7 +51,7 @@ func (c *Context) InitErrors() {
 	}
 }
 
-func (c Context) resetErrors() (new Context) {
+func (c Context) ResetErrors() (new Context) {
 	new = c
 	new.InitErrors()
 	return
@@ -81,12 +82,12 @@ func (c Context) CollectError(err *Error) *Error {
 	*c.Errors = append(*c.Errors, err)
 	if c.MaxErrors >= 0 && len(*c.Errors) >= c.MaxErrors {
 		*c.Errors = append(*c.Errors, ErrTooManyErrors)
-		return c.mergeErrors()
+		return c.MergeErrors()
 	}
 	return nil
 }
 
-func (c Context) mergeErrors() *Error {
+func (c Context) MergeErrors() *Error {
 	if c.Errors == nil || len(*c.Errors) == 0 {
 		return nil
 	}
@@ -120,7 +121,7 @@ func (c Context) AddArrayIndex(index int) Context {
 // AddMapKey creates a new Context from current one plus a map
 // dereference for key key.
 func (c Context) AddMapKey(key interface{}) Context {
-	return c.AddDepth("[" + toString(key) + "]")
+	return c.AddDepth("[" + str.ToString(key) + "]")
 }
 
 // AddPtr creates a new Context from current one plus a pointer dereference.

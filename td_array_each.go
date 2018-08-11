@@ -9,6 +9,10 @@ package testdeep
 import (
 	"reflect"
 	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdArrayEach struct {
@@ -29,15 +33,15 @@ func ArrayEach(expectedValue interface{}) TestDeep {
 	}
 }
 
-func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
+func (a *tdArrayEach) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	if !got.IsValid() {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "nil value",
-			Got:      rawString("nil"),
-			Expected: rawString("Slice OR Array OR *Slice OR *Array"),
+			Got:      types.RawString("nil"),
+			Expected: types.RawString("Slice OR Array OR *Slice OR *Array"),
 		})
 	}
 
@@ -46,12 +50,12 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 		gotElem := got.Elem()
 		if !gotElem.IsValid() {
 			if ctx.BooleanError {
-				return BooleanError
+				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message:  "nil pointer",
-				Got:      rawString("nil " + got.Type().String()),
-				Expected: rawString("Slice OR Array OR *Slice OR *Array"),
+				Got:      types.RawString("nil " + got.Type().String()),
+				Expected: types.RawString("Slice OR Array OR *Slice OR *Array"),
 			})
 		}
 
@@ -64,7 +68,7 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	case reflect.Array, reflect.Slice:
 		gotLen := got.Len()
 
-		var err *Error
+		var err *ctxerr.Error
 		for idx := 0; idx < gotLen; idx++ {
 			err = deepValueEqual(ctx.AddArrayIndex(idx), got.Index(idx), a.expected)
 			if err != nil {
@@ -75,21 +79,21 @@ func (a *tdArrayEach) Match(ctx Context, got reflect.Value) (err *Error) {
 	}
 
 	if ctx.BooleanError {
-		return BooleanError
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "bad type",
-		Got:      rawString(got.Type().String()),
-		Expected: rawString("Slice OR Array OR *Slice OR *Array"),
+		Got:      types.RawString(got.Type().String()),
+		Expected: types.RawString("Slice OR Array OR *Slice OR *Array"),
 	})
 }
 
 func (a *tdArrayEach) String() string {
 	const prefix = "ArrayEach("
 
-	content := toString(a.expected)
+	content := str.ToString(a.expected)
 	if strings.Contains(content, "\n") {
-		return prefix + indentString(content, "          ") + ")"
+		return prefix + str.IndentString(content, "          ") + ")"
 	}
 	return prefix + content + ")"
 }

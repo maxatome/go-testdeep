@@ -150,11 +150,11 @@ func TestPtr(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Ptr(nil) }, "usage: Ptr(")
-	checkPanic(t, func() { Ptr(MyInterface(nil)) }, "usage: Ptr(")
+	test.CheckPanic(t, func() { Ptr(nil) }, "usage: Ptr(")
+	test.CheckPanic(t, func() { Ptr(MyInterface(nil)) }, "usage: Ptr(")
 
-	checkPanic(t, func() { PPtr(nil) }, "usage: PPtr(")
-	checkPanic(t, func() { PPtr(MyInterface(nil)) }, "usage: PPtr(")
+	test.CheckPanic(t, func() { PPtr(nil) }, "usage: PPtr(")
+	test.CheckPanic(t, func() { PPtr(MyInterface(nil)) }, "usage: PPtr(")
 
 	//
 	// String

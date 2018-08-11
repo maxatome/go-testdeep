@@ -9,6 +9,9 @@ package testdeep
 import (
 	"reflect"
 	"time"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 )
 
 func ternRune(cond bool, a, b rune) rune {
@@ -27,21 +30,21 @@ func ternStr(cond bool, a, b string) string {
 
 // getTime returns the time.Time that is inside got or that can be
 // converted from got contents.
-func getTime(ctx Context, got reflect.Value, mustConvert bool) (time.Time, *Error) {
+func getTime(ctx ctxerr.Context, got reflect.Value, mustConvert bool) (time.Time, *ctxerr.Error) {
 	var (
 		gotIf interface{}
 		ok    bool
 	)
 	if mustConvert {
-		gotIf, ok = getInterface(got.Convert(timeType), true)
+		gotIf, ok = dark.GetInterface(got.Convert(timeType), true)
 	} else {
-		gotIf, ok = getInterface(got, true)
+		gotIf, ok = dark.GetInterface(got, true)
 	}
 	if !ok {
 		if ctx.BooleanError {
-			return time.Time{}, BooleanError
+			return time.Time{}, ctxerr.BooleanError
 		}
-		return time.Time{}, &Error{
+		return time.Time{}, &ctxerr.Error{
 			Message: "cannot compare unexported field that cannot be overridden",
 		}
 	}

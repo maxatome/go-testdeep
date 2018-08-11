@@ -9,6 +9,9 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdShallow struct {
@@ -58,26 +61,26 @@ func Shallow(expectedPtr interface{}) TestDeep {
 	}
 }
 
-func (s *tdShallow) Match(ctx Context, got reflect.Value) *Error {
+func (s *tdShallow) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Kind() != s.expectedKind {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "bad kind",
-			Got:      rawString(got.Kind().String()),
-			Expected: rawString(s.expectedKind.String()),
+			Got:      types.RawString(got.Kind().String()),
+			Expected: types.RawString(s.expectedKind.String()),
 		})
 	}
 
 	if got.Pointer() != s.expectedPointer {
 		if ctx.BooleanError {
-			return BooleanError
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  fmt.Sprintf("%s pointer mismatch", s.expectedKind),
-			Got:      rawString(fmt.Sprintf("0x%x", got.Pointer())),
-			Expected: rawString(fmt.Sprintf("0x%x", s.expectedPointer)),
+			Got:      types.RawString(fmt.Sprintf("0x%x", got.Pointer())),
+			Expected: types.RawString(fmt.Sprintf("0x%x", s.expectedPointer)),
 		})
 	}
 	return nil

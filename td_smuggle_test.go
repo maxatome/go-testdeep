@@ -250,34 +250,34 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Smuggle("test", 12) }, "usage: Smuggle")
+	test.CheckPanic(t, func() { Smuggle("test", 12) }, "usage: Smuggle")
 
 	// Bad number of args
-	checkPanic(t, func() {
+	test.CheckPanic(t, func() {
 		Smuggle(func() int { return 0 }, 12)
 	}, "FUNC must take only one argument")
 
-	checkPanic(t, func() {
+	test.CheckPanic(t, func() {
 		Smuggle(func(a int, b string) int { return 0 }, 12)
 	}, "FUNC must take only one argument")
 
 	// Bad number of returned values
-	checkPanic(t, func() {
+	test.CheckPanic(t, func() {
 		Smuggle(func(a int) {}, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
-	checkPanic(t, func() {
+	test.CheckPanic(t, func() {
 		Smuggle(
 			func(a int) (int, bool, string, int) { return 0, false, "", 23 },
 			12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
 	// Bad returned types
-	checkPanic(t, func() {
+	test.CheckPanic(t, func() {
 		Smuggle(func(a int) (int, int) { return 0, 0 }, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
-	checkPanic(t, func() {
+	test.CheckPanic(t, func() {
 		Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 

@@ -6,7 +6,13 @@
 
 package testdeep
 
-import "runtime"
+import (
+	"runtime"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/types"
+)
 
 // CmpTrue is a shortcut for:
 //
@@ -38,7 +44,7 @@ func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool {
 	return CmpDeeply(t, got, false, args...)
 }
 
-func cmpError(ctx Context, t TestingT, got error, args ...interface{}) bool {
+func cmpError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) bool {
 	if got != nil {
 		return true
 	}
@@ -46,18 +52,18 @@ func cmpError(ctx Context, t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 	formatError(t,
 		ctx.FailureIsFatal,
-		&Error{
+		&ctxerr.Error{
 			Context:  ctx,
 			Message:  "should be an error",
-			Got:      rawString("nil"),
-			Expected: rawString("non-nil error"),
+			Got:      types.RawString("nil"),
+			Expected: types.RawString("non-nil error"),
 		},
 		args...)
 
 	return false
 }
 
-func cmpNoError(ctx Context, t TestingT, got error, args ...interface{}) bool {
+func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) bool {
 	if got == nil {
 		return true
 	}
@@ -65,11 +71,11 @@ func cmpNoError(ctx Context, t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 	formatError(t,
 		ctx.FailureIsFatal,
-		&Error{
+		&ctxerr.Error{
 			Context:  ctx,
 			Message:  "should NOT be an error",
 			Got:      got,
-			Expected: rawString("nil"),
+			Expected: types.RawString("nil"),
 		},
 		args...)
 
@@ -106,7 +112,7 @@ func CmpNoError(t TestingT, got error, args ...interface{}) bool {
 	return cmpNoError(NewContext(), t, got, args...)
 }
 
-func cmpPanic(ctx Context, t TestingT, fn func(), expected interface{}, args ...interface{}) bool {
+func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, args ...interface{}) bool {
 	t.Helper()
 
 	if ctx.Path == contextDefaultRootName {
@@ -128,10 +134,10 @@ func cmpPanic(ctx Context, t TestingT, fn func(), expected interface{}, args ...
 	if !panicked {
 		formatError(t,
 			ctx.FailureIsFatal,
-			&Error{
+			&ctxerr.Error{
 				Context: ctx,
 				Message: "should have panicked",
-				Summary: rawString("did not panic"),
+				Summary: types.RawString("did not panic"),
 			},
 			args...)
 		return false
@@ -140,10 +146,10 @@ func cmpPanic(ctx Context, t TestingT, fn func(), expected interface{}, args ...
 	return cmpDeeply(ctx.AddDepth("→panic()"), t, panicParam, expected, args...)
 }
 
-func cmpNotPanic(ctx Context, t TestingT, fn func(), args ...interface{}) bool {
+func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{}) bool {
 	var (
 		panicked   bool
-		stackTrace rawString
+		stackTrace types.RawString
 	)
 
 	func() {
@@ -157,7 +163,7 @@ func cmpNotPanic(ctx Context, t TestingT, fn func(), args ...interface{}) bool {
 						break
 					}
 				}
-				stackTrace = rawString("panic: " + toString(panicParam) + "\n\n" +
+				stackTrace = types.RawString("panic: " + str.ToString(panicParam) + "\n\n" +
 					string(buf[:n]))
 			}
 		}()
@@ -178,11 +184,11 @@ func cmpNotPanic(ctx Context, t TestingT, fn func(), args ...interface{}) bool {
 
 	formatError(t,
 		ctx.FailureIsFatal,
-		&Error{
+		&ctxerr.Error{
 			Context:  ctx,
 			Message:  "should NOT have panicked",
 			Got:      stackTrace,
-			Expected: rawString("not panicking at all"),
+			Expected: types.RawString("not panicking at all"),
 		})
 	return false
 }
