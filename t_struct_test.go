@@ -63,7 +63,7 @@ func TestRun(tt *testing.T) {
 }
 
 func TestFailureIsFatal(tt *testing.T) {
-	ttt := &testdeep.TestTestingFT{}
+	ttt := &test.TestingFT{}
 
 	// All t.True(false) tests of course fail
 

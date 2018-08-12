@@ -10,13 +10,13 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 func TestFormatError(t *testing.T) {
-	ttt := &TestTestingT{}
+	ttt := &test.TestingT{}
 
 	err := &ctxerr.Error{
 		Context: NewContext(),
