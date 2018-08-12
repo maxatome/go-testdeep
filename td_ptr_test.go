@@ -26,76 +26,87 @@ func TestPtr(t *testing.T) {
 	checkOK(t, &str, testdeep.Ptr("test"))
 	checkOK(t, &struct{}{}, testdeep.Ptr(struct{}{}))
 
-	checkError(t, &num, testdeep.Ptr(13), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("*DATA"),
-		Got:      mustBe("(int) 12"),
-		Expected: mustBe("(int) 13"),
-	})
-	checkError(t, nil, testdeep.Ptr(13), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("*int"),
-	})
-	checkError(t, (*int)(nil), testdeep.Ptr(13), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("*DATA"), // should be DATA, but seems hard to be done
-		Got:      mustBe("nil"),
-		Expected: mustBe("(int) 13"),
-	})
-	checkError(t, (*int)(nil), testdeep.Ptr((*int)(nil)), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("*int"),
-		Expected: mustBe("**int"),
-	})
-	checkError(t, &num, testdeep.Ptr("test"), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("*int"),
-		Expected: mustBe("*string"),
-	})
+	checkError(t, &num, testdeep.Ptr(13),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("*DATA"),
+			Got:      mustBe("(int) 12"),
+			Expected: mustBe("(int) 13"),
+		})
+	checkError(t, nil, testdeep.Ptr(13),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("*int"),
+		})
+	checkError(t, (*int)(nil), testdeep.Ptr(13),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("*DATA"), // should be DATA, but seems hard to be done
+			Got:      mustBe("nil"),
+			Expected: mustBe("(int) 13"),
+		})
+	checkError(t, (*int)(nil), testdeep.Ptr((*int)(nil)),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*int"),
+			Expected: mustBe("**int"),
+		})
+	checkError(t, &num, testdeep.Ptr("test"),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*int"),
+			Expected: mustBe("*string"),
+		})
 
-	checkError(t, &num, testdeep.Ptr(testdeep.Any(11)), expectedError{
-		Message:  mustBe("comparing with Any"),
-		Path:     mustBe("*DATA"),
-		Got:      mustBe("(int) 12"),
-		Expected: mustBe("Any((int) 11)"),
-	})
+	checkError(t, &num, testdeep.Ptr(testdeep.Any(11)),
+		expectedError{
+			Message:  mustBe("comparing with Any"),
+			Path:     mustBe("*DATA"),
+			Got:      mustBe("(int) 12"),
+			Expected: mustBe("Any((int) 11)"),
+		})
 
-	checkError(t, &str, testdeep.Ptr("foobar"), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("*DATA"),
-		Got:      mustContain(`"test"`),
-		Expected: mustContain(`"foobar"`),
-	})
+	checkError(t, &str, testdeep.Ptr("foobar"),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("*DATA"),
+			Got:      mustContain(`"test"`),
+			Expected: mustContain(`"foobar"`),
+		})
 
-	checkError(t, 13, testdeep.Ptr(13), expectedError{
-		Message:  mustBe("pointer type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("*int"),
-	})
-	checkError(t, &str, testdeep.Ptr(12), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("*string"),
-		Expected: mustBe("*int"),
-	})
+	checkError(t, 13, testdeep.Ptr(13),
+		expectedError{
+			Message:  mustBe("pointer type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("*int"),
+		})
+	checkError(t, &str, testdeep.Ptr(12),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*string"),
+			Expected: mustBe("*int"),
+		})
 
-	checkError(t, &pNum, testdeep.Ptr(12), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("**int"),
-		Expected: mustBe("*int"),
-	})
-	checkError(t, &pStr, testdeep.Ptr("test"), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("**string"),
-		Expected: mustBe("*string"),
-	})
+	checkError(t, &pNum, testdeep.Ptr(12),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("**int"),
+			Expected: mustBe("*int"),
+		})
+	checkError(t, &pStr, testdeep.Ptr("test"),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("**string"),
+			Expected: mustBe("*string"),
+		})
 
 	//
 	// PPtr
@@ -103,50 +114,57 @@ func TestPtr(t *testing.T) {
 	checkOK(t, &pStr, testdeep.PPtr("test"))
 	checkOK(t, &pStruct, testdeep.PPtr(struct{}{}))
 
-	checkError(t, &pNum, testdeep.PPtr(13), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("**DATA"),
-		Got:      mustBe("(int) 12"),
-		Expected: mustBe("(int) 13"),
-	})
-	checkError(t, nil, testdeep.PPtr(13), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("**int"),
-	})
-	checkError(t, &num, testdeep.PPtr(13), expectedError{
-		Message:  mustBe("pointer type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("*int"),
-		Expected: mustBe("**int"),
-	})
+	checkError(t, &pNum, testdeep.PPtr(13),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("**DATA"),
+			Got:      mustBe("(int) 12"),
+			Expected: mustBe("(int) 13"),
+		})
+	checkError(t, nil, testdeep.PPtr(13),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("**int"),
+		})
+	checkError(t, &num, testdeep.PPtr(13),
+		expectedError{
+			Message:  mustBe("pointer type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*int"),
+			Expected: mustBe("**int"),
+		})
 
-	checkError(t, &pStr, testdeep.PPtr("foobar"), expectedError{
-		Message: mustBe("values differ"),
-		Path:    mustBe("**DATA"),
-	})
-	checkError(t, &str, testdeep.PPtr("foobar"), expectedError{
-		Message:  mustBe("pointer type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("*string"),
-		Expected: mustBe("**string"),
-	})
+	checkError(t, &pStr, testdeep.PPtr("foobar"),
+		expectedError{
+			Message: mustBe("values differ"),
+			Path:    mustBe("**DATA"),
+		})
+	checkError(t, &str, testdeep.PPtr("foobar"),
+		expectedError{
+			Message:  mustBe("pointer type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*string"),
+			Expected: mustBe("**string"),
+		})
 
-	checkError(t, &pNum, testdeep.PPtr(testdeep.Any(11)), expectedError{
-		Message:  mustBe("comparing with Any"),
-		Path:     mustBe("**DATA"),
-		Got:      mustBe("(int) 12"),
-		Expected: mustBe("Any((int) 11)"),
-	})
+	checkError(t, &pNum, testdeep.PPtr(testdeep.Any(11)),
+		expectedError{
+			Message:  mustBe("comparing with Any"),
+			Path:     mustBe("**DATA"),
+			Got:      mustBe("(int) 12"),
+			Expected: mustBe("Any((int) 11)"),
+		})
 
 	pStruct = nil
-	checkError(t, &pStruct, testdeep.PPtr(struct{}{}), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("**DATA"), // should be *DATA, but seems hard to be done
-		Got:      mustBe("nil"),
-		Expected: mustContain("struct"),
-	})
+	checkError(t, &pStruct, testdeep.PPtr(struct{}{}),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("**DATA"), // should be *DATA, but seems hard to be done
+			Got:      mustBe("nil"),
+			Expected: mustContain("struct"),
+		})
 
 	//
 	// Bad usage

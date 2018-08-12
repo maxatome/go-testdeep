@@ -17,26 +17,29 @@ func TestAny(t *testing.T) {
 	checkOK(t, 6, testdeep.Any(nil, 5, 6, 7))
 	checkOK(t, nil, testdeep.Any(5, 6, 7, nil))
 
-	checkError(t, 6, testdeep.Any(5), expectedError{
-		Message:  mustBe("comparing with Any"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("(int) 6"),
-		Expected: mustBe("Any((int) 5)"),
-	})
+	checkError(t, 6, testdeep.Any(5),
+		expectedError{
+			Message:  mustBe("comparing with Any"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("(int) 6"),
+			Expected: mustBe("Any((int) 5)"),
+		})
 
-	checkError(t, 6, testdeep.Any(nil), expectedError{
-		Message:  mustBe("comparing with Any"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("(int) 6"),
-		Expected: mustBe("Any(nil)"),
-	})
+	checkError(t, 6, testdeep.Any(nil),
+		expectedError{
+			Message:  mustBe("comparing with Any"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("(int) 6"),
+			Expected: mustBe("Any(nil)"),
+		})
 
-	checkError(t, nil, testdeep.Any(6), expectedError{
-		Message:  mustBe("comparing with Any"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("Any((int) 6)"),
-	})
+	checkError(t, nil, testdeep.Any(6),
+		expectedError{
+			Message:  mustBe("comparing with Any"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("Any((int) 6)"),
+		})
 
 	//
 	// String

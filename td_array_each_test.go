@@ -72,12 +72,13 @@ func TestArrayEach(t *testing.T) {
 		},
 		testdeep.ArrayEach(testdeep.Between(20, 30)))
 
-	checkError(t, nil, testdeep.ArrayEach(4), expectedError{
-		Message:  mustBe("nil value"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
-	})
+	checkError(t, nil, testdeep.ArrayEach(4),
+		expectedError{
+			Message:  mustBe("nil value"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+		})
 
 	checkErrorForEach(t,
 		[]interface{}{

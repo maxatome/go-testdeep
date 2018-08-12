@@ -19,12 +19,13 @@ func TestShallow(t *testing.T) {
 	// Slice
 	gotSlice := []int{1, 2, 3}
 	expectedSlice := []int{1, 2, 3}
-	checkError(t, gotSlice, testdeep.Shallow(expectedSlice), expectedError{
-		Message:  mustBe("slice pointer mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("0x"),
-		Expected: mustContain("0x"),
-	})
+	checkError(t, gotSlice, testdeep.Shallow(expectedSlice),
+		expectedError{
+			Message:  mustBe("slice pointer mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"),
+			Expected: mustContain("0x"),
+		})
 
 	expectedSlice = gotSlice
 	checkOK(t, gotSlice, testdeep.Shallow(expectedSlice))
@@ -34,12 +35,13 @@ func TestShallow(t *testing.T) {
 	// Map
 	gotMap := map[string]bool{"a": true, "b": false}
 	expectedMap := map[string]bool{"a": true, "b": false}
-	checkError(t, gotMap, testdeep.Shallow(expectedMap), expectedError{
-		Message:  mustBe("map pointer mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("0x"),
-		Expected: mustContain("0x"),
-	})
+	checkError(t, gotMap, testdeep.Shallow(expectedMap),
+		expectedError{
+			Message:  mustBe("map pointer mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"),
+			Expected: mustContain("0x"),
+		})
 
 	expectedMap = gotMap
 	checkOK(t, gotMap, testdeep.Shallow(expectedMap))
@@ -52,12 +54,13 @@ func TestShallow(t *testing.T) {
 	}
 	gotPtr := &MyStruct{val: 12}
 	expectedPtr := &MyStruct{val: 12}
-	checkError(t, gotPtr, testdeep.Shallow(expectedPtr), expectedError{
-		Message:  mustBe("ptr pointer mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("0x"),
-		Expected: mustContain("0x"),
-	})
+	checkError(t, gotPtr, testdeep.Shallow(expectedPtr),
+		expectedError{
+			Message:  mustBe("ptr pointer mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"),
+			Expected: mustContain("0x"),
+		})
 
 	expectedPtr = gotPtr
 	checkOK(t, gotPtr, testdeep.Shallow(expectedPtr))
@@ -67,12 +70,13 @@ func TestShallow(t *testing.T) {
 	// Func
 	gotFunc := func(a int) int { return a * 2 }
 	expectedFunc := func(a int) int { return a * 2 }
-	checkError(t, gotFunc, testdeep.Shallow(expectedFunc), expectedError{
-		Message:  mustBe("func pointer mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("0x"),
-		Expected: mustContain("0x"),
-	})
+	checkError(t, gotFunc, testdeep.Shallow(expectedFunc),
+		expectedError{
+			Message:  mustBe("func pointer mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"),
+			Expected: mustContain("0x"),
+		})
 
 	expectedFunc = gotFunc
 	checkOK(t, gotFunc, testdeep.Shallow(expectedFunc))
@@ -82,12 +86,13 @@ func TestShallow(t *testing.T) {
 	// Chan
 	gotChan := make(chan int)
 	expectedChan := make(chan int)
-	checkError(t, gotChan, testdeep.Shallow(expectedChan), expectedError{
-		Message:  mustBe("chan pointer mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("0x"),
-		Expected: mustContain("0x"),
-	})
+	checkError(t, gotChan, testdeep.Shallow(expectedChan),
+		expectedError{
+			Message:  mustBe("chan pointer mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"),
+			Expected: mustContain("0x"),
+		})
 
 	expectedChan = gotChan
 	checkOK(t, gotChan, testdeep.Shallow(expectedChan))
@@ -95,12 +100,13 @@ func TestShallow(t *testing.T) {
 
 	//
 	// Erroneous mix
-	checkError(t, gotMap, testdeep.Shallow(expectedChan), expectedError{
-		Message:  mustBe("bad kind"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("map"),
-		Expected: mustContain("chan"),
-	})
+	checkError(t, gotMap, testdeep.Shallow(expectedChan),
+		expectedError{
+			Message:  mustBe("bad kind"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("map"),
+			Expected: mustContain("chan"),
+		})
 
 	//
 	// Bad usage

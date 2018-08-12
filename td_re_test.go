@@ -33,20 +33,22 @@ func TestRe(t *testing.T) {
 	// fmt.Stringer interface
 	checkOK(t, MyStringer{}, testdeep.Re("bin"))
 
-	checkError(t, 12, testdeep.Re("bar"), expectedError{
-		Message: mustBe("bad type"),
-		Path:    mustBe("DATA"),
-		Got:     mustBe("int"),
-		Expected: mustBe(
-			"string (convertible) OR fmt.Stringer OR error OR []uint8"),
-	})
+	checkError(t, 12, testdeep.Re("bar"),
+		expectedError{
+			Message: mustBe("bad type"),
+			Path:    mustBe("DATA"),
+			Got:     mustBe("int"),
+			Expected: mustBe(
+				"string (convertible) OR fmt.Stringer OR error OR []uint8"),
+		})
 
-	checkError(t, "foo bar test", testdeep.Re("pipo"), expectedError{
-		Message:  mustBe("does not match Regexp"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`"foo bar test"`),
-		Expected: mustBe("pipo"),
-	})
+	checkError(t, "foo bar test", testdeep.Re("pipo"),
+		expectedError{
+			Message:  mustBe("does not match Regexp"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`"foo bar test"`),
+			Expected: mustBe("pipo"),
+		})
 
 	checkError(t, "foo bar test", testdeep.Re("(pi)(po)", []string{"pi", "po"}),
 		expectedError{
@@ -67,19 +69,21 @@ func TestRe(t *testing.T) {
 	checkOK(t, MySlice("Ho zz hoho"),
 		testdeep.ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
 
-	checkError(t, []int{12}, testdeep.Re("bar"), expectedError{
-		Message:  mustBe("bad slice type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("[]int"),
-		Expected: mustBe("[]uint8"),
-	})
+	checkError(t, []int{12}, testdeep.Re("bar"),
+		expectedError{
+			Message:  mustBe("bad slice type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("[]int"),
+			Expected: mustBe("[]uint8"),
+		})
 
-	checkError(t, []byte("foo bar test"), testdeep.Re("pipo"), expectedError{
-		Message:  mustBe("does not match Regexp"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`foo bar test`),
-		Expected: mustBe("pipo"),
-	})
+	checkError(t, []byte("foo bar test"), testdeep.Re("pipo"),
+		expectedError{
+			Message:  mustBe("does not match Regexp"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`foo bar test`),
+			Expected: mustBe("pipo"),
+		})
 
 	checkError(t, []byte("foo bar test"),
 		testdeep.Re("(pi)(po)", []string{"pi", "po"}),

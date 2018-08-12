@@ -36,66 +36,74 @@ func TestEmpty(t *testing.T) {
 	l1 = nil
 	checkOK(t, &l3, testdeep.Empty())
 
-	checkError(t, 12, testdeep.Empty(), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
-	})
+	checkError(t, 12, testdeep.Empty(),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
+		})
 
 	num := 12
 	n1 := &num
 	n2 := &n1
 	n3 := &n2
-	checkError(t, &n3, testdeep.Empty(), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("****int"),
-		Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
-	})
+	checkError(t, &n3, testdeep.Empty(),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("****int"),
+			Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
+		})
 
 	n1 = nil
-	checkError(t, &n3, testdeep.Empty(), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("****int"),
-		Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
-	})
+	checkError(t, &n3, testdeep.Empty(),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("****int"),
+			Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
+		})
 
-	checkError(t, "foobar", testdeep.Empty(), expectedError{
-		Message:  mustBe("not empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`"foobar"`),
-		Expected: mustBe("empty"),
-	})
-	checkError(t, []int{1}, testdeep.Empty(), expectedError{
-		Message:  mustBe("not empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("(int) 1"),
-		Expected: mustBe("empty"),
-	})
-	checkError(t, map[string]bool{"foo": true}, testdeep.Empty(), expectedError{
-		Message:  mustBe("not empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`"foo": (bool) true`),
-		Expected: mustBe("empty"),
-	})
+	checkError(t, "foobar", testdeep.Empty(),
+		expectedError{
+			Message:  mustBe("not empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`"foobar"`),
+			Expected: mustBe("empty"),
+		})
+	checkError(t, []int{1}, testdeep.Empty(),
+		expectedError{
+			Message:  mustBe("not empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("(int) 1"),
+			Expected: mustBe("empty"),
+		})
+	checkError(t, map[string]bool{"foo": true}, testdeep.Empty(),
+		expectedError{
+			Message:  mustBe("not empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`"foo": (bool) true`),
+			Expected: mustBe("empty"),
+		})
 
 	ch := make(chan int, 1)
 	ch <- 42
-	checkError(t, ch, testdeep.Empty(), expectedError{
-		Message:  mustBe("not empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("(chan int)"),
-		Expected: mustBe("empty"),
-	})
+	checkError(t, ch, testdeep.Empty(),
+		expectedError{
+			Message:  mustBe("not empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("(chan int)"),
+			Expected: mustBe("empty"),
+		})
 
-	checkError(t, [3]int{}, testdeep.Empty(), expectedError{
-		Message:  mustBe("not empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("(int) 0"),
-		Expected: mustBe("empty"),
-	})
+	checkError(t, [3]int{}, testdeep.Empty(),
+		expectedError{
+			Message:  mustBe("not empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("(int) 0"),
+			Expected: mustBe("empty"),
+		})
 
 	//
 	// String
@@ -121,67 +129,77 @@ func TestNotEmpty(t *testing.T) {
 	l3 := &l2
 	checkOK(t, &l3, testdeep.NotEmpty())
 
-	checkError(t, 12, testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
-	})
+	checkError(t, 12, testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
+		})
 
-	checkError(t, nil, testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("nil"),
-		Expected: mustBe("not empty"),
-	})
-	checkError(t, "", testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`""`),
-		Expected: mustBe("not empty"),
-	})
-	checkError(t, ([]int)(nil), testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("([]int) <nil>"),
-		Expected: mustBe("not empty"),
-	})
-	checkError(t, []int{}, testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("([]int)"),
-		Expected: mustBe("not empty"),
-	})
-	checkError(t, (map[string]bool)(nil), testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("(map[string]bool) <nil>"),
-		Expected: mustBe("not empty"),
-	})
-	checkError(t, map[string]bool{}, testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("(map[string]bool)"),
-		Expected: mustBe("not empty"),
-	})
-	checkError(t, (chan int)(nil), testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("(chan int) <nil>"),
-		Expected: mustBe("not empty"),
-	})
-	checkError(t, make(chan int), testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("(chan int)"),
-		Expected: mustBe("not empty"),
-	})
-	checkError(t, [0]int{}, testdeep.NotEmpty(), expectedError{
-		Message:  mustBe("empty"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("([0]int)"),
-		Expected: mustBe("not empty"),
-	})
+	checkError(t, nil, testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("nil"),
+			Expected: mustBe("not empty"),
+		})
+	checkError(t, "", testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`""`),
+			Expected: mustBe("not empty"),
+		})
+	checkError(t, ([]int)(nil), testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("([]int) <nil>"),
+			Expected: mustBe("not empty"),
+		})
+	checkError(t, []int{}, testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("([]int)"),
+			Expected: mustBe("not empty"),
+		})
+	checkError(t, (map[string]bool)(nil), testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("(map[string]bool) <nil>"),
+			Expected: mustBe("not empty"),
+		})
+	checkError(t, map[string]bool{}, testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("(map[string]bool)"),
+			Expected: mustBe("not empty"),
+		})
+	checkError(t, (chan int)(nil), testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("(chan int) <nil>"),
+			Expected: mustBe("not empty"),
+		})
+	checkError(t, make(chan int), testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("(chan int)"),
+			Expected: mustBe("not empty"),
+		})
+	checkError(t, [0]int{}, testdeep.NotEmpty(),
+		expectedError{
+			Message:  mustBe("empty"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("([0]int)"),
+			Expected: mustBe("not empty"),
+		})
 
 	//
 	// String

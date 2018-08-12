@@ -30,26 +30,29 @@ func TestLen(t *testing.T) {
 
 	checkOK(t, make(chan int, 3), testdeep.Len(0))
 
-	checkError(t, [5]int{}, testdeep.Len(4), expectedError{
-		Message:  mustBe("bad length"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("5"),
-		Expected: mustBe("4"),
-	})
+	checkError(t, [5]int{}, testdeep.Len(4),
+		expectedError{
+			Message:  mustBe("bad length"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("5"),
+			Expected: mustBe("4"),
+		})
 
-	checkError(t, [5]int{}, testdeep.Len(testdeep.Lt(4)), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("len(DATA)"),
-		Got:      mustBe("5"),
-		Expected: mustBe("< 4"),
-	})
+	checkError(t, [5]int{}, testdeep.Len(testdeep.Lt(4)),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("len(DATA)"),
+			Got:      mustBe("5"),
+			Expected: mustBe("< 4"),
+		})
 
-	checkError(t, 123, testdeep.Len(4), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("Array, Chan, Map, Slice or string"),
-	})
+	checkError(t, 123, testdeep.Len(4),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("Array, Chan, Map, Slice or string"),
+		})
 
 	//
 	// String
@@ -72,26 +75,29 @@ func TestCap(t *testing.T) {
 
 	checkOK(t, make(chan int, 3), testdeep.Cap(3))
 
-	checkError(t, [5]int{}, testdeep.Cap(4), expectedError{
-		Message:  mustBe("bad capacity"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("5"),
-		Expected: mustBe("4"),
-	})
+	checkError(t, [5]int{}, testdeep.Cap(4),
+		expectedError{
+			Message:  mustBe("bad capacity"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("5"),
+			Expected: mustBe("4"),
+		})
 
-	checkError(t, [5]int{}, testdeep.Cap(testdeep.Between(2, 4)), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("cap(DATA)"),
-		Got:      mustBe("5"),
-		Expected: mustBe("2 ≤ got ≤ 4"),
-	})
+	checkError(t, [5]int{}, testdeep.Cap(testdeep.Between(2, 4)),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("cap(DATA)"),
+			Got:      mustBe("5"),
+			Expected: mustBe("2 ≤ got ≤ 4"),
+		})
 
-	checkError(t, map[int]int{1: 2}, testdeep.Cap(1), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("map[int]int"),
-		Expected: mustBe("Array, Chan or Slice"),
-	})
+	checkError(t, map[int]int{1: 2}, testdeep.Cap(1),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("map[int]int"),
+			Expected: mustBe("Array, Chan or Slice"),
+		})
 
 	//
 	// String

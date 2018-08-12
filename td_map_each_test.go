@@ -53,12 +53,13 @@ func TestMapEach(t *testing.T) {
 		},
 		testdeep.MapEach(testdeep.Between(20, 30)))
 
-	checkError(t, nil, testdeep.MapEach(4), expectedError{
-		Message:  mustBe("nil value"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("Map OR *Map"),
-	})
+	checkError(t, nil, testdeep.MapEach(4),
+		expectedError{
+			Message:  mustBe("nil value"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("Map OR *Map"),
+		})
 
 	checkErrorForEach(t,
 		[]interface{}{

@@ -17,26 +17,29 @@ func TestAll(t *testing.T) {
 	checkOK(t, 6, testdeep.All(6, 6, 6))
 	checkOK(t, nil, testdeep.All(nil, nil, nil))
 
-	checkError(t, 6, testdeep.All(6, 5, 6), expectedError{
-		Message:  mustBe("compared (part 2 of 3)"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("(int) 6"),
-		Expected: mustBe("(int) 5"),
-	})
+	checkError(t, 6, testdeep.All(6, 5, 6),
+		expectedError{
+			Message:  mustBe("compared (part 2 of 3)"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("(int) 6"),
+			Expected: mustBe("(int) 5"),
+		})
 
-	checkError(t, 6, testdeep.All(6, nil, 6), expectedError{
-		Message:  mustBe("compared (part 2 of 3)"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("(int) 6"),
-		Expected: mustBe("nil"),
-	})
+	checkError(t, 6, testdeep.All(6, nil, 6),
+		expectedError{
+			Message:  mustBe("compared (part 2 of 3)"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("(int) 6"),
+			Expected: mustBe("nil"),
+		})
 
-	checkError(t, nil, testdeep.All(nil, 5, nil), expectedError{
-		Message:  mustBe("compared (part 2 of 3)"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("(int) 5"),
-	})
+	checkError(t, nil, testdeep.All(nil, 5, nil),
+		expectedError{
+			Message:  mustBe("compared (part 2 of 3)"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("(int) 5"),
+		})
 
 	checkError(t,
 		6,

@@ -24,19 +24,21 @@ func TestString(t *testing.T) {
 	// fmt.Stringer interface
 	checkOK(t, MyStringer{}, testdeep.String("pipo bingo"))
 
-	checkError(t, "foo bar test", testdeep.String("pipo"), expectedError{
-		Message:  mustBe("does not match"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`"foo bar test"`),
-		Expected: mustContain(`"pipo"`),
-	})
+	checkError(t, "foo bar test", testdeep.String("pipo"),
+		expectedError{
+			Message:  mustBe("does not match"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`"foo bar test"`),
+			Expected: mustContain(`"pipo"`),
+		})
 
-	checkError(t, 12, testdeep.String("bar"), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
-	})
+	checkError(t, 12, testdeep.String("bar"),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
+		})
 }
 
 func TestHasPrefix(t *testing.T) {
@@ -50,19 +52,21 @@ func TestHasPrefix(t *testing.T) {
 	// fmt.Stringer interface
 	checkOK(t, MyStringer{}, testdeep.HasPrefix("pipo"))
 
-	checkError(t, "foo bar test", testdeep.HasPrefix("pipo"), expectedError{
-		Message:  mustBe("has not prefix"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`"foo bar test"`),
-		Expected: mustMatch(`^HasPrefix\(.*"pipo"`),
-	})
+	checkError(t, "foo bar test", testdeep.HasPrefix("pipo"),
+		expectedError{
+			Message:  mustBe("has not prefix"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`"foo bar test"`),
+			Expected: mustMatch(`^HasPrefix\(.*"pipo"`),
+		})
 
-	checkError(t, 12, testdeep.HasPrefix("bar"), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
-	})
+	checkError(t, 12, testdeep.HasPrefix("bar"),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
+		})
 }
 
 func TestHasSuffix(t *testing.T) {
@@ -76,19 +80,21 @@ func TestHasSuffix(t *testing.T) {
 	// fmt.Stringer interface
 	checkOK(t, MyStringer{}, testdeep.HasSuffix("bingo"))
 
-	checkError(t, "foo bar test", testdeep.HasSuffix("pipo"), expectedError{
-		Message:  mustBe("has not suffix"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain(`"foo bar test"`),
-		Expected: mustMatch(`^HasSuffix\(.*"pipo"`),
-	})
+	checkError(t, "foo bar test", testdeep.HasSuffix("pipo"),
+		expectedError{
+			Message:  mustBe("has not suffix"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`"foo bar test"`),
+			Expected: mustMatch(`^HasSuffix\(.*"pipo"`),
+		})
 
-	checkError(t, 12, testdeep.HasSuffix("bar"), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
-	})
+	checkError(t, 12, testdeep.HasSuffix("bar"),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
+		})
 }
 
 func TestStringTypeBehind(t *testing.T) {
