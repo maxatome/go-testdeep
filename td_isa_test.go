@@ -12,7 +12,7 @@ import (
 	"regexp"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -27,39 +27,40 @@ func TestIsa(t *testing.T) {
 		ValInt: 123,
 	}
 
-	checkOK(t, &gotStruct, Isa(&MyStruct{}))
-	checkOK(t, (*MyStruct)(nil), Isa(&MyStruct{}))
-	checkOK(t, (*MyStruct)(nil), Isa((*MyStruct)(nil)))
-	checkOK(t, gotStruct, Isa(MyStruct{}))
+	checkOK(t, &gotStruct, testdeep.Isa(&MyStruct{}))
+	checkOK(t, (*MyStruct)(nil), testdeep.Isa(&MyStruct{}))
+	checkOK(t, (*MyStruct)(nil), testdeep.Isa((*MyStruct)(nil)))
+	checkOK(t, gotStruct, testdeep.Isa(MyStruct{}))
 
-	checkOK(t, bytes.NewBufferString("foobar"), Isa((*fmt.Stringer)(nil)),
+	checkOK(t, bytes.NewBufferString("foobar"),
+		testdeep.Isa((*fmt.Stringer)(nil)),
 		"checks bytes.NewBufferString() implements fmt.Stringer")
 
 	var ifstr fmt.Stringer = regexp.MustCompile("aa")
-	checkOK(t, bytes.NewBufferString("foobar"), Isa(&ifstr))
+	checkOK(t, bytes.NewBufferString("foobar"), testdeep.Isa(&ifstr))
 
-	checkError(t, &gotStruct, Isa(&MyStructBase{}), expectedError{
+	checkError(t, &gotStruct, testdeep.Isa(&MyStructBase{}), expectedError{
 		Message:  mustBe("type mismatch"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain("*testdeep_test.MyStruct"),
 		Expected: mustContain("*testdeep_test.MyStructBase"),
 	})
 
-	checkError(t, (*MyStruct)(nil), Isa(&MyStructBase{}), expectedError{
+	checkError(t, (*MyStruct)(nil), testdeep.Isa(&MyStructBase{}), expectedError{
 		Message:  mustBe("type mismatch"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain("*testdeep_test.MyStruct"),
 		Expected: mustContain("*testdeep_test.MyStructBase"),
 	})
 
-	checkError(t, gotStruct, Isa(&MyStruct{}), expectedError{
+	checkError(t, gotStruct, testdeep.Isa(&MyStruct{}), expectedError{
 		Message:  mustBe("type mismatch"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain("testdeep_test.MyStruct"),
 		Expected: mustContain("*testdeep_test.MyStruct"),
 	})
 
-	checkError(t, &gotStruct, Isa(MyStruct{}), expectedError{
+	checkError(t, &gotStruct, testdeep.Isa(MyStruct{}), expectedError{
 		Message:  mustBe("type mismatch"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain("*testdeep_test.MyStruct"),
@@ -67,24 +68,24 @@ func TestIsa(t *testing.T) {
 	})
 
 	gotSlice := []int{1, 2, 3}
-	checkOK(t, gotSlice, Isa([]int{}))
-	checkOK(t, &gotSlice, Isa(((*[]int)(nil))))
+	checkOK(t, gotSlice, testdeep.Isa([]int{}))
+	checkOK(t, &gotSlice, testdeep.Isa(((*[]int)(nil))))
 
-	checkError(t, &gotSlice, Isa([]int{}), expectedError{
+	checkError(t, &gotSlice, testdeep.Isa([]int{}), expectedError{
 		Message:  mustBe("type mismatch"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain("*[]int"),
 		Expected: mustContain("[]int"),
 	})
 
-	checkError(t, gotSlice, Isa((*[]int)(nil)), expectedError{
+	checkError(t, gotSlice, testdeep.Isa((*[]int)(nil)), expectedError{
 		Message:  mustBe("type mismatch"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain("[]int"),
 		Expected: mustContain("*[]int"),
 	})
 
-	checkError(t, gotSlice, Isa([1]int{2}), expectedError{
+	checkError(t, gotSlice, testdeep.Isa([1]int{2}), expectedError{
 		Message:  mustBe("type mismatch"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain("[]int"),
@@ -93,9 +94,10 @@ func TestIsa(t *testing.T) {
 
 	//
 	// String
-	test.EqualStr(t, Isa((*MyStruct)(nil)).String(), "*testdeep_test.MyStruct")
+	test.EqualStr(t, testdeep.Isa((*MyStruct)(nil)).String(),
+		"*testdeep_test.MyStruct")
 }
 
 func TestIsaTypeBehind(t *testing.T) {
-	equalTypes(t, Isa(([]int)(nil)), []int{})
+	equalTypes(t, testdeep.Isa(([]int)(nil)), []int{})
 }

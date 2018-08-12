@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
@@ -195,18 +195,18 @@ func checkError(t *testing.T, got, expected interface{},
 	expectedError expectedError, args ...interface{}) bool {
 	t.Helper()
 
-	err := EqDeeplyError(got, expected)
+	err := testdeep.EqDeeplyError(got, expected)
 	if err == nil {
 		t.Errorf("%sAn Error should have occurred", test.BuildTestName(args))
 		return false
 	}
 
-	_, expectedIsTestDeep := expected.(TestDeep)
+	_, expectedIsTestDeep := expected.(testdeep.TestDeep)
 	if !matchError(t, err.(*ctxerr.Error), expectedError, expectedIsTestDeep, args...) {
 		return false
 	}
 
-	if EqDeeply(got, expected) {
+	if testdeep.EqDeeply(got, expected) {
 		t.Errorf(`%sBoolean context failed
 	     got: true
 	expected: false`, test.BuildTestName(args))
@@ -238,11 +238,11 @@ func checkOK(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
 	t.Helper()
 
-	if !CmpDeeply(t, got, expected, args...) {
+	if !testdeep.CmpDeeply(t, got, expected, args...) {
 		return false
 	}
 
-	if !EqDeeply(got, expected) {
+	if !testdeep.EqDeeply(got, expected) {
 		t.Errorf(`%sBoolean context failed
 	     got: false
 	expected: true`, test.BuildTestName(args))
@@ -269,7 +269,8 @@ func checkOKForEach(t *testing.T, gotList []interface{}, expected interface{},
 	return
 }
 
-func equalTypes(t *testing.T, got TestDeep, expected interface{}, args ...interface{}) bool {
+func equalTypes(t *testing.T, got testdeep.TestDeep, expected interface{},
+	args ...interface{}) bool {
 	gotType := got.TypeBehind()
 	expectedType := reflect.TypeOf(expected)
 

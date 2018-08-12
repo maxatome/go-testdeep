@@ -9,36 +9,41 @@ package testdeep_test
 import (
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestAll(t *testing.T) {
-	checkOK(t, 6, All(6, 6, 6))
-	checkOK(t, nil, All(nil, nil, nil))
+	checkOK(t, 6, testdeep.All(6, 6, 6))
+	checkOK(t, nil, testdeep.All(nil, nil, nil))
 
-	checkError(t, 6, All(6, 5, 6), expectedError{
+	checkError(t, 6, testdeep.All(6, 5, 6), expectedError{
 		Message:  mustBe("compared (part 2 of 3)"),
 		Path:     mustBe("DATA"),
 		Got:      mustBe("(int) 6"),
 		Expected: mustBe("(int) 5"),
 	})
 
-	checkError(t, 6, All(6, nil, 6), expectedError{
+	checkError(t, 6, testdeep.All(6, nil, 6), expectedError{
 		Message:  mustBe("compared (part 2 of 3)"),
 		Path:     mustBe("DATA"),
 		Got:      mustBe("(int) 6"),
 		Expected: mustBe("nil"),
 	})
 
-	checkError(t, nil, All(nil, 5, nil), expectedError{
+	checkError(t, nil, testdeep.All(nil, 5, nil), expectedError{
 		Message:  mustBe("compared (part 2 of 3)"),
 		Path:     mustBe("DATA"),
 		Got:      mustBe("nil"),
 		Expected: mustBe("(int) 5"),
 	})
 
-	checkError(t, 6, All(6, All(Between(3, 8), Between(4, 5)), 6),
+	checkError(t,
+		6,
+		testdeep.All(
+			6,
+			testdeep.All(testdeep.Between(3, 8), testdeep.Between(4, 5)),
+			6),
 		expectedError{
 			Message:  mustBe("compared (part 2 of 3)"),
 			Path:     mustBe("DATA"),
@@ -60,10 +65,10 @@ func TestAll(t *testing.T) {
 
 	//
 	// String
-	test.EqualStr(t, All(6).String(), "All((int) 6)")
-	test.EqualStr(t, All(6, 7).String(), "All((int) 6,\n    (int) 7)")
+	test.EqualStr(t, testdeep.All(6).String(), "All((int) 6)")
+	test.EqualStr(t, testdeep.All(6, 7).String(), "All((int) 6,\n    (int) 7)")
 }
 
 func TestAllTypeBehind(t *testing.T) {
-	equalTypes(t, All(6), nil)
+	equalTypes(t, testdeep.All(6), nil)
 }

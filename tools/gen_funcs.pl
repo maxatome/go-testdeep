@@ -191,7 +191,7 @@ while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}/gms)
 
 my $funcs_test_contents = <<EOH;
 $HEADER
-package testdeep_test
+package testdeep
 
 $imports
 EOH

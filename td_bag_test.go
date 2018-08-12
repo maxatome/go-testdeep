@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -30,9 +30,9 @@ func TestBag(t *testing.T) {
 
 		//
 		// Bag
-		checkOK(t, got, Bag(5, 4, 1, 4, 3), testName)
+		checkOK(t, got, testdeep.Bag(5, 4, 1, 4, 3), testName)
 
-		checkError(t, got, Bag(5, 4, 1, 3),
+		checkError(t, got, testdeep.Bag(5, 4, 1, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
@@ -40,7 +40,7 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, Bag(5, 4, 1, 4, 3, 66),
+		checkError(t, got, testdeep.Bag(5, 4, 1, 4, 3, 66),
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
@@ -48,7 +48,7 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, Bag(5, 66, 4, 1, 4, 3),
+		checkError(t, got, testdeep.Bag(5, 66, 4, 1, 4, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
@@ -56,7 +56,7 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, Bag(5, 66, 4, 1, 4, 3, 66),
+		checkError(t, got, testdeep.Bag(5, 66, 4, 1, 4, 3, 66),
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
@@ -64,7 +64,7 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, Bag(5, 66, 4, 1, 3),
+		checkError(t, got, testdeep.Bag(5, 66, 4, 1, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
@@ -74,10 +74,10 @@ func TestBag(t *testing.T) {
 
 		//
 		// SubBagOf
-		checkOK(t, got, SubBagOf(5, 4, 1, 4, 3), testName)
-		checkOK(t, got, SubBagOf(5, 66, 4, 1, 4, 3), testName)
+		checkOK(t, got, testdeep.SubBagOf(5, 4, 1, 4, 3), testName)
+		checkOK(t, got, testdeep.SubBagOf(5, 66, 4, 1, 4, 3), testName)
 
-		checkError(t, got, SubBagOf(5, 66, 4, 1, 3),
+		checkError(t, got, testdeep.SubBagOf(5, 66, 4, 1, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a SubBagOf"),
 				Path:    mustBe("DATA"),
@@ -87,10 +87,10 @@ func TestBag(t *testing.T) {
 
 		//
 		// SuperBagOf
-		checkOK(t, got, SuperBagOf(5, 4, 1, 4, 3), testName)
-		checkOK(t, got, SuperBagOf(5, 4, 3), testName)
+		checkOK(t, got, testdeep.SuperBagOf(5, 4, 1, 4, 3), testName)
+		checkOK(t, got, testdeep.SuperBagOf(5, 4, 3), testName)
 
-		checkError(t, got, SuperBagOf(5, 66, 4, 1, 3),
+		checkError(t, got, testdeep.SuperBagOf(5, 66, 4, 1, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a SuperBagOf"),
 				Path:    mustBe("DATA"),
@@ -100,22 +100,22 @@ func TestBag(t *testing.T) {
 	}
 
 	checkOK(t, []interface{}{123, "foo", nil, "bar", nil},
-		Bag("foo", "bar", 123, nil, nil))
+		testdeep.Bag("foo", "bar", 123, nil, nil))
 
 	var nilSlice MySlice
 	for idx, got := range []interface{}{([]int)(nil), &nilSlice} {
 		testName := fmt.Sprintf("Test #%d", idx)
 
-		checkOK(t, got, Bag(), testName)
-		checkOK(t, got, SubBagOf(), testName)
-		checkOK(t, got, SubBagOf(1, 2), testName)
-		checkOK(t, got, SuperBagOf(), testName)
+		checkOK(t, got, testdeep.Bag(), testName)
+		checkOK(t, got, testdeep.SubBagOf(), testName)
+		checkOK(t, got, testdeep.SubBagOf(1, 2), testName)
+		checkOK(t, got, testdeep.SuperBagOf(), testName)
 	}
 
-	for idx, bag := range []TestDeep{
-		Bag(123),
-		SubBagOf(123),
-		SuperBagOf(123),
+	for idx, bag := range []testdeep.TestDeep{
+		testdeep.Bag(123),
+		testdeep.SubBagOf(123),
+		testdeep.SuperBagOf(123),
 	} {
 		testName := fmt.Sprintf("Test #%d → %s", idx, bag)
 
@@ -160,19 +160,19 @@ func TestBag(t *testing.T) {
 
 	//
 	// String
-	test.EqualStr(t, Bag(1).String(), "Bag((int) 1)")
-	test.EqualStr(t, Bag(1, 2).String(), "Bag((int) 1,\n    (int) 2)")
+	test.EqualStr(t, testdeep.Bag(1).String(), "Bag((int) 1)")
+	test.EqualStr(t, testdeep.Bag(1, 2).String(), "Bag((int) 1,\n    (int) 2)")
 
-	test.EqualStr(t, SubBagOf(1).String(), "SubBagOf((int) 1)")
-	test.EqualStr(t, SubBagOf(1, 2).String(), "SubBagOf((int) 1,\n         (int) 2)")
+	test.EqualStr(t, testdeep.SubBagOf(1).String(), "SubBagOf((int) 1)")
+	test.EqualStr(t, testdeep.SubBagOf(1, 2).String(), "SubBagOf((int) 1,\n         (int) 2)")
 
-	test.EqualStr(t, SuperBagOf(1).String(), "SuperBagOf((int) 1)")
-	test.EqualStr(t, SuperBagOf(1, 2).String(),
+	test.EqualStr(t, testdeep.SuperBagOf(1).String(), "SuperBagOf((int) 1)")
+	test.EqualStr(t, testdeep.SuperBagOf(1, 2).String(),
 		"SuperBagOf((int) 1,\n           (int) 2)")
 }
 
 func TestBagTypeBehind(t *testing.T) {
-	equalTypes(t, Bag(6), nil)
-	equalTypes(t, SubBagOf(6), nil)
-	equalTypes(t, SuperBagOf(6), nil)
+	equalTypes(t, testdeep.Bag(6), nil)
+	equalTypes(t, testdeep.SubBagOf(6), nil)
+	equalTypes(t, testdeep.SuperBagOf(6), nil)
 }

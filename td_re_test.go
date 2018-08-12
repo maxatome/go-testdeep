@@ -11,29 +11,29 @@ import (
 	"regexp"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestRe(t *testing.T) {
 	//
 	// string
-	checkOK(t, "foo bar test", Re("bar"))
-	checkOK(t, "foo bar test", Re(regexp.MustCompile("test$")))
+	checkOK(t, "foo bar test", testdeep.Re("bar"))
+	checkOK(t, "foo bar test", testdeep.Re(regexp.MustCompile("test$")))
 
 	checkOK(t, "foo bar test",
-		ReAll(`(\w+)`, Bag("bar", "test", "foo")))
+		testdeep.ReAll(`(\w+)`, testdeep.Bag("bar", "test", "foo")))
 
 	type MyString string
 	checkOK(t, MyString("Ho zz hoho"),
-		ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
+		testdeep.ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
 
 	// error interface
-	checkOK(t, errors.New("pipo bingo"), Re("bin"))
+	checkOK(t, errors.New("pipo bingo"), testdeep.Re("bin"))
 	// fmt.Stringer interface
-	checkOK(t, MyStringer{}, Re("bin"))
+	checkOK(t, MyStringer{}, testdeep.Re("bin"))
 
-	checkError(t, 12, Re("bar"), expectedError{
+	checkError(t, 12, testdeep.Re("bar"), expectedError{
 		Message: mustBe("bad type"),
 		Path:    mustBe("DATA"),
 		Got:     mustBe("int"),
@@ -41,14 +41,14 @@ func TestRe(t *testing.T) {
 			"string (convertible) OR fmt.Stringer OR error OR []uint8"),
 	})
 
-	checkError(t, "foo bar test", Re("pipo"), expectedError{
+	checkError(t, "foo bar test", testdeep.Re("pipo"), expectedError{
 		Message:  mustBe("does not match Regexp"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain(`"foo bar test"`),
 		Expected: mustBe("pipo"),
 	})
 
-	checkError(t, "foo bar test", Re("(pi)(po)", []string{"pi", "po"}),
+	checkError(t, "foo bar test", testdeep.Re("(pi)(po)", []string{"pi", "po"}),
 		expectedError{
 			Message:  mustBe("does not match Regexp"),
 			Path:     mustBe("DATA"),
@@ -58,23 +58,23 @@ func TestRe(t *testing.T) {
 
 	//
 	// bytes
-	checkOK(t, []byte("foo bar test"), Re("bar"))
+	checkOK(t, []byte("foo bar test"), testdeep.Re("bar"))
 
 	checkOK(t, []byte("foo bar test"),
-		ReAll(`(\w+)`, Bag("bar", "test", "foo")))
+		testdeep.ReAll(`(\w+)`, testdeep.Bag("bar", "test", "foo")))
 
 	type MySlice []byte
 	checkOK(t, MySlice("Ho zz hoho"),
-		ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
+		testdeep.ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
 
-	checkError(t, []int{12}, Re("bar"), expectedError{
+	checkError(t, []int{12}, testdeep.Re("bar"), expectedError{
 		Message:  mustBe("bad slice type"),
 		Path:     mustBe("DATA"),
 		Got:      mustBe("[]int"),
 		Expected: mustBe("[]uint8"),
 	})
 
-	checkError(t, []byte("foo bar test"), Re("pipo"), expectedError{
+	checkError(t, []byte("foo bar test"), testdeep.Re("pipo"), expectedError{
 		Message:  mustBe("does not match Regexp"),
 		Path:     mustBe("DATA"),
 		Got:      mustContain(`foo bar test`),
@@ -82,7 +82,7 @@ func TestRe(t *testing.T) {
 	})
 
 	checkError(t, []byte("foo bar test"),
-		Re("(pi)(po)", []string{"pi", "po"}),
+		testdeep.Re("(pi)(po)", []string{"pi", "po"}),
 		expectedError{
 			Message:  mustBe("does not match Regexp"),
 			Path:     mustBe("DATA"),
@@ -93,13 +93,13 @@ func TestRe(t *testing.T) {
 	//
 	// Bad usage
 	const reUsage = "usage: Re("
-	test.CheckPanic(t, func() { Re(123) }, reUsage)
-	test.CheckPanic(t, func() { Re("bar", []string{}, 1) }, reUsage)
+	test.CheckPanic(t, func() { testdeep.Re(123) }, reUsage)
+	test.CheckPanic(t, func() { testdeep.Re("bar", []string{}, 1) }, reUsage)
 
 	const reAllUsage = "usage: ReAll("
-	test.CheckPanic(t, func() { ReAll(123, 456) }, reAllUsage)
+	test.CheckPanic(t, func() { testdeep.ReAll(123, 456) }, reAllUsage)
 }
 
 func TestReTypeBehind(t *testing.T) {
-	equalTypes(t, Re("x"), nil)
+	equalTypes(t, testdeep.Re("x"), nil)
 }

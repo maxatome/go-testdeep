@@ -7,10 +7,9 @@
 package testdeep_test
 
 import (
-	"fmt"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
@@ -52,13 +51,13 @@ func TestEqualArray(t *testing.T) {
 			Expected: mustBe("(int) 3"),
 		})
 
-	oldMaxErrors := DefaultContextConfig.MaxErrors
-	defer func() { DefaultContextConfig.MaxErrors = oldMaxErrors }()
+	oldMaxErrors := testdeep.DefaultContextConfig.MaxErrors
+	defer func() { testdeep.DefaultContextConfig.MaxErrors = oldMaxErrors }()
 
 	t.Run("DefaultContextConfig.MaxErrors = 2",
 		func(t *testing.T) {
-			DefaultContextConfig.MaxErrors = 2
-			err := EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
+			testdeep.DefaultContextConfig.MaxErrors = 2
+			err := testdeep.EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
 
 			// First error
 			ok := t.Run("First error",
@@ -110,8 +109,8 @@ func TestEqualArray(t *testing.T) {
 
 	t.Run("DefaultContextConfig.MaxErrors = -1 (aka. all errors)",
 		func(t *testing.T) {
-			DefaultContextConfig.MaxErrors = -1
-			err := EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
+			testdeep.DefaultContextConfig.MaxErrors = -1
+			err := testdeep.EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
 
 			// First error
 			ok := t.Run("First error",
@@ -604,85 +603,25 @@ func TestEqualRecurs(t *testing.T) {
 func TestEqualPanic(t *testing.T) {
 	test.CheckPanic(t,
 		func() {
-			EqDeeply(Ignore(), Ignore())
+			testdeep.EqDeeply(testdeep.Ignore(), testdeep.Ignore())
 		},
 		"Found a TestDeep operator in got param, can only use it in expected one!")
 }
 
 func TestCmpDeeply(t *testing.T) {
 	mockT := &testing.T{}
-	test.IsTrue(t, CmpDeeply(mockT, 1, 1))
+	test.IsTrue(t, testdeep.CmpDeeply(mockT, 1, 1))
 	test.IsFalse(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	test.IsFalse(t, CmpDeeply(mockT, 1, 2))
+	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2))
 	test.IsTrue(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	test.IsFalse(t, CmpDeeply(mockT, 1, 2, "Basic test"))
+	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2, "Basic test"))
 	test.IsTrue(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	test.IsFalse(t, CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
+	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
 	test.IsTrue(t, mockT.Failed())
-}
-
-func ExampleEqDeeply() {
-	type MyStruct struct {
-		Name  string
-		Num   int
-		Items []int
-	}
-
-	got := &MyStruct{
-		Name:  "Foobar",
-		Num:   12,
-		Items: []int{4, 5, 9, 3, 8},
-	}
-
-	if EqDeeply(got,
-		Struct(&MyStruct{},
-			StructFields{
-				"Name":  Re("^Foo"),
-				"Num":   Between(10, 20),
-				"Items": ArrayEach(Between(3, 9)),
-			})) {
-		fmt.Println("Match!")
-	} else {
-		fmt.Println("NO!")
-	}
-
-	// Output:
-	// Match!
-}
-
-func ExampleEqDeeplyError() {
-	type MyStruct struct {
-		Name  string
-		Num   int
-		Items []int
-	}
-
-	got := &MyStruct{
-		Name:  "Foobar",
-		Num:   12,
-		Items: []int{4, 5, 9, 3, 8},
-	}
-
-	err := EqDeeplyError(got,
-		Struct(&MyStruct{},
-			StructFields{
-				"Name":  Re("^Foo"),
-				"Num":   Between(10, 20),
-				"Items": ArrayEach(Between(3, 8)),
-			}))
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// Output something like:
-	// DATA.Items[2]: values differ
-	// 	     got: 9
-	// 	expected: 3 ≤ got ≤ 8
-	// [under TestDeep operator Between at equal_test.go:17]
 }

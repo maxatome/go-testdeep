@@ -11,15 +11,15 @@ import (
 	"testing"
 )
 
-func ExampleCmpTrue() {
-	t := &testing.T{}
+func ExampleT_True() {
+	t := NewT(&testing.T{})
 
 	got := true
-	ok := CmpTrue(t, got, "check that got is true!")
+	ok := t.True(got, "check that got is true!")
 	fmt.Println(ok)
 
 	got = false
-	ok = CmpTrue(t, got, "check that got is true!")
+	ok = t.True(got, "check that got is true!")
 	fmt.Println(ok)
 
 	// Output:
@@ -27,15 +27,15 @@ func ExampleCmpTrue() {
 	// false
 }
 
-func ExampleCmpFalse() {
-	t := &testing.T{}
+func ExampleT_False() {
+	t := NewT(&testing.T{})
 
 	got := false
-	ok := CmpFalse(t, got, "check that got is false!")
+	ok := t.False(got, "check that got is false!")
 	fmt.Println(ok)
 
 	got = true
-	ok = CmpFalse(t, got, "check that got is false!")
+	ok = t.False(got, "check that got is false!")
 	fmt.Println(ok)
 
 	// Output:
@@ -43,15 +43,15 @@ func ExampleCmpFalse() {
 	// false
 }
 
-func ExampleCmpError() {
-	t := &testing.T{}
+func ExampleT_CmpError() {
+	t := NewT(&testing.T{})
 
 	got := fmt.Errorf("Error #%d", 42)
-	ok := CmpError(t, got, "An error occurred")
+	ok := t.CmpError(got, "An error occurred")
 	fmt.Println(ok)
 
 	got = nil
-	ok = CmpError(t, got, "An error occurred") // fails
+	ok = t.CmpError(got, "An error occurred") // fails
 	fmt.Println(ok)
 
 	// Output:
@@ -59,15 +59,15 @@ func ExampleCmpError() {
 	// false
 }
 
-func ExampleCmpNoError() {
-	t := &testing.T{}
+func ExampleT_CmpNoError() {
+	t := NewT(&testing.T{})
 
 	got := fmt.Errorf("Error #%d", 42)
-	ok := CmpNoError(t, got, "An error occurred") // fails
+	ok := t.CmpNoError(got, "An error occurred") // fails
 	fmt.Println(ok)
 
 	got = nil
-	ok = CmpNoError(t, got, "An error occurred")
+	ok = t.CmpNoError(got, "An error occurred")
 	fmt.Println(ok)
 
 	// Output:
@@ -75,22 +75,20 @@ func ExampleCmpNoError() {
 	// true
 }
 
-func ExampleCmpPanic() {
-	t := &testing.T{}
+func ExampleT_CmpPanic() {
+	t := NewT(&testing.T{})
 
-	ok := CmpPanic(t,
-		func() { panic("I am panicking!") }, "I am panicking!",
+	ok := t.CmpPanic(func() { panic("I am panicking!") }, "I am panicking!",
 		"Checks for panic")
 	fmt.Println("checks exact panic() string:", ok)
 
 	// Can use TestDeep operator too
-	ok = CmpPanic(t,
-		func() { panic("I am panicking!") }, Contains("panicking!"),
+	ok = t.CmpPanic(func() { panic("I am panicking!") }, Contains("panicking!"),
 		"Checks for panic")
 	fmt.Println("checks panic() sub-string:", ok)
 
 	// Can detect panic(nil)
-	ok = CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)")
+	ok = t.CmpPanic(func() { panic(nil) }, nil, "Checks for panic(nil)")
 	fmt.Println("checks for panic(nil):", ok)
 
 	// As well as structured data panic
@@ -99,7 +97,7 @@ func ExampleCmpPanic() {
 		Code  int
 	}
 
-	ok = CmpPanic(t,
+	ok = t.CmpPanic(
 		func() {
 			panic(PanicStruct{Error: "Memory violation", Code: 11})
 		},
@@ -110,7 +108,7 @@ func ExampleCmpPanic() {
 	fmt.Println("checks exact panic() struct:", ok)
 
 	// or combined with TestDeep operators too
-	ok = CmpPanic(t,
+	ok = t.CmpPanic(
 		func() {
 			panic(PanicStruct{Error: "Memory violation", Code: 11})
 		},
@@ -121,7 +119,7 @@ func ExampleCmpPanic() {
 
 	// Of course, do not panic = test failure, even for expected nil
 	// panic parameter
-	ok = CmpPanic(t, func() {}, nil)
+	ok = t.CmpPanic(func() {}, nil)
 	fmt.Println("checks a panic occurred:", ok)
 
 	// Output:
@@ -133,19 +131,19 @@ func ExampleCmpPanic() {
 	// checks a panic occurred: false
 }
 
-func ExampleCmpNotPanic() {
-	t := &testing.T{}
+func ExampleT_CmpNotPanic() {
+	t := NewT(&testing.T{})
 
-	ok := CmpNotPanic(t, func() {}, nil)
+	ok := t.CmpNotPanic(func() {}, nil)
 	fmt.Println("checks a panic DID NOT occur:", ok)
 
 	// Classic panic
-	ok = CmpNotPanic(t, func() { panic("I am panicking!") },
+	ok = t.CmpNotPanic(func() { panic("I am panicking!") },
 		"Hope it does not panic!")
 	fmt.Println("still no panic?", ok)
 
 	// Can detect panic(nil)
-	ok = CmpNotPanic(t, func() { panic(nil) }, "Checks for panic(nil)")
+	ok = t.CmpNotPanic(func() { panic(nil) }, "Checks for panic(nil)")
 	fmt.Println("last no panic?", ok)
 
 	// Output:

@@ -9,7 +9,7 @@ package testdeep_test
 import (
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -23,7 +23,7 @@ func TestMapEach(t *testing.T) {
 			MyMap{"foo": 1, "bar": 1},
 			&MyMap{"foo": 1, "bar": 1},
 		},
-		MapEach(1))
+		testdeep.MapEach(1))
 
 	checkOKForEach(t,
 		[]interface{}{
@@ -32,11 +32,11 @@ func TestMapEach(t *testing.T) {
 			MyMap{},
 			&MyMap{},
 		},
-		MapEach(1))
+		testdeep.MapEach(1))
 
-	checkOK(t, (map[string]int)(nil), MapEach(1))
-	checkOK(t, (MyMap)(nil), MapEach(1))
-	checkError(t, (*MyMap)(nil), MapEach(4),
+	checkOK(t, (map[string]int)(nil), testdeep.MapEach(1))
+	checkOK(t, (MyMap)(nil), testdeep.MapEach(1))
+	checkError(t, (*MyMap)(nil), testdeep.MapEach(4),
 		expectedError{
 			Message:  mustBe("nil pointer"),
 			Path:     mustBe("DATA"),
@@ -51,9 +51,9 @@ func TestMapEach(t *testing.T) {
 			MyMap{"foo": 20, "bar": 22, "test": 29},
 			&MyMap{"foo": 20, "bar": 22, "test": 29},
 		},
-		MapEach(Between(20, 30)))
+		testdeep.MapEach(testdeep.Between(20, 30)))
 
-	checkError(t, nil, MapEach(4), expectedError{
+	checkError(t, nil, testdeep.MapEach(4), expectedError{
 		Message:  mustBe("nil value"),
 		Path:     mustBe("DATA"),
 		Got:      mustBe("nil"),
@@ -67,7 +67,7 @@ func TestMapEach(t *testing.T) {
 			MyMap{"foo": 4, "bar": 5, "test": 4},
 			&MyMap{"foo": 4, "bar": 5, "test": 4},
 		},
-		MapEach(4),
+		testdeep.MapEach(4),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["bar"]`),
@@ -75,7 +75,7 @@ func TestMapEach(t *testing.T) {
 			Expected: mustBe("(int) 4"),
 		})
 
-	checkError(t, 666, MapEach(4),
+	checkError(t, 666, testdeep.MapEach(4),
 		expectedError{
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA"),
@@ -83,7 +83,7 @@ func TestMapEach(t *testing.T) {
 			Expected: mustBe("Map OR *Map"),
 		})
 	num := 666
-	checkError(t, &num, MapEach(4),
+	checkError(t, &num, testdeep.MapEach(4),
 		expectedError{
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA"),
@@ -91,9 +91,10 @@ func TestMapEach(t *testing.T) {
 			Expected: mustBe("Map OR *Map"),
 		})
 
-	checkOK(t, map[string]interface{}{"a": nil, "b": nil, "c": nil}, MapEach(nil))
+	checkOK(t, map[string]interface{}{"a": nil, "b": nil, "c": nil},
+		testdeep.MapEach(nil))
 	checkError(t, map[string]interface{}{"a": nil, "b": nil, "c": nil, "d": 66},
-		MapEach(nil),
+		testdeep.MapEach(nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["d"]`),
@@ -103,12 +104,12 @@ func TestMapEach(t *testing.T) {
 
 	//
 	// String
-	test.EqualStr(t, MapEach(4).String(), "MapEach((int) 4)")
-	test.EqualStr(t, MapEach(All(1, 2)).String(),
+	test.EqualStr(t, testdeep.MapEach(4).String(), "MapEach((int) 4)")
+	test.EqualStr(t, testdeep.MapEach(testdeep.All(1, 2)).String(),
 		`MapEach(All((int) 1,
             (int) 2))`)
 }
 
 func TestMapEachTypeBehind(t *testing.T) {
-	equalTypes(t, MapEach(4), nil)
+	equalTypes(t, testdeep.MapEach(4), nil)
 }

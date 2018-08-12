@@ -6,7 +6,7 @@
 //
 // DO NOT EDIT!!! AUTOMATICALLY GENERATED!!!
 
-package testdeep_test
+package testdeep
 
 import (
 	"bytes"
@@ -17,8 +17,6 @@ import (
 	"strconv"
 	"testing"
 	"time"
-
-	. "github.com/maxatome/go-testdeep"
 )
 
 func ExampleT_All() {
