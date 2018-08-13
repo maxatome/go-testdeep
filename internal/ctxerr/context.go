@@ -46,7 +46,7 @@ type Context struct {
 
 func (c *Context) InitErrors() {
 	if c.MaxErrors != 0 && c.MaxErrors != 1 {
-		errors := make([]*Error, 0)
+		var errors []*Error
 		c.Errors = &errors
 	}
 }

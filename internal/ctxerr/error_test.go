@@ -25,6 +25,9 @@ func TestError(t *testing.T) {
 		`DATA[12].Field: Error message
 	     got: (int) 1
 	expected: (int) 2`)
+	test.EqualStr(t, err.GotString(), "(int) 1")
+	test.EqualStr(t, err.ExpectedString(), "(int) 2")
+	test.EqualStr(t, err.SummaryString(), "")
 
 	err.Message = "Value of %% differ"
 	test.EqualStr(t, err.Error(),
@@ -89,6 +92,9 @@ Originates from following error:
 		(int) 42
 	[under TestDeep operator SubOperator at file2.go:236]
 [under TestDeep operator Operator at file.go:23]`)
+	test.EqualStr(t, err.GotString(), "")
+	test.EqualStr(t, err.ExpectedString(), "")
+	test.EqualStr(t, err.SummaryString(), "(int) 666")
 
 	err = ctxerr.Error{
 		Context: ctxerr.Context{Path: "DATA[12].Field"},
@@ -179,4 +185,11 @@ DATA[13].Field: Error message
 	// ErrTooManyErrors
 	test.EqualStr(t, ctxerr.ErrTooManyErrors.Error(),
 		`Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)`)
+}
+
+func TestBooleanError(t *testing.T) {
+	if ctxerr.BooleanError.Error() != "" {
+		t.Errorf("BooleanError should stringify to empty string, not `%s'",
+			ctxerr.BooleanError.Error())
+	}
 }

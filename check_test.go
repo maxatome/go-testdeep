@@ -249,6 +249,12 @@ func checkOK(t *testing.T, got, expected interface{},
 		return false
 	}
 
+	if err := testdeep.EqDeeplyError(got, expected); err != nil {
+		t.Errorf(`%sEqDeeplyError returned an error: %s`,
+			test.BuildTestName(args), err)
+		return false
+	}
+
 	return true
 }
 

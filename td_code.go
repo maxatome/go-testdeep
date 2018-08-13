@@ -153,8 +153,6 @@ type tdCodeResult struct {
 
 var _ types.TestDeepStringer = tdCodeResult{}
 
-func (r tdCodeResult) _TestDeep() {}
-
 func (r tdCodeResult) String() string {
 	if r.Reason == "" {
 		return fmt.Sprintf("  value: %s\nit failed but didn't say why",
