@@ -12,16 +12,22 @@ import (
 	"testing"
 )
 
+func EqualErrorMessage(t *testing.T, got, expected interface{},
+	args ...interface{}) {
+	t.Helper()
+	t.Errorf(`%sFailed test
+	     got: %v
+	expected: %v`,
+		BuildTestName(args), got, expected)
+}
+
 func EqualStr(t *testing.T, got, expected string, args ...interface{}) bool {
 	if got == expected {
 		return true
 	}
 
 	t.Helper()
-	t.Errorf(`%sFailed test
-	     got: %s
-	expected: %s`,
-		BuildTestName(args), got, expected)
+	EqualErrorMessage(t, got, expected, args...)
 	return false
 }
 
@@ -31,10 +37,7 @@ func EqualInt(t *testing.T, got, expected int, args ...interface{}) bool {
 	}
 
 	t.Helper()
-	t.Errorf(`%sFailed test
-	     got: %d
-	expected: %d`,
-		BuildTestName(args), got, expected)
+	EqualErrorMessage(t, got, expected, args...)
 	return false
 }
 
@@ -44,10 +47,7 @@ func EqualBool(t *testing.T, got, expected bool, args ...interface{}) bool {
 	}
 
 	t.Helper()
-	t.Errorf(`%sFailed test
-	     got: %t
-	expected: %t`,
-		BuildTestName(args), got, expected)
+	EqualErrorMessage(t, got, expected, args...)
 	return false
 }
 
@@ -70,9 +70,7 @@ func IsTrue(t *testing.T, got bool, args ...interface{}) bool {
 	}
 
 	t.Helper()
-	t.Errorf(`%sFailed test
-	     got: false
-	expected: true`, BuildTestName(args))
+	EqualErrorMessage(t, false, true, args...)
 	return false
 }
 
@@ -82,9 +80,7 @@ func IsFalse(t *testing.T, got bool, args ...interface{}) bool {
 	}
 
 	t.Helper()
-	t.Errorf(`%sFailed test
-	     got: true
-	expected: false`, BuildTestName(args))
+	EqualErrorMessage(t, true, false, args...)
 	return false
 }
 

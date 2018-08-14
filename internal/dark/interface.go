@@ -10,7 +10,7 @@ import (
 	"reflect"
 )
 
-func GetInterface(val reflect.Value, force bool) (interface{}, bool) {
+var GetInterface = func(val reflect.Value, force bool) (interface{}, bool) {
 	if !val.IsValid() {
 		return nil, true
 	}
