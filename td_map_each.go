@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdMapEach struct {
@@ -88,9 +88,9 @@ func (m *tdMapEach) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 func (m *tdMapEach) String() string {
 	const prefix = "MapEach("
 
-	content := str.ToString(m.expected)
+	content := util.ToString(m.expected)
 	if strings.Contains(content, "\n") {
-		return prefix + str.IndentString(content, "        ") + ")"
+		return prefix + util.IndentString(content, "        ") + ")"
 	}
 	return prefix + content + ")"
 }

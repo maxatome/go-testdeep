@@ -12,7 +12,7 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type mapKind uint8
@@ -98,7 +98,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 		if !vkey.Type().AssignableTo(keyType) {
 			panic(fmt.Sprintf(
 				"expected key %s type mismatch: %s != model key type (%s)",
-				str.ToString(key),
+				util.ToString(key),
 				vkey.Type(),
 				keyType))
 		}
@@ -111,7 +111,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 			default:
 				panic(fmt.Sprintf(
 					"expected key %s value cannot be nil as entries value type is %s",
-					str.ToString(key),
+					util.ToString(key),
 					valueType))
 			}
 		} else {
@@ -121,7 +121,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 				if !entryInfo.expected.Type().AssignableTo(valueType) {
 					panic(fmt.Sprintf(
 						"expected key %s value type mismatch: %s != model key type (%s)",
-						str.ToString(key),
+						util.ToString(key),
 						entryInfo.expected.Type(),
 						valueType))
 				}
@@ -139,7 +139,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 
 		if checkedEntries[vkey.Interface()] {
 			panic(fmt.Sprintf(
-				"%s entry exists in both model & expectedEntries", str.ToString(vkey)))
+				"%s entry exists in both model & expectedEntries", util.ToString(vkey)))
 		}
 
 		entryInfo.key = vkey
@@ -320,8 +320,8 @@ func (m *tdMap) String() string {
 
 		for _, entryInfo := range m.expectedEntries {
 			fmt.Fprintf(buf, "  %s: %s,\n", // nolint: errcheck
-				str.ToString(entryInfo.key),
-				str.ToString(entryInfo.expected))
+				util.ToString(entryInfo.key),
+				util.ToString(entryInfo.expected))
 		}
 
 		buf.WriteByte('}')

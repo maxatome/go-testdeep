@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdContains struct {
@@ -198,5 +198,5 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 }
 
 func (c *tdContains) String() string {
-	return "Contains(" + str.ToString(c.expectedValue) + ")"
+	return "Contains(" + util.ToString(c.expectedValue) + ")"
 }

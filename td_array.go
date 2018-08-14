@@ -12,8 +12,8 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdArray struct {
@@ -158,7 +158,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 						"type %s of #%d expected value differs from %s contents (%s)",
 						vexpectedValue.Type(),
 						index,
-						ternStr(maxLength < 0, "slice", "array"),
+						util.TernStr(maxLength < 0, "slice", "array"),
 						elemType))
 				}
 			}
@@ -263,7 +263,7 @@ func (a *tdArray) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Erro
 }
 
 func (a *tdArray) String() string {
-	buf := bytes.NewBufferString(ternStr(a.expectedType.Kind() == reflect.Array,
+	buf := bytes.NewBufferString(util.TernStr(a.expectedType.Kind() == reflect.Array,
 		"Array(", "Slice("))
 
 	buf.WriteString(a.expectedTypeStr())
@@ -275,7 +275,7 @@ func (a *tdArray) String() string {
 
 		for index, expectedValue := range a.expectedEntries {
 			fmt.Fprintf(buf, "  %d: %s\n", // nolint: errcheck
-				index, str.ToString(expectedValue))
+				index, util.ToString(expectedValue))
 		}
 
 		buf.WriteString("})")

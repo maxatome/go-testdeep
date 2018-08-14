@@ -14,20 +14,6 @@ import (
 	"github.com/maxatome/go-testdeep/internal/dark"
 )
 
-func ternRune(cond bool, a, b rune) rune {
-	if cond {
-		return a
-	}
-	return b
-}
-
-func ternStr(cond bool, a, b string) string {
-	if cond {
-		return a
-	}
-	return b
-}
-
 // getTime returns the time.Time that is inside got or that can be
 // converted from got contents.
 func getTime(ctx ctxerr.Context, got reflect.Value, mustConvert bool) (time.Time, *ctxerr.Error) {

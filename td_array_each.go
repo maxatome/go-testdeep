@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdArrayEach struct {
@@ -91,9 +91,9 @@ func (a *tdArrayEach) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.
 func (a *tdArrayEach) String() string {
 	const prefix = "ArrayEach("
 
-	content := str.ToString(a.expected)
+	content := util.ToString(a.expected)
 	if strings.Contains(content, "\n") {
-		return prefix + str.IndentString(content, "          ") + ")"
+		return prefix + util.IndentString(content, "          ") + ")"
 	}
 	return prefix + content + ")"
 }

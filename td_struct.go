@@ -15,7 +15,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
-	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdStruct struct {
@@ -223,7 +223,7 @@ func (s *tdStruct) String() string {
 
 		for _, fieldInfo := range s.expectedFields {
 			fmt.Fprintf(buf, "  %s: %s\n", // nolint: errcheck
-				fieldInfo.name, str.ToString(fieldInfo.expected))
+				fieldInfo.name, util.ToString(fieldInfo.expected))
 		}
 
 		buf.WriteString("})")

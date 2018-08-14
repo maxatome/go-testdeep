@@ -12,8 +12,8 @@ import (
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdStringBase struct {
@@ -96,7 +96,7 @@ func (s *tdString) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (s *tdString) String() string {
-	return str.ToString(s.expected)
+	return util.ToString(s.expected)
 }
 
 type tdHasPrefix struct {
@@ -143,7 +143,7 @@ func (s *tdHasPrefix) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 }
 
 func (s *tdHasPrefix) String() string {
-	return "HasPrefix(" + str.ToString(s.expected) + ")"
+	return "HasPrefix(" + util.ToString(s.expected) + ")"
 }
 
 type tdHasSuffix struct {
@@ -190,5 +190,5 @@ func (s *tdHasSuffix) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 }
 
 func (s *tdHasSuffix) String() string {
-	return "HasSuffix(" + str.ToString(s.expected) + ")"
+	return "HasSuffix(" + util.ToString(s.expected) + ")"
 }

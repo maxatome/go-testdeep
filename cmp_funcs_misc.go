@@ -10,8 +10,8 @@ import (
 	"runtime"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 // CmpTrue is a shortcut for:
@@ -163,7 +163,7 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 						break
 					}
 				}
-				stackTrace = types.RawString("panic: " + str.ToString(panicParam) + "\n\n" +
+				stackTrace = types.RawString("panic: " + util.ToString(panicParam) + "\n\n" +
 					string(buf[:n]))
 			}
 		}()

@@ -10,8 +10,8 @@ import (
 	"bytes"
 	"reflect"
 
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdSetResultKind uint8
@@ -53,7 +53,7 @@ func (r tdSetResult) String() string {
 		buf.WriteString("Missing ")
 		buf.WriteString(r.Kind.String())
 		buf.WriteString(": ")
-		str.SliceToBuffer(buf, r.Missing)
+		util.SliceToBuffer(buf, r.Missing)
 	}
 
 	if len(r.Extra) > 0 {
@@ -63,7 +63,7 @@ func (r tdSetResult) String() string {
 		buf.WriteString("Extra ")
 		buf.WriteString(r.Kind.String())
 		buf.WriteString(": ")
-		str.SliceToBuffer(buf, r.Extra)
+		util.SliceToBuffer(buf, r.Extra)
 	}
 
 	return buf.String()

@@ -224,7 +224,7 @@ func TestContextPath(t *testing.T) {
 
 	ctx = ctxerr.Context{Path: "DATA"}
 	ctx = ctx.AddMapKey("foo")
-	test.EqualStr(t, ctx.Path, `DATA["foo"]`) // special case of str.ToString()
+	test.EqualStr(t, ctx.Path, `DATA["foo"]`) // special case of util.ToString()
 	test.EqualInt(t, ctx.Depth, 1)
 
 	ctx = ctxerr.Context{Path: "DATA"}

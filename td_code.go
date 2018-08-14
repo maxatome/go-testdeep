@@ -11,8 +11,8 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdCode struct {
@@ -156,8 +156,8 @@ var _ types.TestDeepStringer = tdCodeResult{}
 func (r tdCodeResult) String() string {
 	if r.Reason == "" {
 		return fmt.Sprintf("  value: %s\nit failed but didn't say why",
-			str.ToString(r.Value))
+			util.ToString(r.Value))
 	}
 	return fmt.Sprintf("        value: %s\nit failed coz: %s",
-		str.ToString(r.Value), r.Reason)
+		util.ToString(r.Value), r.Reason)
 }

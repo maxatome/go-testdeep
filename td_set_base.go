@@ -11,8 +11,8 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/str"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type setKind uint8
@@ -182,6 +182,6 @@ func (s *tdSetBase) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (s *tdSetBase) String() string {
-	return str.SliceToBuffer(
+	return util.SliceToBuffer(
 		bytes.NewBufferString(s.GetLocation().Func), s.expectedItems).String()
 }

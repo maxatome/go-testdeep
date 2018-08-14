@@ -13,7 +13,7 @@ import (
 	"unsafe"
 
 	"github.com/maxatome/go-testdeep/internal/location"
-	"github.com/maxatome/go-testdeep/internal/str"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type Visit struct {
@@ -121,7 +121,7 @@ func (c Context) AddArrayIndex(index int) Context {
 // AddMapKey creates a new Context from current one plus a map
 // dereference for key key.
 func (c Context) AddMapKey(key interface{}) Context {
-	return c.AddDepth("[" + str.ToString(key) + "]")
+	return c.AddDepth("[" + util.ToString(key) + "]")
 }
 
 // AddPtr creates a new Context from current one plus a pointer dereference.

@@ -14,6 +14,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type boundCmp uint8
@@ -440,16 +441,16 @@ func (b *tdBetween) String() string {
 	if min != nil {
 		if max != nil {
 			return fmt.Sprintf("%v %c got %c %v",
-				min, ternRune(b.minBound == boundIn, '≤', '<'),
-				ternRune(b.maxBound == boundIn, '≤', '<'), max)
+				min, util.TernRune(b.minBound == boundIn, '≤', '<'),
+				util.TernRune(b.maxBound == boundIn, '≤', '<'), max)
 		}
 
 		return fmt.Sprintf("%c %v",
-			ternRune(b.minBound == boundIn, '≥', '>'), min)
+			util.TernRune(b.minBound == boundIn, '≥', '>'), min)
 	}
 
 	return fmt.Sprintf("%c %v",
-		ternRune(b.maxBound == boundIn, '≤', '<'), max)
+		util.TernRune(b.maxBound == boundIn, '≤', '<'), max)
 }
 
 func (b *tdBetween) TypeBehind() reflect.Type {
