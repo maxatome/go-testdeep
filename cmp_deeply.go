@@ -26,16 +26,16 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 		buf = bytes.NewBufferString(failedTest + "\n")
 	case 1:
 		buf = bytes.NewBufferString(failedTest + " '")
-		fmt.Fprint(buf, args[0])
+		fmt.Fprint(buf, args[0]) // nolint: errcheck
 		buf.WriteString("'\n")
 	default:
 		buf = bytes.NewBufferString(failedTest + " '")
 		if str, ok := args[0].(string); ok && strings.ContainsRune(str, '%') {
-			fmt.Fprintf(buf, str, args[1:]...)
+			fmt.Fprintf(buf, str, args[1:]...) // nolint: errcheck
 		} else {
 			// create a new slice to fool govet and avoid "call has possible
 			// formatting directive" errors
-			fmt.Fprint(buf, args[:]...)
+			fmt.Fprint(buf, args[:]...) // nolint: errcheck
 		}
 		buf.WriteString("'\n")
 	}

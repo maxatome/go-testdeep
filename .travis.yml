@@ -1,19 +1,34 @@
 language: go
-
-sudo: false
+go_import_path: github.com/maxatome/go-testdeep
 
 go:
   - 1.9.x
   - 1.10.x
   - tip
 
-go_import_path: github.com/maxatome/go-testdeep
+sudo: false
+
+install:
+  - go get -v github.com/alecthomas/gometalinter
+  - gometalinter --install
 
 script:
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
+  - export GORACE="halt_on_error=1"
   - go get -t ./...
-  - 'go test -v -covermode=count -coverprofile=coverage.out $(if ! expr "$(go version)" : ".* go1\.9\." >/dev/null; then echo ./...; fi)'
+  - 'go test -race -covermode=atomic -coverprofile=coverage.out $(if ! expr "$(go version)" : ".* go1\.9\." >/dev/null; then echo ./...; fi)'
+  - gometalinter
+    --disable-all
+    --enable=errcheck
+    --enable=gofmt
+    --enable=golint
+    --enable=gosimple
+    --enable=ineffassign
+    --enable=maligned
+    --enable=unconvert
+    --enable=staticcheck
+    --deadline=4m
+    ./...
 
 after_success:
+  - go get github.com/mattn/goveralls
   - goveralls -coverprofile=coverage.out -service=travis-ci

@@ -26,13 +26,9 @@ type Visit struct {
 // traversal.
 type Context struct {
 	Path        string
-	Depth       int
 	Visited     map[Visit]bool
 	CurOperator location.GetLocationer
-	// If true, the contents of the returned *Error will not be
-	// checked. Can be used to avoid filling Error{} with expensive
-	// computations.
-	BooleanError bool
+	Depth       int
 	// 0 ≤ MaxErrors ≤ 1 stops when first error encoutered (without the
 	// "Too many errors" error);
 	// MaxErrors > 1 stops when MaxErrors'th error encoutered (with a
@@ -40,6 +36,10 @@ type Context struct {
 	// < 0 do not stop until comparison ends.
 	MaxErrors int
 	Errors    *[]*Error
+	// If true, the contents of the returned *Error will not be
+	// checked. Can be used to avoid filling Error{} with expensive
+	// computations.
+	BooleanError bool
 	// See ContexConfig.FailureIsFatal for details
 	FailureIsFatal bool
 }
