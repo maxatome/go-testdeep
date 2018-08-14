@@ -73,37 +73,37 @@ func TestCode(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Code("test") }, "usage: Code")
+	checkPanic(t, func() { testdeep.Code("test") }, "usage: Code")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Code(func() bool { return true })
 	}, "FUNC must take only one argument")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Code(func(a int, b string) bool { return true })
 	}, "FUNC must take only one argument")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Code(func(n int) (bool, int) { return true, 0 })
 	}, "FUNC must return bool or (bool, string)")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Code(func(n int) (int, string) { return 0, "" })
 	}, "FUNC must return bool or (bool, string)")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Code(func(n int) (string, bool) { return "", true })
 	}, "FUNC must return bool or (bool, string)")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Code(func(n int) (bool, string, int) { return true, "", 0 })
 	}, "FUNC must return bool or (bool, string)")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Code(func(n int) {})
 	}, "FUNC must return bool or (bool, string)")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Code(func(n int) int { return 0 })
 	}, "FUNC must return bool or (bool, string)")
 

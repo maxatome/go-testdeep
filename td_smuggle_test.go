@@ -251,34 +251,34 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Smuggle("test", 12) }, "usage: Smuggle")
+	checkPanic(t, func() { testdeep.Smuggle("test", 12) }, "usage: Smuggle")
 
 	// Bad number of args
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Smuggle(func() int { return 0 }, 12)
 	}, "FUNC must take only one argument")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Smuggle(func(a int, b string) int { return 0 }, 12)
 	}, "FUNC must take only one argument")
 
 	// Bad number of returned values
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Smuggle(func(a int) {}, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Smuggle(
 			func(a int) (int, bool, string, int) { return 0, false, "", 23 },
 			12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
 	// Bad returned types
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Smuggle(func(a int) (int, int) { return 0, 0 }, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
-	test.CheckPanic(t, func() {
+	checkPanic(t, func() {
 		testdeep.Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 

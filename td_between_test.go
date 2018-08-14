@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/maxatome/go-testdeep"
-	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestBetween(t *testing.T) {
@@ -75,13 +74,13 @@ func TestBetween(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Between("test", "test") },
+	checkPanic(t, func() { testdeep.Between("test", "test") },
 		"usage: Between(")
-	test.CheckPanic(t, func() { testdeep.Between(12, "test") },
+	checkPanic(t, func() { testdeep.Between(12, "test") },
 		"from and to params must have the same type")
-	test.CheckPanic(t, func() { testdeep.Between("test", 12) },
+	checkPanic(t, func() { testdeep.Between("test", 12) },
 		"from and to params must have the same type")
-	test.CheckPanic(t, func() { testdeep.Between(1, 2, testdeep.BoundsInIn, testdeep.BoundsInOut) },
+	checkPanic(t, func() { testdeep.Between(1, 2, testdeep.BoundsInIn, testdeep.BoundsInOut) },
 		"usage: Between(")
 }
 
@@ -297,9 +296,9 @@ func TestN(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.N("test") }, "usage: N(")
-	test.CheckPanic(t, func() { testdeep.N(10, 1, 2) }, "usage: N(")
-	test.CheckPanic(t, func() { testdeep.N(10, "test") },
+	checkPanic(t, func() { testdeep.N("test") }, "usage: N(")
+	checkPanic(t, func() { testdeep.N(10, 1, 2) }, "usage: N(")
+	checkPanic(t, func() { testdeep.N(10, "test") },
 		"tolerance param must have the same type as num one")
 }
 
@@ -370,10 +369,10 @@ func TestLGt(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Gt("test") }, "usage: Gt(")
-	test.CheckPanic(t, func() { testdeep.Gte("test") }, "usage: Gte(")
-	test.CheckPanic(t, func() { testdeep.Lt("test") }, "usage: Lt(")
-	test.CheckPanic(t, func() { testdeep.Lte("test") }, "usage: Lte(")
+	checkPanic(t, func() { testdeep.Gt("test") }, "usage: Gt(")
+	checkPanic(t, func() { testdeep.Gte("test") }, "usage: Gte(")
+	checkPanic(t, func() { testdeep.Lt("test") }, "usage: Lt(")
+	checkPanic(t, func() { testdeep.Lte("test") }, "usage: Lte(")
 }
 
 func TestBetweenTime(t *testing.T) {

@@ -292,36 +292,36 @@ func TestMap(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Map("test", nil) }, "usage: Map(")
-	test.CheckPanic(t,
+	checkPanic(t, func() { testdeep.Map("test", nil) }, "usage: Map(")
+	checkPanic(t,
 		func() { testdeep.SuperMapOf("test", nil) },
 		"usage: SuperMapOf(")
-	test.CheckPanic(t,
+	checkPanic(t,
 		func() { testdeep.SubMapOf("test", nil) },
 		"usage: SubMapOf(")
 
 	num := 12
-	test.CheckPanic(t, func() { testdeep.Map(&num, nil) }, "usage: Map(")
-	test.CheckPanic(t,
+	checkPanic(t, func() { testdeep.Map(&num, nil) }, "usage: Map(")
+	checkPanic(t,
 		func() { testdeep.SuperMapOf(&num, nil) },
 		"usage: SuperMapOf(")
-	test.CheckPanic(t,
+	checkPanic(t,
 		func() { testdeep.SubMapOf(&num, nil) },
 		"usage: SubMapOf(")
 
-	test.CheckPanic(t,
+	checkPanic(t,
 		func() { testdeep.Map(&MyMap{}, testdeep.MapEntries{1: 2}) },
 		"expected key (int) 1 type mismatch: int != model key type (string)")
 
-	test.CheckPanic(t,
+	checkPanic(t,
 		func() { testdeep.Map(&MyMap{}, testdeep.MapEntries{"foo": nil}) },
 		`expected key "foo" value cannot be nil as entries value type is int`)
 
-	test.CheckPanic(t,
+	checkPanic(t,
 		func() { testdeep.Map(&MyMap{}, testdeep.MapEntries{"foo": uint16(2)}) },
 		`expected key "foo" value type mismatch: uint16 != model key type (int)`)
 
-	test.CheckPanic(t,
+	checkPanic(t,
 		func() { testdeep.Map(&MyMap{"foo": 1}, testdeep.MapEntries{"foo": 1}) },
 		`"foo" entry exists in both model & expectedEntries`)
 
