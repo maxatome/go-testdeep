@@ -19,7 +19,7 @@ func TestFormatError(t *testing.T) {
 	ttt := &test.TestingT{}
 
 	err := &ctxerr.Error{
-		Context: NewContext(),
+		Context: newContext(),
 		Message: "test error message",
 		Summary: types.RawString("test error summary"),
 	}

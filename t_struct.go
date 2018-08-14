@@ -210,7 +210,7 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
-	return cmpDeeply(NewContextWithConfig(t.Config),
+	return cmpDeeply(newContextWithConfig(t.Config),
 		t.TestingFT, got, expected, args...)
 }
 
@@ -253,7 +253,7 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpError(got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpError(NewContextWithConfig(t.Config), t.TestingFT, got, args...)
+	return cmpError(newContextWithConfig(t.Config), t.TestingFT, got, args...)
 }
 
 // CmpNoError checks that "got" is nil error.
@@ -271,7 +271,7 @@ func (t *T) CmpError(got error, args ...interface{}) bool {
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpNoError(got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpNoError(NewContextWithConfig(t.Config), t.TestingFT, got, args...)
+	return cmpNoError(newContextWithConfig(t.Config), t.TestingFT, got, args...)
 }
 
 // CmpPanic calls "fn" and checks a panic() occurred with the
@@ -287,7 +287,7 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool {
 	t.Helper()
-	return cmpPanic(NewContextWithConfig(t.Config), t, fn, expected, args...)
+	return cmpPanic(newContextWithConfig(t.Config), t, fn, expected, args...)
 }
 
 // CmpNotPanic calls "fn" and checks no panic() occurred. If a panic()
@@ -302,7 +302,7 @@ func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool 
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
 	t.Helper()
-	return cmpNotPanic(NewContextWithConfig(t.Config), t, fn, args...)
+	return cmpNotPanic(newContextWithConfig(t.Config), t, fn, args...)
 }
 
 // Run runs "f" as a subtest of t called "name". It runs "f" in a separate

@@ -74,5 +74,5 @@ func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected interface{},
 func CmpDeeply(t TestingT, got, expected interface{},
 	args ...interface{}) bool {
 	t.Helper()
-	return cmpDeeply(NewContext(), t, got, expected, args...)
+	return cmpDeeply(newContext(), t, got, expected, args...)
 }

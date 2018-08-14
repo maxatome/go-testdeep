@@ -76,13 +76,15 @@ func (c *ContextConfig) sanitize() {
 	}
 }
 
-// NewContext creates a new ctxerr.Context using DefaultContextConfig configuration.
-func NewContext() ctxerr.Context {
-	return NewContextWithConfig(DefaultContextConfig)
+// newContext creates a new ctxerr.Context using DefaultContextConfig
+// configuration.
+func newContext() ctxerr.Context {
+	return newContextWithConfig(DefaultContextConfig)
 }
 
-// NewContextWithConfig creates a new ctxerr.Context using a specific configuration.
-func NewContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
+// newContextWithConfig creates a new ctxerr.Context using a specific
+// configuration.
+func newContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 	config.sanitize()
 
 	ctx = ctxerr.Context{
@@ -96,8 +98,8 @@ func NewContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 	return
 }
 
-// NewBooleanContext creates a new boolean ctxerr.Context.
-func NewBooleanContext() ctxerr.Context {
+// newBooleanContext creates a new boolean ctxerr.Context.
+func newBooleanContext() ctxerr.Context {
 	return ctxerr.Context{
 		Visited:      map[ctxerr.Visit]bool{},
 		BooleanError: true,

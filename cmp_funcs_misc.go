@@ -93,7 +93,7 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) 
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpError(NewContext(), t, got, args...)
+	return cmpError(newContext(), t, got, args...)
 }
 
 // CmpNoError checks that "got" is nil error.
@@ -109,7 +109,7 @@ func CmpError(t TestingT, got error, args ...interface{}) bool {
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNoError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpNoError(NewContext(), t, got, args...)
+	return cmpNoError(newContext(), t, got, args...)
 }
 
 func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, args ...interface{}) bool {
@@ -207,7 +207,7 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 	args ...interface{}) bool {
 	t.Helper()
-	return cmpPanic(NewContext(), t, fn, expectedPanic, args...)
+	return cmpPanic(newContext(), t, fn, expectedPanic, args...)
 }
 
 // CmpNotPanic calls "fn" and checks no panic() occurred. If a panic()
@@ -222,5 +222,5 @@ func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool {
 	t.Helper()
-	return cmpNotPanic(NewContext(), t, fn, args...)
+	return cmpNotPanic(newContext(), t, fn, args...)
 }

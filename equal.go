@@ -366,7 +366,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 }
 
 func deepValueEqualOK(got, expected reflect.Value) bool {
-	return deepValueEqualFinal(NewBooleanContext(), got, expected) == nil
+	return deepValueEqualFinal(newBooleanContext(), got, expected) == nil
 }
 
 // EqDeeply returns true if "got" matches "expected". "expected" can
@@ -380,7 +380,7 @@ func EqDeeply(got, expected interface{}) bool {
 // operators. If "got" does not match "expected", the returned *ctxerr.Error
 // contains the reason of the first mismatch detected.
 func EqDeeplyError(got, expected interface{}) error {
-	err := deepValueEqualFinal(NewContext(),
+	err := deepValueEqualFinal(newContext(),
 		reflect.ValueOf(got), reflect.ValueOf(expected))
 	if err == nil {
 		return nil
