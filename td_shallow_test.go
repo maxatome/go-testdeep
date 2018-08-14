@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestShallow(t *testing.T) {
@@ -109,7 +110,7 @@ func TestShallow(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { testdeep.Shallow("test") }, "usage: Shallow")
+	test.CheckPanic(t, func() { testdeep.Shallow("test") }, "usage: Shallow")
 
 	//
 	//

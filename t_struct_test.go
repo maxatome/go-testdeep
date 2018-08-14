@@ -36,7 +36,7 @@ func TestT(tt *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(tt,
+	test.CheckPanic(tt,
 		func() {
 			testdeep.NewT(tt, testdeep.ContextConfig{}, testdeep.ContextConfig{})
 		},

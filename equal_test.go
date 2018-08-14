@@ -606,7 +606,7 @@ func TestEqualRecurs(t *testing.T) {
 }
 
 func TestEqualPanic(t *testing.T) {
-	checkPanic(t,
+	test.CheckPanic(t,
 		func() {
 			testdeep.EqDeeply(testdeep.Ignore(), testdeep.Ignore())
 		},

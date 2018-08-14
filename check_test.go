@@ -275,40 +275,6 @@ func checkOKForEach(t *testing.T, gotList []interface{}, expected interface{},
 	return
 }
 
-func checkPanic(t *testing.T, fn func(), contains string) bool {
-	t.Helper()
-
-	var (
-		panicked   bool
-		panicParam interface{}
-	)
-
-	func() {
-		defer func() { panicParam = recover() }()
-		panicked = true
-		fn()
-		panicked = false
-	}()
-
-	if !panicked {
-		t.Error("panic() did not occur")
-		return false
-	}
-
-	panicStr, ok := panicParam.(string)
-	if !ok {
-		t.Errorf("panic() occurred but recover()d %T type instead of string",
-			panicParam)
-		return false
-	}
-
-	if !strings.Contains(panicStr, contains) {
-		t.Errorf("panic() string `%s'\ndoes not contain `%s'", panicStr, contains)
-		return false
-	}
-	return true
-}
-
 func equalTypes(t *testing.T, got testdeep.TestDeep, expected interface{},
 	args ...interface{}) bool {
 	gotType := got.TypeBehind()

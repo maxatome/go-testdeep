@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestRe(t *testing.T) {
@@ -96,11 +97,11 @@ func TestRe(t *testing.T) {
 	//
 	// Bad usage
 	const reUsage = "usage: Re("
-	checkPanic(t, func() { testdeep.Re(123) }, reUsage)
-	checkPanic(t, func() { testdeep.Re("bar", []string{}, 1) }, reUsage)
+	test.CheckPanic(t, func() { testdeep.Re(123) }, reUsage)
+	test.CheckPanic(t, func() { testdeep.Re("bar", []string{}, 1) }, reUsage)
 
 	const reAllUsage = "usage: ReAll("
-	checkPanic(t, func() { testdeep.ReAll(123, 456) }, reAllUsage)
+	test.CheckPanic(t, func() { testdeep.ReAll(123, 456) }, reAllUsage)
 }
 
 func TestReTypeBehind(t *testing.T) {

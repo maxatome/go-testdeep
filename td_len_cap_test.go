@@ -63,7 +63,7 @@ func TestLen(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { testdeep.Len(int64(12)) }, "usage: Len(")
+	test.CheckPanic(t, func() { testdeep.Len(int64(12)) }, "usage: Len(")
 }
 
 func TestCap(t *testing.T) {
@@ -108,7 +108,7 @@ func TestCap(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { testdeep.Cap(int64(12)) }, "usage: Cap(")
+	test.CheckPanic(t, func() { testdeep.Cap(int64(12)) }, "usage: Cap(")
 }
 
 func TestLenCapTypeBehind(t *testing.T) {
