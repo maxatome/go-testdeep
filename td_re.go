@@ -193,16 +193,16 @@ func (r *tdRe) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 
 	default:
 		var strOK bool
-		if iface, ok := dark.GetInterface(got, true); ok {
-			switch gotVal := iface.(type) {
-			case error:
-				str = gotVal.Error()
-				strOK = true
-			case fmt.Stringer:
-				str = gotVal.String()
-				strOK = true
-			default:
-			}
+		iface := dark.MustGetInterface(got)
+
+		switch gotVal := iface.(type) {
+		case error:
+			str = gotVal.Error()
+			strOK = true
+		case fmt.Stringer:
+			str = gotVal.String()
+			strOK = true
+		default:
 		}
 
 		if !strOK {

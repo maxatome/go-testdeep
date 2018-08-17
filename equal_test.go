@@ -390,6 +390,26 @@ func TestEqualFunc(t *testing.T) {
 }
 
 //
+// Channel
+func TestEqualChannel(t *testing.T) {
+	var gotCh, expectedCh chan int
+
+	checkOK(t, gotCh, expectedCh) // nil channels
+
+	gotCh = make(chan int, 1)
+	checkOK(t, gotCh, gotCh) // exactly the same
+
+	checkError(t, gotCh, make(chan int, 1),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"), // hexadecimal pointer
+			Expected: mustContain("0x"), // hexadecimal pointer
+		})
+
+}
+
+//
 // Others
 func TestEqualOthers(t *testing.T) {
 	type Private struct {
@@ -412,11 +432,8 @@ func TestEqualOthers(t *testing.T) {
 		numc128 complex128
 
 		boolean bool
-
-		channel chan int
 	}
 
-	channel := make(chan int, 1)
 	checkOK(t,
 		Private{ // got
 			num:     1,
@@ -434,7 +451,6 @@ func TestEqualOthers(t *testing.T) {
 			numc64:  complex(64, 1),
 			numc128: complex(128, -1),
 			boolean: true,
-			channel: channel,
 		},
 		Private{
 			num:     1,
@@ -452,7 +468,6 @@ func TestEqualOthers(t *testing.T) {
 			numc64:  complex(64, 1),
 			numc128: complex(128, -1),
 			boolean: true,
-			channel: channel,
 		})
 
 	checkError(t, Private{num: 1}, Private{num: 2},
@@ -575,16 +590,18 @@ func TestEqualOthers(t *testing.T) {
 			Got:      mustBe("(bool) true"),
 			Expected: mustBe("(bool) false"),
 		})
+}
 
-	var expectedChannel = make(chan int, 2)
-	checkError(t, Private{channel: channel},
-		Private{channel: expectedChannel},
-		expectedError{
-			Message:  mustBe("values differ"),
-			Path:     mustBe("DATA.channel"),
-			Got:      mustContain("0x"), // hexadecimal pointer
-			Expected: mustContain("0x"), // hexadecimal pointer
-		})
+//
+// Private non-copy-able fields
+func TestEqualReallyPrivate(t *testing.T) {
+	type Private struct {
+		channel chan int
+	}
+
+	ch := make(chan int, 3)
+
+	checkOKOrPanicIfUnsafeDisabled(t, Private{channel: ch}, Private{channel: ch})
 }
 
 func TestEqualRecurs(t *testing.T) {

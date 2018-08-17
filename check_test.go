@@ -15,6 +15,7 @@ import (
 
 	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -256,6 +257,26 @@ func checkOK(t *testing.T, got, expected interface{},
 	}
 
 	return true
+}
+
+func checkOKOrPanicIfUnsafeDisabled(t *testing.T, got, expected interface{},
+	args ...interface{}) bool {
+	t.Helper()
+
+	var ret bool
+	cmp := func() {
+		t.Helper()
+		ret = checkOK(t, got, expected, args...)
+	}
+
+	// Should panic if unsafe package is not available
+	if dark.UnsafeDisabled {
+		return test.CheckPanic(t, cmp,
+			"dark.GetInterface() does not handle private ")
+	}
+
+	cmp()
+	return ret
 }
 
 func checkOKForEach(t *testing.T, gotList []interface{}, expected interface{},

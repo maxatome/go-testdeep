@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -354,7 +355,7 @@ func TestStructPrivateFields(t *testing.T) {
 			"nameb": testdeep.Re("^foo"),
 		}))
 
-	checkOK(t, got,
+	checkOKOrPanicIfUnsafeDisabled(t, got,
 		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
 			"err": testdeep.Re("error"),
 		}))
@@ -370,7 +371,7 @@ func TestStructPrivateFields(t *testing.T) {
 			Expected: mustBe("string (convertible) OR fmt.Stringer OR error OR []uint8"),
 		})
 
-	checkOK(t, got,
+	checkOKOrPanicIfUnsafeDisabled(t, got,
 		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
 			"next": testdeep.Struct(&structPrivateFields{}, testdeep.StructFields{
 				"iface": testdeep.Re("buffer"),
@@ -406,11 +407,20 @@ func TestStructPrivateFields(t *testing.T) {
 				}),
 		}))
 
-	checkOK(t, got,
-		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
-			"birth":  testdeep.TruncTime(d("2018-04-01T10:11:12Z"), time.Second),
-			"birth2": testdeep.TruncTime(MyTime(d("2018-03-01T09:08:07Z")), time.Second),
-		}))
+	expected := testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+		"birth":  testdeep.TruncTime(d("2018-04-01T10:11:12Z"), time.Second),
+		"birth2": testdeep.TruncTime(MyTime(d("2018-03-01T09:08:07Z")), time.Second),
+	})
+	if !dark.UnsafeDisabled {
+		checkOK(t, got, expected)
+	} else {
+		checkError(t, got, expected,
+			expectedError{
+				Message: mustBe("cannot compare"),
+				Path:    mustBe("DATA.birth"),
+				Summary: mustBe("unexported field that cannot be overridden"),
+			})
+	}
 
 	checkError(t, got,
 		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{

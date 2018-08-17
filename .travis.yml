@@ -15,6 +15,7 @@ install:
 script:
   - export GORACE="halt_on_error=1"
   - go get -t ./...
+  - go test -race -tags safe ./...
   - 'go test -race -covermode=atomic -coverprofile=coverage.out $(if ! expr "$(go version)" : ".* go1\.9\." >/dev/null; then echo ./...; fi)'
   - gometalinter
     --disable-all

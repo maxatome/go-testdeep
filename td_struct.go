@@ -159,7 +159,7 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 			if !ok {
 				// Probably in an environment where "unsafe" package is forbidden... :(
 				fmt.Fprintf(os.Stderr, // nolint: errcheck
-					"field %s is unexported and cannot be overridden, skip it.",
+					"field %s is unexported and cannot be overridden, skip it from model.\n",
 					fieldName)
 				continue
 			}
