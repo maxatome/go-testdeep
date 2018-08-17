@@ -12,6 +12,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 // getTime returns the time.Time that is inside got or that can be
@@ -31,7 +32,8 @@ func getTime(ctx ctxerr.Context, got reflect.Value, mustConvert bool) (time.Time
 			return time.Time{}, ctxerr.BooleanError
 		}
 		return time.Time{}, &ctxerr.Error{
-			Message: "cannot compare unexported field that cannot be overridden",
+			Message: "cannot compare",
+			Summary: types.RawString("unexported field that cannot be overridden"),
 		}
 	}
 	return gotIf.(time.Time), nil
