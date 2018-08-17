@@ -89,6 +89,7 @@ package testdeep
 
 import (
 \t"time"
+\t"testing" // used by t.Helper() workaround below
 )
 EOH
 
@@ -147,10 +148,23 @@ EOF
 // Returns true if the test is OK, false if it fails.
 EOF
 
+    # Workaround to bypass golang issue
+    # https://github.com/golang/go/issues/26995 when race detector on
+    chop(my $call_helper_comment = <<EOH);
+// Work around https://github.com/golang/go/issues/26995 issue
+// when corrected, this block should be replaced by t.Helper()
+EOH
+
     $funcs_contents .= $func_comment . <<EOF;
 $ARGS_COMMENT
 func Cmp$func(t TestingT, $cmp_args, args ...interface{}) bool {
-\tt.Helper()
+\t$call_helper_comment
+\tif tt, ok := t.(*testing.T); ok {
+\t\ttt.Helper()
+\t} else {
+\t\tt.Helper()
+\t}
+
 \treturn CmpDeeply(t, got, $func($call_args), args...)
 }
 EOF
@@ -158,7 +172,13 @@ EOF
     $t_contents .= $func_comment . <<EOF;
 $ARGS_COMMENT
 func (t *T)$func($cmp_args, args ...interface{}) bool {
-\tt.Helper()
+\t$call_helper_comment
+\tif tt, ok := t.TestingFT.(*testing.T); ok {
+\t\ttt.Helper()
+\t} else {
+\t\tt.Helper()
+\t}
+
 \treturn t.CmpDeeply(got, $func($call_args), args...)
 }
 EOF
