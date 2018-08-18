@@ -16,6 +16,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
+// Visit is used by Context and its Visited map to handle cyclic references.
 type Visit struct {
 	A1  unsafe.Pointer
 	A2  unsafe.Pointer
@@ -44,6 +45,8 @@ type Context struct {
 	FailureIsFatal bool
 }
 
+// InitErrors initializes Context *Errors slice, if MaxErrors < 0 or
+// MaxErrors > 1.
 func (c *Context) InitErrors() {
 	if c.MaxErrors != 0 && c.MaxErrors != 1 {
 		var errors []*Error
@@ -51,6 +54,7 @@ func (c *Context) InitErrors() {
 	}
 }
 
+// ResetErrors returns a new Context without any Error set.
 func (c Context) ResetErrors() (new Context) {
 	new = c
 	new.InitErrors()
@@ -87,6 +91,8 @@ func (c Context) CollectError(err *Error) *Error {
 	return nil
 }
 
+// MergeErrors merges all collected errors in the first one and
+// returns it. It returns nil if no errors have been collected.
 func (c Context) MergeErrors() *Error {
 	if c.Errors == nil || len(*c.Errors) == 0 {
 		return nil

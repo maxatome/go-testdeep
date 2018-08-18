@@ -19,6 +19,7 @@ type Location struct {
 	Line int    // Line number inside file
 }
 
+// GetLocationer is the interface that wraps the basic GetLocation method.
 type GetLocationer interface {
 	GetLocation() Location
 }

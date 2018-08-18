@@ -10,6 +10,12 @@ import (
 	"reflect"
 )
 
+// GetInterface does its best to return the data behind val. If force
+// is true, it tries to bypass golang protections using the unsafe
+// package.
+//
+// It returns (nil, false) if the data behind val can not be retrieved
+// as an interface{} (aka. struct private + non-copyable field).
 var GetInterface = func(val reflect.Value, force bool) (interface{}, bool) {
 	if !val.IsValid() {
 		return nil, true
@@ -37,6 +43,8 @@ var GetInterface = func(val reflect.Value, force bool) (interface{}, bool) {
 	return nil, false
 }
 
+// MustGetInterface does its best to return the data behind val. If it
+// fails (struct private + non-copyable field), it panics.
 func MustGetInterface(val reflect.Value) interface{} {
 	ret, ok := GetInterface(val, true)
 	if ok {

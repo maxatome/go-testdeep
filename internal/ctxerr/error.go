@@ -36,6 +36,8 @@ type Error struct {
 }
 
 var (
+	// BooleanError is the *Error returned when an error occurs in a
+	// boolean context.
 	BooleanError = &Error{}
 
 	// ErrTooManyErrors is chained to the last error encountered when

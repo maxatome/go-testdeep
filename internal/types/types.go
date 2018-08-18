@@ -10,16 +10,20 @@ import (
 	"strconv"
 )
 
+// TestDeepStringer is a TestDeep specific interface for objects which
+// know how to stringify themselves.
 type TestDeepStringer interface {
 	_TestDeep()
 	String() string
 }
 
+// TestDeepStamp is a useful type providing the _TestDeep() method
+// needed to implement TestDeepStringer interface.
 type TestDeepStamp struct{}
 
-func (_ TestDeepStamp) _TestDeep() {}
+func (t TestDeepStamp) _TestDeep() {}
 
-// Implements types.TestDeepStringer
+// RawString implements TestDeepStringer interface.
 type RawString string
 
 func (s RawString) _TestDeep() {}
@@ -28,7 +32,7 @@ func (s RawString) String() string {
 	return string(s)
 }
 
-// Implements types.TestDeepStringer
+// RawInt implements TestDeepStringer interface.
 type RawInt int
 
 func (i RawInt) _TestDeep() {}

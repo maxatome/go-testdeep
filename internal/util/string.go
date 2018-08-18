@@ -18,6 +18,7 @@ import (
 	"github.com/davecgh/go-spew/spew"
 )
 
+// ToString does it best to stringify val.
 func ToString(val interface{}) string {
 	if val == nil {
 		return "nil"
@@ -46,10 +47,13 @@ typeSwitch:
 	return strings.TrimRight(spew.Sdump(val), "\n")
 }
 
+// IndentString indents str lines (from 2nd one = 1st line is not
+// indented) by indent.
 func IndentString(str string, indent string) string {
 	return strings.Replace(str, "\n", "\n"+indent, -1)
 }
 
+// SliceToBuffer stringifies items slice into buf then returns buf.
 func SliceToBuffer(buf *bytes.Buffer, items []reflect.Value) *bytes.Buffer {
 	buf.WriteByte('(')
 	if len(items) < 2 {

@@ -12,6 +12,12 @@ import (
 	"testing"
 )
 
+// EqualErrorMessage prints a test error message of the form:
+//
+//   Message
+//   Failed test
+//          got: got_value
+//     expected: expected_value
 func EqualErrorMessage(t *testing.T, got, expected interface{},
 	args ...interface{}) {
 	t.Helper()
@@ -21,6 +27,7 @@ func EqualErrorMessage(t *testing.T, got, expected interface{},
 		BuildTestName(args), got, expected)
 }
 
+// EqualStr checks that got equals expected.
 func EqualStr(t *testing.T, got, expected string, args ...interface{}) bool {
 	if got == expected {
 		return true
@@ -31,6 +38,7 @@ func EqualStr(t *testing.T, got, expected string, args ...interface{}) bool {
 	return false
 }
 
+// EqualInt checks that got equals expected.
 func EqualInt(t *testing.T, got, expected int, args ...interface{}) bool {
 	if got == expected {
 		return true
@@ -41,6 +49,7 @@ func EqualInt(t *testing.T, got, expected int, args ...interface{}) bool {
 	return false
 }
 
+// EqualBool checks that got equals expected.
 func EqualBool(t *testing.T, got, expected bool, args ...interface{}) bool {
 	if got == expected {
 		return true
@@ -51,6 +60,7 @@ func EqualBool(t *testing.T, got, expected bool, args ...interface{}) bool {
 	return false
 }
 
+// BuildTestName builds a string given args.
 func BuildTestName(args []interface{}) string {
 	switch len(args) {
 	case 0:
@@ -64,6 +74,7 @@ func BuildTestName(args []interface{}) string {
 	}
 }
 
+// IsTrue checks that got is true.
 func IsTrue(t *testing.T, got bool, args ...interface{}) bool {
 	if got {
 		return true
@@ -74,6 +85,7 @@ func IsTrue(t *testing.T, got bool, args ...interface{}) bool {
 	return false
 }
 
+// IsFalse checks that got is false.
 func IsFalse(t *testing.T, got bool, args ...interface{}) bool {
 	if !got {
 		return true
@@ -84,6 +96,8 @@ func IsFalse(t *testing.T, got bool, args ...interface{}) bool {
 	return false
 }
 
+// CheckPanic checks that fn() panics and that the panic() arg is a
+// string that contains contains.
 func CheckPanic(t *testing.T, fn func(), contains string) bool {
 	t.Helper()
 

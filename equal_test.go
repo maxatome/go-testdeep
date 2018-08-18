@@ -593,7 +593,7 @@ func TestEqualOthers(t *testing.T) {
 }
 
 //
-// Private non-copy-able fields
+// Private non-copyable fields
 func TestEqualReallyPrivate(t *testing.T) {
 	type Private struct {
 		channel chan int
