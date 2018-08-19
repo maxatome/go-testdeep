@@ -4,7 +4,7 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package testdeep
+package util
 
 import (
 	"bytes"
@@ -12,10 +12,14 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/types"
+
 	"github.com/davecgh/go-spew/spew"
 )
 
-func toString(val interface{}) string {
+// ToString does it best to stringify val.
+func ToString(val interface{}) string {
 	if val == nil {
 		return "nil"
 	}
@@ -23,9 +27,9 @@ func toString(val interface{}) string {
 typeSwitch:
 	switch tval := val.(type) {
 	case reflect.Value:
-		newVal, ok := getInterface(tval, true)
+		newVal, ok := dark.GetInterface(tval, true)
 		if ok {
-			return toString(newVal)
+			return ToString(newVal)
 		}
 
 	case string:
@@ -36,22 +40,25 @@ typeSwitch:
 		}
 		return `"` + tval + `"`
 
-	case testDeepStringer:
+	case types.TestDeepStringer:
 		return tval.String()
 	}
 
 	return strings.TrimRight(spew.Sdump(val), "\n")
 }
 
-func indentString(str string, indent string) string {
+// IndentString indents str lines (from 2nd one = 1st line is not
+// indented) by indent.
+func IndentString(str string, indent string) string {
 	return strings.Replace(str, "\n", "\n"+indent, -1)
 }
 
-func sliceToBuffer(buf *bytes.Buffer, items []reflect.Value) *bytes.Buffer {
+// SliceToBuffer stringifies items slice into buf then returns buf.
+func SliceToBuffer(buf *bytes.Buffer, items []reflect.Value) *bytes.Buffer {
 	buf.WriteByte('(')
 	if len(items) < 2 {
 		if len(items) > 0 {
-			buf.WriteString(toString(items[0]))
+			buf.WriteString(ToString(items[0]))
 		}
 	} else {
 		begLine := bytes.LastIndexByte(buf.Bytes(), '\n') + 1
@@ -62,7 +69,7 @@ func sliceToBuffer(buf *bytes.Buffer, items []reflect.Value) *bytes.Buffer {
 			if idx != 0 {
 				buf.WriteString(prefix)
 			}
-			buf.WriteString(toString(item))
+			buf.WriteString(ToString(item))
 			buf.WriteString(",\n")
 		}
 		buf.Truncate(buf.Len() - 2)

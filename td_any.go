@@ -8,6 +8,8 @@ package testdeep
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 type tdAny struct {
@@ -24,17 +26,17 @@ func Any(expectedValues ...interface{}) TestDeep {
 	}
 }
 
-func (a *tdAny) Match(ctx Context, got reflect.Value) *Error {
+func (a *tdAny) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	for _, item := range a.items {
 		if deepValueEqualOK(got, item) {
 			return nil
 		}
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "comparing with Any",
 		Got:      got,
 		Expected: a,

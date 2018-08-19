@@ -11,30 +11,33 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestCode(t *testing.T) {
-	checkOK(t, 12, Code(func(n int) bool { return n >= 10 && n < 20 }))
+	checkOK(t, 12, testdeep.Code(func(n int) bool { return n >= 10 && n < 20 }))
 
-	checkOK(t, 12, Code(func(val interface{}) bool {
+	checkOK(t, 12, testdeep.Code(func(val interface{}) bool {
 		num, ok := val.(int)
 		return ok && num == 12
 	}))
 
-	checkOK(t, errors.New("foobar"), Code(func(val error) bool {
+	checkOK(t, errors.New("foobar"), testdeep.Code(func(val error) bool {
 		return val.Error() == "foobar"
 	}))
 
-	checkError(t, 123, Code(func(n float64) bool { return true }), expectedError{
-		Message:  mustBe("incompatible parameter type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("float64"),
-	})
+	checkError(t, 123, testdeep.Code(func(n float64) bool { return true }),
+		expectedError{
+			Message:  mustBe("incompatible parameter type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("float64"),
+		})
 
 	type xInt int
-	checkError(t, xInt(12), Code(func(n int) bool { return n >= 10 && n < 20 }),
+	checkError(t, xInt(12),
+		testdeep.Code(func(n int) bool { return n >= 10 && n < 20 }),
 		expectedError{
 			Message:  mustBe("incompatible parameter type"),
 			Path:     mustBe("DATA"),
@@ -43,7 +46,7 @@ func TestCode(t *testing.T) {
 		})
 
 	checkError(t, 12,
-		Code(func(n int) (bool, string) { return false, "custom error" }),
+		testdeep.Code(func(n int) (bool, string) { return false, "custom error" }),
 		expectedError{
 			Message: mustBe("ran code with %% as argument"),
 			Path:    mustBe("DATA"),
@@ -51,7 +54,7 @@ func TestCode(t *testing.T) {
 		})
 
 	checkError(t, 12,
-		Code(func(n int) bool { return false }),
+		testdeep.Code(func(n int) bool { return false }),
 		expectedError{
 			Message: mustBe("ran code with %% as argument"),
 			Path:    mustBe("DATA"),
@@ -61,7 +64,7 @@ func TestCode(t *testing.T) {
 	type MyBool bool
 	type MyString string
 	checkError(t, 12,
-		Code(func(n int) (MyBool, MyString) { return false, "very custom error" }),
+		testdeep.Code(func(n int) (MyBool, MyString) { return false, "very custom error" }),
 		expectedError{
 			Message: mustBe("ran code with %% as argument"),
 			Path:    mustBe("DATA"),
@@ -70,58 +73,61 @@ func TestCode(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Code("test") }, "usage: Code")
+	test.CheckPanic(t, func() { testdeep.Code("test") }, "usage: Code")
 
-	checkPanic(t, func() {
-		Code(func() bool { return true })
+	test.CheckPanic(t, func() {
+		testdeep.Code(func() bool { return true })
 	}, "FUNC must take only one argument")
 
-	checkPanic(t, func() {
-		Code(func(a int, b string) bool { return true })
+	test.CheckPanic(t, func() {
+		testdeep.Code(func(a int, b string) bool { return true })
 	}, "FUNC must take only one argument")
 
-	checkPanic(t, func() {
-		Code(func(n int) (bool, int) { return true, 0 })
+	test.CheckPanic(t, func() {
+		testdeep.Code(func(n int) (bool, int) { return true, 0 })
 	}, "FUNC must return bool or (bool, string)")
 
-	checkPanic(t, func() {
-		Code(func(n int) (int, string) { return 0, "" })
+	test.CheckPanic(t, func() {
+		testdeep.Code(func(n int) (int, string) { return 0, "" })
 	}, "FUNC must return bool or (bool, string)")
 
-	checkPanic(t, func() {
-		Code(func(n int) (string, bool) { return "", true })
+	test.CheckPanic(t, func() {
+		testdeep.Code(func(n int) (string, bool) { return "", true })
 	}, "FUNC must return bool or (bool, string)")
 
-	checkPanic(t, func() {
-		Code(func(n int) (bool, string, int) { return true, "", 0 })
+	test.CheckPanic(t, func() {
+		testdeep.Code(func(n int) (bool, string, int) { return true, "", 0 })
 	}, "FUNC must return bool or (bool, string)")
 
-	checkPanic(t, func() {
-		Code(func(n int) {})
+	test.CheckPanic(t, func() {
+		testdeep.Code(func(n int) {})
 	}, "FUNC must return bool or (bool, string)")
 
-	checkPanic(t, func() {
-		Code(func(n int) int { return 0 })
+	test.CheckPanic(t, func() {
+		testdeep.Code(func(n int) int { return 0 })
 	}, "FUNC must return bool or (bool, string)")
 
 	//
 	// String
-	equalStr(t, Code(func(n int) bool { return false }).String(),
+	test.EqualStr(t,
+		testdeep.Code(func(n int) bool { return false }).String(),
 		"Code(func(int) bool)")
-	equalStr(t, Code(func(n int) (bool, string) { return false, "" }).String(),
+	test.EqualStr(t,
+		testdeep.Code(func(n int) (bool, string) { return false, "" }).String(),
 		"Code(func(int) (bool, string))")
-	equalStr(t,
-		Code(func(n int) (MyBool, MyString) { return false, "" }).String(),
+	test.EqualStr(t,
+		testdeep.Code(func(n int) (MyBool, MyString) { return false, "" }).String(),
 		"Code(func(int) (testdeep_test.MyBool, testdeep_test.MyString))")
 }
 
 func TestCodeTypeBehind(t *testing.T) {
 	// Type behind is the code function parameter one
 
-	equalTypes(t, Code(func(n int) bool { return n != 0 }), 23)
+	equalTypes(t, testdeep.Code(func(n int) bool { return n != 0 }), 23)
 
 	type MyTime time.Time
 
 	equalTypes(t,
-		Code(func(t MyTime) bool { return time.Time(t).IsZero() }), MyTime{})
+		testdeep.Code(func(t MyTime) bool { return time.Time(t).IsZero() }),
+		MyTime{})
 }

@@ -9,6 +9,8 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 type tdAll struct {
@@ -25,21 +27,21 @@ func All(expectedValues ...interface{}) TestDeep {
 	}
 }
 
-func (a *tdAll) Match(ctx Context, got reflect.Value) (err *Error) {
-	var origErr *Error
+func (a *tdAll) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
+	var origErr *ctxerr.Error
 	for idx, item := range a.items {
 		// Use deepValueEqualFinal here instead of deepValueEqual as we
 		// want to know whether an error occurred or not, we do not want
 		// to accumulate it silently
 		origErr = deepValueEqualFinal(
-			ctx.resetErrors().
+			ctx.ResetErrors().
 				AddDepth(fmt.Sprintf("<All#%d/%d>", idx+1, len(a.items))),
 			got, item)
 		if origErr != nil {
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
-			err := &Error{
+			err := &ctxerr.Error{
 				Message:  fmt.Sprintf("compared (part %d of %d)", idx+1, len(a.items)),
 				Got:      got,
 				Expected: item,

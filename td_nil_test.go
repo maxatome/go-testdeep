@@ -11,21 +11,22 @@ import (
 	"fmt"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestNil(t *testing.T) {
-	checkOK(t, (func())(nil), Nil())
-	checkOK(t, ([]int)(nil), Nil())
-	checkOK(t, (map[bool]bool)(nil), Nil())
-	checkOK(t, (*int)(nil), Nil())
-	checkOK(t, (chan int)(nil), Nil())
-	checkOK(t, nil, Nil())
+	checkOK(t, (func())(nil), testdeep.Nil())
+	checkOK(t, ([]int)(nil), testdeep.Nil())
+	checkOK(t, (map[bool]bool)(nil), testdeep.Nil())
+	checkOK(t, (*int)(nil), testdeep.Nil())
+	checkOK(t, (chan int)(nil), testdeep.Nil())
+	checkOK(t, nil, testdeep.Nil())
 
 	var got fmt.Stringer = (*bytes.Buffer)(nil)
-	checkOK(t, got, Nil())
+	checkOK(t, got, testdeep.Nil())
 
-	checkError(t, 42, Nil(),
+	checkError(t, 42, testdeep.Nil(),
 		expectedError{
 			Message:  mustBe("non-nil"),
 			Path:     mustBe("DATA"),
@@ -34,7 +35,7 @@ func TestNil(t *testing.T) {
 		})
 
 	num := 42
-	checkError(t, &num, Nil(),
+	checkError(t, &num, testdeep.Nil(),
 		expectedError{
 			Message:  mustBe("non-nil"),
 			Path:     mustBe("DATA"),
@@ -44,53 +45,53 @@ func TestNil(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Nil().String(), "nil")
+	test.EqualStr(t, testdeep.Nil().String(), "nil")
 }
 
 func TestNotNil(t *testing.T) {
 	num := 42
-	checkOK(t, func() {}, NotNil())
-	checkOK(t, []int{}, NotNil())
-	checkOK(t, map[bool]bool{}, NotNil())
-	checkOK(t, &num, NotNil())
-	checkOK(t, 42, NotNil())
+	checkOK(t, func() {}, testdeep.NotNil())
+	checkOK(t, []int{}, testdeep.NotNil())
+	checkOK(t, map[bool]bool{}, testdeep.NotNil())
+	checkOK(t, &num, testdeep.NotNil())
+	checkOK(t, 42, testdeep.NotNil())
 
-	checkError(t, (func())(nil), NotNil(),
+	checkError(t, (func())(nil), testdeep.NotNil(),
 		expectedError{
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
 			Got:      mustContain("nil"),
 			Expected: mustBe("not nil"),
 		})
-	checkError(t, ([]int)(nil), NotNil(),
+	checkError(t, ([]int)(nil), testdeep.NotNil(),
 		expectedError{
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
 			Got:      mustContain("nil"),
 			Expected: mustBe("not nil"),
 		})
-	checkError(t, (map[bool]bool)(nil), NotNil(),
+	checkError(t, (map[bool]bool)(nil), testdeep.NotNil(),
 		expectedError{
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
 			Got:      mustContain("nil"),
 			Expected: mustBe("not nil"),
 		})
-	checkError(t, (*int)(nil), NotNil(),
+	checkError(t, (*int)(nil), testdeep.NotNil(),
 		expectedError{
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
 			Got:      mustContain("nil"),
 			Expected: mustBe("not nil"),
 		})
-	checkError(t, (chan int)(nil), NotNil(),
+	checkError(t, (chan int)(nil), testdeep.NotNil(),
 		expectedError{
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
 			Got:      mustContain("nil"),
 			Expected: mustBe("not nil"),
 		})
-	checkError(t, nil, NotNil(),
+	checkError(t, nil, testdeep.NotNil(),
 		expectedError{
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
@@ -99,7 +100,7 @@ func TestNotNil(t *testing.T) {
 		})
 
 	var got fmt.Stringer = (*bytes.Buffer)(nil)
-	checkError(t, got, NotNil(),
+	checkError(t, got, testdeep.NotNil(),
 		expectedError{
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
@@ -109,10 +110,10 @@ func TestNotNil(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, NotNil().String(), "not nil")
+	test.EqualStr(t, testdeep.NotNil().String(), "not nil")
 }
 
 func TestNilTypeBehind(t *testing.T) {
-	equalTypes(t, Nil(), nil)
-	equalTypes(t, NotNil(), nil)
+	equalTypes(t, testdeep.Nil(), nil)
+	equalTypes(t, testdeep.NotNil(), nil)
 }

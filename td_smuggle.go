@@ -10,6 +10,9 @@ import (
 	"reflect"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 // SmuggledGot can be returned by a Smuggle function to name the
@@ -21,7 +24,7 @@ type SmuggledGot struct {
 
 const smuggled = "<smuggled>"
 
-func (s SmuggledGot) contextAndGot(ctx Context) (Context, reflect.Value) {
+func (s SmuggledGot) contextAndGot(ctx ctxerr.Context) (ctxerr.Context, reflect.Value) {
 	// If the Name starts with a Letter, prefix it by a "."
 	var name string
 	if s.Name != "" {
@@ -180,15 +183,15 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 		": FUNC must return value or (value, bool) or (value, bool, string)")
 }
 
-func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
+func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if !got.Type().AssignableTo(s.argType) {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "incompatible parameter type",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(s.argType.String()),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString(s.argType.String()),
 		})
 	}
 
@@ -196,12 +199,12 @@ func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 	// choice, as we think it is better to work on surrounding struct
 	// instead.
 	if !got.CanInterface() {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message: "cannot smuggle unexported field",
-			Summary: rawString("work on surrounding struct instead"),
+			Summary: types.RawString("work on surrounding struct instead"),
 		})
 	}
 
@@ -209,7 +212,7 @@ func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 	if len(ret) == 1 || ret[1].Bool() {
 		newGot := ret[0]
 
-		var newCtx Context
+		var newCtx ctxerr.Context
 		if newGot.IsValid() {
 			switch newGot.Type() {
 			case smuggledGotType:
@@ -229,11 +232,11 @@ func (s *tdSmuggle) Match(ctx Context, got reflect.Value) *Error {
 		return deepValueEqual(newCtx, newGot, s.expectedValue)
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
 
-	err := Error{
+	err := ctxerr.Error{
 		Message: "ran smuggle code with %% as argument",
 	}
 

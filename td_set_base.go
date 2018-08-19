@@ -9,6 +9,10 @@ package testdeep
 import (
 	"bytes"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type setKind uint8
@@ -42,18 +46,18 @@ func (s *tdSetBase) Add(items ...interface{}) {
 	}
 }
 
-func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
+func (s *tdSetBase) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	switch got.Kind() {
 	case reflect.Ptr:
 		gotElem := got.Elem()
 		if !gotElem.IsValid() {
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message:  "nil pointer",
-				Got:      rawString("nil " + got.Type().String()),
-				Expected: rawString("Slice OR Array OR *Slice OR *Array"),
+				Got:      types.RawString("nil " + got.Type().String()),
+				Expected: types.RawString("Slice OR Array OR *Slice OR *Array"),
 			})
 		}
 
@@ -123,16 +127,16 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 				}
 
 				if len(missingItems) > 0 {
-					if ctx.booleanError {
-						return booleanError
+					if ctx.BooleanError {
+						return ctxerr.BooleanError
 					}
 					res.Missing = missingItems
 				}
 			}
 
 			if len(foundGotIdxes) < gotLen && s.kind != superSet {
-				if ctx.booleanError {
-					return booleanError
+				if ctx.BooleanError {
+					return ctxerr.BooleanError
 				}
 				notFoundRemain := gotLen - len(foundGotIdxes)
 				res.Extra = make([]reflect.Value, 0, notFoundRemain)
@@ -144,8 +148,8 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 				}
 			}
 		} else if len(foundItems) > 0 {
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
 			res.Extra = foundItems
 		}
@@ -153,31 +157,31 @@ func (s *tdSetBase) Match(ctx Context, got reflect.Value) *Error {
 		if res.IsEmpty() {
 			return nil
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message: "comparing %% as a " + s.GetLocation().Func,
 			Summary: res,
 		})
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
 
-	var gotStr rawString
+	var gotStr types.RawString
 	if got.IsValid() {
-		gotStr = rawString(got.Type().String())
+		gotStr = types.RawString(got.Type().String())
 	} else {
 		gotStr = "nil"
 	}
 
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "bad type",
 		Got:      gotStr,
-		Expected: rawString("Slice OR Array OR *Slice OR *Array"),
+		Expected: types.RawString("Slice OR Array OR *Slice OR *Array"),
 	})
 }
 
 func (s *tdSetBase) String() string {
-	return sliceToBuffer(
+	return util.SliceToBuffer(
 		bytes.NewBufferString(s.GetLocation().Func), s.expectedItems).String()
 }

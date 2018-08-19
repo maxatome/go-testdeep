@@ -9,10 +9,13 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
-	"strconv"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/location"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 var (
@@ -55,18 +58,13 @@ type TestingFT interface {
 	Run(name string, f func(t *testing.T)) bool
 }
 
-type testDeepStringer interface {
-	_TestDeep()
-	String() string
-}
-
 // TestDeep is the representation of a testdeep operator. It is not
 // intended to be used directly, but through Cmp* functions.
 type TestDeep interface {
-	testDeepStringer
-	Match(ctx Context, got reflect.Value) *Error
+	types.TestDeepStringer
+	Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
+	location.GetLocationer
 	setLocation(int)
-	GetLocation() Location
 	HandleInvalid() bool
 	TypeBehind() reflect.Type
 }
@@ -74,14 +72,13 @@ type TestDeep interface {
 // Base is a base type providing some methods needed by the TestDeep
 // interface.
 type Base struct {
-	location Location
+	types.TestDeepStamp
+	location location.Location
 }
-
-func (t Base) _TestDeep() {}
 
 func (t *Base) setLocation(callDepth int) {
 	var ok bool
-	t.location, ok = NewLocation(callDepth)
+	t.location, ok = location.New(callDepth)
 	if !ok {
 		t.location.File = "???"
 		t.location.Line = 0
@@ -91,7 +88,7 @@ func (t *Base) setLocation(callDepth int) {
 	opDotPos := strings.LastIndex(t.location.Func, ".")
 
 	// Try to go one level upper, to check if it is a CmpXxx function
-	cmpLoc, ok := NewLocation(callDepth + 1)
+	cmpLoc, ok := location.New(callDepth + 1)
 	if ok {
 		cmpDotPos := strings.LastIndex(cmpLoc.Func, ".")
 
@@ -107,9 +104,9 @@ func (t *Base) setLocation(callDepth int) {
 	t.location.Func = t.location.Func[opDotPos+1:]
 }
 
-// GetLocation returns a copy of the Location where the TestDeep
+// GetLocation returns a copy of the location.Location where the TestDeep
 // operator has been created.
-func (t *Base) GetLocation() Location {
+func (t *Base) GetLocation() location.Location {
 	return t.location
 }
 
@@ -126,7 +123,7 @@ func (t Base) TypeBehind() reflect.Type {
 	return nil
 }
 
-// NewBase returns a new Base struct with Location set to the
+// NewBase returns a new Base struct with location.Location set to the
 // "callDepth" depth.
 func NewBase(callDepth int) (b Base) {
 	b.setLocation(callDepth)
@@ -145,27 +142,9 @@ func (t BaseOKNil) HandleInvalid() bool {
 	return true
 }
 
-// NewBaseOKNil returns a new BaseOKNil struct with Location set to
+// NewBaseOKNil returns a new BaseOKNil struct with location.Location set to
 // the "callDepth" depth.
 func NewBaseOKNil(callDepth int) (b BaseOKNil) {
 	b.setLocation(callDepth)
 	return
-}
-
-// Implements testDeepStringer
-type rawString string
-
-func (s rawString) _TestDeep() {}
-
-func (s rawString) String() string {
-	return string(s)
-}
-
-// Implements testDeepStringer
-type rawInt int
-
-func (i rawInt) _TestDeep() {}
-
-func (i rawInt) String() string {
-	return strconv.Itoa(int(i))
 }

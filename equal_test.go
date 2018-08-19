@@ -7,10 +7,11 @@
 package testdeep_test
 
 import (
-	"fmt"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 type ComplexStruct struct { // nolint: megacheck
@@ -50,13 +51,13 @@ func TestEqualArray(t *testing.T) {
 			Expected: mustBe("(int) 3"),
 		})
 
-	oldMaxErrors := DefaultContextConfig.MaxErrors
-	defer func() { DefaultContextConfig.MaxErrors = oldMaxErrors }()
+	oldMaxErrors := testdeep.DefaultContextConfig.MaxErrors
+	defer func() { testdeep.DefaultContextConfig.MaxErrors = oldMaxErrors }()
 
 	t.Run("DefaultContextConfig.MaxErrors = 2",
 		func(t *testing.T) {
-			DefaultContextConfig.MaxErrors = 2
-			err := EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
+			testdeep.DefaultContextConfig.MaxErrors = 2
+			err := testdeep.EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
 
 			// First error
 			ok := t.Run("First error",
@@ -65,12 +66,13 @@ func TestEqualArray(t *testing.T) {
 						t.Errorf("An Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
-						Message:  mustBe("values differ"),
-						Path:     mustBe("DATA[1]"),
-						Got:      mustBe("(int) 2"),
-						Expected: mustBe("(int) 42"),
-					}, false) {
+					if !matchError(t, err.(*ctxerr.Error),
+						expectedError{
+							Message:  mustBe("values differ"),
+							Path:     mustBe("DATA[1]"),
+							Got:      mustBe("(int) 2"),
+							Expected: mustBe("(int) 42"),
+						}, false) {
 						return
 					}
 				})
@@ -79,27 +81,28 @@ func TestEqualArray(t *testing.T) {
 			}
 
 			// Second error
-			err = err.Next
+			eErr := err.(*ctxerr.Error).Next
 			t.Run("Second error",
 				func(t *testing.T) {
-					if err == nil {
+					if eErr == nil {
 						t.Errorf("A second Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
-						Message:  mustBe("values differ"),
-						Path:     mustBe("DATA[2]"),
-						Got:      mustBe("(int) 3"),
-						Expected: mustBe("(int) 43"),
-					}, false) {
+					if !matchError(t, eErr,
+						expectedError{
+							Message:  mustBe("values differ"),
+							Path:     mustBe("DATA[2]"),
+							Got:      mustBe("(int) 3"),
+							Expected: mustBe("(int) 43"),
+						}, false) {
 						return
 					}
-					if err.Next != ErrTooManyErrors {
-						if err.Next == nil {
+					if eErr.Next != ctxerr.ErrTooManyErrors {
+						if eErr.Next == nil {
 							t.Error("ErrTooManyErrors should follow the 2 errors")
 						} else {
 							t.Errorf("Only 2 Errors should have occurred. Found 3rd: %s",
-								err.Next)
+								eErr.Next)
 						}
 						return
 					}
@@ -108,8 +111,8 @@ func TestEqualArray(t *testing.T) {
 
 	t.Run("DefaultContextConfig.MaxErrors = -1 (aka. all errors)",
 		func(t *testing.T) {
-			DefaultContextConfig.MaxErrors = -1
-			err := EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
+			testdeep.DefaultContextConfig.MaxErrors = -1
+			err := testdeep.EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
 
 			// First error
 			ok := t.Run("First error",
@@ -118,12 +121,13 @@ func TestEqualArray(t *testing.T) {
 						t.Errorf("An Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
-						Message:  mustBe("values differ"),
-						Path:     mustBe("DATA[1]"),
-						Got:      mustBe("(int) 2"),
-						Expected: mustBe("(int) 42"),
-					}, false) {
+					if !matchError(t, err.(*ctxerr.Error),
+						expectedError{
+							Message:  mustBe("values differ"),
+							Path:     mustBe("DATA[1]"),
+							Got:      mustBe("(int) 2"),
+							Expected: mustBe("(int) 42"),
+						}, false) {
 						return
 					}
 				})
@@ -132,19 +136,20 @@ func TestEqualArray(t *testing.T) {
 			}
 
 			// Second error
-			err = err.Next
+			eErr := err.(*ctxerr.Error).Next
 			ok = t.Run("Second error",
 				func(t *testing.T) {
-					if err == nil {
+					if eErr == nil {
 						t.Errorf("A second Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
-						Message:  mustBe("values differ"),
-						Path:     mustBe("DATA[2]"),
-						Got:      mustBe("(int) 3"),
-						Expected: mustBe("(int) 43"),
-					}, false) {
+					if !matchError(t, eErr,
+						expectedError{
+							Message:  mustBe("values differ"),
+							Path:     mustBe("DATA[2]"),
+							Got:      mustBe("(int) 3"),
+							Expected: mustBe("(int) 43"),
+						}, false) {
 						return
 					}
 				})
@@ -153,22 +158,23 @@ func TestEqualArray(t *testing.T) {
 			}
 
 			// Third error
-			err = err.Next
+			eErr = eErr.Next
 			t.Run("Third error",
 				func(t *testing.T) {
-					if err == nil {
+					if eErr == nil {
 						t.Errorf("A third Error should have occurred")
 						return
 					}
-					if !matchError(t, err, expectedError{
-						Message:  mustBe("values differ"),
-						Path:     mustBe("DATA[3]"),
-						Got:      mustBe("(int) 4"),
-						Expected: mustBe("(int) 44"),
-					}, false) {
+					if !matchError(t, eErr,
+						expectedError{
+							Message:  mustBe("values differ"),
+							Path:     mustBe("DATA[3]"),
+							Got:      mustBe("(int) 4"),
+							Expected: mustBe("(int) 44"),
+						}, false) {
 						return
 					}
-					if err.Next != nil {
+					if eErr.Next != nil {
 						t.Errorf("Only 3 Errors should have occurred")
 						return
 					}
@@ -384,6 +390,26 @@ func TestEqualFunc(t *testing.T) {
 }
 
 //
+// Channel
+func TestEqualChannel(t *testing.T) {
+	var gotCh, expectedCh chan int
+
+	checkOK(t, gotCh, expectedCh) // nil channels
+
+	gotCh = make(chan int, 1)
+	checkOK(t, gotCh, gotCh) // exactly the same
+
+	checkError(t, gotCh, make(chan int, 1),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"), // hexadecimal pointer
+			Expected: mustContain("0x"), // hexadecimal pointer
+		})
+
+}
+
+//
 // Others
 func TestEqualOthers(t *testing.T) {
 	type Private struct {
@@ -406,11 +432,8 @@ func TestEqualOthers(t *testing.T) {
 		numc128 complex128
 
 		boolean bool
-
-		channel chan int
 	}
 
-	channel := make(chan int, 1)
 	checkOK(t,
 		Private{ // got
 			num:     1,
@@ -428,7 +451,6 @@ func TestEqualOthers(t *testing.T) {
 			numc64:  complex(64, 1),
 			numc128: complex(128, -1),
 			boolean: true,
-			channel: channel,
 		},
 		Private{
 			num:     1,
@@ -446,7 +468,6 @@ func TestEqualOthers(t *testing.T) {
 			numc64:  complex(64, 1),
 			numc128: complex(128, -1),
 			boolean: true,
-			channel: channel,
 		})
 
 	checkError(t, Private{num: 1}, Private{num: 2},
@@ -569,16 +590,18 @@ func TestEqualOthers(t *testing.T) {
 			Got:      mustBe("(bool) true"),
 			Expected: mustBe("(bool) false"),
 		})
+}
 
-	var expectedChannel = make(chan int, 2)
-	checkError(t, Private{channel: channel},
-		Private{channel: expectedChannel},
-		expectedError{
-			Message:  mustBe("values differ"),
-			Path:     mustBe("DATA.channel"),
-			Got:      mustContain("0x"), // hexadecimal pointer
-			Expected: mustContain("0x"), // hexadecimal pointer
-		})
+//
+// Private non-copyable fields
+func TestEqualReallyPrivate(t *testing.T) {
+	type Private struct {
+		channel chan int
+	}
+
+	ch := make(chan int, 3)
+
+	checkOKOrPanicIfUnsafeDisabled(t, Private{channel: ch}, Private{channel: ch})
 }
 
 func TestEqualRecurs(t *testing.T) {
@@ -600,88 +623,27 @@ func TestEqualRecurs(t *testing.T) {
 }
 
 func TestEqualPanic(t *testing.T) {
-	checkPanic(t,
+	test.CheckPanic(t,
 		func() {
-			EqDeeply(Ignore(), Ignore())
+			testdeep.EqDeeply(testdeep.Ignore(), testdeep.Ignore())
 		},
 		"Found a TestDeep operator in got param, can only use it in expected one!")
 }
 
 func TestCmpDeeply(t *testing.T) {
 	mockT := &testing.T{}
-	isTrue(t, CmpDeeply(mockT, 1, 1))
-	isFalse(t, mockT.Failed())
+	test.IsTrue(t, testdeep.CmpDeeply(mockT, 1, 1))
+	test.IsFalse(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	isFalse(t, CmpDeeply(mockT, 1, 2))
-	isTrue(t, mockT.Failed())
+	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2))
+	test.IsTrue(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	isFalse(t, CmpDeeply(mockT, 1, 2, "Basic test"))
-	isTrue(t, mockT.Failed())
+	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2, "Basic test"))
+	test.IsTrue(t, mockT.Failed())
 
 	mockT = &testing.T{}
-	isFalse(t, CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
-	isTrue(t, mockT.Failed())
-}
-
-func ExampleEqDeeply() {
-	type MyStruct struct {
-		Name  string
-		Num   int
-		Items []int
-	}
-
-	got := &MyStruct{
-		Name:  "Foobar",
-		Num:   12,
-		Items: []int{4, 5, 9, 3, 8},
-	}
-
-	if EqDeeply(got,
-		Struct(&MyStruct{},
-			StructFields{
-				"Name":  Re("^Foo"),
-				"Num":   Between(10, 20),
-				"Items": ArrayEach(Between(3, 9)),
-			})) {
-		fmt.Println("Match!")
-	} else {
-		fmt.Println("NO!")
-	}
-
-	// Output:
-	// Match!
-}
-
-func ExampleEqDeeplyError() {
-	type MyStruct struct {
-		Name  string
-		Num   int
-		Items []int
-	}
-
-	got := &MyStruct{
-		Name:  "Foobar",
-		Num:   12,
-		Items: []int{4, 5, 9, 3, 8},
-	}
-
-	err := EqDeeplyError(got,
-		Struct(&MyStruct{},
-			StructFields{
-				"Name":  Re("^Foo"),
-				"Num":   Between(10, 20),
-				"Items": ArrayEach(Between(3, 8)),
-			}))
-	if err != nil {
-		err.Location.Line = 17 // only to be sure the line number will match example
-		fmt.Println(err)
-	}
-
-	// Output:
-	// DATA.Items[2]: values differ
-	// 	     got: 9
-	// 	expected: 3 ≤ got ≤ 8
-	// [under TestDeep operator Between at equal_test.go:17]
+	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
+	test.IsTrue(t, mockT.Failed())
 }

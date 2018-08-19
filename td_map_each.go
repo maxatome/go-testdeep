@@ -9,6 +9,10 @@ package testdeep
 import (
 	"reflect"
 	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdMapEach struct {
@@ -28,15 +32,15 @@ func MapEach(expectedValue interface{}) TestDeep {
 	}
 }
 
-func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
+func (m *tdMapEach) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if !got.IsValid() {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "nil value",
-			Got:      rawString("nil"),
-			Expected: rawString("Map OR *Map"),
+			Got:      types.RawString("nil"),
+			Expected: types.RawString("Map OR *Map"),
 		})
 	}
 
@@ -44,13 +48,13 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
 	case reflect.Ptr:
 		gotElem := got.Elem()
 		if !gotElem.IsValid() {
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message:  "nil pointer",
-				Got:      rawString("nil " + got.Type().String()),
-				Expected: rawString("Map OR *Map"),
+				Got:      types.RawString("nil " + got.Type().String()),
+				Expected: types.RawString("Map OR *Map"),
 			})
 		}
 
@@ -61,7 +65,7 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
 		fallthrough
 
 	case reflect.Map:
-		var err *Error
+		var err *ctxerr.Error
 		for _, key := range got.MapKeys() {
 			err = deepValueEqual(ctx.AddMapKey(key), got.MapIndex(key), m.expected)
 			if err != nil {
@@ -71,22 +75,22 @@ func (m *tdMapEach) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "bad type",
-		Got:      rawString(got.Type().String()),
-		Expected: rawString("Map OR *Map"),
+		Got:      types.RawString(got.Type().String()),
+		Expected: types.RawString("Map OR *Map"),
 	})
 }
 
 func (m *tdMapEach) String() string {
 	const prefix = "MapEach("
 
-	content := toString(m.expected)
+	content := util.ToString(m.expected)
 	if strings.Contains(content, "\n") {
-		return prefix + indentString(content, "        ") + ")"
+		return prefix + util.IndentString(content, "        ") + ")"
 	}
 	return prefix + content + ")"
 }

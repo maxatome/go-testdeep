@@ -4,7 +4,7 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package testdeep
+package location
 
 import (
 	"fmt"
@@ -19,13 +19,18 @@ type Location struct {
 	Line int    // Line number inside file
 }
 
-// NewLocation returns a new Location. "callDepth" is the number of
+// GetLocationer is the interface that wraps the basic GetLocation method.
+type GetLocationer interface {
+	GetLocation() Location
+}
+
+// New returns a new Location. "callDepth" is the number of
 // stack frames to ascend to get the calling function (Func field),
 // added to 1 to get the File & Line fields.
 //
 // If the location can not be determined, false is returned and
 // the Location is not valid.
-func NewLocation(callDepth int) (loc Location, ok bool) {
+func New(callDepth int) (loc Location, ok bool) {
 	_, loc.File, loc.Line, ok = runtime.Caller(callDepth + 1)
 	if !ok {
 		return

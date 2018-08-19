@@ -10,7 +10,8 @@ import (
 	"fmt"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestSet(t *testing.T) {
@@ -29,12 +30,16 @@ func TestSet(t *testing.T) {
 
 		//
 		// Set
-		checkOK(t, got, Set(5, 4, 1, 3), testName)
-		checkOK(t, got, Set(5, 4, 1, 3, 3, 3, 3), testName) // duplicated fields
+		checkOK(t, got, testdeep.Set(5, 4, 1, 3), testName)
 		checkOK(t, got,
-			Set(Between(0, 5), Between(0, 5), Between(0, 5))) // dup too
+			testdeep.Set(5, 4, 1, 3, 3, 3, 3), testName) // duplicated fields
+		checkOK(t, got,
+			testdeep.Set(
+				testdeep.Between(0, 5),
+				testdeep.Between(0, 5),
+				testdeep.Between(0, 5))) // dup too
 
-		checkError(t, got, Set(5, 4, 1),
+		checkError(t, got, testdeep.Set(5, 4, 1),
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
@@ -42,7 +47,7 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, Set(5, 4, 1, 3, 66),
+		checkError(t, got, testdeep.Set(5, 4, 1, 3, 66),
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
@@ -50,7 +55,7 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, Set(5, 66, 4, 1, 3),
+		checkError(t, got, testdeep.Set(5, 66, 4, 1, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
@@ -58,7 +63,7 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, Set(5, 66, 4, 1, 3, 67),
+		checkError(t, got, testdeep.Set(5, 66, 4, 1, 3, 67),
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
@@ -66,7 +71,7 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, Set(5, 66, 4, 3),
+		checkError(t, got, testdeep.Set(5, 66, 4, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
@@ -76,10 +81,10 @@ func TestSet(t *testing.T) {
 
 		//
 		// SubSetOf
-		checkOK(t, got, SubSetOf(5, 4, 1, 3), testName)
-		checkOK(t, got, SubSetOf(5, 4, 1, 3, 66), testName)
+		checkOK(t, got, testdeep.SubSetOf(5, 4, 1, 3), testName)
+		checkOK(t, got, testdeep.SubSetOf(5, 4, 1, 3, 66), testName)
 
-		checkError(t, got, SubSetOf(5, 66, 4, 3),
+		checkError(t, got, testdeep.SubSetOf(5, 66, 4, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a SubSetOf"),
 				Path:    mustBe("DATA"),
@@ -89,10 +94,10 @@ func TestSet(t *testing.T) {
 
 		//
 		// SuperSetOf
-		checkOK(t, got, SuperSetOf(5, 4, 1, 3), testName)
-		checkOK(t, got, SuperSetOf(5, 4), testName)
+		checkOK(t, got, testdeep.SuperSetOf(5, 4, 1, 3), testName)
+		checkOK(t, got, testdeep.SuperSetOf(5, 4), testName)
 
-		checkError(t, got, SuperSetOf(5, 66, 4, 1, 3),
+		checkError(t, got, testdeep.SuperSetOf(5, 66, 4, 1, 3),
 			expectedError{
 				Message: mustBe("comparing %% as a SuperSetOf"),
 				Path:    mustBe("DATA"),
@@ -102,9 +107,9 @@ func TestSet(t *testing.T) {
 
 		//
 		// NotAny
-		checkOK(t, got, NotAny(10, 20, 30), testName)
+		checkOK(t, got, testdeep.NotAny(10, 20, 30), testName)
 
-		checkError(t, got, NotAny(3, 66),
+		checkError(t, got, testdeep.NotAny(3, 66),
 			expectedError{
 				Message: mustBe("comparing %% as a NotAny"),
 				Path:    mustBe("DATA"),
@@ -114,25 +119,25 @@ func TestSet(t *testing.T) {
 	}
 
 	checkOK(t, []interface{}{123, "foo", nil, "bar", nil},
-		Set("foo", "bar", 123, nil))
+		testdeep.Set("foo", "bar", 123, nil))
 
 	var nilSlice MySlice
 	for idx, got := range []interface{}{([]int)(nil), &nilSlice} {
 		testName := fmt.Sprintf("Test #%d", idx)
 
-		checkOK(t, got, Set(), testName)
-		checkOK(t, got, SubSetOf(), testName)
-		checkOK(t, got, SubSetOf(1, 2), testName)
-		checkOK(t, got, SuperSetOf(), testName)
-		checkOK(t, got, NotAny(), testName)
-		checkOK(t, got, NotAny(1, 2), testName)
+		checkOK(t, got, testdeep.Set(), testName)
+		checkOK(t, got, testdeep.SubSetOf(), testName)
+		checkOK(t, got, testdeep.SubSetOf(1, 2), testName)
+		checkOK(t, got, testdeep.SuperSetOf(), testName)
+		checkOK(t, got, testdeep.NotAny(), testName)
+		checkOK(t, got, testdeep.NotAny(1, 2), testName)
 	}
 
-	for idx, set := range []TestDeep{
-		Set(123),
-		SubSetOf(123),
-		SuperSetOf(123),
-		NotAny(123),
+	for idx, set := range []testdeep.TestDeep{
+		testdeep.Set(123),
+		testdeep.SubSetOf(123),
+		testdeep.SuperSetOf(123),
+		testdeep.NotAny(123),
 	} {
 		testName := fmt.Sprintf("Test #%d → %s", idx, set)
 
@@ -177,23 +182,23 @@ func TestSet(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, Set(1).String(), "Set((int) 1)")
-	equalStr(t, Set(1, 2).String(), "Set((int) 1,\n    (int) 2)")
+	test.EqualStr(t, testdeep.Set(1).String(), "Set((int) 1)")
+	test.EqualStr(t, testdeep.Set(1, 2).String(), "Set((int) 1,\n    (int) 2)")
 
-	equalStr(t, SubSetOf(1).String(), "SubSetOf((int) 1)")
-	equalStr(t, SubSetOf(1, 2).String(), "SubSetOf((int) 1,\n         (int) 2)")
+	test.EqualStr(t, testdeep.SubSetOf(1).String(), "SubSetOf((int) 1)")
+	test.EqualStr(t, testdeep.SubSetOf(1, 2).String(), "SubSetOf((int) 1,\n         (int) 2)")
 
-	equalStr(t, SuperSetOf(1).String(), "SuperSetOf((int) 1)")
-	equalStr(t, SuperSetOf(1, 2).String(),
+	test.EqualStr(t, testdeep.SuperSetOf(1).String(), "SuperSetOf((int) 1)")
+	test.EqualStr(t, testdeep.SuperSetOf(1, 2).String(),
 		"SuperSetOf((int) 1,\n           (int) 2)")
 
-	equalStr(t, NotAny(1).String(), "NotAny((int) 1)")
-	equalStr(t, NotAny(1, 2).String(), "NotAny((int) 1,\n       (int) 2)")
+	test.EqualStr(t, testdeep.NotAny(1).String(), "NotAny((int) 1)")
+	test.EqualStr(t, testdeep.NotAny(1, 2).String(), "NotAny((int) 1,\n       (int) 2)")
 }
 
 func TestSetTypeBehind(t *testing.T) {
-	equalTypes(t, Set(6), nil)
-	equalTypes(t, SubSetOf(6), nil)
-	equalTypes(t, SuperSetOf(6), nil)
-	equalTypes(t, NotAny(6), nil)
+	equalTypes(t, testdeep.Set(6), nil)
+	equalTypes(t, testdeep.SubSetOf(6), nil)
+	equalTypes(t, testdeep.SuperSetOf(6), nil)
+	equalTypes(t, testdeep.NotAny(6), nil)
 }

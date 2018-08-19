@@ -9,6 +9,9 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdLenCapBase struct {
@@ -33,7 +36,7 @@ func (b *tdLenCapBase) initLenCapBase(val interface{}) bool {
 	return false
 }
 
-func (b *tdLenCapBase) isEqual(ctx Context, got int) (bool, *Error) {
+func (b *tdLenCapBase) isEqual(ctx ctxerr.Context, got int) (bool, *ctxerr.Error) {
 	if b.isTestDeeper {
 		vlen := reflect.New(intType)
 		vlen.Elem().SetInt(int64(got))
@@ -56,7 +59,7 @@ var _ TestDeep = &tdLen{}
 
 // Len is a smuggler operator. It takes data, applies len() function
 // on it and compares its result to "val". Of course, the compared
-// value must be an array, a channel, a map, a slice or a string.
+// value must be an array, a channel, a map, a slice or a util.
 //
 // "val" can be an int value:
 //   Len(12)
@@ -77,30 +80,30 @@ func (l *tdLen) String() string {
 	return fmt.Sprintf("len=%d", l.expectedValue.Int())
 }
 
-func (l *tdLen) Match(ctx Context, got reflect.Value) *Error {
+func (l *tdLen) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Map, reflect.Slice, reflect.String:
 		ret, err := l.isEqual(ctx.AddFunctionCall("len"), got.Len())
 		if ret {
 			return err
 		}
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "bad length",
-			Got:      rawInt(got.Len()),
-			Expected: rawInt(l.expectedValue.Int()),
+			Got:      types.RawInt(got.Len()),
+			Expected: types.RawInt(l.expectedValue.Int()),
 		})
 
 	default:
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "bad type",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString("Array, Chan, Map, Slice or string"),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString("Array, Chan, Map, Slice or string"),
 		})
 	}
 }
@@ -134,30 +137,30 @@ func (c *tdCap) String() string {
 	return fmt.Sprintf("cap=%d", c.expectedValue.Int())
 }
 
-func (c *tdCap) Match(ctx Context, got reflect.Value) *Error {
+func (c *tdCap) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Slice:
 		ret, err := c.isEqual(ctx.AddFunctionCall("cap"), got.Cap())
 		if ret {
 			return err
 		}
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "bad capacity",
-			Got:      rawInt(got.Cap()),
-			Expected: rawInt(c.expectedValue.Int()),
+			Got:      types.RawInt(got.Cap()),
+			Expected: types.RawInt(c.expectedValue.Int()),
 		})
 
 	default:
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "bad type",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString("Array, Chan or Slice"),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString("Array, Chan or Slice"),
 		})
 	}
 }

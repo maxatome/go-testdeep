@@ -14,20 +14,24 @@ import (
 	"fmt"
 	"reflect"
 	"unsafe"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
-func isNilStr(isNil bool) rawString {
+func isNilStr(isNil bool) types.RawString {
 	if isNil {
 		return "nil"
 	}
 	return "not nil"
 }
 
-func deepValueEqualFinal(ctx Context, got, expected reflect.Value) (err *Error) {
+func deepValueEqualFinal(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxerr.Error) {
 	err = deepValueEqual(ctx, got, expected)
 	if err == nil {
 		// Try to merge pending errors
-		errMerge := ctx.mergeErrors()
+		errMerge := ctx.MergeErrors()
 		if errMerge != nil {
 			return errMerge
 		}
@@ -35,29 +39,30 @@ func deepValueEqualFinal(ctx Context, got, expected reflect.Value) (err *Error) 
 	return
 }
 
-func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
+func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxerr.Error) {
 	if !got.IsValid() || !expected.IsValid() {
 		if got.IsValid() == expected.IsValid() {
 			return
 		}
 
-		err = &Error{}
+		err = &ctxerr.Error{}
 
 		if expected.IsValid() { // here: !got.IsValid()
 			if expected.Type().Implements(testDeeper) {
-				ctx.curOperator = expected.Interface().(TestDeep)
-				if ctx.curOperator.HandleInvalid() {
-					return ctx.curOperator.Match(ctx, got)
+				curOperator := expected.Interface().(TestDeep)
+				ctx.CurOperator = curOperator
+				if curOperator.HandleInvalid() {
+					return curOperator.Match(ctx, got)
 				}
-				if ctx.booleanError {
-					return booleanError
+				if ctx.BooleanError {
+					return ctxerr.BooleanError
 				}
 
 				// Special case if "expected" is a TestDeep operator which
 				// does not handle invalid values: the operator is not called,
 				// but for the user the error comes from it
-			} else if ctx.booleanError {
-				return booleanError
+			} else if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
 
 			err.Expected = expected
@@ -68,8 +73,8 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 				return nil
 			}
 
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
 
 			err.Got = got
@@ -87,8 +92,9 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	if got.Type() != expected.Type() {
 		if expected.Type().Implements(testDeeper) {
-			ctx.curOperator = expected.Interface().(TestDeep)
-			return ctx.curOperator.Match(ctx, got)
+			curOperator := expected.Interface().(TestDeep)
+			ctx.CurOperator = curOperator
+			return curOperator.Match(ctx, got)
 		}
 
 		// "expected" is not a TestDeep operator
@@ -101,19 +107,19 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			return deepValueEqual(ctx, got.Elem(), expected)
 		}
 
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "type mismatch",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(expected.Type().String()),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString(expected.Type().String()),
 		})
 	}
 
 	// if ctx.Depth > 10 { panic("deepValueEqual") }	// for debugging
 
-	// We want to avoid putting more in the visited map than we need to.
+	// We want to avoid putting more in the Visited map than we need to.
 	// For any possible reference cycle that might be encountered,
 	// hard(t) needs to return true for at least one of the types in the cycle.
 	hard := func(k reflect.Kind) bool {
@@ -128,23 +134,23 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		addr1 := unsafe.Pointer(got.UnsafeAddr())
 		addr2 := unsafe.Pointer(expected.UnsafeAddr())
 		if uintptr(addr1) > uintptr(addr2) {
-			// Canonicalize order to reduce number of entries in visited.
+			// Canonicalize order to reduce number of entries in Visited.
 			// Assumes non-moving garbage collector.
 			addr1, addr2 = addr2, addr1
 		}
 
 		// Short circuit if references are already seen.
-		v := visit{
-			a1:  addr1,
-			a2:  addr2,
-			typ: got.Type(),
+		v := ctxerr.Visit{
+			A1:  addr1,
+			A2:  addr2,
+			Typ: got.Type(),
 		}
-		if ctx.visited[v] {
+		if ctx.Visited[v] {
 			return
 		}
 
 		// Remember for later.
-		ctx.visited[v] = true
+		ctx.Visited[v] = true
 	}
 
 	switch got.Kind() {
@@ -160,10 +166,10 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	case reflect.Slice:
 		if got.IsNil() != expected.IsNil() {
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message:  "nil slice",
 				Got:      isNilStr(got.IsNil()),
 				Expected: isNilStr(expected.IsNil()),
@@ -176,8 +182,8 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		)
 
 		// Shortcut in boolean context
-		if ctx.booleanError && gotLen != expectedLen {
-			return booleanError
+		if ctx.BooleanError && gotLen != expectedLen {
+			return ctxerr.BooleanError
 		}
 
 		if got.Pointer() == expected.Pointer() {
@@ -216,7 +222,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 				}
 			}
 
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message: fmt.Sprintf("comparing slices, from index #%d", maxLen),
 				Summary: res,
 			})
@@ -228,10 +234,10 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			if got.IsNil() == expected.IsNil() {
 				return
 			}
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message:  "nil interface",
 				Got:      isNilStr(got.IsNil()),
 				Expected: isNilStr(expected.IsNil()),
@@ -258,10 +264,10 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 
 	case reflect.Map:
 		if got.IsNil() != expected.IsNil() {
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message:  "nil map",
 				Got:      isNilStr(got.IsNil()),
 				Expected: isNilStr(expected.IsNil()),
@@ -269,8 +275,8 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		}
 
 		// Shortcut in boolean context
-		if ctx.booleanError && got.Len() != expected.Len() {
-			return booleanError
+		if ctx.BooleanError && got.Len() != expected.Len() {
+			return ctxerr.BooleanError
 		}
 
 		if got.Pointer() == expected.Pointer() {
@@ -292,14 +298,14 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			if err != nil {
 				return
 			}
-			foundKeys[mustGetInterface(vkey)] = true
+			foundKeys[dark.MustGetInterface(vkey)] = true
 		}
 
 		if got.Len() == len(foundKeys) {
 			if len(notFoundKeys) == 0 {
 				return
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message: "comparing map",
 				Summary: tdSetResult{
 					Kind:    keysSetResult,
@@ -308,8 +314,8 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			})
 		}
 
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
 
 		// Retrieve extra keys
@@ -325,7 +331,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 			}
 		}
 
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message: "comparing map",
 			Summary: res,
 		})
@@ -334,24 +340,24 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 		if got.IsNil() && expected.IsNil() {
 			return
 		}
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
 		// Can't do better than this:
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message: "functions mismatch",
-			Summary: rawString("<can not be compared>"),
+			Summary: types.RawString("<can not be compared>"),
 		})
 
 	default:
 		// Normal equality suffices
-		if mustGetInterface(got) == mustGetInterface(expected) {
+		if dark.MustGetInterface(got) == dark.MustGetInterface(expected) {
 			return
 		}
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "values differ",
 			Got:      got,
 			Expected: expected,
@@ -360,42 +366,7 @@ func deepValueEqual(ctx Context, got, expected reflect.Value) (err *Error) {
 }
 
 func deepValueEqualOK(got, expected reflect.Value) bool {
-	return deepValueEqualFinal(NewBooleanContext(), got, expected) == nil
-}
-
-func getInterface(val reflect.Value, force bool) (interface{}, bool) {
-	if !val.IsValid() {
-		return nil, true
-	}
-
-	if val.CanInterface() {
-		return val.Interface(), true
-	}
-
-	if force {
-		val = unsafeReflectValue(val)
-		if val.CanInterface() {
-			return val.Interface(), true
-		}
-	}
-
-	// For some types, we can copy them in new visitable reflect.Value instances
-	copyVal, ok := CopyValue(val)
-	if ok && copyVal.CanInterface() {
-		return copyVal.Interface(), true
-	}
-
-	// For others, in environments where "unsafe" package is not
-	// available, we cannot go further
-	return nil, false
-}
-
-func mustGetInterface(val reflect.Value) interface{} {
-	ret, ok := getInterface(val, true)
-	if ok {
-		return ret
-	}
-	panic("getInterface() does not handle " + val.Kind().String() + " kind")
+	return deepValueEqualFinal(newBooleanContext(), got, expected) == nil
 }
 
 // EqDeeply returns true if "got" matches "expected". "expected" can
@@ -406,9 +377,13 @@ func EqDeeply(got, expected interface{}) bool {
 
 // EqDeeplyError returns nil if "got" matches "expected". "expected"
 // can be the same type as got is, or contains some TestDeep
-// operators. If "got" does not match "expected", the returned *Error
+// operators. If "got" does not match "expected", the returned *ctxerr.Error
 // contains the reason of the first mismatch detected.
-func EqDeeplyError(got, expected interface{}) (err *Error) {
-	return deepValueEqualFinal(NewContext(),
+func EqDeeplyError(got, expected interface{}) error {
+	err := deepValueEqualFinal(newContext(),
 		reflect.ValueOf(got), reflect.ValueOf(expected))
+	if err == nil {
+		return nil
+	}
+	return err
 }

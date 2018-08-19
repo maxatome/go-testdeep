@@ -11,6 +11,10 @@ import (
 	"math"
 	"reflect"
 	"time"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type boundCmp uint8
@@ -381,15 +385,15 @@ func (b *tdBetween) matchFloat(got reflect.Value) (ok bool) {
 	return
 }
 
-func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
+func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Type() != b.expectedMin.Type() {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "type mismatch",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(b.expectedMin.Type().String()),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString(b.expectedMin.Type().String()),
 		})
 	}
 
@@ -410,13 +414,13 @@ func (b *tdBetween) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "values differ",
-		Got:      rawString(fmt.Sprintf("%v", got.Interface())),
-		Expected: rawString(b.String()),
+		Got:      types.RawString(fmt.Sprintf("%v", got.Interface())),
+		Expected: types.RawString(b.String()),
 	})
 }
 
@@ -437,16 +441,16 @@ func (b *tdBetween) String() string {
 	if min != nil {
 		if max != nil {
 			return fmt.Sprintf("%v %c got %c %v",
-				min, ternRune(b.minBound == boundIn, '≤', '<'),
-				ternRune(b.maxBound == boundIn, '≤', '<'), max)
+				min, util.TernRune(b.minBound == boundIn, '≤', '<'),
+				util.TernRune(b.maxBound == boundIn, '≤', '<'), max)
 		}
 
 		return fmt.Sprintf("%c %v",
-			ternRune(b.minBound == boundIn, '≥', '>'), min)
+			util.TernRune(b.minBound == boundIn, '≥', '>'), min)
 	}
 
 	return fmt.Sprintf("%c %v",
-		ternRune(b.maxBound == boundIn, '≤', '<'), max)
+		util.TernRune(b.maxBound == boundIn, '≤', '<'), max)
 }
 
 func (b *tdBetween) TypeBehind() reflect.Type {
@@ -455,15 +459,15 @@ func (b *tdBetween) TypeBehind() reflect.Type {
 
 var _ TestDeep = &tdBetweenTime{}
 
-func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
+func (b *tdBetweenTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Type() != b.expectedType {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "type mismatch",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(b.expectedType.String()),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString(b.expectedType.String()),
 		})
 	}
 
@@ -499,13 +503,13 @@ func (b *tdBetweenTime) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "values differ",
-		Got:      rawString(fmt.Sprintf("%v", got.Interface())),
-		Expected: rawString(b.String()),
+		Got:      types.RawString(fmt.Sprintf("%v", got.Interface())),
+		Expected: types.RawString(b.String()),
 	})
 }
 

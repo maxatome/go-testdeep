@@ -10,6 +10,10 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdRe struct {
@@ -101,7 +105,7 @@ func (r *tdRe) needCaptures() bool {
 	return r.captures.IsValid()
 }
 
-func (r *tdRe) matchByteCaptures(ctx Context, got []byte, result [][][]byte) *Error {
+func (r *tdRe) matchByteCaptures(ctx ctxerr.Context, got []byte, result [][][]byte) *ctxerr.Error {
 	if len(result) == 0 {
 		return r.doesNotMatch(ctx, got)
 	}
@@ -122,7 +126,7 @@ func (r *tdRe) matchByteCaptures(ctx Context, got []byte, result [][][]byte) *Er
 	return r.matchCaptures(ctx, captures)
 }
 
-func (r *tdRe) matchStringCaptures(ctx Context, got string, result [][]string) *Error {
+func (r *tdRe) matchStringCaptures(ctx ctxerr.Context, got string, result [][]string) *ctxerr.Error {
 	if len(result) == 0 {
 		return r.doesNotMatch(ctx, got)
 	}
@@ -140,30 +144,30 @@ func (r *tdRe) matchStringCaptures(ctx Context, got string, result [][]string) *
 	return r.matchCaptures(ctx, captures)
 }
 
-func (r *tdRe) matchCaptures(ctx Context, captures []string) (err *Error) {
-	return deepValueEqual(ctx.ResetPath("("+ctx.path+" =~ "+r.String()+")"),
+func (r *tdRe) matchCaptures(ctx ctxerr.Context, captures []string) (err *ctxerr.Error) {
+	return deepValueEqual(ctx.ResetPath("("+ctx.Path+" =~ "+r.String()+")"),
 		reflect.ValueOf(captures), r.captures)
 }
 
-func (r *tdRe) matchBool(ctx Context, got interface{}, result bool) *Error {
+func (r *tdRe) matchBool(ctx ctxerr.Context, got interface{}, result bool) *ctxerr.Error {
 	if result {
 		return nil
 	}
 	return r.doesNotMatch(ctx, got)
 }
 
-func (r *tdRe) doesNotMatch(ctx Context, got interface{}) *Error {
-	if ctx.booleanError {
-		return booleanError
+func (r *tdRe) doesNotMatch(ctx ctxerr.Context, got interface{}) *ctxerr.Error {
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "does not match Regexp",
 		Got:      got,
-		Expected: rawString(r.re.String()),
+		Expected: types.RawString(r.re.String()),
 	})
 }
 
-func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
+func (r *tdRe) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	var str string
 	switch got.Kind() {
 	case reflect.String:
@@ -178,37 +182,37 @@ func (r *tdRe) Match(ctx Context, got reflect.Value) *Error {
 			}
 			return r.matchBool(ctx, gotBytes, r.re.Match(gotBytes))
 		}
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "bad slice type",
-			Got:      rawString("[]" + got.Type().Elem().Kind().String()),
-			Expected: rawString("[]uint8"),
+			Got:      types.RawString("[]" + got.Type().Elem().Kind().String()),
+			Expected: types.RawString("[]uint8"),
 		})
 
 	default:
 		var strOK bool
-		if iface, ok := getInterface(got, true); ok {
-			switch gotVal := iface.(type) {
-			case error:
-				str = gotVal.Error()
-				strOK = true
-			case fmt.Stringer:
-				str = gotVal.String()
-				strOK = true
-			default:
-			}
+		iface := dark.MustGetInterface(got)
+
+		switch gotVal := iface.(type) {
+		case error:
+			str = gotVal.Error()
+			strOK = true
+		case fmt.Stringer:
+			str = gotVal.String()
+			strOK = true
+		default:
 		}
 
 		if !strOK {
-			if ctx.booleanError {
-				return booleanError
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&Error{
+			return ctx.CollectError(&ctxerr.Error{
 				Message: "bad type",
-				Got:     rawString(got.Type().String()),
-				Expected: rawString(
+				Got:     types.RawString(got.Type().String()),
+				Expected: types.RawString(
 					"string (convertible) OR fmt.Stringer OR error OR []uint8"),
 			})
 		}

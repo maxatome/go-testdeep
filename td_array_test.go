@@ -9,7 +9,8 @@ package testdeep_test
 import (
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestArray(t *testing.T) {
@@ -17,32 +18,36 @@ func TestArray(t *testing.T) {
 
 	//
 	// Simple array
-	checkOK(t, [5]int{}, Array([5]int{}, nil))
-	checkOK(t, [5]int{0, 0, 0, 4}, Array([5]int{0, 0, 0, 4}, nil))
-	checkOK(t, [5]int{1, 0, 3}, Array([5]int{}, ArrayEntries{2: 3, 0: 1}))
-	checkOK(t, [5]int{1, 2, 3}, Array([5]int{0, 2}, ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, [5]int{}, testdeep.Array([5]int{}, nil))
+	checkOK(t, [5]int{0, 0, 0, 4}, testdeep.Array([5]int{0, 0, 0, 4}, nil))
+	checkOK(t, [5]int{1, 0, 3},
+		testdeep.Array([5]int{}, testdeep.ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, [5]int{1, 2, 3},
+		testdeep.Array([5]int{0, 2}, testdeep.ArrayEntries{2: 3, 0: 1}))
 
 	zero, one, two := 0, 1, 2
 	checkOK(t, [5]*int{nil, &zero, &one, &two},
-		Array([5]*int{}, ArrayEntries{1: &zero, 2: &one, 3: &two, 4: nil}))
+		testdeep.Array(
+			[5]*int{}, testdeep.ArrayEntries{1: &zero, 2: &one, 3: &two, 4: nil}))
 
 	gotArray := [...]int{1, 2, 3, 4, 5}
 
-	checkError(t, gotArray, Array(MyArray{}, nil),
+	checkError(t, gotArray, testdeep.Array(MyArray{}, nil),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("[5]int"),
 			Expected: mustBe("testdeep_test.MyArray"),
 		})
-	checkError(t, gotArray, Array([5]int{1, 2, 3, 4, 6}, nil),
+	checkError(t, gotArray, testdeep.Array([5]int{1, 2, 3, 4, 6}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
 			Got:      mustBe("(int) 5"),
 			Expected: mustBe("(int) 6"),
 		})
-	checkError(t, gotArray, Array([5]int{1, 2, 3, 4}, ArrayEntries{4: 6}),
+	checkError(t, gotArray,
+		testdeep.Array([5]int{1, 2, 3, 4}, testdeep.ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
@@ -52,20 +57,25 @@ func TestArray(t *testing.T) {
 
 	//
 	// Array type
-	checkOK(t, MyArray{}, Array(MyArray{}, nil))
-	checkOK(t, MyArray{0, 0, 0, 4}, Array(MyArray{0, 0, 0, 4}, nil))
-	checkOK(t, MyArray{1, 0, 3}, Array(MyArray{}, ArrayEntries{2: 3, 0: 1}))
-	checkOK(t, MyArray{1, 2, 3}, Array(MyArray{0, 2}, ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, MyArray{}, testdeep.Array(MyArray{}, nil))
+	checkOK(t, MyArray{0, 0, 0, 4}, testdeep.Array(MyArray{0, 0, 0, 4}, nil))
+	checkOK(t, MyArray{1, 0, 3},
+		testdeep.Array(MyArray{}, testdeep.ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, MyArray{1, 2, 3},
+		testdeep.Array(MyArray{0, 2}, testdeep.ArrayEntries{2: 3, 0: 1}))
 
-	checkOK(t, &MyArray{}, Array(&MyArray{}, nil))
-	checkOK(t, &MyArray{0, 0, 0, 4}, Array(&MyArray{0, 0, 0, 4}, nil))
-	checkOK(t, &MyArray{1, 0, 3}, Array(&MyArray{}, ArrayEntries{2: 3, 0: 1}))
-	checkOK(t, &MyArray{1, 0, 3}, Array((*MyArray)(nil), ArrayEntries{2: 3, 0: 1}))
-	checkOK(t, &MyArray{1, 2, 3}, Array(&MyArray{0, 2}, ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, &MyArray{}, testdeep.Array(&MyArray{}, nil))
+	checkOK(t, &MyArray{0, 0, 0, 4}, testdeep.Array(&MyArray{0, 0, 0, 4}, nil))
+	checkOK(t, &MyArray{1, 0, 3},
+		testdeep.Array(&MyArray{}, testdeep.ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, &MyArray{1, 0, 3},
+		testdeep.Array((*MyArray)(nil), testdeep.ArrayEntries{2: 3, 0: 1}))
+	checkOK(t, &MyArray{1, 2, 3},
+		testdeep.Array(&MyArray{0, 2}, testdeep.ArrayEntries{2: 3, 0: 1}))
 
 	gotTypedArray := MyArray{1, 2, 3, 4, 5}
 
-	checkError(t, 123, Array(&MyArray{}, ArrayEntries{}),
+	checkError(t, 123, testdeep.Array(&MyArray{}, testdeep.ArrayEntries{}),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
@@ -73,7 +83,8 @@ func TestArray(t *testing.T) {
 			Expected: mustBe("*testdeep_test.MyArray"),
 		})
 
-	checkError(t, &MyStruct{}, Array(&MyArray{}, ArrayEntries{}),
+	checkError(t, &MyStruct{},
+		testdeep.Array(&MyArray{}, testdeep.ArrayEntries{}),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
@@ -81,21 +92,22 @@ func TestArray(t *testing.T) {
 			Expected: mustBe("*testdeep_test.MyArray"),
 		})
 
-	checkError(t, gotTypedArray, Array([5]int{}, nil),
+	checkError(t, gotTypedArray, testdeep.Array([5]int{}, nil),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("testdeep_test.MyArray"),
 			Expected: mustBe("[5]int"),
 		})
-	checkError(t, gotTypedArray, Array(MyArray{1, 2, 3, 4, 6}, nil),
+	checkError(t, gotTypedArray, testdeep.Array(MyArray{1, 2, 3, 4, 6}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
 			Got:      mustBe("(int) 5"),
 			Expected: mustBe("(int) 6"),
 		})
-	checkError(t, gotTypedArray, Array(MyArray{1, 2, 3, 4}, ArrayEntries{4: 6}),
+	checkError(t, gotTypedArray,
+		testdeep.Array(MyArray{1, 2, 3, 4}, testdeep.ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
@@ -103,21 +115,22 @@ func TestArray(t *testing.T) {
 			Expected: mustBe("(int) 6"),
 		})
 
-	checkError(t, &gotTypedArray, Array([5]int{}, nil),
+	checkError(t, &gotTypedArray, testdeep.Array([5]int{}, nil),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("*testdeep_test.MyArray"),
 			Expected: mustBe("[5]int"),
 		})
-	checkError(t, &gotTypedArray, Array(&MyArray{1, 2, 3, 4, 6}, nil),
+	checkError(t, &gotTypedArray, testdeep.Array(&MyArray{1, 2, 3, 4, 6}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
 			Got:      mustBe("(int) 5"),
 			Expected: mustBe("(int) 6"),
 		})
-	checkError(t, &gotTypedArray, Array(&MyArray{1, 2, 3, 4}, ArrayEntries{4: 6}),
+	checkError(t, &gotTypedArray,
+		testdeep.Array(&MyArray{1, 2, 3, 4}, testdeep.ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
@@ -127,21 +140,28 @@ func TestArray(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Array("test", nil) }, "usage: Array(")
-	checkPanic(t, func() { Array(&MyStruct{}, nil) }, "usage: Array(")
-	checkPanic(t, func() { Array([]int{}, nil) }, "usage: Array(")
-	checkPanic(t, func() { Array([1]int{}, ArrayEntries{1: 34}) },
+	test.CheckPanic(t, func() { testdeep.Array("test", nil) }, "usage: Array(")
+	test.CheckPanic(t,
+		func() { testdeep.Array(&MyStruct{}, nil) },
+		"usage: Array(")
+	test.CheckPanic(t, func() { testdeep.Array([]int{}, nil) }, "usage: Array(")
+	test.CheckPanic(t,
+		func() { testdeep.Array([1]int{}, testdeep.ArrayEntries{1: 34}) },
 		"array length is 1, so cannot have #1 expected index")
-	checkPanic(t, func() { Array([3]int{}, ArrayEntries{1: nil}) },
+	test.CheckPanic(t,
+		func() { testdeep.Array([3]int{}, testdeep.ArrayEntries{1: nil}) },
 		"expected value of #1 cannot be nil as items type is int")
-	checkPanic(t, func() { Array([3]int{}, ArrayEntries{1: "bad"}) },
+	test.CheckPanic(t,
+		func() { testdeep.Array([3]int{}, testdeep.ArrayEntries{1: "bad"}) },
 		"type string of #1 expected value differs from array contents (int)")
-	checkPanic(t, func() { Array([1]int{12}, ArrayEntries{0: 21}) },
+	test.CheckPanic(t,
+		func() { testdeep.Array([1]int{12}, testdeep.ArrayEntries{0: 21}) },
 		"non zero #0 entry in model already exists in expectedEntries")
 
 	//
 	// String
-	equalStr(t, Array(MyArray{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
+	test.EqualStr(t,
+		testdeep.Array(MyArray{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}).String(),
 		`Array(testdeep_test.MyArray{
   0: (int) 2
   1: (int) 3
@@ -150,7 +170,8 @@ func TestArray(t *testing.T) {
   4: (int) 0
 })`)
 
-	equalStr(t, Array(&MyArray{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
+	test.EqualStr(t,
+		testdeep.Array(&MyArray{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}).String(),
 		`Array(*testdeep_test.MyArray{
   0: (int) 2
   1: (int) 3
@@ -159,16 +180,16 @@ func TestArray(t *testing.T) {
   4: (int) 0
 })`)
 
-	equalStr(t, Array([0]int{}, ArrayEntries{}).String(),
+	test.EqualStr(t, testdeep.Array([0]int{}, testdeep.ArrayEntries{}).String(),
 		`Array([0]int{})`)
 }
 
 func TestArrayTypeBehind(t *testing.T) {
 	type MyArray [12]int
 
-	equalTypes(t, Array([12]int{}, nil), [12]int{})
-	equalTypes(t, Array(MyArray{}, nil), MyArray{})
-	equalTypes(t, Array(&MyArray{}, nil), &MyArray{})
+	equalTypes(t, testdeep.Array([12]int{}, nil), [12]int{})
+	equalTypes(t, testdeep.Array(MyArray{}, nil), MyArray{})
+	equalTypes(t, testdeep.Array(&MyArray{}, nil), &MyArray{})
 }
 
 func TestSlice(t *testing.T) {
@@ -176,31 +197,37 @@ func TestSlice(t *testing.T) {
 
 	//
 	// Simple slice
-	checkOK(t, []int{}, Slice([]int{}, nil))
-	checkOK(t, []int{0, 3}, Slice([]int{0, 3}, nil))
-	checkOK(t, []int{2, 3}, Slice([]int{}, ArrayEntries{1: 3, 0: 2}))
-	checkOK(t, []int{2, 3}, Slice(([]int)(nil), ArrayEntries{1: 3, 0: 2}))
-	checkOK(t, []int{2, 3, 4}, Slice([]int{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
-	checkOK(t, []int{2, 3, 4}, Slice([]int{2, 3}, ArrayEntries{2: 4}))
-	checkOK(t, []int{2, 3, 4, 0, 6}, Slice([]int{2, 3}, ArrayEntries{2: 4, 4: 6}))
+	checkOK(t, []int{}, testdeep.Slice([]int{}, nil))
+	checkOK(t, []int{0, 3}, testdeep.Slice([]int{0, 3}, nil))
+	checkOK(t, []int{2, 3},
+		testdeep.Slice([]int{}, testdeep.ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, []int{2, 3},
+		testdeep.Slice(([]int)(nil), testdeep.ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, []int{2, 3, 4},
+		testdeep.Slice([]int{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, []int{2, 3, 4},
+		testdeep.Slice([]int{2, 3}, testdeep.ArrayEntries{2: 4}))
+	checkOK(t, []int{2, 3, 4, 0, 6},
+		testdeep.Slice([]int{2, 3}, testdeep.ArrayEntries{2: 4, 4: 6}))
 
 	gotSlice := []int{2, 3, 4}
 
-	checkError(t, gotSlice, Slice(MySlice{}, nil),
+	checkError(t, gotSlice, testdeep.Slice(MySlice{}, nil),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("[]int"),
 			Expected: mustBe("testdeep_test.MySlice"),
 		})
-	checkError(t, gotSlice, Slice([]int{2, 3, 5}, nil),
+	checkError(t, gotSlice, testdeep.Slice([]int{2, 3, 5}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, gotSlice, Slice([]int{2, 3}, ArrayEntries{2: 5}),
+	checkError(t, gotSlice,
+		testdeep.Slice([]int{2, 3}, testdeep.ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
@@ -210,27 +237,31 @@ func TestSlice(t *testing.T) {
 
 	//
 	// Slice type
-	checkOK(t, MySlice{}, Slice(MySlice{}, nil))
-	checkOK(t, MySlice{0, 3}, Slice(MySlice{0, 3}, nil))
-	checkOK(t, MySlice{2, 3}, Slice(MySlice{}, ArrayEntries{1: 3, 0: 2}))
-	checkOK(t, MySlice{2, 3}, Slice((MySlice)(nil), ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, MySlice{}, testdeep.Slice(MySlice{}, nil))
+	checkOK(t, MySlice{0, 3}, testdeep.Slice(MySlice{0, 3}, nil))
+	checkOK(t, MySlice{2, 3},
+		testdeep.Slice(MySlice{}, testdeep.ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, MySlice{2, 3},
+		testdeep.Slice((MySlice)(nil), testdeep.ArrayEntries{1: 3, 0: 2}))
 	checkOK(t, MySlice{2, 3, 4},
-		Slice(MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
+		testdeep.Slice(MySlice{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}))
 	checkOK(t, MySlice{2, 3, 4, 0, 6},
-		Slice(MySlice{2, 3}, ArrayEntries{2: 4, 4: 6}))
+		testdeep.Slice(MySlice{2, 3}, testdeep.ArrayEntries{2: 4, 4: 6}))
 
-	checkOK(t, &MySlice{}, Slice(&MySlice{}, nil))
-	checkOK(t, &MySlice{0, 3}, Slice(&MySlice{0, 3}, nil))
-	checkOK(t, &MySlice{2, 3}, Slice(&MySlice{}, ArrayEntries{1: 3, 0: 2}))
-	checkOK(t, &MySlice{2, 3}, Slice((*MySlice)(nil), ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, &MySlice{}, testdeep.Slice(&MySlice{}, nil))
+	checkOK(t, &MySlice{0, 3}, testdeep.Slice(&MySlice{0, 3}, nil))
+	checkOK(t, &MySlice{2, 3},
+		testdeep.Slice(&MySlice{}, testdeep.ArrayEntries{1: 3, 0: 2}))
+	checkOK(t, &MySlice{2, 3},
+		testdeep.Slice((*MySlice)(nil), testdeep.ArrayEntries{1: 3, 0: 2}))
 	checkOK(t, &MySlice{2, 3, 4},
-		Slice(&MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}))
+		testdeep.Slice(&MySlice{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}))
 	checkOK(t, &MySlice{2, 3, 4, 0, 6},
-		Slice(&MySlice{2, 3}, ArrayEntries{2: 4, 4: 6}))
+		testdeep.Slice(&MySlice{2, 3}, testdeep.ArrayEntries{2: 4, 4: 6}))
 
 	gotTypedSlice := MySlice{2, 3, 4}
 
-	checkError(t, 123, Slice(&MySlice{}, ArrayEntries{}),
+	checkError(t, 123, testdeep.Slice(&MySlice{}, testdeep.ArrayEntries{}),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
@@ -238,7 +269,8 @@ func TestSlice(t *testing.T) {
 			Expected: mustBe("*testdeep_test.MySlice"),
 		})
 
-	checkError(t, &MyStruct{}, Slice(&MySlice{}, ArrayEntries{}),
+	checkError(t, &MyStruct{},
+		testdeep.Slice(&MySlice{}, testdeep.ArrayEntries{}),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
@@ -246,35 +278,37 @@ func TestSlice(t *testing.T) {
 			Expected: mustBe("*testdeep_test.MySlice"),
 		})
 
-	checkError(t, gotTypedSlice, Slice([]int{}, nil),
+	checkError(t, gotTypedSlice, testdeep.Slice([]int{}, nil),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("testdeep_test.MySlice"),
 			Expected: mustBe("[]int"),
 		})
-	checkError(t, gotTypedSlice, Slice(MySlice{2, 3, 5}, nil),
+	checkError(t, gotTypedSlice, testdeep.Slice(MySlice{2, 3, 5}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, gotTypedSlice, Slice(MySlice{2, 3}, ArrayEntries{2: 5}),
+	checkError(t, gotTypedSlice,
+		testdeep.Slice(MySlice{2, 3}, testdeep.ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, gotTypedSlice, Slice(MySlice{2, 3, 4}, ArrayEntries{3: 5}),
+	checkError(t, gotTypedSlice,
+		testdeep.Slice(MySlice{2, 3, 4}, testdeep.ArrayEntries{3: 5}),
 		expectedError{
 			Message:  mustBe("expected value out of range"),
 			Path:     mustBe("DATA[3]"),
 			Got:      mustBe("<non-existent value>"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, gotTypedSlice, Slice(MySlice{2, 3}, nil),
+	checkError(t, gotTypedSlice, testdeep.Slice(MySlice{2, 3}, nil),
 		expectedError{
 			Message:  mustBe("got value out of range"),
 			Path:     mustBe("DATA[2]"),
@@ -282,28 +316,29 @@ func TestSlice(t *testing.T) {
 			Expected: mustBe("<non-existent value>"),
 		})
 
-	checkError(t, &gotTypedSlice, Slice([]int{}, nil),
+	checkError(t, &gotTypedSlice, testdeep.Slice([]int{}, nil),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("*testdeep_test.MySlice"),
 			Expected: mustBe("[]int"),
 		})
-	checkError(t, &gotTypedSlice, Slice(&MySlice{2, 3, 5}, nil),
+	checkError(t, &gotTypedSlice, testdeep.Slice(&MySlice{2, 3, 5}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, &gotTypedSlice, Slice(&MySlice{2, 3}, ArrayEntries{2: 5}),
+	checkError(t, &gotTypedSlice,
+		testdeep.Slice(&MySlice{2, 3}, testdeep.ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
 		})
-	checkError(t, &gotTypedSlice, Slice(&MySlice{2, 3}, nil),
+	checkError(t, &gotTypedSlice, testdeep.Slice(&MySlice{2, 3}, nil),
 		expectedError{
 			Message:  mustBe("got value out of range"),
 			Path:     mustBe("DATA[2]"),
@@ -318,44 +353,50 @@ func TestSlice(t *testing.T) {
 		gotNilTypedSlice MySlice
 	)
 
-	checkOK(t, gotNilSlice, Slice([]int{}, nil))
-	checkOK(t, gotNilTypedSlice, Slice(MySlice{}, nil))
-	checkOK(t, &gotNilTypedSlice, Slice(&MySlice{}, nil))
+	checkOK(t, gotNilSlice, testdeep.Slice([]int{}, nil))
+	checkOK(t, gotNilTypedSlice, testdeep.Slice(MySlice{}, nil))
+	checkOK(t, &gotNilTypedSlice, testdeep.Slice(&MySlice{}, nil))
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Slice("test", nil) }, "usage: Slice(")
-	checkPanic(t, func() { Slice(&MyStruct{}, nil) }, "usage: Slice(")
-	checkPanic(t, func() { Slice([0]int{}, nil) }, "usage: Slice(")
-	checkPanic(t, func() { Slice([]int{}, ArrayEntries{1: "bad"}) },
+	test.CheckPanic(t, func() { testdeep.Slice("test", nil) }, "usage: Slice(")
+	test.CheckPanic(t,
+		func() { testdeep.Slice(&MyStruct{}, nil) },
+		"usage: Slice(")
+	test.CheckPanic(t, func() { testdeep.Slice([0]int{}, nil) }, "usage: Slice(")
+	test.CheckPanic(t,
+		func() { testdeep.Slice([]int{}, testdeep.ArrayEntries{1: "bad"}) },
 		"type string of #1 expected value differs from slice contents (int)")
-	checkPanic(t, func() { Slice([]int{12}, ArrayEntries{0: 21}) },
+	test.CheckPanic(t,
+		func() { testdeep.Slice([]int{12}, testdeep.ArrayEntries{0: 21}) },
 		"non zero #0 entry in model already exists in expectedEntries")
 
 	//
 	// String
-	equalStr(t, Slice(MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
+	test.EqualStr(t,
+		testdeep.Slice(MySlice{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}).String(),
 		`Slice(testdeep_test.MySlice{
   0: (int) 2
   1: (int) 3
   2: (int) 4
 })`)
 
-	equalStr(t, Slice(&MySlice{0, 0, 4}, ArrayEntries{1: 3, 0: 2}).String(),
+	test.EqualStr(t,
+		testdeep.Slice(&MySlice{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}).String(),
 		`Slice(*testdeep_test.MySlice{
   0: (int) 2
   1: (int) 3
   2: (int) 4
 })`)
 
-	equalStr(t, Slice(&MySlice{}, ArrayEntries{}).String(),
+	test.EqualStr(t, testdeep.Slice(&MySlice{}, testdeep.ArrayEntries{}).String(),
 		`Slice(*testdeep_test.MySlice{})`)
 }
 
 func TestSliceTypeBehind(t *testing.T) {
 	type MySlice []int
 
-	equalTypes(t, Slice([]int{}, nil), []int{})
-	equalTypes(t, Slice(MySlice{}, nil), MySlice{})
-	equalTypes(t, Slice(&MySlice{}, nil), &MySlice{})
+	equalTypes(t, testdeep.Slice([]int{}, nil), []int{})
+	equalTypes(t, testdeep.Slice(MySlice{}, nil), MySlice{})
+	equalTypes(t, testdeep.Slice(&MySlice{}, nil), &MySlice{})
 }

@@ -9,7 +9,8 @@ package testdeep_test
 import (
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestArrayEach(t *testing.T) {
@@ -28,7 +29,7 @@ func TestArrayEach(t *testing.T) {
 			&MyArray{4, 4, 4},
 			&MySlice{4, 4, 4},
 		},
-		ArrayEach(4))
+		testdeep.ArrayEach(4))
 
 	checkOKForEach(t,
 		[]interface{}{
@@ -41,18 +42,18 @@ func TestArrayEach(t *testing.T) {
 			&MyEmptyArray{},
 			&MySlice{},
 		},
-		ArrayEach(4))
+		testdeep.ArrayEach(4))
 
-	checkOK(t, ([]int)(nil), ArrayEach(4))
-	checkOK(t, MySlice(nil), ArrayEach(4))
-	checkError(t, (*MyArray)(nil), ArrayEach(4),
+	checkOK(t, ([]int)(nil), testdeep.ArrayEach(4))
+	checkOK(t, MySlice(nil), testdeep.ArrayEach(4))
+	checkError(t, (*MyArray)(nil), testdeep.ArrayEach(4),
 		expectedError{
 			Message:  mustBe("nil pointer"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil *testdeep_test.MyArray"),
 			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
 		})
-	checkError(t, (*MySlice)(nil), ArrayEach(4),
+	checkError(t, (*MySlice)(nil), testdeep.ArrayEach(4),
 		expectedError{
 			Message:  mustBe("nil pointer"),
 			Path:     mustBe("DATA"),
@@ -69,14 +70,15 @@ func TestArrayEach(t *testing.T) {
 			&MyArray{20, 22, 29},
 			&MySlice{20, 22, 29},
 		},
-		ArrayEach(Between(20, 30)))
+		testdeep.ArrayEach(testdeep.Between(20, 30)))
 
-	checkError(t, nil, ArrayEach(4), expectedError{
-		Message:  mustBe("nil value"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
-	})
+	checkError(t, nil, testdeep.ArrayEach(4),
+		expectedError{
+			Message:  mustBe("nil value"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+		})
 
 	checkErrorForEach(t,
 		[]interface{}{
@@ -87,7 +89,7 @@ func TestArrayEach(t *testing.T) {
 			&MyArray{4, 5, 4},
 			&MySlice{4, 5, 4},
 		},
-		ArrayEach(4),
+		testdeep.ArrayEach(4),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
@@ -95,7 +97,7 @@ func TestArrayEach(t *testing.T) {
 			Expected: mustBe("(int) 4"),
 		})
 
-	checkError(t, 666, ArrayEach(4),
+	checkError(t, 666, testdeep.ArrayEach(4),
 		expectedError{
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA"),
@@ -103,7 +105,7 @@ func TestArrayEach(t *testing.T) {
 			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
 		})
 	num := 666
-	checkError(t, &num, ArrayEach(4),
+	checkError(t, &num, testdeep.ArrayEach(4),
 		expectedError{
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA"),
@@ -111,8 +113,8 @@ func TestArrayEach(t *testing.T) {
 			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
 		})
 
-	checkOK(t, []interface{}{nil, nil, nil}, ArrayEach(nil))
-	checkError(t, []interface{}{nil, nil, nil, 66}, ArrayEach(nil),
+	checkOK(t, []interface{}{nil, nil, nil}, testdeep.ArrayEach(nil))
+	checkError(t, []interface{}{nil, nil, nil, 66}, testdeep.ArrayEach(nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[3]"),
@@ -122,12 +124,12 @@ func TestArrayEach(t *testing.T) {
 
 	//
 	// String
-	equalStr(t, ArrayEach(4).String(), "ArrayEach((int) 4)")
-	equalStr(t, ArrayEach(All(1, 2)).String(),
+	test.EqualStr(t, testdeep.ArrayEach(4).String(), "ArrayEach((int) 4)")
+	test.EqualStr(t, testdeep.ArrayEach(testdeep.All(1, 2)).String(),
 		`ArrayEach(All((int) 1,
               (int) 2))`)
 }
 
 func TestArrayEachTypeBehind(t *testing.T) {
-	equalTypes(t, ArrayEach(6), nil)
+	equalTypes(t, testdeep.ArrayEach(6), nil)
 }

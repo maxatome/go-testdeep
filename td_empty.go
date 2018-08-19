@@ -8,9 +8,12 @@ package testdeep
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
-const emptyBadType rawString = "Array, Chan, Map, Slice, string or pointer(s) on them"
+const emptyBadType types.RawString = "Array, Chan, Map, Slice, string or pointer(s) on them"
 
 type tdEmpty struct {
 	BaseOKNil
@@ -63,28 +66,28 @@ func isEmpty(got reflect.Value) (bool, bool) {
 	}
 }
 
-func (e *tdEmpty) Match(ctx Context, got reflect.Value) (err *Error) {
+func (e *tdEmpty) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	ok, badType := isEmpty(got)
 	if ok {
 		return nil
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
 
 	if badType {
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "bad type",
-			Got:      rawString(got.Type().String()),
+			Got:      types.RawString(got.Type().String()),
 			Expected: emptyBadType,
 		})
 	}
 
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "not empty",
 		Got:      got,
-		Expected: rawString("empty"),
+		Expected: types.RawString("empty"),
 	})
 }
 
@@ -110,26 +113,26 @@ func NotEmpty() TestDeep {
 	}
 }
 
-func (e *tdNotEmpty) Match(ctx Context, got reflect.Value) (err *Error) {
+func (e *tdNotEmpty) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	ok, badType := isEmpty(got)
 	if ok {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "empty",
 			Got:      got,
-			Expected: rawString("not empty"),
+			Expected: types.RawString("not empty"),
 		})
 	}
 
 	if badType {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "bad type",
-			Got:      rawString(got.Type().String()),
+			Got:      types.RawString(got.Type().String()),
 			Expected: emptyBadType,
 		})
 	}

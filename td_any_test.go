@@ -9,40 +9,44 @@ package testdeep_test
 import (
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestAny(t *testing.T) {
-	checkOK(t, 6, Any(nil, 5, 6, 7))
-	checkOK(t, nil, Any(5, 6, 7, nil))
+	checkOK(t, 6, testdeep.Any(nil, 5, 6, 7))
+	checkOK(t, nil, testdeep.Any(5, 6, 7, nil))
 
-	checkError(t, 6, Any(5), expectedError{
-		Message:  mustBe("comparing with Any"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("(int) 6"),
-		Expected: mustBe("Any((int) 5)"),
-	})
+	checkError(t, 6, testdeep.Any(5),
+		expectedError{
+			Message:  mustBe("comparing with Any"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("(int) 6"),
+			Expected: mustBe("Any((int) 5)"),
+		})
 
-	checkError(t, 6, Any(nil), expectedError{
-		Message:  mustBe("comparing with Any"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("(int) 6"),
-		Expected: mustBe("Any(nil)"),
-	})
+	checkError(t, 6, testdeep.Any(nil),
+		expectedError{
+			Message:  mustBe("comparing with Any"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("(int) 6"),
+			Expected: mustBe("Any(nil)"),
+		})
 
-	checkError(t, nil, Any(6), expectedError{
-		Message:  mustBe("comparing with Any"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("Any((int) 6)"),
-	})
+	checkError(t, nil, testdeep.Any(6),
+		expectedError{
+			Message:  mustBe("comparing with Any"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("Any((int) 6)"),
+		})
 
 	//
 	// String
-	equalStr(t, Any(6).String(), "Any((int) 6)")
-	equalStr(t, Any(6, 7).String(), "Any((int) 6,\n    (int) 7)")
+	test.EqualStr(t, testdeep.Any(6).String(), "Any((int) 6)")
+	test.EqualStr(t, testdeep.Any(6, 7).String(), "Any((int) 6,\n    (int) 7)")
 }
 
 func TestAnyTypeBehind(t *testing.T) {
-	equalTypes(t, Any(6), nil)
+	equalTypes(t, testdeep.Any(6), nil)
 }

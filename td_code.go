@@ -9,6 +9,10 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdCode struct {
@@ -81,15 +85,15 @@ func Code(fn interface{}) TestDeep {
 	panic("Code(FUNC): FUNC must return bool or (bool, string)")
 }
 
-func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
+func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if !got.Type().AssignableTo(c.argType) {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message:  "incompatible parameter type",
-			Got:      rawString(got.Type().String()),
-			Expected: rawString(c.argType.String()),
+			Got:      types.RawString(got.Type().String()),
+			Expected: types.RawString(c.argType.String()),
 		})
 	}
 
@@ -97,12 +101,12 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 	// choice, as we think it is better to use Code() on surrounding
 	// struct instead.
 	if !got.CanInterface() {
-		if ctx.booleanError {
-			return booleanError
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&Error{
+		return ctx.CollectError(&ctxerr.Error{
 			Message: "cannot compare unexported field",
-			Summary: rawString("use Code() on surrounding struct instead"),
+			Summary: types.RawString("use Code() on surrounding struct instead"),
 		})
 	}
 
@@ -111,11 +115,11 @@ func (c *tdCode) Match(ctx Context, got reflect.Value) *Error {
 		return nil
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
 
-	err := Error{
+	err := ctxerr.Error{
 		Message: "ran code with %% as argument",
 	}
 
@@ -142,19 +146,18 @@ func (c *tdCode) TypeBehind() reflect.Type {
 }
 
 type tdCodeResult struct {
+	types.TestDeepStamp
 	Value  reflect.Value
 	Reason string
 }
 
-var _ testDeepStringer = tdCodeResult{}
-
-func (r tdCodeResult) _TestDeep() {}
+var _ types.TestDeepStringer = tdCodeResult{}
 
 func (r tdCodeResult) String() string {
 	if r.Reason == "" {
 		return fmt.Sprintf("  value: %s\nit failed but didn't say why",
-			toString(r.Value))
+			util.ToString(r.Value))
 	}
 	return fmt.Sprintf("        value: %s\nit failed coz: %s",
-		toString(r.Value), r.Reason)
+		util.ToString(r.Value), r.Reason)
 }

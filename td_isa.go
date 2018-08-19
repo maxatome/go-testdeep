@@ -8,6 +8,9 @@ package testdeep
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdIsa struct {
@@ -50,7 +53,7 @@ func Isa(model interface{}) TestDeep {
 	}
 }
 
-func (i *tdIsa) Match(ctx Context, got reflect.Value) *Error {
+func (i *tdIsa) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	gotType := got.Type()
 
 	if gotType == i.expectedType {
@@ -63,10 +66,10 @@ func (i *tdIsa) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(i.errorTypeMismatch(rawString(gotType.String())))
+	return ctx.CollectError(i.errorTypeMismatch(types.RawString(gotType.String())))
 }
 
 func (i *tdIsa) String() string {

@@ -8,6 +8,8 @@ package testdeep
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 type tdNil struct {
@@ -24,7 +26,7 @@ func Nil() TestDeep {
 	}
 }
 
-func (n *tdNil) Match(ctx Context, got reflect.Value) *Error {
+func (n *tdNil) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if !got.IsValid() {
 		return nil
 	}
@@ -37,10 +39,10 @@ func (n *tdNil) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "non-nil",
 		Got:      got,
 		Expected: n,
@@ -65,7 +67,7 @@ func NotNil() TestDeep {
 	}
 }
 
-func (n *tdNotNil) Match(ctx Context, got reflect.Value) *Error {
+func (n *tdNotNil) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.IsValid() {
 		switch got.Kind() {
 		case reflect.Chan, reflect.Func, reflect.Interface,
@@ -80,10 +82,10 @@ func (n *tdNotNil) Match(ctx Context, got reflect.Value) *Error {
 		}
 	}
 
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "nil value",
 		Got:      got,
 		Expected: n,

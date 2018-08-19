@@ -9,15 +9,19 @@ package testdeep
 import (
 	"bytes"
 	"testing"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 func TestFormatError(t *testing.T) {
-	ttt := &TestTestingT{}
+	ttt := &test.TestingT{}
 
-	err := &Error{
-		Context: NewContext(),
+	err := &ctxerr.Error{
+		Context: newContext(),
 		Message: "test error message",
-		Summary: rawString("test error summary"),
+		Summary: types.RawString("test error summary"),
 	}
 
 	nonStringName := bytes.NewBufferString("zip!")
@@ -26,45 +30,51 @@ func TestFormatError(t *testing.T) {
 		//
 		// Without args
 		formatError(ttt, fatal, err)
-		equalStr(t, ttt.LastMessage, `Failed test
+		test.EqualStr(t, ttt.LastMessage, `Failed test
 DATA: test error message
 	test error summary`)
-		equalBool(t, ttt.IsFatal, fatal)
+		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		//
 		// With one arg
 		formatError(ttt, fatal, err, "foo bar!")
-		equalStr(t, ttt.LastMessage, `Failed test 'foo bar!'
+		test.EqualStr(t, ttt.LastMessage, `Failed test 'foo bar!'
 DATA: test error message
 	test error summary`)
-		equalBool(t, ttt.IsFatal, fatal)
+		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		formatError(ttt, fatal, err, nonStringName)
-		equalStr(t, ttt.LastMessage, `Failed test 'zip!'
+		test.EqualStr(t, ttt.LastMessage, `Failed test 'zip!'
 DATA: test error message
 	test error summary`)
-		equalBool(t, ttt.IsFatal, fatal)
+		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		//
 		// With several args & Printf format
 		formatError(ttt, fatal, err, "hello %d!", 123)
-		equalStr(t, ttt.LastMessage, `Failed test 'hello 123!'
+		test.EqualStr(t, ttt.LastMessage, `Failed test 'hello 123!'
 DATA: test error message
 	test error summary`)
-		equalBool(t, ttt.IsFatal, fatal)
+		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		//
 		// With several args without Printf format
 		formatError(ttt, fatal, err, "hello ", "world! ", 123)
-		equalStr(t, ttt.LastMessage, `Failed test 'hello world! 123'
+		test.EqualStr(t, ttt.LastMessage, `Failed test 'hello world! 123'
 DATA: test error message
 	test error summary`)
-		equalBool(t, ttt.IsFatal, fatal)
+		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		formatError(ttt, fatal, err, nonStringName, "hello ", "world! ", 123)
-		equalStr(t, ttt.LastMessage, `Failed test 'zip!hello world! 123'
+		test.EqualStr(t, ttt.LastMessage, `Failed test 'zip!hello world! 123'
 DATA: test error message
 	test error summary`)
-		equalBool(t, ttt.IsFatal, fatal)
+		test.EqualBool(t, ttt.IsFatal, fatal)
 	}
+}
+
+// Just to test the case where t is an interface and not a *testing.T
+// See t.Helper() issue in CmpDeeply
+func TestCmpDeeply(t *testing.T) {
+	test.IsTrue(t, CmpDeeply(&test.TestingT{}, 1, 1))
 }

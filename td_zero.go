@@ -8,6 +8,8 @@ package testdeep
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 type tdZero struct {
@@ -34,7 +36,7 @@ func Zero() TestDeep {
 	}
 }
 
-func (z *tdZero) Match(ctx Context, got reflect.Value) (err *Error) {
+func (z *tdZero) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	// nil case
 	if !got.IsValid() {
 		return nil
@@ -70,14 +72,14 @@ func NotZero() TestDeep {
 	}
 }
 
-func (z *tdNotZero) Match(ctx Context, got reflect.Value) (err *Error) {
+func (z *tdNotZero) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	if got.IsValid() && !deepValueEqualOK(got, reflect.New(got.Type()).Elem()) {
 		return nil
 	}
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "zero value",
 		Got:      got,
 		Expected: z,

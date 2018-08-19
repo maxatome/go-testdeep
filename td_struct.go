@@ -12,6 +12,10 @@ import (
 	"os"
 	"reflect"
 	"sort"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdStruct struct {
@@ -151,15 +155,11 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 			vfield := vmodel.FieldByIndex(field.Index)
 
 			// Try to force access to unexported fields
-			if !vfield.CanInterface() {
-				vfield = unsafeReflectValue(vfield)
-			}
-
-			fieldIf, ok := getInterface(vfield, false) // no need to force here
+			fieldIf, ok := dark.GetInterface(vfield, true)
 			if !ok {
 				// Probably in an environment where "unsafe" package is forbidden... :(
 				fmt.Fprintf(os.Stderr, // nolint: errcheck
-					"field %s is unexported and cannot be overridden, skip it.",
+					"field %s is unexported and cannot be overridden, skip it from model.\n",
 					fieldName)
 				continue
 			}
@@ -186,7 +186,7 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 	return st
 }
 
-func (s *tdStruct) Match(ctx Context, got reflect.Value) (err *Error) {
+func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	err = s.checkPtr(ctx, &got, false)
 	if err != nil {
 		return ctx.CollectError(err)
@@ -223,7 +223,7 @@ func (s *tdStruct) String() string {
 
 		for _, fieldInfo := range s.expectedFields {
 			fmt.Fprintf(buf, "  %s: %s\n", // nolint: errcheck
-				fieldInfo.name, toString(fieldInfo.expected))
+				fieldInfo.name, util.ToString(fieldInfo.expected))
 		}
 
 		buf.WriteString("})")

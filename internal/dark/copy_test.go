@@ -4,13 +4,14 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package testdeep_test
+package dark_test
 
 import (
 	"reflect"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func checkFieldValueOK(t *testing.T,
@@ -20,12 +21,12 @@ func checkFieldValueOK(t *testing.T,
 	testName := "field " + fieldName
 
 	fieldOrig := s.FieldByName(fieldName)
-	isFalse(t, fieldOrig.CanInterface(), testName+" + fieldOrig.CanInterface()")
+	test.IsFalse(t, fieldOrig.CanInterface(), testName+" + fieldOrig.CanInterface()")
 
-	fieldCopy, ok := CopyValue(fieldOrig)
-	if isTrue(t, ok, "Can copy "+testName) {
-		if isTrue(t, fieldCopy.CanInterface(), testName+" + fieldCopy.CanInterface()") {
-			CmpDeeply(t, fieldCopy.Interface(), value,
+	fieldCopy, ok := dark.CopyValue(fieldOrig)
+	if test.IsTrue(t, ok, "Can copy "+testName) {
+		if test.IsTrue(t, fieldCopy.CanInterface(), testName+" + fieldCopy.CanInterface()") {
+			test.IsTrue(t, reflect.DeepEqual(fieldCopy.Interface(), value),
 				testName+" + fieldCopy contents")
 		}
 	}
@@ -37,10 +38,10 @@ func checkFieldValueNOK(t *testing.T, s reflect.Value, fieldName string) {
 	testName := "field " + fieldName
 
 	fieldOrig := s.FieldByName(fieldName)
-	isFalse(t, fieldOrig.CanInterface(), testName+" + fieldOrig.CanInterface()")
+	test.IsFalse(t, fieldOrig.CanInterface(), testName+" + fieldOrig.CanInterface()")
 
-	_, ok := CopyValue(fieldOrig)
-	isFalse(t, ok, "Could not copy "+testName)
+	_, ok := dark.CopyValue(fieldOrig)
+	test.IsFalse(t, ok, "Could not copy "+testName)
 }
 
 func TestCopyValue(t *testing.T) {

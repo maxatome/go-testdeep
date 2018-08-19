@@ -12,7 +12,9 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestStruct(t *testing.T) {
@@ -29,7 +31,7 @@ func TestStruct(t *testing.T) {
 	//
 	// Using pointer
 	checkOK(t, &gotStruct,
-		Struct(&MyStruct{}, StructFields{
+		testdeep.Struct(&MyStruct{}, testdeep.StructFields{
 			"ValBool": true,
 			"ValStr":  "foobar",
 			"ValInt":  123,
@@ -37,14 +39,15 @@ func TestStruct(t *testing.T) {
 		}))
 
 	checkOK(t, &gotStruct,
-		Struct((*MyStruct)(nil), StructFields{
+		testdeep.Struct((*MyStruct)(nil), testdeep.StructFields{
 			"ValBool": true,
 			"ValStr":  "foobar",
 			"ValInt":  123,
 			"Ptr":     nil,
 		}))
 
-	checkError(t, 123, Struct(&MyStruct{}, StructFields{}),
+	checkError(t, 123,
+		testdeep.Struct(&MyStruct{}, testdeep.StructFields{}),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
@@ -52,7 +55,8 @@ func TestStruct(t *testing.T) {
 			Expected: mustContain("*testdeep_test.MyStruct"),
 		})
 
-	checkError(t, &MyStructBase{}, Struct(&MyStruct{}, StructFields{}),
+	checkError(t, &MyStructBase{},
+		testdeep.Struct(&MyStruct{}, testdeep.StructFields{}),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
@@ -61,7 +65,7 @@ func TestStruct(t *testing.T) {
 		})
 
 	checkError(t, &gotStruct,
-		Struct(&MyStruct{}, StructFields{
+		testdeep.Struct(&MyStruct{}, testdeep.StructFields{
 			"ValBool": false, // ← does not match
 			"ValStr":  "foobar",
 			"ValInt":  123,
@@ -74,7 +78,7 @@ func TestStruct(t *testing.T) {
 		})
 
 	checkOK(t, &gotStruct,
-		Struct(&MyStruct{
+		testdeep.Struct(&MyStruct{
 			MyStructMid: MyStructMid{
 				MyStructBase: MyStructBase{
 					ValBool: true,
@@ -85,7 +89,7 @@ func TestStruct(t *testing.T) {
 		}, nil))
 
 	checkError(t, &gotStruct,
-		Struct(&MyStruct{
+		testdeep.Struct(&MyStruct{
 			MyStructMid: MyStructMid{
 				MyStructBase: MyStructBase{
 					ValBool: true,
@@ -103,14 +107,14 @@ func TestStruct(t *testing.T) {
 
 	// Zero values
 	checkOK(t, &MyStruct{},
-		Struct(&MyStruct{}, StructFields{
+		testdeep.Struct(&MyStruct{}, testdeep.StructFields{
 			"ValBool": false,
 			"ValStr":  "",
 			"ValInt":  0,
 		}))
 
 	// nil cases
-	checkError(t, nil, Struct(&MyStruct{}, nil),
+	checkError(t, nil, testdeep.Struct(&MyStruct{}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
@@ -118,7 +122,7 @@ func TestStruct(t *testing.T) {
 			Expected: mustContain("*testdeep_test.MyStruct"),
 		})
 
-	checkError(t, (*MyStruct)(nil), Struct(&MyStruct{}, nil),
+	checkError(t, (*MyStruct)(nil), testdeep.Struct(&MyStruct{}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
@@ -129,21 +133,22 @@ func TestStruct(t *testing.T) {
 	//
 	// Without pointer
 	checkOK(t, gotStruct,
-		Struct(MyStruct{}, StructFields{
+		testdeep.Struct(MyStruct{}, testdeep.StructFields{
 			"ValBool": true,
 			"ValStr":  "foobar",
 			"ValInt":  123,
 		}))
 
-	checkError(t, 123, Struct(MyStruct{}, StructFields{}), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustContain("int"),
-		Expected: mustContain("testdeep_test.MyStruct"),
-	})
+	checkError(t, 123, testdeep.Struct(MyStruct{}, testdeep.StructFields{}),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("int"),
+			Expected: mustContain("testdeep_test.MyStruct"),
+		})
 
 	checkError(t, gotStruct,
-		Struct(MyStruct{}, StructFields{
+		testdeep.Struct(MyStruct{}, testdeep.StructFields{
 			"ValBool": false, // ← does not match
 			"ValStr":  "foobar",
 			"ValInt":  123,
@@ -156,7 +161,7 @@ func TestStruct(t *testing.T) {
 		})
 
 	checkOK(t, gotStruct,
-		Struct(MyStruct{
+		testdeep.Struct(MyStruct{
 			MyStructMid: MyStructMid{
 				MyStructBase: MyStructBase{
 					ValBool: true,
@@ -167,7 +172,7 @@ func TestStruct(t *testing.T) {
 		}, nil))
 
 	checkError(t, gotStruct,
-		Struct(MyStruct{
+		testdeep.Struct(MyStruct{
 			MyStructMid: MyStructMid{
 				MyStructBase: MyStructBase{
 					ValBool: true,
@@ -185,14 +190,14 @@ func TestStruct(t *testing.T) {
 
 	// Zero values
 	checkOK(t, MyStruct{},
-		Struct(MyStruct{}, StructFields{
+		testdeep.Struct(MyStruct{}, testdeep.StructFields{
 			"ValBool": false,
 			"ValStr":  "",
 			"ValInt":  0,
 		}))
 
 	// nil cases
-	checkError(t, nil, Struct(MyStruct{}, nil),
+	checkError(t, nil, testdeep.Struct(MyStruct{}, nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
@@ -200,7 +205,7 @@ func TestStruct(t *testing.T) {
 			Expected: mustContain("testdeep_test.MyStruct"),
 		})
 
-	checkError(t, (*MyStruct)(nil), Struct(MyStruct{}, nil),
+	checkError(t, (*MyStruct)(nil), testdeep.Struct(MyStruct{}, nil),
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA"),
@@ -210,69 +215,72 @@ func TestStruct(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Struct("test", nil) }, "usage: Struct")
+	test.CheckPanic(t, func() { testdeep.Struct("test", nil) }, "usage: Struct")
 
 	i := 12
-	checkPanic(t, func() { Struct(&i, nil) }, "usage: Struct")
+	test.CheckPanic(t, func() { testdeep.Struct(&i, nil) }, "usage: Struct")
 
-	checkPanic(t,
-		func() { Struct(&MyStruct{}, StructFields{"UnknownField": 123}) },
+	test.CheckPanic(t,
+		func() { testdeep.Struct(&MyStruct{}, testdeep.StructFields{"UnknownField": 123}) },
 		"struct testdeep_test.MyStruct has no field `UnknownField'")
 
-	checkPanic(t,
-		func() { Struct(&MyStruct{}, StructFields{"ValBool": 123}) },
+	test.CheckPanic(t,
+		func() { testdeep.Struct(&MyStruct{}, testdeep.StructFields{"ValBool": 123}) },
 		"type int of field expected value ValBool differs from struct one (bool)")
 
-	checkPanic(t,
-		func() { Struct(&MyStruct{}, StructFields{"ValBool": nil}) },
+	test.CheckPanic(t,
+		func() { testdeep.Struct(&MyStruct{}, testdeep.StructFields{"ValBool": nil}) },
 		"expected value of field ValBool cannot be nil as it is a bool")
 
-	checkPanic(t,
+	test.CheckPanic(t,
 		func() {
-			Struct(&MyStruct{
+			testdeep.Struct(&MyStruct{
 				MyStructMid: MyStructMid{
 					MyStructBase: MyStructBase{
 						ValBool: true,
 					},
 				},
 			},
-				StructFields{"ValBool": false})
+				testdeep.StructFields{"ValBool": false})
 		},
 		"non zero field ValBool in model already exists in expectedFields")
 
 	//
 	// String
-	equalStr(t, Struct(MyStruct{
-		MyStructMid: MyStructMid{
-			ValStr: "foobar",
+	test.EqualStr(t,
+		testdeep.Struct(MyStruct{
+			MyStructMid: MyStructMid{
+				ValStr: "foobar",
+			},
+			ValInt: 123,
 		},
-		ValInt: 123,
-	},
-		StructFields{
-			"ValBool": false,
-		}).String(),
+			testdeep.StructFields{
+				"ValBool": false,
+			}).String(),
 		`Struct(testdeep_test.MyStruct{
   ValBool: (bool) false
   ValInt: (int) 123
   ValStr: "foobar"
 })`)
 
-	equalStr(t, Struct(&MyStruct{
-		MyStructMid: MyStructMid{
-			ValStr: "foobar",
+	test.EqualStr(t,
+		testdeep.Struct(&MyStruct{
+			MyStructMid: MyStructMid{
+				ValStr: "foobar",
+			},
+			ValInt: 123,
 		},
-		ValInt: 123,
-	},
-		StructFields{
-			"ValBool": false,
-		}).String(),
+			testdeep.StructFields{
+				"ValBool": false,
+			}).String(),
 		`Struct(*testdeep_test.MyStruct{
   ValBool: (bool) false
   ValInt: (int) 123
   ValStr: "foobar"
 })`)
 
-	equalStr(t, Struct(&MyStruct{}, StructFields{}).String(),
+	test.EqualStr(t,
+		testdeep.Struct(&MyStruct{}, testdeep.StructFields{}).String(),
 		`Struct(*testdeep_test.MyStruct{})`)
 }
 
@@ -332,25 +340,29 @@ func TestStructPrivateFields(t *testing.T) {
 		},
 	}
 
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"name": "foobar",
-	}))
+	checkOK(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"name": "foobar",
+		}))
 
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"name": Re("^foo"),
-	}))
+	checkOK(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"name": testdeep.Re("^foo"),
+		}))
 
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"nameb": Re("^foo"),
-	}))
+	checkOK(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"nameb": testdeep.Re("^foo"),
+		}))
 
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"err": Re("error"),
-	}))
+	checkOKOrPanicIfUnsafeDisabled(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"err": testdeep.Re("error"),
+		}))
 
 	checkError(t, got,
-		Struct(structPrivateFields{}, StructFields{
-			"iface": Re("buffer"),
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"iface": testdeep.Re("buffer"),
 		}),
 		expectedError{
 			Message:  mustBe("bad type"),
@@ -359,47 +371,62 @@ func TestStructPrivateFields(t *testing.T) {
 			Expected: mustBe("string (convertible) OR fmt.Stringer OR error OR []uint8"),
 		})
 
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"next": Struct(&structPrivateFields{}, StructFields{
-			"iface": Re("buffer"),
-		}),
-	}))
-
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"properties": []int{20, 22, 23, 21},
-	}))
-
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"properties": ArrayEach(Between(20, 23)),
-	}))
-
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"byKey": MapEach(Struct(&privateValue{}, StructFields{
-			"weight": Between(12, 34),
-			"value":  Any(HasPrefix("t"), HasSuffix("e")),
-		})),
-	}))
-
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"byKey": SuperMapOf(
-			map[privateKey]*privateValue{
-				{num: 3, name: "zip"}: {value: "ttse", weight: 34},
-			},
-			MapEntries{
-				privateKey{num: 2, name: "bar"}: &privateValue{value: "tset", weight: 23},
+	checkOKOrPanicIfUnsafeDisabled(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"next": testdeep.Struct(&structPrivateFields{}, testdeep.StructFields{
+				"iface": testdeep.Re("buffer"),
 			}),
-	}))
+		}))
 
-	checkOK(t, got, Struct(structPrivateFields{}, StructFields{
-		"birth":  TruncTime(d("2018-04-01T10:11:12Z"), time.Second),
-		"birth2": TruncTime(MyTime(d("2018-03-01T09:08:07Z")), time.Second),
-	}))
+	checkOK(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"properties": []int{20, 22, 23, 21},
+		}))
+
+	checkOK(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"properties": testdeep.ArrayEach(testdeep.Between(20, 23)),
+		}))
+
+	checkOK(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"byKey": testdeep.MapEach(testdeep.Struct(&privateValue{}, testdeep.StructFields{
+				"weight": testdeep.Between(12, 34),
+				"value":  testdeep.Any(testdeep.HasPrefix("t"), testdeep.HasSuffix("e")),
+			})),
+		}))
+
+	checkOK(t, got,
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"byKey": testdeep.SuperMapOf(
+				map[privateKey]*privateValue{
+					{num: 3, name: "zip"}: {value: "ttse", weight: 34},
+				},
+				testdeep.MapEntries{
+					privateKey{num: 2, name: "bar"}: &privateValue{value: "tset", weight: 23},
+				}),
+		}))
+
+	expected := testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+		"birth":  testdeep.TruncTime(d("2018-04-01T10:11:12Z"), time.Second),
+		"birth2": testdeep.TruncTime(MyTime(d("2018-03-01T09:08:07Z")), time.Second),
+	})
+	if !dark.UnsafeDisabled {
+		checkOK(t, got, expected)
+	} else {
+		checkError(t, got, expected,
+			expectedError{
+				Message: mustBe("cannot compare"),
+				Path:    mustBe("DATA.birth"),
+				Summary: mustBe("unexported field that cannot be overridden"),
+			})
+	}
 
 	checkError(t, got,
-		Struct(structPrivateFields{}, StructFields{
-			"next": Struct(&structPrivateFields{}, StructFields{
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"next": testdeep.Struct(&structPrivateFields{}, testdeep.StructFields{
 				"name":  "sub",
-				"birth": Code(func(t time.Time) bool { return true }),
+				"birth": testdeep.Code(func(t time.Time) bool { return true }),
 			}),
 		}),
 		expectedError{
@@ -409,10 +436,10 @@ func TestStructPrivateFields(t *testing.T) {
 		})
 
 	checkError(t, got,
-		Struct(structPrivateFields{}, StructFields{
-			"next": Struct(&structPrivateFields{}, StructFields{
+		testdeep.Struct(structPrivateFields{}, testdeep.StructFields{
+			"next": testdeep.Struct(&structPrivateFields{}, testdeep.StructFields{
 				"name": "sub",
-				"birth": Smuggle(
+				"birth": testdeep.Smuggle(
 					func(t time.Time) string { return t.String() },
 					"2018-04-01T10:11:12.123456789Z"),
 			}),
@@ -425,6 +452,6 @@ func TestStructPrivateFields(t *testing.T) {
 }
 
 func TestStructTypeBehind(t *testing.T) {
-	equalTypes(t, Struct(MyStruct{}, nil), MyStruct{})
-	equalTypes(t, Struct(&MyStruct{}, nil), &MyStruct{})
+	equalTypes(t, testdeep.Struct(MyStruct{}, nil), MyStruct{})
+	equalTypes(t, testdeep.Struct(&MyStruct{}, nil), &MyStruct{})
 }

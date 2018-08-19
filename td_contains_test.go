@@ -12,7 +12,7 @@ import (
 	"reflect"
 	"testing"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
 )
 
 func TestContains(t *testing.T) {
@@ -33,15 +33,16 @@ func TestContains(t *testing.T) {
 	} {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
-		checkOK(t, got, Contains(34), testName)
-		checkOK(t, got, Contains(Between(30, 35)), testName)
+		checkOK(t, got, testdeep.Contains(34), testName)
+		checkOK(t, got, testdeep.Contains(testdeep.Between(30, 35)), testName)
 
-		checkError(t, got, Contains(35), expectedError{
-			Message:  mustBe("does not contain"),
-			Path:     mustBe("DATA"),
-			Got:      mustContain("(int) 34"), // as well as other items in fact...
-			Expected: mustBe("Contains((int) 35)"),
-		}, testName)
+		checkError(t, got, testdeep.Contains(35),
+			expectedError{
+				Message:  mustBe("does not contain"),
+				Path:     mustBe("DATA"),
+				Got:      mustContain("(int) 34"), // as well as other items in fact...
+				Expected: mustBe("Contains((int) 35)"),
+			}, testName)
 	}
 
 	for idx, got := range []interface{}{
@@ -50,14 +51,15 @@ func TestContains(t *testing.T) {
 	} {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
-		checkOK(t, got, Contains(Between('n', 'p')), testName)
+		checkOK(t, got, testdeep.Contains(testdeep.Between('n', 'p')), testName)
 
-		checkError(t, got, Contains(Between('y', 'z')), expectedError{
-			Message:  mustBe("does not contain"),
-			Path:     mustBe("DATA"),
-			Got:      mustContain(`"foobar"`), // as well as other items in fact...
-			Expected: mustBe(fmt.Sprintf("Contains(%d ≤ got ≤ %d)", 'y', 'z')),
-		}, testName)
+		checkError(t, got, testdeep.Contains(testdeep.Between('y', 'z')),
+			expectedError{
+				Message:  mustBe("does not contain"),
+				Path:     mustBe("DATA"),
+				Got:      mustContain(`"foobar"`), // as well as other items in fact...
+				Expected: mustBe(fmt.Sprintf("Contains(%d ≤ got ≤ %d)", 'y', 'z')),
+			}, testName)
 	}
 }
 
@@ -80,17 +82,18 @@ func TestContainsNil(t *testing.T) {
 	} {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
-		checkOK(t, got, Contains(nil), testName)
-		checkOK(t, got, Contains((*int)(nil)), testName)
-		checkOK(t, got, Contains(Nil()), testName)
-		checkOK(t, got, Contains(NotNil()), testName)
+		checkOK(t, got, testdeep.Contains(nil), testName)
+		checkOK(t, got, testdeep.Contains((*int)(nil)), testName)
+		checkOK(t, got, testdeep.Contains(testdeep.Nil()), testName)
+		checkOK(t, got, testdeep.Contains(testdeep.NotNil()), testName)
 
-		checkError(t, got, Contains((*uint8)(nil)), expectedError{
-			Message:  mustBe("does not contain"),
-			Path:     mustBe("DATA"),
-			Got:      mustContain("12345642"),
-			Expected: mustBe("Contains((*uint8)(<nil>))"),
-		}, testName)
+		checkError(t, got, testdeep.Contains((*uint8)(nil)),
+			expectedError{
+				Message:  mustBe("does not contain"),
+				Path:     mustBe("DATA"),
+				Got:      mustContain("12345642"),
+				Expected: mustBe("Contains((*uint8)(<nil>))"),
+			}, testName)
 	}
 
 	for idx, got := range []interface{}{
@@ -106,9 +109,9 @@ func TestContainsNil(t *testing.T) {
 	} {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
-		checkOK(t, got, Contains(nil), testName)
-		checkOK(t, got, Contains(Nil()), testName)
-		checkOK(t, got, Contains(NotNil()), testName)
+		checkOK(t, got, testdeep.Contains(nil), testName)
+		checkOK(t, got, testdeep.Contains(testdeep.Nil()), testName)
+		checkOK(t, got, testdeep.Contains(testdeep.NotNil()), testName)
 	}
 
 	for idx, got := range []interface{}{
@@ -118,28 +121,31 @@ func TestContainsNil(t *testing.T) {
 	} {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
-		checkError(t, got, Contains(nil), expectedError{
-			Message: mustBe("does not contain"),
-			Path:    mustBe("DATA"),
-			// Got
-			Expected: mustBe("Contains(nil)"),
-		}, testName)
+		checkError(t, got, testdeep.Contains(nil),
+			expectedError{
+				Message: mustBe("does not contain"),
+				Path:    mustBe("DATA"),
+				// Got
+				Expected: mustBe("Contains(nil)"),
+			}, testName)
 	}
 
-	checkError(t, "foobar", Contains(nil), expectedError{
-		Message:  mustBe("cannot check contains"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("string"),
-		Expected: mustBe("Contains(nil)"),
-	})
+	checkError(t, "foobar", testdeep.Contains(nil),
+		expectedError{
+			Message:  mustBe("cannot check contains"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("string"),
+			Expected: mustBe("Contains(nil)"),
+		})
 
 	// Caught by deepValueEqual, before Match() call
-	checkError(t, nil, Contains(nil), expectedError{
-		Message:  mustBe("values differ"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("nil"),
-		Expected: mustBe("Contains(nil)"),
-	})
+	checkError(t, nil, testdeep.Contains(nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("Contains(nil)"),
+		})
 }
 
 func TestContainsString(t *testing.T) {
@@ -153,33 +159,36 @@ func TestContainsString(t *testing.T) {
 	} {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
-		checkOK(t, got, Contains("po bi"), testName)
-		checkOK(t, got, Contains('o'), testName)
-		checkOK(t, got, Contains(byte('o')), testName)
+		checkOK(t, got, testdeep.Contains("po bi"), testName)
+		checkOK(t, got, testdeep.Contains('o'), testName)
+		checkOK(t, got, testdeep.Contains(byte('o')), testName)
 
-		checkError(t, got, Contains("zip"), expectedError{
-			Message:  mustBe("does not contain"),
-			Path:     mustBe("DATA"),
-			Got:      mustContain(`"pipo bingo"`),
-			Expected: mustMatch(`^Contains\(.*"zip"`),
-		})
+		checkError(t, got, testdeep.Contains("zip"),
+			expectedError{
+				Message:  mustBe("does not contain"),
+				Path:     mustBe("DATA"),
+				Got:      mustContain(`"pipo bingo"`),
+				Expected: mustMatch(`^Contains\(.*"zip"`),
+			})
 
-		checkError(t, got, Contains(12), expectedError{
-			Message:  mustBe("cannot check contains"),
-			Path:     mustBe("DATA"),
-			Got:      mustBe(reflect.TypeOf(got).String()),
-			Expected: mustBe("int"),
-		})
+		checkError(t, got, testdeep.Contains(12),
+			expectedError{
+				Message:  mustBe("cannot check contains"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe(reflect.TypeOf(got).String()),
+				Expected: mustBe("int"),
+			})
 	}
 
-	checkError(t, 12, Contains("bar"), expectedError{
-		Message:  mustBe("bad type"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("int"),
-		Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
-	})
+	checkError(t, 12, testdeep.Contains("bar"),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
+		})
 }
 
 func TestContainsTypeBehind(t *testing.T) {
-	equalTypes(t, Contains("x"), nil)
+	equalTypes(t, testdeep.Contains("x"), nil)
 }

@@ -10,7 +10,8 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestSmuggle(t *testing.T) {
@@ -35,119 +36,120 @@ func TestSmuggle(t *testing.T) {
 	// One returned value
 	checkOK(t,
 		gotTime,
-		Smuggle(
+		testdeep.Smuggle(
 			func(date time.Time) int {
 				return date.Year()
 			},
-			Between(2010, 2020)))
+			testdeep.Between(2010, 2020)))
 
 	checkOK(t,
 		gotStruct,
-		Smuggle(
-			func(s MyStruct) SmuggledGot {
-				return SmuggledGot{
+		testdeep.Smuggle(
+			func(s MyStruct) testdeep.SmuggledGot {
+				return testdeep.SmuggledGot{
 					Name: "ValStr",
 					Got:  s.ValStr,
 				}
 			},
-			Contains("oob")))
+			testdeep.Contains("oob")))
 
 	checkOK(t,
 		gotStruct,
-		Smuggle(
-			func(s MyStruct) *SmuggledGot {
-				return &SmuggledGot{
+		testdeep.Smuggle(
+			func(s MyStruct) *testdeep.SmuggledGot {
+				return &testdeep.SmuggledGot{
 					Name: "ValStr",
 					Got:  s.ValStr,
 				}
 			},
-			Contains("oob")))
+			testdeep.Contains("oob")))
 
 	//
 	// 2 returned values
 	checkOK(t,
 		gotStruct,
-		Smuggle(
+		testdeep.Smuggle(
 			func(s MyStruct) (string, bool) {
 				if s.ValStr == "" {
 					return "", false
 				}
 				return s.ValStr, true
 			},
-			Contains("oob")))
+			testdeep.Contains("oob")))
 
 	checkOK(t,
 		gotStruct,
-		Smuggle(
-			func(s MyStruct) (SmuggledGot, bool) {
+		testdeep.Smuggle(
+			func(s MyStruct) (testdeep.SmuggledGot, bool) {
 				if s.ValStr == "" {
-					return SmuggledGot{}, false
+					return testdeep.SmuggledGot{}, false
 				}
-				return SmuggledGot{
+				return testdeep.SmuggledGot{
 					Name: "ValStr",
 					Got:  s.ValStr,
 				}, true
 			},
-			Contains("oob")))
+			testdeep.Contains("oob")))
 
 	checkOK(t,
 		gotStruct,
-		Smuggle(
-			func(s MyStruct) (*SmuggledGot, bool) {
+		testdeep.Smuggle(
+			func(s MyStruct) (*testdeep.SmuggledGot, bool) {
 				if s.ValStr == "" {
 					return nil, false
 				}
-				return &SmuggledGot{
+				return &testdeep.SmuggledGot{
 					Name: "ValStr",
 					Got:  s.ValStr,
 				}, true
 			},
-			Contains("oob")))
+			testdeep.Contains("oob")))
 
 	//
 	// 3 returned values
 	checkOK(t,
 		gotStruct,
-		Smuggle(
+		testdeep.Smuggle(
 			func(s MyStruct) (string, bool, string) {
 				if s.ValStr == "" {
 					return "", false, "ValStr must not be empty"
 				}
 				return s.ValStr, true, ""
 			},
-			Contains("oob")))
+			testdeep.Contains("oob")))
 
 	checkOK(t,
 		gotStruct,
-		Smuggle(
-			func(s MyStruct) (SmuggledGot, bool, string) {
+		testdeep.Smuggle(
+			func(s MyStruct) (testdeep.SmuggledGot, bool, string) {
 				if s.ValStr == "" {
-					return SmuggledGot{}, false, "ValStr must not be empty"
+					return testdeep.SmuggledGot{}, false, "ValStr must not be empty"
 				}
-				return SmuggledGot{
+				return testdeep.SmuggledGot{
 					Name: "ValStr",
 					Got:  s.ValStr,
 				}, true, ""
 			},
-			Contains("oob")))
+			testdeep.Contains("oob")))
 
 	checkOK(t,
 		gotStruct,
-		Smuggle(
-			func(s MyStruct) (*SmuggledGot, bool, string) {
+		testdeep.Smuggle(
+			func(s MyStruct) (*testdeep.SmuggledGot, bool, string) {
 				if s.ValStr == "" {
 					return nil, false, "ValStr must not be empty"
 				}
-				return &SmuggledGot{
+				return &testdeep.SmuggledGot{
 					Name: "ValStr",
 					Got:  s.ValStr,
 				}, true, ""
 			},
-			Contains("oob")))
+			testdeep.Contains("oob")))
 
 	//
 	// Errors
-	checkError(t, 123, Smuggle(func(n float64) int { return int(n) }, 123),
+	checkError(t, 123,
+		testdeep.Smuggle(func(n float64) int { return int(n) }, 123),
 		expectedError{
 			Message:  mustBe("incompatible parameter type"),
 			Path:     mustBe("DATA"),
@@ -156,7 +158,8 @@ func TestSmuggle(t *testing.T) {
 		})
 
 	type xInt int
-	checkError(t, xInt(12), Smuggle(func(n int) int64 { return int64(n) }, 12),
+	checkError(t, xInt(12),
+		testdeep.Smuggle(func(n int) int64 { return int64(n) }, 12),
 		expectedError{
 			Message:  mustBe("incompatible parameter type"),
 			Path:     mustBe("DATA"),
@@ -165,7 +168,7 @@ func TestSmuggle(t *testing.T) {
 		})
 
 	checkError(t, 12,
-		Smuggle(func(n int) (int, bool) { return n, false }, 12),
+		testdeep.Smuggle(func(n int) (int, bool) { return n, false }, 12),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
@@ -175,7 +178,7 @@ func TestSmuggle(t *testing.T) {
 	type MyBool bool
 	type MyString string
 	checkError(t, 12,
-		Smuggle(func(n int) (int, MyBool, MyString) {
+		testdeep.Smuggle(func(n int) (int, MyBool, MyString) {
 			return n, false, "very custom error"
 		}, 12),
 		expectedError{
@@ -185,9 +188,7 @@ func TestSmuggle(t *testing.T) {
 		})
 
 	checkError(t, 12,
-		Smuggle(func(n int) *SmuggledGot {
-			return nil
-		}, int64(13)),
+		testdeep.Smuggle(func(n int) *testdeep.SmuggledGot { return nil }, int64(13)),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
@@ -197,7 +198,8 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Errors behind Smuggle()
-	checkError(t, 12, Smuggle(func(n int) int64 { return int64(n) }, int64(13)),
+	checkError(t, 12,
+		testdeep.Smuggle(func(n int) int64 { return int64(n) }, int64(13)),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA<smuggled>"),
@@ -206,8 +208,8 @@ func TestSmuggle(t *testing.T) {
 		})
 
 	checkError(t, 12,
-		Smuggle(func(n int) SmuggledGot {
-			return SmuggledGot{
+		testdeep.Smuggle(func(n int) testdeep.SmuggledGot {
+			return testdeep.SmuggledGot{
 				// With Name = ""
 				Got: int64(n),
 			}
@@ -220,8 +222,8 @@ func TestSmuggle(t *testing.T) {
 		})
 
 	checkError(t, 12,
-		Smuggle(func(n int) *SmuggledGot {
-			return &SmuggledGot{
+		testdeep.Smuggle(func(n int) *testdeep.SmuggledGot {
+			return &testdeep.SmuggledGot{
 				Name: "<int64>",
 				Got:  int64(n),
 			}
@@ -234,8 +236,8 @@ func TestSmuggle(t *testing.T) {
 		})
 
 	checkError(t, 12,
-		Smuggle(func(n int) *SmuggledGot {
-			return &SmuggledGot{
+		testdeep.Smuggle(func(n int) *testdeep.SmuggledGot {
+			return &testdeep.SmuggledGot{
 				Name: "Int64",
 				Got:  int64(n),
 			}
@@ -249,49 +251,49 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Bad usage
-	checkPanic(t, func() { Smuggle("test", 12) }, "usage: Smuggle")
+	test.CheckPanic(t, func() { testdeep.Smuggle("test", 12) }, "usage: Smuggle")
 
 	// Bad number of args
-	checkPanic(t, func() {
-		Smuggle(func() int { return 0 }, 12)
+	test.CheckPanic(t, func() {
+		testdeep.Smuggle(func() int { return 0 }, 12)
 	}, "FUNC must take only one argument")
 
-	checkPanic(t, func() {
-		Smuggle(func(a int, b string) int { return 0 }, 12)
+	test.CheckPanic(t, func() {
+		testdeep.Smuggle(func(a int, b string) int { return 0 }, 12)
 	}, "FUNC must take only one argument")
 
 	// Bad number of returned values
-	checkPanic(t, func() {
-		Smuggle(func(a int) {}, 12)
+	test.CheckPanic(t, func() {
+		testdeep.Smuggle(func(a int) {}, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
-	checkPanic(t, func() {
-		Smuggle(
+	test.CheckPanic(t, func() {
+		testdeep.Smuggle(
 			func(a int) (int, bool, string, int) { return 0, false, "", 23 },
 			12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
 	// Bad returned types
-	checkPanic(t, func() {
-		Smuggle(func(a int) (int, int) { return 0, 0 }, 12)
+	test.CheckPanic(t, func() {
+		testdeep.Smuggle(func(a int) (int, int) { return 0, 0 }, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
-	checkPanic(t, func() {
-		Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12)
+	test.CheckPanic(t, func() {
+		testdeep.Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12)
 	}, "FUNC must return value or (value, bool) or (value, bool, string)")
 
 	//
 	// String
-	equalStr(t,
-		Smuggle(func(n int) int { return 0 }, 12).String(),
+	test.EqualStr(t,
+		testdeep.Smuggle(func(n int) int { return 0 }, 12).String(),
 		"Smuggle(func(int) int)")
 
-	equalStr(t,
-		Smuggle(func(n int) (int, bool) { return 23, false }, 12).String(),
+	test.EqualStr(t,
+		testdeep.Smuggle(func(n int) (int, bool) { return 23, false }, 12).String(),
 		"Smuggle(func(int) (int, bool))")
 
-	equalStr(t,
-		Smuggle(func(n int) (int, MyBool, MyString) { return 23, false, "" }, 12).
+	test.EqualStr(t,
+		testdeep.Smuggle(func(n int) (int, MyBool, MyString) { return 23, false, "" }, 12).
 			String(),
 		"Smuggle(func(int) (int, testdeep_test.MyBool, testdeep_test.MyString))")
 }
@@ -299,11 +301,13 @@ func TestSmuggle(t *testing.T) {
 func TestSmuggleTypeBehind(t *testing.T) {
 	// Type behind is the smuggle function parameter one
 
-	equalTypes(t, Smuggle(func(n int) bool { return n != 0 }, true), 23)
+	equalTypes(t, testdeep.Smuggle(func(n int) bool { return n != 0 }, true), 23)
 
 	type MyTime time.Time
 
 	equalTypes(t,
-		Smuggle(func(t MyTime) time.Time { return time.Time(t) }, time.Now()),
+		testdeep.Smuggle(
+			func(t MyTime) time.Time { return time.Time(t) },
+			time.Now()),
 		MyTime{})
 }

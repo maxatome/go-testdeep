@@ -10,6 +10,9 @@ import (
 	"fmt"
 	"reflect"
 	"time"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdTruncTime struct {
@@ -62,7 +65,7 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	panic("usage: TruncTime(time.Time[, time.Duration])")
 }
 
-func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
+func (t *tdTruncTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	err := t.checkType(ctx, got)
 	if err != nil {
 		return ctx.CollectError(err)
@@ -79,8 +82,8 @@ func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
 	}
 
 	// Fail
-	if ctx.booleanError {
-		return booleanError
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
 	}
 
 	var gotRawStr, gotTruncStr string
@@ -94,9 +97,9 @@ func (t *tdTruncTime) Match(ctx Context, got reflect.Value) *Error {
 		gotTruncStr = gotTimeTrunc.String()
 	}
 
-	return ctx.CollectError(&Error{
+	return ctx.CollectError(&ctxerr.Error{
 		Message:  "values differ",
-		Got:      rawString(gotRawStr + "\ntruncated to:\n" + gotTruncStr),
+		Got:      types.RawString(gotRawStr + "\ntruncated to:\n" + gotTruncStr),
 		Expected: t,
 	})
 }

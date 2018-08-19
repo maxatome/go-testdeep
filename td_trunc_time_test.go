@@ -10,7 +10,8 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 type MyTime time.Time
@@ -29,11 +30,12 @@ func TestTruncTime(t *testing.T) {
 	// If monotonic clock available, check without TruncTime()
 	if now != nowWithoutMono {
 		// OK now contains a monotonic part != 0, so fail coz "==" used inside
-		checkError(t, now, nowWithoutMono, expectedError{
-			Message: mustBe("values differ"),
-		})
+		checkError(t, now, nowWithoutMono,
+			expectedError{
+				Message: mustBe("values differ"),
+			})
 	}
-	checkOK(t, now, TruncTime(nowWithoutMono))
+	checkOK(t, now, testdeep.TruncTime(nowWithoutMono))
 
 	//
 	// time.Time
@@ -42,71 +44,75 @@ func TestTruncTime(t *testing.T) {
 	// Time zone / location does not matter
 	UTCp2 := time.FixedZone("UTC+2", 2)
 	UTCm2 := time.FixedZone("UTC-2", 2)
-	checkOK(t, gotDate, TruncTime(gotDate.In(UTCp2)))
-	checkOK(t, gotDate, TruncTime(gotDate.In(UTCm2)))
+	checkOK(t, gotDate, testdeep.TruncTime(gotDate.In(UTCp2)))
+	checkOK(t, gotDate, testdeep.TruncTime(gotDate.In(UTCm2)))
 
 	expDate := gotDate
 
-	checkOK(t, gotDate, TruncTime(expDate))
-	checkOK(t, gotDate, TruncTime(expDate, time.Second))
-	checkOK(t, gotDate, TruncTime(expDate, time.Minute))
+	checkOK(t, gotDate, testdeep.TruncTime(expDate))
+	checkOK(t, gotDate, testdeep.TruncTime(expDate, time.Second))
+	checkOK(t, gotDate, testdeep.TruncTime(expDate, time.Minute))
 
 	expDate = expDate.Add(time.Second)
-	checkError(t, gotDate, TruncTime(expDate, time.Second), expectedError{
-		Message: mustBe("values differ"),
-		Path:    mustBe("DATA"),
-		Got: mustBe("2018-03-09 01:02:03.000000004 +0000 UTC\n" +
-			"truncated to:\n" +
-			"2018-03-09 01:02:03 +0000 UTC"),
-		Expected: mustBe("2018-03-09 01:02:04 +0000 UTC"),
-	})
-	checkOK(t, gotDate, TruncTime(expDate, time.Minute))
+	checkError(t, gotDate, testdeep.TruncTime(expDate, time.Second),
+		expectedError{
+			Message: mustBe("values differ"),
+			Path:    mustBe("DATA"),
+			Got: mustBe("2018-03-09 01:02:03.000000004 +0000 UTC\n" +
+				"truncated to:\n" +
+				"2018-03-09 01:02:03 +0000 UTC"),
+			Expected: mustBe("2018-03-09 01:02:04 +0000 UTC"),
+		})
+	checkOK(t, gotDate, testdeep.TruncTime(expDate, time.Minute))
 
-	checkError(t, gotDate, TruncTime(MyTime(gotDate)), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("time.Time"),
-		Expected: mustBe("testdeep_test.MyTime"),
-	})
+	checkError(t, gotDate, testdeep.TruncTime(MyTime(gotDate)),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("time.Time"),
+			Expected: mustBe("testdeep_test.MyTime"),
+		})
 
 	//
 	// Type convertible to time.Time NOT implementing fmt.Stringer
 	gotMyDate := MyTime(gotDate)
 	expMyDate := MyTime(gotDate)
 
-	checkOK(t, gotMyDate, TruncTime(expMyDate))
-	checkOK(t, gotMyDate, TruncTime(expMyDate, time.Second))
-	checkOK(t, gotMyDate, TruncTime(expMyDate, time.Minute))
+	checkOK(t, gotMyDate, testdeep.TruncTime(expMyDate))
+	checkOK(t, gotMyDate, testdeep.TruncTime(expMyDate, time.Second))
+	checkOK(t, gotMyDate, testdeep.TruncTime(expMyDate, time.Minute))
 
 	expMyDate = MyTime(gotDate.Add(time.Second))
-	checkError(t, gotMyDate, TruncTime(expMyDate, time.Second), expectedError{
-		Message: mustBe("values differ"),
-		Path:    mustBe("DATA"),
-		Got: mustBe("2018-03-09 01:02:03.000000004 +0000 UTC\n" +
-			"truncated to:\n" +
-			"2018-03-09 01:02:03 +0000 UTC"),
-		Expected: mustBe("2018-03-09 01:02:04 +0000 UTC"),
-	})
-	checkOK(t, gotMyDate, TruncTime(expMyDate, time.Minute))
+	checkError(t, gotMyDate, testdeep.TruncTime(expMyDate, time.Second),
+		expectedError{
+			Message: mustBe("values differ"),
+			Path:    mustBe("DATA"),
+			Got: mustBe("2018-03-09 01:02:03.000000004 +0000 UTC\n" +
+				"truncated to:\n" +
+				"2018-03-09 01:02:03 +0000 UTC"),
+			Expected: mustBe("2018-03-09 01:02:04 +0000 UTC"),
+		})
+	checkOK(t, gotMyDate, testdeep.TruncTime(expMyDate, time.Minute))
 
-	checkError(t, MyTime(gotDate), TruncTime(gotDate), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("testdeep_test.MyTime"),
-		Expected: mustBe("time.Time"),
-	})
+	checkError(t, MyTime(gotDate), testdeep.TruncTime(gotDate),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("testdeep_test.MyTime"),
+			Expected: mustBe("time.Time"),
+		})
 
 	//
 	// Type convertible to time.Time implementing fmt.Stringer
 	gotMyStrDate := MyTimeStr(gotDate)
 	expMyStrDate := MyTimeStr(gotDate)
 
-	checkOK(t, gotMyStrDate, TruncTime(expMyStrDate))
-	checkOK(t, gotMyStrDate, TruncTime(expMyStrDate, time.Second))
-	checkOK(t, gotMyStrDate, TruncTime(expMyStrDate, time.Minute))
+	checkOK(t, gotMyStrDate, testdeep.TruncTime(expMyStrDate))
+	checkOK(t, gotMyStrDate, testdeep.TruncTime(expMyStrDate, time.Second))
+	checkOK(t, gotMyStrDate, testdeep.TruncTime(expMyStrDate, time.Minute))
 
 	expMyStrDate = MyTimeStr(gotDate.Add(time.Second))
-	checkError(t, gotMyStrDate, TruncTime(expMyStrDate, time.Second),
+	checkError(t, gotMyStrDate, testdeep.TruncTime(expMyStrDate, time.Second),
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
@@ -115,23 +121,24 @@ func TestTruncTime(t *testing.T) {
 				"<<2018-03-09T01:02:03Z>>"),
 			Expected: mustBe("<<2018-03-09T01:02:04Z>>"),
 		})
-	checkOK(t, gotMyStrDate, TruncTime(expMyStrDate, time.Minute))
+	checkOK(t, gotMyStrDate, testdeep.TruncTime(expMyStrDate, time.Minute))
 
-	checkError(t, MyTimeStr(gotDate), TruncTime(gotDate), expectedError{
-		Message:  mustBe("type mismatch"),
-		Path:     mustBe("DATA"),
-		Got:      mustBe("testdeep_test.MyTimeStr"),
-		Expected: mustBe("time.Time"),
-	})
+	checkError(t, MyTimeStr(gotDate), testdeep.TruncTime(gotDate),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("testdeep_test.MyTimeStr"),
+			Expected: mustBe("time.Time"),
+		})
 
 	//
 	// Bad usage
-	checkPanic(t, func() { TruncTime("test") }, "usage: TruncTime(")
+	test.CheckPanic(t, func() { testdeep.TruncTime("test") }, "usage: TruncTime(")
 }
 
 func TestTruncTimeTypeBehind(t *testing.T) {
 	type MyTime time.Time
 
-	equalTypes(t, TruncTime(time.Time{}), time.Time{})
-	equalTypes(t, TruncTime(MyTime{}), MyTime{})
+	equalTypes(t, testdeep.TruncTime(time.Time{}), time.Time{})
+	equalTypes(t, testdeep.TruncTime(MyTime{}), MyTime{})
 }
