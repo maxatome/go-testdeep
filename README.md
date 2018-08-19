@@ -21,6 +21,7 @@ Extremely flexible golang deep comparison, extends the go testing package.
 
 ## Latest news
 
+- 2018/08/18: works around golang issue in `go test -race` cases;
 - 2018/07/15: new
   [`NaN`](https://godoc.org/github.com/maxatome/go-testdeep#NaN) &
   [`NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#NotNaN) &
@@ -36,13 +37,6 @@ Extremely flexible golang deep comparison, extends the go testing package.
   &
   [`T.Contains`](https://godoc.org/github.com/maxatome/go-testdeep#T.Contains))
   reworked to handle arrays, slices and maps;
-- 2018/06/19: new
-  [ContextConfig](https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig)
-  feature `FailureIsFatal` available. See
-  [DefaultContextConfig](https://godoc.org/github.com/maxatome/go-testdeep#pkg-variables)
-  for default global value and
-  [`T.FailureIsFatal`](https://godoc.org/github.com/maxatome/go-testdeep#T.FailureIsFatal)
-  method;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
