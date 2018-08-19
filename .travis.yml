@@ -1,35 +1,45 @@
 language: go
 go_import_path: github.com/maxatome/go-testdeep
 
-go:
-  - 1.9.x
-  - 1.10.x
-  - tip
-
 sudo: false
 
-install:
-  - go get -v github.com/alecthomas/gometalinter
-  - gometalinter --install
+matrix:
+  include:
+    - go: 1.9.x
+    - go: 1.10.x
+      env:
+        - GO_TEST_SAFE_FLAGS="-covermode=atomic -coverprofile=coverage-safe.out ./..."
+        - GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out ./..."
+        - USE_GOMETALINTER=1
+      install:
+        - go get -v github.com/alecthomas/gometalinter
+        - gometalinter --install
+      after_success:
+        - go get github.com/mattn/goveralls
+        - go get github.com/wadey/gocovmerge
+        - gocovmerge coverage-safe.out coverage-unsafe.out > coverage.out
+        - goveralls -coverprofile=coverage.out -service=travis-ci
+    - go: master
+  allow_failures:
+    - go: master
+  fast_finish: true
 
 script:
   - export GORACE="halt_on_error=1"
   - go get -t ./...
-  - go test -race -tags safe ./...
-  - 'go test -race -covermode=atomic -coverprofile=coverage.out $(if ! expr "$(go version)" : ".* go1\.9\." >/dev/null; then echo ./...; fi)'
-  - gometalinter
-    --disable-all
-    --enable=errcheck
-    --enable=gofmt
-    --enable=golint
-    --enable=gosimple
-    --enable=ineffassign
-    --enable=maligned
-    --enable=unconvert
-    --enable=staticcheck
-    --deadline=4m
-    ./...
-
-after_success:
-  - go get github.com/mattn/goveralls
-  - goveralls -coverprofile=coverage.out -service=travis-ci
+  - go test -race -tags safe $GO_TEST_SAFE_FLAGS ./...
+  - go test -race $GO_TEST_UNSAFE_FLAGS ./...
+  - if [ "$USE_GOMETALINTER" = 1 ]; then
+      gometalinter
+        --disable-all
+        --enable=errcheck
+        --enable=gofmt
+        --enable=golint
+        --enable=gosimple
+        --enable=ineffassign
+        --enable=maligned
+        --enable=unconvert
+        --enable=staticcheck
+        --deadline=4m
+        ./...;
+      fi
