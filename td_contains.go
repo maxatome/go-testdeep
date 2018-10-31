@@ -86,7 +86,7 @@ func Contains(expectedValue interface{}) TestDeep {
 	return &c
 }
 
-func (c *tdContains) doesNotContains(ctx ctxerr.Context, got interface{}) *ctxerr.Error {
+func (c *tdContains) doesNotContain(ctx ctxerr.Context, got interface{}) *ctxerr.Error {
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
@@ -124,7 +124,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 				return nil
 			}
 		}
-		return c.doesNotContains(ctx, got)
+		return c.doesNotContain(ctx, got)
 
 	case reflect.Map:
 		expectedValue := c.getExpectedValue(got)
@@ -133,7 +133,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 				return nil
 			}
 		}
-		return c.doesNotContains(ctx, got)
+		return c.doesNotContain(ctx, got)
 
 		// For String kind *AND* TestDeep operator, applies this operator on
 		// each character of the string
@@ -144,7 +144,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 					return nil
 				}
 			}
-			return c.doesNotContains(ctx, got)
+			return c.doesNotContain(ctx, got)
 		}
 	}
 
@@ -176,7 +176,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 					return nil
 				}
 			}
-			return c.doesNotContains(ctx, str)
+			return c.doesNotContain(ctx, str)
 		}
 	}
 

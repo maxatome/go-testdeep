@@ -21,6 +21,13 @@ Extremely flexible golang deep comparison, extends the go testing package.
 
 ## Latest news
 
+- 2018/10/31: new
+  [`ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey)
+  operator and its friends
+  [`CmpContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#CmpContainsKey)
+  &
+  [`T.ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#T.ContainsKey);
+  reworked to handle arrays, slices and maps;
 - 2018/08/18: works around golang issue in `go test -race` cases;
 - 2018/07/15: new
   [`NaN`](https://godoc.org/github.com/maxatome/go-testdeep#NaN) &
@@ -31,12 +38,6 @@ Extremely flexible golang deep comparison, extends the go testing package.
   [`T.NaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.NaN)
   &
   [`T.NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.NotNaN));
-- 2018/06/24: [`Contains`](https://godoc.org/github.com/maxatome/go-testdeep#Contains)
-  (and its friends
-  [`CmpContains`](https://godoc.org/github.com/maxatome/go-testdeep#CmpContains)
-  &
-  [`T.Contains`](https://godoc.org/github.com/maxatome/go-testdeep#T.Contains))
-  reworked to handle arrays, slices and maps;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -414,7 +415,9 @@ See functions returning [`TestDeep` interface](https://godoc.org/github.com/maxa
 - [`Contains`](https://godoc.org/github.com/maxatome/go-testdeep#Contains)
   checks that a string, [`error`](https://golang.org/ref/spec#Errors) or
   [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces contain
-  a sub-string;
+  a sub-string; or an array, slice or map contain a value;
+- [`ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey)
+  checks that a map contains a key;
 - [`Empty`](https://godoc.org/github.com/maxatome/go-testdeep#Empty)
   checks that an array, a channel, a map, a slice or a string is empty;
 - [`Gt`](https://godoc.org/github.com/maxatome/go-testdeep#Gt)

@@ -36,7 +36,7 @@ func TestIsa(t *testing.T) {
 		testdeep.Isa((*fmt.Stringer)(nil)),
 		"checks bytes.NewBufferString() implements fmt.Stringer")
 
-	var ifstr fmt.Stringer = regexp.MustCompile("aa")
+	var ifstr fmt.Stringer = regexp.MustCompile("aa?")
 	checkOK(t, bytes.NewBufferString("foobar"), testdeep.Isa(&ifstr))
 
 	checkError(t, &gotStruct, testdeep.Isa(&MyStructBase{}),

@@ -81,7 +81,7 @@ func TestCopyValue(t *testing.T) {
 		array:   [3]interface{}{1, 2, SubPublic{Public: 3}},
 		slice:   append(make([]interface{}, 0, 10), 4, 5, SubPublic{Public: 6}),
 		hash: map[interface{}]interface{}{
-			"foo": &SubPublic{Public: 34},
+			"foo":                 &SubPublic{Public: 34},
 			SubPublic{Public: 78}: 42,
 		},
 		pint:  &num,
