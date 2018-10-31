@@ -7,6 +7,7 @@ matrix:
   include:
     - go: 1.9.x
     - go: 1.10.x
+    - go: 1.11.x
       env:
         - GO_TEST_SAFE_FLAGS="-covermode=atomic -coverprofile=coverage-safe.out ./..."
         - GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out ./..."
