@@ -215,6 +215,28 @@ func CmpContains(t TestingT, got interface{}, expectedValue interface{}, args ..
 	return CmpDeeply(t, got, Contains(expectedValue), args...)
 }
 
+// CmpContainsKey is a shortcut for:
+//
+//   CmpDeeply(t, got, ContainsKey(expectedValue), args...)
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpContainsKey(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	// Work around https://github.com/golang/go/issues/26995 issue
+	// when corrected, this block should be replaced by t.Helper()
+	if tt, ok := t.(*testing.T); ok {
+		tt.Helper()
+	} else {
+		t.Helper()
+	}
+
+	return CmpDeeply(t, got, ContainsKey(expectedValue), args...)
+}
+
 // CmpEmpty is a shortcut for:
 //
 //   CmpDeeply(t, got, Empty(), args...)

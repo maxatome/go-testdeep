@@ -215,6 +215,28 @@ func (t *T) Contains(got interface{}, expectedValue interface{}, args ...interfa
 	return t.CmpDeeply(got, Contains(expectedValue), args...)
 }
 
+// ContainsKey is a shortcut for:
+//
+//   t.CmpDeeply(got, ContainsKey(expectedValue), args...)
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func (t *T) ContainsKey(got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	// Work around https://github.com/golang/go/issues/26995 issue
+	// when corrected, this block should be replaced by t.Helper()
+	if tt, ok := t.TestingFT.(*testing.T); ok {
+		tt.Helper()
+	} else {
+		t.Helper()
+	}
+
+	return t.CmpDeeply(got, ContainsKey(expectedValue), args...)
+}
+
 // Empty is a shortcut for:
 //
 //   t.CmpDeeply(got, Empty(), args...)
