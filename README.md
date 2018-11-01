@@ -17,6 +17,7 @@ Extremely flexible golang deep comparison, extends the go testing package.
 - [Available operators](#available-operators)
 - [See also](#see-also)
 - [License](#license)
+- [FAQ](FAQ.md)
 
 
 ## Latest news
@@ -541,3 +542,8 @@ repository](https://github.com/golang/go/blob/master/LICENSE).
 Uses two files (`bypass.go` & `bypasssafe.go`) from
 [Go-spew](https://github.com/davecgh/go-spew) which is licensed under
 the [copyfree](http://copyfree.org) ISC License.
+
+
+## FAQ
+
+See [FAQ](FAQ.md).
