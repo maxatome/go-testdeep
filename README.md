@@ -407,7 +407,7 @@ See functions returning [`TestDeep` interface](https://godoc.org/github.com/maxa
   compares the contents of an array or a slice without taking care of the order
   of items;
 - [`Between`](https://godoc.org/github.com/maxatome/go-testdeep#Between)
-  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/) is
   between two bounds;
 - [`Cap`](https://godoc.org/github.com/maxatome/go-testdeep#Cap)
   checks an array, slice or channel capacity;
