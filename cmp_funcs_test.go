@@ -436,6 +436,45 @@ func ExampleCmpContains_error() {
 	// try TestDeep operator: false
 }
 
+func ExampleCmpContainsKey() {
+	t := &testing.T{}
+
+	ok := CmpContainsKey(t, map[string]int{"foo": 11, "bar": 22, "zip": 33}, "foo")
+	fmt.Println(`map contains key "foo":`, ok)
+
+	ok = CmpContainsKey(t, map[int]bool{12: true, 24: false, 42: true, 51: false}, Between(40, 50))
+	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
+
+	// Output:
+	// map contains key "foo": true
+	// map contains at least a key in [40 .. 50]: true
+}
+
+func ExampleCmpContainsKey_nil() {
+	t := &testing.T{}
+
+	num := 1234
+	got := map[*int]bool{&num: false, nil: true}
+
+	ok := CmpContainsKey(t, got, nil)
+	fmt.Println("map contains untyped nil key:", ok)
+
+	ok = CmpContainsKey(t, got, (*int)(nil))
+	fmt.Println("map contains *int nil key:", ok)
+
+	ok = CmpContainsKey(t, got, Nil())
+	fmt.Println("map contains Nil() key:", ok)
+
+	ok = CmpContainsKey(t, got, (*byte)(nil))
+	fmt.Println("map contains *byte nil key:", ok) // types differ: *byte ≠ *int
+
+	// Output:
+	// map contains untyped nil key: true
+	// map contains *int nil key: true
+	// map contains Nil() key: true
+	// map contains *byte nil key: false
+}
+
 func ExampleCmpEmpty() {
 	t := &testing.T{}
 

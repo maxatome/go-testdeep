@@ -436,6 +436,45 @@ func ExampleT_Contains_error() {
 	// try TestDeep operator: false
 }
 
+func ExampleT_ContainsKey() {
+	t := NewT(&testing.T{})
+
+	ok := t.ContainsKey(map[string]int{"foo": 11, "bar": 22, "zip": 33}, "foo")
+	fmt.Println(`map contains key "foo":`, ok)
+
+	ok = t.ContainsKey(map[int]bool{12: true, 24: false, 42: true, 51: false}, Between(40, 50))
+	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
+
+	// Output:
+	// map contains key "foo": true
+	// map contains at least a key in [40 .. 50]: true
+}
+
+func ExampleT_ContainsKey_nil() {
+	t := NewT(&testing.T{})
+
+	num := 1234
+	got := map[*int]bool{&num: false, nil: true}
+
+	ok := t.ContainsKey(got, nil)
+	fmt.Println("map contains untyped nil key:", ok)
+
+	ok = t.ContainsKey(got, (*int)(nil))
+	fmt.Println("map contains *int nil key:", ok)
+
+	ok = t.ContainsKey(got, Nil())
+	fmt.Println("map contains Nil() key:", ok)
+
+	ok = t.ContainsKey(got, (*byte)(nil))
+	fmt.Println("map contains *byte nil key:", ok) // types differ: *byte ≠ *int
+
+	// Output:
+	// map contains untyped nil key: true
+	// map contains *int nil key: true
+	// map contains Nil() key: true
+	// map contains *byte nil key: false
+}
+
 func ExampleT_Empty() {
 	t := NewT(&testing.T{})
 
