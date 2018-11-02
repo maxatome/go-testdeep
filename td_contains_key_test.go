@@ -27,10 +27,12 @@ func TestContainsKey(t *testing.T) {
 
 		checkError(t, got, testdeep.ContainsKey(35),
 			expectedError{
-				Message:  mustBe("does not contain key"),
-				Path:     mustBe("DATA"),
-				Got:      mustContain("(int) 34"), // as well as other items in fact...
-				Expected: mustBe("ContainsKey((int) 35)"),
+				Message: mustBe("does not contain key"),
+				Path:    mustBe("DATA"),
+				Summary: mustMatch(`expected key: \(int\) 35
+ not in keys: \(\(int\) (12|28|34),
+               \(int\) (12|28|34),
+               \(int\) (12|28|34)\)`),
 			}, testName)
 	}
 }
@@ -53,10 +55,11 @@ func TestContainsKeyNil(t *testing.T) {
 
 		checkError(t, got, testdeep.ContainsKey((*uint8)(nil)),
 			expectedError{
-				Message:  mustBe("does not contain key"),
-				Path:     mustBe("DATA"),
-				Got:      mustContain("12345642"),
-				Expected: mustBe("ContainsKey((*uint8)(<nil>))"),
+				Message: mustBe("does not contain key"),
+				Path:    mustBe("DATA"),
+				Summary: mustMatch(`expected key: \(\*uint8\)\(<nil>\)
+ not in keys: \(\(\*int\)\((<nil>|.*12345642.*)\),
+               \(\*int\)\((<nil>|.*12345642.*)\)\)`),
 			}, testName)
 	}
 
@@ -66,8 +69,10 @@ func TestContainsKeyNil(t *testing.T) {
 		expectedError{
 			Message: mustBe("does not contain key"),
 			Path:    mustBe("DATA"),
-			// Got
-			Expected: mustBe("ContainsKey(nil)"),
+			Summary: mustMatch(`expected key: nil
+ not in keys: \("(foo|bar|zip)",
+               "(foo|bar|zip)",
+               "(foo|bar|zip)"\)`),
 		})
 
 	checkError(t, "foobar", testdeep.ContainsKey(nil),

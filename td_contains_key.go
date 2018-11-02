@@ -7,6 +7,7 @@
 package testdeep
 
 import (
+	"bytes"
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
@@ -55,14 +56,21 @@ func ContainsKey(expectedValue interface{}) TestDeep {
 	return &c
 }
 
-func (c *tdContainsKey) doesNotContainKey(ctx ctxerr.Context, got interface{}) *ctxerr.Error {
+func (c *tdContainsKey) doesNotContainKey(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
+
+	keys := append(make([]reflect.Value, 0, got.Len()), got.MapKeys()...)
+
+	buf := bytes.NewBufferString("expected key: ")
+	buf.WriteString(util.ToString(c.expectedValue))
+	buf.WriteString("\n not in keys: ")
+	util.SliceToBuffer(buf, keys)
+
 	return ctx.CollectError(&ctxerr.Error{
-		Message:  "does not contain key",
-		Got:      got,
-		Expected: c,
+		Message: "does not contain key",
+		Summary: types.RawString(buf.String()),
 	})
 }
 
