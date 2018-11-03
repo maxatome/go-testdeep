@@ -422,10 +422,10 @@ See functions returning [`TestDeep` interface](https://godoc.org/github.com/maxa
 - [`Empty`](https://godoc.org/github.com/maxatome/go-testdeep#Empty)
   checks that an array, a channel, a map, a slice or a string is empty;
 - [`Gt`](https://godoc.org/github.com/maxatome/go-testdeep#Gt)
-  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/) is
   greater than a value;
 - [`Gte`](https://godoc.org/github.com/maxatome/go-testdeep#Gte)
-  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/) is
   greater or equal than a value;
 - [`HasPrefix`](https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix)
   checks the prefix of a string, [`error`](https://golang.org/ref/spec#Errors)
@@ -440,10 +440,10 @@ See functions returning [`TestDeep` interface](https://godoc.org/github.com/maxa
 - [`Len`](https://godoc.org/github.com/maxatome/go-testdeep#Len)
   checks an array, slice, map, string or channel length;
 - [`Lt`](https://godoc.org/github.com/maxatome/go-testdeep#Lt)
-  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/) is
   lesser than a value;
 - [`Lte`](https://godoc.org/github.com/maxatome/go-testdeep#Lte)
-  checks that a number or [`time.Time`](https://golang.org/pkg/time/)) is
+  checks that a number or [`time.Time`](https://golang.org/pkg/time/) is
   lesser or equal than a value;
 - [`Map`](https://godoc.org/github.com/maxatome/go-testdeep#Map)
   compares the contents of a map;
