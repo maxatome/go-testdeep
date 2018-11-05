@@ -59,7 +59,7 @@ var _ TestDeep = &tdLen{}
 
 // Len is a smuggler operator. It takes data, applies len() function
 // on it and compares its result to "val". Of course, the compared
-// value must be an array, a channel, a map, a slice or a util.
+// value must be an array, a channel, a map, a slice or a string.
 //
 // "val" can be an int value:
 //   Len(12)
