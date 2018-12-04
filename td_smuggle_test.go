@@ -7,6 +7,7 @@
 package testdeep_test
 
 import (
+	"errors"
 	"testing"
 	"time"
 
@@ -147,24 +148,53 @@ func TestSmuggle(t *testing.T) {
 			testdeep.Contains("oob")))
 
 	//
+	// Convertible types
+	checkOK(t, 123,
+		testdeep.Smuggle(func(n float64) int { return int(n) }, 123))
+
+	type xInt int
+	checkOK(t, xInt(123),
+		testdeep.Smuggle(func(n int) int64 { return int64(n) }, int64(123)))
+	checkOK(t, xInt(123),
+		testdeep.Smuggle(func(n uint32) int64 { return int64(n) }, int64(123)))
+
+	type tVal struct{ Val interface{} }
+	checkOK(t, tVal{Val: int32(123)},
+		testdeep.Struct(tVal{}, testdeep.StructFields{
+			"Val": testdeep.Smuggle(func(n int64) int { return int(n) }, 123),
+		}))
+
+	//
 	// Errors
-	checkError(t, 123,
+	checkError(t, "123",
 		testdeep.Smuggle(func(n float64) int { return int(n) }, 123),
 		expectedError{
 			Message:  mustBe("incompatible parameter type"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("int"),
+			Got:      mustBe("string"),
 			Expected: mustBe("float64"),
 		})
 
-	type xInt int
-	checkError(t, xInt(12),
-		testdeep.Smuggle(func(n int) int64 { return int64(n) }, 12),
+	checkError(t, tVal{},
+		testdeep.Struct(tVal{}, testdeep.StructFields{
+			"Val": testdeep.Smuggle(func(n int64) int { return int(n) }, 123),
+		}),
 		expectedError{
 			Message:  mustBe("incompatible parameter type"),
-			Path:     mustBe("DATA"),
-			Got:      mustBe("testdeep_test.xInt"),
-			Expected: mustBe("int"),
+			Path:     mustBe("DATA.Val"),
+			Got:      mustBe("interface {}"),
+			Expected: mustBe("int64"),
+		})
+
+	checkError(t, tVal{Val: "str"},
+		testdeep.Struct(tVal{}, testdeep.StructFields{
+			"Val": testdeep.Smuggle(func(n int64) int { return int(n) }, 123),
+		}),
+		expectedError{
+			Message:  mustBe("incompatible parameter type"),
+			Path:     mustBe("DATA.Val"),
+			Got:      mustBe("string"),
+			Expected: mustBe("int64"),
 		})
 
 	checkError(t, 12,
@@ -180,6 +210,16 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, 12,
 		testdeep.Smuggle(func(n int) (int, MyBool, MyString) {
 			return n, false, "very custom error"
+		}, 12),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("        value: (int) 12\nit failed coz: very custom error"),
+		})
+
+	checkError(t, 12,
+		testdeep.Smuggle(func(n int) (int, error) {
+			return n, errors.New("very custom error")
 		}, 12),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
@@ -263,24 +303,30 @@ func TestSmuggle(t *testing.T) {
 	}, "FUNC must take only one argument")
 
 	// Bad number of returned values
+	const errMesg = "FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"
+
 	test.CheckPanic(t, func() {
 		testdeep.Smuggle(func(a int) {}, 12)
-	}, "FUNC must return value or (value, bool) or (value, bool, string)")
+	}, errMesg)
 
 	test.CheckPanic(t, func() {
 		testdeep.Smuggle(
 			func(a int) (int, bool, string, int) { return 0, false, "", 23 },
 			12)
-	}, "FUNC must return value or (value, bool) or (value, bool, string)")
+	}, errMesg)
 
 	// Bad returned types
 	test.CheckPanic(t, func() {
 		testdeep.Smuggle(func(a int) (int, int) { return 0, 0 }, 12)
-	}, "FUNC must return value or (value, bool) or (value, bool, string)")
+	}, errMesg)
 
 	test.CheckPanic(t, func() {
 		testdeep.Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12)
-	}, "FUNC must return value or (value, bool) or (value, bool, string)")
+	}, errMesg)
+
+	test.CheckPanic(t, func() {
+		testdeep.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12)
+	}, errMesg)
 
 	//
 	// String
@@ -291,6 +337,10 @@ func TestSmuggle(t *testing.T) {
 	test.EqualStr(t,
 		testdeep.Smuggle(func(n int) (int, bool) { return 23, false }, 12).String(),
 		"Smuggle(func(int) (int, bool))")
+
+	test.EqualStr(t,
+		testdeep.Smuggle(func(n int) (int, error) { return 23, nil }, 12).String(),
+		"Smuggle(func(int) (int, error))")
 
 	test.EqualStr(t,
 		testdeep.Smuggle(func(n int) (int, MyBool, MyString) { return 23, false, "" }, 12).

@@ -21,6 +21,7 @@ import (
 var (
 	testDeeper         = reflect.TypeOf((*TestDeep)(nil)).Elem()
 	stringerInterface  = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+	errorInterface     = reflect.TypeOf((*error)(nil)).Elem()
 	timeType           = reflect.TypeOf(time.Time{})
 	intType            = reflect.TypeOf(int(0))
 	smuggledGotType    = reflect.TypeOf(SmuggledGot{})

@@ -50,7 +50,7 @@ var _ TestDeep = &tdSmuggle{}
 // Smuggle operator allows to change data contents or mutate it into
 // another type before stepping down in favor of generic comparison
 // process. So "fn" is a function that must take one parameter whose
-// type must be the same as the type of the compared value.
+// type must be convertible to the type of the compared value.
 //
 // "fn" must return at least one value, these value will be compared as is
 // to "expectedValue", here integer 28:
@@ -90,6 +90,20 @@ var _ TestDeep = &tdSmuggle{}
 //     },
 //     Between(28, 30))
 //
+// Instead of returning (X, bool) or (X, bool, string), "fn" can
+// return (X, error). When a problem occurs, the returned error is
+// non-nil, as in:
+//
+//   Smuggle(func (value string) (int, error) {
+//       num, err := strconv.Atoi(value)
+//       return num, err
+//     },
+//     Between(28, 30))
+//
+// Which can be simplified to:
+//
+//   Smuggle(strconv.Atoi, Between(28, 30))
+//
 // Imagine you want to compare that the Year of a date is between 2010
 // and 2020:
 //
@@ -99,8 +113,8 @@ var _ TestDeep = &tdSmuggle{}
 //     Between(2010, 2020))
 //
 // In this case the data location forwarded to next test will be
-// somthing like DATA.MyTimeField<smuggled>, but you can act on it too
-// by returning a SmuggledGot struct (by value or by address):
+// something like DATA.MyTimeField<smuggled>, but you can act on it
+// too by returning a SmuggledGot struct (by value or by address):
 //
 //   Smuggle(func (date time.Time) SmuggledGot {
 //       return SmuggledGot{
@@ -135,9 +149,29 @@ var _ TestDeep = &tdSmuggle{}
 //     },
 //     Between(time.Now().Add(-2*time.Hour), time.Now()))
 //
+// or:
+//
+//   // Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
+//   // whether this date is contained between 2 hours before now and now.
+//   Smuggle(func (date string) (*SmuggledGot, error) {
+//       date, err := time.Parse("2006/01/02 15:04:05", date)
+//       if err != nil {
+//         return nil, err
+//       }
+//       return &SmuggledGot{
+//         Name: "Date",
+//         Got:  date,
+//       }, nil
+//     },
+//     Between(time.Now().Add(-2*time.Hour), time.Now()))
+//
 // The difference between Smuggle and Code operators is that Code is
 // used to do a final comparison while Smuggle transforms the data and
-// then steps down in favor of generic comparison process.
+// then steps down in favor of generic comparison process. Moreover,
+// the type accepted as input for the function is lax to facilitate
+// the tests writing (eg. the function can accept an float64 and the
+// got value be an int). See examples. On the other hand, the output
+// type is strict and must match exactly the expected value type.
 //
 // TypeBehind method returns the reflect.Type of only parameter of "fn".
 func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
@@ -161,8 +195,12 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 		}
 		fallthrough
 
-	case 2: // (value, bool)
-		if fnType.Out(1).Kind() != reflect.Bool {
+	case 2:
+		// (value, *bool*) or (value, *bool*, string)
+		if fnType.Out(1).Kind() != reflect.Bool &&
+			// (value, *error*)
+			(fnType.NumOut() > 2 ||
+				fnType.Out(1) != errorInterface) {
 			break
 		}
 		fallthrough
@@ -180,11 +218,27 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 	}
 
 	panic(usage +
-		": FUNC must return value or (value, bool) or (value, bool, string)")
+		": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)")
+}
+
+func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {
+	if !got.Type().ConvertibleTo(s.argType) {
+		if got.Kind() != reflect.Interface || got.IsNil() {
+			return got, false
+		}
+
+		got = got.Elem()
+		if !got.Type().ConvertibleTo(s.argType) {
+			return got, false
+		}
+	}
+
+	return got.Convert(s.argType), true
 }
 
 func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
-	if !got.Type().AssignableTo(s.argType) {
+	got, ok := s.laxConvert(got)
+	if !ok {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
@@ -209,7 +263,9 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	ret := s.function.Call([]reflect.Value{got})
-	if len(ret) == 1 || ret[1].Bool() {
+	if len(ret) == 1 ||
+		(ret[1].Kind() == reflect.Bool && ret[1].Bool()) ||
+		(ret[1].Kind() == reflect.Interface && ret[1].IsNil()) {
 		newGot := ret[0]
 
 		var newCtx ctxerr.Context
@@ -236,22 +292,24 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		return ctxerr.BooleanError
 	}
 
-	err := ctxerr.Error{
+	summary := tdCodeResult{
+		Value: got,
+	}
+
+	switch len(ret) {
+	case 3: // (value, false, string)
+		summary.Reason = ret[2].String()
+	case 2:
+		// (value, error)
+		if ret[1].Kind() == reflect.Interface {
+			summary.Reason = ret[1].Interface().(error).Error()
+		}
+		// (value, false)
+	}
+	return ctx.CollectError(&ctxerr.Error{
 		Message: "ran smuggle code with %% as argument",
-	}
-
-	if len(ret) > 2 {
-		err.Summary = tdCodeResult{
-			Value:  got,
-			Reason: ret[2].String(),
-		}
-	} else {
-		err.Summary = tdCodeResult{
-			Value: got,
-		}
-	}
-
-	return ctx.CollectError(&err)
+		Summary: summary,
+	})
 }
 
 func (s *tdSmuggle) String() string {

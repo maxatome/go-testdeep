@@ -10,6 +10,7 @@ package testdeep
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -1635,10 +1636,55 @@ func ExampleCmpSmuggle_convert() {
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
+	ok = CmpSmuggle(t, "123", func(numStr string) (int, error) {
+		return strconv.Atoi(numStr)
+	}, Between(120, 130),
+		"checks that number in %#v is in [120 .. 130]")
+	fmt.Println(ok)
+
+	// Short version :)
+	ok = CmpSmuggle(t, "123", strconv.Atoi, Between(120, 130),
+		"checks that number in %#v is in [120 .. 130]")
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// true
 	// true
+	// true
+	// true
+}
+
+func ExampleCmpSmuggle_lax() {
+	t := &testing.T{}
+
+	// got is an int16 and Smuggle func input is an int64: it is OK
+	got := int(123)
+
+	ok := CmpSmuggle(t, got, func(n int64) uint32 { return uint32(n) }, uint32(123))
+	fmt.Println("got int16(123) → smuggle via int64 → uint32(123):", ok)
+
+	// Output:
+	// got int16(123) → smuggle via int64 → uint32(123): true
+}
+
+func ExampleCmpSmuggle_auto_unmarshal() {
+	t := &testing.T{}
+
+	// Automatically json.Unmarshal to compare
+	got := []byte(`{"a":1,"b":2}`)
+
+	ok := CmpSmuggle(t, got, func(b json.RawMessage) (r map[string]int, err error) {
+		err = json.Unmarshal(b, &r)
+		return
+	}, map[string]int{
+		"a": 1,
+		"b": 2,
+	})
+	fmt.Println("JSON contents is OK:", ok)
+
+	// Output:
+	// JSON contents is OK: true
 }
 
 func ExampleCmpSmuggle_complex() {
