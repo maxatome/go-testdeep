@@ -1557,6 +1557,42 @@ func ExampleT_Shallow() {
 	// false
 }
 
+func ExampleT_Shallow_slice() {
+	t := NewT(&testing.T{})
+
+	back := []int{1, 2, 3, 1, 2, 3}
+	a := back[:3]
+	b := back[3:]
+
+	ok := t.Shallow(a, back)
+	fmt.Println("are ≠ but share the same area:", ok)
+
+	ok = t.Shallow(b, back)
+	fmt.Println("are = but do not point to same area:", ok)
+
+	// Output:
+	// are ≠ but share the same area: true
+	// are = but do not point to same area: false
+}
+
+func ExampleT_Shallow_string() {
+	t := NewT(&testing.T{})
+
+	back := "foobarfoobar"
+	a := back[:6]
+	b := back[6:]
+
+	ok := t.Shallow(a, back)
+	fmt.Println("are ≠ but share the same area:", ok)
+
+	ok = t.Shallow(b, a)
+	fmt.Println("are = but do not point to same area:", ok)
+
+	// Output:
+	// are ≠ but share the same area: true
+	// are = but do not point to same area: false
+}
+
 func ExampleT_Slice_slice() {
 	t := NewT(&testing.T{})
 
