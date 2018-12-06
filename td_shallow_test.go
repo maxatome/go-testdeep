@@ -17,9 +17,10 @@ import (
 func TestShallow(t *testing.T) {
 	//
 	// Slice
-	gotSlice := []int{1, 2, 3}
-	expectedSlice := []int{1, 2, 3}
-	checkError(t, gotSlice, testdeep.Shallow(expectedSlice),
+	back := [...]int{1, 2, 3, 1, 2, 3}
+	as := back[:3]
+	bs := back[3:]
+	checkError(t, bs, testdeep.Shallow(back[:]),
 		expectedError{
 			Message:  mustBe("slice pointer mismatch"),
 			Path:     mustBe("DATA"),
@@ -27,8 +28,7 @@ func TestShallow(t *testing.T) {
 			Expected: mustContain("0x"),
 		})
 
-	expectedSlice = gotSlice
-	checkOK(t, gotSlice, testdeep.Shallow(expectedSlice))
+	checkOK(t, as, testdeep.Shallow(back[:]))
 	checkOK(t, ([]byte)(nil), ([]byte)(nil))
 
 	//
@@ -99,6 +99,30 @@ func TestShallow(t *testing.T) {
 	checkOK(t, (chan int)(nil), (chan int)(nil))
 
 	//
+	// String
+	backStr := "foobarfoobar!"
+	a := backStr[:6]
+	b := backStr[6:12]
+	checkOK(t, a, testdeep.Shallow(backStr))
+	checkOK(t, backStr, testdeep.Shallow(a))
+	checkOK(t, b, testdeep.Shallow(backStr[6:7]))
+
+	checkError(t, backStr, testdeep.Shallow(b),
+		expectedError{
+			Message:  mustBe("string pointer mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"),
+			Expected: mustContain("0x"),
+		})
+	checkError(t, b, testdeep.Shallow(backStr),
+		expectedError{
+			Message:  mustBe("string pointer mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("0x"),
+			Expected: mustContain("0x"),
+		})
+
+	//
 	// Erroneous mix
 	checkError(t, gotMap, testdeep.Shallow(expectedChan),
 		expectedError{
@@ -110,7 +134,7 @@ func TestShallow(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Shallow("test") }, "usage: Shallow")
+	test.CheckPanic(t, func() { testdeep.Shallow(42) }, "usage: Shallow")
 
 	//
 	//
