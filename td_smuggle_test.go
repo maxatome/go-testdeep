@@ -247,6 +247,15 @@ func TestSmuggle(t *testing.T) {
 			Expected: mustBe("(int64) 13"),
 		})
 
+	checkError(t, gotStruct,
+		testdeep.Smuggle("MyStructMid.MyStructBase.ValBool", false),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.MyStructMid.MyStructBase.ValBool"),
+			Got:      mustBe("(bool) true"),
+			Expected: mustBe("(bool) false"),
+		})
+
 	checkError(t, 12,
 		testdeep.Smuggle(func(n int) testdeep.SmuggledGot {
 			return testdeep.SmuggledGot{
@@ -291,7 +300,9 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Smuggle("test", 12) }, "usage: Smuggle")
+	test.CheckPanic(t, func() { testdeep.Smuggle(123, 12) }, "usage: Smuggle")
+	test.CheckPanic(t, func() { testdeep.Smuggle("foo.9bingo", 12) },
+		"bad field name `9bingo' in FIELDS_PATH")
 
 	// Bad number of args
 	test.CheckPanic(t, func() {
@@ -346,6 +357,133 @@ func TestSmuggle(t *testing.T) {
 		testdeep.Smuggle(func(n int) (int, MyBool, MyString) { return 23, false, "" }, 12).
 			String(),
 		"Smuggle(func(int) (int, testdeep_test.MyBool, testdeep_test.MyString))")
+}
+
+func TestSmuggleFieldPath(t *testing.T) {
+	num := 42
+	gotStruct := MyStruct{
+		MyStructMid: MyStructMid{
+			MyStructBase: MyStructBase{
+				ValBool: true,
+			},
+			ValStr: "foobar",
+		},
+		ValInt: 123,
+		Ptr:    &num,
+	}
+
+	type A struct {
+		Num int
+		Str string
+	}
+	type C struct {
+		A      A
+		PA1    *A
+		PA2    *A
+		Iface1 interface{}
+		Iface2 interface{}
+		Iface3 interface{}
+		Iface4 interface{}
+	}
+	type B struct {
+		A      A
+		PA     *A
+		PppA   ***A
+		Iface  interface{}
+		Iface2 interface{}
+		Iface3 interface{}
+		C      *C
+	}
+	pa := &A{Num: 3, Str: "three"}
+	ppa := &pa
+	b := B{
+		A:      A{Num: 1, Str: "one"},
+		PA:     &A{Num: 2, Str: "two"},
+		PppA:   &ppa,
+		Iface:  A{Num: 4, Str: "four"},
+		Iface2: &ppa,
+		Iface3: nil,
+		C: &C{
+			A:      A{Num: 5, Str: "five"},
+			PA1:    &A{Num: 6, Str: "six"},
+			PA2:    nil, // explicit to be clear
+			Iface1: A{Num: 7, Str: "seven"},
+			Iface2: &A{Num: 8, Str: "eight"},
+			Iface3: nil, // explicit to be clear
+			Iface4: (*A)(nil),
+		},
+	}
+
+	//
+	// OK
+	checkOK(t, gotStruct, testdeep.Smuggle("ValInt", 123))
+	checkOK(t, gotStruct,
+		testdeep.Smuggle("MyStructMid.ValStr", testdeep.Contains("oob")))
+	checkOK(t, gotStruct,
+		testdeep.Smuggle("MyStructMid.MyStructBase.ValBool", true))
+	checkOK(t, gotStruct, testdeep.Smuggle("ValBool", true)) // thanks to composition
+
+	// OK across pointers
+	checkOK(t, b, testdeep.Smuggle("PA.Num", 2))
+	checkOK(t, b, testdeep.Smuggle("PppA.Num", 3))
+
+	// OK with interface{}
+	checkOK(t, b, testdeep.Smuggle("Iface.Num", 4))
+	checkOK(t, b, testdeep.Smuggle("Iface2.Num", 3))
+	checkOK(t, b, testdeep.Smuggle("C.Iface1.Num", 7))
+	checkOK(t, b, testdeep.Smuggle("C.Iface2.Num", 8))
+
+	// Errors
+	checkError(t, 12, testdeep.Smuggle("foo.bar", 23),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("        value: (int) 12\nit failed coz: it is not a struct and should be"),
+		})
+	checkError(t, gotStruct, testdeep.Smuggle("ValInt.bar", 23),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("\nit failed coz: field `ValInt' is not a struct and should be"),
+		})
+	checkError(t, gotStruct, testdeep.Smuggle("MyStructMid.ValStr.foobar", 23),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("\nit failed coz: field `MyStructMid.ValStr' is not a struct and should be"),
+		})
+
+	checkError(t, gotStruct, testdeep.Smuggle("foo.bar", 23),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("\nit failed coz: field `foo' not found"),
+		})
+
+	checkError(t, b, testdeep.Smuggle("C.PA2.Num", 456),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("\nit failed coz: field `C.PA2' is nil"),
+		})
+	checkError(t, b, testdeep.Smuggle("C.Iface3.Num", 456),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("\nit failed coz: field `C.Iface3' is nil"),
+		})
+	checkError(t, b, testdeep.Smuggle("C.Iface4.Num", 456),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("\nit failed coz: field `C.Iface4' is nil"),
+		})
+	checkError(t, b, testdeep.Smuggle("Iface3.Num", 456),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("\nit failed coz: field `Iface3' is nil"),
+		})
 }
 
 func TestSmuggleTypeBehind(t *testing.T) {
