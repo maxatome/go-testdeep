@@ -7,7 +7,9 @@
 package testdeep
 
 import (
+	"fmt"
 	"reflect"
+	"strings"
 	"unicode"
 	"unicode/utf8"
 
@@ -47,10 +49,80 @@ type tdSmuggle struct {
 
 var _ TestDeep = &tdSmuggle{}
 
+type smuggleValue struct {
+	Path  string
+	Value reflect.Value
+}
+
+var smuggleValueType = reflect.TypeOf(smuggleValue{})
+
+func nilFieldErr(path []string) error {
+	return fmt.Errorf("field `%s' is nil", strings.Join(path, "."))
+}
+
+func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), error) {
+	parts := strings.Split(path, ".")
+
+	// Check path parts validity
+	for i, p := range parts {
+		for j, r := range p {
+			if !unicode.IsLetter(r) && (j == 0 || !unicode.IsNumber(r)) {
+				return nil, fmt.Errorf("bad field name `%s' in FIELDS_PATH", parts[i])
+			}
+		}
+	}
+
+	return func(got interface{}) (smuggleValue, error) {
+		vgot := reflect.ValueOf(got)
+
+		for idxPart, fieldName := range parts {
+			// Resolve only one interface{} dereference
+			if vgot.Kind() == reflect.Interface {
+				if vgot.IsNil() {
+					return smuggleValue{}, nilFieldErr(parts[:idxPart])
+				}
+				vgot = vgot.Elem()
+			}
+
+			// Resolve multiple ptr dereferences
+			for {
+				if vgot.Kind() != reflect.Ptr {
+					break
+				}
+				if vgot.IsNil() {
+					return smuggleValue{}, nilFieldErr(parts[:idxPart])
+				}
+				vgot = vgot.Elem()
+			}
+
+			if vgot.Kind() != reflect.Struct {
+				if idxPart == 0 {
+					return smuggleValue{}, fmt.Errorf("it is not a struct and should be")
+				}
+				return smuggleValue{}, fmt.Errorf(
+					"field `%s' is not a struct and should be",
+					strings.Join(parts[:idxPart], "."))
+			}
+
+			vgot = vgot.FieldByName(fieldName)
+			if !vgot.IsValid() {
+				return smuggleValue{}, fmt.Errorf("field `%s' not found",
+					strings.Join(parts[:idxPart+1], "."))
+			}
+		}
+		return smuggleValue{
+			Path:  path,
+			Value: vgot,
+		}, nil
+	}, nil
+}
+
 // Smuggle operator allows to change data contents or mutate it into
 // another type before stepping down in favor of generic comparison
 // process. So "fn" is a function that must take one parameter whose
-// type must be convertible to the type of the compared value.
+// type must be convertible to the type of the compared value (as a
+// convenient shortcut, "fn" can be a string specifying a fields-path
+// through structs, see below for details).
 //
 // "fn" must return at least one value, these value will be compared as is
 // to "expectedValue", here integer 28:
@@ -165,21 +237,62 @@ var _ TestDeep = &tdSmuggle{}
 //     },
 //     Between(time.Now().Add(-2*time.Hour), time.Now()))
 //
+// Smuggle can also be used to access a struct field embedded in
+// several struct layers.
+//
+//   type A struct { Num int }
+//   type B struct { A *A }
+//   type C struct { B B }
+//   got := C{B: B{A: &A{Num: 12}}}
+//
+//   // Tests that got.B.A.Num is 12
+//   CmpDeeply(t, got,
+//     Smuggle(func (c C) int {
+//         return c.B.A.Num
+//       },
+//       12))
+//
+// As brought up above, a field-path can be passed as "fn" value
+// instead of a function pointer. Using this feature, the CmpDeeply
+// call in the above example can be rewritten as follows:
+//
+//   // Tests that got.B.A.Num is 12
+//   CmpDeeply(t, got, Smuggle("B.A.Num", 12))
+//
+// Behind the scenes, a temporary function is automatically created to
+// achieve the same goal, but add some checks against nil values and
+// auto-dereference interfaces and pointers.
+//
 // The difference between Smuggle and Code operators is that Code is
 // used to do a final comparison while Smuggle transforms the data and
 // then steps down in favor of generic comparison process. Moreover,
 // the type accepted as input for the function is lax to facilitate
 // the tests writing (eg. the function can accept an float64 and the
 // got value be an int). See examples. On the other hand, the output
-// type is strict and must match exactly the expected value type.
+// type is strict and must match exactly the expected value type. The
+// fields-path string "fn" shortcut is not available with Code
+// operator.
 //
-// TypeBehind method returns the reflect.Type of only parameter of "fn".
+// TypeBehind method returns the reflect.Type of only parameter of
+// "fn". For the case where "fn" is a fields-path, it is always
+// Interface{}, as the type can not be known in advance.
 func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
-	const usage = "Smuggle(FUNC, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
+	const usage = "Smuggle(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
 
-	if vfn.Kind() != reflect.Func {
+	switch vfn.Kind() {
+	case reflect.String:
+		fn, err := buildStructFieldFn(vfn.String())
+		if err != nil {
+			panic(usage + ": " + err.Error())
+		}
+		vfn = reflect.ValueOf(fn)
+
+	case reflect.Func:
+		// nothing to do check
+
+	default:
 		panic("usage: " + usage)
 	}
 
@@ -280,6 +393,10 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 				} else {
 					newCtx, newGot = smGot.contextAndGot(ctx)
 				}
+
+			case smuggleValueType:
+				smv := newGot.Interface().(smuggleValue)
+				newCtx, newGot = ctx.AddDepth("."+smv.Path), smv.Value
 
 			default:
 				newCtx = ctx.AddDepth(smuggled)

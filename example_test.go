@@ -1864,6 +1864,63 @@ func ExampleSmuggle_complex() {
 	// true
 }
 
+func ExampleSmuggle_field_path() {
+	t := &testing.T{}
+
+	type Body struct {
+		Name  string
+		Value interface{}
+	}
+	type Request struct {
+		Body *Body
+	}
+	type Transaction struct {
+		Request
+	}
+	type ValueNum struct {
+		Num int
+	}
+
+	got := &Transaction{
+		Request: Request{
+			Body: &Body{
+				Name:  "test",
+				Value: &ValueNum{Num: 123},
+			},
+		},
+	}
+
+	// Want to check whether Num is between 100 and 200?
+	ok := CmpDeeply(t, got,
+		Smuggle(
+			func(t *Transaction) (int, error) {
+				if t.Request.Body == nil ||
+					t.Request.Body.Value == nil {
+					return 0, errors.New("Request.Body or Request.Body.Value is nil")
+				}
+				if v, ok := t.Request.Body.Value.(*ValueNum); ok && v != nil {
+					return v.Num, nil
+				}
+				return 0, errors.New("Request.Body.Value isn't *ValueNum or nil")
+			},
+			Between(100, 200)))
+	fmt.Println("check Num by hand:", ok)
+
+	// Same, but automagically generated...
+	ok = CmpDeeply(t, got, Smuggle("Request.Body.Value.Num", Between(100, 200)))
+	fmt.Println("check Num using a fields-path:", ok)
+
+	// And as Request is an anonymous field, can be simplified further
+	// as it can be omitted
+	ok = CmpDeeply(t, got, Smuggle("Body.Value.Num", Between(100, 200)))
+	fmt.Println("check Num using an other fields-path:", ok)
+
+	// Output:
+	// check Num by hand: true
+	// check Num using a fields-path: true
+	// check Num using an other fields-path: true
+}
+
 func ExampleString() {
 	t := &testing.T{}
 

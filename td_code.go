@@ -156,8 +156,8 @@ var _ types.TestDeepStringer = tdCodeResult{}
 func (r tdCodeResult) String() string {
 	if r.Reason == "" {
 		return fmt.Sprintf("  value: %s\nit failed but didn't say why",
-			util.ToString(r.Value))
+			util.IndentString(util.ToString(r.Value), "         "))
 	}
 	return fmt.Sprintf("        value: %s\nit failed coz: %s",
-		util.ToString(r.Value), r.Reason)
+		util.IndentString(util.ToString(r.Value), "               "), r.Reason)
 }
