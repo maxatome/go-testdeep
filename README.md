@@ -22,6 +22,19 @@ Extremely flexible golang deep comparison, extends the go testing package.
 
 ## Latest news
 
+- 2018/12/07: [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
+  operator and its friends
+  [`CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle)
+  &
+  [`T.Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle)
+  are now more lax and gain the ability to work on struct
+  fields-paths.
+  [`Shallow`](https://godoc.org/github.com/maxatome/go-testdeep#Shallow)
+  operator and its friends
+  [`CmpShallow`](https://godoc.org/github.com/maxatome/go-testdeep#CmpShallow)
+  &
+  [`T.Shallow`](https://godoc.org/github.com/maxatome/go-testdeep#T.Shallow)
+  can now work on strings;
 - 2018/10/31: new
   [`ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey)
   operator and its friends
@@ -30,15 +43,6 @@ Extremely flexible golang deep comparison, extends the go testing package.
   [`T.ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#T.ContainsKey);
   reworked to handle arrays, slices and maps;
 - 2018/08/18: works around golang issue in `go test -race` cases;
-- 2018/07/15: new
-  [`NaN`](https://godoc.org/github.com/maxatome/go-testdeep#NaN) &
-  [`NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#NotNaN) &
-  operators (and their friends
-  [`CmpNaN`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNaN),
-  [`CmpNotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNaN),
-  [`T.NaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.NaN)
-  &
-  [`T.NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#T.NotNaN));
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -493,7 +497,8 @@ See functions returning [`TestDeep` interface](https://godoc.org/github.com/maxa
   compares the contents of a slice or a pointer on a slice;
 - [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
   changes data contents or mutates it into another type via a custom
-  function before stepping down in favor of generic comparison process;
+  function or a struct fields-path before stepping down in favor of
+  generic comparison process;
 - [`String`](https://godoc.org/github.com/maxatome/go-testdeep#String)
   checks a string, [`error`](https://golang.org/ref/spec#Errors) or
   [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interfaces
