@@ -192,7 +192,7 @@ func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 	return true
 }
 
-func checkError(t *testing.T, got, expected interface{},
+func _checkError(t *testing.T, got, expected interface{},
 	expectedError expectedError, args ...interface{}) bool {
 	t.Helper()
 
@@ -217,6 +217,49 @@ func checkError(t *testing.T, got, expected interface{},
 	return true
 }
 
+func ifaceExpectedError(t *testing.T, expectedError expectedError) expectedError {
+	t.Helper()
+
+	if !strings.Contains(expectedError.Path.Exact, "DATA") {
+		return expectedError
+	}
+
+	newExpectedError := expectedError
+	newExpectedError.Path.Exact = strings.Replace(expectedError.Path.Exact,
+		"DATA", "DATA.Iface", 1)
+
+	if newExpectedError.Origin != nil {
+		newOrigin := ifaceExpectedError(t, *newExpectedError.Origin)
+		newExpectedError.Origin = &newOrigin
+	}
+
+	return newExpectedError
+}
+
+// checkError calls _checkError twice. The first time with the same
+// parameters, the second time in an interface{} context.
+func checkError(t *testing.T, got, expected interface{},
+	expectedError expectedError, args ...interface{}) bool {
+	t.Helper()
+
+	if ok := _checkError(t, got, expected, expectedError, args...); !ok {
+		return false
+	}
+
+	type tmpStruct struct {
+		Iface interface{}
+	}
+
+	return _checkError(t, tmpStruct{Iface: got},
+		testdeep.Struct(
+			tmpStruct{},
+			testdeep.StructFields{
+				"Iface": expected,
+			}),
+		ifaceExpectedError(t, expectedError),
+		args...)
+}
+
 func checkErrorForEach(t *testing.T,
 	gotList []interface{}, expected interface{},
 	expectedError expectedError, args ...interface{}) (ret bool) {
@@ -235,7 +278,7 @@ func checkErrorForEach(t *testing.T,
 	return
 }
 
-func checkOK(t *testing.T, got, expected interface{},
+func _checkOK(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
 	t.Helper()
 
@@ -259,6 +302,30 @@ func checkOK(t *testing.T, got, expected interface{},
 	return true
 }
 
+// checkOK calls _checkOK twice. The first time with the same
+// parameters, the second time in an interface{} context.
+func checkOK(t *testing.T, got, expected interface{},
+	args ...interface{}) bool {
+	t.Helper()
+
+	if ok := _checkOK(t, got, expected, args...); !ok {
+		return false
+	}
+
+	type tmpStruct struct {
+		Iface interface{}
+	}
+
+	// Dirty hack to force got be passed as an interface kind
+	return _checkOK(t, tmpStruct{Iface: got},
+		testdeep.Struct(
+			tmpStruct{},
+			testdeep.StructFields{
+				"Iface": expected,
+			}),
+		args...)
+}
+
 func checkOKOrPanicIfUnsafeDisabled(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
 	t.Helper()
@@ -266,7 +333,7 @@ func checkOKOrPanicIfUnsafeDisabled(t *testing.T, got, expected interface{},
 	var ret bool
 	cmp := func() {
 		t.Helper()
-		ret = checkOK(t, got, expected, args...)
+		ret = _checkOK(t, got, expected, args...)
 	}
 
 	// Should panic if unsafe package is not available

@@ -8,6 +8,7 @@ package testdeep_test
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 	"time"
 
@@ -158,11 +159,12 @@ func TestSmuggle(t *testing.T) {
 	checkOK(t, xInt(123),
 		testdeep.Smuggle(func(n uint32) int64 { return int64(n) }, int64(123)))
 
-	type tVal struct{ Val interface{} }
-	checkOK(t, tVal{Val: int32(123)},
-		testdeep.Struct(tVal{}, testdeep.StructFields{
-			"Val": testdeep.Smuggle(func(n int64) int { return int(n) }, 123),
-		}))
+	checkOK(t, int32(123),
+		testdeep.Smuggle(func(n int64) int { return int(n) }, 123))
+
+	checkOK(t, gotTime,
+		testdeep.Smuggle(func(t fmt.Stringer) string { return t.String() },
+			"2018-05-23 12:13:14 +0000 UTC"))
 
 	//
 	// Errors
@@ -175,25 +177,12 @@ func TestSmuggle(t *testing.T) {
 			Expected: mustBe("float64"),
 		})
 
-	checkError(t, tVal{},
-		testdeep.Struct(tVal{}, testdeep.StructFields{
-			"Val": testdeep.Smuggle(func(n int64) int { return int(n) }, 123),
-		}),
+	checkError(t, nil,
+		testdeep.Smuggle(func(n int64) int { return int(n) }, 123),
 		expectedError{
 			Message:  mustBe("incompatible parameter type"),
-			Path:     mustBe("DATA.Val"),
-			Got:      mustBe("interface {}"),
-			Expected: mustBe("int64"),
-		})
-
-	checkError(t, tVal{Val: "str"},
-		testdeep.Struct(tVal{}, testdeep.StructFields{
-			"Val": testdeep.Smuggle(func(n int64) int { return int(n) }, 123),
-		}),
-		expectedError{
-			Message:  mustBe("incompatible parameter type"),
-			Path:     mustBe("DATA.Val"),
-			Got:      mustBe("string"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
 			Expected: mustBe("int64"),
 		})
 

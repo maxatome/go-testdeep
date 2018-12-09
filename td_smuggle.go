@@ -335,18 +335,10 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 }
 
 func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {
-	if !got.Type().ConvertibleTo(s.argType) {
-		if got.Kind() != reflect.Interface || got.IsNil() {
-			return got, false
-		}
-
-		got = got.Elem()
-		if !got.Type().ConvertibleTo(s.argType) {
-			return got, false
-		}
+	if got.IsValid() && got.Type().ConvertibleTo(s.argType) {
+		return got.Convert(s.argType), true
 	}
-
-	return got.Convert(s.argType), true
+	return got, false
 }
 
 func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -355,11 +347,16 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&ctxerr.Error{
+		err := ctxerr.Error{
 			Message:  "incompatible parameter type",
-			Got:      types.RawString(got.Type().String()),
 			Expected: types.RawString(s.argType.String()),
-		})
+		}
+		if got.IsValid() {
+			err.Got = types.RawString(got.Type().String())
+		} else {
+			err.Got = types.RawString("nil")
+		}
+		return ctx.CollectError(&err)
 	}
 
 	// Refuse to override unexported fields access in this case. It is a
@@ -427,6 +424,10 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		Message: "ran smuggle code with %% as argument",
 		Summary: summary,
 	})
+}
+
+func (s *tdSmuggle) HandleInvalid() bool {
+	return true // Knows how to handle untyped nil values (aka. invalid values)
 }
 
 func (s *tdSmuggle) String() string {

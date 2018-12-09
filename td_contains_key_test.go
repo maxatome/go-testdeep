@@ -23,7 +23,8 @@ func TestContainsKey(t *testing.T) {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
 		checkOK(t, got, testdeep.ContainsKey(34), testName)
-		checkOK(t, got, testdeep.ContainsKey(testdeep.Between(30, 35)), testName)
+		checkOK(t, got, testdeep.ContainsKey(testdeep.Between(30, 35)),
+			testName)
 
 		checkError(t, got, testdeep.ContainsKey(35),
 			expectedError{

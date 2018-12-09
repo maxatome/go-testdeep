@@ -33,6 +33,7 @@ func TestTruncTime(t *testing.T) {
 		checkError(t, now, nowWithoutMono,
 			expectedError{
 				Message: mustBe("values differ"),
+				Path:    mustContain("DATA"),
 			})
 	}
 	checkOK(t, now, testdeep.TruncTime(nowWithoutMono))

@@ -367,7 +367,7 @@ func TestStructPrivateFields(t *testing.T) {
 		expectedError{
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA.iface"),
-			Got:      mustBe("interface {}"),
+			Got:      mustBe("int"),
 			Expected: mustBe("string (convertible) OR fmt.Stringer OR error OR []uint8"),
 		})
 
