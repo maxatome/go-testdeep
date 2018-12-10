@@ -417,7 +417,41 @@ func ExampleCode() {
 		got)
 	fmt.Println(ok)
 
+	// Same with failure reason
+	ok = CmpDeeply(t, got,
+		Code(func(num string) (bool, string) {
+			n, err := strconv.Atoi(num)
+			if err != nil {
+				return false, "not a number"
+			}
+			if n > 10 && n < 100 {
+				return true, ""
+			}
+			return false, "not in ]10 .. 100["
+		}),
+		"checks string `%s` contains a number and this number is in ]10 .. 100[",
+		got)
+	fmt.Println(ok)
+
+	// Same with failure reason thanks to error
+	ok = CmpDeeply(t, got,
+		Code(func(num string) error {
+			n, err := strconv.Atoi(num)
+			if err != nil {
+				return err
+			}
+			if n > 10 && n < 100 {
+				return nil
+			}
+			return fmt.Errorf("%d not in ]10 .. 100[", n)
+		}),
+		"checks string `%s` contains a number and this number is in ]10 .. 100[",
+		got)
+	fmt.Println(ok)
+
 	// Output:
+	// true
+	// true
 	// true
 }
 

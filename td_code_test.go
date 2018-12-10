@@ -7,6 +7,7 @@
 package testdeep_test
 
 import (
+	"encoding/json"
 	"errors"
 	"testing"
 	"time"
@@ -26,6 +27,19 @@ func TestCode(t *testing.T) {
 	checkOK(t, errors.New("foobar"), testdeep.Code(func(val error) bool {
 		return val.Error() == "foobar"
 	}))
+
+	checkOK(t, json.RawMessage(`[42]`),
+		testdeep.Code(func(b json.RawMessage) error {
+			var l []int
+			err := json.Unmarshal(b, &l)
+			if err != nil {
+				return err
+			}
+			if len(l) != 1 || l[0] != 42 {
+				return errors.New("42 not found")
+			}
+			return nil
+		}))
 
 	checkError(t, 123, testdeep.Code(func(n float64) bool { return true }),
 		expectedError{
@@ -71,6 +85,16 @@ func TestCode(t *testing.T) {
 			Summary: mustBe("        value: (int) 12\nit failed coz: very custom error"),
 		})
 
+	checkError(t, 12,
+		testdeep.Code(func(i int) error {
+			return errors.New("very custom error")
+		}),
+		expectedError{
+			Message: mustBe("ran code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("        value: (int) 12\nit failed coz: very custom error"),
+		})
+
 	//
 	// Bad usage
 	test.CheckPanic(t, func() { testdeep.Code("test") }, "usage: Code")
@@ -85,27 +109,31 @@ func TestCode(t *testing.T) {
 
 	test.CheckPanic(t, func() {
 		testdeep.Code(func(n int) (bool, int) { return true, 0 })
-	}, "FUNC must return bool or (bool, string)")
+	}, "FUNC must return bool or (bool, string) or error")
+
+	test.CheckPanic(t, func() {
+		testdeep.Code(func(n int) (error, string) { return nil, "" })
+	}, "FUNC must return bool or (bool, string) or error")
 
 	test.CheckPanic(t, func() {
 		testdeep.Code(func(n int) (int, string) { return 0, "" })
-	}, "FUNC must return bool or (bool, string)")
+	}, "FUNC must return bool or (bool, string) or error")
 
 	test.CheckPanic(t, func() {
 		testdeep.Code(func(n int) (string, bool) { return "", true })
-	}, "FUNC must return bool or (bool, string)")
+	}, "FUNC must return bool or (bool, string) or error")
 
 	test.CheckPanic(t, func() {
 		testdeep.Code(func(n int) (bool, string, int) { return true, "", 0 })
-	}, "FUNC must return bool or (bool, string)")
+	}, "FUNC must return bool or (bool, string) or error")
 
 	test.CheckPanic(t, func() {
 		testdeep.Code(func(n int) {})
-	}, "FUNC must return bool or (bool, string)")
+	}, "FUNC must return bool or (bool, string) or error")
 
 	test.CheckPanic(t, func() {
 		testdeep.Code(func(n int) int { return 0 })
-	}, "FUNC must return bool or (bool, string)")
+	}, "FUNC must return bool or (bool, string) or error")
 
 	//
 	// String
@@ -115,6 +143,9 @@ func TestCode(t *testing.T) {
 	test.EqualStr(t,
 		testdeep.Code(func(n int) (bool, string) { return false, "" }).String(),
 		"Code(func(int) (bool, string))")
+	test.EqualStr(t,
+		testdeep.Code(func(n int) error { return nil }).String(),
+		"Code(func(int) error)")
 	test.EqualStr(t,
 		testdeep.Code(func(n int) (MyBool, MyString) { return false, "" }).String(),
 		"Code(func(int) (testdeep_test.MyBool, testdeep_test.MyString))")
