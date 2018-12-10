@@ -43,6 +43,20 @@ var _ TestDeep = &tdCode{}
 //       return false, "year must be 2018"
 //     })
 //
+// or a single error value. If the returned error is nil, the test
+// succeeded, else the error contains the reason of failure:
+//   Code(func (b json.RawMessage) error {
+//       var c map[string]int
+//       err := json.Unmarshal(b, &c)
+//       if err != nil {
+//         return err
+//       }
+//       if c["test"] != 42 {
+//         return fmt.Errorf(`key "test" does not match 42`)
+//       }
+//       return nil
+//     })
+//
 // This operator allows to handle any specific comparison not handled
 // by standard operators.
 //
@@ -73,7 +87,10 @@ func Code(fn interface{}) TestDeep {
 		fallthrough
 
 	case 1:
-		if fnType.Out(0).Kind() == reflect.Bool {
+		// (*bool*) or (*bool*, string)
+		if fnType.Out(0).Kind() == reflect.Bool ||
+			// (*error*)
+			(fnType.NumOut() == 1 && fnType.Out(0) == errorInterface) {
 			return &tdCode{
 				Base:     NewBase(3),
 				function: vfn,
@@ -82,7 +99,7 @@ func Code(fn interface{}) TestDeep {
 		}
 	}
 
-	panic("Code(FUNC): FUNC must return bool or (bool, string)")
+	panic("Code(FUNC): FUNC must return bool or (bool, string) or error")
 }
 
 func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -111,7 +128,11 @@ func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	ret := c.function.Call([]reflect.Value{got})
-	if ret[0].Bool() {
+	if ret[0].Kind() == reflect.Bool {
+		if ret[0].Bool() {
+			return nil
+		}
+	} else if ret[0].IsNil() { // reflect.Interface
 		return nil
 	}
 
@@ -119,22 +140,21 @@ func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		return ctxerr.BooleanError
 	}
 
-	err := ctxerr.Error{
+	summary := tdCodeResult{
+		Value: got,
+	}
+
+	if len(ret) > 1 { // (bool, string)
+		summary.Reason = ret[1].String()
+	} else if ret[0].Kind() == reflect.Interface { // (error)
+		summary.Reason = ret[0].Interface().(error).Error()
+	}
+	// else (bool) so no reason to report
+
+	return ctx.CollectError(&ctxerr.Error{
 		Message: "ran code with %% as argument",
-	}
-
-	if len(ret) > 1 {
-		err.Summary = tdCodeResult{
-			Value:  got,
-			Reason: ret[1].String(),
-		}
-	} else {
-		err.Summary = tdCodeResult{
-			Value: got,
-		}
-	}
-
-	return ctx.CollectError(&err)
+		Summary: summary,
+	})
 }
 
 func (c *tdCode) String() string {
