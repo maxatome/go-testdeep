@@ -94,7 +94,8 @@ func TestMapEach(t *testing.T) {
 
 	checkOK(t, map[string]interface{}{"a": nil, "b": nil, "c": nil},
 		testdeep.MapEach(nil))
-	checkError(t, map[string]interface{}{"a": nil, "b": nil, "c": nil, "d": 66},
+	checkError(t,
+		map[string]interface{}{"a": nil, "b": nil, "c": nil, "d": 66},
 		testdeep.MapEach(nil),
 		expectedError{
 			Message:  mustBe("values differ"),

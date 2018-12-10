@@ -1772,6 +1772,34 @@ func ExampleCmpSmuggle_complex() {
 	// true
 }
 
+func ExampleCmpSmuggle_interface() {
+	t := &testing.T{}
+
+	gotTime, err := time.Parse(time.RFC3339, "2018-05-23T12:13:14Z")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Do not check the struct itself, but it stringified form
+	ok := CmpSmuggle(t, gotTime, func(s fmt.Stringer) string {
+		return s.String()
+	}, "2018-05-23 12:13:14 +0000 UTC")
+	fmt.Println("stringified time.Time OK:", ok)
+
+	// If got does not implement the fmt.Stringer interface, it fails
+	// without calling the Smuggle func
+	type MyTime time.Time
+	ok = CmpSmuggle(t, MyTime(gotTime), func(s fmt.Stringer) string {
+		fmt.Println("Smuggle func called!")
+		return s.String()
+	}, "2018-05-23 12:13:14 +0000 UTC")
+	fmt.Println("stringified MyTime OK:", ok)
+
+	// Output
+	// stringified time.Time OK: true
+	// stringified MyTime OK: false
+}
+
 func ExampleCmpSmuggle_field_path() {
 	t := &testing.T{}
 

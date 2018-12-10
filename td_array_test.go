@@ -55,6 +55,15 @@ func TestArray(t *testing.T) {
 			Expected: mustBe("(int) 6"),
 		})
 
+	checkError(t, nil,
+		testdeep.Array([1]int{42}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustContain("Array("),
+		})
+
 	//
 	// Array type
 	checkOK(t, MyArray{}, testdeep.Array(MyArray{}, nil))
@@ -233,6 +242,15 @@ func TestSlice(t *testing.T) {
 			Path:     mustBe("DATA[2]"),
 			Got:      mustBe("(int) 4"),
 			Expected: mustBe("(int) 5"),
+		})
+
+	checkError(t, nil,
+		testdeep.Slice([]int{2, 3}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustContain("Slice("),
 		})
 
 	//

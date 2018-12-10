@@ -15,6 +15,8 @@ import (
 )
 
 func TestShallow(t *testing.T) {
+	checkOK(t, nil, nil)
+
 	//
 	// Slice
 	back := [...]int{1, 2, 3, 1, 2, 3}

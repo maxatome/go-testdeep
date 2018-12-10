@@ -15,6 +15,7 @@ Extremely flexible golang deep comparison, extends the go testing package.
 - [Installation](#installation)
 - [Presentation](#presentation)
 - [Available operators](#available-operators)
+- [Operators vs go types](#operators-vs-go-types)
 - [See also](#see-also)
 - [License](#license)
 - [FAQ](FAQ.md)
@@ -527,6 +528,81 @@ See functions returning [`TestDeep` interface](https://godoc.org/github.com/maxa
 - [`Zero`](https://godoc.org/github.com/maxatome/go-testdeep#Zero)
   checks data against its zero'ed conterpart.
 
+
+## Operators vs go types
+
+| Operator vs go type                               | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct      | pointer            | interface¹ | chan | func | operator |
+| ------------------------------------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ----------- | ------------------ | ---------- | ---- | ---- | -------- |
+| [`All`](https://godoc.org/github.com/maxatome/go-testdeep#All)                 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`All`](https://godoc.org/github.com/maxatome/go-testdeep#All) |
+| [`Any`](https://godoc.org/github.com/maxatome/go-testdeep#Any)                 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`Any`](https://godoc.org/github.com/maxatome/go-testdeep#Any) |
+| [`Array`](https://godoc.org/github.com/maxatome/go-testdeep#Array)             | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✗        | ✗ | ✗           | ptr on array       | ✓ | ✗ | ✗ | [`Array`](https://godoc.org/github.com/maxatome/go-testdeep#Array) |
+| [`ArrayEach`](https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach)     | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ptr on array/slice | ✓ | ✗ | ✗ | [`ArrayEach`](https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach) |
+| [`Bag`](https://godoc.org/github.com/maxatome/go-testdeep#Bag)                 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ptr on array/slice | ✓ | ✗ | ✗ | [`Bag`](https://godoc.org/github.com/maxatome/go-testdeep#Bag) |
+| [`Between`](https://godoc.org/github.com/maxatome/go-testdeep#Between)         | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗        | ✗ | `time.Time` | ✗                  | ✓ | ✗ | ✗ | [`Between`](https://godoc.org/github.com/maxatome/go-testdeep#Between) |
+| [`Cap`](https://godoc.org/github.com/maxatome/go-testdeep#Cap)                 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ✗                  | ✓ | ✓ | ✗ | [`Cap`](https://godoc.org/github.com/maxatome/go-testdeep#Cap) |
+| [`Code`](https://godoc.org/github.com/maxatome/go-testdeep#Code)               | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`Code`](https://godoc.org/github.com/maxatome/go-testdeep#Code) |
+| [`Contains`](https://godoc.org/github.com/maxatome/go-testdeep#Contains)       | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓        | ✓ | ✗           | ✗                  | ✓ | ✗ | ✗ | [`Contains`](https://godoc.org/github.com/maxatome/go-testdeep#Contains) |
+| [`ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey) | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗        | ✓ | ✗           | ✗                  | ✓ | ✗ | ✗ | [`ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey) |
+
+| Operator vs go type                               | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct      | pointer            | interface¹ | chan | func | operator |
+| ------------------------------------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ----------- | ------------------ | ---------- | ---- | ---- | -------- |
+| [`Empty`](https://godoc.org/github.com/maxatome/go-testdeep#Empty)             | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓        | ✓ | ✗           | ptr or/array/slice/map/string | ✓ | ✓ | ✗ | [`Empty`](https://godoc.org/github.com/maxatome/go-testdeep#Empty) |
+| [`Gt`](https://godoc.org/github.com/maxatome/go-testdeep#Gt)                   | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗        | ✗ | `time.Time` | ✗                  | ✓ | ✗ | ✗ | [`Gt`](https://godoc.org/github.com/maxatome/go-testdeep#Gt) |
+| [`Gte`](https://godoc.org/github.com/maxatome/go-testdeep#Gte)                 | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗        | ✗ | `time.Time` | ✗                  | ✓ | ✗ | ✗ | [`Gte`](https://godoc.org/github.com/maxatome/go-testdeep#Gte) |
+| [`HasPrefix`](https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix)     | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | ✗        | ✗ | ✗           | ✗                  | ✓ + `fmt.Stringer`, `error` | ✗ | ✗ | [`HasPrefix`](https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix) |
+| [`HasSuffix`](https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix)     | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | ✗        | ✗ | ✗           | ✗                  | ✓ + `fmt.Stringer`, `error` | ✗ | ✗ | [`HasSuffix`](https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix) |
+| [`Ignore`](https://godoc.org/github.com/maxatome/go-testdeep#Isa)              | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`Ignore`](https://godoc.org/github.com/maxatome/go-testdeep#Isa) |
+| [`Isa`](https://godoc.org/github.com/maxatome/go-testdeep#Isa)                 | ✗ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`Isa`](https://godoc.org/github.com/maxatome/go-testdeep#Isa) |
+| [`Len`](https://godoc.org/github.com/maxatome/go-testdeep#Len)                 | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓        | ✓ | ✗           | ✗                  | ✓ | ✓ | ✗ | [`Len`](https://godoc.org/github.com/maxatome/go-testdeep#Len) |
+| [`Lt`](https://godoc.org/github.com/maxatome/go-testdeep#Lt)                   | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗        | ✗ | `time.Time` | ✗                  | ✓ | ✗ | ✗ | [`Lt`](https://godoc.org/github.com/maxatome/go-testdeep#Lt) |
+| [`Lte`](https://godoc.org/github.com/maxatome/go-testdeep#Lte)                 | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗        | ✗ | `time.Time` | ✗                  | ✓ | ✗ | ✗ | [`Lte`](https://godoc.org/github.com/maxatome/go-testdeep#Lte) |
+
+| Operator vs go type                               | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct      | pointer            | interface¹ | chan | func | operator |
+| ------------------------------------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ----------- | ------------------ | ---------- | ---- | ---- | -------- |
+| [`Map`](https://godoc.org/github.com/maxatome/go-testdeep#Map)                 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗        | ✓ | ✗           | ptr on map         | ✓ | ✗ | ✗ | [`Map`](https://godoc.org/github.com/maxatome/go-testdeep#Map) |
+| [`MapEach`](https://godoc.org/github.com/maxatome/go-testdeep#MapEach)         | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗        | ✓ | ✗           | ptr on map         | ✓ | ✗ | ✗ | [`MapEach`](https://godoc.org/github.com/maxatome/go-testdeep#MapEach) |
+| [`N`](https://godoc.org/github.com/maxatome/go-testdeep#N)                     | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗        | ✗ | ✗           | ✗                  | ✓ | ✗ | ✗ | [`N`](https://godoc.org/github.com/maxatome/go-testdeep#N) |
+| [`NaN`](https://godoc.org/github.com/maxatome/go-testdeep#NaN)                 | ✗ | ✗ | ✗ | ✗ | ✓ | ✗    | ✗ | ✗        | ✗ | ✗           | ✗                  | ✓ | ✗ | ✗ | [`NaN`](https://godoc.org/github.com/maxatome/go-testdeep#NaN) |
+| [`Nil`](https://godoc.org/github.com/maxatome/go-testdeep#Nil)                 | ✓ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✓        | ✓ | ✗           | ✓                  | ✓ | ✓ | ✓ | [`Nil`](https://godoc.org/github.com/maxatome/go-testdeep#Nil) |
+| [`None`](https://godoc.org/github.com/maxatome/go-testdeep#None)               | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`None`](https://godoc.org/github.com/maxatome/go-testdeep#None) |
+| [`NotAny`](https://godoc.org/github.com/maxatome/go-testdeep#NotAny)           | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ptr on array/slice | ✓ | ✗ | ✗ | [`NotAny`](https://godoc.org/github.com/maxatome/go-testdeep#NotAny) |
+| [`Not`](https://godoc.org/github.com/maxatome/go-testdeep#Not)                 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`Not`](https://godoc.org/github.com/maxatome/go-testdeep#Not) |
+| [`NotEmpty`](https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty)       | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓        | ✓ | ✗           | ptr or/array/slice/map/string | ✓ | ✓ | ✗ | [`NotEmpty`](https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty) |
+| [`NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#NotNaN)           | ✗ | ✗ | ✗ | ✗ | ✓ | ✗    | ✗ | ✗        | ✗ | ✗           | ✗                  | ✓ | ✗ | ✗ | [`NotNaN`](https://godoc.org/github.com/maxatome/go-testdeep#NotNaN) |
+
+| Operator vs go type                               | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct      | pointer            | interface¹ | chan | func | operator |
+| ------------------------------------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ----------- | ------------------ | ---------- | ---- | ---- | -------- |
+| [`NotNil`](https://godoc.org/github.com/maxatome/go-testdeep#NotNil)           | ✓ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✓        | ✓ | ✗           | ✓                  | ✓ | ✓ | ✓ | [`NotNil`](https://godoc.org/github.com/maxatome/go-testdeep#NotNil) |
+| [`NotZero`](https://godoc.org/github.com/maxatome/go-testdeep#NotZero)         | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`NotZero`](https://godoc.org/github.com/maxatome/go-testdeep#NotZero) |
+| [`PPtr`](https://godoc.org/github.com/maxatome/go-testdeep#PPtr)               | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗        | ✗ | ✗           | ✓                  | ✓ | ✗ | ✗ | [`PPtr`](https://godoc.org/github.com/maxatome/go-testdeep#PPtr) |
+| [`Ptr`](https://godoc.org/github.com/maxatome/go-testdeep#Ptr)                 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗        | ✗ | ✗           | ✓                  | ✓ | ✗ | ✗ | [`Ptr`](https://godoc.org/github.com/maxatome/go-testdeep#Ptr) |
+| [`Re`](https://godoc.org/github.com/maxatome/go-testdeep#Re)                   | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | `[]byte` | ✗ | ✗           | ✗                  | ✓ + `fmt.Stringer`, `error` | ✗ | ✗ | [`Re`](https://godoc.org/github.com/maxatome/go-testdeep#Re) |
+| [`ReAll`](https://godoc.org/github.com/maxatome/go-testdeep#ReAll)             | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | `[]byte` | ✗ | ✗           | ✗                  | ✓ + `fmt.Stringer`, `error` | ✗ | ✗ | [`ReAll`](https://godoc.org/github.com/maxatome/go-testdeep#ReAll) |
+| [`Set`](https://godoc.org/github.com/maxatome/go-testdeep#Set)                 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ptr on array/slice | ✓ | ✗ | ✗ | [`Set`](https://godoc.org/github.com/maxatome/go-testdeep#Set) |
+| [`Shallow`](https://godoc.org/github.com/maxatome/go-testdeep#Shallow)         | ✓ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | ✓        | ✓ | ✗           | ✓                  | ✓ | ✓ | ✓ | [`Shallow`](https://godoc.org/github.com/maxatome/go-testdeep#Shallow) |
+| [`Slice`](https://godoc.org/github.com/maxatome/go-testdeep#Slice)             | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✓        | ✗ | ✗           | ptr on slice       | ✓ | ✗ | ✗ | [`Slice`](https://godoc.org/github.com/maxatome/go-testdeep#Slice) |
+| [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)         | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle) |
+
+| Operator vs go type                               | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct      | pointer            | interface¹ | chan | func | operator |
+| ------------------------------------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ----------- | ------------------ | ---------- | ---- | ---- | -------- |
+| [`String`](https://godoc.org/github.com/maxatome/go-testdeep#String)           | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | ✗        | ✗ | ✗           | ✗                  | ✓ + `fmt.Stringer`, `error` | ✗ | ✗ | [`String`](https://godoc.org/github.com/maxatome/go-testdeep#String) |
+| [`Struct`](https://godoc.org/github.com/maxatome/go-testdeep#Struct)           | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✓           | ptr on struct      | ✓ | ✗ | ✗ | [`Struct`](https://godoc.org/github.com/maxatome/go-testdeep#Struct) |
+| [`SubBagOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf)       | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ptr on array/slice | ✓ | ✗ | ✗ | [`SubBagOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf) |
+| [`SubMapOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubMapOf)       | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗        | ✓ | ✗           | ptr on map         | ✓ | ✗ | ✗ | [`SubMapOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubMapOf) |
+| [`SubSetOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf)       | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`](https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf) |
+| [`SuperBagOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf)   | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf) |
+| [`SuperMapOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf)   | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗        | ✓ | ✗           | ptr on map         | ✓ | ✗ | ✗ | [`SuperMapOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf) |
+| [`SuperSetOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf)   | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | ✗           | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperSetOf`](https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf) |
+| [`TruncTime`](https://godoc.org/github.com/maxatome/go-testdeep#TruncTime)     | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓        | ✗ | `time.Time` | todo               | ✓ | ✗ | ✗ | [`TruncTime`](https://godoc.org/github.com/maxatome/go-testdeep#TruncTime) |
+| [`Zero`](https://godoc.org/github.com/maxatome/go-testdeep#Zero)               | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓        | ✓ | ✓           | ✓                  | ✓ | ✓ | ✓ | [`Zero`](https://godoc.org/github.com/maxatome/go-testdeep#Zero) |
+
+Legend:
+- ✗ means using this operator with this go type will always fail
+- ✓ means using this operator with this go type can succeed
+- `[]byte`, `time.Time`, ptr on X, `fmt.Stringer`, `error` means using
+  this operator with this go type can succeed
+- todo means should be implemented in future (PRs welcome :) )
+- ¹ + ✓ means using this operator with the data behind the interface can succeed
 
 ## See also
 

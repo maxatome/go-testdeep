@@ -39,49 +39,54 @@ func deepValueEqualFinal(ctx ctxerr.Context, got, expected reflect.Value) (err *
 	return
 }
 
+// nilHandler is called when one of got or expected is nil (but never
+// both, it is caller responsibility)
+func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {
+	err := ctxerr.Error{}
+
+	if expected.IsValid() { // here: !got.IsValid()
+		if expected.Type().Implements(testDeeper) {
+			curOperator := expected.Interface().(TestDeep)
+			ctx.CurOperator = curOperator
+			if curOperator.HandleInvalid() {
+				return curOperator.Match(ctx, got)
+			}
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+
+			// Special case if "expected" is a TestDeep operator which
+			// does not handle invalid values: the operator is not called,
+			// but for the user the error comes from it
+		} else if ctx.BooleanError {
+			return ctxerr.BooleanError
+		}
+
+		err.Expected = expected
+	} else { // here: !expected.IsValid() && got.IsValid()
+		// Special case: "got" is a nil interface, so consider as equal
+		// to "expected" nil.
+		if got.Kind() == reflect.Interface && got.IsNil() {
+			return nil
+		}
+
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
+		}
+
+		err.Got = got
+	}
+
+	err.Message = "values differ"
+	return ctx.CollectError(&err)
+}
+
 func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxerr.Error) {
 	if !got.IsValid() || !expected.IsValid() {
 		if got.IsValid() == expected.IsValid() {
 			return
 		}
-
-		err = &ctxerr.Error{}
-
-		if expected.IsValid() { // here: !got.IsValid()
-			if expected.Type().Implements(testDeeper) {
-				curOperator := expected.Interface().(TestDeep)
-				ctx.CurOperator = curOperator
-				if curOperator.HandleInvalid() {
-					return curOperator.Match(ctx, got)
-				}
-				if ctx.BooleanError {
-					return ctxerr.BooleanError
-				}
-
-				// Special case if "expected" is a TestDeep operator which
-				// does not handle invalid values: the operator is not called,
-				// but for the user the error comes from it
-			} else if ctx.BooleanError {
-				return ctxerr.BooleanError
-			}
-
-			err.Expected = expected
-		} else { // here: !expected.IsValid() && got.IsValid()
-			// Special case: "got" is a nil interface, so consider as equal
-			// to "expected" nil.
-			if got.Kind() == reflect.Interface && got.IsNil() {
-				return nil
-			}
-
-			if ctx.BooleanError {
-				return ctxerr.BooleanError
-			}
-
-			err.Got = got
-		}
-
-		err.Message = "values differ"
-		return ctx.CollectError(err)
+		return nilHandler(ctx, got, expected)
 	}
 
 	// Special case, "got" implements testDeeper: only if allowed
@@ -93,6 +98,16 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 	if got.Type() != expected.Type() {
 		if expected.Type().Implements(testDeeper) {
 			curOperator := expected.Interface().(TestDeep)
+
+			// Resolve interface
+			if got.Kind() == reflect.Interface {
+				got = got.Elem()
+
+				if !got.IsValid() {
+					return nilHandler(ctx, got, expected)
+				}
+			}
+
 			ctx.CurOperator = curOperator
 			return curOperator.Match(ctx, got)
 		}

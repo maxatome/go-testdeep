@@ -31,6 +31,7 @@ func TestArrayEach(t *testing.T) {
 		},
 		testdeep.ArrayEach(4))
 
+	// Empty slice/array
 	checkOKForEach(t,
 		[]interface{}{
 			[0]int{},
@@ -41,11 +42,12 @@ func TestArrayEach(t *testing.T) {
 			MySlice{},
 			&MyEmptyArray{},
 			&MySlice{},
+			// nil cases
+			([]int)(nil),
+			MySlice(nil),
 		},
 		testdeep.ArrayEach(4))
 
-	checkOK(t, ([]int)(nil), testdeep.ArrayEach(4))
-	checkOK(t, MySlice(nil), testdeep.ArrayEach(4))
 	checkError(t, (*MyArray)(nil), testdeep.ArrayEach(4),
 		expectedError{
 			Message:  mustBe("nil pointer"),
