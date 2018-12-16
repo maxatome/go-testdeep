@@ -30,10 +30,10 @@ func TestContainsKey(t *testing.T) {
 			expectedError{
 				Message: mustBe("does not contain key"),
 				Path:    mustBe("DATA"),
-				Summary: mustMatch(`expected key: \(int\) 35
- not in keys: \(\(int\) (12|28|34),
-               \(int\) (12|28|34),
-               \(int\) (12|28|34)\)`),
+				Summary: mustMatch(`expected key: 35
+ not in keys: \((12|28|34),
+               (12|28|34),
+               (12|28|34)\)`),
 			}, testName)
 	}
 }

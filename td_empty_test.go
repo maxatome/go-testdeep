@@ -76,7 +76,7 @@ func TestEmpty(t *testing.T) {
 		expectedError{
 			Message:  mustBe("not empty"),
 			Path:     mustBe("DATA"),
-			Got:      mustContain("(int) 1"),
+			Got:      mustContain("1"),
 			Expected: mustBe("empty"),
 		})
 	checkError(t, map[string]bool{"foo": true}, testdeep.Empty(),
@@ -101,7 +101,7 @@ func TestEmpty(t *testing.T) {
 		expectedError{
 			Message:  mustBe("not empty"),
 			Path:     mustBe("DATA"),
-			Got:      mustContain("(int) 0"),
+			Got:      mustContain("0"),
 			Expected: mustBe("empty"),
 		})
 

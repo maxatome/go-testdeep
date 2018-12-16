@@ -329,7 +329,7 @@ func ExampleBag() {
 	// true
 }
 
-func ExampleBetween() {
+func ExampleBetween_int() {
 	t := &testing.T{}
 
 	got := 156
@@ -353,6 +353,40 @@ func ExampleBetween() {
 
 	ok = CmpDeeply(t, got, Between(154, 156, BoundsOutOut),
 		"checks %v is in ]154 .. 156[", got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
+	// true
+	// false
+}
+
+func ExampleBetween_string() {
+	t := &testing.T{}
+
+	got := "abc"
+
+	ok := CmpDeeply(t, got, Between("aaa", "abc"),
+		`checks "%v" is in ["aaa" .. "abc"]`, got)
+	fmt.Println(ok)
+
+	// BoundsInIn is implicit
+	ok = CmpDeeply(t, got, Between("aaa", "abc", BoundsInIn),
+		`checks "%v" is in ["aaa" .. "abc"]`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Between("aaa", "abc", BoundsInOut),
+		`checks "%v" is in ["aaa" .. "abc"[`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Between("aaa", "abc", BoundsOutIn),
+		`checks "%v" is in ]"aaa" .. "abc"]`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Between("aaa", "abc", BoundsOutOut),
+		`checks "%v" is in ]"aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -721,7 +755,7 @@ func ExampleEmpty_pointers() {
 	// false
 }
 
-func ExampleGt() {
+func ExampleGt_int() {
 	t := &testing.T{}
 
 	got := 156
@@ -737,7 +771,23 @@ func ExampleGt() {
 	// false
 }
 
-func ExampleGte() {
+func ExampleGt_string() {
+	t := &testing.T{}
+
+	got := "abc"
+
+	ok := CmpDeeply(t, got, Gt("abb"), `checks "%v" is > "abb"`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Gt("abc"), `checks "%v" is > "abc"`, got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleGte_int() {
 	t := &testing.T{}
 
 	got := 156
@@ -745,8 +795,36 @@ func ExampleGte() {
 	ok := CmpDeeply(t, got, Gte(156), "checks %v is ≥ 156", got)
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, got, Gte(155), "checks %v is ≥ 155", got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Gte(157), "checks %v is ≥ 157", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
+	// true
+	// false
+}
+
+func ExampleGte_string() {
+	t := &testing.T{}
+
+	got := "abc"
+
+	ok := CmpDeeply(t, got, Gte("abc"), `checks "%v" is ≥ "abc"`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Gte("abb"), `checks "%v" is ≥ "abb"`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Gte("abd"), `checks "%v" is ≥ "abd"`, got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
 }
 
 func ExampleIsa() {
@@ -888,7 +966,7 @@ func ExampleLen_operatorMap() {
 	// true
 }
 
-func ExampleLt() {
+func ExampleLt_int() {
 	t := &testing.T{}
 
 	got := 156
@@ -904,7 +982,23 @@ func ExampleLt() {
 	// false
 }
 
-func ExampleLte() {
+func ExampleLt_string() {
+	t := &testing.T{}
+
+	got := "abc"
+
+	ok := CmpDeeply(t, got, Lt("abd"), `checks "%v" is < "abd"`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Lt("abc"), `checks "%v" is < "abc"`, got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleLte_int() {
 	t := &testing.T{}
 
 	got := 156
@@ -912,8 +1006,36 @@ func ExampleLte() {
 	ok := CmpDeeply(t, got, Lte(156), "checks %v is ≤ 156", got)
 	fmt.Println(ok)
 
+	ok = CmpDeeply(t, got, Lte(157), "checks %v is ≤ 157", got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Lte(155), "checks %v is ≤ 155", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
+	// true
+	// false
+}
+
+func ExampleLte_string() {
+	t := &testing.T{}
+
+	got := "abc"
+
+	ok := CmpDeeply(t, got, Lte("abc"), `checks "%v" is ≤ "abc"`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Lte("abd"), `checks "%v" is ≤ "abd"`, got)
+	fmt.Println(ok)
+
+	ok = CmpDeeply(t, got, Lte("abb"), `checks "%v" is ≤ "abb"`, got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
 }
 
 func ExampleMap_map() {

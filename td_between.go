@@ -59,9 +59,9 @@ type tdBetweenTime struct {
 var _ TestDeep = &tdBetweenTime{}
 
 // Between operator checks that data is between "from" and
-// "to". "from" and "to" can be any numeric or time.Time (or
+// "to". "from" and "to" can be any numeric, string or time.Time (or
 // assignable) value. "from" and "to" must be the same kind as the
-// compared value if numeric, and the same type if time.Time (or
+// compared value if numeric, and the same type if string or time.Time (or
 // assignable). "bounds" allows to specify whether bounds are included
 // or not. See Bounds* constants for details. If "bounds" is missing,
 // it defaults to BoundsInIn.
@@ -73,7 +73,7 @@ func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 		expectedMax: reflect.ValueOf(to),
 	}
 
-	const usage = "usage: Between(NUM|TIME, NUM|TIME[, BOUNDS_KIND])"
+	const usage = "usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND])"
 
 	if len(bounds) > 0 {
 		if len(bounds) > 1 {
@@ -125,6 +125,12 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 
 	case reflect.Float32, reflect.Float64:
 		if b.expectedMin.Float() > b.expectedMax.Float() {
+			b.expectedMin, b.expectedMax = b.expectedMax, b.expectedMin
+		}
+		return b
+
+	case reflect.String:
+		if b.expectedMin.String() > b.expectedMax.String() {
 			b.expectedMin, b.expectedMax = b.expectedMax, b.expectedMin
 		}
 		return b
@@ -274,7 +280,7 @@ func Gt(val interface{}) TestDeep {
 		expectedMin: reflect.ValueOf(val),
 		minBound:    boundOut,
 	}
-	return b.initBetween("usage: Gt(NUM|TIME)")
+	return b.initBetween("usage: Gt(NUM|STRING|TIME)")
 }
 
 // Gte operator checks that data is greater or equal than "val". "val"
@@ -288,7 +294,7 @@ func Gte(val interface{}) TestDeep {
 		expectedMin: reflect.ValueOf(val),
 		minBound:    boundIn,
 	}
-	return b.initBetween("usage: Gte(NUM|TIME)")
+	return b.initBetween("usage: Gte(NUM|STRING|TIME)")
 }
 
 // Lt operator checks that data is lesser than "val". "val" can be
@@ -302,7 +308,7 @@ func Lt(val interface{}) TestDeep {
 		expectedMin: reflect.ValueOf(val),
 		maxBound:    boundOut,
 	}
-	return b.initBetween("usage: Lt(NUM|TIME)")
+	return b.initBetween("usage: Lt(NUM|STRING|TIME)")
 }
 
 // Lte operator checks that data is lesser or equal than "val". "val"
@@ -316,7 +322,7 @@ func Lte(val interface{}) TestDeep {
 		expectedMin: reflect.ValueOf(val),
 		maxBound:    boundIn,
 	}
-	return b.initBetween("usage: Lte(NUM|TIME)")
+	return b.initBetween("usage: Lte(NUM|STRING|TIME)")
 }
 
 func (b *tdBetween) matchInt(got reflect.Value) (ok bool) {
@@ -385,6 +391,28 @@ func (b *tdBetween) matchFloat(got reflect.Value) (ok bool) {
 	return
 }
 
+func (b *tdBetween) matchString(got reflect.Value) (ok bool) {
+	switch b.minBound {
+	case boundIn:
+		ok = got.String() >= b.expectedMin.String()
+	case boundOut:
+		ok = got.String() > b.expectedMin.String()
+	default:
+		ok = true
+	}
+	if ok {
+		switch b.maxBound {
+		case boundIn:
+			ok = got.String() <= b.expectedMax.String()
+		case boundOut:
+			ok = got.String() < b.expectedMax.String()
+		default:
+			ok = true
+		}
+	}
+	return
+}
+
 func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Type() != b.expectedMin.Type() {
 		if ctx.BooleanError {
@@ -408,6 +436,9 @@ func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 
 	case reflect.Float32, reflect.Float64:
 		ok = b.matchFloat(got)
+
+	case reflect.String:
+		ok = b.matchString(got)
 	}
 
 	if ok {
@@ -417,40 +448,67 @@ func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
+
+	var gotStr types.RawString
+	if got.Kind() == reflect.String {
+		gotStr = types.RawString(util.ToString(got))
+	} else {
+		gotStr = types.RawString(fmt.Sprintf("%v", got))
+	}
+
 	return ctx.CollectError(&ctxerr.Error{
 		Message:  "values differ",
-		Got:      types.RawString(fmt.Sprintf("%v", got.Interface())),
+		Got:      gotStr,
 		Expected: types.RawString(b.String()),
 	})
 }
 
 func (b *tdBetween) String() string {
-	var min, max interface{}
+	var (
+		min, max       interface{}
+		minStr, maxStr string
+	)
 
 	if b.minBound != boundNone {
 		min = b.expectedMin.Interface()
+
+		// We want strings be double-quoted
+		if b.expectedMin.Kind() == reflect.String {
+			minStr = util.ToString(min)
+		} else {
+			minStr = fmt.Sprintf("%v", min)
+		}
 	}
 	if b.maxBound != boundNone {
 		max = b.expectedMax.Interface()
+
+		// We want strings be double-quoted
+		if b.expectedMax.Kind() == reflect.String {
+			maxStr = util.ToString(max)
+		} else {
+			maxStr = fmt.Sprintf("%v", max)
+		}
 	}
 
 	if min == max {
-		return fmt.Sprintf("%v", min)
+		return minStr
 	}
 
 	if min != nil {
 		if max != nil {
 			return fmt.Sprintf("%v %c got %c %v",
-				min, util.TernRune(b.minBound == boundIn, '≤', '<'),
-				util.TernRune(b.maxBound == boundIn, '≤', '<'), max)
+				minStr,
+				util.TernRune(b.minBound == boundIn, '≤', '<'),
+				util.TernRune(b.maxBound == boundIn, '≤', '<'),
+				maxStr)
 		}
 
 		return fmt.Sprintf("%c %v",
-			util.TernRune(b.minBound == boundIn, '≥', '>'), min)
+			util.TernRune(b.minBound == boundIn, '≥', '>'), minStr)
 	}
 
 	return fmt.Sprintf("%c %v",
-		util.TernRune(b.maxBound == boundIn, '≤', '<'), max)
+		util.TernRune(b.maxBound == boundIn, '≤', '<'), maxStr)
 }
 
 func (b *tdBetween) TypeBehind() reflect.Type {

@@ -40,8 +40,8 @@ func TestContains(t *testing.T) {
 			expectedError{
 				Message:  mustBe("does not contain"),
 				Path:     mustBe("DATA"),
-				Got:      mustContain("(int) 34"), // as well as other items in fact...
-				Expected: mustBe("Contains((int) 35)"),
+				Got:      mustContain("34"), // as well as other items in fact...
+				Expected: mustBe("Contains(35)"),
 			}, testName)
 	}
 

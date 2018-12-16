@@ -9,6 +9,7 @@ package util
 import (
 	"bytes"
 	"reflect"
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -32,6 +33,7 @@ typeSwitch:
 			return ToString(newVal)
 		}
 
+		// no "(string) " prefix for printable strings
 	case string:
 		for _, chr := range tval {
 			if !unicode.IsPrint(chr) {
@@ -39,6 +41,10 @@ typeSwitch:
 			}
 		}
 		return `"` + tval + `"`
+
+		// no "(int) " prefix for ints
+	case int:
+		return strconv.Itoa(tval)
 
 	case types.TestDeepStringer:
 		return tval.String()

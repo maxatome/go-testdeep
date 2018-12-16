@@ -71,17 +71,24 @@ func TestBetween(t *testing.T) {
 	checkOK(t, 12.1, testdeep.Between(9.5, 12.1, testdeep.BoundsOutIn))
 	checkOK(t, 12.1, testdeep.Between(12.1, 13.1, testdeep.BoundsInOut))
 
+	checkOK(t, "abc", testdeep.Between("aaa", "bbb"))
+	checkOK(t, "abc", testdeep.Between("bbb", "aaa"))
+	checkOK(t, "abc", testdeep.Between("aaa", "abc", testdeep.BoundsOutIn))
+	checkOK(t, "abc", testdeep.Between("abc", "bbb", testdeep.BoundsInOut))
+
 	checkOK(t, 12*time.Hour, testdeep.Between(60*time.Second, 24*time.Hour))
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Between("test", "test") },
+	test.CheckPanic(t,
+		func() { testdeep.Between([]byte("test"), []byte("test")) },
 		"usage: Between(")
 	test.CheckPanic(t, func() { testdeep.Between(12, "test") },
 		"from and to params must have the same type")
 	test.CheckPanic(t, func() { testdeep.Between("test", 12) },
 		"from and to params must have the same type")
-	test.CheckPanic(t, func() { testdeep.Between(1, 2, testdeep.BoundsInIn, testdeep.BoundsInOut) },
+	test.CheckPanic(t,
+		func() { testdeep.Between(1, 2, testdeep.BoundsInIn, testdeep.BoundsInOut) },
 		"usage: Between(")
 }
 
@@ -319,6 +326,11 @@ func TestLGt(t *testing.T) {
 	checkOK(t, 12.3, testdeep.Lt(12.4))
 	checkOK(t, 12.3, testdeep.Lte(12.3))
 
+	checkOK(t, "abc", testdeep.Gt("abb"))
+	checkOK(t, "abc", testdeep.Gte("abc"))
+	checkOK(t, "abc", testdeep.Lt("abd"))
+	checkOK(t, "abc", testdeep.Lte("abc"))
+
 	checkError(t, 12, testdeep.Gt(12),
 		expectedError{
 			Message:  mustBe("values differ"),
@@ -348,6 +360,35 @@ func TestLGt(t *testing.T) {
 			Expected: mustBe("≤ 11"),
 		})
 
+	checkError(t, "abc", testdeep.Gt("abc"),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe(`"abc"`),
+			Expected: mustBe(`> "abc"`),
+		})
+	checkError(t, "abc", testdeep.Lt("abc"),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe(`"abc"`),
+			Expected: mustBe(`< "abc"`),
+		})
+	checkError(t, "abc", testdeep.Gte("abd"),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe(`"abc"`),
+			Expected: mustBe(`≥ "abd"`),
+		})
+	checkError(t, "abc", testdeep.Lte("abb"),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe(`"abc"`),
+			Expected: mustBe(`≤ "abb"`),
+		})
+
 	gotDate := time.Date(2018, time.March, 4, 1, 2, 3, 0, time.UTC)
 	expectedDate := gotDate
 	checkOK(t, gotDate, testdeep.Gte(expectedDate))
@@ -370,10 +411,10 @@ func TestLGt(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { testdeep.Gt("test") }, "usage: Gt(")
-	test.CheckPanic(t, func() { testdeep.Gte("test") }, "usage: Gte(")
-	test.CheckPanic(t, func() { testdeep.Lt("test") }, "usage: Lt(")
-	test.CheckPanic(t, func() { testdeep.Lte("test") }, "usage: Lte(")
+	test.CheckPanic(t, func() { testdeep.Gt([]byte("test")) }, "usage: Gt(")
+	test.CheckPanic(t, func() { testdeep.Gte([]byte("test")) }, "usage: Gte(")
+	test.CheckPanic(t, func() { testdeep.Lt([]byte("test")) }, "usage: Lt(")
+	test.CheckPanic(t, func() { testdeep.Lte([]byte("test")) }, "usage: Lte(")
 }
 
 func TestBetweenTime(t *testing.T) {

@@ -43,16 +43,16 @@ func TestArray(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
-			Got:      mustBe("(int) 5"),
-			Expected: mustBe("(int) 6"),
+			Got:      mustBe("5"),
+			Expected: mustBe("6"),
 		})
 	checkError(t, gotArray,
 		testdeep.Array([5]int{1, 2, 3, 4}, testdeep.ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
-			Got:      mustBe("(int) 5"),
-			Expected: mustBe("(int) 6"),
+			Got:      mustBe("5"),
+			Expected: mustBe("6"),
 		})
 
 	checkError(t, nil,
@@ -112,16 +112,16 @@ func TestArray(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
-			Got:      mustBe("(int) 5"),
-			Expected: mustBe("(int) 6"),
+			Got:      mustBe("5"),
+			Expected: mustBe("6"),
 		})
 	checkError(t, gotTypedArray,
 		testdeep.Array(MyArray{1, 2, 3, 4}, testdeep.ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
-			Got:      mustBe("(int) 5"),
-			Expected: mustBe("(int) 6"),
+			Got:      mustBe("5"),
+			Expected: mustBe("6"),
 		})
 
 	checkError(t, &gotTypedArray, testdeep.Array([5]int{}, nil),
@@ -135,16 +135,16 @@ func TestArray(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
-			Got:      mustBe("(int) 5"),
-			Expected: mustBe("(int) 6"),
+			Got:      mustBe("5"),
+			Expected: mustBe("6"),
 		})
 	checkError(t, &gotTypedArray,
 		testdeep.Array(&MyArray{1, 2, 3, 4}, testdeep.ArrayEntries{4: 6}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[4]"),
-			Got:      mustBe("(int) 5"),
-			Expected: mustBe("(int) 6"),
+			Got:      mustBe("5"),
+			Expected: mustBe("6"),
 		})
 
 	//
@@ -172,21 +172,21 @@ func TestArray(t *testing.T) {
 	test.EqualStr(t,
 		testdeep.Array(MyArray{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}).String(),
 		`Array(testdeep_test.MyArray{
-  0: (int) 2
-  1: (int) 3
-  2: (int) 4
-  3: (int) 0
-  4: (int) 0
+  0: 2
+  1: 3
+  2: 4
+  3: 0
+  4: 0
 })`)
 
 	test.EqualStr(t,
 		testdeep.Array(&MyArray{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}).String(),
 		`Array(*testdeep_test.MyArray{
-  0: (int) 2
-  1: (int) 3
-  2: (int) 4
-  3: (int) 0
-  4: (int) 0
+  0: 2
+  1: 3
+  2: 4
+  3: 0
+  4: 0
 })`)
 
 	test.EqualStr(t, testdeep.Array([0]int{}, testdeep.ArrayEntries{}).String(),
@@ -232,16 +232,16 @@ func TestSlice(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
-			Got:      mustBe("(int) 4"),
-			Expected: mustBe("(int) 5"),
+			Got:      mustBe("4"),
+			Expected: mustBe("5"),
 		})
 	checkError(t, gotSlice,
 		testdeep.Slice([]int{2, 3}, testdeep.ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
-			Got:      mustBe("(int) 4"),
-			Expected: mustBe("(int) 5"),
+			Got:      mustBe("4"),
+			Expected: mustBe("5"),
 		})
 
 	checkError(t, nil,
@@ -307,16 +307,16 @@ func TestSlice(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
-			Got:      mustBe("(int) 4"),
-			Expected: mustBe("(int) 5"),
+			Got:      mustBe("4"),
+			Expected: mustBe("5"),
 		})
 	checkError(t, gotTypedSlice,
 		testdeep.Slice(MySlice{2, 3}, testdeep.ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
-			Got:      mustBe("(int) 4"),
-			Expected: mustBe("(int) 5"),
+			Got:      mustBe("4"),
+			Expected: mustBe("5"),
 		})
 	checkError(t, gotTypedSlice,
 		testdeep.Slice(MySlice{2, 3, 4}, testdeep.ArrayEntries{3: 5}),
@@ -324,13 +324,13 @@ func TestSlice(t *testing.T) {
 			Message:  mustBe("expected value out of range"),
 			Path:     mustBe("DATA[3]"),
 			Got:      mustBe("<non-existent value>"),
-			Expected: mustBe("(int) 5"),
+			Expected: mustBe("5"),
 		})
 	checkError(t, gotTypedSlice, testdeep.Slice(MySlice{2, 3}, nil),
 		expectedError{
 			Message:  mustBe("got value out of range"),
 			Path:     mustBe("DATA[2]"),
-			Got:      mustBe("(int) 4"),
+			Got:      mustBe("4"),
 			Expected: mustBe("<non-existent value>"),
 		})
 
@@ -345,22 +345,22 @@ func TestSlice(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
-			Got:      mustBe("(int) 4"),
-			Expected: mustBe("(int) 5"),
+			Got:      mustBe("4"),
+			Expected: mustBe("5"),
 		})
 	checkError(t, &gotTypedSlice,
 		testdeep.Slice(&MySlice{2, 3}, testdeep.ArrayEntries{2: 5}),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[2]"),
-			Got:      mustBe("(int) 4"),
-			Expected: mustBe("(int) 5"),
+			Got:      mustBe("4"),
+			Expected: mustBe("5"),
 		})
 	checkError(t, &gotTypedSlice, testdeep.Slice(&MySlice{2, 3}, nil),
 		expectedError{
 			Message:  mustBe("got value out of range"),
 			Path:     mustBe("DATA[2]"),
-			Got:      mustBe("(int) 4"),
+			Got:      mustBe("4"),
 			Expected: mustBe("<non-existent value>"),
 		})
 
@@ -394,17 +394,17 @@ func TestSlice(t *testing.T) {
 	test.EqualStr(t,
 		testdeep.Slice(MySlice{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}).String(),
 		`Slice(testdeep_test.MySlice{
-  0: (int) 2
-  1: (int) 3
-  2: (int) 4
+  0: 2
+  1: 3
+  2: 4
 })`)
 
 	test.EqualStr(t,
 		testdeep.Slice(&MySlice{0, 0, 4}, testdeep.ArrayEntries{1: 3, 0: 2}).String(),
 		`Slice(*testdeep_test.MySlice{
-  0: (int) 2
-  1: (int) 3
-  2: (int) 4
+  0: 2
+  1: 3
+  2: 4
 })`)
 
 	test.EqualStr(t, testdeep.Slice(&MySlice{}, testdeep.ArrayEntries{}).String(),

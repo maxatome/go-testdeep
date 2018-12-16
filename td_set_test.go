@@ -43,7 +43,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra items: ((int) 3)"),
+				Summary: mustBe("Extra items: (3)"),
 			},
 			testName)
 
@@ -51,7 +51,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66)"),
+				Summary: mustBe("Missing items: (66)"),
 			},
 			testName)
 
@@ -59,7 +59,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66)"),
+				Summary: mustBe("Missing items: (66)"),
 			},
 			testName)
 
@@ -67,7 +67,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66,\n                (int) 67)"),
+				Summary: mustBe("Missing items: (66,\n                67)"),
 			},
 			testName)
 
@@ -75,7 +75,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66)\n  Extra items: ((int) 1)"),
+				Summary: mustBe("Missing items: (66)\n  Extra items: (1)"),
 			},
 			testName)
 
@@ -88,7 +88,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a SubSetOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra items: ((int) 1)"),
+				Summary: mustBe("Extra items: (1)"),
 			},
 			testName)
 
@@ -101,7 +101,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a SuperSetOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66)"),
+				Summary: mustBe("Missing items: (66)"),
 			},
 			testName)
 
@@ -113,7 +113,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a NotAny"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra items: ((int) 3)"),
+				Summary: mustBe("Extra items: (3)"),
 			},
 			testName)
 	}
@@ -182,18 +182,18 @@ func TestSet(t *testing.T) {
 
 	//
 	// String
-	test.EqualStr(t, testdeep.Set(1).String(), "Set((int) 1)")
-	test.EqualStr(t, testdeep.Set(1, 2).String(), "Set((int) 1,\n    (int) 2)")
+	test.EqualStr(t, testdeep.Set(1).String(), "Set(1)")
+	test.EqualStr(t, testdeep.Set(1, 2).String(), "Set(1,\n    2)")
 
-	test.EqualStr(t, testdeep.SubSetOf(1).String(), "SubSetOf((int) 1)")
-	test.EqualStr(t, testdeep.SubSetOf(1, 2).String(), "SubSetOf((int) 1,\n         (int) 2)")
+	test.EqualStr(t, testdeep.SubSetOf(1).String(), "SubSetOf(1)")
+	test.EqualStr(t, testdeep.SubSetOf(1, 2).String(), "SubSetOf(1,\n         2)")
 
-	test.EqualStr(t, testdeep.SuperSetOf(1).String(), "SuperSetOf((int) 1)")
+	test.EqualStr(t, testdeep.SuperSetOf(1).String(), "SuperSetOf(1)")
 	test.EqualStr(t, testdeep.SuperSetOf(1, 2).String(),
-		"SuperSetOf((int) 1,\n           (int) 2)")
+		"SuperSetOf(1,\n           2)")
 
-	test.EqualStr(t, testdeep.NotAny(1).String(), "NotAny((int) 1)")
-	test.EqualStr(t, testdeep.NotAny(1, 2).String(), "NotAny((int) 1,\n       (int) 2)")
+	test.EqualStr(t, testdeep.NotAny(1).String(), "NotAny(1)")
+	test.EqualStr(t, testdeep.NotAny(1, 2).String(), "NotAny(1,\n       2)")
 }
 
 func TestSetTypeBehind(t *testing.T) {

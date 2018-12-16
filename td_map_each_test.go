@@ -72,8 +72,8 @@ func TestMapEach(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["bar"]`),
-			Got:      mustBe("(int) 5"),
-			Expected: mustBe("(int) 4"),
+			Got:      mustBe("5"),
+			Expected: mustBe("4"),
 		})
 
 	checkError(t, 666, testdeep.MapEach(4),
@@ -100,16 +100,16 @@ func TestMapEach(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["d"]`),
-			Got:      mustBe("(int) 66"),
+			Got:      mustBe("66"),
 			Expected: mustBe("nil"),
 		})
 
 	//
 	// String
-	test.EqualStr(t, testdeep.MapEach(4).String(), "MapEach((int) 4)")
+	test.EqualStr(t, testdeep.MapEach(4).String(), "MapEach(4)")
 	test.EqualStr(t, testdeep.MapEach(testdeep.All(1, 2)).String(),
-		`MapEach(All((int) 1,
-            (int) 2))`)
+		`MapEach(All(1,
+            2))`)
 }
 
 func TestMapEachTypeBehind(t *testing.T) {

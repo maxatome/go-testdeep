@@ -32,8 +32,8 @@ func TestZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 12"),
-			Expected: mustBe("(int) 0"),
+			Got:      mustBe("12"),
+			Expected: mustBe("0"),
 		})
 	checkError(t, int64(12), testdeep.Zero(),
 		expectedError{
@@ -67,15 +67,15 @@ func TestZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
-			Got:      mustBe("(int) 12"),
-			Expected: mustBe("(int) 0"),
+			Got:      mustBe("12"),
+			Expected: mustBe("0"),
 		})
 	checkError(t, MyStruct{ValInt: 12}, testdeep.Zero(),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA.ValInt"),
-			Got:      mustBe("(int) 12"),
-			Expected: mustBe("(int) 0"),
+			Got:      mustBe("12"),
+			Expected: mustBe("0"),
 		})
 	checkError(t, &MyStruct{}, testdeep.Zero(),
 		expectedError{
@@ -122,7 +122,7 @@ func TestNotZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("zero value"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 0"),
+			Got:      mustBe("0"),
 			Expected: mustBe("NotZero()"),
 		})
 	checkError(t, int64(0), testdeep.NotZero(),
@@ -157,7 +157,7 @@ func TestNotZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("zero value"),
 			Path:     mustBe("DATA"),
-			Got:      mustContain("(int) 0"),
+			Got:      mustContain("0"),
 			Expected: mustBe("NotZero()"),
 		})
 	checkError(t, MyStruct{}, testdeep.NotZero(),

@@ -23,29 +23,29 @@ func TestError(t *testing.T) {
 	}
 	test.EqualStr(t, err.Error(),
 		`DATA[12].Field: Error message
-	     got: (int) 1
-	expected: (int) 2`)
-	test.EqualStr(t, err.GotString(), "(int) 1")
-	test.EqualStr(t, err.ExpectedString(), "(int) 2")
+	     got: 1
+	expected: 2`)
+	test.EqualStr(t, err.GotString(), "1")
+	test.EqualStr(t, err.ExpectedString(), "2")
 	test.EqualStr(t, err.SummaryString(), "")
 
 	err.Message = "Value of %% differ"
 	test.EqualStr(t, err.Error(),
 		`Value of DATA[12].Field differ
-	     got: (int) 1
-	expected: (int) 2`)
+	     got: 1
+	expected: 2`)
 
 	err.Message = "Path at end: %%"
 	test.EqualStr(t, err.Error(),
 		`Path at end: DATA[12].Field
-	     got: (int) 1
-	expected: (int) 2`)
+	     got: 1
+	expected: 2`)
 
 	err.Message = "%% <- the path!"
 	test.EqualStr(t, err.Error(),
 		`DATA[12].Field <- the path!
-	     got: (int) 1
-	expected: (int) 2`)
+	     got: 1
+	expected: 2`)
 
 	err = ctxerr.Error{
 		Context:  ctxerr.Context{Path: "DATA[12].Field"},
@@ -60,8 +60,8 @@ func TestError(t *testing.T) {
 	}
 	test.EqualStr(t, err.Error(),
 		`DATA[12].Field: Error message
-	     got: (int) 1
-	expected: (int) 2
+	     got: 1
+	expected: 2
 [under TestDeep operator Operator at file.go:23]`)
 
 	err = ctxerr.Error{
@@ -86,15 +86,15 @@ func TestError(t *testing.T) {
 	}
 	test.EqualStr(t, err.Error(),
 		`DATA[12].Field: Error message
-	(int) 666
+	666
 Originates from following error:
 	DATA[12].Field<All#1/2>: Origin error message
-		(int) 42
+		42
 	[under TestDeep operator SubOperator at file2.go:236]
 [under TestDeep operator Operator at file.go:23]`)
 	test.EqualStr(t, err.GotString(), "")
 	test.EqualStr(t, err.ExpectedString(), "")
-	test.EqualStr(t, err.SummaryString(), "(int) 666")
+	test.EqualStr(t, err.SummaryString(), "666")
 
 	err = ctxerr.Error{
 		Context: ctxerr.Context{Path: "DATA[12].Field"},
@@ -129,13 +129,13 @@ Originates from following error:
 	}
 	test.EqualStr(t, err.Error(),
 		`DATA[12].Field: Error message
-	(int) 666
+	666
 Originates from following error:
 	DATA[12].Field<All#1/2>: Origin error message
-		(int) 42
+		42
 	[under TestDeep operator SubOperator at file2.go:236]
 DATA[13].Field: Error message
-	(int) 888
+	888
 [under TestDeep operator Operator at file.go:23]`)
 
 	err = ctxerr.Error{
@@ -171,14 +171,14 @@ DATA[13].Field: Error message
 	}
 	test.EqualStr(t, err.Error(),
 		`DATA[12].Field: Error message
-	(int) 666
+	666
 Originates from following error:
 	DATA[12].Field<All#1/2>: Origin error message
-		(int) 42
+		42
 	[under TestDeep operator SubOperator at file2.go:236]
 [under TestDeep operator Operator at file.go:23]
 DATA[13].Field: Error message
-	(int) 888
+	888
 [under TestDeep operator Operator at file.go:24]`)
 
 	//

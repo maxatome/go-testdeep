@@ -41,12 +41,11 @@ type TestingT interface {
 // delegate common *testing.T functions to it. Of course, *testing.T
 // implements it.
 type TestingFT interface {
-	Error(args ...interface{})
+	TestingT
 	Errorf(format string, args ...interface{})
 	Fail()
 	FailNow()
 	Failed() bool
-	Fatal(args ...interface{})
 	Fatalf(format string, args ...interface{})
 	Log(args ...interface{})
 	Logf(format string, args ...interface{})
@@ -55,7 +54,6 @@ type TestingFT interface {
 	SkipNow()
 	Skipf(format string, args ...interface{})
 	Skipped() bool
-	Helper()
 	Run(name string, f func(t *testing.T)) bool
 }
 

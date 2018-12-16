@@ -21,15 +21,15 @@ func TestAny(t *testing.T) {
 		expectedError{
 			Message:  mustBe("comparing with Any"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 6"),
-			Expected: mustBe("Any((int) 5)"),
+			Got:      mustBe("6"),
+			Expected: mustBe("Any(5)"),
 		})
 
 	checkError(t, 6, testdeep.Any(nil),
 		expectedError{
 			Message:  mustBe("comparing with Any"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 6"),
+			Got:      mustBe("6"),
 			Expected: mustBe("Any(nil)"),
 		})
 
@@ -38,13 +38,13 @@ func TestAny(t *testing.T) {
 			Message:  mustBe("comparing with Any"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil"),
-			Expected: mustBe("Any((int) 6)"),
+			Expected: mustBe("Any(6)"),
 		})
 
 	//
 	// String
-	test.EqualStr(t, testdeep.Any(6).String(), "Any((int) 6)")
-	test.EqualStr(t, testdeep.Any(6, 7).String(), "Any((int) 6,\n    (int) 7)")
+	test.EqualStr(t, testdeep.Any(6).String(), "Any(6)")
+	test.EqualStr(t, testdeep.Any(6, 7).String(), "Any(6,\n    7)")
 }
 
 func TestAnyTypeBehind(t *testing.T) {

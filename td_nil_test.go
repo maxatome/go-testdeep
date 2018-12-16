@@ -30,7 +30,7 @@ func TestNil(t *testing.T) {
 		expectedError{
 			Message:  mustBe("non-nil"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 42"),
+			Got:      mustBe("42"),
 			Expected: mustBe("nil"),
 		})
 

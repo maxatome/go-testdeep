@@ -47,8 +47,8 @@ func TestEqualArray(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
-			Got:      mustBe("(int) 2"),
-			Expected: mustBe("(int) 3"),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
 		})
 
 	oldMaxErrors := testdeep.DefaultContextConfig.MaxErrors
@@ -70,8 +70,8 @@ func TestEqualArray(t *testing.T) {
 						expectedError{
 							Message:  mustBe("values differ"),
 							Path:     mustBe("DATA[1]"),
-							Got:      mustBe("(int) 2"),
-							Expected: mustBe("(int) 42"),
+							Got:      mustBe("2"),
+							Expected: mustBe("42"),
 						}, false) {
 						return
 					}
@@ -92,8 +92,8 @@ func TestEqualArray(t *testing.T) {
 						expectedError{
 							Message:  mustBe("values differ"),
 							Path:     mustBe("DATA[2]"),
-							Got:      mustBe("(int) 3"),
-							Expected: mustBe("(int) 43"),
+							Got:      mustBe("3"),
+							Expected: mustBe("43"),
 						}, false) {
 						return
 					}
@@ -125,8 +125,8 @@ func TestEqualArray(t *testing.T) {
 						expectedError{
 							Message:  mustBe("values differ"),
 							Path:     mustBe("DATA[1]"),
-							Got:      mustBe("(int) 2"),
-							Expected: mustBe("(int) 42"),
+							Got:      mustBe("2"),
+							Expected: mustBe("42"),
 						}, false) {
 						return
 					}
@@ -147,8 +147,8 @@ func TestEqualArray(t *testing.T) {
 						expectedError{
 							Message:  mustBe("values differ"),
 							Path:     mustBe("DATA[2]"),
-							Got:      mustBe("(int) 3"),
-							Expected: mustBe("(int) 43"),
+							Got:      mustBe("3"),
+							Expected: mustBe("43"),
 						}, false) {
 						return
 					}
@@ -169,8 +169,8 @@ func TestEqualArray(t *testing.T) {
 						expectedError{
 							Message:  mustBe("values differ"),
 							Path:     mustBe("DATA[3]"),
-							Got:      mustBe("(int) 4"),
-							Expected: mustBe("(int) 44"),
+							Got:      mustBe("4"),
+							Expected: mustBe("44"),
 						}, false) {
 						return
 					}
@@ -196,14 +196,14 @@ func TestEqualSlice(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing slices, from index #2"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe(`Missing items: ((int) 3)`),
+			Summary: mustBe(`Missing items: (3)`),
 		})
 
 	checkError(t, []int{1, 2, 3}, []int{1, 2},
 		expectedError{
 			Message: mustBe("comparing slices, from index #2"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe(`Extra items: ((int) 3)`),
+			Summary: mustBe(`Extra items: (3)`),
 		})
 
 	checkError(t, []int{1, 2}, ([]int)(nil),
@@ -226,8 +226,8 @@ func TestEqualSlice(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
-			Got:      mustBe("(int) 2"),
-			Expected: mustBe("(int) 3"),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
 		})
 }
 
@@ -276,8 +276,8 @@ func TestEqualPtr(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("*DATA"),
-			Got:      mustBe("(int) 13"),
-			Expected: mustBe("(int) 12"),
+			Got:      mustBe("13"),
+			Expected: mustBe("12"),
 		})
 }
 
@@ -346,8 +346,8 @@ func TestEqualMap(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["bar"]`),
-			Got:      mustBe("(int) 4"),
-			Expected: mustBe("(int) 5"),
+			Got:      mustBe("4"),
+			Expected: mustBe("5"),
 		})
 
 	checkError(t, map[string]int{"foo": 1, "bar": 4, "test": 12},
@@ -474,8 +474,8 @@ func TestEqualOthers(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA.num"),
-			Got:      mustBe("(int) 1"),
-			Expected: mustBe("(int) 2"),
+			Got:      mustBe("1"),
+			Expected: mustBe("2"),
 		})
 
 	checkError(t, Private{num8: 1}, Private{num8: 2},
