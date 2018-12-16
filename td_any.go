@@ -20,6 +20,7 @@ var _ TestDeep = &tdAny{}
 
 // Any operator compares data against several expected values. During
 // a match, at least one of them has to match to succeed.
+//go:noinline
 func Any(expectedValues ...interface{}) TestDeep {
 	return &tdAny{
 		tdList: newList(expectedValues...),

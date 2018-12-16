@@ -21,6 +21,7 @@ var _ TestDeep = &tdNone{}
 
 // None operator compares data against several expected values. During
 // a match, none of them have to match to succeed.
+//go:noinline
 func None(expectedValues ...interface{}) TestDeep {
 	return &tdNone{
 		tdList: newList(expectedValues...),
@@ -33,6 +34,7 @@ func None(expectedValues ...interface{}) TestDeep {
 // Not is the same operator as None() with only one argument. It is
 // provided as a more readable function when only one argument is
 // needed.
+//go:noinline
 func Not(expected interface{}) TestDeep {
 	return &tdNone{
 		tdList: newList(expected),

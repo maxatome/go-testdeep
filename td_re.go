@@ -68,6 +68,7 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 //     Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
 //   CmpDeeply(t, "John Doe",
 //     Re(`^(\w+) (\w+)`, Bag("Doe", "John"))       // succeeds
+//go:noinline
 func Re(reg interface{}, capture ...interface{}) TestDeep {
 	r := newRe(reg, capture...)
 	r.numMatches = 1
@@ -90,6 +91,7 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 //     ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
 //   CmpDeeply(t, "John Doe",
 //     ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))       // succeeds
+//go:noinline
 func ReAll(reg interface{}, capture interface{}) TestDeep {
 	r := newRe(reg, capture)
 	r.numMatches = -1
