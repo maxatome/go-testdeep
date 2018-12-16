@@ -579,9 +579,9 @@ Uses two files (`bypass.go` & `bypasssafe.go`) from
 [Go-spew](https://github.com/davecgh/go-spew) which is licensed under
 the [copyfree](http://copyfree.org) ISC License.
 
-Gopher by [Renee French](https://reneefrench.blogspot.com/), licensed
-under [Creative Commons 3.0 Attributions
-license](https://creativecommons.org/licenses/by/3.0/).
+[Public Domain Gopher](https://github.com/egonelbre/gophers) provided
+by [Egon Elbre](http://egonelbre.com/). The Go gopher was designed by
+[Renee French](https://reneefrench.blogspot.com/).
 
 
 ## FAQ
