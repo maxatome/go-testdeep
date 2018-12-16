@@ -147,6 +147,8 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 	}
 }
 
+//go:noinline
+
 // Map operator compares the contents of a map against the non-zero
 // values of "model" (if any) and the values of "expectedEntries".
 //
@@ -159,10 +161,11 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 // entries must be expected to succeed.
 //
 // TypeBehind method returns the reflect.Type of "model".
-//go:noinline
 func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, allMap)
 }
+
+//go:noinline
 
 // SubMapOf operator compares the contents of a map against the non-zero
 // values of "model" (if any) and the values of "expectedEntries".
@@ -183,10 +186,11 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 //     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, extra {"c": 3}
 //
 // TypeBehind method returns the reflect.Type of "model".
-//go:noinline
 func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, subMap)
 }
+
+//go:noinline
 
 // SuperMapOf operator compares the contents of a map against the non-zero
 // values of "model" (if any) and the values of "expectedEntries".
@@ -206,7 +210,6 @@ func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 //     SuperMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, missing {"b": 2}
 //
 // TypeBehind method returns the reflect.Type of "model".
-//go:noinline
 func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, superMap)
 }

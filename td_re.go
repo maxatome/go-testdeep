@@ -51,6 +51,8 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 	return
 }
 
+//go:noinline
+
 // Re operator allows to apply a regexp on a string (or convertible),
 // []byte, error or fmt.Stringer interface (error interface is tested
 // before fmt.Stringer.)
@@ -68,12 +70,13 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 //     Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
 //   CmpDeeply(t, "John Doe",
 //     Re(`^(\w+) (\w+)`, Bag("Doe", "John"))       // succeeds
-//go:noinline
 func Re(reg interface{}, capture ...interface{}) TestDeep {
 	r := newRe(reg, capture...)
 	r.numMatches = 1
 	return r
 }
+
+//go:noinline
 
 // ReAll operator allows to successively apply a regexp on a string
 // (or convertible), []byte, error or fmt.Stringer interface (error
@@ -91,7 +94,6 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 //     ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
 //   CmpDeeply(t, "John Doe",
 //     ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))       // succeeds
-//go:noinline
 func ReAll(reg interface{}, capture interface{}) TestDeep {
 	r := newRe(reg, capture)
 	r.numMatches = -1
