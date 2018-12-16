@@ -159,6 +159,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 // entries must be expected to succeed.
 //
 // TypeBehind method returns the reflect.Type of "model".
+//go:noinline
 func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, allMap)
 }
@@ -182,6 +183,7 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 //     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, extra {"c": 3}
 //
 // TypeBehind method returns the reflect.Type of "model".
+//go:noinline
 func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, subMap)
 }
@@ -204,6 +206,7 @@ func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 //     SuperMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, missing {"b": 2}
 //
 // TypeBehind method returns the reflect.Type of "model".
+//go:noinline
 func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, superMap)
 }

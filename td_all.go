@@ -21,6 +21,7 @@ var _ TestDeep = &tdAll{}
 
 // All operator compares data against several expected values. During
 // a match, all of them have to match to succeed.
+//go:noinline
 func All(expectedValues ...interface{}) TestDeep {
 	return &tdAll{
 		tdList: newList(expectedValues...),
