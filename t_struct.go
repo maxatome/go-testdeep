@@ -78,8 +78,8 @@ type T struct {
 //   			     got: "Bob"
 //   			expected: "John"
 //   		DATA.Age: values differ
-//   			     got: (int) 12
-//   			expected: (int) 28
+//   			     got: 12
+//   			expected: 28
 //   FAIL
 //
 // Now with a special configuration:

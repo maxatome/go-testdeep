@@ -36,7 +36,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra items: ((int) 4)"),
+				Summary: mustBe("Extra items: (4)"),
 			},
 			testName)
 
@@ -44,7 +44,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66)"),
+				Summary: mustBe("Missing items: (66)"),
 			},
 			testName)
 
@@ -52,7 +52,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66)"),
+				Summary: mustBe("Missing items: (66)"),
 			},
 			testName)
 
@@ -60,7 +60,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66,\n                (int) 66)"),
+				Summary: mustBe("Missing items: (66,\n                66)"),
 			},
 			testName)
 
@@ -68,7 +68,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66)\n  Extra items: ((int) 4)"),
+				Summary: mustBe("Missing items: (66)\n  Extra items: (4)"),
 			},
 			testName)
 
@@ -81,7 +81,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a SubBagOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra items: ((int) 4)"),
+				Summary: mustBe("Extra items: (4)"),
 			},
 			testName)
 
@@ -94,7 +94,7 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a SuperBagOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: ((int) 66)"),
+				Summary: mustBe("Missing items: (66)"),
 			},
 			testName)
 	}
@@ -160,15 +160,15 @@ func TestBag(t *testing.T) {
 
 	//
 	// String
-	test.EqualStr(t, testdeep.Bag(1).String(), "Bag((int) 1)")
-	test.EqualStr(t, testdeep.Bag(1, 2).String(), "Bag((int) 1,\n    (int) 2)")
+	test.EqualStr(t, testdeep.Bag(1).String(), "Bag(1)")
+	test.EqualStr(t, testdeep.Bag(1, 2).String(), "Bag(1,\n    2)")
 
-	test.EqualStr(t, testdeep.SubBagOf(1).String(), "SubBagOf((int) 1)")
-	test.EqualStr(t, testdeep.SubBagOf(1, 2).String(), "SubBagOf((int) 1,\n         (int) 2)")
+	test.EqualStr(t, testdeep.SubBagOf(1).String(), "SubBagOf(1)")
+	test.EqualStr(t, testdeep.SubBagOf(1, 2).String(), "SubBagOf(1,\n         2)")
 
-	test.EqualStr(t, testdeep.SuperBagOf(1).String(), "SuperBagOf((int) 1)")
+	test.EqualStr(t, testdeep.SuperBagOf(1).String(), "SuperBagOf(1)")
 	test.EqualStr(t, testdeep.SuperBagOf(1, 2).String(),
-		"SuperBagOf((int) 1,\n           (int) 2)")
+		"SuperBagOf(1,\n           2)")
 }
 
 func TestBagTypeBehind(t *testing.T) {

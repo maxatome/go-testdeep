@@ -37,7 +37,7 @@ func TestToString(t *testing.T) {
 		{ParamGot: types.RawString("test"), Expected: "test"},
 		{ParamGot: types.RawInt(42), Expected: "42"},
 		{ParamGot: myTestDeepStringer{}, Expected: "TesT!"},
-		{ParamGot: 42, Expected: "(int) 42"},
+		{ParamGot: 42, Expected: "42"},
 	} {
 		test.EqualStr(t, util.ToString(curTest.ParamGot), curTest.Expected)
 	}

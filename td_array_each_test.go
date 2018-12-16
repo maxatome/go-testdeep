@@ -95,8 +95,8 @@ func TestArrayEach(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
-			Got:      mustBe("(int) 5"),
-			Expected: mustBe("(int) 4"),
+			Got:      mustBe("5"),
+			Expected: mustBe("4"),
 		})
 
 	checkError(t, 666, testdeep.ArrayEach(4),
@@ -120,16 +120,16 @@ func TestArrayEach(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[3]"),
-			Got:      mustBe("(int) 66"),
+			Got:      mustBe("66"),
 			Expected: mustBe("nil"),
 		})
 
 	//
 	// String
-	test.EqualStr(t, testdeep.ArrayEach(4).String(), "ArrayEach((int) 4)")
+	test.EqualStr(t, testdeep.ArrayEach(4).String(), "ArrayEach(4)")
 	test.EqualStr(t, testdeep.ArrayEach(testdeep.All(1, 2)).String(),
-		`ArrayEach(All((int) 1,
-              (int) 2))`)
+		`ArrayEach(All(1,
+              2))`)
 }
 
 func TestArrayEachTypeBehind(t *testing.T) {

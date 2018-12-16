@@ -30,8 +30,8 @@ func TestPtr(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("*DATA"),
-			Got:      mustBe("(int) 12"),
-			Expected: mustBe("(int) 13"),
+			Got:      mustBe("12"),
+			Expected: mustBe("13"),
 		})
 	checkError(t, nil, testdeep.Ptr(13),
 		expectedError{
@@ -45,7 +45,7 @@ func TestPtr(t *testing.T) {
 			Message:  mustBe("values differ"),
 			Path:     mustBe("*DATA"), // should be DATA, but seems hard to be done
 			Got:      mustBe("nil"),
-			Expected: mustBe("(int) 13"),
+			Expected: mustBe("13"),
 		})
 	checkError(t, (*int)(nil), testdeep.Ptr((*int)(nil)),
 		expectedError{
@@ -66,8 +66,8 @@ func TestPtr(t *testing.T) {
 		expectedError{
 			Message:  mustBe("comparing with Any"),
 			Path:     mustBe("*DATA"),
-			Got:      mustBe("(int) 12"),
-			Expected: mustBe("Any((int) 11)"),
+			Got:      mustBe("12"),
+			Expected: mustBe("Any(11)"),
 		})
 
 	checkError(t, &str, testdeep.Ptr("foobar"),
@@ -118,8 +118,8 @@ func TestPtr(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("**DATA"),
-			Got:      mustBe("(int) 12"),
-			Expected: mustBe("(int) 13"),
+			Got:      mustBe("12"),
+			Expected: mustBe("13"),
 		})
 	checkError(t, nil, testdeep.PPtr(13),
 		expectedError{
@@ -153,8 +153,8 @@ func TestPtr(t *testing.T) {
 		expectedError{
 			Message:  mustBe("comparing with Any"),
 			Path:     mustBe("**DATA"),
-			Got:      mustBe("(int) 12"),
-			Expected: mustBe("Any((int) 11)"),
+			Got:      mustBe("12"),
+			Expected: mustBe("Any(11)"),
 		})
 
 	pStruct = nil

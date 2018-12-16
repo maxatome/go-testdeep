@@ -21,15 +21,15 @@ func TestAll(t *testing.T) {
 		expectedError{
 			Message:  mustBe("compared (part 2 of 3)"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 6"),
-			Expected: mustBe("(int) 5"),
+			Got:      mustBe("6"),
+			Expected: mustBe("5"),
 		})
 
 	checkError(t, 6, testdeep.All(6, nil, 6),
 		expectedError{
 			Message:  mustBe("compared (part 2 of 3)"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 6"),
+			Got:      mustBe("6"),
 			Expected: mustBe("nil"),
 		})
 
@@ -38,7 +38,7 @@ func TestAll(t *testing.T) {
 			Message:  mustBe("compared (part 2 of 3)"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil"),
-			Expected: mustBe("(int) 5"),
+			Expected: mustBe("5"),
 		})
 
 	checkError(t,
@@ -50,12 +50,12 @@ func TestAll(t *testing.T) {
 		expectedError{
 			Message:  mustBe("compared (part 2 of 3)"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 6"),
+			Got:      mustBe("6"),
 			Expected: mustBe("All(3 ≤ got ≤ 8,\n    4 ≤ got ≤ 5)"),
 			Origin: &expectedError{
 				Message:  mustBe("compared (part 2 of 2)"),
 				Path:     mustBe("DATA<All#2/3>"),
-				Got:      mustBe("(int) 6"),
+				Got:      mustBe("6"),
 				Expected: mustBe("4 ≤ got ≤ 5"),
 				Origin: &expectedError{
 					Message:  mustBe("values differ"),
@@ -68,8 +68,8 @@ func TestAll(t *testing.T) {
 
 	//
 	// String
-	test.EqualStr(t, testdeep.All(6).String(), "All((int) 6)")
-	test.EqualStr(t, testdeep.All(6, 7).String(), "All((int) 6,\n    (int) 7)")
+	test.EqualStr(t, testdeep.All(6).String(), "All(6)")
+	test.EqualStr(t, testdeep.All(6, 7).String(), "All(6,\n    7)")
 }
 
 func TestAllTypeBehind(t *testing.T) {

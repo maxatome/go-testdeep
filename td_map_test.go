@@ -46,8 +46,8 @@ func TestMap(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["bar"]`),
-			Got:      mustBe("(int) 2"),
-			Expected: mustBe("(int) 3"),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
 		})
 
 	checkError(t, gotMap, testdeep.Map(map[string]int{}, nil),
@@ -111,8 +111,8 @@ func TestMap(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["bar"]`),
-			Got:      mustBe("(int) 2"),
-			Expected: mustBe("(int) 3"),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
 		})
 
 	checkError(t, gotTypedMap, testdeep.Map(MyMap{}, nil),
@@ -147,8 +147,8 @@ func TestMap(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["bar"]`),
-			Got:      mustBe("(int) 2"),
-			Expected: mustBe("(int) 3"),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
 		})
 
 	checkError(t, &gotTypedMap, testdeep.Map(&MyMap{}, nil),
@@ -232,8 +232,8 @@ func TestMap(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["bar"]`),
-			Got:      mustBe("(int) 2"),
-			Expected: mustBe("(int) 3"),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
 		})
 
 	checkError(t, gotMap, testdeep.SuperMapOf(map[string]int{"test": 2}, nil),
@@ -268,8 +268,8 @@ func TestMap(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe(`DATA["bar"]`),
-			Got:      mustBe("(int) 2"),
-			Expected: mustBe("(int) 3"),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
 		})
 
 	checkError(t, gotMap, testdeep.SubMapOf(map[string]int{"foo": 1}, nil),
@@ -311,7 +311,7 @@ func TestMap(t *testing.T) {
 
 	test.CheckPanic(t,
 		func() { testdeep.Map(&MyMap{}, testdeep.MapEntries{1: 2}) },
-		"expected key (int) 1 type mismatch: int != model key type (string)")
+		"expected key 1 type mismatch: int != model key type (string)")
 
 	test.CheckPanic(t,
 		func() { testdeep.Map(&MyMap{}, testdeep.MapEntries{"foo": nil}) },
@@ -333,7 +333,7 @@ func TestMap(t *testing.T) {
 		"*testdeep_test.MyMap{}")
 	test.EqualStr(t, testdeep.Map(&MyMap{"foo": 2}, nil).String(),
 		`*testdeep_test.MyMap{
-  "foo": (int) 2,
+  "foo": 2,
 }`)
 
 	test.EqualStr(t, testdeep.SubMapOf(MyMap{}, nil).String(),
@@ -342,7 +342,7 @@ func TestMap(t *testing.T) {
 		"SubMapOf(*testdeep_test.MyMap{})")
 	test.EqualStr(t, testdeep.SubMapOf(&MyMap{"foo": 2}, nil).String(),
 		`SubMapOf(*testdeep_test.MyMap{
-  "foo": (int) 2,
+  "foo": 2,
 })`)
 
 	test.EqualStr(t, testdeep.SuperMapOf(MyMap{}, nil).String(),
@@ -351,7 +351,7 @@ func TestMap(t *testing.T) {
 		"SuperMapOf(*testdeep_test.MyMap{})")
 	test.EqualStr(t, testdeep.SuperMapOf(&MyMap{"foo": 2}, nil).String(),
 		`SuperMapOf(*testdeep_test.MyMap{
-  "foo": (int) 2,
+  "foo": 2,
 })`)
 }
 

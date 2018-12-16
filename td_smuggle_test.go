@@ -191,7 +191,7 @@ func TestSmuggle(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("  value: (int) 12\nit failed but didn't say why"),
+			Summary: mustBe("  value: 12\nit failed but didn't say why"),
 		})
 
 	type MyBool bool
@@ -203,7 +203,7 @@ func TestSmuggle(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("        value: (int) 12\nit failed coz: very custom error"),
+			Summary: mustBe("        value: 12\nit failed coz: very custom error"),
 		})
 
 	checkError(t, 12,
@@ -213,7 +213,7 @@ func TestSmuggle(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("        value: (int) 12\nit failed coz: very custom error"),
+			Summary: mustBe("        value: 12\nit failed coz: very custom error"),
 		})
 
 	checkError(t, 12,
@@ -427,7 +427,7 @@ func TestSmuggleFieldPath(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("        value: (int) 12\nit failed coz: it is not a struct and should be"),
+			Summary: mustBe("        value: 12\nit failed coz: it is not a struct and should be"),
 		})
 	checkError(t, gotStruct, testdeep.Smuggle("ValInt.bar", 23),
 		expectedError{

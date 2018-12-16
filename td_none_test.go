@@ -21,8 +21,8 @@ func TestNone(t *testing.T) {
 		expectedError{
 			Message:  mustBe("comparing with None (part 1 of 2 is OK)"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 6"),
-			Expected: mustBe("None((int) 6,\n     (int) 7)"),
+			Got:      mustBe("6"),
+			Expected: mustBe("None(6,\n     7)"),
 		})
 
 	checkError(t, nil, testdeep.None(7, nil),
@@ -30,13 +30,13 @@ func TestNone(t *testing.T) {
 			Message:  mustBe("comparing with None (part 2 of 2 is OK)"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil"),
-			Expected: mustBe("None((int) 7,\n     nil)"),
+			Expected: mustBe("None(7,\n     nil)"),
 		})
 
 	//
 	// String
-	test.EqualStr(t, testdeep.None(6).String(), "None((int) 6)")
-	test.EqualStr(t, testdeep.None(6, 7).String(), "None((int) 6,\n     (int) 7)")
+	test.EqualStr(t, testdeep.None(6).String(), "None(6)")
+	test.EqualStr(t, testdeep.None(6, 7).String(), "None(6,\n     7)")
 }
 
 func TestNot(t *testing.T) {
@@ -47,8 +47,8 @@ func TestNot(t *testing.T) {
 		expectedError{
 			Message:  mustBe("comparing with Not"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(int) 6"),
-			Expected: mustBe("Not((int) 6)"),
+			Got:      mustBe("6"),
+			Expected: mustBe("Not(6)"),
 		})
 
 	checkError(t, nil, testdeep.Not(nil),
@@ -61,7 +61,7 @@ func TestNot(t *testing.T) {
 
 	//
 	// String
-	test.EqualStr(t, testdeep.Not(6).String(), "Not((int) 6)")
+	test.EqualStr(t, testdeep.Not(6).String(), "Not(6)")
 }
 
 func TestNoneTypeBehind(t *testing.T) {

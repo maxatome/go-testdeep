@@ -259,7 +259,7 @@ func TestStruct(t *testing.T) {
 			}).String(),
 		`Struct(testdeep_test.MyStruct{
   ValBool: (bool) false
-  ValInt: (int) 123
+  ValInt: 123
   ValStr: "foobar"
 })`)
 
@@ -275,7 +275,7 @@ func TestStruct(t *testing.T) {
 			}).String(),
 		`Struct(*testdeep_test.MyStruct{
   ValBool: (bool) false
-  ValInt: (int) 123
+  ValInt: 123
   ValStr: "foobar"
 })`)
 

@@ -64,7 +64,7 @@ func TestCode(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("        value: (int) 12\nit failed coz: custom error"),
+			Summary: mustBe("        value: 12\nit failed coz: custom error"),
 		})
 
 	checkError(t, 12,
@@ -72,7 +72,7 @@ func TestCode(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("  value: (int) 12\nit failed but didn't say why"),
+			Summary: mustBe("  value: 12\nit failed but didn't say why"),
 		})
 
 	type MyBool bool
@@ -82,7 +82,7 @@ func TestCode(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("        value: (int) 12\nit failed coz: very custom error"),
+			Summary: mustBe("        value: 12\nit failed coz: very custom error"),
 		})
 
 	checkError(t, 12,
@@ -92,7 +92,7 @@ func TestCode(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("        value: (int) 12\nit failed coz: very custom error"),
+			Summary: mustBe("        value: 12\nit failed coz: very custom error"),
 		})
 
 	//
