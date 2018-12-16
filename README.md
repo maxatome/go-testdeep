@@ -25,6 +25,8 @@ go-testdeep
 
 ## Latest news
 
+- 2018/12/16: [`Between`], [`Gt`], [`Gte`], [`Lt`] & [`Lte`] operators
+  now handle strings as well;
 - 2018/12/07: [`Smuggle`] operator and its friends
   [`CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle)
   &
@@ -41,7 +43,6 @@ go-testdeep
   &
   [`T.ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#T.ContainsKey);
   reworked to handle arrays, slices and maps;
-- 2018/08/18: works around golang issue in `go test -race` cases;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -404,7 +405,7 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 - [`ArrayEach`] compares each array or slice item;
 - [`Bag`] compares the contents of an array or a slice without taking
   care of the order of items;
-- [`Between`] checks that a number or [`time.Time`] is between two
+- [`Between`] checks that a number, string or [`time.Time`] is between two
   bounds;
 - [`Cap`] checks an array, slice or channel capacity;
 - [`Code`] allows to use a custom function;
@@ -414,9 +415,9 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 - [`ContainsKey`] checks that a map contains a key;
 - [`Empty`] checks that an array, a channel, a map, a slice or a
   string is empty;
-- [`Gt`] checks that a number or [`time.Time`] is greater than a
+- [`Gt`] checks that a number, string or [`time.Time`] is greater than a
   value;
-- [`Gte`] checks that a number or [`time.Time`] is greater or equal
+- [`Gte`] checks that a number, string or [`time.Time`] is greater or equal
   than a value;
 - [`HasPrefix`] checks the prefix of a string, [`error`] or
   [`fmt.Stringer`] interfaces;
@@ -426,8 +427,8 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 - [`Isa`] checks the data type or whether data implements an interface
   or not;
 - [`Len`] checks an array, slice, map, string or channel length;
-- [`Lt`] checks that a number or [`time.Time`] is lesser than a value;
-- [`Lte`] checks that a number or [`time.Time`] is lesser or equal
+- [`Lt`] checks that a number, string or [`time.Time`] is lesser than a value;
+- [`Lte`] checks that a number, string or [`time.Time`] is lesser or equal
   than a value;
 - [`Map`] compares the contents of a map;
 - [`MapEach`] compares each map entry;
@@ -492,7 +493,7 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 | [`Array`]           | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✗ | ✗ | ✗             | ptr on array       | ✓ | ✗ | ✗ | [`Array`] |
 | [`ArrayEach`]       | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`ArrayEach`] |
 | [`Bag`]             | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`Bag`] |
-| [`Between`]         | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                  | ✓ | ✗ | ✗ | [`Between`] |
+| [`Between`]         | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                  | ✓ | ✗ | ✗ | [`Between`] |
 | [`Cap`]             | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓ | ✗ | ✗             | ✗                  | ✓ | ✓ | ✗ | [`Cap`] |
 | [`Code`]            | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓             | ✓                  | ✓ | ✓ | ✓ | [`Code`] |
 | [`Contains`]        | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓ | ✓ | ✗             | ✗                  | ✓ | ✗ | ✗ | [`Contains`] |
@@ -501,15 +502,15 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
 | [`Empty`]           | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓ | ✓ | ✗             | ptr or/array/slice/map/string | ✓ | ✓ | ✗ | [`Empty`] |
-| [`Gt`]              | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Gt`] |
-| [`Gte`]             | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Gte`] |
+| [`Gt`]              | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Gt`] |
+| [`Gte`]             | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Gte`] |
 | [`HasPrefix`]       | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | ✗ | ✗ | ✗             | ✗                             | ✓ + [`fmt.Stringer`], [`error`] | ✗ | ✗ | [`HasPrefix`] |
 | [`HasSuffix`]       | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | ✗ | ✗ | ✗             | ✗                             | ✓ + [`fmt.Stringer`], [`error`] | ✗ | ✗ | [`HasSuffix`] |
 | [`Ignore`]          | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓             | ✓                             | ✓ | ✓ | ✓ | [`Ignore`] |
 | [`Isa`]             | ✗ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓             | ✓                             | ✓ | ✓ | ✓ | [`Isa`] |
 | [`Len`]             | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓ | ✓ | ✗             | ✗                             | ✓ | ✓ | ✗ | [`Len`] |
-| [`Lt`]              | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Lt`] |
-| [`Lte`]             | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Lte`] |
+| [`Lt`]              | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Lt`] |
+| [`Lte`]             | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Lte`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |

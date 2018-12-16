@@ -208,7 +208,7 @@ func ExampleT_Bag() {
 	// true
 }
 
-func ExampleT_Between() {
+func ExampleT_Between_int() {
 	t := NewT(&testing.T{})
 
 	got := 156
@@ -232,6 +232,40 @@ func ExampleT_Between() {
 
 	ok = t.Between(got, 154, 156, BoundsOutOut,
 		"checks %v is in ]154 .. 156[", got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
+	// true
+	// false
+}
+
+func ExampleT_Between_string() {
+	t := NewT(&testing.T{})
+
+	got := "abc"
+
+	ok := t.Between(got, "aaa", "abc", BoundsInIn,
+		`checks "%v" is in ["aaa" .. "abc"]`, got)
+	fmt.Println(ok)
+
+	// BoundsInIn is implicit
+	ok = t.Between(got, "aaa", "abc", BoundsInIn,
+		`checks "%v" is in ["aaa" .. "abc"]`, got)
+	fmt.Println(ok)
+
+	ok = t.Between(got, "aaa", "abc", BoundsInOut,
+		`checks "%v" is in ["aaa" .. "abc"[`, got)
+	fmt.Println(ok)
+
+	ok = t.Between(got, "aaa", "abc", BoundsOutIn,
+		`checks "%v" is in ]"aaa" .. "abc"]`, got)
+	fmt.Println(ok)
+
+	ok = t.Between(got, "aaa", "abc", BoundsOutOut,
+		`checks "%v" is in ]"aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -591,7 +625,7 @@ func ExampleT_Empty_pointers() {
 	// false
 }
 
-func ExampleT_Gt() {
+func ExampleT_Gt_int() {
 	t := NewT(&testing.T{})
 
 	got := 156
@@ -607,7 +641,23 @@ func ExampleT_Gt() {
 	// false
 }
 
-func ExampleT_Gte() {
+func ExampleT_Gt_string() {
+	t := NewT(&testing.T{})
+
+	got := "abc"
+
+	ok := t.Gt(got, "abb", `checks "%v" is > "abb"`, got)
+	fmt.Println(ok)
+
+	ok = t.Gt(got, "abc", `checks "%v" is > "abc"`, got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleT_Gte_int() {
 	t := NewT(&testing.T{})
 
 	got := 156
@@ -615,8 +665,36 @@ func ExampleT_Gte() {
 	ok := t.Gte(got, 156, "checks %v is ≥ 156", got)
 	fmt.Println(ok)
 
+	ok = t.Gte(got, 155, "checks %v is ≥ 155", got)
+	fmt.Println(ok)
+
+	ok = t.Gte(got, 157, "checks %v is ≥ 157", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
+	// true
+	// false
+}
+
+func ExampleT_Gte_string() {
+	t := NewT(&testing.T{})
+
+	got := "abc"
+
+	ok := t.Gte(got, "abc", `checks "%v" is ≥ "abc"`, got)
+	fmt.Println(ok)
+
+	ok = t.Gte(got, "abb", `checks "%v" is ≥ "abb"`, got)
+	fmt.Println(ok)
+
+	ok = t.Gte(got, "abd", `checks "%v" is ≥ "abd"`, got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
 }
 
 func ExampleT_HasPrefix() {
@@ -832,7 +910,7 @@ func ExampleT_Len_operatorMap() {
 	// true
 }
 
-func ExampleT_Lt() {
+func ExampleT_Lt_int() {
 	t := NewT(&testing.T{})
 
 	got := 156
@@ -848,7 +926,23 @@ func ExampleT_Lt() {
 	// false
 }
 
-func ExampleT_Lte() {
+func ExampleT_Lt_string() {
+	t := NewT(&testing.T{})
+
+	got := "abc"
+
+	ok := t.Lt(got, "abd", `checks "%v" is < "abd"`, got)
+	fmt.Println(ok)
+
+	ok = t.Lt(got, "abc", `checks "%v" is < "abc"`, got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleT_Lte_int() {
 	t := NewT(&testing.T{})
 
 	got := 156
@@ -856,8 +950,36 @@ func ExampleT_Lte() {
 	ok := t.Lte(got, 156, "checks %v is ≤ 156", got)
 	fmt.Println(ok)
 
+	ok = t.Lte(got, 157, "checks %v is ≤ 157", got)
+	fmt.Println(ok)
+
+	ok = t.Lte(got, 155, "checks %v is ≤ 155", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
+	// true
+	// false
+}
+
+func ExampleT_Lte_string() {
+	t := NewT(&testing.T{})
+
+	got := "abc"
+
+	ok := t.Lte(got, "abc", `checks "%v" is ≤ "abc"`, got)
+	fmt.Println(ok)
+
+	ok = t.Lte(got, "abd", `checks "%v" is ≤ "abd"`, got)
+	fmt.Println(ok)
+
+	ok = t.Lte(got, "abb", `checks "%v" is ≤ "abb"`, got)
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// false
 }
 
 func ExampleT_Map_map() {
