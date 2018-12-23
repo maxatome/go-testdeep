@@ -40,6 +40,7 @@ func ExampleEqDeeply() {
 }
 
 func ExampleEqDeeplyError() {
+//line /testdeep/example.go:1
 	type MyStruct struct {
 		Name  string
 		Num   int
@@ -63,9 +64,9 @@ func ExampleEqDeeplyError() {
 		fmt.Println(err)
 	}
 
-	// Output something like:
+	// Output:
 	// DATA.Items[2]: values differ
 	// 	     got: 9
 	// 	expected: 3 ≤ got ≤ 8
-	// [under TestDeep operator Between at equal_test.go:17]
+	// [under TestDeep operator Between at example.go:18]
 }
