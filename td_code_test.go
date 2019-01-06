@@ -112,7 +112,7 @@ func TestCode(t *testing.T) {
 	}, "FUNC must return bool or (bool, string) or error")
 
 	test.CheckPanic(t, func() {
-		testdeep.Code(func(n int) (error, string) { return nil, "" })
+		testdeep.Code(func(n int) (error, string) { return nil, "" }) // nolint: staticcheck
 	}, "FUNC must return bool or (bool, string) or error")
 
 	test.CheckPanic(t, func() {
