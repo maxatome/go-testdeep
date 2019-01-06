@@ -1,18 +1,168 @@
 # FAQ
 
-## How to mix strict requirements and simple assertions
+## How to mix strict requirements and simple assertions?
 
 ```golang
+import (
+  "testing"
+
+  td "github.com/maxatome/go-testdeep"
+)
+
 func TestAssertionsAndRequirements(t *testing.T) {
   assert := td.NewT(t)
   require := assert.FatalOnError()
+
+  got := SomeFunction()
 
   require.CmpDeeply(got, expected) // if it fails: report error + abort
   assert.CmpDeeply(got, expected)  // if it fails: report error + continue
 }
 ```
 
-## How to add a new operator
+## How to test io.Reader contents, like http.Response.Body for example?
+
+The [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
+is done for that, here with the help of
+[`ReadAll`](https://golang.org/pkg/io/ioutil/#ReadAll).
+
+```golang
+import (
+  "io"
+  "net/http"
+  "testing"
+  "io/ioutil"
+
+  td "github.com/maxatome/go-testdeep"
+)
+
+func TestResponseBody(t *testing.T) {
+  // Expect this response sends "Expected Response!"
+  var resp *http.Response = GetResponse()
+
+  td.CmpDeeply(t, resp.Body,
+    td.Smuggle(ioutil.ReadAll, []byte("Expected Response!")))
+}
+```
+
+## OK, but I prefer comparing strings instead of bytes
+
+No problem, [`ReadAll`](https://golang.org/pkg/io/ioutil/#ReadAll) the
+body by yourself and cast returned `[]byte` contents to `string`:
+
+```golang
+import (
+  "io"
+  "io/ioutil"
+  "net/http"
+  "testing"
+
+  td "github.com/maxatome/go-testdeep"
+)
+
+func TestResponseBody(t *testing.T) {
+  // Expect this response sends "Expected Response!"
+  var resp *http.Response = GetResponse()
+
+  td.CmpDeeply(t, body, td.Smuggle(
+    func(body io.Reader) (string, error) {
+      b, err := ioutil.ReadAll(body)
+      return string(b), err
+    },
+    "Expected Response!"))
+}
+
+```
+
+## OK, but my response is in fact a JSON marshaled struct of my own
+
+No problem, [JSON unmarshal](https://golang.org/pkg/encoding/json/#Unmarshal)
+it just after reading the body:
+
+```golang
+import (
+  "encoding/json"
+  "io"
+  "io/ioutil"
+  "net/http"
+  "testing"
+
+  td "github.com/maxatome/go-testdeep"
+)
+
+func TestResponseBody(t *testing.T) {
+  // Expect this response sends `{"ID":42,"Name":"Bob","Age":28}`
+  var resp *http.Response = GetResponse()
+
+  type MyOwnStruct struct {
+    ID   uint64
+    Name string
+    Age  int
+  }
+
+  td.CmpDeeply(t, body, td.Smuggle(
+    func(body io.Reader) (&MyOwnStruct, error) {
+      b, err := ioutil.ReadAll(body)
+      if err != nil {
+        return nil, err
+      }
+      var s MyOwnStruct
+      return &s, json.Unmarshal(b, &s)
+    },
+    &MyOwnStruct{
+      ID:   42,
+      Name: "Bob",
+      Age:  28,
+    }))
+}
+```
+
+## OK, but you are funny, this response sends a new created object, so I don't know the ID in advance!
+
+No problem, use
+[`Struct`](https://godoc.org/github.com/maxatome/go-testdeep#Struct)
+operator to test that ID field is non-zero:
+
+```golang
+import (
+  "encoding/json"
+  "io"
+  "io/ioutil"
+  "net/http"
+  "testing"
+
+  td "github.com/maxatome/go-testdeep"
+)
+
+func TestResponseBody(t *testing.T) {
+  // Expect this response sends `{"ID":42,"Name":"Bob","Age":28}`
+  var resp *http.Response = GetResponse()
+
+  type MyOwnStruct struct {
+    ID   uint64
+    Name string
+    Age  int
+  }
+
+  td.CmpDeeply(t, body, td.Smuggle(
+    func(body io.Reader) (*MyOwnStruct, error) {
+      b, err := ioutil.ReadAll(body)
+      if err != nil {
+        return nil, err
+      }
+      var s MyOwnStruct
+      return &s, json.Unmarshal(b, &s)
+    },
+    td.Struct(&MyOwnStruct{
+      Name: "Bob",
+      Age:  28,
+    }, td.StructFields{
+      "ID": td.NotZero(),
+    })))
+}
+```
+
+## How to add a new operator?
 
 You want to add a new `FooBar` operator.
 

@@ -325,7 +325,7 @@ func TestSmuggle(t *testing.T) {
 	}, errMesg)
 
 	test.CheckPanic(t, func() {
-		testdeep.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12)
+		testdeep.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12) // nolint: staticcheck
 	}, errMesg)
 
 	//

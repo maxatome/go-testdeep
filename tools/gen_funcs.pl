@@ -121,6 +121,8 @@ foreach my $func (sort keys %funcs)
 // Cmp$func is a shortcut for:
 //
 //   CmpDeeply(t, got, $func($call_args), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#$func for details.
 EOF
 
     $t_contents .= <<EOF;
@@ -128,6 +130,8 @@ EOF
 // $func is a shortcut for:
 //
 //   t.CmpDeeply(got, $func($call_args), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#$func for details.
 EOF
 
 

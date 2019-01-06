@@ -13,8 +13,9 @@ matrix:
         - GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out ./..."
         - USE_GOMETALINTER=1
       install:
-        - go get -v github.com/alecthomas/gometalinter
-        - gometalinter --install
+        - version=2.0.12; name=gometalinter-2.0.12-linux-amd64;
+          wget -q -O - https://github.com/alecthomas/gometalinter/releases/download/v$version/$name.tar.gz |
+            tar -zxvf - -C $GOPATH/bin && mv $GOPATH/bin/$name/[a-z]* $GOPATH/bin
       after_success:
         - go get github.com/mattn/goveralls
         - go get github.com/wadey/gocovmerge
@@ -42,5 +43,6 @@ script:
         --enable=unconvert
         --enable=staticcheck
         --deadline=4m
+        -e 'internal/dark/bypass\.go\z'
         ./...;
       fi
