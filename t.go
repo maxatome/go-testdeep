@@ -17,6 +17,8 @@ import (
 //
 //   t.CmpDeeply(got, All(expectedValues...), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#All for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -38,6 +40,8 @@ func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface
 // Any is a shortcut for:
 //
 //   t.CmpDeeply(got, Any(expectedValues...), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Any for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -61,6 +65,8 @@ func (t *T) Any(got interface{}, expectedValues []interface{}, args ...interface
 //
 //   t.CmpDeeply(got, Array(model, expectedEntries), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Array for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -82,6 +88,8 @@ func (t *T) Array(got interface{}, model interface{}, expectedEntries ArrayEntri
 // ArrayEach is a shortcut for:
 //
 //   t.CmpDeeply(got, ArrayEach(expectedValue), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -105,6 +113,8 @@ func (t *T) ArrayEach(got interface{}, expectedValue interface{}, args ...interf
 //
 //   t.CmpDeeply(got, Bag(expectedItems...), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Bag for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -126,6 +136,8 @@ func (t *T) Bag(got interface{}, expectedItems []interface{}, args ...interface{
 // Between is a shortcut for:
 //
 //   t.CmpDeeply(got, Between(from, to, bounds), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Between for details.
 //
 // Between() optional parameter "bounds" is here mandatory.
 // BoundsInIn value should be passed to mimic its absence in
@@ -153,6 +165,8 @@ func (t *T) Between(got interface{}, from interface{}, to interface{}, bounds Bo
 //
 //   t.CmpDeeply(got, Cap(val), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Cap for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -174,6 +188,8 @@ func (t *T) Cap(got interface{}, val interface{}, args ...interface{}) bool {
 // Code is a shortcut for:
 //
 //   t.CmpDeeply(got, Code(fn), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Code for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -197,6 +213,8 @@ func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, Contains(expectedValue), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Contains for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -218,6 +236,8 @@ func (t *T) Contains(got interface{}, expectedValue interface{}, args ...interfa
 // ContainsKey is a shortcut for:
 //
 //   t.CmpDeeply(got, ContainsKey(expectedValue), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -241,6 +261,8 @@ func (t *T) ContainsKey(got interface{}, expectedValue interface{}, args ...inte
 //
 //   t.CmpDeeply(got, Empty(), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Empty for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -262,6 +284,8 @@ func (t *T) Empty(got interface{}, args ...interface{}) bool {
 // Gt is a shortcut for:
 //
 //   t.CmpDeeply(got, Gt(val), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Gt for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -285,6 +309,8 @@ func (t *T) Gt(got interface{}, val interface{}, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, Gte(val), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Gte for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -306,6 +332,8 @@ func (t *T) Gte(got interface{}, val interface{}, args ...interface{}) bool {
 // HasPrefix is a shortcut for:
 //
 //   t.CmpDeeply(got, HasPrefix(expected), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -329,6 +357,8 @@ func (t *T) HasPrefix(got interface{}, expected string, args ...interface{}) boo
 //
 //   t.CmpDeeply(got, HasSuffix(expected), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -350,6 +380,8 @@ func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) boo
 // Isa is a shortcut for:
 //
 //   t.CmpDeeply(got, Isa(model), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Isa for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -373,6 +405,8 @@ func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, Len(val), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Len for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -394,6 +428,8 @@ func (t *T) Len(got interface{}, val interface{}, args ...interface{}) bool {
 // Lt is a shortcut for:
 //
 //   t.CmpDeeply(got, Lt(val), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Lt for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -417,6 +453,8 @@ func (t *T) Lt(got interface{}, val interface{}, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, Lte(val), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Lte for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -438,6 +476,8 @@ func (t *T) Lte(got interface{}, val interface{}, args ...interface{}) bool {
 // Map is a shortcut for:
 //
 //   t.CmpDeeply(got, Map(model, expectedEntries), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Map for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -461,6 +501,8 @@ func (t *T) Map(got interface{}, model interface{}, expectedEntries MapEntries, 
 //
 //   t.CmpDeeply(got, MapEach(expectedValue), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#MapEach for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -482,6 +524,8 @@ func (t *T) MapEach(got interface{}, expectedValue interface{}, args ...interfac
 // N is a shortcut for:
 //
 //   t.CmpDeeply(got, N(num, tolerance), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#N for details.
 //
 // N() optional parameter "tolerance" is here mandatory.
 // 0 value should be passed to mimic its absence in
@@ -509,6 +553,8 @@ func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...i
 //
 //   t.CmpDeeply(got, NaN(), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#NaN for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -530,6 +576,8 @@ func (t *T) NaN(got interface{}, args ...interface{}) bool {
 // Nil is a shortcut for:
 //
 //   t.CmpDeeply(got, Nil(), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Nil for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -553,6 +601,8 @@ func (t *T) Nil(got interface{}, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, None(expectedValues...), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#None for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -574,6 +624,8 @@ func (t *T) None(got interface{}, expectedValues []interface{}, args ...interfac
 // Not is a shortcut for:
 //
 //   t.CmpDeeply(got, Not(expected), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Not for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -597,6 +649,8 @@ func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool
 //
 //   t.CmpDeeply(got, NotAny(expectedItems...), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#NotAny for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -618,6 +672,8 @@ func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interfa
 // NotEmpty is a shortcut for:
 //
 //   t.CmpDeeply(got, NotEmpty(), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -641,6 +697,8 @@ func (t *T) NotEmpty(got interface{}, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, NotNaN(), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#NotNaN for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -662,6 +720,8 @@ func (t *T) NotNaN(got interface{}, args ...interface{}) bool {
 // NotNil is a shortcut for:
 //
 //   t.CmpDeeply(got, NotNil(), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#NotNil for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -685,6 +745,8 @@ func (t *T) NotNil(got interface{}, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, NotZero(), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#NotZero for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -706,6 +768,8 @@ func (t *T) NotZero(got interface{}, args ...interface{}) bool {
 // PPtr is a shortcut for:
 //
 //   t.CmpDeeply(got, PPtr(val), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#PPtr for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -729,6 +793,8 @@ func (t *T) PPtr(got interface{}, val interface{}, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, Ptr(val), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Ptr for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -750,6 +816,8 @@ func (t *T) Ptr(got interface{}, val interface{}, args ...interface{}) bool {
 // Re is a shortcut for:
 //
 //   t.CmpDeeply(got, Re(reg, capture), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Re for details.
 //
 // Re() optional parameter "capture" is here mandatory.
 // nil value should be passed to mimic its absence in
@@ -777,6 +845,8 @@ func (t *T) Re(got interface{}, reg interface{}, capture interface{}, args ...in
 //
 //   t.CmpDeeply(got, ReAll(reg, capture), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#ReAll for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -798,6 +868,8 @@ func (t *T) ReAll(got interface{}, reg interface{}, capture interface{}, args ..
 // Set is a shortcut for:
 //
 //   t.CmpDeeply(got, Set(expectedItems...), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Set for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -821,6 +893,8 @@ func (t *T) Set(got interface{}, expectedItems []interface{}, args ...interface{
 //
 //   t.CmpDeeply(got, Shallow(expectedPtr), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Shallow for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -842,6 +916,8 @@ func (t *T) Shallow(got interface{}, expectedPtr interface{}, args ...interface{
 // Slice is a shortcut for:
 //
 //   t.CmpDeeply(got, Slice(model, expectedEntries), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Slice for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -865,6 +941,8 @@ func (t *T) Slice(got interface{}, model interface{}, expectedEntries ArrayEntri
 //
 //   t.CmpDeeply(got, Smuggle(fn, expectedValue), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Smuggle for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -886,6 +964,8 @@ func (t *T) Smuggle(got interface{}, fn interface{}, expectedValue interface{}, 
 // String is a shortcut for:
 //
 //   t.CmpDeeply(got, String(expected), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#String for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -909,6 +989,8 @@ func (t *T) String(got interface{}, expected string, args ...interface{}) bool {
 //
 //   t.CmpDeeply(got, Struct(model, expectedFields), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#Struct for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -930,6 +1012,8 @@ func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFiel
 // SubBagOf is a shortcut for:
 //
 //   t.CmpDeeply(got, SubBagOf(expectedItems...), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -953,6 +1037,8 @@ func (t *T) SubBagOf(got interface{}, expectedItems []interface{}, args ...inter
 //
 //   t.CmpDeeply(got, SubMapOf(model, expectedEntries), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#SubMapOf for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -974,6 +1060,8 @@ func (t *T) SubMapOf(got interface{}, model interface{}, expectedEntries MapEntr
 // SubSetOf is a shortcut for:
 //
 //   t.CmpDeeply(got, SubSetOf(expectedItems...), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -997,6 +1085,8 @@ func (t *T) SubSetOf(got interface{}, expectedItems []interface{}, args ...inter
 //
 //   t.CmpDeeply(got, SuperBagOf(expectedItems...), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -1018,6 +1108,8 @@ func (t *T) SuperBagOf(got interface{}, expectedItems []interface{}, args ...int
 // SuperMapOf is a shortcut for:
 //
 //   t.CmpDeeply(got, SuperMapOf(model, expectedEntries), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -1041,6 +1133,8 @@ func (t *T) SuperMapOf(got interface{}, model interface{}, expectedEntries MapEn
 //
 //   t.CmpDeeply(got, SuperSetOf(expectedItems...), args...)
 //
+// See https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf for details.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -1062,6 +1156,8 @@ func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...int
 // TruncTime is a shortcut for:
 //
 //   t.CmpDeeply(got, TruncTime(expectedTime, trunc), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#TruncTime for details.
 //
 // TruncTime() optional parameter "trunc" is here mandatory.
 // 0 value should be passed to mimic its absence in
@@ -1088,6 +1184,8 @@ func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Dura
 // Zero is a shortcut for:
 //
 //   t.CmpDeeply(got, Zero(), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Zero for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
