@@ -7,6 +7,7 @@
 package testdeep_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/maxatome/go-testdeep"
@@ -73,5 +74,37 @@ func TestAll(t *testing.T) {
 }
 
 func TestAllTypeBehind(t *testing.T) {
-	equalTypes(t, testdeep.All(6), nil)
+	equalTypes(t, testdeep.All(6, nil), nil)
+	equalTypes(t, testdeep.All(6, "toto"), nil)
+
+	equalTypes(t, testdeep.All(6, testdeep.Zero(), 7, 8), 26)
+
+	// Always the same non-interface type (even if we encounter several
+	// interface types)
+	equalTypes(t,
+		testdeep.All(
+			testdeep.Empty(),
+			5,
+			testdeep.Isa((*error)(nil)), // interface type (in fact pointer to ...)
+			testdeep.All(6, 7),
+			testdeep.Isa((*fmt.Stringer)(nil)), // interface type
+			8),
+		42)
+
+	// Only one interface type
+	equalTypes(t,
+		testdeep.All(
+			testdeep.Isa((*error)(nil)),
+			testdeep.Isa((*error)(nil)),
+			testdeep.Isa((*error)(nil)),
+		),
+		(*error)(nil))
+
+	// Several interface types, cannot be sure
+	equalTypes(t,
+		testdeep.All(
+			testdeep.Isa((*error)(nil)),
+			testdeep.Isa((*fmt.Stringer)(nil)),
+		),
+		nil)
 }

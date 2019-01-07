@@ -9,7 +9,6 @@ package testdeep_test
 import (
 	"bytes"
 	"fmt"
-	"regexp"
 	"testing"
 
 	"github.com/maxatome/go-testdeep"
@@ -36,8 +35,8 @@ func TestIsa(t *testing.T) {
 		testdeep.Isa((*fmt.Stringer)(nil)),
 		"checks bytes.NewBufferString() implements fmt.Stringer")
 
-	var ifstr fmt.Stringer = regexp.MustCompile("aa?")
-	checkOK(t, bytes.NewBufferString("foobar"), testdeep.Isa(&ifstr))
+	// does bytes.NewBufferString("foobar") implements fmt.Stringer?
+	checkOK(t, bytes.NewBufferString("foobar"), testdeep.Isa((*fmt.Stringer)(nil)))
 
 	checkError(t, &gotStruct, testdeep.Isa(&MyStructBase{}),
 		expectedError{
@@ -107,4 +106,6 @@ func TestIsa(t *testing.T) {
 
 func TestIsaTypeBehind(t *testing.T) {
 	equalTypes(t, testdeep.Isa(([]int)(nil)), []int{})
+
+	equalTypes(t, testdeep.Isa((*fmt.Stringer)(nil)), (*fmt.Stringer)(nil))
 }
