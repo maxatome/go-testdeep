@@ -11,12 +11,10 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"unicode"
 
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 // ToString does it best to stringify val.
@@ -25,7 +23,6 @@ func ToString(val interface{}) string {
 		return "nil"
 	}
 
-typeSwitch:
 	switch tval := val.(type) {
 	case reflect.Value:
 		newVal, ok := dark.GetInterface(tval, true)
@@ -35,37 +32,7 @@ typeSwitch:
 
 		// no "(string) " prefix for printable strings
 	case string:
-		var unquotable, unbackquotable bool
-		for _, chr := range tval {
-			if !unicode.IsPrint(chr) {
-				if chr != '\n' {
-					break typeSwitch
-				}
-				unquotable = true
-				if unbackquotable {
-					break
-				}
-				continue
-			}
-			if chr == '"' {
-				unquotable = true
-				if unbackquotable {
-					break
-				}
-			} else if chr == '`' {
-				unbackquotable = true
-				if unquotable {
-					break
-				}
-			}
-		}
-		if unquotable {
-			if unbackquotable {
-				break typeSwitch
-			}
-			return "`" + tval + "`"
-		}
-		return `"` + tval + `"`
+		return tdutil.FormatString(tval)
 
 		// no "(int) " prefix for ints
 	case int:
@@ -75,7 +42,7 @@ typeSwitch:
 		return tval.String()
 	}
 
-	return strings.TrimRight(spew.Sdump(val), "\n")
+	return tdutil.SpewString(val)
 }
 
 // IndentString indents str lines (from 2nd one = 1st line is not

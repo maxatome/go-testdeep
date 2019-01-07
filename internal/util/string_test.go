@@ -26,26 +26,27 @@ func (m myTestDeepStringer) String() string {
 
 func TestToString(t *testing.T) {
 	for _, curTest := range []struct {
-		ParamGot interface{}
-		Expected string
+		paramGot interface{}
+		expected string
 	}{
-		{ParamGot: nil, Expected: "nil"},
-		{ParamGot: "foobar", Expected: `"foobar"`},
-		{ParamGot: "foo\rbar", Expected: `(string) (len=7) "foo\rbar"`},
-		{ParamGot: "foo\u2028bar", Expected: `(string) (len=9) "foo\u2028bar"`},
-		{ParamGot: `foo"bar`, Expected: "`foo\"bar`"},
-		{ParamGot: "foo\n\"bar", Expected: "`foo\n\"bar`"},
-		{ParamGot: "foo`\"\nbar", Expected: "(string) (len=9) \"foo`\\\"\\nbar\""},
-		{ParamGot: "foo`\n\"bar", Expected: "(string) (len=9) \"foo`\\n\\\"bar\""},
-		{ParamGot: "foo\n`\"bar", Expected: "(string) (len=9) \"foo\\n`\\\"bar\""},
-		{ParamGot: "foo\n\"`bar", Expected: "(string) (len=9) \"foo\\n\\\"`bar\""},
-		{ParamGot: reflect.ValueOf("foobar"), Expected: `"foobar"`},
-		{ParamGot: types.RawString("test"), Expected: "test"},
-		{ParamGot: types.RawInt(42), Expected: "42"},
-		{ParamGot: myTestDeepStringer{}, Expected: "TesT!"},
-		{ParamGot: 42, Expected: "42"},
+		{paramGot: nil, expected: "nil"},
+		{paramGot: "foobar", expected: `"foobar"`},
+		{paramGot: "foo\rbar", expected: `(string) (len=7) "foo\rbar"`},
+		{paramGot: "foo\u2028bar", expected: `(string) (len=9) "foo\u2028bar"`},
+		{paramGot: `foo"bar`, expected: "`foo\"bar`"},
+		{paramGot: "foo\n\"bar", expected: "`foo\n\"bar`"},
+		{paramGot: "foo`\"\nbar", expected: "(string) (len=9) \"foo`\\\"\\nbar\""},
+		{paramGot: "foo`\n\"bar", expected: "(string) (len=9) \"foo`\\n\\\"bar\""},
+		{paramGot: "foo\n`\"bar", expected: "(string) (len=9) \"foo\\n`\\\"bar\""},
+		{paramGot: "foo\n\"`bar", expected: "(string) (len=9) \"foo\\n\\\"`bar\""},
+		{paramGot: reflect.ValueOf("foobar"), expected: `"foobar"`},
+		{paramGot: types.RawString("test"), expected: "test"},
+		{paramGot: types.RawInt(42), expected: "42"},
+		{paramGot: myTestDeepStringer{}, expected: "TesT!"},
+		{paramGot: 42, expected: "42"},
+		{paramGot: int64(42), expected: "(int64) 42"},
 	} {
-		test.EqualStr(t, util.ToString(curTest.ParamGot), curTest.Expected)
+		test.EqualStr(t, util.ToString(curTest.paramGot), curTest.expected)
 	}
 }
 
