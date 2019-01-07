@@ -35,10 +35,35 @@ typeSwitch:
 
 		// no "(string) " prefix for printable strings
 	case string:
+		var unquotable, unbackquotable bool
 		for _, chr := range tval {
 			if !unicode.IsPrint(chr) {
+				if chr != '\n' {
+					break typeSwitch
+				}
+				unquotable = true
+				if unbackquotable {
+					break
+				}
+				continue
+			}
+			if chr == '"' {
+				unquotable = true
+				if unbackquotable {
+					break
+				}
+			} else if chr == '`' {
+				unbackquotable = true
+				if unquotable {
+					break
+				}
+			}
+		}
+		if unquotable {
+			if unbackquotable {
 				break typeSwitch
 			}
+			return "`" + tval + "`"
 		}
 		return `"` + tval + `"`
 
