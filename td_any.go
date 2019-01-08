@@ -22,6 +22,10 @@ var _ TestDeep = &tdAny{}
 
 // Any operator compares data against several expected values. During
 // a match, at least one of them has to match to succeed.
+//
+// TypeBehind method can return a non-nil reflect.Type if all items
+// known non-interface types are equal, or if only interface types
+// are found (mostly issued from Isa()) and they are equal.
 func Any(expectedValues ...interface{}) TestDeep {
 	return &tdAny{
 		tdList: newList(expectedValues...),
@@ -43,4 +47,8 @@ func (a *tdAny) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		Got:      got,
 		Expected: a,
 	})
+}
+
+func (a *tdAny) TypeBehind() reflect.Type {
+	return a.uniqTypeBehind()
 }
