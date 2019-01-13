@@ -17,6 +17,7 @@ go-testdeep
 - [Installation](#installation)
 - [Presentation](#presentation)
 - [Available operators](#available-operators)
+- [Environment variables](#environment-variables)
 - [Operators vs go types](#operators-vs-go-types)
 - [See also](#see-also)
 - [License](#license)
@@ -482,6 +483,52 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 - [`TruncTime`] compares time.Time (or assignable) values after
   truncating them;
 - [`Zero`] checks data against its zero'ed conterpart.
+
+
+## Environment variables
+
+- `TESTDEEP_MAX_ERRORS` maximum number of errors to report before
+  stopping during one comparison (one [`CmpDeeply`] execution for
+  example). It defaults to 10;
+- `TESTDEEP_COLOR` enable (`on`) or disable (`off`) the color
+  output. It defaults to `on`;
+- `TESTDEEP_COLOR_TITLE` color of the test failure title. See below
+  for color format, it defaults to `cyan`;
+- `TESTDEEP_COLOR_OK` color of the test expected value. See below
+  for color format, it defaults to `green`;
+- `TESTDEEP_COLOR_BAD` color of the test got value. See below
+  for color format, it defaults to `red`;
+
+### Color format
+
+A color in `TESTDEEP_COLOR_*` environment variables has the following
+format:
+
+```
+foreground_color                    # set foreground color, background one untouched
+foreground_color:background_color   # set foreground AND background color
+:background_color                   # set background color, foreground one untouched
+```
+
+`foreground_color` and `background_color` can be:
+- `black`
+- `red`
+- `green`
+- `yellow`
+- `blue`
+- `magenta`
+- `cyan`
+- `white`
+- `gray`
+
+For example:
+
+```
+TESTDEEP_COLOR_OK=black:green \
+    TESTDEEP_COLOR_BAD=white:red \
+    TESTDEEP_COLOR_TITLE=yellow \
+    go test
+```
 
 
 ## Operators vs go types
