@@ -7,9 +7,10 @@
 package test
 
 import (
-	"fmt"
 	"strings"
 	"testing"
+
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 )
 
 // EqualErrorMessage prints a test error message of the form:
@@ -24,7 +25,7 @@ func EqualErrorMessage(t *testing.T, got, expected interface{},
 	t.Errorf(`%sFailed test
 	     got: %v
 	expected: %v`,
-		BuildTestName(args), got, expected)
+		tdutil.BuildTestName(args...), got, expected)
 }
 
 // EqualStr checks that got equals expected.
@@ -58,20 +59,6 @@ func EqualBool(t *testing.T, got, expected bool, args ...interface{}) bool {
 	t.Helper()
 	EqualErrorMessage(t, got, expected, args...)
 	return false
-}
-
-// BuildTestName builds a string given args.
-func BuildTestName(args []interface{}) string {
-	switch len(args) {
-	case 0:
-		return ""
-
-	case 1:
-		return args[0].(string) + "\n"
-
-	default:
-		return fmt.Sprintf(args[0].(string)+"\n", args[1:]...)
-	}
 }
 
 // IsTrue checks that got is true.

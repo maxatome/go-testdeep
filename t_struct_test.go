@@ -124,6 +124,7 @@ func TestStructWithInterfaceT(tt *testing.T) {
 	test.IsFalse(tt, t.Cap(nil, 12))
 	test.IsFalse(tt, t.Code(0, func(n int) bool { return false }))
 	test.IsFalse(tt, t.Contains(0, nil))
+	test.IsFalse(tt, t.ContainsKey(map[bool]int{}, true))
 	test.IsFalse(tt, t.Empty(0))
 	test.IsFalse(tt, t.Gt(0, 12))
 	test.IsFalse(tt, t.Gte(0, 12))

@@ -17,6 +17,9 @@ go-testdeep
 - [Installation](#installation)
 - [Presentation](#presentation)
 - [Available operators](#available-operators)
+- [Helpers](#helpers)
+  - [`tdhttp` or HTTP API testing helper](#tdhttp-or-http-api-testing-helper)
+- [Environment variables](#environment-variables)
 - [Operators vs go types](#operators-vs-go-types)
 - [See also](#see-also)
 - [License](#license)
@@ -25,6 +28,10 @@ go-testdeep
 
 ## Latest news
 
+- 2019/01/13: test failures output is now colored by default. See
+  [Environment variables](#environment-variables) to configure it;
+- 2019/01/07: introducing TestDeep helpers. First one is
+  [`tdhttp` or HTTP API testing helper](#tdhttp-or-http-api-testing-helper);
 - 2018/12/16: [`Between`], [`Gt`], [`Gte`], [`Lt`] & [`Lte`] operators
   now handle strings as well;
 - 2018/12/07: [`Smuggle`] operator and its friends
@@ -37,12 +44,6 @@ go-testdeep
   &
   [`T.Shallow`](https://godoc.org/github.com/maxatome/go-testdeep#T.Shallow)
   can now work on strings;
-- 2018/10/31: new [`ContainsKey`] operator and its
-  friends
-  [`CmpContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#CmpContainsKey)
-  &
-  [`T.ContainsKey`](https://godoc.org/github.com/maxatome/go-testdeep#T.ContainsKey);
-  reworked to handle arrays, slices and maps;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -248,7 +249,7 @@ using a package that uses this function behind the scene.
 This function works very well, but it is not flexible. Both
 compared structures must match exactly.
 
-The purpose of testdeep package is to do its best to introduce this
+The purpose of `testdeep` package is to do its best to introduce this
 missing flexibility using *operators* when the expected value (or
 one of its component) cannot be matched exactly.
 
@@ -484,6 +485,68 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 - [`Zero`] checks data against its zero'ed conterpart.
 
 
+## Helpers
+
+The goal of helpers is to make use of `go-testdeep` even more powerful
+by providing common features using [TestDeep operators](#available-operators)
+behind the scene.
+
+### `tdhttp` or HTTP API testing helper
+
+The package `github.com/maxatome/go-testdeep/helpers/tdhttp` provides
+some functions to easily test HTTP handlers.
+
+See [`tdhttp`] documentation for details or
+[FAQ](doc/FAQ.md#what-about-testing-the-response-using-my-api) for an
+example of use.
+
+
+## Environment variables
+
+- `TESTDEEP_MAX_ERRORS` maximum number of errors to report before
+  stopping during one comparison (one [`CmpDeeply`] execution for
+  example). It defaults to 10;
+- `TESTDEEP_COLOR` enable (`on`) or disable (`off`) the color
+  output. It defaults to `on`;
+- `TESTDEEP_COLOR_TITLE` color of the test failure title. See below
+  for color format, it defaults to `cyan`;
+- `TESTDEEP_COLOR_OK` color of the test expected value. See below
+  for color format, it defaults to `green`;
+- `TESTDEEP_COLOR_BAD` color of the test got value. See below
+  for color format, it defaults to `red`;
+
+### Color format
+
+A color in `TESTDEEP_COLOR_*` environment variables has the following
+format:
+
+```
+foreground_color                    # set foreground color, background one untouched
+foreground_color:background_color   # set foreground AND background color
+:background_color                   # set background color, foreground one untouched
+```
+
+`foreground_color` and `background_color` can be:
+- `black`
+- `red`
+- `green`
+- `yellow`
+- `blue`
+- `magenta`
+- `cyan`
+- `white`
+- `gray`
+
+For example:
+
+```
+TESTDEEP_COLOR_OK=black:green \
+    TESTDEEP_COLOR_BAD=white:red \
+    TESTDEEP_COLOR_TITLE=yellow \
+    go test
+```
+
+
 ## Operators vs go types
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
@@ -647,3 +710,5 @@ See [FAQ](doc/FAQ.md).
 [`fmt.Stringer`]: https://golang.org/pkg/fmt/#Stringer
 [`time.Time`]: https://golang.org/pkg/time/
 [`math.NaN`]: https://golang.org/pkg/math/#NaN
+
+[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp

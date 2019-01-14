@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep"
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
@@ -89,7 +90,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	expected: %s
 	Full error:
 	> %s`,
-			test.BuildTestName(args),
+			tdutil.BuildTestName(args...),
 			fieldName, indent(got, 10), indent(expected.Exact, 10),
 			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
 		return false
@@ -101,7 +102,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	should contain: %s
 	Full error:
 	> %s`,
-			test.BuildTestName(args),
+			tdutil.BuildTestName(args...),
 			fieldName,
 			indent(got, 16), indent(expected.Contain, 16),
 			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
@@ -114,7 +115,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	should match: %s
 	Full error:
 	> %s`,
-			test.BuildTestName(args),
+			tdutil.BuildTestName(args...),
 			fieldName,
 			indent(got, 14), indent(expected.Match.String(), 14),
 			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
@@ -160,7 +161,7 @@ func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 		t.Errorf(`%sLocation of the origin of the error
 	     got: %v
 	expected: %v`,
-			test.BuildTestName(args), err.Location.IsInitialized(), expectedError.Located)
+			tdutil.BuildTestName(args...), err.Location.IsInitialized(), expectedError.Located)
 		return false
 	}
 
@@ -169,14 +170,14 @@ func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 		t.Errorf(`%sFile of the origin of the error
 	     got: line %d of %s
 	expected: *_test.go`,
-			test.BuildTestName(args), err.Location.Line, err.Location.File)
+			tdutil.BuildTestName(args...), err.Location.Line, err.Location.File)
 		return false
 	}
 
 	if expectedError.Origin != nil {
 		if err.Origin == nil {
 			t.Errorf(`%sError should originate from another Error`,
-				test.BuildTestName(args))
+				tdutil.BuildTestName(args...))
 			return false
 		}
 
@@ -185,7 +186,7 @@ func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 	}
 	if err.Origin != nil {
 		t.Errorf(`%sError should NOT originate from another Error`,
-			test.BuildTestName(args))
+			tdutil.BuildTestName(args...))
 		return false
 	}
 
@@ -198,7 +199,7 @@ func _checkError(t *testing.T, got, expected interface{},
 
 	err := testdeep.EqDeeplyError(got, expected)
 	if err == nil {
-		t.Errorf("%sAn Error should have occurred", test.BuildTestName(args))
+		t.Errorf("%sAn Error should have occurred", tdutil.BuildTestName(args...))
 		return false
 	}
 
@@ -210,7 +211,7 @@ func _checkError(t *testing.T, got, expected interface{},
 	if testdeep.EqDeeply(got, expected) {
 		t.Errorf(`%sBoolean context failed
 	     got: true
-	expected: false`, test.BuildTestName(args))
+	expected: false`, tdutil.BuildTestName(args...))
 		return false
 	}
 
@@ -265,7 +266,7 @@ func checkErrorForEach(t *testing.T,
 	expectedError expectedError, args ...interface{}) (ret bool) {
 	t.Helper()
 
-	globalTestName := test.BuildTestName(args)
+	globalTestName := tdutil.BuildTestName(args...)
 	ret = true
 
 	for idx, got := range gotList {
@@ -289,13 +290,13 @@ func _checkOK(t *testing.T, got, expected interface{},
 	if !testdeep.EqDeeply(got, expected) {
 		t.Errorf(`%sBoolean context failed
 	     got: false
-	expected: true`, test.BuildTestName(args))
+	expected: true`, tdutil.BuildTestName(args...))
 		return false
 	}
 
 	if err := testdeep.EqDeeplyError(got, expected); err != nil {
 		t.Errorf(`%sEqDeeplyError returned an error: %s`,
-			test.BuildTestName(args), err)
+			tdutil.BuildTestName(args...), err)
 		return false
 	}
 
@@ -350,7 +351,7 @@ func checkOKForEach(t *testing.T, gotList []interface{}, expected interface{},
 	args ...interface{}) (ret bool) {
 	t.Helper()
 
-	globalTestName := test.BuildTestName(args)
+	globalTestName := tdutil.BuildTestName(args...)
 	ret = true
 
 	for idx, got := range gotList {
@@ -390,6 +391,6 @@ func equalTypes(t *testing.T, got testdeep.TestDeep, expected interface{},
 	t.Errorf(`%sFailed test
 	     got: %s
 	expected: %s`,
-		test.BuildTestName(args), gotStr, expectedStr)
+		tdutil.BuildTestName(args...), gotStr, expectedStr)
 	return false
 }

@@ -45,12 +45,7 @@ func New(callDepth int) (loc Location, ok bool) {
 		return
 	}
 
-	fn := runtime.FuncForPC(pc)
-	if fn != nil {
-		loc.Func = fn.Name()
-	} else {
-		ok = false
-	}
+	loc.Func = runtime.FuncForPC(pc).Name()
 	return
 }
 

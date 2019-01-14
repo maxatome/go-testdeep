@@ -8,11 +8,10 @@ package testdeep
 
 import (
 	"bytes"
-	"fmt"
 	"reflect"
-	"strings"
 	"testing" // used by t.Helper() workaround below
 
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
@@ -28,22 +27,11 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	const failedTest = "Failed test"
 
 	var buf *bytes.Buffer
-	switch len(args) {
-	case 0:
+	if len(args) == 0 {
 		buf = bytes.NewBufferString(failedTest + "\n")
-	case 1:
+	} else {
 		buf = bytes.NewBufferString(failedTest + " '")
-		fmt.Fprint(buf, args[0]) // nolint: errcheck
-		buf.WriteString("'\n")
-	default:
-		buf = bytes.NewBufferString(failedTest + " '")
-		if str, ok := args[0].(string); ok && strings.ContainsRune(str, '%') {
-			fmt.Fprintf(buf, str, args[1:]...) // nolint: errcheck
-		} else {
-			// create a new slice to fool govet and avoid "call has possible
-			// formatting directive" errors
-			fmt.Fprint(buf, args[:]...) // nolint: errcheck
-		}
+		tdutil.FbuildTestName(buf, args...)
 		buf.WriteString("'\n")
 	}
 
