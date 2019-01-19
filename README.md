@@ -50,6 +50,8 @@ go-testdeep
 
 ## Synopsis
 
+![error output](doc/colored-output.svg)
+
 ```go
 import (
   "testing"
@@ -508,6 +510,8 @@ example of use.
   example). It defaults to 10;
 - `TESTDEEP_COLOR` enable (`on`) or disable (`off`) the color
   output. It defaults to `on`;
+- `TESTDEEP_COLOR_TEST_NAME` color of the test name. See below
+  for color format, it defaults to `yellow`;
 - `TESTDEEP_COLOR_TITLE` color of the test failure title. See below
   for color format, it defaults to `cyan`;
 - `TESTDEEP_COLOR_OK` color of the test expected value. See below
