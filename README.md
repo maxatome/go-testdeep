@@ -12,7 +12,7 @@ go-testdeep
 
 **Extremely flexible golang deep comparison, extends the go testing package.**
 
-- [Latest new](#latest-news)
+- [Latest news](#latest-news)
 - [Synopsis](#synopsis)
 - [Installation](#installation)
 - [Presentation](#presentation)
@@ -119,44 +119,18 @@ go test -run=TestCreateRecord
 ```
 
 outputs for last `td.CmpDeeply` call:
-```
---- FAIL: TestCreateRecord (0.00s)
-  test_test.go:46: Failed test 'Newly created record'
-    DATA.CreatedAt: values differ
-           got: 2018-05-27 10:55:50.788166932 +0200 CEST m=-2.998149554
-      expected: 2018-05-27 10:55:53.788163509 +0200 CEST m=+0.001848002 ≤ got ≤ 2018-05-27 10:55:53.788464176 +0200 CEST m=+0.002148179
-    [under TestDeep operator Between at test_test.go:54]
-FAIL
-exit status 1
-FAIL  github.com/maxatome/go-testdeep  0.006s
-```
+
+![error output](doc/colored-newly1.svg)
 
 If `CreateRecord` had not set correctly `Id` field, output would have
 been:
-```
---- FAIL: TestCreateRecord (0.00s)
-  test_test.go:46: Failed test 'Newly created record'
-    DATA.Id: zero value
-           got: (uint64) 0
-      expected: NotZero()
-    [under TestDeep operator Not at test_test.go:53]
-FAIL
-exit status 1
-FAIL  github.com/maxatome/go-testdeep  0.006s
-```
 
-If `CreateRecord` had not set `Name` field to "Alice" value instead of
+![error output](doc/colored-newly2.svg)
+
+If `CreateRecord` had set `Name` field to "Alice" value instead of
 expected "Bob", output would have been:
-```
---- FAIL: TestCreateRecord (0.00s)
-  test_test.go:46: Failed test 'Newly created record'
-    DATA.Name: values differ
-           got: "Alice"
-      expected: "Bob"
-FAIL
-exit status 1
-FAIL  github.com/maxatome/go-testdeep  0.006s
-```
+
+![error output](doc/colored-newly3.svg)
 
 Using [`testdeep.T`][`T`]
 type, `TestCreateRecord` can also be written as:
