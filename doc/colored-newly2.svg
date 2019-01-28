@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="205.53027mm"
+   height="62.54108mm"
+   viewBox="0 0 205.53027 62.54108"
+   version="1.1"
+   id="svg206"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="colored-newly2.svg">
+  <defs
+     id="defs200" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="454.11795"
+     inkscape:cy="-21.812134"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1364"
+     inkscape:window-height="740"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata203">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(14.318708,-80.521126)">
+    <rect
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.42850718;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       id="rect10-4"
+       width="205.53027"
+       height="62.54108"
+       x="-14.318708"
+       y="80.521126"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;line-height:6px;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-9.698267"
+       y="88.945076"
+       id="text889-5"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="88.945076"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
+         id="tspan903-9">--- FAIL: TestCreateRecord (0.00s)</tspan><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="94.945076"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
+         id="tspan4186">  test_test.go:46: <tspan
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:monospace;-inkscape-font-specification:'monospace Bold';fill:#ffff00;stroke-width:0.26458332px"
+   id="tspan4202">Failed test 'Newly created record'</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="100.94508"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:'monospace Bold';fill:#00ffff;stroke-width:0.26458332px"
+         id="tspan4188">    DATA.Id: zero value</tspan><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="106.94508"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
+         id="tspan4190"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:monospace;-inkscape-font-specification:'monospace Bold';fill:#ff0000;stroke-width:0.26458332px"
+           id="tspan132">           got: </tspan><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#ff0000;stroke-width:0.26458332px"
+           id="tspan4206">(uint64) 0</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="112.94508"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
+         id="tspan4192"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:monospace;-inkscape-font-specification:'monospace Bold';fill:#00ff00;stroke-width:0.26458332px"
+           id="tspan140">      expected: </tspan><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#00ff00;stroke-width:0.26458332px"
+           id="tspan4208">NotZero()</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="118.94508"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
+         id="tspan4194">    [under TestDeep operator Not at test_test.go:53]</tspan><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="124.94508"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
+         id="tspan4196">FAIL</tspan><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="130.94507"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
+         id="tspan4198">exit status 1</tspan><tspan
+         sodipodi:role="line"
+         x="-9.698267"
+         y="136.94507"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
+         id="tspan4200">FAIL  github.com/maxatome/go-testdeep  0.006s</tspan></text>
+  </g>
+</svg>

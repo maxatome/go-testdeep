@@ -196,14 +196,14 @@ func TestEqualSlice(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing slices, from index #2"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe(`Missing items: (3)`),
+			Summary: mustBe(`Missing item: (3)`),
 		})
 
 	checkError(t, []int{1, 2, 3}, []int{1, 2},
 		expectedError{
 			Message: mustBe("comparing slices, from index #2"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe(`Extra items: (3)`),
+			Summary: mustBe(`Extra item: (3)`),
 		})
 
 	checkError(t, []int{1, 2}, ([]int)(nil),
@@ -355,7 +355,7 @@ func TestEqualMap(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing map"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`Extra keys:[^"]+"test"`),
+			Summary: mustMatch(`Extra key:[^"]+"test"`),
 		})
 
 	checkError(t, map[string]int{"foo": 1, "bar": 4},
@@ -363,7 +363,7 @@ func TestEqualMap(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing map"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`Missing keys:[^"]+"test"`),
+			Summary: mustMatch(`Missing key:[^"]+"test"`),
 		})
 
 	checkError(t, map[string]int{"foo": 1, "bar": 4, "test+": 12},
@@ -371,8 +371,8 @@ func TestEqualMap(t *testing.T) {
 		expectedError{
 			Message: mustBe("comparing map"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`Missing keys:[^"]+"test-".*
-  Extra keys:[^"]+"test\+"`),
+			Summary: mustMatch(`Missing key:[^"]+"test-".*
+  Extra key:[^"]+"test\+"`),
 		})
 }
 

@@ -26,16 +26,18 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 
 	const failedTest = "Failed test"
 
-	var buf *bytes.Buffer
+	var buf bytes.Buffer
+	ctxerr.ColorizeTestNameOn(&buf)
 	if len(args) == 0 {
-		buf = bytes.NewBufferString(failedTest + "\n")
+		buf.WriteString(failedTest + "\n")
 	} else {
-		buf = bytes.NewBufferString(failedTest + " '")
-		tdutil.FbuildTestName(buf, args...)
+		buf.WriteString(failedTest + " '")
+		tdutil.FbuildTestName(&buf, args...)
 		buf.WriteString("'\n")
 	}
+	ctxerr.ColorizeTestNameOff(&buf)
 
-	err.Append(buf, "")
+	err.Append(&buf, "")
 
 	if isFatal {
 		t.Fatal(buf.String())
