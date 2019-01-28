@@ -7,6 +7,7 @@
 package ctxerr
 
 import (
+	"bytes"
 	"os"
 	"testing"
 
@@ -25,9 +26,19 @@ func TestColor(t *testing.T) {
 		test.EqualStr(t, light, "")
 		test.EqualStr(t, bold, "")
 		test.EqualStr(t, off, "")
+
+		var b bytes.Buffer
+		ColorizeTestNameOn(&b)
+		test.EqualInt(t, b.Len(), 0)
+		ColorizeTestNameOff(&b)
+		test.EqualInt(t, b.Len(), 0)
 	}
 
 	// on
+	colorTestNameOnSave, colorTestNameOffSave := colorTestNameOn, colorTestNameOff
+	defer func() {
+		colorTestNameOn, colorTestNameOff = colorTestNameOnSave, colorTestNameOffSave
+	}()
 	for _, flag := range []string{"on", ""} {
 		os.Setenv("TESTDEEP_COLOR", flag)
 		os.Setenv("MY_TEST_COLOR", "")
@@ -63,5 +74,13 @@ func TestColor(t *testing.T) {
 		test.EqualStr(t, light, "\x1b[0;31m") // red
 		test.EqualStr(t, bold, "\x1b[1;31m")  // bold red
 		test.EqualStr(t, off, "\x1b[0m")
+
+		// Color test name
+		_, colorTestNameOn, colorTestNameOff = colorFromEnv(envColorTitle, "yellow")
+		var b bytes.Buffer
+		ColorizeTestNameOn(&b)
+		test.EqualStr(t, b.String(), "\x1b[1;33m")
+		ColorizeTestNameOff(&b)
+		test.EqualStr(t, b.String(), "\x1b[1;33m\x1b[0m")
 	}
 }
