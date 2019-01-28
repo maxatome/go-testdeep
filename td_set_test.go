@@ -43,7 +43,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra items: (3)"),
+				Summary: mustBe("Extra item: (3)"),
 			},
 			testName)
 
@@ -51,7 +51,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: (66)"),
+				Summary: mustBe("Missing item: (66)"),
 			},
 			testName)
 
@@ -59,7 +59,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: (66)"),
+				Summary: mustBe("Missing item: (66)"),
 			},
 			testName)
 
@@ -67,7 +67,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: (66,\n                67)"),
+				Summary: mustBe("Missing 2 items: (66,\n                  67)"),
 			},
 			testName)
 
@@ -75,7 +75,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: (66)\n  Extra items: (1)"),
+				Summary: mustBe("Missing item: (66)\n  Extra item: (1)"),
 			},
 			testName)
 
@@ -88,7 +88,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a SubSetOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra items: (1)"),
+				Summary: mustBe("Extra item: (1)"),
 			},
 			testName)
 
@@ -101,7 +101,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a SuperSetOf"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing items: (66)"),
+				Summary: mustBe("Missing item: (66)"),
 			},
 			testName)
 
@@ -113,7 +113,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a NotAny"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra items: (3)"),
+				Summary: mustBe("Extra item: (3)"),
 			},
 			testName)
 	}

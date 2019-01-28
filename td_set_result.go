@@ -8,7 +8,9 @@ package testdeep
 
 import (
 	"bytes"
+	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -25,9 +27,9 @@ const (
 func (k tdSetResultKind) String() string {
 	switch k {
 	case itemsSetResult:
-		return "items"
+		return "item"
 	case keysSetResult:
-		return "keys"
+		return "key"
 	default:
 		return "?"
 	}
@@ -49,20 +51,42 @@ func (r tdSetResult) IsEmpty() bool {
 func (r tdSetResult) String() string {
 	buf := &bytes.Buffer{}
 
+	var missing, extra string
+
 	if len(r.Missing) > 0 {
-		buf.WriteString("Missing ")
-		buf.WriteString(r.Kind.String())
-		buf.WriteString(": ")
-		util.SliceToBuffer(buf, r.Missing)
+		if len(r.Missing) > 1 {
+			missing = fmt.Sprintf("Missing %d %ss: ", len(r.Missing), r.Kind)
+		} else {
+			missing = fmt.Sprintf("Missing %s: ", r.Kind)
+		}
 	}
 
 	if len(r.Extra) > 0 {
-		if buf.Len() > 0 {
-			buf.WriteString("\n  ")
+		if len(r.Extra) > 1 {
+			extra = fmt.Sprintf("Extra %d %ss: ", len(r.Extra), r.Kind)
+		} else {
+			extra = fmt.Sprintf("Extra %s: ", r.Kind)
 		}
-		buf.WriteString("Extra ")
-		buf.WriteString(r.Kind.String())
-		buf.WriteString(": ")
+	}
+
+	if len(missing) != len(extra) && missing != "" && extra != "" {
+		if len(missing) > len(extra) {
+			extra = strings.Repeat(" ", len(missing)-len(extra)) + extra
+		} else {
+			missing = strings.Repeat(" ", len(extra)-len(missing)) + missing
+		}
+	}
+
+	if missing != "" {
+		buf.WriteString(missing)
+		util.SliceToBuffer(buf, r.Missing)
+	}
+
+	if extra != "" {
+		if missing != "" {
+			buf.WriteByte('\n')
+		}
+		buf.WriteString(extra)
 		util.SliceToBuffer(buf, r.Extra)
 	}
 
