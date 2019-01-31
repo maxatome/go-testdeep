@@ -71,7 +71,7 @@ func (c *tdContainsKey) doesNotContainKey(ctx ctxerr.Context, got reflect.Value)
 			},
 			{
 				Label: " not in keys: ",
-				Value: util.SliceToString(keys),
+				Value: util.ToString(keys),
 			},
 		},
 	})

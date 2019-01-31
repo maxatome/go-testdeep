@@ -179,6 +179,7 @@ func TestCmpWithInterfaceT(tt *testing.T) {
 	test.IsFalse(tt, CmpCap(ttt, nil, 12))
 	test.IsFalse(tt, CmpCode(ttt, 0, func(n int) bool { return false }))
 	test.IsFalse(tt, CmpContains(ttt, 0, nil))
+	test.IsFalse(tt, CmpContainsKey(ttt, map[bool]int{}, true))
 	test.IsFalse(tt, CmpEmpty(ttt, 0))
 	test.IsFalse(tt, CmpGt(ttt, 0, 12))
 	test.IsFalse(tt, CmpGte(ttt, 0, 12))
