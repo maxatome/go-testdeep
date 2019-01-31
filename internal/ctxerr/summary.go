@@ -1,0 +1,120 @@
+package ctxerr
+
+import (
+	"bytes"
+	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/util"
+)
+
+// ErrorSummary is the interface used to render error summaries. See
+// Error.Summary.
+type ErrorSummary interface {
+	AppendSummary(buf *bytes.Buffer, prefix string)
+}
+
+// ErrorSummaryItem implements the ErrorSummary interface and allows
+// to render a labeled value.
+//
+// With explanation set:
+//
+//   Label: value
+//   Explanation
+//
+// With an empty explantion:
+//
+//   Label: value
+type ErrorSummaryItem struct {
+	Label       string
+	Value       string
+	Explanation string
+}
+
+var _ ErrorSummary = ErrorSummaryItem{}
+
+// AppendSummary implements the ErrorSummary interface.
+func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
+	buf.WriteString(prefix)
+	buf.WriteString(colorBadOnBold)
+	buf.WriteString(s.Label)
+
+	buf.WriteString(colorBadOn)
+	buf.WriteString(
+		util.IndentString(s.Value, prefix+strings.Repeat(" ", len(s.Label))))
+
+	if s.Explanation != "" {
+		buf.WriteByte('\n')
+		buf.WriteString(prefix)
+		buf.WriteString(util.IndentString(s.Explanation, prefix))
+	}
+
+	buf.WriteString(colorBadOff)
+}
+
+// ErrorSummaryItems implements the ErrorSummary interface and allows
+// to render summaries with several labeled values. For example:
+//
+//   Missing 6 items: the 6 items...
+//     Extra 2 items: the 2 items...
+type ErrorSummaryItems []ErrorSummaryItem
+
+var _ ErrorSummary = (ErrorSummaryItems)(nil)
+
+// AppendSummary implements ErrorSummary interface.
+func (s ErrorSummaryItems) AppendSummary(buf *bytes.Buffer, prefix string) {
+	for idx, item := range s {
+		if idx > 0 {
+			buf.WriteByte('\n')
+		}
+		item.AppendSummary(buf, prefix)
+	}
+}
+
+type errorSummaryString string
+
+var _ ErrorSummary = errorSummaryString("")
+
+func (s errorSummaryString) AppendSummary(buf *bytes.Buffer, prefix string) {
+	buf.WriteString(prefix)
+	buf.WriteString(colorBadOn)
+	buf.WriteString(util.IndentString(string(s), prefix))
+	buf.WriteString(colorBadOff)
+}
+
+// NewSummary returns an ErrorSummary composed by the simple string s.
+func NewSummary(s string) ErrorSummary {
+	return errorSummaryString(s)
+}
+
+// NewSummaryReason returns an ErrorSummary meaning that the value got
+// failed for an (optional) reason.
+//
+// With a given reason "it is not nil", the generated summary will be:
+//
+//           value: the_got_value
+//   it failed coz: it is not nil
+//
+// If reason is empty, the generated summary will be:
+//
+//           value: the_got_value
+//   it failed but didn't say why
+func NewSummaryReason(got interface{}, reason string) ErrorSummary {
+	if reason == "" {
+		return ErrorSummaryItem{
+			Label:       "  value: ",
+			Value:       util.ToString(got),
+			Explanation: "it failed but didn't say why",
+		}
+	}
+
+	return ErrorSummaryItems{
+		{
+			Label: "        value: ",
+			Value: util.ToString(got),
+		},
+		{
+			Label: "it failed coz: ",
+			Value: reason,
+		},
+	}
+}

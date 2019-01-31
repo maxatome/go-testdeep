@@ -368,7 +368,7 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		}
 		return ctx.CollectError(&ctxerr.Error{
 			Message: "cannot smuggle unexported field",
-			Summary: types.RawString("work on surrounding struct instead"),
+			Summary: ctxerr.NewSummary("work on surrounding struct instead"),
 		})
 	}
 
@@ -406,23 +406,20 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		return ctxerr.BooleanError
 	}
 
-	summary := tdCodeResult{
-		Value: got,
-	}
-
+	var reason string
 	switch len(ret) {
 	case 3: // (value, false, string)
-		summary.Reason = ret[2].String()
+		reason = ret[2].String()
 	case 2:
 		// (value, error)
 		if ret[1].Kind() == reflect.Interface {
-			summary.Reason = ret[1].Interface().(error).Error()
+			reason = ret[1].Interface().(error).Error()
 		}
 		// (value, false)
 	}
 	return ctx.CollectError(&ctxerr.Error{
 		Message: "ran smuggle code with %% as argument",
-		Summary: summary,
+		Summary: ctxerr.NewSummaryReason(got, reason),
 	})
 }
 

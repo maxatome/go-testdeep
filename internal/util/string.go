@@ -54,20 +54,20 @@ func IndentString(str string, indent string) string {
 // SliceToBuffer stringifies items slice into buf then returns buf.
 func SliceToBuffer(buf *bytes.Buffer, items []reflect.Value) *bytes.Buffer {
 	buf.WriteByte('(')
+
+	begLine := bytes.LastIndexByte(buf.Bytes(), '\n') + 1
+	prefix := strings.Repeat(" ", buf.Len()-begLine)
+
 	if len(items) < 2 {
 		if len(items) > 0 {
-			buf.WriteString(ToString(items[0]))
+			buf.WriteString(IndentString(ToString(items[0]), prefix))
 		}
 	} else {
-		begLine := bytes.LastIndexByte(buf.Bytes(), '\n') + 1
-
-		prefix := strings.Repeat(" ", buf.Len()-begLine)
-
 		for idx, item := range items {
 			if idx != 0 {
 				buf.WriteString(prefix)
 			}
-			buf.WriteString(ToString(item))
+			buf.WriteString(IndentString(ToString(item), prefix))
 			buf.WriteString(",\n")
 		}
 		buf.Truncate(buf.Len() - 2)
@@ -75,4 +75,11 @@ func SliceToBuffer(buf *bytes.Buffer, items []reflect.Value) *bytes.Buffer {
 	buf.WriteByte(')')
 
 	return buf
+}
+
+// SliceToString stringifies items slice into a string and returns it.
+func SliceToString(items []reflect.Value) string {
+	var buf bytes.Buffer
+	SliceToBuffer(&buf, items)
+	return buf.String()
 }

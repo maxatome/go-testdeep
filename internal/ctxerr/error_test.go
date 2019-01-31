@@ -67,7 +67,7 @@ func TestError(t *testing.T) {
 	err = ctxerr.Error{
 		Context: ctxerr.Context{Path: "DATA[12].Field"},
 		Message: "Error message",
-		Summary: 666,
+		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
 			File: "file.go",
 			Func: "Operator",
@@ -76,7 +76,7 @@ func TestError(t *testing.T) {
 		Origin: &ctxerr.Error{
 			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
 			Message: "Origin error message",
-			Summary: 42,
+			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
 				File: "file2.go",
 				Func: "SubOperator",
@@ -99,7 +99,7 @@ Originates from following error:
 	err = ctxerr.Error{
 		Context: ctxerr.Context{Path: "DATA[12].Field"},
 		Message: "Error message",
-		Summary: 666,
+		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
 			File: "file.go",
 			Func: "Operator",
@@ -108,7 +108,7 @@ Originates from following error:
 		Origin: &ctxerr.Error{
 			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
 			Message: "Origin error message",
-			Summary: 42,
+			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
 				File: "file2.go",
 				Func: "SubOperator",
@@ -119,7 +119,7 @@ Originates from following error:
 		Next: &ctxerr.Error{
 			Context: ctxerr.Context{Path: "DATA[13].Field"},
 			Message: "Error message",
-			Summary: 888,
+			Summary: ctxerr.NewSummary("888"),
 			Location: location.Location{
 				File: "file.go",
 				Func: "Operator",
@@ -141,7 +141,7 @@ DATA[13].Field: Error message
 	err = ctxerr.Error{
 		Context: ctxerr.Context{Path: "DATA[12].Field"},
 		Message: "Error message",
-		Summary: 666,
+		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
 			File: "file.go",
 			Func: "Operator",
@@ -150,7 +150,7 @@ DATA[13].Field: Error message
 		Origin: &ctxerr.Error{
 			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
 			Message: "Origin error message",
-			Summary: 42,
+			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
 				File: "file2.go",
 				Func: "SubOperator",
@@ -161,7 +161,7 @@ DATA[13].Field: Error message
 		Next: &ctxerr.Error{
 			Context: ctxerr.Context{Path: "DATA[13].Field"},
 			Message: "Error message",
-			Summary: 888,
+			Summary: ctxerr.NewSummary("888"),
 			Location: location.Location{
 				File: "file.go",
 				Func: "Operator",

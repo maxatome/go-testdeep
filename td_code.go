@@ -7,12 +7,10 @@
 package testdeep
 
 import (
-	"fmt"
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
-	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 type tdCode struct {
@@ -123,7 +121,7 @@ func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		}
 		return ctx.CollectError(&ctxerr.Error{
 			Message: "cannot compare unexported field",
-			Summary: types.RawString("use Code() on surrounding struct instead"),
+			Summary: ctxerr.NewSummary("use Code() on surrounding struct instead"),
 		})
 	}
 
@@ -140,20 +138,17 @@ func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		return ctxerr.BooleanError
 	}
 
-	summary := tdCodeResult{
-		Value: got,
-	}
-
+	var reason string
 	if len(ret) > 1 { // (bool, string)
-		summary.Reason = ret[1].String()
+		reason = ret[1].String()
 	} else if ret[0].Kind() == reflect.Interface { // (error)
-		summary.Reason = ret[0].Interface().(error).Error()
+		reason = ret[0].Interface().(error).Error()
 	}
 	// else (bool) so no reason to report
 
 	return ctx.CollectError(&ctxerr.Error{
 		Message: "ran code with %% as argument",
-		Summary: summary,
+		Summary: ctxerr.NewSummaryReason(got, reason),
 	})
 }
 
@@ -163,21 +158,4 @@ func (c *tdCode) String() string {
 
 func (c *tdCode) TypeBehind() reflect.Type {
 	return c.argType
-}
-
-type tdCodeResult struct {
-	types.TestDeepStamp
-	Value  reflect.Value
-	Reason string
-}
-
-var _ types.TestDeepStringer = tdCodeResult{}
-
-func (r tdCodeResult) String() string {
-	if r.Reason == "" {
-		return fmt.Sprintf("  value: %s\nit failed but didn't say why",
-			util.IndentString(util.ToString(r.Value), "         "))
-	}
-	return fmt.Sprintf("        value: %s\nit failed coz: %s",
-		util.IndentString(util.ToString(r.Value), "               "), r.Reason)
 }

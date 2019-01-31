@@ -127,7 +127,7 @@ type Error struct {
 	Expected interface{}
 	// If not nil, Summary is used to display summary instead of using
 	// Got + Expected fields
-	Summary interface{}
+	Summary ErrorSummary
 	// If initialized, location of TestDeep operator originator of the error
 	Location location.Location
 	// If defined, the current Error comes from this Error
@@ -199,14 +199,11 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 	}
 	buf.WriteString(colorTitleOff)
 
-	writeEolPrefix()
-
 	if e.Summary != nil {
-		buf.WriteByte('\t')
-		buf.WriteString(colorBadOn)
-		buf.WriteString(util.IndentString(e.SummaryString(), prefix+"\t"))
-		buf.WriteString(colorBadOff)
+		buf.WriteByte('\n')
+		e.Summary.AppendSummary(buf, prefix+"\t")
 	} else {
+		writeEolPrefix()
 		buf.WriteString(colorBadOnBold)
 		buf.WriteString("\t     got: ")
 		buf.WriteString(colorBadOn)
@@ -245,7 +242,7 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 
 // GotString returns the string corresponding to the Got
 // field. Returns the empty string if the Error Summary field is not
-// empty.
+// nil.
 func (e *Error) GotString() string {
 	if e.Summary != nil {
 		return ""
@@ -255,7 +252,7 @@ func (e *Error) GotString() string {
 
 // ExpectedString returns the string corresponding to the Expected
 // field. Returns the empty string if the Error Summary field is not
-// empty.
+// nil.
 func (e *Error) ExpectedString() string {
 	if e.Summary != nil {
 		return ""
@@ -269,5 +266,8 @@ func (e *Error) SummaryString() string {
 	if e.Summary == nil {
 		return ""
 	}
-	return util.ToString(e.Summary)
+
+	var buf bytes.Buffer
+	e.Summary.AppendSummary(&buf, "")
+	return buf.String()
 }

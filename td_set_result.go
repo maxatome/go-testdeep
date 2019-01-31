@@ -12,6 +12,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -91,4 +92,50 @@ func (r tdSetResult) String() string {
 	}
 
 	return buf.String()
+}
+
+func (r tdSetResult) Summary() ctxerr.ErrorSummary {
+	var missing, extra string
+
+	if len(r.Missing) > 0 {
+		if len(r.Missing) > 1 {
+			missing = fmt.Sprintf("Missing %d %ss: ", len(r.Missing), r.Kind)
+		} else {
+			missing = fmt.Sprintf("Missing %s: ", r.Kind)
+		}
+	}
+
+	if len(r.Extra) > 0 {
+		if len(r.Extra) > 1 {
+			extra = fmt.Sprintf("Extra %d %ss: ", len(r.Extra), r.Kind)
+		} else {
+			extra = fmt.Sprintf("Extra %s: ", r.Kind)
+		}
+	}
+
+	if len(missing) != len(extra) && missing != "" && extra != "" {
+		if len(missing) > len(extra) {
+			extra = strings.Repeat(" ", len(missing)-len(extra)) + extra
+		} else {
+			missing = strings.Repeat(" ", len(extra)-len(missing)) + missing
+		}
+	}
+
+	var summary ctxerr.ErrorSummaryItems
+
+	if missing != "" {
+		summary = append(summary, ctxerr.ErrorSummaryItem{
+			Label: missing,
+			Value: util.SliceToString(r.Missing),
+		})
+	}
+
+	if extra != "" {
+		summary = append(summary, ctxerr.ErrorSummaryItem{
+			Label: extra,
+			Value: util.SliceToString(r.Extra),
+		})
+	}
+
+	return summary
 }

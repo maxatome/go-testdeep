@@ -256,10 +256,10 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		}
 		return ctx.CollectError(&ctxerr.Error{
 			Message: errorMessage,
-			Summary: tdSetResult{
+			Summary: (tdSetResult{
 				Kind:    keysSetResult,
 				Missing: notFoundKeys,
-			},
+			}).Summary(),
 		})
 	}
 
@@ -279,10 +279,10 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		}
 		return ctx.CollectError(&ctxerr.Error{
 			Message: errorMessage,
-			Summary: tdSetResult{
+			Summary: (tdSetResult{
 				Kind:    keysSetResult,
 				Missing: notFoundKeys,
-			},
+			}).Summary(),
 		})
 	}
 
@@ -305,7 +305,7 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 
 	return ctx.CollectError(&ctxerr.Error{
 		Message: errorMessage,
-		Summary: res,
+		Summary: res.Summary(),
 	})
 }
 
