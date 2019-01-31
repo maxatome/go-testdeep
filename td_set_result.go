@@ -7,7 +7,6 @@
 package testdeep
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
 	"strings"
@@ -43,55 +42,8 @@ type tdSetResult struct {
 	Kind    tdSetResultKind
 }
 
-var _ types.TestDeepStringer = tdSetResult{}
-
 func (r tdSetResult) IsEmpty() bool {
 	return len(r.Missing) == 0 && len(r.Extra) == 0
-}
-
-func (r tdSetResult) String() string {
-	buf := &bytes.Buffer{}
-
-	var missing, extra string
-
-	if len(r.Missing) > 0 {
-		if len(r.Missing) > 1 {
-			missing = fmt.Sprintf("Missing %d %ss: ", len(r.Missing), r.Kind)
-		} else {
-			missing = fmt.Sprintf("Missing %s: ", r.Kind)
-		}
-	}
-
-	if len(r.Extra) > 0 {
-		if len(r.Extra) > 1 {
-			extra = fmt.Sprintf("Extra %d %ss: ", len(r.Extra), r.Kind)
-		} else {
-			extra = fmt.Sprintf("Extra %s: ", r.Kind)
-		}
-	}
-
-	if len(missing) != len(extra) && missing != "" && extra != "" {
-		if len(missing) > len(extra) {
-			extra = strings.Repeat(" ", len(missing)-len(extra)) + extra
-		} else {
-			missing = strings.Repeat(" ", len(extra)-len(missing)) + missing
-		}
-	}
-
-	if missing != "" {
-		buf.WriteString(missing)
-		util.SliceToBuffer(buf, r.Missing)
-	}
-
-	if extra != "" {
-		if missing != "" {
-			buf.WriteByte('\n')
-		}
-		buf.WriteString(extra)
-		util.SliceToBuffer(buf, r.Extra)
-	}
-
-	return buf.String()
 }
 
 func (r tdSetResult) Summary() ctxerr.ErrorSummary {

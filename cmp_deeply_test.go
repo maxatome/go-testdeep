@@ -15,6 +15,8 @@ import (
 )
 
 func TestFormatError(t *testing.T) {
+	defer ctxerr.SaveColorState()()
+
 	ttt := &test.TestingT{}
 
 	err := &ctxerr.Error{

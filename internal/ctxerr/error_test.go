@@ -15,6 +15,8 @@ import (
 )
 
 func TestError(t *testing.T) {
+	defer ctxerr.SaveColorState()()
+
 	err := ctxerr.Error{
 		Context:  ctxerr.Context{Path: "DATA[12].Field"},
 		Message:  "Error message",

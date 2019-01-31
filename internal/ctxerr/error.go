@@ -24,11 +24,37 @@ const (
 )
 
 var (
-	_, colorTestNameOn, colorTestNameOff    = colorFromEnv(envColorTitle, "yellow")
-	_, colorTitleOn, colorTitleOff          = colorFromEnv(envColorTitle, "cyan")
-	colorOKOn, colorOKOnBold, colorOKOff    = colorFromEnv(envColorOK, "green")
-	colorBadOn, colorBadOnBold, colorBadOff = colorFromEnv(envColorBad, "red")
+	colorTestNameOn, colorTestNameOff       string
+	colorTitleOn, colorTitleOff             string
+	colorOKOn, colorOKOnBold, colorOKOff    string
+	colorBadOn, colorBadOnBold, colorBadOff string
 )
+
+func init() {
+	InitColors()
+}
+
+// InitColors initializes all colors from environment. It is
+// automatically called in init(). It is exported to be used in tests.
+func InitColors() {
+	_, colorTestNameOn, colorTestNameOff = colorFromEnv(envColorTitle, "yellow")
+	_, colorTitleOn, colorTitleOff = colorFromEnv(envColorTitle, "cyan")
+	colorOKOn, colorOKOnBold, colorOKOff = colorFromEnv(envColorOK, "green")
+	colorBadOn, colorBadOnBold, colorBadOff = colorFromEnv(envColorBad, "red")
+}
+
+// SaveColorState save the "TESTDEEP_COLOR" environment variable
+// value, sets it to "off", calls InitColors() and returns a function
+// to be called in a defer statement. Only intented to be used in
+// tests like:
+//
+//   defer ctxerr.SaveColorState()()
+func SaveColorState() func() {
+	colorState := os.Getenv(envColor)
+	os.Setenv(envColor, "off")
+	InitColors()
+	return func() { os.Setenv(envColor, colorState) }
+}
 
 var colors = map[string]byte{
 	"black":   '0',
