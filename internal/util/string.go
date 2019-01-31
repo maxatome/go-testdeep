@@ -30,6 +30,11 @@ func ToString(val interface{}) string {
 			return ToString(newVal)
 		}
 
+	case []reflect.Value:
+		var buf bytes.Buffer
+		SliceToBuffer(&buf, tval)
+		return buf.String()
+
 		// no "(string) " prefix for printable strings
 	case string:
 		return tdutil.FormatString(tval)
@@ -75,11 +80,4 @@ func SliceToBuffer(buf *bytes.Buffer, items []reflect.Value) *bytes.Buffer {
 	buf.WriteByte(')')
 
 	return buf
-}
-
-// SliceToString stringifies items slice into a string and returns it.
-func SliceToString(items []reflect.Value) string {
-	var buf bytes.Buffer
-	SliceToBuffer(&buf, items)
-	return buf.String()
 }

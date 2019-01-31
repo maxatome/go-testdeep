@@ -78,14 +78,14 @@ func (r tdSetResult) Summary() ctxerr.ErrorSummary {
 	if missing != "" {
 		summary = append(summary, ctxerr.ErrorSummaryItem{
 			Label: missing,
-			Value: util.SliceToString(r.Missing),
+			Value: util.ToString(r.Missing),
 		})
 	}
 
 	if extra != "" {
 		summary = append(summary, ctxerr.ErrorSummaryItem{
 			Label: extra,
-			Value: util.SliceToString(r.Extra),
+			Value: util.ToString(r.Extra),
 		})
 	}
 
