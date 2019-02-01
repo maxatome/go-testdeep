@@ -50,10 +50,16 @@ func InitColors() {
 //
 //   defer ctxerr.SaveColorState()()
 func SaveColorState() func() {
-	colorState := os.Getenv(envColor)
-	os.Setenv(envColor, "off")
+	colorState, set := os.LookupEnv(envColor)
+	os.Setenv(envColor, "off") // nolint: errcheck
 	InitColors()
-	return func() { os.Setenv(envColor, colorState) }
+	return func() {
+		if set {
+			os.Setenv(envColor, colorState) // nolint: errcheck
+		} else {
+			os.Unsetenv(envColor) // nolint: errcheck
+		}
+	}
 }
 
 var colors = map[string]byte{

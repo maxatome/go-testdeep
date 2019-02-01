@@ -76,8 +76,14 @@ func TestContext(t *testing.T) {
 }
 
 func TestGetMaxErrorsFromEnv(t *testing.T) {
-	oldEnv := os.Getenv(envMaxErrors)
-	defer func() { os.Setenv(envMaxErrors, oldEnv) }()
+	oldEnv, set := os.LookupEnv(envMaxErrors)
+	defer func() {
+		if set {
+			os.Setenv(envMaxErrors, oldEnv)
+		} else {
+			os.Unsetenv(envMaxErrors)
+		}
+	}()
 
 	os.Setenv(envMaxErrors, "")
 	test.EqualInt(t, getMaxErrorsFromEnv(), 10)
