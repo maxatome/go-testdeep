@@ -9,7 +9,6 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
-	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
@@ -51,25 +50,17 @@ func (r tdSetResult) Summary() ctxerr.ErrorSummary {
 
 	if len(r.Missing) > 0 {
 		if len(r.Missing) > 1 {
-			missing = fmt.Sprintf("Missing %d %ss: ", len(r.Missing), r.Kind)
+			missing = fmt.Sprintf("Missing %d %ss", len(r.Missing), r.Kind)
 		} else {
-			missing = fmt.Sprintf("Missing %s: ", r.Kind)
+			missing = fmt.Sprintf("Missing %s", r.Kind)
 		}
 	}
 
 	if len(r.Extra) > 0 {
 		if len(r.Extra) > 1 {
-			extra = fmt.Sprintf("Extra %d %ss: ", len(r.Extra), r.Kind)
+			extra = fmt.Sprintf("Extra %d %ss", len(r.Extra), r.Kind)
 		} else {
-			extra = fmt.Sprintf("Extra %s: ", r.Kind)
-		}
-	}
-
-	if len(missing) != len(extra) && missing != "" && extra != "" {
-		if len(missing) > len(extra) {
-			extra = strings.Repeat(" ", len(missing)-len(extra)) + extra
-		} else {
-			missing = strings.Repeat(" ", len(extra)-len(missing)) + missing
+			extra = fmt.Sprintf("Extra %s", r.Kind)
 		}
 	}
 

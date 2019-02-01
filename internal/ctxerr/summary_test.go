@@ -73,21 +73,21 @@ func TestErrorSummary(t *testing.T) {
 		//
 		// ErrorSummaryItem
 		summary = ctxerr.ErrorSummaryItem{
-			Label: "  the_label: ",
+			Label: "the_label",
 			Value: "foo\nbar",
 		}
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`
-----*  the_label: +foo
-----~             ~bar^`))
+----*the_label: +foo
+----~           ~bar^`))
 
 		summary = ctxerr.ErrorSummaryItem{
-			Label:       "  the_label: ",
+			Label:       "the_label",
 			Value:       "foo\nbar",
 			Explanation: "And the\nexplanation...",
 		}
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`
-----*  the_label: +foo
-----~             ~bar
+----*the_label: +foo
+----~           ~bar
 ----And the
 ----explanation...^`))
 
@@ -95,27 +95,27 @@ func TestErrorSummary(t *testing.T) {
 		// ErrorSummaryItems
 		summary = ctxerr.ErrorSummaryItems{
 			{
-				Label:       "first label: ",
+				Label:       "first label",
 				Value:       "foo\nbar",
 				Explanation: "And the\nexplanation...",
 			},
 			{
-				Label: "  2nd label: ",
+				Label: "2nd label",
 				Value: "zip\nzap",
 			},
 			{
-				Label: "  3rd label: ",
+				Label: "3rd big label",
 				Value: "666",
 			},
 		}
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`
-----*first label: +foo
-----~             ~bar
+----*  first label: +foo
+----~               ~bar
 ----And the
 ----explanation...^
-----*  2nd label: +zip
-----~             ~zap^
-----*  3rd label: +666^`))
+----*    2nd label: +zip
+----~               ~zap^
+----*3rd big label: +666^`))
 
 		//
 		// NewSummaryReason

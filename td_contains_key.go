@@ -66,11 +66,11 @@ func (c *tdContainsKey) doesNotContainKey(ctx ctxerr.Context, got reflect.Value)
 		Message: "does not contain key",
 		Summary: ctxerr.ErrorSummaryItems{
 			{
-				Label: "expected key: ",
+				Label: "expected key",
 				Value: util.ToString(c.expectedValue),
 			},
 			{
-				Label: " not in keys: ",
+				Label: "not in keys",
 				Value: util.ToString(keys),
 			},
 		},
