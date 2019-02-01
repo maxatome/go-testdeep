@@ -186,7 +186,7 @@ func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, a
 			&ctxerr.Error{
 				Context: ctx,
 				Message: "should have panicked",
-				Summary: types.RawString("did not panic"),
+				Summary: ctxerr.NewSummary("did not panic"),
 			},
 			args...)
 		return false

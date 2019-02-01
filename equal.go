@@ -239,7 +239,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 			return ctx.CollectError(&ctxerr.Error{
 				Message: fmt.Sprintf("comparing slices, from index #%d", maxLen),
-				Summary: res,
+				Summary: res.Summary(),
 			})
 		}
 		return
@@ -322,10 +322,10 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			}
 			return ctx.CollectError(&ctxerr.Error{
 				Message: "comparing map",
-				Summary: tdSetResult{
+				Summary: (tdSetResult{
 					Kind:    keysSetResult,
 					Missing: notFoundKeys,
-				},
+				}).Summary(),
 			})
 		}
 
@@ -348,7 +348,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 		return ctx.CollectError(&ctxerr.Error{
 			Message: "comparing map",
-			Summary: res,
+			Summary: res.Summary(),
 		})
 
 	case reflect.Func:
@@ -361,7 +361,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		// Can't do better than this:
 		return ctx.CollectError(&ctxerr.Error{
 			Message: "functions mismatch",
-			Summary: types.RawString("<can not be compared>"),
+			Summary: ctxerr.NewSummary("<can not be compared>"),
 		})
 
 	default:

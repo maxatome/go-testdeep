@@ -314,7 +314,10 @@ You want to add a new `FooBar` operator.
 - add operator tests in `td_foo_bar_test.go` file;
 - in `example_test.go` file, add examples function(s) `ExampleFooBar*`
   in alphabetical order;
-- add a test line for this operator in `TestStructWithInterfaceT()`
+- add a test line for this operator in `TestCmpWithInterfaceT()`
+  function in `cmp_funcs_misc_test.go` to test the case where t is an
+  interface and not a `*testing.T`;
+- add a other test line for this operator in `TestStructWithInterfaceT()`
   function in `t_struct_test.go` to test the case where t is an
   interface and not a `*testing.T`;
 - automatically generate `CmpFooBar` & `T.FooBar` (+ examples) code:

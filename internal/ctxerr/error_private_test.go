@@ -15,8 +15,7 @@ import (
 )
 
 func TestColor(t *testing.T) {
-	envColorV := os.Getenv("TESTDEEP_COLOR")
-	defer func() { os.Setenv("TESTDEEP_COLOR", envColorV) }()
+	defer SaveColorState()()
 
 	// off
 	for _, flag := range []string{"off", "xxbad"} {

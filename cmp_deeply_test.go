@@ -12,16 +12,17 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
-	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 func TestFormatError(t *testing.T) {
+	defer ctxerr.SaveColorState()()
+
 	ttt := &test.TestingT{}
 
 	err := &ctxerr.Error{
 		Context: newContext(),
 		Message: "test error message",
-		Summary: types.RawString("test error summary"),
+		Summary: ctxerr.NewSummary("test error summary"),
 	}
 
 	nonStringName := bytes.NewBufferString("zip!")
