@@ -74,6 +74,19 @@ type Base struct {
 	location location.Location
 }
 
+func pkgFunc(full string) (string, string) {
+	// the/package.Foo      → "the/package", "Foo"
+	dotPos := strings.LastIndex(full, ".")
+	pkg, fn := full[:dotPos], full[dotPos+1:]
+
+	// the/package.(*T).Foo → "the/package", "(*T).Foo"
+	if dotPos > 0 && pkg[len(pkg)-1] == ')' {
+		dotPos = strings.LastIndex(pkg, ".")
+		pkg, fn = full[:dotPos], full[dotPos+1:]
+	}
+	return pkg, fn
+}
+
 func (t *Base) setLocation(callDepth int) {
 	var ok bool
 	t.location, ok = location.New(callDepth)
@@ -83,23 +96,21 @@ func (t *Base) setLocation(callDepth int) {
 		return
 	}
 
-	opDotPos := strings.LastIndex(t.location.Func, ".")
+	// Here package is github.com/maxatome/go-testdeep, or its vendored
+	// counterpart
+	var pkg string
+	pkg, t.location.Func = pkgFunc(t.location.Func)
 
-	// Try to go one level upper, to check if it is a CmpXxx function
+	// Try to go one level upper, if we are still in go-testdeep package
 	cmpLoc, ok := location.New(callDepth + 1)
 	if ok {
-		cmpDotPos := strings.LastIndex(cmpLoc.Func, ".")
-
-		// Must be in same package as found operator
-		if t.location.Func[:opDotPos] == cmpLoc.Func[:cmpDotPos] &&
-			strings.HasPrefix(cmpLoc.Func[cmpDotPos+1:], "Cmp") &&
-			cmpLoc.Func != "CmpDeeply" {
-			t.location = cmpLoc
-			opDotPos = cmpDotPos
+		cmpPkg, _ := pkgFunc(cmpLoc.Func)
+		if cmpPkg == pkg {
+			t.location.File = cmpLoc.File
+			t.location.Line = cmpLoc.Line
+			t.location.BehindCmp = true
 		}
 	}
-
-	t.location.Func = t.location.Func[opDotPos+1:]
 }
 
 // GetLocation returns a copy of the location.Location where the TestDeep

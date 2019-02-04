@@ -18,8 +18,6 @@ type tdAny struct {
 
 var _ TestDeep = &tdAny{}
 
-//go:noinline
-
 // Any operator compares data against several expected values. During
 // a match, at least one of them has to match to succeed.
 //

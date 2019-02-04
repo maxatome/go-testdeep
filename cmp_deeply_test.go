@@ -73,9 +73,3 @@ DATA: test error message
 		test.EqualBool(t, ttt.IsFatal, fatal)
 	}
 }
-
-// Just to test the case where t is an interface and not a *testing.T
-// See t.Helper() issue in CmpDeeply
-func TestCmpDeeply(t *testing.T) {
-	test.IsTrue(t, CmpDeeply(&test.TestingT{}, 1, 1))
-}

@@ -51,8 +51,6 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 	return
 }
 
-//go:noinline
-
 // Re operator allows to apply a regexp on a string (or convertible),
 // []byte, error or fmt.Stringer interface (error interface is tested
 // before fmt.Stringer.)
@@ -75,8 +73,6 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 	r.numMatches = 1
 	return r
 }
-
-//go:noinline
 
 // ReAll operator allows to successively apply a regexp on a string
 // (or convertible), []byte, error or fmt.Stringer interface (error

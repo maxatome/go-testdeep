@@ -147,8 +147,6 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 	}
 }
 
-//go:noinline
-
 // Map operator compares the contents of a map against the non-zero
 // values of "model" (if any) and the values of "expectedEntries".
 //
@@ -164,8 +162,6 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, allMap)
 }
-
-//go:noinline
 
 // SubMapOf operator compares the contents of a map against the non-zero
 // values of "model" (if any) and the values of "expectedEntries".
@@ -189,8 +185,6 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, subMap)
 }
-
-//go:noinline
 
 // SuperMapOf operator compares the contents of a map against the non-zero
 // values of "model" (if any) and the values of "expectedEntries".

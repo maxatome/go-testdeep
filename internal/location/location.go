@@ -14,9 +14,10 @@ import (
 
 // Location record a place in a source file.
 type Location struct {
-	File string // File name
-	Func string // Function name
-	Line int    // Line number inside file
+	File      string // File name
+	Func      string // Function name
+	Line      int    // Line number inside file
+	BehindCmp bool   // BehindCmp is true when operator is behind a Cmp* function
 }
 
 // GetLocationer is the interface that wraps the basic GetLocation method.
