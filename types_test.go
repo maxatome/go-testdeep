@@ -4,6 +4,10 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
+// Work around https://github.com/golang/go/issues/26995 issue
+// (corrected in go 1.12).
+// +build go1.12 !race
+
 package testdeep_test
 
 import (
