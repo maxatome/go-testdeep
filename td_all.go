@@ -19,8 +19,6 @@ type tdAll struct {
 
 var _ TestDeep = &tdAll{}
 
-//go:noinline
-
 // All operator compares data against several expected values. During
 // a match, all of them have to match to succeed.
 //

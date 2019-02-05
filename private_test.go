@@ -8,6 +8,8 @@ package testdeep
 
 import (
 	"testing"
+
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 // Edge cases not tested elsewhere...
@@ -26,4 +28,19 @@ func TestTdSetResult(t *testing.T) {
 		t.Errorf("tdSetResultKind stringification failed => %s",
 			tdSetResultKind(199))
 	}
+}
+
+func TestPkgFunc(t *testing.T) {
+	pkg, fn := pkgFunc("the/package.Foo")
+	test.EqualStr(t, pkg, "the/package")
+	test.EqualStr(t, fn, "Foo")
+
+	pkg, fn = pkgFunc("the/package.(*T).Foo")
+	test.EqualStr(t, pkg, "the/package")
+	test.EqualStr(t, fn, "(*T).Foo")
+
+	// Theorically not possible, but...
+	pkg, fn = pkgFunc(".Foo")
+	test.EqualStr(t, pkg, "")
+	test.EqualStr(t, fn, "Foo")
 }

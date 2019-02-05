@@ -9,6 +9,9 @@ package test
 import (
 	"strings"
 	"testing"
+	"unicode"
+
+	"github.com/davecgh/go-spew/spew"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 )
@@ -28,6 +31,15 @@ func EqualErrorMessage(t *testing.T, got, expected interface{},
 		tdutil.BuildTestName(args...), got, expected)
 }
 
+func spewIfNeeded(s string) string {
+	for _, chr := range s {
+		if !unicode.IsPrint(chr) {
+			return strings.TrimRight(spew.Sdump(s), "\n")
+		}
+	}
+	return s
+}
+
 // EqualStr checks that got equals expected.
 func EqualStr(t *testing.T, got, expected string, args ...interface{}) bool {
 	if got == expected {
@@ -35,7 +47,7 @@ func EqualStr(t *testing.T, got, expected string, args ...interface{}) bool {
 	}
 
 	t.Helper()
-	EqualErrorMessage(t, got, expected, args...)
+	EqualErrorMessage(t, spewIfNeeded(got), spewIfNeeded(expected), args...)
 	return false
 }
 

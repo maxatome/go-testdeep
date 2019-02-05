@@ -646,4 +646,8 @@ func TestCmpDeeply(t *testing.T) {
 	mockT = &testing.T{}
 	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
 	test.IsTrue(t, mockT.Failed())
+
+	// Just to test the case where t is an interface and not a *testing.T
+	// See t.Helper() issue in CmpDeeply
+	test.IsTrue(t, testdeep.CmpDeeply(&test.TestingT{}, 1, 1))
 }
