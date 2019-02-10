@@ -8,26 +8,17 @@ package ctxerr
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
-	"unsafe"
 
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
-// Visit is used by Context and its Visited map to handle cyclic references.
-type Visit struct {
-	A1  unsafe.Pointer
-	A2  unsafe.Pointer
-	Typ reflect.Type
-}
-
 // Context is used internally to keep track of the CmpDeeply in-Depth
 // traversal.
 type Context struct {
 	Path        string
-	Visited     map[Visit]bool
+	Visited     Visited
 	CurOperator location.GetLocationer
 	Depth       int
 	// 0 ≤ MaxErrors ≤ 1 stops when first error encoutered (without the
