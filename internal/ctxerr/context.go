@@ -12,13 +12,14 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/util"
+	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
 // Context is used internally to keep track of the CmpDeeply in-Depth
 // traversal.
 type Context struct {
 	Path        string
-	Visited     Visited
+	Visited     visited.Visited
 	CurOperator location.GetLocationer
 	Depth       int
 	// 0 ≤ MaxErrors ≤ 1 stops when first error encoutered (without the
