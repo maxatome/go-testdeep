@@ -4,19 +4,19 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package ctxerr_test
+package visited_test
 
 import (
 	"reflect"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
 func TestVisited(t *testing.T) {
 	t.Run("not a pointer", func(t *testing.T) {
-		v := ctxerr.NewVisited()
+		v := visited.NewVisited()
 		a, b := 1, 2
 		test.IsFalse(t, v.Record(reflect.ValueOf(a), reflect.ValueOf(b)))
 		test.IsFalse(t, v.Record(reflect.ValueOf(a), reflect.ValueOf(b)))
@@ -26,7 +26,7 @@ func TestVisited(t *testing.T) {
 	// use a struct pointer below
 
 	t.Run("map", func(t *testing.T) {
-		v := ctxerr.NewVisited()
+		v := visited.NewVisited()
 
 		type vMap struct{ m map[string]bool }
 		a, b := &vMap{m: map[string]bool{}}, &vMap{m: map[string]bool{}}
@@ -41,7 +41,7 @@ func TestVisited(t *testing.T) {
 	})
 
 	t.Run("slice", func(t *testing.T) {
-		v := ctxerr.NewVisited()
+		v := visited.NewVisited()
 
 		type vSlice struct{ s []string }
 		a, b := &vSlice{s: []string{}}, &vSlice{}
@@ -56,7 +56,7 @@ func TestVisited(t *testing.T) {
 	})
 
 	t.Run("ptr", func(t *testing.T) {
-		v := ctxerr.NewVisited()
+		v := visited.NewVisited()
 
 		type vPtr struct{ p *int }
 		n := 42
@@ -72,7 +72,7 @@ func TestVisited(t *testing.T) {
 	})
 
 	t.Run("interface", func(t *testing.T) {
-		v := ctxerr.NewVisited()
+		v := visited.NewVisited()
 
 		type vIf struct{ i interface{} }
 		a, b := &vIf{i: 42}, &vIf{}
