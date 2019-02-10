@@ -13,7 +13,6 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
-	"unsafe"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
@@ -134,43 +133,14 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 	// if ctx.Depth > 10 { panic("deepValueEqual") }	// for debugging
 
-	// We want to avoid putting more in the Visited map than we need to.
-	// For any possible reference cycle that might be encountered,
-	// hard(t) needs to return true for at least one of the types in the cycle.
-	hard := func(k reflect.Kind) bool {
-		switch k {
-		case reflect.Map, reflect.Slice, reflect.Ptr, reflect.Interface:
-			return true
-		}
-		return false
-	}
-
-	if got.CanAddr() && expected.CanAddr() && hard(got.Kind()) {
-		addr1 := unsafe.Pointer(got.UnsafeAddr())
-		addr2 := unsafe.Pointer(expected.UnsafeAddr())
-		if uintptr(addr1) > uintptr(addr2) {
-			// Canonicalize order to reduce number of entries in Visited.
-			// Assumes non-moving garbage collector.
-			addr1, addr2 = addr2, addr1
-		}
-
-		// Short circuit if references are already seen.
-		v := ctxerr.Visit{
-			A1:  addr1,
-			A2:  addr2,
-			Typ: got.Type(),
-		}
-		if ctx.Visited[v] {
-			return
-		}
-
-		// Remember for later.
-		ctx.Visited[v] = true
+	// Avoid looping forever on cyclic references
+	if ctx.Visited.Record(got, expected) {
+		return
 	}
 
 	switch got.Kind() {
 	case reflect.Array:
-		for i := 0; i < got.Len(); i++ {
+		for i, l := 0, got.Len(); i < l; i++ {
 			err = deepValueEqual(ctx.AddArrayIndex(i),
 				got.Index(i), expected.Index(i))
 			if err != nil {

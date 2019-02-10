@@ -89,7 +89,7 @@ func newContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 
 	ctx = ctxerr.Context{
 		Path:           config.RootName,
-		Visited:        map[ctxerr.Visit]bool{},
+		Visited:        ctxerr.NewVisited(),
 		MaxErrors:      config.MaxErrors,
 		FailureIsFatal: config.FailureIsFatal,
 	}
@@ -101,7 +101,7 @@ func newContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 // newBooleanContext creates a new boolean ctxerr.Context.
 func newBooleanContext() ctxerr.Context {
 	return ctxerr.Context{
-		Visited:      map[ctxerr.Visit]bool{},
+		Visited:      ctxerr.NewVisited(),
 		BooleanError: true,
 	}
 }
