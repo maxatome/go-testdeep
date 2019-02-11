@@ -11,12 +11,13 @@ import (
 	"testing"
 )
 
-// Package tdutil allows to write unit tests for testdeep helpers.
+// Package tdutil allows to write unit tests for testdeep helpers and
+// so provides some helpful functions.
 //
 // It is not intended to be used in tests outside go-testdeep and its
 // helpers perimeter.
 
-// T can be used in tests, to test testing.T behavior as it override
+// T can be used in tests, to test testing.T behavior as it overrides
 // Run() method.
 type T struct {
 	testing.T

@@ -17,7 +17,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
-// ToString does it best to stringify val.
+// ToString does its best to stringify val.
 func ToString(val interface{}) string {
 	if val == nil {
 		return "nil"
