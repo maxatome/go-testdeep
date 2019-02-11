@@ -195,6 +195,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		if gotLen != expectedLen {
 			res := tdSetResult{
 				Kind: itemsSetResult,
+				// do not sort Extra/Mising here
 			}
 
 			if gotLen > expectedLen {
@@ -297,6 +298,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 				Summary: (tdSetResult{
 					Kind:    keysSetResult,
 					Missing: notFoundKeys,
+					Sort:    true,
 				}).Summary(),
 			})
 		}
@@ -310,6 +312,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			Kind:    keysSetResult,
 			Missing: notFoundKeys,
 			Extra:   make([]reflect.Value, 0, got.Len()-len(foundKeys)),
+			Sort:    true,
 		}
 
 		for _, vkey := range got.MapKeys() {

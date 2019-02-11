@@ -41,6 +41,7 @@ type tdSetResult struct {
 	Missing []reflect.Value
 	Extra   []reflect.Value
 	Kind    tdSetResultKind
+	Sort    bool
 }
 
 func (r tdSetResult) IsEmpty() bool {
@@ -54,7 +55,9 @@ func (r tdSetResult) Summary() ctxerr.ErrorSummary {
 		var missing string
 
 		if len(r.Missing) > 1 {
-			sort.Stable(tdutil.SortableValues(r.Missing))
+			if r.Sort {
+				sort.Stable(tdutil.SortableValues(r.Missing))
+			}
 			missing = fmt.Sprintf("Missing %d %ss", len(r.Missing), r.Kind)
 		} else {
 			missing = fmt.Sprintf("Missing %s", r.Kind)
@@ -70,7 +73,9 @@ func (r tdSetResult) Summary() ctxerr.ErrorSummary {
 		var extra string
 
 		if len(r.Extra) > 1 {
-			sort.Stable(tdutil.SortableValues(r.Extra))
+			if r.Sort {
+				sort.Stable(tdutil.SortableValues(r.Extra))
+			}
 			extra = fmt.Sprintf("Extra %d %ss", len(r.Extra), r.Kind)
 		} else {
 			extra = fmt.Sprintf("Extra %s", r.Kind)

@@ -40,11 +40,13 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, testdeep.Bag(5, 4, 1, 4, 3, 66),
+		checkError(t, got, testdeep.Bag(5, 4, 1, 4, 3, 66, 42),
 			expectedError{
 				Message: mustBe("comparing %% as a Bag"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Missing item: (66)"),
+				// items are sorted
+				Summary: mustBe(`Missing 2 items: (42,
+                  66)`),
 			},
 			testName)
 
