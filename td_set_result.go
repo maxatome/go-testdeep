@@ -9,7 +9,9 @@ package testdeep
 import (
 	"fmt"
 	"reflect"
+	"sort"
 
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -46,34 +48,34 @@ func (r tdSetResult) IsEmpty() bool {
 }
 
 func (r tdSetResult) Summary() ctxerr.ErrorSummary {
-	var missing, extra string
+	var summary ctxerr.ErrorSummaryItems
 
 	if len(r.Missing) > 0 {
+		var missing string
+
 		if len(r.Missing) > 1 {
+			sort.Stable(tdutil.SortableValues(r.Missing))
 			missing = fmt.Sprintf("Missing %d %ss", len(r.Missing), r.Kind)
 		} else {
 			missing = fmt.Sprintf("Missing %s", r.Kind)
 		}
-	}
 
-	if len(r.Extra) > 0 {
-		if len(r.Extra) > 1 {
-			extra = fmt.Sprintf("Extra %d %ss", len(r.Extra), r.Kind)
-		} else {
-			extra = fmt.Sprintf("Extra %s", r.Kind)
-		}
-	}
-
-	var summary ctxerr.ErrorSummaryItems
-
-	if missing != "" {
 		summary = append(summary, ctxerr.ErrorSummaryItem{
 			Label: missing,
 			Value: util.ToString(r.Missing),
 		})
 	}
 
-	if extra != "" {
+	if len(r.Extra) > 0 {
+		var extra string
+
+		if len(r.Extra) > 1 {
+			sort.Stable(tdutil.SortableValues(r.Extra))
+			extra = fmt.Sprintf("Extra %d %ss", len(r.Extra), r.Kind)
+		} else {
+			extra = fmt.Sprintf("Extra %s", r.Kind)
+		}
+
 		summary = append(summary, ctxerr.ErrorSummaryItem{
 			Label: extra,
 			Value: util.ToString(r.Extra),
