@@ -192,6 +192,14 @@ func TestEqualSlice(t *testing.T) {
 	checkOK(t, array[:], array[:])
 	checkOK(t, ([]int)(nil), ([]int)(nil))
 
+	// Same pointer, but not same len
+	checkError(t, array[:1], array[:],
+		expectedError{
+			Message: mustBe("comparing slices, from index #1"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`Missing item: (2)`),
+		})
+
 	checkError(t, []int{1, 2}, []int{1, 2, 3},
 		expectedError{
 			Message: mustBe("comparing slices, from index #2"),

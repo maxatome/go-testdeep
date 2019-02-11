@@ -166,13 +166,15 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			expectedLen = expected.Len()
 		)
 
-		// Shortcut in boolean context
-		if ctx.BooleanError && gotLen != expectedLen {
-			return ctxerr.BooleanError
-		}
-
-		if got.Pointer() == expected.Pointer() {
-			return
+		if gotLen != expectedLen {
+			// Shortcut in boolean context
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+		} else {
+			if got.Pointer() == expected.Pointer() {
+				return
+			}
 		}
 
 		var maxLen int
