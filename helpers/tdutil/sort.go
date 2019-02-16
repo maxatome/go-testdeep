@@ -14,14 +14,31 @@ import (
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
-// SortableValues is used to allow the sorting a of a []reflect.Value
+// SortableValues is used to allow the sorting of a []reflect.Value
 // slice. It is used with the standard sort package:
 //
 //   vals := []reflect.Value{a, b, c, d}
 //   sort.Sort(SortableValues(vals))
 //   // vals contents now sorted
 //
-// See sort.Stable documentation for a stable sort.
+// Replace sort.Sort by sort.Stable for a stable sort. See sort documentation.
+//
+// Sorting rules are as follows:
+//   - nil is always lower
+//   - different types are sorted by their name
+//   - false is lesser than true
+//   - float and int numbers are sorted by their value
+//   - complex numbers are sorted by their real, then by their imaginary parts
+//   - strings are sorted by their value
+//   - map: shorter length is lesser, then sorted by address
+//   - functions, channels and unsafe pointer are sorted by their address
+//   - struct: comparison is spread to each field
+//   - pointer: comparison is spred to the pointed value
+//   - arrays: comparison is spread to each item
+//   - slice: comparison is spread to each item, then shorter length is lesser
+//   - interface: comparison is spread to the value
+//
+// Cyclic references are correctly handled.
 func SortableValues(s []reflect.Value) sort.Interface {
 	r := &rValues{
 		Slice: s,
