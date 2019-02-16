@@ -39,11 +39,13 @@ func TestSet(t *testing.T) {
 				testdeep.Between(0, 5),
 				testdeep.Between(0, 5))) // dup too
 
-		checkError(t, got, testdeep.Set(5, 4, 1),
+		checkError(t, got, testdeep.Set(5, 4),
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra item: (3)"),
+				// items are sorted
+				Summary: mustBe(`Extra 2 items: (1,
+                3)`),
 			},
 			testName)
 
@@ -63,7 +65,7 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
-		checkError(t, got, testdeep.Set(5, 66, 4, 1, 3, 67),
+		checkError(t, got, testdeep.Set(5, 67, 4, 1, 3, 66),
 			expectedError{
 				Message: mustBe("comparing %% as a Set"),
 				Path:    mustBe("DATA"),

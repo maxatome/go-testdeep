@@ -2028,7 +2028,7 @@ func ExampleSmuggle_interface() {
 		t.Fatal(err)
 	}
 
-	// Do not check the struct itself, but it stringified form
+	// Do not check the struct itself, but its stringified form
 	ok := CmpDeeply(t, gotTime,
 		Smuggle(func(s fmt.Stringer) string {
 			return s.String()

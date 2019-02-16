@@ -103,6 +103,7 @@ func (s *tdSetBase) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 
 		res := tdSetResult{
 			Kind: itemsSetResult,
+			Sort: true,
 		}
 
 		if s.kind != noneSet {

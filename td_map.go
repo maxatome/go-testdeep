@@ -253,6 +253,7 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 			Summary: (tdSetResult{
 				Kind:    keysSetResult,
 				Missing: notFoundKeys,
+				Sort:    true,
 			}).Summary(),
 		})
 	}
@@ -276,6 +277,7 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 			Summary: (tdSetResult{
 				Kind:    keysSetResult,
 				Missing: notFoundKeys,
+				Sort:    true,
 			}).Summary(),
 		})
 	}
@@ -289,6 +291,7 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		Kind:    keysSetResult,
 		Missing: notFoundKeys,
 		Extra:   make([]reflect.Value, 0, got.Len()-len(foundKeys)),
+		Sort:    true,
 	}
 
 	for _, vkey := range got.MapKeys() {

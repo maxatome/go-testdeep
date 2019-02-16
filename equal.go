@@ -166,13 +166,15 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			expectedLen = expected.Len()
 		)
 
-		// Shortcut in boolean context
-		if ctx.BooleanError && gotLen != expectedLen {
-			return ctxerr.BooleanError
-		}
-
-		if got.Pointer() == expected.Pointer() {
-			return
+		if gotLen != expectedLen {
+			// Shortcut in boolean context
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+		} else {
+			if got.Pointer() == expected.Pointer() {
+				return
+			}
 		}
 
 		var maxLen int
@@ -193,6 +195,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		if gotLen != expectedLen {
 			res := tdSetResult{
 				Kind: itemsSetResult,
+				// do not sort Extra/Mising here
 			}
 
 			if gotLen > expectedLen {
@@ -295,6 +298,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 				Summary: (tdSetResult{
 					Kind:    keysSetResult,
 					Missing: notFoundKeys,
+					Sort:    true,
 				}).Summary(),
 			})
 		}
@@ -308,6 +312,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			Kind:    keysSetResult,
 			Missing: notFoundKeys,
 			Extra:   make([]reflect.Value, 0, got.Len()-len(foundKeys)),
+			Sort:    true,
 		}
 
 		for _, vkey := range got.MapKeys() {

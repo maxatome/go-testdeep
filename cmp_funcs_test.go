@@ -1934,7 +1934,7 @@ func ExampleCmpSmuggle_interface() {
 		t.Fatal(err)
 	}
 
-	// Do not check the struct itself, but it stringified form
+	// Do not check the struct itself, but its stringified form
 	ok := CmpSmuggle(t, gotTime, func(s fmt.Stringer) string {
 		return s.String()
 	}, "2018-05-23 12:13:14 +0000 UTC")

@@ -188,9 +188,19 @@ func TestEqualSlice(t *testing.T) {
 	checkOK(t, []int{1, 2}, []int{1, 2})
 
 	// Same pointer
-	array := [2]int{1, 2}
+	array := [...]int{2, 1, 4, 3}
 	checkOK(t, array[:], array[:])
 	checkOK(t, ([]int)(nil), ([]int)(nil))
+
+	// Same pointer, but not same len
+	checkError(t, array[:2], array[:],
+		expectedError{
+			Message: mustBe("comparing slices, from index #2"),
+			Path:    mustBe("DATA"),
+			// Missing items are not sorted
+			Summary: mustBe(`Missing 2 items: (4,
+                  3)`),
+		})
 
 	checkError(t, []int{1, 2}, []int{1, 2, 3},
 		expectedError{
@@ -366,13 +376,16 @@ func TestEqualMap(t *testing.T) {
 			Summary: mustMatch(`Missing key:[^"]+"test"`),
 		})
 
-	checkError(t, map[string]int{"foo": 1, "bar": 4, "test+": 12},
-		map[string]int{"foo": 1, "bar": 4, "test-": 12},
+	// Extra and missing keys are sorted
+	checkError(t, map[string]int{"foo": 1, "bar": 4, "test1+": 12, "test2+": 13},
+		map[string]int{"foo": 1, "bar": 4, "test1-": 12, "test2-": 13},
 		expectedError{
 			Message: mustBe("comparing map"),
 			Path:    mustBe("DATA"),
-			Summary: mustMatch(`Missing key:[^"]+"test-".*
-  Extra key:[^"]+"test\+"`),
+			Summary: mustBe(`Missing 2 keys: ("test1-",
+                 "test2-")
+  Extra 2 keys: ("test1+",
+                 "test2+")`),
 		})
 }
 
