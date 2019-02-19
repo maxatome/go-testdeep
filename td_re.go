@@ -145,7 +145,8 @@ func (r *tdRe) matchStringCaptures(ctx ctxerr.Context, got string, result [][]st
 }
 
 func (r *tdRe) matchCaptures(ctx ctxerr.Context, captures []string) (err *ctxerr.Error) {
-	return deepValueEqual(ctx.ResetPath("("+ctx.Path+" =~ "+r.String()+")"),
+	return deepValueEqual(
+		ctx.ResetPath("("+ctx.Path.String()+" =~ "+r.String()+")"),
 		reflect.ValueOf(captures), r.captures)
 }
 

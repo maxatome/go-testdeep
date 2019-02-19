@@ -242,7 +242,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 	case reflect.Struct:
 		sType := got.Type()
 		for i, n := 0, got.NumField(); i < n; i++ {
-			err = deepValueEqual(ctx.AddDepth("."+sType.Field(i).Name),
+			err = deepValueEqual(ctx.AddField(sType.Field(i).Name),
 				got.Field(i), expected.Field(i))
 			if err != nil {
 				return

@@ -164,8 +164,8 @@ func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, a
 		t.Helper()
 	}
 
-	if ctx.Path == contextDefaultRootName {
-		ctx.Path = contextPanicRootName
+	if ctx.Path.Len() == 1 && ctx.Path.String() == contextDefaultRootName {
+		ctx.Path = ctxerr.NewPath(contextPanicRootName)
 	}
 
 	var (
@@ -192,7 +192,7 @@ func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, a
 		return false
 	}
 
-	return cmpDeeply(ctx.AddDepth("→panic()"), t, panicParam, expected, args...)
+	return cmpDeeply(ctx.AddCustomLevel("→panic()"), t, panicParam, expected, args...)
 }
 
 func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{}) bool {
@@ -233,8 +233,8 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 		t.Helper()
 	}
 
-	if ctx.Path == contextDefaultRootName {
-		ctx.Path = contextPanicRootName
+	if ctx.Path.Len() == 1 && ctx.Path.String() == contextDefaultRootName {
+		ctx.Path = ctxerr.NewPath(contextPanicRootName)
 	}
 
 	formatError(t,

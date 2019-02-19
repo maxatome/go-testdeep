@@ -38,7 +38,7 @@ func (s SmuggledGot) contextAndGot(ctx ctxerr.Context) (ctxerr.Context, reflect.
 	} else {
 		name = smuggled
 	}
-	return ctx.AddDepth(name), reflect.ValueOf(s.Got)
+	return ctx.AddCustomLevel(name), reflect.ValueOf(s.Got)
 }
 
 type tdSmuggle struct {
@@ -393,10 +393,10 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 
 			case smuggleValueType:
 				smv := newGot.Interface().(smuggleValue)
-				newCtx, newGot = ctx.AddDepth("."+smv.Path), smv.Value
+				newCtx, newGot = ctx.AddCustomLevel("."+smv.Path), smv.Value
 
 			default:
-				newCtx = ctx.AddDepth(smuggled)
+				newCtx = ctx.AddCustomLevel(smuggled)
 			}
 		}
 		return deepValueEqual(newCtx, newGot, s.expectedValue)
