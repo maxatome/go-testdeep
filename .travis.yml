@@ -8,12 +8,13 @@ matrix:
     - go: 1.9.x
     - go: 1.10.x
     - go: 1.11.x
+    - go: 1.12
       env:
         - GO_TEST_SAFE_FLAGS="-covermode=atomic -coverprofile=coverage-safe.out ./..."
         - GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out ./..."
         - USE_GOMETALINTER=1
       install:
-        - version=2.0.12; name=gometalinter-2.0.12-linux-amd64;
+        - version=3.0.0; name=gometalinter-$version-linux-amd64;
           wget -q -O - https://github.com/alecthomas/gometalinter/releases/download/v$version/$name.tar.gz |
             tar -zxvf - -C $GOPATH/bin && mv $GOPATH/bin/$name/[a-z]* $GOPATH/bin
       after_success:
@@ -37,7 +38,6 @@ script:
         --enable=errcheck
         --enable=gofmt
         --enable=golint
-        --enable=gosimple
         --enable=ineffassign
         --enable=maligned
         --enable=unconvert
