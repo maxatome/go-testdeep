@@ -37,7 +37,7 @@ func init() {
 // InitColors initializes all colors from environment. It is
 // automatically called in init(). It is exported to be used in tests.
 func InitColors() {
-	_, colorTestNameOn, colorTestNameOff = colorFromEnv(envColorTitle, "yellow")
+	_, colorTestNameOn, colorTestNameOff = colorFromEnv(envColorTestName, "yellow")
 	_, colorTitleOn, colorTitleOff = colorFromEnv(envColorTitle, "cyan")
 	colorOKOn, colorOKOnBold, colorOKOff = colorFromEnv(envColorOK, "green")
 	colorBadOn, colorBadOnBold, colorBadOff = colorFromEnv(envColorBad, "red")
