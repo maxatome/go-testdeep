@@ -44,6 +44,6 @@ script:
         --enable=staticcheck
         --deadline=4m
         -e '^internal/dark/bypass\.go'
-        -e '^(../){5}'
+        -e '^(\.\./){5}'
         ./...;
       fi
