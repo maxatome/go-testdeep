@@ -8,15 +8,17 @@ matrix:
     - go: 1.9.x
     - go: 1.10.x
     - go: 1.11.x
-    - go: 1.12
+    - go: 1.12.x
       env:
         - GO_TEST_SAFE_FLAGS="-covermode=atomic -coverprofile=coverage-safe.out ./..."
         - GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out ./..."
         - USE_GOMETALINTER=1
       install:
-        - version=3.0.0; name=gometalinter-$version-linux-amd64;
-          wget -q -O - https://github.com/alecthomas/gometalinter/releases/download/v$version/$name.tar.gz |
-            tar -zxvf - -C $GOPATH/bin && mv $GOPATH/bin/$name/[a-z]* $GOPATH/bin
+        - >
+          version=1.15.0; name=golangci-lint-$version-linux-amd64;
+          wget -q -O - https://github.com/golangci/golangci-lint/releases/download/v$version/$name.tar.gz |
+            tar -zxvf - -C $GOPATH/bin &&
+              mv $GOPATH/bin/$name/golangci-lint $GOPATH/bin
       after_success:
         - go get github.com/mattn/goveralls
         - go get github.com/wadey/gocovmerge
@@ -32,18 +34,6 @@ script:
   - go get -t ./...
   - go test -race -tags safe $GO_TEST_SAFE_FLAGS ./...
   - go test -race $GO_TEST_UNSAFE_FLAGS ./...
-  - if [ "$USE_GOMETALINTER" = 1 ]; then
-      gometalinter
-        --disable-all
-        --enable=errcheck
-        --enable=gofmt
-        --enable=golint
-        --enable=ineffassign
-        --enable=maligned
-        --enable=unconvert
-        --enable=staticcheck
-        --deadline=4m
-        -e '^internal/dark/bypass\.go'
-        -e '^(\.\./){5}'
-        ./...;
-      fi
+  - >
+    [ "$USE_GOMETALINTER" != 1 ] ||
+      golangci-lint run -E gofmt -E golint -E maligned -E prealloc -E unconvert ./...

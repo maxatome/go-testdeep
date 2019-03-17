@@ -14,22 +14,6 @@ import (
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
-type ComplexStruct struct { // nolint: megacheck,staticcheck
-	ItemsByName map[string]*ComplexStructItem
-	ItemsById   map[uint32]*ComplexStructItem
-	Items       []*ComplexStructItem
-	Label       string
-	Weight      float64
-}
-
-type ComplexStructItem struct { // nolint: megacheck,staticcheck
-	Name       string
-	Id         uint32
-	properties []ItemProperty
-	propByName map[string]ItemProperty
-	Enabled    bool
-}
-
 type ItemPropertyKind uint8
 
 type ItemProperty struct {
@@ -425,7 +409,7 @@ func TestEqualChannel(t *testing.T) {
 //
 // Others
 func TestEqualOthers(t *testing.T) {
-	type Private struct {
+	type Private struct { // nolint: maligned
 		num   int
 		num8  int8
 		num16 int16
