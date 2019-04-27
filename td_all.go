@@ -39,7 +39,7 @@ func (a *tdAll) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		// to accumulate it silently
 		origErr = deepValueEqualFinal(
 			ctx.ResetErrors().
-				AddDepth(fmt.Sprintf("<All#%d/%d>", idx+1, len(a.items))),
+				AddCustomLevel(fmt.Sprintf("<All#%d/%d>", idx+1, len(a.items))),
 			got, item)
 		if origErr != nil {
 			if ctx.BooleanError {

@@ -89,7 +89,7 @@ func newContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 	config.sanitize()
 
 	ctx = ctxerr.Context{
-		Path:           config.RootName,
+		Path:           ctxerr.NewPath(config.RootName),
 		Visited:        visited.NewVisited(),
 		MaxErrors:      config.MaxErrors,
 		FailureIsFatal: config.FailureIsFatal,

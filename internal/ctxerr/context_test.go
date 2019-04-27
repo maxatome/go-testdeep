@@ -204,40 +204,44 @@ func TestContextCollectError(t *testing.T) {
 }
 
 func TestContextPath(t *testing.T) {
-	ctx := ctxerr.Context{Path: "DATA"}
-	ctx = ctx.AddDepth(".field")
-	test.EqualStr(t, ctx.Path, "DATA.field")
+	ctx := ctxerr.Context{Path: ctxerr.NewPath("DATA")}
+	ctx = ctx.AddField("field")
+	test.EqualStr(t, ctx.Path.String(), "DATA.field")
 	test.EqualInt(t, ctx.Depth, 1)
 
 	ctx = ctx.AddPtr(2)
-	test.EqualStr(t, ctx.Path, "**DATA.field")
+	test.EqualStr(t, ctx.Path.String(), "**DATA.field")
 	test.EqualInt(t, ctx.Depth, 2)
 
-	ctx = ctx.AddDepth(".another")
-	test.EqualStr(t, ctx.Path, "(**DATA.field).another")
+	ctx = ctx.AddField("another")
+	test.EqualStr(t, ctx.Path.String(), "(*DATA.field).another")
 	test.EqualInt(t, ctx.Depth, 3)
 
-	ctx = ctxerr.Context{Path: "DATA"}
+	ctx = ctx.AddCustomLevel("→cust")
+	test.EqualStr(t, ctx.Path.String(), "(*DATA.field).another→cust")
+	test.EqualInt(t, ctx.Depth, 4)
+
+	ctx = ctxerr.Context{Path: ctxerr.NewPath("DATA")}
 	ctx = ctx.AddArrayIndex(18)
-	test.EqualStr(t, ctx.Path, "DATA[18]")
+	test.EqualStr(t, ctx.Path.String(), "DATA[18]")
 	test.EqualInt(t, ctx.Depth, 1)
 
-	ctx = ctxerr.Context{Path: "DATA"}
+	ctx = ctxerr.Context{Path: ctxerr.NewPath("DATA")}
 	ctx = ctx.AddMapKey("foo")
-	test.EqualStr(t, ctx.Path, `DATA["foo"]`) // special case of util.ToString()
+	test.EqualStr(t, ctx.Path.String(), `DATA["foo"]`) // special case of util.ToString()
 	test.EqualInt(t, ctx.Depth, 1)
 
-	ctx = ctxerr.Context{Path: "DATA"}
+	ctx = ctxerr.Context{Path: ctxerr.NewPath("DATA")}
 	ctx = ctx.AddMapKey(12)
-	test.EqualStr(t, ctx.Path, `DATA[12]`)
+	test.EqualStr(t, ctx.Path.String(), `DATA[12]`)
 	test.EqualInt(t, ctx.Depth, 1)
 
-	ctx = ctxerr.Context{Path: "DATA"}
+	ctx = ctxerr.Context{Path: ctxerr.NewPath("DATA")}
 	ctx = ctx.AddFunctionCall("foobar")
-	test.EqualStr(t, ctx.Path, "foobar(DATA)")
+	test.EqualStr(t, ctx.Path.String(), "foobar(DATA)")
 	test.EqualInt(t, ctx.Depth, 1)
 
 	ctx = ctx.ResetPath("NEW")
-	test.EqualStr(t, ctx.Path, "NEW")
+	test.EqualStr(t, ctx.Path.String(), "NEW")
 	test.EqualInt(t, ctx.Depth, 2)
 }

@@ -27,9 +27,9 @@ var _ TestDeep = &tdZero{}
 //
 // Beware that:
 //
-//   CmpDeeply(t, AnyStruct{}, Zero())       // is true
-//   CmpDeeply(t, &AnyStruct{}, Zero())      // is false, coz pointer ≠ nil
-//   CmpDeeply(t, &AnyStruct{}, Ptr(Zero())) // is true
+//   Cmp(t, AnyStruct{}, Zero())       // is true
+//   Cmp(t, &AnyStruct{}, Zero())      // is false, coz pointer ≠ nil
+//   Cmp(t, &AnyStruct{}, Ptr(Zero())) // is true
 func Zero() TestDeep {
 	return &tdZero{
 		BaseOKNil: NewBaseOKNil(3),
@@ -63,9 +63,9 @@ var _ TestDeep = &tdNotZero{}
 //
 // Beware that:
 //
-//   CmpDeeply(t, AnyStruct{}, NotZero())       // is false
-//   CmpDeeply(t, &AnyStruct{}, NotZero())      // is true, coz pointer ≠ nil
-//   CmpDeeply(t, &AnyStruct{}, Ptr(NotZero())) // is false
+//   Cmp(t, AnyStruct{}, NotZero())       // is false
+//   Cmp(t, &AnyStruct{}, NotZero())      // is true, coz pointer ≠ nil
+//   Cmp(t, &AnyStruct{}, Ptr(NotZero())) // is false
 func NotZero() TestDeep {
 	return &tdNotZero{
 		BaseOKNil: NewBaseOKNil(3),

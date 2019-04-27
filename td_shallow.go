@@ -36,13 +36,13 @@ func stringPointer(s string) uintptr {
 // "expectedPointer" to succeed.
 //
 //   a, b := 123, 123
-//   CmpDeeply(t, &a, Shallow(&a)) // succeeds
-//   CmpDeeply(t, &a, Shallow(&b)) // fails even if a == b as &a != &b
+//   Cmp(t, &a, Shallow(&a)) // succeeds
+//   Cmp(t, &a, Shallow(&b)) // fails even if a == b as &a != &b
 //
 //   back := "foobarfoobar"
 //   a, b := back[:6], back[6:]
 //   // a == b but...
-//   CmpDeeply(t, &a, Shallow(&b)) // fails
+//   Cmp(t, &a, Shallow(&b)) // fails
 //
 // Be careful for slices and strings! Shallow can succeed but the
 // slices/strings not be identical because of their different
@@ -50,13 +50,13 @@ func stringPointer(s string) uintptr {
 //
 //   a := "foobar yes!"
 //   b := a[:1]                    // aka. "f"
-//   CmpDeeply(t, &a, Shallow(&b)) // succeeds as both strings point to the same area, even if len() differ
+//   Cmp(t, &a, Shallow(&b)) // succeeds as both strings point to the same area, even if len() differ
 //
 // The same behavior occurs for slices:
 //
 //   a := []int{1, 2, 3, 4, 5, 6}
 //   b := a[:2]                    // aka. []int{1, 2}
-//   CmpDeeply(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
+//   Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
 func Shallow(expectedPtr interface{}) TestDeep {
 	vptr := reflect.ValueOf(expectedPtr)
 

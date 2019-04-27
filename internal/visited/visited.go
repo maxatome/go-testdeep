@@ -30,8 +30,8 @@ func NewVisited() Visited {
 // Record checks and, if needed, records a new entry for (got,
 // expected) couple. It returns true if got & expected are pointers
 // and have already been seen together. It returns false otherwise.
-// It is the caller responsibilty to check that got and expected types
-// are the same.
+// It is the caller responsibility to check that got and expected
+// types are the same.
 func (v Visited) Record(got, expected reflect.Value) bool {
 	switch got.Kind() {
 	case reflect.Map, reflect.Slice, reflect.Ptr, reflect.Interface:

@@ -66,10 +66,10 @@ var _ TestDeep = &tdString{}
 // fmt.Stringer.)
 //
 //   err := errors.New("error!")
-//   CmpDeeply(t, err, String("error!")) // succeeds
+//   Cmp(t, err, String("error!")) // succeeds
 //
 //   bstr := bytes.NewBufferString("fmt.Stringer!")
-//   CmpDeeply(t, bstr, String("fmt.Stringer!")) // succeeds
+//   Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 func String(expected string) TestDeep {
 	return &tdString{
 		tdStringBase: newStringBase(expected),
@@ -110,13 +110,13 @@ var _ TestDeep = &tdHasPrefix{}
 // tested before fmt.Stringer.)
 //
 //   type Foobar string
-//   CmpDeeply(t, Foobar("foobar"), HasPrefix("foo")) // succeeds
+//   Cmp(t, Foobar("foobar"), HasPrefix("foo")) // succeeds
 //
 //   err := errors.New("error!")
-//   CmpDeeply(t, err, HasPrefix("err")) // succeeds
+//   Cmp(t, err, HasPrefix("err")) // succeeds
 //
 //   bstr := bytes.NewBufferString("fmt.Stringer!")
-//   CmpDeeply(t, bstr, HasPrefix("fmt")) // succeeds
+//   Cmp(t, bstr, HasPrefix("fmt")) // succeeds
 func HasPrefix(expected string) TestDeep {
 	return &tdHasPrefix{
 		tdStringBase: newStringBase(expected),
@@ -157,13 +157,13 @@ var _ TestDeep = &tdHasSuffix{}
 // tested before fmt.Stringer.)
 //
 //   type Foobar string
-//   CmpDeeply(t, Foobar("foobar"), HasSuffix("bar")) // succeeds
+//   Cmp(t, Foobar("foobar"), HasSuffix("bar")) // succeeds
 //
 //   err := errors.New("error!")
-//   CmpDeeply(t, err, HasSuffix("!")) // succeeds
+//   Cmp(t, err, HasSuffix("!")) // succeeds
 //
 //   bstr := bytes.NewBufferString("fmt.Stringer!")
-//   CmpDeeply(t, bstr, HasSuffix("!")) // succeeds
+//   Cmp(t, bstr, HasSuffix("!")) // succeeds
 func HasSuffix(expected string) TestDeep {
 	return &tdHasSuffix{
 		tdStringBase: newStringBase(expected),

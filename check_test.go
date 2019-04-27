@@ -134,7 +134,7 @@ func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 		return false
 	}
 
-	if !cmpErrorStr(t, err, err.Context.Path, expectedError.Path,
+	if !cmpErrorStr(t, err, err.Context.Path.String(), expectedError.Path,
 		"Context.Path", args...) {
 		return false
 	}

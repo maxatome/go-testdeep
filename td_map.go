@@ -175,10 +175,10 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 // entry to succeed. But some expected entries can be missing from the
 // compared map.
 //
-//   CmpDeeply(t, map[string]int{"a": 1},
+//   Cmp(t, map[string]int{"a": 1},
 //     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // succeeds
 //
-//   CmpDeeply(t, map[string]int{"a": 1, "c": 3},
+//   Cmp(t, map[string]int{"a": 1, "c": 3},
 //     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, extra {"c": 3}
 //
 // TypeBehind method returns the reflect.Type of "model".
@@ -197,10 +197,10 @@ func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 // During a match, each expected entry should match in the compared
 // map. But some entries in the compared map may not be expected.
 //
-//   CmpDeeply(t, map[string]int{"a": 1, "b": 2},
+//   Cmp(t, map[string]int{"a": 1, "b": 2},
 //     SuperMapOf(map[string]int{"a": 1}, nil) // succeeds
 //
-//   CmpDeeply(t, map[string]int{"a": 1, "c": 3},
+//   Cmp(t, map[string]int{"a": 1, "c": 3},
 //     SuperMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, missing {"b": 2}
 //
 // TypeBehind method returns the reflect.Type of "model".

@@ -68,7 +68,7 @@
 //     }
 //   }
 //
-// With testdeep, it is a way simple, thanks to CmpDeeply and
+// With testdeep, it is a way simple, thanks to Cmp and
 // CmpNoError functions:
 //
 //   import (
@@ -83,7 +83,7 @@
 //     record, err := CreateRecord()
 //
 //     if td.CmpNoError(t, err) {
-//       td.CmpDeeply(t, record,
+//       td.Cmp(t, record,
 //         Struct(
 //           &Record{
 //             Name: "Bob",
@@ -101,7 +101,7 @@
 // be found below to cover most (all?) needed tests. See
 // https://godoc.org/github.com/maxatome/go-testdeep#TestDeep
 //
-// The CmpDeeply function is the keystone of this package, but to make
+// The Cmp function is the keystone of this package, but to make
 // the writing of tests even easier, the family of Cmp* functions are
 // provided and act as shortcuts. Using CmpStruct function, the
 // previous example can be written as:

@@ -33,7 +33,7 @@ import (
 //   - map: shorter length is lesser, then sorted by address
 //   - functions, channels and unsafe pointer are sorted by their address
 //   - struct: comparison is spread to each field
-//   - pointer: comparison is spred to the pointed value
+//   - pointer: comparison is spread to the pointed value
 //   - arrays: comparison is spread to each item
 //   - slice: comparison is spread to each item, then shorter length is lesser
 //   - interface: comparison is spread to the value

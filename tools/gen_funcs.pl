@@ -89,7 +89,6 @@ package testdeep
 
 import (
 \t"time"
-\t"testing" // used by t.Helper() workaround below
 )
 EOH
 
@@ -120,7 +119,7 @@ foreach my $func (sort keys %funcs)
 
 // Cmp$func is a shortcut for:
 //
-//   CmpDeeply(t, got, $func($call_args), args...)
+//   Cmp(t, got, $func($call_args), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#$func for details.
 EOF
@@ -129,7 +128,7 @@ EOF
 
 // $func is a shortcut for:
 //
-//   t.CmpDeeply(got, $func($call_args), args...)
+//   t.Cmp(got, $func($call_args), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#$func for details.
 EOF
@@ -152,38 +151,19 @@ EOF
 // Returns true if the test is OK, false if it fails.
 EOF
 
-    # Workaround to bypass golang issue
-    # https://github.com/golang/go/issues/26995 when race detector on
-    chop(my $call_helper_comment = <<EOH);
-// Work around https://github.com/golang/go/issues/26995 issue
-// when corrected, this block should be replaced by t.Helper()
-EOH
-
     $funcs_contents .= $func_comment . <<EOF;
 $ARGS_COMMENT
 func Cmp$func(t TestingT, $cmp_args, args ...interface{}) bool {
-\t$call_helper_comment
-\tif tt, ok := t.(*testing.T); ok {
-\t\ttt.Helper()
-\t} else {
-\t\tt.Helper()
-\t}
-
-\treturn CmpDeeply(t, got, $func($call_args), args...)
+\tt.Helper()
+\treturn Cmp(t, got, $func($call_args), args...)
 }
 EOF
 
     $t_contents .= $func_comment . <<EOF;
 $ARGS_COMMENT
 func (t *T)$func($cmp_args, args ...interface{}) bool {
-\t$call_helper_comment
-\tif tt, ok := t.TestingFT.(*testing.T); ok {
-\t\ttt.Helper()
-\t} else {
-\t\tt.Helper()
-\t}
-
-\treturn t.CmpDeeply(got, $func($call_args), args...)
+\tt.Helper()
+\treturn t.Cmp(got, $func($call_args), args...)
 }
 EOF
 }
@@ -273,7 +253,7 @@ foreach my $func (sort keys %funcs)
 			  [ "t.$func(",     "T_$func",  \$t_test_contents ])
 	{
 	    (my $code = $example->{code}) =~
-		s%CmpDeeply\(t,\s+($rparam),\s+$func($rep)%
+		s%Cmp\(t,\s+($rparam),\s+$func($rep)%
                   my @params = extract_params("$func$name", $2);
                   my $repl = $info->[0] . $1;
                   for (my $i = 0; $i < @$args; $i++)
@@ -319,7 +299,7 @@ EOF
 
 {
     $t_test_contents =~ s/t := &testing\.T\{\}/t := NewT(&testing\.T\{\})/g;
-    $t_test_contents =~ s/CmpDeeply\(t,/t.CmpDeeply(/g;
+    $t_test_contents =~ s/Cmp\(t,/t.Cmp(/g;
 
     open(my $fh, "| gofmt -s > '$dir/t_test.go'");
     print $fh $t_test_contents;
@@ -341,6 +321,8 @@ foreach my $go_file (do { opendir(my $dh, $dir);
     {
 	my($comment, $func, $params) = ($1, $2, $3);
 
+	next if $func eq '(t *T) CmpDeeply' or $func eq 'CmpDeeply';
+
 	if ($params =~ /\Qargs ...interface{})\E\z/)
 	{
 	    chomp $comment;
@@ -357,6 +339,3 @@ if (@args_errors)
 	. join("\n- ", @args_errors)
 	. "\n";
 }
-
-#$funcs_test_contents !~ /CmpDeeply/
-#    or die "At least one CmpDeeply() occurrence has not been replaced!\n";

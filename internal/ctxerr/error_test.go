@@ -18,7 +18,9 @@ func TestError(t *testing.T) {
 	defer ctxerr.SaveColorState()()
 
 	err := ctxerr.Error{
-		Context:  ctxerr.Context{Path: "DATA[12].Field"},
+		Context: ctxerr.Context{
+			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
+		},
 		Message:  "Error message",
 		Got:      1,
 		Expected: 2,
@@ -50,7 +52,9 @@ func TestError(t *testing.T) {
 	expected: 2`)
 
 	err = ctxerr.Error{
-		Context:  ctxerr.Context{Path: "DATA[12].Field"},
+		Context: ctxerr.Context{
+			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
+		},
 		Message:  "Error message",
 		Got:      1,
 		Expected: 2,
@@ -67,7 +71,9 @@ func TestError(t *testing.T) {
 [under TestDeep operator Operator at file.go:23]`)
 
 	err = ctxerr.Error{
-		Context: ctxerr.Context{Path: "DATA[12].Field"},
+		Context: ctxerr.Context{
+			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
+		},
 		Message: "Error message",
 		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
@@ -76,7 +82,9 @@ func TestError(t *testing.T) {
 			Line: 23,
 		},
 		Origin: &ctxerr.Error{
-			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
+			Context: ctxerr.Context{
+				Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field").AddCustomLevel("<All#1/2>"),
+			},
 			Message: "Origin error message",
 			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
@@ -99,7 +107,9 @@ Originates from following error:
 	test.EqualStr(t, err.SummaryString(), "666")
 
 	err = ctxerr.Error{
-		Context: ctxerr.Context{Path: "DATA[12].Field"},
+		Context: ctxerr.Context{
+			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
+		},
 		Message: "Error message",
 		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
@@ -108,7 +118,9 @@ Originates from following error:
 			Line: 23,
 		},
 		Origin: &ctxerr.Error{
-			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
+			Context: ctxerr.Context{
+				Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field").AddCustomLevel("<All#1/2>"),
+			},
 			Message: "Origin error message",
 			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
@@ -119,7 +131,9 @@ Originates from following error:
 		},
 		// Next error at same location
 		Next: &ctxerr.Error{
-			Context: ctxerr.Context{Path: "DATA[13].Field"},
+			Context: ctxerr.Context{
+				Path: ctxerr.NewPath("DATA").AddArrayIndex(13).AddField("Field"),
+			},
 			Message: "Error message",
 			Summary: ctxerr.NewSummary("888"),
 			Location: location.Location{
@@ -141,7 +155,7 @@ DATA[13].Field: Error message
 [under TestDeep operator Operator at file.go:23]`)
 
 	err = ctxerr.Error{
-		Context: ctxerr.Context{Path: "DATA[12].Field"},
+		Context: ctxerr.Context{Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field")},
 		Message: "Error message",
 		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
@@ -150,7 +164,9 @@ DATA[13].Field: Error message
 			Line: 23,
 		},
 		Origin: &ctxerr.Error{
-			Context: ctxerr.Context{Path: "DATA[12].Field<All#1/2>"},
+			Context: ctxerr.Context{
+				Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field").AddCustomLevel("<All#1/2>"),
+			},
 			Message: "Origin error message",
 			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
@@ -161,7 +177,9 @@ DATA[13].Field: Error message
 		},
 		// Next error at different location
 		Next: &ctxerr.Error{
-			Context: ctxerr.Context{Path: "DATA[13].Field"},
+			Context: ctxerr.Context{
+				Path: ctxerr.NewPath("DATA").AddArrayIndex(13).AddField("Field"),
+			},
 			Message: "Error message",
 			Summary: ctxerr.NewSummary("888"),
 			Location: location.Location{

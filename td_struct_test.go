@@ -326,7 +326,7 @@ func TestStructPrivateFields(t *testing.T) {
 		},
 		name:       "foobar",
 		nameb:      []byte("foobar"),
-		err:        errors.New("the error!"),
+		err:        errors.New("the error"),
 		iface:      1234,
 		properties: []int{20, 22, 23, 21},
 		birth:      d("2018-04-01T10:11:12.123456789Z"),

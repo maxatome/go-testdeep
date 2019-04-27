@@ -9,13 +9,12 @@
 package testdeep
 
 import (
-	"testing" // used by t.Helper() workaround below
 	"time"
 )
 
 // All is a shortcut for:
 //
-//   t.CmpDeeply(got, All(expectedValues...), args...)
+//   t.Cmp(got, All(expectedValues...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#All for details.
 //
@@ -26,20 +25,13 @@ import (
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, All(expectedValues...), args...)
+	t.Helper()
+	return t.Cmp(got, All(expectedValues...), args...)
 }
 
 // Any is a shortcut for:
 //
-//   t.CmpDeeply(got, Any(expectedValues...), args...)
+//   t.Cmp(got, Any(expectedValues...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Any for details.
 //
@@ -50,20 +42,13 @@ func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Any(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Any(expectedValues...), args...)
+	t.Helper()
+	return t.Cmp(got, Any(expectedValues...), args...)
 }
 
 // Array is a shortcut for:
 //
-//   t.CmpDeeply(got, Array(model, expectedEntries), args...)
+//   t.Cmp(got, Array(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Array for details.
 //
@@ -74,20 +59,13 @@ func (t *T) Any(got interface{}, expectedValues []interface{}, args ...interface
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Array(got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Array(model, expectedEntries), args...)
+	t.Helper()
+	return t.Cmp(got, Array(model, expectedEntries), args...)
 }
 
 // ArrayEach is a shortcut for:
 //
-//   t.CmpDeeply(got, ArrayEach(expectedValue), args...)
+//   t.Cmp(got, ArrayEach(expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach for details.
 //
@@ -98,20 +76,13 @@ func (t *T) Array(got interface{}, model interface{}, expectedEntries ArrayEntri
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) ArrayEach(got interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, ArrayEach(expectedValue), args...)
+	t.Helper()
+	return t.Cmp(got, ArrayEach(expectedValue), args...)
 }
 
 // Bag is a shortcut for:
 //
-//   t.CmpDeeply(got, Bag(expectedItems...), args...)
+//   t.Cmp(got, Bag(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Bag for details.
 //
@@ -122,20 +93,13 @@ func (t *T) ArrayEach(got interface{}, expectedValue interface{}, args ...interf
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Bag(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Bag(expectedItems...), args...)
+	t.Helper()
+	return t.Cmp(got, Bag(expectedItems...), args...)
 }
 
 // Between is a shortcut for:
 //
-//   t.CmpDeeply(got, Between(from, to, bounds), args...)
+//   t.Cmp(got, Between(from, to, bounds), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Between for details.
 //
@@ -150,20 +114,13 @@ func (t *T) Bag(got interface{}, expectedItems []interface{}, args ...interface{
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Between(got interface{}, from interface{}, to interface{}, bounds BoundsKind, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Between(from, to, bounds), args...)
+	t.Helper()
+	return t.Cmp(got, Between(from, to, bounds), args...)
 }
 
 // Cap is a shortcut for:
 //
-//   t.CmpDeeply(got, Cap(val), args...)
+//   t.Cmp(got, Cap(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Cap for details.
 //
@@ -174,20 +131,13 @@ func (t *T) Between(got interface{}, from interface{}, to interface{}, bounds Bo
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Cap(got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Cap(val), args...)
+	t.Helper()
+	return t.Cmp(got, Cap(val), args...)
 }
 
 // Code is a shortcut for:
 //
-//   t.CmpDeeply(got, Code(fn), args...)
+//   t.Cmp(got, Code(fn), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Code for details.
 //
@@ -198,20 +148,13 @@ func (t *T) Cap(got interface{}, val interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Code(fn), args...)
+	t.Helper()
+	return t.Cmp(got, Code(fn), args...)
 }
 
 // Contains is a shortcut for:
 //
-//   t.CmpDeeply(got, Contains(expectedValue), args...)
+//   t.Cmp(got, Contains(expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Contains for details.
 //
@@ -222,20 +165,13 @@ func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Contains(got interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Contains(expectedValue), args...)
+	t.Helper()
+	return t.Cmp(got, Contains(expectedValue), args...)
 }
 
 // ContainsKey is a shortcut for:
 //
-//   t.CmpDeeply(got, ContainsKey(expectedValue), args...)
+//   t.Cmp(got, ContainsKey(expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey for details.
 //
@@ -246,20 +182,13 @@ func (t *T) Contains(got interface{}, expectedValue interface{}, args ...interfa
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) ContainsKey(got interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, ContainsKey(expectedValue), args...)
+	t.Helper()
+	return t.Cmp(got, ContainsKey(expectedValue), args...)
 }
 
 // Empty is a shortcut for:
 //
-//   t.CmpDeeply(got, Empty(), args...)
+//   t.Cmp(got, Empty(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Empty for details.
 //
@@ -270,20 +199,13 @@ func (t *T) ContainsKey(got interface{}, expectedValue interface{}, args ...inte
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Empty(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Empty(), args...)
+	t.Helper()
+	return t.Cmp(got, Empty(), args...)
 }
 
 // Gt is a shortcut for:
 //
-//   t.CmpDeeply(got, Gt(val), args...)
+//   t.Cmp(got, Gt(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Gt for details.
 //
@@ -294,20 +216,13 @@ func (t *T) Empty(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Gt(got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Gt(val), args...)
+	t.Helper()
+	return t.Cmp(got, Gt(val), args...)
 }
 
 // Gte is a shortcut for:
 //
-//   t.CmpDeeply(got, Gte(val), args...)
+//   t.Cmp(got, Gte(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Gte for details.
 //
@@ -318,20 +233,13 @@ func (t *T) Gt(got interface{}, val interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Gte(got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Gte(val), args...)
+	t.Helper()
+	return t.Cmp(got, Gte(val), args...)
 }
 
 // HasPrefix is a shortcut for:
 //
-//   t.CmpDeeply(got, HasPrefix(expected), args...)
+//   t.Cmp(got, HasPrefix(expected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix for details.
 //
@@ -342,20 +250,13 @@ func (t *T) Gte(got interface{}, val interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) HasPrefix(got interface{}, expected string, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, HasPrefix(expected), args...)
+	t.Helper()
+	return t.Cmp(got, HasPrefix(expected), args...)
 }
 
 // HasSuffix is a shortcut for:
 //
-//   t.CmpDeeply(got, HasSuffix(expected), args...)
+//   t.Cmp(got, HasSuffix(expected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix for details.
 //
@@ -366,20 +267,13 @@ func (t *T) HasPrefix(got interface{}, expected string, args ...interface{}) boo
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, HasSuffix(expected), args...)
+	t.Helper()
+	return t.Cmp(got, HasSuffix(expected), args...)
 }
 
 // Isa is a shortcut for:
 //
-//   t.CmpDeeply(got, Isa(model), args...)
+//   t.Cmp(got, Isa(model), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Isa for details.
 //
@@ -390,20 +284,13 @@ func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) boo
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Isa(model), args...)
+	t.Helper()
+	return t.Cmp(got, Isa(model), args...)
 }
 
 // Len is a shortcut for:
 //
-//   t.CmpDeeply(got, Len(val), args...)
+//   t.Cmp(got, Len(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Len for details.
 //
@@ -414,20 +301,13 @@ func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Len(got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Len(val), args...)
+	t.Helper()
+	return t.Cmp(got, Len(val), args...)
 }
 
 // Lt is a shortcut for:
 //
-//   t.CmpDeeply(got, Lt(val), args...)
+//   t.Cmp(got, Lt(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Lt for details.
 //
@@ -438,20 +318,13 @@ func (t *T) Len(got interface{}, val interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Lt(got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Lt(val), args...)
+	t.Helper()
+	return t.Cmp(got, Lt(val), args...)
 }
 
 // Lte is a shortcut for:
 //
-//   t.CmpDeeply(got, Lte(val), args...)
+//   t.Cmp(got, Lte(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Lte for details.
 //
@@ -462,20 +335,13 @@ func (t *T) Lt(got interface{}, val interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Lte(got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Lte(val), args...)
+	t.Helper()
+	return t.Cmp(got, Lte(val), args...)
 }
 
 // Map is a shortcut for:
 //
-//   t.CmpDeeply(got, Map(model, expectedEntries), args...)
+//   t.Cmp(got, Map(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Map for details.
 //
@@ -486,20 +352,13 @@ func (t *T) Lte(got interface{}, val interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Map(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Map(model, expectedEntries), args...)
+	t.Helper()
+	return t.Cmp(got, Map(model, expectedEntries), args...)
 }
 
 // MapEach is a shortcut for:
 //
-//   t.CmpDeeply(got, MapEach(expectedValue), args...)
+//   t.Cmp(got, MapEach(expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#MapEach for details.
 //
@@ -510,20 +369,13 @@ func (t *T) Map(got interface{}, model interface{}, expectedEntries MapEntries, 
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) MapEach(got interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, MapEach(expectedValue), args...)
+	t.Helper()
+	return t.Cmp(got, MapEach(expectedValue), args...)
 }
 
 // N is a shortcut for:
 //
-//   t.CmpDeeply(got, N(num, tolerance), args...)
+//   t.Cmp(got, N(num, tolerance), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#N for details.
 //
@@ -538,20 +390,13 @@ func (t *T) MapEach(got interface{}, expectedValue interface{}, args ...interfac
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, N(num, tolerance), args...)
+	t.Helper()
+	return t.Cmp(got, N(num, tolerance), args...)
 }
 
 // NaN is a shortcut for:
 //
-//   t.CmpDeeply(got, NaN(), args...)
+//   t.Cmp(got, NaN(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NaN for details.
 //
@@ -562,20 +407,13 @@ func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...i
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) NaN(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, NaN(), args...)
+	t.Helper()
+	return t.Cmp(got, NaN(), args...)
 }
 
 // Nil is a shortcut for:
 //
-//   t.CmpDeeply(got, Nil(), args...)
+//   t.Cmp(got, Nil(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Nil for details.
 //
@@ -586,20 +424,13 @@ func (t *T) NaN(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Nil(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Nil(), args...)
+	t.Helper()
+	return t.Cmp(got, Nil(), args...)
 }
 
 // None is a shortcut for:
 //
-//   t.CmpDeeply(got, None(expectedValues...), args...)
+//   t.Cmp(got, None(expectedValues...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#None for details.
 //
@@ -610,20 +441,13 @@ func (t *T) Nil(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) None(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, None(expectedValues...), args...)
+	t.Helper()
+	return t.Cmp(got, None(expectedValues...), args...)
 }
 
 // Not is a shortcut for:
 //
-//   t.CmpDeeply(got, Not(expected), args...)
+//   t.Cmp(got, Not(expected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Not for details.
 //
@@ -634,20 +458,13 @@ func (t *T) None(got interface{}, expectedValues []interface{}, args ...interfac
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Not(expected), args...)
+	t.Helper()
+	return t.Cmp(got, Not(expected), args...)
 }
 
 // NotAny is a shortcut for:
 //
-//   t.CmpDeeply(got, NotAny(expectedItems...), args...)
+//   t.Cmp(got, NotAny(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotAny for details.
 //
@@ -658,20 +475,13 @@ func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, NotAny(expectedItems...), args...)
+	t.Helper()
+	return t.Cmp(got, NotAny(expectedItems...), args...)
 }
 
 // NotEmpty is a shortcut for:
 //
-//   t.CmpDeeply(got, NotEmpty(), args...)
+//   t.Cmp(got, NotEmpty(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty for details.
 //
@@ -682,20 +492,13 @@ func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interfa
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) NotEmpty(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, NotEmpty(), args...)
+	t.Helper()
+	return t.Cmp(got, NotEmpty(), args...)
 }
 
 // NotNaN is a shortcut for:
 //
-//   t.CmpDeeply(got, NotNaN(), args...)
+//   t.Cmp(got, NotNaN(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotNaN for details.
 //
@@ -706,20 +509,13 @@ func (t *T) NotEmpty(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) NotNaN(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, NotNaN(), args...)
+	t.Helper()
+	return t.Cmp(got, NotNaN(), args...)
 }
 
 // NotNil is a shortcut for:
 //
-//   t.CmpDeeply(got, NotNil(), args...)
+//   t.Cmp(got, NotNil(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotNil for details.
 //
@@ -730,20 +526,13 @@ func (t *T) NotNaN(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) NotNil(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, NotNil(), args...)
+	t.Helper()
+	return t.Cmp(got, NotNil(), args...)
 }
 
 // NotZero is a shortcut for:
 //
-//   t.CmpDeeply(got, NotZero(), args...)
+//   t.Cmp(got, NotZero(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotZero for details.
 //
@@ -754,20 +543,13 @@ func (t *T) NotNil(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) NotZero(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, NotZero(), args...)
+	t.Helper()
+	return t.Cmp(got, NotZero(), args...)
 }
 
 // PPtr is a shortcut for:
 //
-//   t.CmpDeeply(got, PPtr(val), args...)
+//   t.Cmp(got, PPtr(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#PPtr for details.
 //
@@ -778,20 +560,13 @@ func (t *T) NotZero(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) PPtr(got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, PPtr(val), args...)
+	t.Helper()
+	return t.Cmp(got, PPtr(val), args...)
 }
 
 // Ptr is a shortcut for:
 //
-//   t.CmpDeeply(got, Ptr(val), args...)
+//   t.Cmp(got, Ptr(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Ptr for details.
 //
@@ -802,20 +577,13 @@ func (t *T) PPtr(got interface{}, val interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Ptr(got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Ptr(val), args...)
+	t.Helper()
+	return t.Cmp(got, Ptr(val), args...)
 }
 
 // Re is a shortcut for:
 //
-//   t.CmpDeeply(got, Re(reg, capture), args...)
+//   t.Cmp(got, Re(reg, capture), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Re for details.
 //
@@ -830,20 +598,13 @@ func (t *T) Ptr(got interface{}, val interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Re(got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Re(reg, capture), args...)
+	t.Helper()
+	return t.Cmp(got, Re(reg, capture), args...)
 }
 
 // ReAll is a shortcut for:
 //
-//   t.CmpDeeply(got, ReAll(reg, capture), args...)
+//   t.Cmp(got, ReAll(reg, capture), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#ReAll for details.
 //
@@ -854,20 +615,13 @@ func (t *T) Re(got interface{}, reg interface{}, capture interface{}, args ...in
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) ReAll(got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, ReAll(reg, capture), args...)
+	t.Helper()
+	return t.Cmp(got, ReAll(reg, capture), args...)
 }
 
 // Set is a shortcut for:
 //
-//   t.CmpDeeply(got, Set(expectedItems...), args...)
+//   t.Cmp(got, Set(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Set for details.
 //
@@ -878,20 +632,13 @@ func (t *T) ReAll(got interface{}, reg interface{}, capture interface{}, args ..
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Set(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Set(expectedItems...), args...)
+	t.Helper()
+	return t.Cmp(got, Set(expectedItems...), args...)
 }
 
 // Shallow is a shortcut for:
 //
-//   t.CmpDeeply(got, Shallow(expectedPtr), args...)
+//   t.Cmp(got, Shallow(expectedPtr), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Shallow for details.
 //
@@ -902,20 +649,13 @@ func (t *T) Set(got interface{}, expectedItems []interface{}, args ...interface{
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Shallow(got interface{}, expectedPtr interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Shallow(expectedPtr), args...)
+	t.Helper()
+	return t.Cmp(got, Shallow(expectedPtr), args...)
 }
 
 // Slice is a shortcut for:
 //
-//   t.CmpDeeply(got, Slice(model, expectedEntries), args...)
+//   t.Cmp(got, Slice(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Slice for details.
 //
@@ -926,20 +666,13 @@ func (t *T) Shallow(got interface{}, expectedPtr interface{}, args ...interface{
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Slice(got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Slice(model, expectedEntries), args...)
+	t.Helper()
+	return t.Cmp(got, Slice(model, expectedEntries), args...)
 }
 
 // Smuggle is a shortcut for:
 //
-//   t.CmpDeeply(got, Smuggle(fn, expectedValue), args...)
+//   t.Cmp(got, Smuggle(fn, expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Smuggle for details.
 //
@@ -950,20 +683,13 @@ func (t *T) Slice(got interface{}, model interface{}, expectedEntries ArrayEntri
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Smuggle(got interface{}, fn interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Smuggle(fn, expectedValue), args...)
+	t.Helper()
+	return t.Cmp(got, Smuggle(fn, expectedValue), args...)
 }
 
 // String is a shortcut for:
 //
-//   t.CmpDeeply(got, String(expected), args...)
+//   t.Cmp(got, String(expected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#String for details.
 //
@@ -974,20 +700,13 @@ func (t *T) Smuggle(got interface{}, fn interface{}, expectedValue interface{}, 
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) String(got interface{}, expected string, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, String(expected), args...)
+	t.Helper()
+	return t.Cmp(got, String(expected), args...)
 }
 
 // Struct is a shortcut for:
 //
-//   t.CmpDeeply(got, Struct(model, expectedFields), args...)
+//   t.Cmp(got, Struct(model, expectedFields), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Struct for details.
 //
@@ -998,20 +717,13 @@ func (t *T) String(got interface{}, expected string, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Struct(model, expectedFields), args...)
+	t.Helper()
+	return t.Cmp(got, Struct(model, expectedFields), args...)
 }
 
 // SubBagOf is a shortcut for:
 //
-//   t.CmpDeeply(got, SubBagOf(expectedItems...), args...)
+//   t.Cmp(got, SubBagOf(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf for details.
 //
@@ -1022,20 +734,13 @@ func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFiel
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) SubBagOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, SubBagOf(expectedItems...), args...)
+	t.Helper()
+	return t.Cmp(got, SubBagOf(expectedItems...), args...)
 }
 
 // SubMapOf is a shortcut for:
 //
-//   t.CmpDeeply(got, SubMapOf(model, expectedEntries), args...)
+//   t.Cmp(got, SubMapOf(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SubMapOf for details.
 //
@@ -1046,20 +751,13 @@ func (t *T) SubBagOf(got interface{}, expectedItems []interface{}, args ...inter
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) SubMapOf(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, SubMapOf(model, expectedEntries), args...)
+	t.Helper()
+	return t.Cmp(got, SubMapOf(model, expectedEntries), args...)
 }
 
 // SubSetOf is a shortcut for:
 //
-//   t.CmpDeeply(got, SubSetOf(expectedItems...), args...)
+//   t.Cmp(got, SubSetOf(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf for details.
 //
@@ -1070,20 +768,13 @@ func (t *T) SubMapOf(got interface{}, model interface{}, expectedEntries MapEntr
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) SubSetOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, SubSetOf(expectedItems...), args...)
+	t.Helper()
+	return t.Cmp(got, SubSetOf(expectedItems...), args...)
 }
 
 // SuperBagOf is a shortcut for:
 //
-//   t.CmpDeeply(got, SuperBagOf(expectedItems...), args...)
+//   t.Cmp(got, SuperBagOf(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf for details.
 //
@@ -1094,20 +785,13 @@ func (t *T) SubSetOf(got interface{}, expectedItems []interface{}, args ...inter
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) SuperBagOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, SuperBagOf(expectedItems...), args...)
+	t.Helper()
+	return t.Cmp(got, SuperBagOf(expectedItems...), args...)
 }
 
 // SuperMapOf is a shortcut for:
 //
-//   t.CmpDeeply(got, SuperMapOf(model, expectedEntries), args...)
+//   t.Cmp(got, SuperMapOf(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf for details.
 //
@@ -1118,20 +802,13 @@ func (t *T) SuperBagOf(got interface{}, expectedItems []interface{}, args ...int
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) SuperMapOf(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, SuperMapOf(model, expectedEntries), args...)
+	t.Helper()
+	return t.Cmp(got, SuperMapOf(model, expectedEntries), args...)
 }
 
 // SuperSetOf is a shortcut for:
 //
-//   t.CmpDeeply(got, SuperSetOf(expectedItems...), args...)
+//   t.Cmp(got, SuperSetOf(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf for details.
 //
@@ -1142,20 +819,13 @@ func (t *T) SuperMapOf(got interface{}, model interface{}, expectedEntries MapEn
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, SuperSetOf(expectedItems...), args...)
+	t.Helper()
+	return t.Cmp(got, SuperSetOf(expectedItems...), args...)
 }
 
 // TruncTime is a shortcut for:
 //
-//   t.CmpDeeply(got, TruncTime(expectedTime, trunc), args...)
+//   t.Cmp(got, TruncTime(expectedTime, trunc), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#TruncTime for details.
 //
@@ -1170,20 +840,13 @@ func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...int
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, TruncTime(expectedTime, trunc), args...)
+	t.Helper()
+	return t.Cmp(got, TruncTime(expectedTime, trunc), args...)
 }
 
 // Zero is a shortcut for:
 //
-//   t.CmpDeeply(got, Zero(), args...)
+//   t.Cmp(got, Zero(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Zero for details.
 //
@@ -1194,13 +857,6 @@ func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Dura
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Zero(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
-	return t.CmpDeeply(got, Zero(), args...)
+	t.Helper()
+	return t.Cmp(got, Zero(), args...)
 }

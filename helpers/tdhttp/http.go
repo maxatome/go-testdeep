@@ -44,14 +44,7 @@ func CmpMarshaledResponse(tt td.TestingFT,
 	expectedResp Response,
 	args ...interface{},
 ) bool {
-
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by tt.Helper()
-	if ttt, ok := tt.(*testing.T); ok {
-		ttt.Helper()
-	} else {
-		tt.Helper()
-	}
+	tt.Helper()
 
 	if testName := tdutil.BuildTestName(args...); testName != "" {
 		tt.Log(testName)
@@ -68,13 +61,13 @@ func CmpMarshaledResponse(tt td.TestingFT,
 	// Check status, nil = ignore
 	if expectedResp.Status != nil {
 		statusMismatch = !t.RootName("Response.Status").
-			CmpDeeply(w.Code, expectedResp.Status, "status code should match")
+			Cmp(w.Code, expectedResp.Status, "status code should match")
 	}
 
 	// Check header, nil = ignore
 	if expectedResp.Header != nil {
 		headerMismatch = !t.RootName("Response.Header").
-			CmpDeeply(w.Header(), expectedResp.Header, "header should match")
+			Cmp(w.Header(), expectedResp.Header, "header should match")
 	}
 
 	t = t.RootName("Response.Body")
@@ -135,18 +128,16 @@ func CmpMarshaledResponse(tt td.TestingFT,
 		}
 		success = false
 		showRawBody = true // let's show its real body contents
-	} else {
+	} else if !t.Cmp(body, td.Ptr(expectedResp.Body), "body contents is OK") {
 		// If the body comparison fails
-		if !t.CmpDeeply(body, td.Ptr(expectedResp.Body), "body contents is OK") {
-			success = false
+		success = false
 
-			// Try to catch bad body expected type when nothing has been set
-			// to non-zero during unmarshaling body. In this case, require
-			// to show raw body contents.
-			if td.EqDeeply(body, reflect.New(bodyType).Interface()) {
-				showRawBody = true
-				t.Log("Hmm… It seems nothing has been set during unmarshaling…")
-			}
+		// Try to catch bad body expected type when nothing has been set
+		// to non-zero during unmarshaling body. In this case, require
+		// to show raw body contents.
+		if td.EqDeeply(body, reflect.New(bodyType).Interface()) {
+			showRawBody = true
+			t.Log("Hmm… It seems nothing has been set during unmarshaling…")
 		}
 	}
 
@@ -171,15 +162,7 @@ func CmpResponse(t td.TestingFT,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,
 	args ...interface{}) bool {
-
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return CmpMarshaledResponse(t,
 		req,
 		handler,
@@ -216,14 +199,7 @@ func CmpJSONResponse(t td.TestingFT,
 	expectedResp Response,
 	args ...interface{},
 ) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return CmpMarshaledResponse(t,
 		req,
 		handler,
@@ -246,14 +222,7 @@ func CmpXMLResponse(t td.TestingFT,
 	expectedResp Response,
 	args ...interface{},
 ) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return CmpMarshaledResponse(t,
 		req,
 		handler,

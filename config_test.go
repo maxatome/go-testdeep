@@ -14,52 +14,8 @@ import (
 )
 
 func TestContext(t *testing.T) {
-	test.EqualStr(t, newContext().Path, "DATA")
-	test.EqualStr(t, newBooleanContext().Path, "")
-
-	test.EqualStr(t,
-		newContextWithConfig(ContextConfig{RootName: "test"}).
-			AddDepth(".foo").
-			Path,
-		"test.foo")
-
-	test.EqualStr(t,
-		newContextWithConfig(ContextConfig{RootName: "test"}).
-			AddDepth(".foo").
-			AddDepth(".bar").
-			Path,
-		"test.foo.bar")
-
-	test.EqualStr(t,
-		newContextWithConfig(ContextConfig{RootName: "*test"}).
-			AddDepth(".foo").
-			Path,
-		"(*test).foo")
-
-	test.EqualStr(t,
-		newContextWithConfig(ContextConfig{RootName: "test"}).
-			AddArrayIndex(12).Path,
-		"test[12]")
-
-	test.EqualStr(t,
-		newContextWithConfig(ContextConfig{RootName: "*test"}).
-			AddArrayIndex(12).Path,
-		"(*test)[12]")
-
-	test.EqualStr(t,
-		newContextWithConfig(ContextConfig{RootName: "test"}).
-			AddPtr(2).
-			Path,
-		"**test")
-
-	test.EqualStr(t,
-		newContextWithConfig(ContextConfig{RootName: "test.foo"}).
-			AddPtr(1).Path, "*test.foo")
-
-	test.EqualStr(t,
-		newContextWithConfig(ContextConfig{RootName: "test[3]"}).
-			AddPtr(1).Path,
-		"*test[3]")
+	test.EqualStr(t, newContext().Path.String(), "DATA")
+	test.EqualStr(t, newBooleanContext().Path.String(), "")
 
 	if newContextWithConfig(ContextConfig{MaxErrors: -1}).CollectError(nil) != nil {
 		t.Errorf("ctx.CollectError(nil) should return nil")

@@ -311,13 +311,13 @@ func testCmpResponse(t *td.T,
 
 	mockT := &tdutil.T{}
 
-	t.CmpDeeply(cmp(mockT,
+	t.Cmp(cmp(mockT,
 		httptest.NewRequest("GET", "/path", nil),
 		curTest.Handler,
 		curTest.ExpectedResp),
 		curTest.Success)
 
-	dumpLogs := !t.CmpDeeply(mockT.Failed(), !curTest.Success)
+	dumpLogs := !t.Cmp(mockT.Failed(), !curTest.Success)
 
 	for _, expectedLog := range curTest.ExpectedLogs {
 		if !strings.Contains(mockT.LogBuf(), expectedLog) {

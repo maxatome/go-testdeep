@@ -14,22 +14,6 @@ import (
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
-type ComplexStruct struct { // nolint: megacheck,staticcheck
-	ItemsByName map[string]*ComplexStructItem
-	ItemsById   map[uint32]*ComplexStructItem
-	Items       []*ComplexStructItem
-	Label       string
-	Weight      float64
-}
-
-type ComplexStructItem struct { // nolint: megacheck,staticcheck
-	Name       string
-	Id         uint32
-	properties []ItemProperty
-	propByName map[string]ItemProperty
-	Enabled    bool
-}
-
 type ItemPropertyKind uint8
 
 type ItemProperty struct {
@@ -425,7 +409,7 @@ func TestEqualChannel(t *testing.T) {
 //
 // Others
 func TestEqualOthers(t *testing.T) {
-	type Private struct {
+	type Private struct { // nolint: maligned
 		num   int
 		num8  int8
 		num16 int16
@@ -641,26 +625,4 @@ func TestEqualPanic(t *testing.T) {
 			testdeep.EqDeeply(testdeep.Ignore(), testdeep.Ignore())
 		},
 		"Found a TestDeep operator in got param, can only use it in expected one!")
-}
-
-func TestCmpDeeply(t *testing.T) {
-	mockT := &testing.T{}
-	test.IsTrue(t, testdeep.CmpDeeply(mockT, 1, 1))
-	test.IsFalse(t, mockT.Failed())
-
-	mockT = &testing.T{}
-	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2))
-	test.IsTrue(t, mockT.Failed())
-
-	mockT = &testing.T{}
-	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2, "Basic test"))
-	test.IsTrue(t, mockT.Failed())
-
-	mockT = &testing.T{}
-	test.IsFalse(t, testdeep.CmpDeeply(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
-	test.IsTrue(t, mockT.Failed())
-
-	// Just to test the case where t is an interface and not a *testing.T
-	// See t.Helper() issue in CmpDeeply
-	test.IsTrue(t, testdeep.CmpDeeply(&test.TestingT{}, 1, 1))
 }

@@ -38,7 +38,7 @@ func (s SmuggledGot) contextAndGot(ctx ctxerr.Context) (ctxerr.Context, reflect.
 	} else {
 		name = smuggled
 	}
-	return ctx.AddDepth(name), reflect.ValueOf(s.Got)
+	return ctx.AddCustomLevel(name), reflect.ValueOf(s.Got)
 }
 
 type tdSmuggle struct {
@@ -246,18 +246,18 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 //   got := C{B: B{A: &A{Num: 12}}}
 //
 //   // Tests that got.B.A.Num is 12
-//   CmpDeeply(t, got,
+//   Cmp(t, got,
 //     Smuggle(func (c C) int {
 //         return c.B.A.Num
 //       },
 //       12))
 //
 // As brought up above, a field-path can be passed as "fn" value
-// instead of a function pointer. Using this feature, the CmpDeeply
+// instead of a function pointer. Using this feature, the Cmp
 // call in the above example can be rewritten as follows:
 //
 //   // Tests that got.B.A.Num is 12
-//   CmpDeeply(t, got, Smuggle("B.A.Num", 12))
+//   Cmp(t, got, Smuggle("B.A.Num", 12))
 //
 // Behind the scenes, a temporary function is automatically created to
 // achieve the same goal, but add some checks against nil values and
@@ -393,10 +393,10 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 
 			case smuggleValueType:
 				smv := newGot.Interface().(smuggleValue)
-				newCtx, newGot = ctx.AddDepth("."+smv.Path), smv.Value
+				newCtx, newGot = ctx.AddCustomLevel("."+smv.Path), smv.Value
 
 			default:
-				newCtx = ctx.AddDepth(smuggled)
+				newCtx = ctx.AddCustomLevel(smuggled)
 			}
 		}
 		return deepValueEqual(newCtx, newGot, s.expectedValue)

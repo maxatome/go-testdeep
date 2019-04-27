@@ -25,10 +25,16 @@ import (
 func EqualErrorMessage(t *testing.T, got, expected interface{},
 	args ...interface{}) {
 	t.Helper()
-	t.Errorf(`%sFailed test
+
+	testName := tdutil.BuildTestName(args...)
+	if testName != "" {
+		testName = " '" + testName + "'"
+	}
+
+	t.Errorf(`Failed test%s
 	     got: %v
 	expected: %v`,
-		tdutil.BuildTestName(args...), got, expected)
+		testName, got, expected)
 }
 
 func spewIfNeeded(s string) string {

@@ -58,7 +58,7 @@ var _ TestDeep = &tdCode{}
 // This operator allows to handle any specific comparison not handled
 // by standard operators.
 //
-// It is not recommended to call CmpDeeply (or any other Cmp*
+// It is not recommended to call Cmp (or any other Cmp*
 // functions or *T methods) inside the body of "fn", because of
 // confusion produced by output in case of failure. When the data
 // needs to be transformed before being compared again, Smuggle
