@@ -128,18 +128,16 @@ func CmpMarshaledResponse(tt td.TestingFT,
 		}
 		success = false
 		showRawBody = true // let's show its real body contents
-	} else {
+	} else if !t.Cmp(body, td.Ptr(expectedResp.Body), "body contents is OK") {
 		// If the body comparison fails
-		if !t.Cmp(body, td.Ptr(expectedResp.Body), "body contents is OK") {
-			success = false
+		success = false
 
-			// Try to catch bad body expected type when nothing has been set
-			// to non-zero during unmarshaling body. In this case, require
-			// to show raw body contents.
-			if td.EqDeeply(body, reflect.New(bodyType).Interface()) {
-				showRawBody = true
-				t.Log("Hmm… It seems nothing has been set during unmarshaling…")
-			}
+		// Try to catch bad body expected type when nothing has been set
+		// to non-zero during unmarshaling body. In this case, require
+		// to show raw body contents.
+		if td.EqDeeply(body, reflect.New(bodyType).Interface()) {
+			showRawBody = true
+			t.Log("Hmm… It seems nothing has been set during unmarshaling…")
 		}
 	}
 
