@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
@@ -274,7 +275,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		var notFoundKeys []reflect.Value
 		foundKeys := map[interface{}]bool{}
 
-		for _, vkey := range expected.MapKeys() {
+		for _, vkey := range tdutil.MapSortedKeys(expected) {
 			gotValue := got.MapIndex(vkey)
 			if !gotValue.IsValid() {
 				notFoundKeys = append(notFoundKeys, vkey)
@@ -315,9 +316,9 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			Sort:    true,
 		}
 
-		for _, vkey := range got.MapKeys() {
-			if !foundKeys[vkey.Interface()] {
-				res.Extra = append(res.Extra, vkey)
+		for _, k := range tdutil.MapSortedKeys(got) {
+			if !foundKeys[k.Interface()] {
+				res.Extra = append(res.Extra, k)
 			}
 		}
 

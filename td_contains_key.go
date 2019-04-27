@@ -9,6 +9,7 @@ package testdeep
 import (
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -59,9 +60,6 @@ func (c *tdContainsKey) doesNotContainKey(ctx ctxerr.Context, got reflect.Value)
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
-
-	keys := append(make([]reflect.Value, 0, got.Len()), got.MapKeys()...)
-
 	return ctx.CollectError(&ctxerr.Error{
 		Message: "does not contain key",
 		Summary: ctxerr.ErrorSummaryItems{
@@ -71,7 +69,7 @@ func (c *tdContainsKey) doesNotContainKey(ctx ctxerr.Context, got reflect.Value)
 			},
 			{
 				Label: "not in keys",
-				Value: util.ToString(keys),
+				Value: util.ToString(tdutil.MapSortedKeys(got)),
 			},
 		},
 	})
@@ -99,10 +97,17 @@ func (c *tdContainsKey) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	if got.Kind() == reflect.Map {
 		expectedValue := c.getExpectedValue(got)
 
-		for _, vkey := range got.MapKeys() {
-			if deepValueEqualOK(vkey, expectedValue) {
-				return nil
+		// If expected value is a TestDeep operator, check each key
+		if c.isTestDeeper {
+			for _, k := range got.MapKeys() {
+				if deepValueEqualOK(k, expectedValue) {
+					return nil
+				}
 			}
+		} else if expectedValue.IsValid() &&
+			got.Type().Key() == expectedValue.Type() &&
+			got.MapIndex(expectedValue).IsValid() {
+			return nil
 		}
 		return c.doesNotContainKey(ctx, got)
 	}

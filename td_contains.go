@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -128,10 +129,10 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 
 	case reflect.Map:
 		expectedValue := c.getExpectedValue(got)
-		for _, vkey := range got.MapKeys() {
-			if deepValueEqualOK(got.MapIndex(vkey), expectedValue) {
-				return nil
-			}
+		if !tdutil.MapEachValue(got, func(v reflect.Value) bool {
+			return !deepValueEqualOK(v, expectedValue)
+		}) {
+			return nil
 		}
 		return c.doesNotContain(ctx, got)
 

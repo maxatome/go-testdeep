@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -80,12 +81,12 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 }
 
 func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflect.Value) {
-	var expectedKeys []reflect.Value
+	var keysInModel int
 	if expectedModel.IsValid() {
-		expectedKeys = expectedModel.MapKeys()
+		keysInModel = expectedModel.Len()
 	}
 
-	m.expectedEntries = make([]mapEntryInfo, 0, len(expectedKeys)+len(entries))
+	m.expectedEntries = make([]mapEntryInfo, 0, keysInModel+len(entries))
 	checkedEntries := make(map[interface{}]bool, len(entries))
 
 	keyType := m.expectedType.Key()
@@ -134,17 +135,22 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 	}
 
 	// Check entries in model
-	for _, vkey := range expectedKeys {
-		entryInfo.expected = expectedModel.MapIndex(vkey)
+	if keysInModel == 0 {
+		return
+	}
 
-		if checkedEntries[vkey.Interface()] {
+	tdutil.MapEach(expectedModel, func(k, v reflect.Value) bool {
+		entryInfo.expected = v
+
+		if checkedEntries[k.Interface()] {
 			panic(fmt.Sprintf(
-				"%s entry exists in both model & expectedEntries", util.ToString(vkey)))
+				"%s entry exists in both model & expectedEntries", util.ToString(k)))
 		}
 
-		entryInfo.key = vkey
+		entryInfo.key = k
 		m.expectedEntries = append(m.expectedEntries, entryInfo)
-	}
+		return true
+	})
 }
 
 // Map operator compares the contents of a map against the non-zero
@@ -294,9 +300,9 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		Sort:    true,
 	}
 
-	for _, vkey := range got.MapKeys() {
-		if !foundKeys[vkey.Interface()] {
-			res.Extra = append(res.Extra, vkey)
+	for _, k := range tdutil.MapSortedKeys(got) {
+		if !foundKeys[k.Interface()] {
+			res.Extra = append(res.Extra, k)
 		}
 	}
 
