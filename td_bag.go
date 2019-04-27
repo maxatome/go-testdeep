@@ -19,11 +19,11 @@ var _ TestDeep = &tdBag{}
 // array/slice, and each array/slice item should be matched by an
 // expected item to succeed.
 //
-//   CmpDeeply(t, []int{1, 1, 2}, Bag(1, 1, 2))    // succeeds
-//   CmpDeeply(t, []int{1, 1, 2}, Bag(1, 2, 1))    // succeeds
-//   CmpDeeply(t, []int{1, 1, 2}, Bag(2, 1, 1))    // succeeds
-//   CmpDeeply(t, []int{1, 1, 2}, Bag(1, 2))       // fails, one 1 is missing
-//   CmpDeeply(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing
+//   Cmp(t, []int{1, 1, 2}, Bag(1, 1, 2))    // succeeds
+//   Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1))    // succeeds
+//   Cmp(t, []int{1, 1, 2}, Bag(2, 1, 1))    // succeeds
+//   Cmp(t, []int{1, 1, 2}, Bag(1, 2))       // fails, one 1 is missing
+//   Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing
 func Bag(expectedItems ...interface{}) TestDeep {
 	bag := &tdBag{
 		tdSetBase: newSetBase(allSet, false),
@@ -45,8 +45,8 @@ var _ TestDeep = &tdSubBagOf{}
 // expected item to succeed. But some expected items can be missing
 // from the compared array/slice.
 //
-//   CmpDeeply(t, []int{1}, SubBagOf(1, 1, 2))       // succeeds
-//   CmpDeeply(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
+//   Cmp(t, []int{1}, SubBagOf(1, 1, 2))       // succeeds
+//   Cmp(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
 func SubBagOf(expectedItems ...interface{}) TestDeep {
 	bag := &tdSubBagOf{
 		tdSetBase: newSetBase(subSet, false),
@@ -68,8 +68,8 @@ var _ TestDeep = &tdSuperBagOf{}
 // array/slice. But some items in the compared array/slice may not be
 // expected.
 //
-//   CmpDeeply(t, []int{1, 1, 2}, SuperBagOf(1))       // succeeds
-//   CmpDeeply(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing
+//   Cmp(t, []int{1, 1, 2}, SuperBagOf(1))       // succeeds
+//   Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 func SuperBagOf(expectedItems ...interface{}) TestDeep {
 	bag := &tdSuperBagOf{
 		tdSetBase: newSetBase(superSet, false),

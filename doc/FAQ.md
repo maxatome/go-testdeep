@@ -25,8 +25,8 @@ func TestAssertionsAndRequirements(t *testing.T) {
 
   got := SomeFunction()
 
-  require.CmpDeeply(got, expected) // if it fails: report error + abort
-  assert.CmpDeeply(got, expected)  // if it fails: report error + continue
+  require.Cmp(got, expected) // if it fails: report error + abort
+  assert.Cmp(got, expected)  // if it fails: report error + continue
 }
 ```
 
@@ -49,7 +49,7 @@ func TestResponseBody(t *testing.T) {
   // Expect this response sends "Expected Response!"
   var resp *http.Response = GetResponse()
 
-  td.CmpDeeply(t, resp.Body,
+  td.Cmp(t, resp.Body,
     td.Smuggle(ioutil.ReadAll, []byte("Expected Response!")))
 }
 ```
@@ -76,7 +76,7 @@ func TestResponseBody(t *testing.T) {
   // Expect this response sends "Expected Response!"
   var resp *http.Response = GetResponse()
 
-  td.CmpDeeply(t, body, td.Smuggle(
+  td.Cmp(t, body, td.Smuggle(
     func(body io.Reader) (string, error) {
       b, err := ioutil.ReadAll(body)
       return string(b), err
@@ -112,7 +112,7 @@ func TestResponseBody(t *testing.T) {
     Age  int
   }
 
-  td.CmpDeeply(t, body, td.Smuggle(
+  td.Cmp(t, body, td.Smuggle(
     func(body io.Reader) (&Person, error) {
       b, err := ioutil.ReadAll(body)
       if err != nil {
@@ -156,7 +156,7 @@ func TestResponseBody(t *testing.T) {
     Age  int
   }
 
-  td.CmpDeeply(t, body, td.Smuggle(
+  td.Cmp(t, body, td.Smuggle(
     func(body io.Reader) (*Person, error) {
       b, err := ioutil.ReadAll(body)
       if err != nil {

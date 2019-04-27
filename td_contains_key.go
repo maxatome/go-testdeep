@@ -24,26 +24,26 @@ var _ TestDeep = &tdContainsKey{}
 // compares each key of map against "expectedValue".
 //
 //   hash := map[string]int{"foo": 12, "bar": 34, "zip": 28}
-//   CmpDeeply(t, hash, ContainsKey("foo"))          // succeeds
-//   CmpDeeply(t, hash, ContainsKey(HasPrefix("z"))) // succeeds
-//   CmpDeeply(t, hash, ContainsKey(HasPrefix("x"))  // fails
+//   Cmp(t, hash, ContainsKey("foo"))          // succeeds
+//   Cmp(t, hash, ContainsKey(HasPrefix("z"))) // succeeds
+//   Cmp(t, hash, ContainsKey(HasPrefix("x"))  // fails
 //
 //   hnum := map[int]string{1: "foo", 42: "bar"}
-//   CmpDeeply(t, hash, ContainsKey(42))             // succeeds
-//   CmpDeeply(t, hash, ContainsKey(Between(40, 45)) // succeeds
+//   Cmp(t, hash, ContainsKey(42))             // succeeds
+//   Cmp(t, hash, ContainsKey(Between(40, 45)) // succeeds
 //
 // When ContainsKey(nil) is used, nil is automatically converted to a
 // typed nil on the fly to avoid confusion (if the map key type allows
-// it of course.) So all following CmpDeeply calls are equivalent
+// it of course.) So all following Cmp calls are equivalent
 // (except the (*byte)(nil) one):
 //
 //   num := 123
 //   hnum := map[*int]bool{&num: true, nil: true}
-//   CmpDeeply(t, hnum, ContainsKey(nil))          // succeeds → (*int)(nil)
-//   CmpDeeply(t, hnum, ContainsKey((*int)(nil)))  // succeeds
-//   CmpDeeply(t, hnum, ContainsKey(Nil()))        // succeeds
+//   Cmp(t, hnum, ContainsKey(nil))          // succeeds → (*int)(nil)
+//   Cmp(t, hnum, ContainsKey((*int)(nil)))  // succeeds
+//   Cmp(t, hnum, ContainsKey(Nil()))        // succeeds
 //   // But...
-//   CmpDeeply(t, hnum, ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
+//   Cmp(t, hnum, ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 func ContainsKey(expectedValue interface{}) TestDeep {
 	c := tdContainsKey{
 		tdSmugglerBase: newSmugglerBase(expectedValue),

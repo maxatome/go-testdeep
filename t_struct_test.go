@@ -17,21 +17,21 @@ import (
 
 func TestT(tt *testing.T) {
 	t := testdeep.NewT(tt)
-	testdeep.CmpDeeply(tt, t.Config, testdeep.DefaultContextConfig)
+	testdeep.Cmp(tt, t.Config, testdeep.DefaultContextConfig)
 
 	t = testdeep.NewT(tt, testdeep.ContextConfig{})
-	testdeep.CmpDeeply(tt, t.Config, testdeep.DefaultContextConfig)
+	testdeep.Cmp(tt, t.Config, testdeep.DefaultContextConfig)
 
 	conf := testdeep.ContextConfig{
 		RootName:  "TEST",
 		MaxErrors: 33,
 	}
 	t = testdeep.NewT(tt, conf)
-	testdeep.CmpDeeply(tt, t.Config, conf)
+	testdeep.Cmp(tt, t.Config, conf)
 
 	t2 := t.RootName("T2")
-	testdeep.CmpDeeply(tt, t.Config, conf)
-	testdeep.CmpDeeply(tt, t2.Config, testdeep.ContextConfig{
+	testdeep.Cmp(tt, t.Config, conf)
+	testdeep.Cmp(tt, t2.Config, testdeep.ContextConfig{
 		RootName:  "T2",
 		MaxErrors: 33,
 	})
@@ -43,6 +43,50 @@ func TestT(tt *testing.T) {
 			testdeep.NewT(tt, testdeep.ContextConfig{}, testdeep.ContextConfig{})
 		},
 		"usage: NewT")
+}
+
+func TestTCmp(tt *testing.T) {
+	// *testing.T
+	{
+		// Cmp
+		ttt := &testing.T{}
+		t := testdeep.NewT(ttt)
+
+		t.Cmp(1, 1)
+		testdeep.CmpFalse(tt, ttt.Failed())
+		t.Cmp(1, 2)
+		testdeep.CmpTrue(tt, ttt.Failed())
+
+		// CmpDeeply
+		ttt = &testing.T{}
+		t = testdeep.NewT(ttt)
+
+		t.CmpDeeply(1, 1)
+		testdeep.CmpFalse(tt, ttt.Failed())
+		t.CmpDeeply(1, 2)
+		testdeep.CmpTrue(tt, ttt.Failed())
+	}
+
+	// TestingT interface but NOT *testing.T (see t.Helper() issue in code)
+	{
+		// Cmp
+		ttt := &test.TestingFT{}
+		t := testdeep.NewT(ttt)
+
+		t.Cmp(1, 1)
+		testdeep.CmpFalse(tt, ttt.Failed())
+		t.Cmp(1, 2)
+		testdeep.CmpTrue(tt, ttt.Failed())
+
+		// CmpDeeply
+		ttt = &test.TestingFT{}
+		t = testdeep.NewT(ttt)
+
+		t.CmpDeeply(1, 1)
+		testdeep.CmpFalse(tt, ttt.Failed())
+		t.CmpDeeply(1, 2)
+		testdeep.CmpTrue(tt, ttt.Failed())
+	}
 }
 
 func TestRun(tt *testing.T) {

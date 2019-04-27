@@ -20,9 +20,9 @@ var _ TestDeep = &tdSet{}
 // array/slice, and each array/slice item should be matched by an
 // expected item to succeed.
 //
-//   CmpDeeply(t, []int{1, 1, 2}, Set(1, 2))    // succeeds
-//   CmpDeeply(t, []int{1, 1, 2}, Set(2, 1))    // succeeds
-//   CmpDeeply(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing
+//   Cmp(t, []int{1, 1, 2}, Set(1, 2))    // succeeds
+//   Cmp(t, []int{1, 1, 2}, Set(2, 1))    // succeeds
+//   Cmp(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing
 func Set(expectedItems ...interface{}) TestDeep {
 	set := &tdSet{
 		tdSetBase: newSetBase(allSet, true),
@@ -45,8 +45,8 @@ var _ TestDeep = &tdSubSetOf{}
 // expected item to succeed. But some expected items can be missing
 // from the compared array/slice.
 //
-//   CmpDeeply(t, []int{1, 1}, SubSetOf(1, 2))    // succeeds
-//   CmpDeeply(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item
+//   Cmp(t, []int{1, 1}, SubSetOf(1, 2))    // succeeds
+//   Cmp(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item
 func SubSetOf(expectedItems ...interface{}) TestDeep {
 	set := &tdSubSetOf{
 		tdSetBase: newSetBase(subSet, true),
@@ -69,8 +69,8 @@ var _ TestDeep = &tdSuperSetOf{}
 // array/slice. But some items in the compared array/slice may not be
 // expected.
 //
-//   CmpDeeply(t, []int{1, 1, 2}, SuperSetOf(1))    // succeeds
-//   CmpDeeply(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
+//   Cmp(t, []int{1, 1, 2}, SuperSetOf(1))    // succeeds
+//   Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
 func SuperSetOf(expectedItems ...interface{}) TestDeep {
 	set := &tdSuperSetOf{
 		tdSetBase: newSetBase(superSet, true),
@@ -88,8 +88,8 @@ var _ TestDeep = &tdNotAny{}
 // NotAny operator checks that the contents of an array or a slice (or
 // a pointer on array/slice) does not contain any of "expectedItems".
 //
-//   CmpDeeply(t, []int{1}, NotAny(1, 2, 3)) // fails
-//   CmpDeeply(t, []int{5}, NotAny(1, 2, 3)) // succeeds
+//   Cmp(t, []int{1}, NotAny(1, 2, 3)) // fails
+//   Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds
 func NotAny(expectedItems ...interface{}) TestDeep {
 	set := &tdNotAny{
 		tdSetBase: newSetBase(noneSet, true),

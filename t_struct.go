@@ -62,7 +62,7 @@ type T struct {
 // time of the returned instance.
 //
 //   t := NewT(tt)
-//   t.CmpDeeply(
+//   t.Cmp(
 //     Record{Age: 12, Name: "Bob", Id: 12},  // got
 //     Record{Age: 21, Name: "John", Id: 28}) // expected
 //
@@ -88,7 +88,7 @@ type T struct {
 //       RootName:  "RECORD", // got data named "RECORD" instead of "DATA"
 //       MaxErrors: 2,        // stops after 2 errors instead of default 10
 //     })
-//   t.CmpDeeply(
+//   t.Cmp(
 //     Record{Age: 12, Name: "Bob", Id: 12},  // got
 //     Record{Age: 21, Name: "John", Id: 28}) // expected
 //
@@ -176,30 +176,30 @@ func (t *T) RootName(rootName string) *T {
 // It returns a new instance of *T so does not alter the original t
 // and used as follows:
 //
-//   // Following t.CmpDeeply() will call Fatal() if failure
+//   // Following t.Cmp() will call Fatal() if failure
 //   t = t.FailureIsFatal()
-//   t.CmpDeeply(...)
-//   t.CmpDeeply(...)
-//   // Following t.CmpDeeply() won't call Fatal() if failure
+//   t.Cmp(...)
+//   t.Cmp(...)
+//   // Following t.Cmp() won't call Fatal() if failure
 //   t = t.FailureIsFatal(false)
-//   t.CmpDeeply(...)
+//   t.Cmp(...)
 //
 // or, if only one call is critic:
 //
-//   // This CmpDeeply() call will call Fatal() if failure
-//   t.FailureIsFatal().CmpDeeply(...)
-//   // Following t.CmpDeeply() won't call Fatal() if failure
-//   t.CmpDeeply(...)
-//   t.CmpDeeply(...)
+//   // This Cmp() call will call Fatal() if failure
+//   t.FailureIsFatal().Cmp(...)
+//   // Following t.Cmp() won't call Fatal() if failure
+//   t.Cmp(...)
+//   t.Cmp(...)
 func (t *T) FailureIsFatal(enable ...bool) *T {
 	new := *t
 	new.Config.FailureIsFatal = len(enable) == 0 || enable[0]
 	return &new
 }
 
-// CmpDeeply is mostly a shortcut for:
+// Cmp is mostly a shortcut for:
 //
-//   CmpDeeply(t.TestingFT, got, expected, args...)
+//   Cmp(t.TestingFT, got, expected, args...)
 //
 // with the exception that t.Config is used to configure the test
 // Context.
@@ -208,6 +208,21 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 // logged as is in case of failure. If len(args) > 1 and the first
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
+func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
+	// Work around https://github.com/golang/go/issues/26995 issue
+	// when corrected, this block should be replaced by t.Helper()
+	if tt, ok := t.TestingFT.(*testing.T); ok {
+		tt.Helper()
+	} else {
+		t.Helper()
+	}
+
+	return cmpDeeply(newContextWithConfig(t.Config),
+		t.TestingFT, got, expected, args...)
+}
+
+// CmpDeeply works the same as Cmp and is still available for
+// compatibility purpose. Use shorter Cmp in new code.
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 	// Work around https://github.com/golang/go/issues/26995 issue
 	// when corrected, this block should be replaced by t.Helper()
@@ -223,7 +238,7 @@ func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 
 // True is shortcut for:
 //
-//   t.CmpDeeply(got, true, args...)
+//   t.Cmp(got, true, args...)
 //
 // "args..." are optional and allow to name the test. This name is
 // logged as is in case of failure. If len(args) > 1 and the first
@@ -238,12 +253,12 @@ func (t *T) True(got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return t.CmpDeeply(got, true, args...)
+	return t.Cmp(got, true, args...)
 }
 
 // False is shortcut for:
 //
-//   t.CmpDeeply(got, false, args...)
+//   t.Cmp(got, false, args...)
 //
 // "args..." are optional and allow to name the test. This name is
 // logged as is in case of failure. If len(args) > 1 and the first
@@ -258,7 +273,7 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return t.CmpDeeply(got, false, args...)
+	return t.Cmp(got, false, args...)
 }
 
 // CmpError checks that "got" is non-nil error.

@@ -17,7 +17,7 @@ import (
 
 // CmpTrue is a shortcut for:
 //
-//   CmpDeeply(t, got, true, args...)
+//   Cmp(t, got, true, args...)
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -34,12 +34,12 @@ func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, true, args...)
+	return Cmp(t, got, true, args...)
 }
 
 // CmpFalse is a shortcut for:
 //
-//   CmpDeeply(t, got, false, args...)
+//   Cmp(t, got, false, args...)
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -56,7 +56,7 @@ func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, false, args...)
+	return Cmp(t, got, false, args...)
 }
 
 func cmpError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) bool {

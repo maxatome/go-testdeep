@@ -28,8 +28,8 @@ var (
 	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
 )
 
-// TestingT is the minimal interface used by CmpDeeply to report
-// errors. It is commonly implemented by *testing.T and testing.TB.
+// TestingT is the minimal interface used by Cmp to report errors. It
+// is commonly implemented by *testing.T and testing.TB.
 type TestingT interface {
 	Error(args ...interface{})
 	Fatal(args ...interface{})

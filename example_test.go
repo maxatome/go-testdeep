@@ -85,7 +85,7 @@ func Example() {
 	}
 
 	// Let's check masters slice contents
-	ok := CmpDeeply(t, masters, All(
+	ok := Cmp(t, masters, All(
 		Len(Gt(0)), // len(masters) should be > 0
 		ArrayEach(
 			// For each Master
@@ -123,7 +123,7 @@ func Example() {
 func ExampleIgnore() {
 	t := &testing.T{}
 
-	ok := CmpDeeply(t, []int{1, 2, 3},
+	ok := Cmp(t, []int{1, 2, 3},
 		Slice([]int{}, ArrayEntries{
 			0: 1,
 			1: Ignore(), // do not care about this entry
@@ -142,7 +142,7 @@ func ExampleAll() {
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "foo/bar" string
-	ok := CmpDeeply(t,
+	ok := Cmp(t,
 		got,
 		All(Re("o/b"), HasSuffix("bar"), "foo/bar"),
 		"checks value %s", got)
@@ -150,7 +150,7 @@ func ExampleAll() {
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "fooX/Ybar" string
-	ok = CmpDeeply(t,
+	ok = Cmp(t,
 		got,
 		All(Re("o/b"), HasSuffix("bar"), "fooX/Ybar"),
 		"checks value %s", got)
@@ -168,13 +168,13 @@ func ExampleAny() {
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "bar" suffix
-	ok := CmpDeeply(t, got, Any(Re("zip"), HasSuffix("bar")),
+	ok := Cmp(t, got, Any(Re("zip"), HasSuffix("bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "foo" suffix
-	ok = CmpDeeply(t, got, Any(Re("zip"), HasSuffix("foo")),
+	ok = Cmp(t, got, Any(Re("zip"), HasSuffix("foo")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -188,7 +188,7 @@ func ExampleArray_array() {
 
 	got := [3]int{42, 58, 26}
 
-	ok := CmpDeeply(t, got, Array([3]int{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok := Cmp(t, got, Array([3]int{42}, ArrayEntries{1: 58, 2: Ignore()}),
 		"checks array %v", got)
 	fmt.Println(ok)
 
@@ -203,20 +203,20 @@ func ExampleArray_typedArray() {
 
 	got := MyArray{42, 58, 26}
 
-	ok := CmpDeeply(t, got, Array(MyArray{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok := Cmp(t, got, Array(MyArray{42}, ArrayEntries{1: 58, 2: Ignore()}),
 		"checks typed array %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, Array(&MyArray{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok = Cmp(t, &got, Array(&MyArray{42}, ArrayEntries{1: 58, 2: Ignore()}),
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Array(&MyArray{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Array((*MyArray)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
@@ -233,7 +233,7 @@ func ExampleArrayEach_array() {
 
 	got := [3]int{42, 58, 26}
 
-	ok := CmpDeeply(t, got, ArrayEach(Between(25, 60)),
+	ok := Cmp(t, got, ArrayEach(Between(25, 60)),
 		"checks each item of array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -248,11 +248,11 @@ func ExampleArrayEach_typedArray() {
 
 	got := MyArray{42, 58, 26}
 
-	ok := CmpDeeply(t, got, ArrayEach(Between(25, 60)),
+	ok := Cmp(t, got, ArrayEach(Between(25, 60)),
 		"checks each item of typed array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, ArrayEach(Between(25, 60)),
+	ok = Cmp(t, &got, ArrayEach(Between(25, 60)),
 		"checks each item of typed array pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -266,7 +266,7 @@ func ExampleArrayEach_slice() {
 
 	got := []int{42, 58, 26}
 
-	ok := CmpDeeply(t, got, ArrayEach(Between(25, 60)),
+	ok := Cmp(t, got, ArrayEach(Between(25, 60)),
 		"checks each item of slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -281,11 +281,11 @@ func ExampleArrayEach_typedSlice() {
 
 	got := MySlice{42, 58, 26}
 
-	ok := CmpDeeply(t, got, ArrayEach(Between(25, 60)),
+	ok := Cmp(t, got, ArrayEach(Between(25, 60)),
 		"checks each item of typed slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, ArrayEach(Between(25, 60)),
+	ok = Cmp(t, &got, ArrayEach(Between(25, 60)),
 		"checks each item of typed slice pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -300,25 +300,25 @@ func ExampleBag() {
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are present
-	ok := CmpDeeply(t, got, Bag(1, 1, 2, 3, 5, 8, 8),
+	ok := Cmp(t, got, Bag(1, 1, 2, 3, 5, 8, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Does not match as got contains 2 times 1 and 8, and these
 	// duplicates are not expected
-	ok = CmpDeeply(t, got, Bag(1, 2, 3, 5, 8),
+	ok = Cmp(t, got, Bag(1, 2, 3, 5, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	got = []int{1, 3, 5, 8, 2}
 
 	// Duplicates of 1 and 8 are expected but not present in got
-	ok = CmpDeeply(t, got, Bag(1, 1, 2, 3, 5, 8, 8),
+	ok = Cmp(t, got, Bag(1, 1, 2, 3, 5, 8, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Matches as all items are present
-	ok = CmpDeeply(t, got, Bag(1, 2, 3, 5, Gt(7)),
+	ok = Cmp(t, got, Bag(1, 2, 3, 5, Gt(7)),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
@@ -334,24 +334,24 @@ func ExampleBetween_int() {
 
 	got := 156
 
-	ok := CmpDeeply(t, got, Between(154, 156),
+	ok := Cmp(t, got, Between(154, 156),
 		"checks %v is in [154 .. 156]", got)
 	fmt.Println(ok)
 
 	// BoundsInIn is implicit
-	ok = CmpDeeply(t, got, Between(154, 156, BoundsInIn),
+	ok = Cmp(t, got, Between(154, 156, BoundsInIn),
 		"checks %v is in [154 .. 156]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Between(154, 156, BoundsInOut),
+	ok = Cmp(t, got, Between(154, 156, BoundsInOut),
 		"checks %v is in [154 .. 156[", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Between(154, 156, BoundsOutIn),
+	ok = Cmp(t, got, Between(154, 156, BoundsOutIn),
 		"checks %v is in ]154 .. 156]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Between(154, 156, BoundsOutOut),
+	ok = Cmp(t, got, Between(154, 156, BoundsOutOut),
 		"checks %v is in ]154 .. 156[", got)
 	fmt.Println(ok)
 
@@ -368,24 +368,24 @@ func ExampleBetween_string() {
 
 	got := "abc"
 
-	ok := CmpDeeply(t, got, Between("aaa", "abc"),
+	ok := Cmp(t, got, Between("aaa", "abc"),
 		`checks "%v" is in ["aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
 	// BoundsInIn is implicit
-	ok = CmpDeeply(t, got, Between("aaa", "abc", BoundsInIn),
+	ok = Cmp(t, got, Between("aaa", "abc", BoundsInIn),
 		`checks "%v" is in ["aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Between("aaa", "abc", BoundsInOut),
+	ok = Cmp(t, got, Between("aaa", "abc", BoundsInOut),
 		`checks "%v" is in ["aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Between("aaa", "abc", BoundsOutIn),
+	ok = Cmp(t, got, Between("aaa", "abc", BoundsOutIn),
 		`checks "%v" is in ]"aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Between("aaa", "abc", BoundsOutOut),
+	ok = Cmp(t, got, Between("aaa", "abc", BoundsOutOut),
 		`checks "%v" is in ]"aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
@@ -402,15 +402,15 @@ func ExampleCap() {
 
 	got := make([]int, 0, 12)
 
-	ok := CmpDeeply(t, got, Cap(12), "checks %v capacity is 12", got)
+	ok := Cmp(t, got, Cap(12), "checks %v capacity is 12", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Cap(0), "checks %v capacity is 0", got)
+	ok = Cmp(t, got, Cap(0), "checks %v capacity is 0", got)
 	fmt.Println(ok)
 
 	got = nil
 
-	ok = CmpDeeply(t, got, Cap(0), "checks %v capacity is 0", got)
+	ok = Cmp(t, got, Cap(0), "checks %v capacity is 0", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -424,11 +424,11 @@ func ExampleCap_operator() {
 
 	got := make([]int, 0, 12)
 
-	ok := CmpDeeply(t, got, Cap(Between(10, 12)),
+	ok := Cmp(t, got, Cap(Between(10, 12)),
 		"checks %v capacity is in [10 .. 12]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Cap(Gt(10)),
+	ok = Cmp(t, got, Cap(Gt(10)),
 		"checks %v capacity is in [10 .. 12]", got)
 	fmt.Println(ok)
 
@@ -442,7 +442,7 @@ func ExampleCode() {
 
 	got := "12"
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 10 && n < 100
@@ -452,7 +452,7 @@ func ExampleCode() {
 	fmt.Println(ok)
 
 	// Same with failure reason
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		Code(func(num string) (bool, string) {
 			n, err := strconv.Atoi(num)
 			if err != nil {
@@ -468,7 +468,7 @@ func ExampleCode() {
 	fmt.Println(ok)
 
 	// Same with failure reason thanks to error
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		Code(func(num string) error {
 			n, err := strconv.Atoi(num)
 			if err != nil {
@@ -492,16 +492,16 @@ func ExampleCode() {
 func ExampleContains_arraySlice() {
 	t := &testing.T{}
 
-	ok := CmpDeeply(t, [...]int{11, 22, 33, 44}, Contains(22))
+	ok := Cmp(t, [...]int{11, 22, 33, 44}, Contains(22))
 	fmt.Println("array contains 22:", ok)
 
-	ok = CmpDeeply(t, [...]int{11, 22, 33, 44}, Contains(Between(20, 25)))
+	ok = Cmp(t, [...]int{11, 22, 33, 44}, Contains(Between(20, 25)))
 	fmt.Println("array contains at least one item in [20 .. 25]:", ok)
 
-	ok = CmpDeeply(t, []int{11, 22, 33, 44}, Contains(22))
+	ok = Cmp(t, []int{11, 22, 33, 44}, Contains(22))
 	fmt.Println("slice contains 22:", ok)
 
-	ok = CmpDeeply(t, []int{11, 22, 33, 44}, Contains(Between(20, 25)))
+	ok = Cmp(t, []int{11, 22, 33, 44}, Contains(Between(20, 25)))
 	fmt.Println("slice contains at least one item in [20 .. 25]:", ok)
 
 	// Output:
@@ -517,16 +517,16 @@ func ExampleContains_nil() {
 	num := 123
 	got := [...]*int{&num, nil}
 
-	ok := CmpDeeply(t, got, Contains(nil))
+	ok := Cmp(t, got, Contains(nil))
 	fmt.Println("array contains untyped nil:", ok)
 
-	ok = CmpDeeply(t, got, Contains((*int)(nil)))
+	ok = Cmp(t, got, Contains((*int)(nil)))
 	fmt.Println("array contains *int nil:", ok)
 
-	ok = CmpDeeply(t, got, Contains(Nil()))
+	ok = Cmp(t, got, Contains(Nil()))
 	fmt.Println("array contains Nil():", ok)
 
-	ok = CmpDeeply(t, got, Contains((*byte)(nil)))
+	ok = Cmp(t, got, Contains((*byte)(nil)))
 	fmt.Println("array contains *byte nil:", ok) // types differ: *byte ≠ *int
 
 	// Output:
@@ -539,11 +539,11 @@ func ExampleContains_nil() {
 func ExampleContains_map() {
 	t := &testing.T{}
 
-	ok := CmpDeeply(t,
+	ok := Cmp(t,
 		map[string]int{"foo": 11, "bar": 22, "zip": 33}, Contains(22))
 	fmt.Println("map contains value 22:", ok)
 
-	ok = CmpDeeply(t,
+	ok = Cmp(t,
 		map[string]int{"foo": 11, "bar": 22, "zip": 33},
 		Contains(Between(20, 25)))
 	fmt.Println("map contains at least one value in [20 .. 25]:", ok)
@@ -558,16 +558,16 @@ func ExampleContains_string() {
 
 	got := "foobar"
 
-	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
+	ok := Cmp(t, got, Contains("oob"), "checks %s", got)
 	fmt.Println("contains `oob` string:", ok)
 
-	ok = CmpDeeply(t, got, Contains('b'), "checks %s", got)
+	ok = Cmp(t, got, Contains('b'), "checks %s", got)
 	fmt.Println("contains 'b' rune:", ok)
 
-	ok = CmpDeeply(t, got, Contains(byte('a')), "checks %s", got)
+	ok = Cmp(t, got, Contains(byte('a')), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	ok = CmpDeeply(t, got, Contains(Between('n', 'p')), "checks %s", got)
+	ok = Cmp(t, got, Contains(Between('n', 'p')), "checks %s", got)
 	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
@@ -583,18 +583,18 @@ func ExampleContains_stringer() {
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
+	ok := Cmp(t, got, Contains("oob"), "checks %s", got)
 	fmt.Println("contains `oob` string:", ok)
 
-	ok = CmpDeeply(t, got, Contains('b'), "checks %s", got)
+	ok = Cmp(t, got, Contains('b'), "checks %s", got)
 	fmt.Println("contains 'b' rune:", ok)
 
-	ok = CmpDeeply(t, got, Contains(byte('a')), "checks %s", got)
+	ok = Cmp(t, got, Contains(byte('a')), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
 	// Be careful! TestDeep operators in Contains() do not work with
 	// fmt.Stringer nor error interfaces
-	ok = CmpDeeply(t, got, Contains(Between('n', 'p')), "checks %s", got)
+	ok = Cmp(t, got, Contains(Between('n', 'p')), "checks %s", got)
 	fmt.Println("try TestDeep operator:", ok)
 
 	// Output:
@@ -609,18 +609,18 @@ func ExampleContains_error() {
 
 	got := errors.New("foobar")
 
-	ok := CmpDeeply(t, got, Contains("oob"), "checks %s", got)
+	ok := Cmp(t, got, Contains("oob"), "checks %s", got)
 	fmt.Println("contains `oob` string:", ok)
 
-	ok = CmpDeeply(t, got, Contains('b'), "checks %s", got)
+	ok = Cmp(t, got, Contains('b'), "checks %s", got)
 	fmt.Println("contains 'b' rune:", ok)
 
-	ok = CmpDeeply(t, got, Contains(byte('a')), "checks %s", got)
+	ok = Cmp(t, got, Contains(byte('a')), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
 	// Be careful! TestDeep operators in Contains() do not work with
 	// fmt.Stringer nor error interfaces
-	ok = CmpDeeply(t, got, Contains(Between('n', 'p')), "checks %s", got)
+	ok = Cmp(t, got, Contains(Between('n', 'p')), "checks %s", got)
 	fmt.Println("try TestDeep operator:", ok)
 
 	// Output:
@@ -633,11 +633,11 @@ func ExampleContains_error() {
 func ExampleContainsKey() {
 	t := &testing.T{}
 
-	ok := CmpDeeply(t,
+	ok := Cmp(t,
 		map[string]int{"foo": 11, "bar": 22, "zip": 33}, ContainsKey("foo"))
 	fmt.Println(`map contains key "foo":`, ok)
 
-	ok = CmpDeeply(t,
+	ok = Cmp(t,
 		map[int]bool{12: true, 24: false, 42: true, 51: false},
 		ContainsKey(Between(40, 50)))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
@@ -653,16 +653,16 @@ func ExampleContainsKey_nil() {
 	num := 1234
 	got := map[*int]bool{&num: false, nil: true}
 
-	ok := CmpDeeply(t, got, ContainsKey(nil))
+	ok := Cmp(t, got, ContainsKey(nil))
 	fmt.Println("map contains untyped nil key:", ok)
 
-	ok = CmpDeeply(t, got, ContainsKey((*int)(nil)))
+	ok = Cmp(t, got, ContainsKey((*int)(nil)))
 	fmt.Println("map contains *int nil key:", ok)
 
-	ok = CmpDeeply(t, got, ContainsKey(Nil()))
+	ok = Cmp(t, got, ContainsKey(Nil()))
 	fmt.Println("map contains Nil() key:", ok)
 
-	ok = CmpDeeply(t, got, ContainsKey((*byte)(nil)))
+	ok = Cmp(t, got, ContainsKey((*byte)(nil)))
 	fmt.Println("map contains *byte nil key:", ok) // types differ: *byte ≠ *int
 
 	// Output:
@@ -675,37 +675,37 @@ func ExampleContainsKey_nil() {
 func ExampleEmpty() {
 	t := &testing.T{}
 
-	ok := CmpDeeply(t, nil, Empty()) // special case: nil is considered empty
+	ok := Cmp(t, nil, Empty()) // special case: nil is considered empty
 	fmt.Println(ok)
 
 	// fails, typed nil is not empty (expect for channel, map, slice or
 	// pointers on array, channel, map slice and strings)
-	ok = CmpDeeply(t, (*int)(nil), Empty())
+	ok = Cmp(t, (*int)(nil), Empty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, "", Empty())
+	ok = Cmp(t, "", Empty())
 	fmt.Println(ok)
 
 	// Fails as 0 is a number, so not empty. Use Zero() instead
-	ok = CmpDeeply(t, 0, Empty())
+	ok = Cmp(t, 0, Empty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, (map[string]int)(nil), Empty())
+	ok = Cmp(t, (map[string]int)(nil), Empty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, map[string]int{}, Empty())
+	ok = Cmp(t, map[string]int{}, Empty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, ([]int)(nil), Empty())
+	ok = Cmp(t, ([]int)(nil), Empty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, []int{}, Empty())
+	ok = Cmp(t, []int{}, Empty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, []int{3}, Empty()) // fails, as not empty
+	ok = Cmp(t, []int{3}, Empty()) // fails, as not empty
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, [3]int{}, Empty()) // fails, Empty() is not Zero()!
+	ok = Cmp(t, [3]int{}, Empty()) // fails, Empty() is not Zero()!
 	fmt.Println(ok)
 
 	// Output:
@@ -726,16 +726,16 @@ func ExampleEmpty_pointers() {
 
 	type MySlice []int
 
-	ok := CmpDeeply(t, MySlice{}, Empty()) // Ptr() not needed
+	ok := Cmp(t, MySlice{}, Empty()) // Ptr() not needed
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &MySlice{}, Empty())
+	ok = Cmp(t, &MySlice{}, Empty())
 	fmt.Println(ok)
 
 	l1 := &MySlice{}
 	l2 := &l1
 	l3 := &l2
-	ok = CmpDeeply(t, &l3, Empty())
+	ok = Cmp(t, &l3, Empty())
 	fmt.Println(ok)
 
 	// Works the same for array, map, channel and string
@@ -745,7 +745,7 @@ func ExampleEmpty_pointers() {
 		Value int
 	}
 
-	ok = CmpDeeply(t, &MyStruct{}, Empty()) // fails, use Zero() instead
+	ok = Cmp(t, &MyStruct{}, Empty()) // fails, use Zero() instead
 	fmt.Println(ok)
 
 	// Output:
@@ -760,10 +760,10 @@ func ExampleGt_int() {
 
 	got := 156
 
-	ok := CmpDeeply(t, got, Gt(155), "checks %v is > 155", got)
+	ok := Cmp(t, got, Gt(155), "checks %v is > 155", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Gt(156), "checks %v is > 156", got)
+	ok = Cmp(t, got, Gt(156), "checks %v is > 156", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -776,10 +776,10 @@ func ExampleGt_string() {
 
 	got := "abc"
 
-	ok := CmpDeeply(t, got, Gt("abb"), `checks "%v" is > "abb"`, got)
+	ok := Cmp(t, got, Gt("abb"), `checks "%v" is > "abb"`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Gt("abc"), `checks "%v" is > "abc"`, got)
+	ok = Cmp(t, got, Gt("abc"), `checks "%v" is > "abc"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -792,13 +792,13 @@ func ExampleGte_int() {
 
 	got := 156
 
-	ok := CmpDeeply(t, got, Gte(156), "checks %v is ≥ 156", got)
+	ok := Cmp(t, got, Gte(156), "checks %v is ≥ 156", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Gte(155), "checks %v is ≥ 155", got)
+	ok = Cmp(t, got, Gte(155), "checks %v is ≥ 155", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Gte(157), "checks %v is ≥ 157", got)
+	ok = Cmp(t, got, Gte(157), "checks %v is ≥ 157", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -812,13 +812,13 @@ func ExampleGte_string() {
 
 	got := "abc"
 
-	ok := CmpDeeply(t, got, Gte("abc"), `checks "%v" is ≥ "abc"`, got)
+	ok := Cmp(t, got, Gte("abc"), `checks "%v" is ≥ "abc"`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Gte("abb"), `checks "%v" is ≥ "abb"`, got)
+	ok = Cmp(t, got, Gte("abb"), `checks "%v" is ≥ "abb"`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Gte("abd"), `checks "%v" is ≥ "abd"`, got)
+	ok = Cmp(t, got, Gte("abd"), `checks "%v" is ≥ "abd"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -836,14 +836,14 @@ func ExampleIsa() {
 
 	got := TstStruct{Field: 1}
 
-	ok := CmpDeeply(t, got, Isa(TstStruct{}), "checks got is a TstStruct")
+	ok := Cmp(t, got, Isa(TstStruct{}), "checks got is a TstStruct")
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Isa(&TstStruct{}),
+	ok = Cmp(t, got, Isa(&TstStruct{}),
 		"checks got is a pointer on a TstStruct")
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, Isa(&TstStruct{}),
+	ok = Cmp(t, &got, Isa(&TstStruct{}),
 		"checks &got is a pointer on a TstStruct")
 	fmt.Println(ok)
 
@@ -858,13 +858,13 @@ func ExampleIsa_interface() {
 
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpDeeply(t, got, Isa((*fmt.Stringer)(nil)),
+	ok := Cmp(t, got, Isa((*fmt.Stringer)(nil)),
 		"checks got implements fmt.Stringer interface")
 	fmt.Println(ok)
 
 	errGot := fmt.Errorf("An error #%d occurred", 123)
 
-	ok = CmpDeeply(t, errGot, Isa((*error)(nil)),
+	ok = Cmp(t, errGot, Isa((*error)(nil)),
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
@@ -872,12 +872,12 @@ func ExampleIsa_interface() {
 	// does not match
 	errGot = nil
 
-	ok = CmpDeeply(t, errGot, Isa((*error)(nil)),
+	ok = Cmp(t, errGot, Isa((*error)(nil)),
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
 	// BUT if its address is passed, now it is OK as the types match
-	ok = CmpDeeply(t, &errGot, Isa((*error)(nil)),
+	ok = Cmp(t, &errGot, Isa((*error)(nil)),
 		"checks &errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
@@ -893,15 +893,15 @@ func ExampleLen_slice() {
 
 	got := []int{11, 22, 33}
 
-	ok := CmpDeeply(t, got, Len(3), "checks %v len is 3", got)
+	ok := Cmp(t, got, Len(3), "checks %v len is 3", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Len(0), "checks %v len is 0", got)
+	ok = Cmp(t, got, Len(0), "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	got = nil
 
-	ok = CmpDeeply(t, got, Len(0), "checks %v len is 0", got)
+	ok = Cmp(t, got, Len(0), "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -915,15 +915,15 @@ func ExampleLen_map() {
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := CmpDeeply(t, got, Len(3), "checks %v len is 3", got)
+	ok := Cmp(t, got, Len(3), "checks %v len is 3", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Len(0), "checks %v len is 0", got)
+	ok = Cmp(t, got, Len(0), "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	got = nil
 
-	ok = CmpDeeply(t, got, Len(0), "checks %v len is 0", got)
+	ok = Cmp(t, got, Len(0), "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -937,11 +937,11 @@ func ExampleLen_operatorSlice() {
 
 	got := []int{11, 22, 33}
 
-	ok := CmpDeeply(t, got, Len(Between(3, 8)),
+	ok := Cmp(t, got, Len(Between(3, 8)),
 		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Len(Lt(5)), "checks %v len is < 5", got)
+	ok = Cmp(t, got, Len(Lt(5)), "checks %v len is < 5", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -954,11 +954,11 @@ func ExampleLen_operatorMap() {
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := CmpDeeply(t, got, Len(Between(3, 8)),
+	ok := Cmp(t, got, Len(Between(3, 8)),
 		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Len(Gte(3)), "checks %v len is ≥ 3", got)
+	ok = Cmp(t, got, Len(Gte(3)), "checks %v len is ≥ 3", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -971,10 +971,10 @@ func ExampleLt_int() {
 
 	got := 156
 
-	ok := CmpDeeply(t, got, Lt(157), "checks %v is < 157", got)
+	ok := Cmp(t, got, Lt(157), "checks %v is < 157", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Lt(156), "checks %v is < 156", got)
+	ok = Cmp(t, got, Lt(156), "checks %v is < 156", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -987,10 +987,10 @@ func ExampleLt_string() {
 
 	got := "abc"
 
-	ok := CmpDeeply(t, got, Lt("abd"), `checks "%v" is < "abd"`, got)
+	ok := Cmp(t, got, Lt("abd"), `checks "%v" is < "abd"`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Lt("abc"), `checks "%v" is < "abc"`, got)
+	ok = Cmp(t, got, Lt("abc"), `checks "%v" is < "abc"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1003,13 +1003,13 @@ func ExampleLte_int() {
 
 	got := 156
 
-	ok := CmpDeeply(t, got, Lte(156), "checks %v is ≤ 156", got)
+	ok := Cmp(t, got, Lte(156), "checks %v is ≤ 156", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Lte(157), "checks %v is ≤ 157", got)
+	ok = Cmp(t, got, Lte(157), "checks %v is ≤ 157", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Lte(155), "checks %v is ≤ 155", got)
+	ok = Cmp(t, got, Lte(155), "checks %v is ≤ 155", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1023,13 +1023,13 @@ func ExampleLte_string() {
 
 	got := "abc"
 
-	ok := CmpDeeply(t, got, Lte("abc"), `checks "%v" is ≤ "abc"`, got)
+	ok := Cmp(t, got, Lte("abc"), `checks "%v" is ≤ "abc"`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Lte("abd"), `checks "%v" is ≤ "abd"`, got)
+	ok = Cmp(t, got, Lte("abd"), `checks "%v" is ≤ "abd"`, got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Lte("abb"), `checks "%v" is ≤ "abb"`, got)
+	ok = Cmp(t, got, Lte("abb"), `checks "%v" is ≤ "abb"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1043,18 +1043,18 @@ func ExampleMap_map() {
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		Map(map[string]int{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()}),
 		"checks map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		Map(map[string]int{},
 			MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
 		"checks map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		Map((map[string]int)(nil),
 			MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
 		"checks map %v", got)
@@ -1073,22 +1073,22 @@ func ExampleMap_typedMap() {
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		Map(MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()}),
 		"checks typed map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Map(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()}),
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Map(&MyMap{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Map((*MyMap)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
@@ -1105,7 +1105,7 @@ func ExampleMapEach_map() {
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpDeeply(t, got, MapEach(Between(10, 90)),
+	ok := Cmp(t, got, MapEach(Between(10, 90)),
 		"checks each value of map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
@@ -1120,11 +1120,11 @@ func ExampleMapEach_typedMap() {
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpDeeply(t, got, MapEach(Between(10, 90)),
+	ok := Cmp(t, got, MapEach(Between(10, 90)),
 		"checks each value of typed map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, MapEach(Between(10, 90)),
+	ok = Cmp(t, &got, MapEach(Between(10, 90)),
 		"checks each value of typed map pointer %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
@@ -1138,7 +1138,7 @@ func ExampleN() {
 
 	got := 1.12345
 
-	ok := CmpDeeply(t, got, N(1.1234, 0.00006),
+	ok := Cmp(t, got, N(1.1234, 0.00006),
 		"checks %v = 1.1234 ± 0.00006", got)
 	fmt.Println(ok)
 
@@ -1151,14 +1151,14 @@ func ExampleNaN_float32() {
 
 	got := float32(math.NaN())
 
-	ok := CmpDeeply(t, got, NaN(),
+	ok := Cmp(t, got, NaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float32(math.NaN()) is float32 not-a-number:", ok)
 
 	got = 12
 
-	ok = CmpDeeply(t, got, NaN(),
+	ok = Cmp(t, got, NaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float32(12) is float32 not-a-number:", ok)
@@ -1173,14 +1173,14 @@ func ExampleNaN_float64() {
 
 	got := math.NaN()
 
-	ok := CmpDeeply(t, got, NaN(),
+	ok := Cmp(t, got, NaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("math.NaN() is not-a-number:", ok)
 
 	got = 12
 
-	ok = CmpDeeply(t, got, NaN(),
+	ok = Cmp(t, got, NaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float64(12) is not-a-number:", ok)
@@ -1195,22 +1195,22 @@ func ExampleNil() {
 	var got fmt.Stringer // interface
 
 	// nil value can be compared directly with nil, no need of Nil() here
-	ok := CmpDeeply(t, got, nil)
+	ok := Cmp(t, got, nil)
 	fmt.Println(ok)
 
 	// But it works with Nil() anyway
-	ok = CmpDeeply(t, got, Nil())
+	ok = Cmp(t, got, Nil())
 	fmt.Println(ok)
 
 	got = (*bytes.Buffer)(nil)
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with nil fails, as the interface is not nil
-	ok = CmpDeeply(t, got, nil)
+	ok = Cmp(t, got, nil)
 	fmt.Println(ok)
 
 	// In this case Nil() succeed
-	ok = CmpDeeply(t, got, Nil())
+	ok = Cmp(t, got, Nil())
 	fmt.Println(ok)
 
 	// Output:
@@ -1225,19 +1225,19 @@ func ExampleNone() {
 
 	got := 18
 
-	ok := CmpDeeply(t, got, None(0, 10, 20, 30, Between(100, 199)),
+	ok := Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)),
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 20
 
-	ok = CmpDeeply(t, got, None(0, 10, 20, 30, Between(100, 199)),
+	ok = Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)),
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 142
 
-	ok = CmpDeeply(t, got, None(0, 10, 20, 30, Between(100, 199)),
+	ok = Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)),
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
@@ -1252,11 +1252,11 @@ func ExampleNotAny() {
 
 	got := []int{4, 5, 9, 42}
 
-	ok := CmpDeeply(t, got, NotAny(3, 6, 8, 41, 43),
+	ok := Cmp(t, got, NotAny(3, 6, 8, 41, 43),
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, NotAny(3, 6, 8, 42, 43),
+	ok = Cmp(t, got, NotAny(3, 6, 8, 42, 43),
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
@@ -1270,16 +1270,16 @@ func ExampleNot() {
 
 	got := 42
 
-	ok := CmpDeeply(t, got, Not(0), "checks %v is non-null", got)
+	ok := Cmp(t, got, Not(0), "checks %v is non-null", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, Not(Between(10, 30)),
+	ok = Cmp(t, got, Not(Between(10, 30)),
 		"checks %v is not in [10 .. 30]", got)
 	fmt.Println(ok)
 
 	got = 0
 
-	ok = CmpDeeply(t, got, Not(0), "checks %v is non-null", got)
+	ok = Cmp(t, got, Not(0), "checks %v is non-null", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1291,23 +1291,23 @@ func ExampleNot() {
 func ExampleNotEmpty() {
 	t := &testing.T{}
 
-	ok := CmpDeeply(t, nil, NotEmpty()) // fails, as nil is considered empty
+	ok := Cmp(t, nil, NotEmpty()) // fails, as nil is considered empty
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, "foobar", NotEmpty())
+	ok = Cmp(t, "foobar", NotEmpty())
 	fmt.Println(ok)
 
 	// Fails as 0 is a number, so not empty. Use NotZero() instead
-	ok = CmpDeeply(t, 0, NotEmpty())
+	ok = Cmp(t, 0, NotEmpty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, map[string]int{"foobar": 42}, NotEmpty())
+	ok = Cmp(t, map[string]int{"foobar": 42}, NotEmpty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, []int{1}, NotEmpty())
+	ok = Cmp(t, []int{1}, NotEmpty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, [3]int{}, NotEmpty()) // succeeds, NotEmpty() is not NotZero()!
+	ok = Cmp(t, [3]int{}, NotEmpty()) // succeeds, NotEmpty() is not NotZero()!
 	fmt.Println(ok)
 
 	// Output:
@@ -1324,16 +1324,16 @@ func ExampleNotEmpty_pointers() {
 
 	type MySlice []int
 
-	ok := CmpDeeply(t, MySlice{12}, NotEmpty())
+	ok := Cmp(t, MySlice{12}, NotEmpty())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &MySlice{12}, NotEmpty()) // Ptr() not needed
+	ok = Cmp(t, &MySlice{12}, NotEmpty()) // Ptr() not needed
 	fmt.Println(ok)
 
 	l1 := &MySlice{12}
 	l2 := &l1
 	l3 := &l2
-	ok = CmpDeeply(t, &l3, NotEmpty())
+	ok = Cmp(t, &l3, NotEmpty())
 	fmt.Println(ok)
 
 	// Works the same for array, map, channel and string
@@ -1343,7 +1343,7 @@ func ExampleNotEmpty_pointers() {
 		Value int
 	}
 
-	ok = CmpDeeply(t, &MyStruct{}, NotEmpty()) // fails, use NotZero() instead
+	ok = Cmp(t, &MyStruct{}, NotEmpty()) // fails, use NotZero() instead
 	fmt.Println(ok)
 
 	// Output:
@@ -1358,14 +1358,14 @@ func ExampleNotNaN_float32() {
 
 	got := float32(math.NaN())
 
-	ok := CmpDeeply(t, got, NotNaN(),
+	ok := Cmp(t, got, NotNaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float32(math.NaN()) is NOT float32 not-a-number:", ok)
 
 	got = 12
 
-	ok = CmpDeeply(t, got, NotNaN(),
+	ok = Cmp(t, got, NotNaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float32(12) is NOT float32 not-a-number:", ok)
@@ -1380,14 +1380,14 @@ func ExampleNotNaN_float64() {
 
 	got := math.NaN()
 
-	ok := CmpDeeply(t, got, NotNaN(),
+	ok := Cmp(t, got, NotNaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("math.NaN() is not-a-number:", ok)
 
 	got = 12
 
-	ok = CmpDeeply(t, got, NotNaN(),
+	ok = Cmp(t, got, NotNaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float64(12) is not-a-number:", ok)
@@ -1402,22 +1402,22 @@ func ExampleNotNil() {
 	var got fmt.Stringer = &bytes.Buffer{}
 
 	// nil value can be compared directly with Not(nil), no need of NotNil() here
-	ok := CmpDeeply(t, got, Not(nil))
+	ok := Cmp(t, got, Not(nil))
 	fmt.Println(ok)
 
 	// But it works with NotNil() anyway
-	ok = CmpDeeply(t, got, NotNil())
+	ok = Cmp(t, got, NotNil())
 	fmt.Println(ok)
 
 	got = (*bytes.Buffer)(nil)
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with Not(nil) succeeds, as the interface is not nil
-	ok = CmpDeeply(t, got, Not(nil))
+	ok = Cmp(t, got, Not(nil))
 	fmt.Println(ok)
 
 	// In this case NotNil() fails
-	ok = CmpDeeply(t, got, NotNil())
+	ok = Cmp(t, got, NotNil())
 	fmt.Println(ok)
 
 	// Output:
@@ -1430,40 +1430,40 @@ func ExampleNotNil() {
 func ExampleNotZero() {
 	t := &testing.T{}
 
-	ok := CmpDeeply(t, 0, NotZero()) // fails
+	ok := Cmp(t, 0, NotZero()) // fails
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, float64(0), NotZero()) // fails
+	ok = Cmp(t, float64(0), NotZero()) // fails
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, 12, NotZero())
+	ok = Cmp(t, 12, NotZero())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, (map[string]int)(nil), NotZero()) // fails, as nil
+	ok = Cmp(t, (map[string]int)(nil), NotZero()) // fails, as nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, map[string]int{}, NotZero()) // succeeds, as not nil
+	ok = Cmp(t, map[string]int{}, NotZero()) // succeeds, as not nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, ([]int)(nil), NotZero()) // fails, as nil
+	ok = Cmp(t, ([]int)(nil), NotZero()) // fails, as nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, []int{}, NotZero()) // succeeds, as not nil
+	ok = Cmp(t, []int{}, NotZero()) // succeeds, as not nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, [3]int{}, NotZero()) // fails
+	ok = Cmp(t, [3]int{}, NotZero()) // fails
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, [3]int{0, 1}, NotZero()) // succeeds, DATA[1] is not 0
+	ok = Cmp(t, [3]int{0, 1}, NotZero()) // succeeds, DATA[1] is not 0
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, bytes.Buffer{}, NotZero()) // fails
+	ok = Cmp(t, bytes.Buffer{}, NotZero()) // fails
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &bytes.Buffer{}, NotZero()) // succeeds, as pointer not nil
+	ok = Cmp(t, &bytes.Buffer{}, NotZero()) // succeeds, as pointer not nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	ok = Cmp(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -1487,10 +1487,10 @@ func ExamplePPtr() {
 	num := 12
 	got := &num
 
-	ok := CmpDeeply(t, &got, PPtr(12))
+	ok := Cmp(t, &got, PPtr(12))
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, PPtr(Between(4, 15)))
+	ok = Cmp(t, &got, PPtr(Between(4, 15)))
 	fmt.Println(ok)
 
 	// Output:
@@ -1503,10 +1503,10 @@ func ExamplePtr() {
 
 	got := 12
 
-	ok := CmpDeeply(t, &got, Ptr(12))
+	ok := Cmp(t, &got, Ptr(12))
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, Ptr(Between(4, 15)))
+	ok = Cmp(t, &got, Ptr(Between(4, 15)))
 	fmt.Println(ok)
 
 	// Output:
@@ -1518,11 +1518,11 @@ func ExampleRe() {
 	t := &testing.T{}
 
 	got := "foo bar"
-	ok := CmpDeeply(t, got, Re("(zip|bar)$"), "checks value %s", got)
+	ok := Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
 	fmt.Println(ok)
 
 	got = "bar foo"
-	ok = CmpDeeply(t, got, Re("(zip|bar)$"), "checks value %s", got)
+	ok = Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1535,7 +1535,7 @@ func ExampleRe_stringer() {
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
-	ok := CmpDeeply(t, got, Re("(zip|bar)$"), "checks value %s", got)
+	ok := Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1546,7 +1546,7 @@ func ExampleRe_error() {
 	t := &testing.T{}
 
 	got := errors.New("foo bar")
-	ok := CmpDeeply(t, got, Re("(zip|bar)$"), "checks value %s", got)
+	ok := Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1557,12 +1557,12 @@ func ExampleRe_capture() {
 	t := &testing.T{}
 
 	got := "foo bar biz"
-	ok := CmpDeeply(t, got, Re(`^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar")),
+	ok := Cmp(t, got, Re(`^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = CmpDeeply(t, got, Re(`^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar")),
+	ok = Cmp(t, got, Re(`^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -1575,13 +1575,13 @@ func ExampleReAll_capture() {
 	t := &testing.T{}
 
 	got := "foo bar biz"
-	ok := CmpDeeply(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
+	ok := Cmp(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = CmpDeeply(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
+	ok = Cmp(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -1594,7 +1594,7 @@ func ExampleReAll_captureComplex() {
 	t := &testing.T{}
 
 	got := "11 45 23 56 85 96"
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		ReAll(`(\d+)`, ArrayEach(Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 10 && n < 100
@@ -1603,7 +1603,7 @@ func ExampleReAll_captureComplex() {
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		ReAll(`(\d+)`, ArrayEach(Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 20 && n < 100
@@ -1622,11 +1622,11 @@ func ExampleRe_compiled() {
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := "foo bar"
-	ok := CmpDeeply(t, got, Re(expected), "checks value %s", got)
+	ok := Cmp(t, got, Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	got = "bar foo"
-	ok = CmpDeeply(t, got, Re(expected), "checks value %s", got)
+	ok = Cmp(t, got, Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1641,7 +1641,7 @@ func ExampleRe_compiledStringer() {
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
-	ok := CmpDeeply(t, got, Re(expected), "checks value %s", got)
+	ok := Cmp(t, got, Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1654,7 +1654,7 @@ func ExampleRe_compiledError() {
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := errors.New("foo bar")
-	ok := CmpDeeply(t, got, Re(expected), "checks value %s", got)
+	ok := Cmp(t, got, Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -1667,12 +1667,12 @@ func ExampleRe_compiledCapture() {
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
 	got := "foo bar biz"
-	ok := CmpDeeply(t, got, Re(expected, Set("biz", "foo", "bar")),
+	ok := Cmp(t, got, Re(expected, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = CmpDeeply(t, got, Re(expected, Set("biz", "foo", "bar")),
+	ok = Cmp(t, got, Re(expected, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -1687,13 +1687,13 @@ func ExampleReAll_compiledCapture() {
 	expected := regexp.MustCompile(`(\w+)`)
 
 	got := "foo bar biz"
-	ok := CmpDeeply(t, got, ReAll(expected, Set("biz", "foo", "bar")),
+	ok := Cmp(t, got, ReAll(expected, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = CmpDeeply(t, got, ReAll(expected, Set("biz", "foo", "bar")),
+	ok = Cmp(t, got, ReAll(expected, Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -1708,7 +1708,7 @@ func ExampleReAll_compiledCaptureComplex() {
 	expected := regexp.MustCompile(`(\d+)`)
 
 	got := "11 45 23 56 85 96"
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		ReAll(expected, ArrayEach(Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 10 && n < 100
@@ -1717,7 +1717,7 @@ func ExampleReAll_compiledCaptureComplex() {
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		ReAll(expected, ArrayEach(Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 20 && n < 100
@@ -1736,18 +1736,18 @@ func ExampleSet() {
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are present, ignoring duplicates
-	ok := CmpDeeply(t, got, Set(1, 2, 3, 5, 8),
+	ok := Cmp(t, got, Set(1, 2, 3, 5, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Duplicates are ignored in a Set
-	ok = CmpDeeply(t, got, Set(1, 2, 2, 2, 2, 2, 3, 5, 8),
+	ok = Cmp(t, got, Set(1, 2, 2, 2, 2, 2, 3, 5, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several Set entries
-	ok = CmpDeeply(t, got, Set(Between(1, 4), 3, Between(2, 10)),
+	ok = Cmp(t, got, Set(Between(1, 4), 3, Between(2, 10)),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
@@ -1766,12 +1766,12 @@ func ExampleShallow() {
 	data := MyStruct{Value: 12}
 	got := &data
 
-	ok := CmpDeeply(t, got, Shallow(&data),
+	ok := Cmp(t, got, Shallow(&data),
 		"checks pointers only, not contents")
 	fmt.Println(ok)
 
 	// Same contents, but not same pointer
-	ok = CmpDeeply(t, got, Shallow(&MyStruct{Value: 12}),
+	ok = Cmp(t, got, Shallow(&MyStruct{Value: 12}),
 		"checks pointers only, not contents")
 	fmt.Println(ok)
 
@@ -1787,10 +1787,10 @@ func ExampleShallow_slice() {
 	a := back[:3]
 	b := back[3:]
 
-	ok := CmpDeeply(t, a, Shallow(back))
+	ok := Cmp(t, a, Shallow(back))
 	fmt.Println("are ≠ but share the same area:", ok)
 
-	ok = CmpDeeply(t, b, Shallow(back))
+	ok = Cmp(t, b, Shallow(back))
 	fmt.Println("are = but do not point to same area:", ok)
 
 	// Output:
@@ -1805,10 +1805,10 @@ func ExampleShallow_string() {
 	a := back[:6]
 	b := back[6:]
 
-	ok := CmpDeeply(t, a, Shallow(back))
+	ok := Cmp(t, a, Shallow(back))
 	fmt.Println("are ≠ but share the same area:", ok)
 
-	ok = CmpDeeply(t, b, Shallow(a))
+	ok = Cmp(t, b, Shallow(a))
 	fmt.Println("are = but do not point to same area:", ok)
 
 	// Output:
@@ -1821,16 +1821,16 @@ func ExampleSlice_slice() {
 
 	got := []int{42, 58, 26}
 
-	ok := CmpDeeply(t, got, Slice([]int{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok := Cmp(t, got, Slice([]int{42}, ArrayEntries{1: 58, 2: Ignore()}),
 		"checks slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		Slice([]int{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
 		"checks slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		Slice(([]int)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
 		"checks slice %v", got)
 	fmt.Println(ok)
@@ -1848,20 +1848,20 @@ func ExampleSlice_typedSlice() {
 
 	got := MySlice{42, 58, 26}
 
-	ok := CmpDeeply(t, got, Slice(MySlice{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok := Cmp(t, got, Slice(MySlice{42}, ArrayEntries{1: 58, 2: Ignore()}),
 		"checks typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got, Slice(&MySlice{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok = Cmp(t, &got, Slice(&MySlice{42}, ArrayEntries{1: 58, 2: Ignore()}),
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Slice(&MySlice{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Slice((*MySlice)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
@@ -1878,12 +1878,12 @@ func ExampleSmuggle_convert() {
 
 	got := int64(123)
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		Smuggle(func(n int64) int { return int(n) }, 123),
 		"checks int64 got against an int value")
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, "123",
+	ok = Cmp(t, "123",
 		Smuggle(
 			func(numStr string) (int, bool) {
 				n, err := strconv.Atoi(numStr)
@@ -1893,7 +1893,7 @@ func ExampleSmuggle_convert() {
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, "123",
+	ok = Cmp(t, "123",
 		Smuggle(
 			func(numStr string) (int, bool, string) {
 				n, err := strconv.Atoi(numStr)
@@ -1906,7 +1906,7 @@ func ExampleSmuggle_convert() {
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, "123",
+	ok = Cmp(t, "123",
 		Smuggle(
 			func(numStr string) (int, error) {
 				return strconv.Atoi(numStr)
@@ -1916,7 +1916,7 @@ func ExampleSmuggle_convert() {
 	fmt.Println(ok)
 
 	// Short version :)
-	ok = CmpDeeply(t, "123",
+	ok = Cmp(t, "123",
 		Smuggle(strconv.Atoi, Between(120, 130)),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
@@ -1935,7 +1935,7 @@ func ExampleSmuggle_lax() {
 	// got is an int16 and Smuggle func input is an int64: it is OK
 	got := int(123)
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		Smuggle(func(n int64) uint32 { return uint32(n) }, uint32(123)))
 	fmt.Println("got int16(123) → smuggle via int64 → uint32(123):", ok)
 
@@ -1949,7 +1949,7 @@ func ExampleSmuggle_auto_unmarshal() {
 	// Automatically json.Unmarshal to compare
 	got := []byte(`{"a":1,"b":2}`)
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		Smuggle(
 			func(b json.RawMessage) (r map[string]int, err error) {
 				err = json.Unmarshal(b, &r)
@@ -1985,7 +1985,7 @@ func ExampleSmuggle_complex() {
 
 		// Simplest way, but in case of Between() failure, error will be bound
 		// to DATA<smuggled>, not very clear...
-		ok := CmpDeeply(t, got,
+		ok := Cmp(t, got,
 			Smuggle(
 				func(sd StartDuration) time.Time {
 					return sd.StartDate.Add(sd.Duration)
@@ -1997,7 +1997,7 @@ func ExampleSmuggle_complex() {
 
 		// Name the computed value "ComputedEndDate" to render a Between() failure
 		// more understandable, so error will be bound to DATA.ComputedEndDate
-		ok = CmpDeeply(t, got,
+		ok = Cmp(t, got,
 			Smuggle(
 				func(sd StartDuration) SmuggledGot {
 					return SmuggledGot{
@@ -2029,7 +2029,7 @@ func ExampleSmuggle_interface() {
 	}
 
 	// Do not check the struct itself, but its stringified form
-	ok := CmpDeeply(t, gotTime,
+	ok := Cmp(t, gotTime,
 		Smuggle(func(s fmt.Stringer) string {
 			return s.String()
 		},
@@ -2039,7 +2039,7 @@ func ExampleSmuggle_interface() {
 	// If got does not implement the fmt.Stringer interface, it fails
 	// without calling the Smuggle func
 	type MyTime time.Time
-	ok = CmpDeeply(t, MyTime(gotTime),
+	ok = Cmp(t, MyTime(gotTime),
 		Smuggle(func(s fmt.Stringer) string {
 			fmt.Println("Smuggle func called!")
 			return s.String()
@@ -2079,7 +2079,7 @@ func ExampleSmuggle_field_path() {
 	}
 
 	// Want to check whether Num is between 100 and 200?
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		Smuggle(
 			func(t *Transaction) (int, error) {
 				if t.Request.Body == nil ||
@@ -2095,12 +2095,12 @@ func ExampleSmuggle_field_path() {
 	fmt.Println("check Num by hand:", ok)
 
 	// Same, but automagically generated...
-	ok = CmpDeeply(t, got, Smuggle("Request.Body.Value.Num", Between(100, 200)))
+	ok = Cmp(t, got, Smuggle("Request.Body.Value.Num", Between(100, 200)))
 	fmt.Println("check Num using a fields-path:", ok)
 
 	// And as Request is an anonymous field, can be simplified further
 	// as it can be omitted
-	ok = CmpDeeply(t, got, Smuggle("Body.Value.Num", Between(100, 200)))
+	ok = Cmp(t, got, Smuggle("Body.Value.Num", Between(100, 200)))
 	fmt.Println("check Num using an other fields-path:", ok)
 
 	// Output:
@@ -2114,7 +2114,7 @@ func ExampleString() {
 
 	got := "foobar"
 
-	ok := CmpDeeply(t, got, String("foobar"), "checks %s", got)
+	ok := Cmp(t, got, String("foobar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2127,7 +2127,7 @@ func ExampleString_stringer() {
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpDeeply(t, got, String("foobar"), "checks %s", got)
+	ok := Cmp(t, got, String("foobar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2139,7 +2139,7 @@ func ExampleString_error() {
 
 	got := errors.New("foobar")
 
-	ok := CmpDeeply(t, got, String("foobar"), "checks %s", got)
+	ok := Cmp(t, got, String("foobar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2151,7 +2151,7 @@ func ExampleHasPrefix() {
 
 	got := "foobar"
 
-	ok := CmpDeeply(t, got, HasPrefix("foo"), "checks %s", got)
+	ok := Cmp(t, got, HasPrefix("foo"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2164,7 +2164,7 @@ func ExampleHasPrefix_stringer() {
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpDeeply(t, got, HasPrefix("foo"), "checks %s", got)
+	ok := Cmp(t, got, HasPrefix("foo"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2176,7 +2176,7 @@ func ExampleHasPrefix_error() {
 
 	got := errors.New("foobar")
 
-	ok := CmpDeeply(t, got, HasPrefix("foo"), "checks %s", got)
+	ok := Cmp(t, got, HasPrefix("foo"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2188,7 +2188,7 @@ func ExampleHasSuffix() {
 
 	got := "foobar"
 
-	ok := CmpDeeply(t, got, HasSuffix("bar"), "checks %s", got)
+	ok := Cmp(t, got, HasSuffix("bar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2201,7 +2201,7 @@ func ExampleHasSuffix_stringer() {
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpDeeply(t, got, HasSuffix("bar"), "checks %s", got)
+	ok := Cmp(t, got, HasSuffix("bar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2213,7 +2213,7 @@ func ExampleHasSuffix_error() {
 
 	got := errors.New("foobar")
 
-	ok := CmpDeeply(t, got, HasSuffix("bar"), "checks %s", got)
+	ok := Cmp(t, got, HasSuffix("bar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -2236,7 +2236,7 @@ func ExampleStruct() {
 	}
 
 	// As NumChildren is zero in Struct() call, it is not checked
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		Struct(Person{Name: "Foobar"}, StructFields{
 			"Age": Between(40, 50),
 		}),
@@ -2244,7 +2244,7 @@ func ExampleStruct() {
 	fmt.Println(ok)
 
 	// Model can be empty
-	ok = CmpDeeply(t, got,
+	ok = Cmp(t, got,
 		Struct(Person{}, StructFields{
 			"Name":        "Foobar",
 			"Age":         Between(40, 50),
@@ -2254,7 +2254,7 @@ func ExampleStruct() {
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Struct(&Person{}, StructFields{
 			"Name":        "Foobar",
 			"Age":         Between(40, 50),
@@ -2264,7 +2264,7 @@ func ExampleStruct() {
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		Struct((*Person)(nil), StructFields{
 			"Name":        "Foobar",
 			"Age":         Between(40, 50),
@@ -2285,18 +2285,18 @@ func ExampleSubBagOf() {
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := CmpDeeply(t, got, SubBagOf(0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 9, 9),
+	ok := Cmp(t, got, SubBagOf(0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 9, 9),
 		"checks at least all items are present, in any order")
 	fmt.Println(ok)
 
 	// got contains one 8 too many
-	ok = CmpDeeply(t, got, SubBagOf(0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 9, 9),
+	ok = Cmp(t, got, SubBagOf(0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 9, 9),
 		"checks at least all items are present, in any order")
 	fmt.Println(ok)
 
 	got = []int{1, 3, 5, 2}
 
-	ok = CmpDeeply(t, got, SubBagOf(
+	ok = Cmp(t, got, SubBagOf(
 		Between(0, 3),
 		Between(0, 3),
 		Between(0, 3),
@@ -2317,7 +2317,7 @@ func ExampleSubMapOf_map() {
 
 	got := map[string]int{"foo": 12, "bar": 42}
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		SubMapOf(map[string]int{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666}),
 		"checks map %v is included in expected keys/values", got)
 	fmt.Println(ok)
@@ -2333,12 +2333,12 @@ func ExampleSubMapOf_typedMap() {
 
 	got := MyMap{"foo": 12, "bar": 42}
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		SubMapOf(MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666}),
 		"checks typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		SubMapOf(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666}),
 		"checks pointed typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
@@ -2354,13 +2354,13 @@ func ExampleSubSetOf() {
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are expected, ignoring duplicates
-	ok := CmpDeeply(t, got, SubSetOf(1, 2, 3, 4, 5, 6, 7, 8),
+	ok := Cmp(t, got, SubSetOf(1, 2, 3, 4, 5, 6, 7, 8),
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several SubSetOf entries
-	ok = CmpDeeply(t, got, SubSetOf(Between(1, 4), 3, Between(2, 10), Gt(100)),
+	ok = Cmp(t, got, SubSetOf(Between(1, 4), 3, Between(2, 10), Gt(100)),
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
@@ -2374,11 +2374,11 @@ func ExampleSuperBagOf() {
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := CmpDeeply(t, got, SuperBagOf(8, 5, 8),
+	ok := Cmp(t, got, SuperBagOf(8, 5, 8),
 		"checks the items are present, in any order")
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, SuperBagOf(Gt(5), Lte(2)),
+	ok = Cmp(t, got, SuperBagOf(Gt(5), Lte(2)),
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
@@ -2392,7 +2392,7 @@ func ExampleSuperMapOf_map() {
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		SuperMapOf(map[string]int{"bar": 42}, MapEntries{"foo": Lt(15)}),
 		"checks map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
@@ -2408,12 +2408,12 @@ func ExampleSuperMapOf_typedMap() {
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpDeeply(t, got,
+	ok := Cmp(t, got,
 		SuperMapOf(MyMap{"bar": 42}, MapEntries{"foo": Lt(15)}),
 		"checks typed map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &got,
+	ok = Cmp(t, &got,
 		SuperMapOf(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15)}),
 		"checks pointed typed map %v contains at leat all expected keys/values",
 		got)
@@ -2429,11 +2429,11 @@ func ExampleSuperSetOf() {
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := CmpDeeply(t, got, SuperSetOf(1, 2, 3),
+	ok := Cmp(t, got, SuperSetOf(1, 2, 3),
 		"checks the items are present, in any order and ignoring duplicates")
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, got, SuperSetOf(Gt(5), Lte(2)),
+	ok = Cmp(t, got, SuperSetOf(Gt(5), Lte(2)),
 		"checks at least 2 items of %v match ignoring duplicates", got)
 	fmt.Println(ok)
 
@@ -2457,19 +2457,19 @@ func ExampleTruncTime() {
 
 	// Compare dates ignoring nanoseconds and monotonic parts
 	expected := dateToTime("2018-05-01T12:45:53Z")
-	ok := CmpDeeply(t, got, TruncTime(expected, time.Second),
+	ok := Cmp(t, got, TruncTime(expected, time.Second),
 		"checks date %v, truncated to the second", got)
 	fmt.Println(ok)
 
 	// Compare dates ignoring time and so monotonic parts
 	expected = dateToTime("2018-05-01T11:22:33.444444444Z")
-	ok = CmpDeeply(t, got, TruncTime(expected, 24*time.Hour),
+	ok = Cmp(t, got, TruncTime(expected, 24*time.Hour),
 		"checks date %v, truncated to the day", got)
 	fmt.Println(ok)
 
 	// Compare dates exactly but ignoring monotonic part
 	expected = dateToTime("2018-05-01T12:45:53.123456789Z")
-	ok = CmpDeeply(t, got, TruncTime(expected),
+	ok = Cmp(t, got, TruncTime(expected),
 		"checks date %v ignoring monotonic part", got)
 	fmt.Println(ok)
 
@@ -2482,40 +2482,40 @@ func ExampleTruncTime() {
 func ExampleZero() {
 	t := &testing.T{}
 
-	ok := CmpDeeply(t, 0, Zero())
+	ok := Cmp(t, 0, Zero())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, float64(0), Zero())
+	ok = Cmp(t, float64(0), Zero())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, 12, Zero()) // fails, as 12 is not 0 :)
+	ok = Cmp(t, 12, Zero()) // fails, as 12 is not 0 :)
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, (map[string]int)(nil), Zero())
+	ok = Cmp(t, (map[string]int)(nil), Zero())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, map[string]int{}, Zero()) // fails, as not nil
+	ok = Cmp(t, map[string]int{}, Zero()) // fails, as not nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, ([]int)(nil), Zero())
+	ok = Cmp(t, ([]int)(nil), Zero())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, []int{}, Zero()) // fails, as not nil
+	ok = Cmp(t, []int{}, Zero()) // fails, as not nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, [3]int{}, Zero())
+	ok = Cmp(t, [3]int{}, Zero())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, [3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
+	ok = Cmp(t, [3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, bytes.Buffer{}, Zero())
+	ok = Cmp(t, bytes.Buffer{}, Zero())
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &bytes.Buffer{}, Zero()) // fails, as pointer not nil
+	ok = Cmp(t, &bytes.Buffer{}, Zero()) // fails, as pointer not nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
+	ok = Cmp(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
 	fmt.Println(ok)
 
 	// Output:

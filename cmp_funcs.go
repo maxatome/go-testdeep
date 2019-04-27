@@ -15,7 +15,7 @@ import (
 
 // CmpAll is a shortcut for:
 //
-//   CmpDeeply(t, got, All(expectedValues...), args...)
+//   Cmp(t, got, All(expectedValues...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#All for details.
 //
@@ -34,12 +34,12 @@ func CmpAll(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, All(expectedValues...), args...)
+	return Cmp(t, got, All(expectedValues...), args...)
 }
 
 // CmpAny is a shortcut for:
 //
-//   CmpDeeply(t, got, Any(expectedValues...), args...)
+//   Cmp(t, got, Any(expectedValues...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Any for details.
 //
@@ -58,12 +58,12 @@ func CmpAny(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Any(expectedValues...), args...)
+	return Cmp(t, got, Any(expectedValues...), args...)
 }
 
 // CmpArray is a shortcut for:
 //
-//   CmpDeeply(t, got, Array(model, expectedEntries), args...)
+//   Cmp(t, got, Array(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Array for details.
 //
@@ -82,12 +82,12 @@ func CmpArray(t TestingT, got interface{}, model interface{}, expectedEntries Ar
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Array(model, expectedEntries), args...)
+	return Cmp(t, got, Array(model, expectedEntries), args...)
 }
 
 // CmpArrayEach is a shortcut for:
 //
-//   CmpDeeply(t, got, ArrayEach(expectedValue), args...)
+//   Cmp(t, got, ArrayEach(expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach for details.
 //
@@ -106,12 +106,12 @@ func CmpArrayEach(t TestingT, got interface{}, expectedValue interface{}, args .
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, ArrayEach(expectedValue), args...)
+	return Cmp(t, got, ArrayEach(expectedValue), args...)
 }
 
 // CmpBag is a shortcut for:
 //
-//   CmpDeeply(t, got, Bag(expectedItems...), args...)
+//   Cmp(t, got, Bag(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Bag for details.
 //
@@ -130,12 +130,12 @@ func CmpBag(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Bag(expectedItems...), args...)
+	return Cmp(t, got, Bag(expectedItems...), args...)
 }
 
 // CmpBetween is a shortcut for:
 //
-//   CmpDeeply(t, got, Between(from, to, bounds), args...)
+//   Cmp(t, got, Between(from, to, bounds), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Between for details.
 //
@@ -158,12 +158,12 @@ func CmpBetween(t TestingT, got interface{}, from interface{}, to interface{}, b
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Between(from, to, bounds), args...)
+	return Cmp(t, got, Between(from, to, bounds), args...)
 }
 
 // CmpCap is a shortcut for:
 //
-//   CmpDeeply(t, got, Cap(val), args...)
+//   Cmp(t, got, Cap(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Cap for details.
 //
@@ -182,12 +182,12 @@ func CmpCap(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Cap(val), args...)
+	return Cmp(t, got, Cap(val), args...)
 }
 
 // CmpCode is a shortcut for:
 //
-//   CmpDeeply(t, got, Code(fn), args...)
+//   Cmp(t, got, Code(fn), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Code for details.
 //
@@ -206,12 +206,12 @@ func CmpCode(t TestingT, got interface{}, fn interface{}, args ...interface{}) b
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Code(fn), args...)
+	return Cmp(t, got, Code(fn), args...)
 }
 
 // CmpContains is a shortcut for:
 //
-//   CmpDeeply(t, got, Contains(expectedValue), args...)
+//   Cmp(t, got, Contains(expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Contains for details.
 //
@@ -230,12 +230,12 @@ func CmpContains(t TestingT, got interface{}, expectedValue interface{}, args ..
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Contains(expectedValue), args...)
+	return Cmp(t, got, Contains(expectedValue), args...)
 }
 
 // CmpContainsKey is a shortcut for:
 //
-//   CmpDeeply(t, got, ContainsKey(expectedValue), args...)
+//   Cmp(t, got, ContainsKey(expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey for details.
 //
@@ -254,12 +254,12 @@ func CmpContainsKey(t TestingT, got interface{}, expectedValue interface{}, args
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, ContainsKey(expectedValue), args...)
+	return Cmp(t, got, ContainsKey(expectedValue), args...)
 }
 
 // CmpEmpty is a shortcut for:
 //
-//   CmpDeeply(t, got, Empty(), args...)
+//   Cmp(t, got, Empty(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Empty for details.
 //
@@ -278,12 +278,12 @@ func CmpEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Empty(), args...)
+	return Cmp(t, got, Empty(), args...)
 }
 
 // CmpGt is a shortcut for:
 //
-//   CmpDeeply(t, got, Gt(val), args...)
+//   Cmp(t, got, Gt(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Gt for details.
 //
@@ -302,12 +302,12 @@ func CmpGt(t TestingT, got interface{}, val interface{}, args ...interface{}) bo
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Gt(val), args...)
+	return Cmp(t, got, Gt(val), args...)
 }
 
 // CmpGte is a shortcut for:
 //
-//   CmpDeeply(t, got, Gte(val), args...)
+//   Cmp(t, got, Gte(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Gte for details.
 //
@@ -326,12 +326,12 @@ func CmpGte(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Gte(val), args...)
+	return Cmp(t, got, Gte(val), args...)
 }
 
 // CmpHasPrefix is a shortcut for:
 //
-//   CmpDeeply(t, got, HasPrefix(expected), args...)
+//   Cmp(t, got, HasPrefix(expected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix for details.
 //
@@ -350,12 +350,12 @@ func CmpHasPrefix(t TestingT, got interface{}, expected string, args ...interfac
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, HasPrefix(expected), args...)
+	return Cmp(t, got, HasPrefix(expected), args...)
 }
 
 // CmpHasSuffix is a shortcut for:
 //
-//   CmpDeeply(t, got, HasSuffix(expected), args...)
+//   Cmp(t, got, HasSuffix(expected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix for details.
 //
@@ -374,12 +374,12 @@ func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interfac
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, HasSuffix(expected), args...)
+	return Cmp(t, got, HasSuffix(expected), args...)
 }
 
 // CmpIsa is a shortcut for:
 //
-//   CmpDeeply(t, got, Isa(model), args...)
+//   Cmp(t, got, Isa(model), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Isa for details.
 //
@@ -398,12 +398,12 @@ func CmpIsa(t TestingT, got interface{}, model interface{}, args ...interface{})
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Isa(model), args...)
+	return Cmp(t, got, Isa(model), args...)
 }
 
 // CmpLen is a shortcut for:
 //
-//   CmpDeeply(t, got, Len(val), args...)
+//   Cmp(t, got, Len(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Len for details.
 //
@@ -422,12 +422,12 @@ func CmpLen(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Len(val), args...)
+	return Cmp(t, got, Len(val), args...)
 }
 
 // CmpLt is a shortcut for:
 //
-//   CmpDeeply(t, got, Lt(val), args...)
+//   Cmp(t, got, Lt(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Lt for details.
 //
@@ -446,12 +446,12 @@ func CmpLt(t TestingT, got interface{}, val interface{}, args ...interface{}) bo
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Lt(val), args...)
+	return Cmp(t, got, Lt(val), args...)
 }
 
 // CmpLte is a shortcut for:
 //
-//   CmpDeeply(t, got, Lte(val), args...)
+//   Cmp(t, got, Lte(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Lte for details.
 //
@@ -470,12 +470,12 @@ func CmpLte(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Lte(val), args...)
+	return Cmp(t, got, Lte(val), args...)
 }
 
 // CmpMap is a shortcut for:
 //
-//   CmpDeeply(t, got, Map(model, expectedEntries), args...)
+//   Cmp(t, got, Map(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Map for details.
 //
@@ -494,12 +494,12 @@ func CmpMap(t TestingT, got interface{}, model interface{}, expectedEntries MapE
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Map(model, expectedEntries), args...)
+	return Cmp(t, got, Map(model, expectedEntries), args...)
 }
 
 // CmpMapEach is a shortcut for:
 //
-//   CmpDeeply(t, got, MapEach(expectedValue), args...)
+//   Cmp(t, got, MapEach(expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#MapEach for details.
 //
@@ -518,12 +518,12 @@ func CmpMapEach(t TestingT, got interface{}, expectedValue interface{}, args ...
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, MapEach(expectedValue), args...)
+	return Cmp(t, got, MapEach(expectedValue), args...)
 }
 
 // CmpN is a shortcut for:
 //
-//   CmpDeeply(t, got, N(num, tolerance), args...)
+//   Cmp(t, got, N(num, tolerance), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#N for details.
 //
@@ -546,12 +546,12 @@ func CmpN(t TestingT, got interface{}, num interface{}, tolerance interface{}, a
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, N(num, tolerance), args...)
+	return Cmp(t, got, N(num, tolerance), args...)
 }
 
 // CmpNaN is a shortcut for:
 //
-//   CmpDeeply(t, got, NaN(), args...)
+//   Cmp(t, got, NaN(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NaN for details.
 //
@@ -570,12 +570,12 @@ func CmpNaN(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, NaN(), args...)
+	return Cmp(t, got, NaN(), args...)
 }
 
 // CmpNil is a shortcut for:
 //
-//   CmpDeeply(t, got, Nil(), args...)
+//   Cmp(t, got, Nil(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Nil for details.
 //
@@ -594,12 +594,12 @@ func CmpNil(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Nil(), args...)
+	return Cmp(t, got, Nil(), args...)
 }
 
 // CmpNone is a shortcut for:
 //
-//   CmpDeeply(t, got, None(expectedValues...), args...)
+//   Cmp(t, got, None(expectedValues...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#None for details.
 //
@@ -618,12 +618,12 @@ func CmpNone(t TestingT, got interface{}, expectedValues []interface{}, args ...
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, None(expectedValues...), args...)
+	return Cmp(t, got, None(expectedValues...), args...)
 }
 
 // CmpNot is a shortcut for:
 //
-//   CmpDeeply(t, got, Not(expected), args...)
+//   Cmp(t, got, Not(expected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Not for details.
 //
@@ -642,12 +642,12 @@ func CmpNot(t TestingT, got interface{}, expected interface{}, args ...interface
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Not(expected), args...)
+	return Cmp(t, got, Not(expected), args...)
 }
 
 // CmpNotAny is a shortcut for:
 //
-//   CmpDeeply(t, got, NotAny(expectedItems...), args...)
+//   Cmp(t, got, NotAny(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotAny for details.
 //
@@ -666,12 +666,12 @@ func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ..
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, NotAny(expectedItems...), args...)
+	return Cmp(t, got, NotAny(expectedItems...), args...)
 }
 
 // CmpNotEmpty is a shortcut for:
 //
-//   CmpDeeply(t, got, NotEmpty(), args...)
+//   Cmp(t, got, NotEmpty(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty for details.
 //
@@ -690,12 +690,12 @@ func CmpNotEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, NotEmpty(), args...)
+	return Cmp(t, got, NotEmpty(), args...)
 }
 
 // CmpNotNaN is a shortcut for:
 //
-//   CmpDeeply(t, got, NotNaN(), args...)
+//   Cmp(t, got, NotNaN(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotNaN for details.
 //
@@ -714,12 +714,12 @@ func CmpNotNaN(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, NotNaN(), args...)
+	return Cmp(t, got, NotNaN(), args...)
 }
 
 // CmpNotNil is a shortcut for:
 //
-//   CmpDeeply(t, got, NotNil(), args...)
+//   Cmp(t, got, NotNil(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotNil for details.
 //
@@ -738,12 +738,12 @@ func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, NotNil(), args...)
+	return Cmp(t, got, NotNil(), args...)
 }
 
 // CmpNotZero is a shortcut for:
 //
-//   CmpDeeply(t, got, NotZero(), args...)
+//   Cmp(t, got, NotZero(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#NotZero for details.
 //
@@ -762,12 +762,12 @@ func CmpNotZero(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, NotZero(), args...)
+	return Cmp(t, got, NotZero(), args...)
 }
 
 // CmpPPtr is a shortcut for:
 //
-//   CmpDeeply(t, got, PPtr(val), args...)
+//   Cmp(t, got, PPtr(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#PPtr for details.
 //
@@ -786,12 +786,12 @@ func CmpPPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) 
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, PPtr(val), args...)
+	return Cmp(t, got, PPtr(val), args...)
 }
 
 // CmpPtr is a shortcut for:
 //
-//   CmpDeeply(t, got, Ptr(val), args...)
+//   Cmp(t, got, Ptr(val), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Ptr for details.
 //
@@ -810,12 +810,12 @@ func CmpPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Ptr(val), args...)
+	return Cmp(t, got, Ptr(val), args...)
 }
 
 // CmpRe is a shortcut for:
 //
-//   CmpDeeply(t, got, Re(reg, capture), args...)
+//   Cmp(t, got, Re(reg, capture), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Re for details.
 //
@@ -838,12 +838,12 @@ func CmpRe(t TestingT, got interface{}, reg interface{}, capture interface{}, ar
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Re(reg, capture), args...)
+	return Cmp(t, got, Re(reg, capture), args...)
 }
 
 // CmpReAll is a shortcut for:
 //
-//   CmpDeeply(t, got, ReAll(reg, capture), args...)
+//   Cmp(t, got, ReAll(reg, capture), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#ReAll for details.
 //
@@ -862,12 +862,12 @@ func CmpReAll(t TestingT, got interface{}, reg interface{}, capture interface{},
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, ReAll(reg, capture), args...)
+	return Cmp(t, got, ReAll(reg, capture), args...)
 }
 
 // CmpSet is a shortcut for:
 //
-//   CmpDeeply(t, got, Set(expectedItems...), args...)
+//   Cmp(t, got, Set(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Set for details.
 //
@@ -886,12 +886,12 @@ func CmpSet(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Set(expectedItems...), args...)
+	return Cmp(t, got, Set(expectedItems...), args...)
 }
 
 // CmpShallow is a shortcut for:
 //
-//   CmpDeeply(t, got, Shallow(expectedPtr), args...)
+//   Cmp(t, got, Shallow(expectedPtr), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Shallow for details.
 //
@@ -910,12 +910,12 @@ func CmpShallow(t TestingT, got interface{}, expectedPtr interface{}, args ...in
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Shallow(expectedPtr), args...)
+	return Cmp(t, got, Shallow(expectedPtr), args...)
 }
 
 // CmpSlice is a shortcut for:
 //
-//   CmpDeeply(t, got, Slice(model, expectedEntries), args...)
+//   Cmp(t, got, Slice(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Slice for details.
 //
@@ -934,12 +934,12 @@ func CmpSlice(t TestingT, got interface{}, model interface{}, expectedEntries Ar
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Slice(model, expectedEntries), args...)
+	return Cmp(t, got, Slice(model, expectedEntries), args...)
 }
 
 // CmpSmuggle is a shortcut for:
 //
-//   CmpDeeply(t, got, Smuggle(fn, expectedValue), args...)
+//   Cmp(t, got, Smuggle(fn, expectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Smuggle for details.
 //
@@ -958,12 +958,12 @@ func CmpSmuggle(t TestingT, got interface{}, fn interface{}, expectedValue inter
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Smuggle(fn, expectedValue), args...)
+	return Cmp(t, got, Smuggle(fn, expectedValue), args...)
 }
 
 // CmpString is a shortcut for:
 //
-//   CmpDeeply(t, got, String(expected), args...)
+//   Cmp(t, got, String(expected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#String for details.
 //
@@ -982,12 +982,12 @@ func CmpString(t TestingT, got interface{}, expected string, args ...interface{}
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, String(expected), args...)
+	return Cmp(t, got, String(expected), args...)
 }
 
 // CmpStruct is a shortcut for:
 //
-//   CmpDeeply(t, got, Struct(model, expectedFields), args...)
+//   Cmp(t, got, Struct(model, expectedFields), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Struct for details.
 //
@@ -1006,12 +1006,12 @@ func CmpStruct(t TestingT, got interface{}, model interface{}, expectedFields St
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Struct(model, expectedFields), args...)
+	return Cmp(t, got, Struct(model, expectedFields), args...)
 }
 
 // CmpSubBagOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SubBagOf(expectedItems...), args...)
+//   Cmp(t, got, SubBagOf(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf for details.
 //
@@ -1030,12 +1030,12 @@ func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, SubBagOf(expectedItems...), args...)
+	return Cmp(t, got, SubBagOf(expectedItems...), args...)
 }
 
 // CmpSubMapOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SubMapOf(model, expectedEntries), args...)
+//   Cmp(t, got, SubMapOf(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SubMapOf for details.
 //
@@ -1054,12 +1054,12 @@ func CmpSubMapOf(t TestingT, got interface{}, model interface{}, expectedEntries
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, SubMapOf(model, expectedEntries), args...)
+	return Cmp(t, got, SubMapOf(model, expectedEntries), args...)
 }
 
 // CmpSubSetOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SubSetOf(expectedItems...), args...)
+//   Cmp(t, got, SubSetOf(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf for details.
 //
@@ -1078,12 +1078,12 @@ func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, SubSetOf(expectedItems...), args...)
+	return Cmp(t, got, SubSetOf(expectedItems...), args...)
 }
 
 // CmpSuperBagOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SuperBagOf(expectedItems...), args...)
+//   Cmp(t, got, SuperBagOf(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf for details.
 //
@@ -1102,12 +1102,12 @@ func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, SuperBagOf(expectedItems...), args...)
+	return Cmp(t, got, SuperBagOf(expectedItems...), args...)
 }
 
 // CmpSuperMapOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SuperMapOf(model, expectedEntries), args...)
+//   Cmp(t, got, SuperMapOf(model, expectedEntries), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf for details.
 //
@@ -1126,12 +1126,12 @@ func CmpSuperMapOf(t TestingT, got interface{}, model interface{}, expectedEntri
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, SuperMapOf(model, expectedEntries), args...)
+	return Cmp(t, got, SuperMapOf(model, expectedEntries), args...)
 }
 
 // CmpSuperSetOf is a shortcut for:
 //
-//   CmpDeeply(t, got, SuperSetOf(expectedItems...), args...)
+//   Cmp(t, got, SuperSetOf(expectedItems...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf for details.
 //
@@ -1150,12 +1150,12 @@ func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, SuperSetOf(expectedItems...), args...)
+	return Cmp(t, got, SuperSetOf(expectedItems...), args...)
 }
 
 // CmpTruncTime is a shortcut for:
 //
-//   CmpDeeply(t, got, TruncTime(expectedTime, trunc), args...)
+//   Cmp(t, got, TruncTime(expectedTime, trunc), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#TruncTime for details.
 //
@@ -1178,12 +1178,12 @@ func CmpTruncTime(t TestingT, got interface{}, expectedTime interface{}, trunc t
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, TruncTime(expectedTime, trunc), args...)
+	return Cmp(t, got, TruncTime(expectedTime, trunc), args...)
 }
 
 // CmpZero is a shortcut for:
 //
-//   CmpDeeply(t, got, Zero(), args...)
+//   Cmp(t, got, Zero(), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Zero for details.
 //
@@ -1202,5 +1202,5 @@ func CmpZero(t TestingT, got interface{}, args ...interface{}) bool {
 		t.Helper()
 	}
 
-	return CmpDeeply(t, got, Zero(), args...)
+	return Cmp(t, got, Zero(), args...)
 }

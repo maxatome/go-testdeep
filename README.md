@@ -28,22 +28,17 @@ go-testdeep
 
 ## Latest news
 
+- 2019/04/27: new [`Cmp`] function and
+  [`T.Cmp`](https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp)
+  method, shorter versions of
+  [`CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#CmpDeeply)
+  and [`T.CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpDeeply);
 - 2019/01/13: test failures output is now colored by default. See
   [Environment variables](#environment-variables) to configure it;
 - 2019/01/07: introducing TestDeep helpers. First one is
   [`tdhttp` or HTTP API testing helper](#tdhttp-or-http-api-testing-helper);
 - 2018/12/16: [`Between`], [`Gt`], [`Gte`], [`Lt`] & [`Lte`] operators
   now handle strings as well;
-- 2018/12/07: [`Smuggle`] operator and its friends
-  [`CmpSmuggle`](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle)
-  &
-  [`T.Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle)
-  are now more lax and gain the ability to work on struct
-  fields-paths.  [`Shallow`] operator and its friends
-  [`CmpShallow`](https://godoc.org/github.com/maxatome/go-testdeep#CmpShallow)
-  &
-  [`T.Shallow`](https://godoc.org/github.com/maxatome/go-testdeep#T.Shallow)
-  can now work on strings;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -77,7 +72,7 @@ func TestCreateRecord(t *testing.T) {
 
   if td.CmpNoError(t, err) {
     // If you know the exact value of all fields of newly created record
-    td.CmpDeeply(t, record,
+    td.Cmp(t, record,
       &Record{
         Id:        245,
         Name:      "Bob",
@@ -88,7 +83,7 @@ func TestCreateRecord(t *testing.T) {
 
     // But as often you cannot guess the values of DB generated fields,
     // you can choose to ignore them and only test the non-zero ones
-    td.CmpDeeply(t, record,
+    td.Cmp(t, record,
       td.Struct(
         &Record{
           Name: "Bob",
@@ -98,7 +93,7 @@ func TestCreateRecord(t *testing.T) {
       "Name & Age fields of newly created record")
 
     // Anyway, it is better to be able to test all fields!
-    td.CmpDeeply(t, record,
+    td.Cmp(t, record,
       td.Struct(
         &Record{
           Name: "Bob",
@@ -118,7 +113,7 @@ Imagine `CreateRecord` does not set correctly `CreatedAt` field, then:
 go test -run=TestCreateRecord
 ```
 
-outputs for last `td.CmpDeeply` call:
+outputs for last `td.Cmp` call:
 
 ![error output](doc/colored-newly1.svg)
 
@@ -164,7 +159,7 @@ func TestCreateRecord(tt *testing.T) {
     t := t.RootName("RECORD") // Use RECORD instead of DATA in failure reports
 
     // If you know the exact value of all fields of newly created record
-    t.CmpDeeply(record,
+    t.Cmp(record,
       &Record{
         Id:        245,
         Name:      "Bob",
@@ -186,8 +181,8 @@ func TestCreateRecord(tt *testing.T) {
       },
       "Newly created record")
 
-    // Or using CmpDeeply method, it's a matter of taste
-    t.CmpDeeply(record,
+    // Or using Cmp method, it's a matter of taste
+    t.Cmp(record,
       td.Struct(
         Record{
           Name: "Bob",
@@ -269,7 +264,7 @@ func TestCreateRecord(t *testing.T) {
 }
 ```
 
-With `testdeep`, it is a way simple, thanks to [`CmpDeeply`] function:
+With `testdeep`, it is a way simple, thanks to [`Cmp`] function:
 
 ```go
 import (
@@ -283,8 +278,8 @@ func TestCreateRecord(t *testing.T) {
   before := time.Now()
   record, err := CreateRecord("Bob", 23)
 
-  if td.CmpDeeply(t, err, nil) {
-    td.CmpDeeply(t, record,
+  if td.Cmp(t, err, nil) {
+    td.Cmp(t, record,
       td.Struct(
         Record{
           Name: "Bob",
@@ -303,7 +298,7 @@ Of course not only structs can be compared. A lot of
 [operators](#available-operators) can be found below to cover most
 (all?) needed tests.
 
-The [`CmpDeeply`] function is the keystone of this package,
+The [`Cmp`] function is the keystone of this package,
 but to make the writing of tests even easier, the family of `Cmp*`
 functions are provided and act as shortcuts. Using
 [`CmpNoError`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNoError)
@@ -480,7 +475,7 @@ example of use.
 ## Environment variables
 
 - `TESTDEEP_MAX_ERRORS` maximum number of errors to report before
-  stopping during one comparison (one [`CmpDeeply`] execution for
+  stopping during one comparison (one [`Cmp`] execution for
   example). It defaults to 10;
 - `TESTDEEP_COLOR` enable (`on`) or disable (`off`) the color
   output. It defaults to `on`;
@@ -682,7 +677,7 @@ See [FAQ](doc/FAQ.md).
 
 [`T`]: https://godoc.org/github.com/maxatome/go-testdeep#T
 [`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep#TestDeep
-[`CmpDeeply`]: https://godoc.org/github.com/maxatome/go-testdeep#CmpDeeply
+[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep#Cmp
 
 [`error`]: https://golang.org/ref/spec#Errors
 [`fmt.Stringer`]: https://golang.org/pkg/fmt/#Stringer

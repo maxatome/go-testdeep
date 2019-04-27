@@ -1130,7 +1130,7 @@ func ExampleCmpNil() {
 	var got fmt.Stringer // interface
 
 	// nil value can be compared directly with nil, no need of Nil() here
-	ok := CmpDeeply(t, got, nil)
+	ok := Cmp(t, got, nil)
 	fmt.Println(ok)
 
 	// But it works with Nil() anyway
@@ -1141,7 +1141,7 @@ func ExampleCmpNil() {
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with nil fails, as the interface is not nil
-	ok = CmpDeeply(t, got, nil)
+	ok = Cmp(t, got, nil)
 	fmt.Println(ok)
 
 	// In this case Nil() succeed
@@ -1337,7 +1337,7 @@ func ExampleCmpNotNil() {
 	var got fmt.Stringer = &bytes.Buffer{}
 
 	// nil value can be compared directly with Not(nil), no need of NotNil() here
-	ok := CmpDeeply(t, got, Not(nil))
+	ok := Cmp(t, got, Not(nil))
 	fmt.Println(ok)
 
 	// But it works with NotNil() anyway
@@ -1348,7 +1348,7 @@ func ExampleCmpNotNil() {
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with Not(nil) succeeds, as the interface is not nil
-	ok = CmpDeeply(t, got, Not(nil))
+	ok = Cmp(t, got, Not(nil))
 	fmt.Println(ok)
 
 	// In this case NotNil() fails
@@ -1398,7 +1398,7 @@ func ExampleCmpNotZero() {
 	ok = CmpNotZero(t, &bytes.Buffer{}) // succeeds, as pointer not nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	ok = Cmp(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -2324,7 +2324,7 @@ func ExampleCmpZero() {
 	ok = CmpZero(t, &bytes.Buffer{}) // fails, as pointer not nil
 	fmt.Println(ok)
 
-	ok = CmpDeeply(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
+	ok = Cmp(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
 	fmt.Println(ok)
 
 	// Output:

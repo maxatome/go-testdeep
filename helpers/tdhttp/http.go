@@ -68,13 +68,13 @@ func CmpMarshaledResponse(tt td.TestingFT,
 	// Check status, nil = ignore
 	if expectedResp.Status != nil {
 		statusMismatch = !t.RootName("Response.Status").
-			CmpDeeply(w.Code, expectedResp.Status, "status code should match")
+			Cmp(w.Code, expectedResp.Status, "status code should match")
 	}
 
 	// Check header, nil = ignore
 	if expectedResp.Header != nil {
 		headerMismatch = !t.RootName("Response.Header").
-			CmpDeeply(w.Header(), expectedResp.Header, "header should match")
+			Cmp(w.Header(), expectedResp.Header, "header should match")
 	}
 
 	t = t.RootName("Response.Body")
@@ -137,7 +137,7 @@ func CmpMarshaledResponse(tt td.TestingFT,
 		showRawBody = true // let's show its real body contents
 	} else {
 		// If the body comparison fails
-		if !t.CmpDeeply(body, td.Ptr(expectedResp.Body), "body contents is OK") {
+		if !t.Cmp(body, td.Ptr(expectedResp.Body), "body contents is OK") {
 			success = false
 
 			// Try to catch bad body expected type when nothing has been set
