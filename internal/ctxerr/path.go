@@ -67,7 +67,7 @@ func (p Path) addLevel(level pathLevel) Path {
 	return append(new, level)
 }
 
-// Copy returns a new Path, exact but independant copy of "p".
+// Copy returns a new Path, exact but independent copy of "p".
 func (p Path) Copy() Path {
 	if p == nil {
 		return nil

@@ -45,7 +45,7 @@ func InitColors() {
 
 // SaveColorState save the "TESTDEEP_COLOR" environment variable
 // value, sets it to "off", calls InitColors() and returns a function
-// to be called in a defer statement. Only intented to be used in
+// to be called in a defer statement. Only intended to be used in
 // tests like:
 //
 //   defer ctxerr.SaveColorState()()
