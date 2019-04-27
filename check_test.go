@@ -283,7 +283,7 @@ func _checkOK(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
 	t.Helper()
 
-	if !testdeep.CmpDeeply(t, got, expected, args...) {
+	if !testdeep.Cmp(t, got, expected, args...) {
 		return false
 	}
 

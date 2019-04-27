@@ -6,7 +6,7 @@
 
 // Work around https://github.com/golang/go/issues/26995 issue
 // (corrected in go 1.12).
-// +build go1.12 !race
+// +build go1.12
 
 package testdeep_test
 
@@ -24,7 +24,7 @@ func TestSetlocation(t *testing.T) {
 
 //line /go-testdeep/types_test.go:10
 	tt := &tdutil.T{}
-	ok := td.CmpDeeply(tt, 12, 13)
+	ok := td.Cmp(tt, 12, 13)
 	if !ok {
 		test.EqualStr(t, tt.LogBuf(), `    types_test.go:11: Failed test
         DATA: values differ
@@ -32,12 +32,12 @@ func TestSetlocation(t *testing.T) {
         	expected: 13
 `)
 	} else {
-		t.Error("CmpDeeply returned true!")
+		t.Error("Cmp returned true!")
 	}
 
 //line /go-testdeep/types_test.go:20
 	tt = &tdutil.T{}
-	ok = td.CmpDeeply(tt,
+	ok = td.Cmp(tt,
 		12,
 		td.Any(13, 14, 15))
 	if !ok {
@@ -50,7 +50,7 @@ func TestSetlocation(t *testing.T) {
         [under TestDeep operator Any at types_test.go:23]
 `)
 	} else {
-		t.Error("CmpDeeply returned true!")
+		t.Error("Cmp returned true!")
 	}
 
 //line /go-testdeep/types_test.go:30
@@ -73,7 +73,7 @@ func TestSetlocation(t *testing.T) {
 //line /go-testdeep/types_test.go:40
 	tt = &tdutil.T{}
 	ttt := td.NewT(tt)
-	ok = ttt.CmpDeeply(
+	ok = ttt.Cmp(
 		12,
 		td.Any(13, 14, 15))
 	if !ok {
@@ -86,7 +86,7 @@ func TestSetlocation(t *testing.T) {
         [under TestDeep operator Any at types_test.go:44]
 `)
 	} else {
-		t.Error("CmpDeeply returned true!")
+		t.Error("Cmp returned true!")
 	}
 
 //line /go-testdeep/types_test.go:50
@@ -104,6 +104,6 @@ func TestSetlocation(t *testing.T) {
         	              15)
 `)
 	} else {
-		t.Error("CmpDeeply returned true!")
+		t.Error("Cmp returned true!")
 	}
 }
