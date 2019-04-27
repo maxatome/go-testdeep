@@ -8,7 +8,6 @@ package testdeep
 
 import (
 	"runtime"
-	"testing" // used by t.Helper() workaround below
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
@@ -26,14 +25,7 @@ import (
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, true, args...)
 }
 
@@ -48,14 +40,7 @@ func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, false, args...)
 }
 
@@ -64,13 +49,7 @@ func cmpError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) bo
 		return true
 	}
 
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
+	t.Helper()
 
 	formatError(t,
 		ctx.FailureIsFatal,
@@ -90,13 +69,7 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) 
 		return true
 	}
 
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
+	t.Helper()
 
 	formatError(t,
 		ctx.FailureIsFatal,
@@ -121,14 +94,7 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) 
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpError(t TestingT, got error, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpError(newContext(), t, got, args...)
 }
 
@@ -144,25 +110,12 @@ func CmpError(t TestingT, got error, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNoError(t TestingT, got error, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpNoError(newContext(), t, got, args...)
 }
 
 func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
+	t.Helper()
 
 	if ctx.Path.Len() == 1 && ctx.Path.String() == contextDefaultRootName {
 		ctx.Path = ctxerr.NewPath(contextPanicRootName)
@@ -225,13 +178,7 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 		return true
 	}
 
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
+	t.Helper()
 
 	if ctx.Path.Len() == 1 && ctx.Path.String() == contextDefaultRootName {
 		ctx.Path = ctxerr.NewPath(contextPanicRootName)
@@ -261,14 +208,7 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 	args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpPanic(newContext(), t, fn, expectedPanic, args...)
 }
 
@@ -283,13 +223,6 @@ func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpNotPanic(newContext(), t, fn, args...)
 }

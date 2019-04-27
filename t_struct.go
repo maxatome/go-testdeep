@@ -209,14 +209,7 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpDeeply(newContextWithConfig(t.Config),
 		t.TestingFT, got, expected, args...)
 }
@@ -224,14 +217,7 @@ func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
 // CmpDeeply works the same as Cmp and is still available for
 // compatibility purpose. Use shorter Cmp in new code.
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpDeeply(newContextWithConfig(t.Config),
 		t.TestingFT, got, expected, args...)
 }
@@ -245,14 +231,7 @@ func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) True(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return t.Cmp(got, true, args...)
 }
 
@@ -265,14 +244,7 @@ func (t *T) True(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) False(got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return t.Cmp(got, false, args...)
 }
 
@@ -288,14 +260,7 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpError(got error, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpError(newContextWithConfig(t.Config), t.TestingFT, got, args...)
 }
 
@@ -313,14 +278,7 @@ func (t *T) CmpError(got error, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpNoError(got error, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpNoError(newContextWithConfig(t.Config), t.TestingFT, got, args...)
 }
 
@@ -336,14 +294,7 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpPanic(newContextWithConfig(t.Config), t, fn, expected, args...)
 }
 
@@ -358,14 +309,7 @@ func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool 
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return cmpNotPanic(newContextWithConfig(t.Config), t, fn, args...)
 }
 
@@ -381,13 +325,6 @@ func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
 // Under the hood, Run delegates all this stuff to testing.Run. That
 // is why this documentation is a copy/paste of testing.Run one.
 func (t *T) Run(name string, f func(t *T)) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.TestingFT.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return t.TestingFT.Run(name, func(tt *testing.T) { f(NewT(tt)) })
 }

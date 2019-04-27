@@ -12,7 +12,7 @@ matrix:
       env:
         - GO_TEST_SAFE_FLAGS="-covermode=atomic -coverprofile=coverage-safe.out ./..."
         - GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out ./..."
-        - USE_GOMETALINTER=1
+        - USE_LINTER=1
       install:
         - >
           version=1.15.0; name=golangci-lint-$version-linux-amd64;

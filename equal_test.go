@@ -626,28 +626,3 @@ func TestEqualPanic(t *testing.T) {
 		},
 		"Found a TestDeep operator in got param, can only use it in expected one!")
 }
-
-func TestCmp(t *testing.T) {
-	mockT := &testing.T{}
-	test.IsTrue(t, testdeep.Cmp(mockT, 1, 1))
-	test.IsFalse(t, mockT.Failed())
-
-	mockT = &testing.T{}
-	test.IsFalse(t, testdeep.Cmp(mockT, 1, 2))
-	test.IsTrue(t, mockT.Failed())
-
-	mockT = &testing.T{}
-	test.IsFalse(t, testdeep.Cmp(mockT, 1, 2, "Basic test"))
-	test.IsTrue(t, mockT.Failed())
-
-	mockT = &testing.T{}
-	test.IsFalse(t, testdeep.Cmp(mockT, 1, 2, "Basic test with %d and %d", 1, 2))
-	test.IsTrue(t, mockT.Failed())
-
-	test.IsTrue(t, testdeep.Cmp(&test.TestingT{}, 1, 1))
-
-	// Just to test the case where t is an interface and not a *testing.T
-	// See t.Helper() issue in CmpDeeply
-	test.IsTrue(t, testdeep.CmpDeeply(&testing.T{}, 1, 1))
-	test.IsTrue(t, testdeep.CmpDeeply(&test.TestingT{}, 1, 1))
-}

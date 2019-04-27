@@ -9,7 +9,6 @@
 package testdeep
 
 import (
-	"testing" // used by t.Helper() workaround below
 	"time"
 )
 
@@ -26,14 +25,7 @@ import (
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpAll(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, All(expectedValues...), args...)
 }
 
@@ -50,14 +42,7 @@ func CmpAll(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpAny(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Any(expectedValues...), args...)
 }
 
@@ -74,14 +59,7 @@ func CmpAny(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpArray(t TestingT, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Array(model, expectedEntries), args...)
 }
 
@@ -98,14 +76,7 @@ func CmpArray(t TestingT, got interface{}, model interface{}, expectedEntries Ar
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpArrayEach(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, ArrayEach(expectedValue), args...)
 }
 
@@ -122,14 +93,7 @@ func CmpArrayEach(t TestingT, got interface{}, expectedValue interface{}, args .
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpBag(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Bag(expectedItems...), args...)
 }
 
@@ -150,14 +114,7 @@ func CmpBag(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpBetween(t TestingT, got interface{}, from interface{}, to interface{}, bounds BoundsKind, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Between(from, to, bounds), args...)
 }
 
@@ -174,14 +131,7 @@ func CmpBetween(t TestingT, got interface{}, from interface{}, to interface{}, b
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpCap(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Cap(val), args...)
 }
 
@@ -198,14 +148,7 @@ func CmpCap(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpCode(t TestingT, got interface{}, fn interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Code(fn), args...)
 }
 
@@ -222,14 +165,7 @@ func CmpCode(t TestingT, got interface{}, fn interface{}, args ...interface{}) b
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpContains(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Contains(expectedValue), args...)
 }
 
@@ -246,14 +182,7 @@ func CmpContains(t TestingT, got interface{}, expectedValue interface{}, args ..
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpContainsKey(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, ContainsKey(expectedValue), args...)
 }
 
@@ -270,14 +199,7 @@ func CmpContainsKey(t TestingT, got interface{}, expectedValue interface{}, args
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpEmpty(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Empty(), args...)
 }
 
@@ -294,14 +216,7 @@ func CmpEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpGt(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Gt(val), args...)
 }
 
@@ -318,14 +233,7 @@ func CmpGt(t TestingT, got interface{}, val interface{}, args ...interface{}) bo
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpGte(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Gte(val), args...)
 }
 
@@ -342,14 +250,7 @@ func CmpGte(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpHasPrefix(t TestingT, got interface{}, expected string, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, HasPrefix(expected), args...)
 }
 
@@ -366,14 +267,7 @@ func CmpHasPrefix(t TestingT, got interface{}, expected string, args ...interfac
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, HasSuffix(expected), args...)
 }
 
@@ -390,14 +284,7 @@ func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interfac
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpIsa(t TestingT, got interface{}, model interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Isa(model), args...)
 }
 
@@ -414,14 +301,7 @@ func CmpIsa(t TestingT, got interface{}, model interface{}, args ...interface{})
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpLen(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Len(val), args...)
 }
 
@@ -438,14 +318,7 @@ func CmpLen(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpLt(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Lt(val), args...)
 }
 
@@ -462,14 +335,7 @@ func CmpLt(t TestingT, got interface{}, val interface{}, args ...interface{}) bo
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpLte(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Lte(val), args...)
 }
 
@@ -486,14 +352,7 @@ func CmpLte(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpMap(t TestingT, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Map(model, expectedEntries), args...)
 }
 
@@ -510,14 +369,7 @@ func CmpMap(t TestingT, got interface{}, model interface{}, expectedEntries MapE
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpMapEach(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, MapEach(expectedValue), args...)
 }
 
@@ -538,14 +390,7 @@ func CmpMapEach(t TestingT, got interface{}, expectedValue interface{}, args ...
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpN(t TestingT, got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, N(num, tolerance), args...)
 }
 
@@ -562,14 +407,7 @@ func CmpN(t TestingT, got interface{}, num interface{}, tolerance interface{}, a
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNaN(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, NaN(), args...)
 }
 
@@ -586,14 +424,7 @@ func CmpNaN(t TestingT, got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNil(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Nil(), args...)
 }
 
@@ -610,14 +441,7 @@ func CmpNil(t TestingT, got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNone(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, None(expectedValues...), args...)
 }
 
@@ -634,14 +458,7 @@ func CmpNone(t TestingT, got interface{}, expectedValues []interface{}, args ...
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNot(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Not(expected), args...)
 }
 
@@ -658,14 +475,7 @@ func CmpNot(t TestingT, got interface{}, expected interface{}, args ...interface
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, NotAny(expectedItems...), args...)
 }
 
@@ -682,14 +492,7 @@ func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ..
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNotEmpty(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, NotEmpty(), args...)
 }
 
@@ -706,14 +509,7 @@ func CmpNotEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNotNaN(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, NotNaN(), args...)
 }
 
@@ -730,14 +526,7 @@ func CmpNotNaN(t TestingT, got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, NotNil(), args...)
 }
 
@@ -754,14 +543,7 @@ func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpNotZero(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, NotZero(), args...)
 }
 
@@ -778,14 +560,7 @@ func CmpNotZero(t TestingT, got interface{}, args ...interface{}) bool {
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpPPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, PPtr(val), args...)
 }
 
@@ -802,14 +577,7 @@ func CmpPPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) 
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Ptr(val), args...)
 }
 
@@ -830,14 +598,7 @@ func CmpPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpRe(t TestingT, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Re(reg, capture), args...)
 }
 
@@ -854,14 +615,7 @@ func CmpRe(t TestingT, got interface{}, reg interface{}, capture interface{}, ar
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpReAll(t TestingT, got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, ReAll(reg, capture), args...)
 }
 
@@ -878,14 +632,7 @@ func CmpReAll(t TestingT, got interface{}, reg interface{}, capture interface{},
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSet(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Set(expectedItems...), args...)
 }
 
@@ -902,14 +649,7 @@ func CmpSet(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpShallow(t TestingT, got interface{}, expectedPtr interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Shallow(expectedPtr), args...)
 }
 
@@ -926,14 +666,7 @@ func CmpShallow(t TestingT, got interface{}, expectedPtr interface{}, args ...in
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSlice(t TestingT, got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Slice(model, expectedEntries), args...)
 }
 
@@ -950,14 +683,7 @@ func CmpSlice(t TestingT, got interface{}, model interface{}, expectedEntries Ar
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSmuggle(t TestingT, got interface{}, fn interface{}, expectedValue interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Smuggle(fn, expectedValue), args...)
 }
 
@@ -974,14 +700,7 @@ func CmpSmuggle(t TestingT, got interface{}, fn interface{}, expectedValue inter
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpString(t TestingT, got interface{}, expected string, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, String(expected), args...)
 }
 
@@ -998,14 +717,7 @@ func CmpString(t TestingT, got interface{}, expected string, args ...interface{}
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpStruct(t TestingT, got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Struct(model, expectedFields), args...)
 }
 
@@ -1022,14 +734,7 @@ func CmpStruct(t TestingT, got interface{}, model interface{}, expectedFields St
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, SubBagOf(expectedItems...), args...)
 }
 
@@ -1046,14 +751,7 @@ func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSubMapOf(t TestingT, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, SubMapOf(model, expectedEntries), args...)
 }
 
@@ -1070,14 +768,7 @@ func CmpSubMapOf(t TestingT, got interface{}, model interface{}, expectedEntries
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, SubSetOf(expectedItems...), args...)
 }
 
@@ -1094,14 +785,7 @@ func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, SuperBagOf(expectedItems...), args...)
 }
 
@@ -1118,14 +802,7 @@ func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSuperMapOf(t TestingT, got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, SuperMapOf(model, expectedEntries), args...)
 }
 
@@ -1142,14 +819,7 @@ func CmpSuperMapOf(t TestingT, got interface{}, model interface{}, expectedEntri
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, SuperSetOf(expectedItems...), args...)
 }
 
@@ -1170,14 +840,7 @@ func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpTruncTime(t TestingT, got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, TruncTime(expectedTime, trunc), args...)
 }
 
@@ -1194,13 +857,6 @@ func CmpTruncTime(t TestingT, got interface{}, expectedTime interface{}, trunc t
 // item of args is a string and contains a '%' rune then fmt.Fprintf
 // is used to compose the name, else args are passed to fmt.Fprint.
 func CmpZero(t TestingT, got interface{}, args ...interface{}) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return Cmp(t, got, Zero(), args...)
 }

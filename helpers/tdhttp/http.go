@@ -44,14 +44,7 @@ func CmpMarshaledResponse(tt td.TestingFT,
 	expectedResp Response,
 	args ...interface{},
 ) bool {
-
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by tt.Helper()
-	if ttt, ok := tt.(*testing.T); ok {
-		ttt.Helper()
-	} else {
-		tt.Helper()
-	}
+	tt.Helper()
 
 	if testName := tdutil.BuildTestName(args...); testName != "" {
 		tt.Log(testName)
@@ -171,15 +164,7 @@ func CmpResponse(t td.TestingFT,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,
 	args ...interface{}) bool {
-
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return CmpMarshaledResponse(t,
 		req,
 		handler,
@@ -216,14 +201,7 @@ func CmpJSONResponse(t td.TestingFT,
 	expectedResp Response,
 	args ...interface{},
 ) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return CmpMarshaledResponse(t,
 		req,
 		handler,
@@ -246,14 +224,7 @@ func CmpXMLResponse(t td.TestingFT,
 	expectedResp Response,
 	args ...interface{},
 ) bool {
-	// Work around https://github.com/golang/go/issues/26995 issue
-	// when corrected, this block should be replaced by t.Helper()
-	if tt, ok := t.(*testing.T); ok {
-		tt.Helper()
-	} else {
-		t.Helper()
-	}
-
+	t.Helper()
 	return CmpMarshaledResponse(t,
 		req,
 		handler,
