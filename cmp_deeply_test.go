@@ -73,3 +73,23 @@ DATA: test error message
 		test.EqualBool(t, ttt.IsFatal, fatal)
 	}
 }
+
+func TestCmp(t *testing.T) {
+	tt := &test.TestingFT{}
+	test.IsTrue(t, Cmp(tt, 1, 1))
+	test.IsFalse(t, tt.Failed())
+
+	tt = &test.TestingFT{}
+	test.IsFalse(t, Cmp(tt, 1, 2))
+	test.IsTrue(t, tt.Failed())
+}
+
+func TestCmpDeeply(t *testing.T) {
+	tt := &test.TestingFT{}
+	test.IsTrue(t, CmpDeeply(tt, 1, 1))
+	test.IsFalse(t, tt.Failed())
+
+	tt = &test.TestingFT{}
+	test.IsFalse(t, CmpDeeply(tt, 1, 2))
+	test.IsTrue(t, tt.Failed())
+}

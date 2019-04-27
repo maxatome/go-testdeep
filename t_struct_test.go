@@ -44,22 +44,26 @@ func TestT(tt *testing.T) {
 }
 
 func TestTCmp(tt *testing.T) {
-	// Cmp
 	ttt := &test.TestingFT{}
 	t := testdeep.NewT(ttt)
-
-	t.Cmp(1, 1)
+	testdeep.CmpTrue(tt, t.Cmp(1, 1))
 	testdeep.CmpFalse(tt, ttt.Failed())
-	t.Cmp(1, 2)
-	testdeep.CmpTrue(tt, ttt.Failed())
 
-	// CmpDeeply
 	ttt = &test.TestingFT{}
 	t = testdeep.NewT(ttt)
+	testdeep.CmpFalse(tt, t.Cmp(1, 2))
+	testdeep.CmpTrue(tt, ttt.Failed())
+}
 
-	t.CmpDeeply(1, 1)
+func TestTCmpDeeply(tt *testing.T) {
+	ttt := &test.TestingFT{}
+	t := testdeep.NewT(ttt)
+	testdeep.CmpTrue(tt, t.CmpDeeply(1, 1))
 	testdeep.CmpFalse(tt, ttt.Failed())
-	t.CmpDeeply(1, 2)
+
+	ttt = &test.TestingFT{}
+	t = testdeep.NewT(ttt)
+	testdeep.CmpFalse(tt, t.CmpDeeply(1, 2))
 	testdeep.CmpTrue(tt, ttt.Failed())
 }
 
