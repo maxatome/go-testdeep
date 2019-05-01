@@ -832,6 +832,34 @@ func ExampleCmpIsa_interface() {
 	// true
 }
 
+func ExampleCmpKeys() {
+	t := &testing.T{}
+
+	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
+
+	// Keys tests keys in an ordered manner
+	ok := CmpKeys(t, got, []string{"bar", "foo", "zip"})
+	fmt.Println("All sorted keys are found:", ok)
+
+	// If the expected keys are not ordered, it fails
+	ok = CmpKeys(t, got, []string{"zip", "bar", "foo"})
+	fmt.Println("All unsorted keys are found:", ok)
+
+	// To circumvent that, one can use Bag operator
+	ok = CmpKeys(t, got, Bag("zip", "bar", "foo"))
+	fmt.Println("All unsorted keys are found, with the help of Bag operator:", ok)
+
+	// Check that each key is 3 bytes long
+	ok = CmpKeys(t, got, ArrayEach(Len(3)))
+	fmt.Println("Each key is 3 bytes long:", ok)
+
+	// Output:
+	// All sorted keys are found: true
+	// All unsorted keys are found: false
+	// All unsorted keys are found, with the help of Bag operator: true
+	// Each key is 3 bytes long: true
+}
+
 func ExampleCmpLen_slice() {
 	t := &testing.T{}
 
@@ -2286,6 +2314,34 @@ func ExampleCmpTruncTime() {
 	// true
 	// true
 	// true
+}
+
+func ExampleCmpValues() {
+	t := &testing.T{}
+
+	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
+
+	// Values tests values in an ordered manner
+	ok := CmpValues(t, got, []int{1, 2, 3})
+	fmt.Println("All sorted values are found:", ok)
+
+	// If the expected values are not ordered, it fails
+	ok = CmpValues(t, got, []int{3, 1, 2})
+	fmt.Println("All unsorted values are found:", ok)
+
+	// To circumvent that, one can use Bag operator
+	ok = CmpValues(t, got, Bag(3, 1, 2))
+	fmt.Println("All unsorted values are found, with the help of Bag operator:", ok)
+
+	// Check that each value is between 1 and 3
+	ok = CmpValues(t, got, ArrayEach(Between(1, 3)))
+	fmt.Println("Each value is between 1 and 3:", ok)
+
+	// Output:
+	// All sorted values are found: true
+	// All unsorted values are found: false
+	// All unsorted values are found, with the help of Bag operator: true
+	// Each value is between 1 and 3: true
 }
 
 func ExampleCmpZero() {

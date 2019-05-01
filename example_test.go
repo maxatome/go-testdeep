@@ -888,6 +888,34 @@ func ExampleIsa_interface() {
 	// true
 }
 
+func ExampleKeys() {
+	t := &testing.T{}
+
+	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
+
+	// Keys tests keys in an ordered manner
+	ok := Cmp(t, got, Keys([]string{"bar", "foo", "zip"}))
+	fmt.Println("All sorted keys are found:", ok)
+
+	// If the expected keys are not ordered, it fails
+	ok = Cmp(t, got, Keys([]string{"zip", "bar", "foo"}))
+	fmt.Println("All unsorted keys are found:", ok)
+
+	// To circumvent that, one can use Bag operator
+	ok = Cmp(t, got, Keys(Bag("zip", "bar", "foo")))
+	fmt.Println("All unsorted keys are found, with the help of Bag operator:", ok)
+
+	// Check that each key is 3 bytes long
+	ok = Cmp(t, got, Keys(ArrayEach(Len(3))))
+	fmt.Println("Each key is 3 bytes long:", ok)
+
+	// Output:
+	// All sorted keys are found: true
+	// All unsorted keys are found: false
+	// All unsorted keys are found, with the help of Bag operator: true
+	// Each key is 3 bytes long: true
+}
+
 func ExampleLen_slice() {
 	t := &testing.T{}
 
@@ -2477,6 +2505,34 @@ func ExampleTruncTime() {
 	// true
 	// true
 	// true
+}
+
+func ExampleValues() {
+	t := &testing.T{}
+
+	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
+
+	// Values tests values in an ordered manner
+	ok := Cmp(t, got, Values([]int{1, 2, 3}))
+	fmt.Println("All sorted values are found:", ok)
+
+	// If the expected values are not ordered, it fails
+	ok = Cmp(t, got, Values([]int{3, 1, 2}))
+	fmt.Println("All unsorted values are found:", ok)
+
+	// To circumvent that, one can use Bag operator
+	ok = Cmp(t, got, Values(Bag(3, 1, 2)))
+	fmt.Println("All unsorted values are found, with the help of Bag operator:", ok)
+
+	// Check that each value is between 1 and 3
+	ok = Cmp(t, got, Values(ArrayEach(Between(1, 3))))
+	fmt.Println("Each value is between 1 and 3:", ok)
+
+	// Output:
+	// All sorted values are found: true
+	// All unsorted values are found: false
+	// All unsorted values are found, with the help of Bag operator: true
+	// Each value is between 1 and 3: true
 }
 
 func ExampleZero() {
