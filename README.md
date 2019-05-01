@@ -28,6 +28,12 @@ go-testdeep
 
 ## Latest news
 
+- 2019/05/01: new [`Keys`] & [`Values`] operators (and their friends
+  [`CmpKeys`](https://godoc.org/github.com/maxatome/go-testdeep#CmpKeys),
+  [`CmpValues`](https://godoc.org/github.com/maxatome/go-testdeep#CmpValues),
+  [`T.Keys`](https://godoc.org/github.com/maxatome/go-testdeep#T.Keys)
+  &
+  [`T.Values`](https://godoc.org/github.com/maxatome/go-testdeep#T.Values));
 - 2019/04/27: new [`Cmp`] function and
   [`T.Cmp`](https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp)
   method, shorter versions of
@@ -37,8 +43,6 @@ go-testdeep
   [Environment variables](#environment-variables) to configure it;
 - 2019/01/07: introducing TestDeep helpers. First one is
   [`tdhttp` or HTTP API testing helper](#tdhttp-or-http-api-testing-helper);
-- 2018/12/16: [`Between`], [`Gt`], [`Gte`], [`Lt`] & [`Lte`] operators
-  now handle strings as well;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -398,6 +402,7 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 - [`Ignore`] allows to ignore a comparison;
 - [`Isa`] checks the data type or whether data implements an interface
   or not;
+- [`Keys`] checks keys of a map;
 - [`Len`] checks an array, slice, map, string or channel length;
 - [`Lt`] checks that a number, string or [`time.Time`] is lesser than a value;
 - [`Lte`] checks that a number, string or [`time.Time`] is lesser or equal
@@ -453,6 +458,7 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
   potentially some extra items;
 - [`TruncTime`] compares time.Time (or assignable) values after
   truncating them;
+- [`Values`] checks values of a map;
 - [`Zero`] checks data against its zero'ed conterpart.
 
 
@@ -544,6 +550,7 @@ TESTDEEP_COLOR_OK=black:green \
 | [`HasSuffix`]       | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✗ | ✗ | ✗ | ✗             | ✗                             | ✓ + [`fmt.Stringer`], [`error`] | ✗ | ✗ | [`HasSuffix`] |
 | [`Ignore`]          | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓             | ✓                             | ✓ | ✓ | ✓ | [`Ignore`] |
 | [`Isa`]             | ✗ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓             | ✓                             | ✓ | ✓ | ✓ | [`Isa`] |
+| [`Keys`]            | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗ | ✓ | ✗             | ✗                             | ✓ | ✗ | ✗ | [`Keys`] |
 | [`Len`]             | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓ | ✓ | ✗             | ✗                             | ✓ | ✓ | ✗ | [`Len`] |
 | [`Lt`]              | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Lt`] |
 | [`Lte`]             | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Lte`] |
@@ -577,19 +584,20 @@ TESTDEEP_COLOR_OK=black:green \
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
 | [`String`]          | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗             | ✗                  | ✓ + [`fmt.Stringer`], [`error`] | ✗ | ✗ | [`String`] |
-| [`Struct`]          | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✓             | ptr on struct      | ✓ | ✗ | ✗ | [`Struct`] |
+| [`Struct`]          | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓             | ptr on struct      | ✓ | ✗ | ✗ | [`Struct`] |
 | [`SubBagOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`SubBagOf`] |
 | [`SubMapOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗             | ptr on map         | ✓ | ✗ | ✗ | [`SubMapOf`] |
 | [`SubSetOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`] |
 | [`SuperBagOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`] |
 | [`SuperMapOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗             | ptr on map         | ✓ | ✗ | ✗ | [`SuperMapOf`] |
 | [`SuperSetOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperSetOf`] |
-| [`TruncTime`]       | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | [`time.Time`] | todo               | ✓ | ✗ | ✗ | [`TruncTime`] |
+| [`TruncTime`]       | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | [`time.Time`] | todo               | ✓ | ✗ | ✗ | [`TruncTime`] |
+| [`Values`]          | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗             | ✗                  | ✓ | ✗ | ✗ | [`Values`] |
 | [`Zero`]            | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓             | ✓                  | ✓ | ✓ | ✓ | [`Zero`] |
 
 Legend:
-- ✗ means using this operator with this go type will always fail
-- ✓ means using this operator with this go type can succeed
+- ✗ means using this operator with a value type of this kind will always fail
+- ✓ means using this operator with a value type of this kind can succeed
 - `[]byte`, [`time.Time`], ptr on X, [`fmt.Stringer`], [`error`] means using
   this operator with this go type can succeed
 - todo means should be implemented in future (PRs welcome :) )
@@ -641,6 +649,7 @@ See [FAQ](doc/FAQ.md).
 [`HasSuffix`]: https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix
 [`Ignore`]: https://godoc.org/github.com/maxatome/go-testdeep#Isa
 [`Isa`]: https://godoc.org/github.com/maxatome/go-testdeep#Isa
+[`Keys`]: https://godoc.org/github.com/maxatome/go-testdeep#Keys
 [`Len`]: https://godoc.org/github.com/maxatome/go-testdeep#Len
 [`Lt`]: https://godoc.org/github.com/maxatome/go-testdeep#Lt
 [`Lte`]: https://godoc.org/github.com/maxatome/go-testdeep#Lte
@@ -673,6 +682,7 @@ See [FAQ](doc/FAQ.md).
 [`SuperMapOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf
 [`SuperSetOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf
 [`TruncTime`]: https://godoc.org/github.com/maxatome/go-testdeep#TruncTime
+[`Values`]: https://godoc.org/github.com/maxatome/go-testdeep#Values
 [`Zero`]: https://godoc.org/github.com/maxatome/go-testdeep#Zero
 
 [`T`]: https://godoc.org/github.com/maxatome/go-testdeep#T

@@ -10,6 +10,8 @@ import (
 	"reflect"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 )
 
 // CopyValue does its best to copy val in a new reflect.Value instance.
@@ -102,16 +104,19 @@ func CopyValue(val reflect.Value) (reflect.Value, bool) {
 			key, value reflect.Value
 			ok         bool
 		)
-		for _, keyVal := range val.MapKeys() {
-			key, ok = CopyValue(keyVal)
+		if !tdutil.MapEach(val, func(k, v reflect.Value) bool {
+			key, ok = CopyValue(k)
 			if !ok {
-				return reflect.Value{}, false
+				return false
 			}
-			value, ok = CopyValue(val.MapIndex(key))
+			value, ok = CopyValue(v)
 			if !ok {
-				return reflect.Value{}, false
+				return false
 			}
 			newVal.SetMapIndex(key, value)
+			return true
+		}) {
+			return reflect.Value{}, false
 		}
 
 	case reflect.Interface:

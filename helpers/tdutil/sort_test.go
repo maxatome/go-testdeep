@@ -9,7 +9,6 @@ package tdutil
 import (
 	"math"
 	"reflect"
-	"sort"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/visited"
@@ -171,26 +170,4 @@ func TestSortCmp(t *testing.T) {
 	pb := &myStruct{n: 42, p: &myStruct{n: 18}}
 	pb.p.p = pb.p
 	checkCmp(pa, pb, 0)
-}
-
-func TestSort(t *testing.T) {
-	s := []reflect.Value{
-		reflect.ValueOf(4),
-		reflect.ValueOf(3),
-		reflect.ValueOf(1),
-	}
-	sort.Sort(SortableValues(s))
-	if s[0].Int() != 1 || s[1].Int() != 3 || s[2].Int() != 4 {
-		t.Errorf("sort error: [ %v, %v, %v ]", s[0].Int(), s[1].Int(), s[2].Int())
-	}
-
-	s = []reflect.Value{
-		reflect.ValueOf(42),
-	}
-	sort.Sort(SortableValues(s))
-	if s[0].Int() != 42 {
-		t.Errorf("sort error: [ %v ]", s[0].Int())
-	}
-
-	sort.Sort(SortableValues(nil))
 }

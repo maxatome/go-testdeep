@@ -38,10 +38,7 @@ func (b *tdLenCapBase) initLenCapBase(val interface{}) bool {
 
 func (b *tdLenCapBase) isEqual(ctx ctxerr.Context, got int) (bool, *ctxerr.Error) {
 	if b.isTestDeeper {
-		vlen := reflect.New(intType)
-		vlen.Elem().SetInt(int64(got))
-
-		return true, deepValueEqual(ctx, vlen.Elem(), b.expectedValue)
+		return true, deepValueEqual(ctx, reflect.ValueOf(got), b.expectedValue)
 	}
 
 	if int64(got) == b.expectedValue.Int() {

@@ -288,6 +288,23 @@ func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool {
 	return t.Cmp(got, Isa(model), args...)
 }
 
+// Keys is a shortcut for:
+//
+//   t.Cmp(got, Keys(val), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Keys for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func (t *T) Keys(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
+	return t.Cmp(got, Keys(val), args...)
+}
+
 // Len is a shortcut for:
 //
 //   t.Cmp(got, Len(val), args...)
@@ -842,6 +859,23 @@ func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...int
 func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, TruncTime(expectedTime, trunc), args...)
+}
+
+// Values is a shortcut for:
+//
+//   t.Cmp(got, Values(val), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Values for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func (t *T) Values(got interface{}, val interface{}, args ...interface{}) bool {
+	t.Helper()
+	return t.Cmp(got, Values(val), args...)
 }
 
 // Zero is a shortcut for:
