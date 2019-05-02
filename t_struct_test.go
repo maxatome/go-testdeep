@@ -14,24 +14,50 @@ import (
 )
 
 func TestT(tt *testing.T) {
-	t := testdeep.NewT(tt)
-	testdeep.Cmp(tt, t.Config, testdeep.DefaultContextConfig)
+	tt.Run("without config", func(tt *testing.T) {
+		t := testdeep.NewT(tt)
+		testdeep.Cmp(tt, t.Config, testdeep.DefaultContextConfig)
 
-	t = testdeep.NewT(tt, testdeep.ContextConfig{})
-	testdeep.Cmp(tt, t.Config, testdeep.DefaultContextConfig)
+		tDup := testdeep.NewT(t)
+		testdeep.Cmp(tt, tDup.Config, testdeep.DefaultContextConfig)
+	})
 
-	conf := testdeep.ContextConfig{
-		RootName:  "TEST",
-		MaxErrors: 33,
-	}
-	t = testdeep.NewT(tt, conf)
-	testdeep.Cmp(tt, t.Config, conf)
+	tt.Run("explicit default config", func(tt *testing.T) {
+		t := testdeep.NewT(tt, testdeep.ContextConfig{})
+		testdeep.Cmp(tt, t.Config, testdeep.DefaultContextConfig)
 
-	t2 := t.RootName("T2")
-	testdeep.Cmp(tt, t.Config, conf)
-	testdeep.Cmp(tt, t2.Config, testdeep.ContextConfig{
-		RootName:  "T2",
-		MaxErrors: 33,
+		tDup := testdeep.NewT(t)
+		testdeep.Cmp(tt, tDup.Config, testdeep.DefaultContextConfig)
+	})
+
+	tt.Run("specific config", func(tt *testing.T) {
+		conf := testdeep.ContextConfig{
+			RootName:  "TEST",
+			MaxErrors: 33,
+		}
+		t := testdeep.NewT(tt, conf)
+		testdeep.Cmp(tt, t.Config, conf)
+
+		tDup := testdeep.NewT(t)
+		testdeep.Cmp(tt, tDup.Config, conf)
+
+		newConf := conf
+		newConf.MaxErrors = 34
+		tDup = testdeep.NewT(t, newConf)
+		testdeep.Cmp(tt, tDup.Config, newConf)
+
+		t2 := t.RootName("T2")
+		testdeep.Cmp(tt, t.Config, conf)
+		testdeep.Cmp(tt, t2.Config, testdeep.ContextConfig{
+			RootName:  "T2",
+			MaxErrors: 33,
+		})
+
+		t3 := t.RootName("")
+		testdeep.Cmp(tt, t3.Config, testdeep.ContextConfig{
+			RootName:  "DATA",
+			MaxErrors: 33,
+		})
 	})
 
 	//
@@ -67,14 +93,14 @@ func TestTCmpDeeply(tt *testing.T) {
 	testdeep.CmpTrue(tt, ttt.Failed())
 }
 
-func TestRun(tt *testing.T) {
+func TestRunT(tt *testing.T) {
 	t := testdeep.NewT(tt)
 
 	runPassed := false
 
-	ok := t.Run("Test level1",
+	ok := t.RunT("Test level1",
 		func(t *testdeep.T) {
-			ok := t.Run("Test level2",
+			ok := t.RunT("Test level2",
 				func(t *testdeep.T) {
 					runPassed = t.True(true) // test succeeds!
 				})

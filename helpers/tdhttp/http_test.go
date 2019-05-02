@@ -177,7 +177,7 @@ func TestCmpResponse(tt *testing.T) {
 			},
 		},
 	} {
-		t.Run(curTest.Name,
+		t.RunT(curTest.Name,
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpResponse, "CmpResponse", curTest)
 			})
@@ -235,7 +235,7 @@ func TestCmpJSONResponse(tt *testing.T) {
 			},
 		},
 	} {
-		t.Run(curTest.Name,
+		t.RunT(curTest.Name,
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpJSONResponse, "CmpJSONResponse", curTest)
 			})
@@ -295,7 +295,7 @@ func TestCmpXMLResponse(tt *testing.T) {
 			},
 		},
 	} {
-		t.Run(curTest.Name,
+		t.RunT(curTest.Name,
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpXMLResponse, "CmpXMLResponse", curTest)
 			})

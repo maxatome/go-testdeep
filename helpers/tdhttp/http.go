@@ -52,7 +52,7 @@ func CmpMarshaledResponse(tt td.TestingFT,
 
 	var statusMismatch, headerMismatch bool
 
-	t := td.NewT(tt) // nolint: vetshadow
+	t := td.NewT(tt)
 
 	w := httptest.NewRecorder()
 

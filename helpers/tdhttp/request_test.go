@@ -21,7 +21,7 @@ type TestStruct struct {
 func TestNewJSONRequest(tt *testing.T) {
 	t := td.NewT(tt)
 
-	t.Run("NewJSONRequest", func(t *td.T) {
+	t.RunT("NewJSONRequest", func(t *td.T) {
 		req := tdhttp.NewJSONRequest("GET", "/path",
 			TestStruct{
 				Name: "Bob",
@@ -35,7 +35,7 @@ func TestNewJSONRequest(tt *testing.T) {
 		}
 	})
 
-	t.Run("NewJSONRequest panic", func(t *td.T) {
+	t.RunT("NewJSONRequest panic", func(t *td.T) {
 		t.CmpPanic(
 			func() { tdhttp.NewJSONRequest("GET", "/path", func() {}) },
 			td.NotEmpty(),
@@ -46,7 +46,7 @@ func TestNewJSONRequest(tt *testing.T) {
 func TestNewXMLRequest(tt *testing.T) {
 	t := td.NewT(tt)
 
-	t.Run("NewXMLRequest", func(t *td.T) {
+	t.RunT("NewXMLRequest", func(t *td.T) {
 		req := tdhttp.NewXMLRequest("GET", "/path",
 			TestStruct{
 				Name: "Bob",
@@ -60,7 +60,7 @@ func TestNewXMLRequest(tt *testing.T) {
 		}
 	})
 
-	t.Run("NewXMLRequest panic", func(t *td.T) {
+	t.RunT("NewXMLRequest panic", func(t *td.T) {
 		t.CmpPanic(
 			func() { tdhttp.NewXMLRequest("GET", "/path", func() {}) },
 			td.NotEmpty(),
