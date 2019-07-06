@@ -14,6 +14,28 @@ import (
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
 )
 
+func TestNewRequest(tt *testing.T) {
+	t := td.NewT(tt)
+
+	t.RunT("NewRequest", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			"Foo", "Bar",
+			"Zip", "Test")
+
+		t.String(req.Header.Get("Foo"), "Bar")
+		t.String(req.Header.Get("Zip"), "Test")
+	})
+
+	t.RunT("NewRequest last header value less", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			"Foo", "Bar",
+			"Zip")
+
+		t.String(req.Header.Get("Foo"), "Bar")
+		t.String(req.Header.Get("Zip"), "")
+	})
+}
+
 type TestStruct struct {
 	Name string `json:"name" xml:"name"`
 }
@@ -25,9 +47,13 @@ func TestNewJSONRequest(tt *testing.T) {
 		req := tdhttp.NewJSONRequest("GET", "/path",
 			TestStruct{
 				Name: "Bob",
-			})
+			},
+			"Foo", "Bar",
+			"Zip", "Test")
 
 		t.String(req.Header.Get("Content-Type"), "application/json")
+		t.String(req.Header.Get("Foo"), "Bar")
+		t.String(req.Header.Get("Zip"), "Test")
 
 		body, err := ioutil.ReadAll(req.Body)
 		if t.CmpNoError(err, "read request body") {
@@ -50,9 +76,13 @@ func TestNewXMLRequest(tt *testing.T) {
 		req := tdhttp.NewXMLRequest("GET", "/path",
 			TestStruct{
 				Name: "Bob",
-			})
+			},
+			"Foo", "Bar",
+			"Zip", "Test")
 
 		t.String(req.Header.Get("Content-Type"), "application/xml")
+		t.String(req.Header.Get("Foo"), "Bar")
+		t.String(req.Header.Get("Zip"), "Test")
 
 		body, err := ioutil.ReadAll(req.Body)
 		if t.CmpNoError(err, "read request body") {
