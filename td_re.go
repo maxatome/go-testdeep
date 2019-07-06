@@ -17,7 +17,7 @@ import (
 )
 
 type tdRe struct {
-	Base
+	base
 	re         *regexp.Regexp
 	captures   reflect.Value
 	numMatches int
@@ -27,7 +27,7 @@ var _ TestDeep = &tdRe{}
 
 func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 	r = &tdRe{
-		Base: NewBase(4),
+		base: newBase(4),
 	}
 
 	switch len(capture) {

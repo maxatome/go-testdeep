@@ -68,9 +68,9 @@ type TestDeep interface {
 	TypeBehind() reflect.Type
 }
 
-// Base is a base type providing some methods needed by the TestDeep
+// base is a base type providing some methods needed by the TestDeep
 // interface.
-type Base struct {
+type base struct {
 	types.TestDeepStamp
 	location location.Location
 }
@@ -88,7 +88,7 @@ func pkgFunc(full string) (string, string) {
 	return pkg, fn
 }
 
-func (t *Base) setLocation(callDepth int) {
+func (t *base) setLocation(callDepth int) {
 	var ok bool
 	t.location, ok = location.New(callDepth)
 	if !ok {
@@ -116,45 +116,45 @@ func (t *Base) setLocation(callDepth int) {
 
 // GetLocation returns a copy of the location.Location where the TestDeep
 // operator has been created.
-func (t *Base) GetLocation() location.Location {
+func (t *base) GetLocation() location.Location {
 	return t.location
 }
 
 // HandleInvalid tells testdeep internals that this operator does not
 // handle nil values directly.
-func (t Base) HandleInvalid() bool {
+func (t base) HandleInvalid() bool {
 	return false
 }
 
 // TypeBehind returns the type handled by the operator. Only few operators
 // knows the type they are handling. If they do not know, nil is
 // returned.
-func (t Base) TypeBehind() reflect.Type {
+func (t base) TypeBehind() reflect.Type {
 	return nil
 }
 
-// NewBase returns a new Base struct with location.Location set to the
+// newBase returns a new base struct with location.Location set to the
 // "callDepth" depth.
-func NewBase(callDepth int) (b Base) {
+func newBase(callDepth int) (b base) {
 	b.setLocation(callDepth)
 	return
 }
 
-// BaseOKNil is a base type providing some methods needed by the TestDeep
+// baseOKNil is a base type providing some methods needed by the TestDeep
 // interface, for operators handling nil values.
-type BaseOKNil struct {
-	Base
+type baseOKNil struct {
+	base
 }
 
 // HandleInvalid tells testdeep internals that this operator handles
 // nil values directly.
-func (t BaseOKNil) HandleInvalid() bool {
+func (t baseOKNil) HandleInvalid() bool {
 	return true
 }
 
-// NewBaseOKNil returns a new BaseOKNil struct with location.Location set to
+// newBaseOKNil returns a new baseOKNil struct with location.Location set to
 // the "callDepth" depth.
-func NewBaseOKNil(callDepth int) (b BaseOKNil) {
+func newBaseOKNil(callDepth int) (b baseOKNil) {
 	b.setLocation(callDepth)
 	return
 }

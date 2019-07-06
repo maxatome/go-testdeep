@@ -17,7 +17,7 @@ import (
 )
 
 type tdMapEach struct {
-	BaseOKNil
+	baseOKNil
 	expected reflect.Value
 }
 
@@ -28,7 +28,7 @@ var _ TestDeep = &tdMapEach{}
 // to match to succeed.
 func MapEach(expectedValue interface{}) TestDeep {
 	return &tdMapEach{
-		BaseOKNil: NewBaseOKNil(3),
+		baseOKNil: newBaseOKNil(3),
 		expected:  reflect.ValueOf(expectedValue),
 	}
 }

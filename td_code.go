@@ -14,7 +14,7 @@ import (
 )
 
 type tdCode struct {
-	Base
+	base
 	function reflect.Value
 	argType  reflect.Type
 }
@@ -90,7 +90,7 @@ func Code(fn interface{}) TestDeep {
 			// (*error*)
 			(fnType.NumOut() == 1 && fnType.Out(0) == errorInterface) {
 			return &tdCode{
-				Base:     NewBase(3),
+				base:     newBase(3),
 				function: vfn,
 				argType:  fnType.In(0),
 			}

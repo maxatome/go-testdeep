@@ -17,13 +17,13 @@ import (
 )
 
 type tdStringBase struct {
-	Base
+	base
 	expected string
 }
 
 func newStringBase(expected string) tdStringBase {
 	return tdStringBase{
-		Base:     NewBase(4),
+		base:     newBase(4),
 		expected: expected,
 	}
 }

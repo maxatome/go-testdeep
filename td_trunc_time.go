@@ -41,7 +41,7 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	if len(trunc) <= 1 {
 		t := tdTruncTime{
 			tdExpectedType: tdExpectedType{
-				Base: NewBase(3),
+				base: newBase(3),
 			},
 		}
 

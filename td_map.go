@@ -48,7 +48,7 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 
 	m := tdMap{
 		tdExpectedType: tdExpectedType{
-			Base: NewBase(4),
+			base: newBase(4),
 		},
 		kind: kind,
 	}

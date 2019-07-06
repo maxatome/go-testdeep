@@ -16,7 +16,7 @@ import (
 const emptyBadType types.RawString = "Array, Chan, Map, Slice, string or pointer(s) on them"
 
 type tdEmpty struct {
-	BaseOKNil
+	baseOKNil
 }
 
 var _ TestDeep = &tdEmpty{}
@@ -29,7 +29,7 @@ var _ TestDeep = &tdEmpty{}
 // etc.) on an array, a channel, a map, a slice or a string.
 func Empty() TestDeep {
 	return &tdEmpty{
-		BaseOKNil: NewBaseOKNil(3),
+		baseOKNil: newBaseOKNil(3),
 	}
 }
 
@@ -96,7 +96,7 @@ func (e *tdEmpty) String() string {
 }
 
 type tdNotEmpty struct {
-	BaseOKNil
+	baseOKNil
 }
 
 var _ TestDeep = &tdNotEmpty{}
@@ -109,7 +109,7 @@ var _ TestDeep = &tdNotEmpty{}
 // etc.) on an array, a channel, a map, a slice or a string.
 func NotEmpty() TestDeep {
 	return &tdNotEmpty{
-		BaseOKNil: NewBaseOKNil(3),
+		baseOKNil: newBaseOKNil(3),
 	}
 }
 

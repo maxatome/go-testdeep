@@ -14,12 +14,12 @@ import (
 )
 
 type tdList struct {
-	BaseOKNil
+	baseOKNil
 	items []reflect.Value
 }
 
 func newList(items ...interface{}) (ret tdList) {
-	ret.BaseOKNil = NewBaseOKNil(4)
+	ret.baseOKNil = newBaseOKNil(4)
 	ret.items = make([]reflect.Value, len(items))
 
 	for idx, item := range items {
