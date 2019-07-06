@@ -36,10 +36,19 @@ type ContextConfig struct {
 	// will be dumped.
 	MaxErrors int
 	// FailureIsFatal allows to Fatal() (instead of Error()) when a test
-	// fails. Using *testing.T instance as
-	// t.TestingFT value, FailNow() is called behind the scenes when
-	// Fatal() is called. See testing documentation for details.
+	// fails. Using *testing.T instance as t.TestingFT value, FailNow()
+	// is called behind the scenes when Fatal() is called. See testing
+	// documentation for details.
 	FailureIsFatal bool
+	// UseEqual allows to use the Equal method on got (if it exists) or
+	// on any of its component to compare got and expected values.
+	//
+	// The signature of the Equal method should be:
+	//   (A) Equal(B) bool
+	// with B assignable to A.
+	//
+	// See time.Time as an example of accepted Equal() method.
+	UseEqual bool
 }
 
 const (
@@ -66,6 +75,7 @@ var DefaultContextConfig = ContextConfig{
 	RootName:       contextDefaultRootName,
 	MaxErrors:      getMaxErrorsFromEnv(),
 	FailureIsFatal: false,
+	UseEqual:       false,
 }
 
 func (c *ContextConfig) sanitize() {
@@ -93,6 +103,7 @@ func newContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 		Visited:        visited.NewVisited(),
 		MaxErrors:      config.MaxErrors,
 		FailureIsFatal: config.FailureIsFatal,
+		UseEqual:       config.UseEqual,
 	}
 
 	ctx.InitErrors()
@@ -104,5 +115,6 @@ func newBooleanContext() ctxerr.Context {
 	return ctxerr.Context{
 		Visited:      visited.NewVisited(),
 		BooleanError: true,
+		UseEqual:     DefaultContextConfig.UseEqual,
 	}
 }

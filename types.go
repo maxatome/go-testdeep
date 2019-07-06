@@ -24,6 +24,7 @@ var (
 	errorInterface     = reflect.TypeOf((*error)(nil)).Elem()
 	timeType           = reflect.TypeOf(time.Time{})
 	intType            = reflect.TypeOf(int(0))
+	boolType           = reflect.TypeOf(false)
 	smuggledGotType    = reflect.TypeOf(SmuggledGot{})
 	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
 )

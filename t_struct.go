@@ -217,6 +217,20 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 	return &new
 }
 
+// UseEqual allows to use the Equal method on got (if it exists) or
+// on any of its component to compare got and expected values.
+//
+// The signature should be:
+//   (A) Equal(B) bool
+// with B assignable to A.
+//
+// See time.Time as an example of accepted Equal() method.
+func (t *T) UseEqual(enable ...bool) *T {
+	new := *t
+	new.Config.UseEqual = len(enable) == 0 || enable[0]
+	return &new
+}
+
 // Cmp is mostly a shortcut for:
 //
 //   Cmp(t.TestingFT, got, expected, args...)

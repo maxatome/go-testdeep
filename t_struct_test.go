@@ -8,6 +8,7 @@ package testdeep_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/test"
@@ -147,4 +148,34 @@ func TestFailureIsFatal(tt *testing.T) {
 	t.True(false) // failure
 	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
 	testdeep.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+}
+
+func TestUseEqual(tt *testing.T) {
+	ttt := &test.TestingFT{}
+
+	var time1, time2 time.Time
+	for {
+		time1 = time.Now()
+		time2 = time1.Truncate(0)
+		if !time1.Equal(time2) {
+			tt.Fatal("time.Equal() does not work as expected")
+		}
+		if time1 != time2 { // to avoid the bad luck case where time1.wall=0
+			break
+		}
+	}
+
+	// Using default config
+	t := testdeep.NewT(ttt)
+	test.IsFalse(tt, t.Cmp(time1, time2))
+
+	// UseEqual
+	t = testdeep.NewT(ttt).UseEqual()
+	test.IsTrue(tt, t.Cmp(time1, time2))
+
+	t = testdeep.NewT(ttt).UseEqual(true)
+	test.IsTrue(tt, t.Cmp(time1, time2))
+
+	t = testdeep.NewT(ttt).UseEqual(false)
+	test.IsFalse(tt, t.Cmp(time1, time2))
 }
