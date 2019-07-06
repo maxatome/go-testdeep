@@ -299,6 +299,10 @@ func TestSmuggle(t *testing.T) {
 	}, "FUNC must take only one argument")
 
 	test.CheckPanic(t, func() {
+		testdeep.Smuggle(func(x ...int) int { return 0 }, 12)
+	}, "FUNC must take only one argument")
+
+	test.CheckPanic(t, func() {
 		testdeep.Smuggle(func(a int, b string) int { return 0 }, 12)
 	}, "FUNC must take only one argument")
 

@@ -104,6 +104,10 @@ func TestCode(t *testing.T) {
 	}, "FUNC must take only one argument")
 
 	test.CheckPanic(t, func() {
+		testdeep.Code(func(x ...int) bool { return true })
+	}, "FUNC must take only one argument")
+
+	test.CheckPanic(t, func() {
 		testdeep.Code(func(a int, b string) bool { return true })
 	}, "FUNC must take only one argument")
 

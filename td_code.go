@@ -73,7 +73,7 @@ func Code(fn interface{}) TestDeep {
 	}
 
 	fnType := vfn.Type()
-	if fnType.NumIn() != 1 {
+	if fnType.IsVariadic() || fnType.NumIn() != 1 {
 		panic("Code(FUNC): FUNC must take only one argument")
 	}
 
