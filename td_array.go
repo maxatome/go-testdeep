@@ -34,7 +34,7 @@ func newArray(kind reflect.Kind, model interface{}, expectedEntries ArrayEntries
 
 	a := tdArray{
 		tdExpectedType: tdExpectedType{
-			Base: NewBase(4),
+			base: newBase(4),
 		},
 	}
 

@@ -45,7 +45,7 @@ func Isa(model interface{}) TestDeep {
 
 	return &tdIsa{
 		tdExpectedType: tdExpectedType{
-			Base:         NewBase(3),
+			base:         newBase(3),
 			expectedType: modelType,
 		},
 		checkImplement: modelType.Kind() == reflect.Ptr &&

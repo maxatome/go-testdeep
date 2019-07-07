@@ -26,7 +26,7 @@ const (
 )
 
 type tdBetween struct {
-	Base
+	base
 	expectedMin reflect.Value
 	expectedMax reflect.Value
 
@@ -104,7 +104,7 @@ func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 }
 
 func (b *tdBetween) initBetween(usage string) TestDeep {
-	b.Base = NewBase(4)
+	b.base = newBase(4)
 
 	if !b.expectedMax.IsValid() {
 		b.expectedMax = b.expectedMin
@@ -164,15 +164,15 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 
 func (b *tdBetween) nInt(tolerance reflect.Value) {
 	if diff := tolerance.Int(); diff != 0 {
-		base := b.expectedMin.Int()
+		expectedBase := b.expectedMin.Int()
 
-		max := base + diff
-		if max < base {
+		max := expectedBase + diff
+		if max < expectedBase {
 			max = math.MaxInt64
 		}
 
-		min := base - diff
-		if min > base {
+		min := expectedBase - diff
+		if min > expectedBase {
 			min = math.MinInt64
 		}
 
@@ -225,7 +225,7 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 // TypeBehind method returns the reflect.Type of "num".
 func N(num interface{}, tolerance ...interface{}) TestDeep {
 	n := tdBetween{
-		Base:        NewBase(3),
+		base:        newBase(3),
 		expectedMin: reflect.ValueOf(num),
 		minBound:    boundIn,
 		maxBound:    boundIn,

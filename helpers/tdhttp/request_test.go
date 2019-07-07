@@ -14,6 +14,28 @@ import (
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
 )
 
+func TestNewRequest(tt *testing.T) {
+	t := td.NewT(tt)
+
+	t.RunT("NewRequest", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			"Foo", "Bar",
+			"Zip", "Test")
+
+		t.String(req.Header.Get("Foo"), "Bar")
+		t.String(req.Header.Get("Zip"), "Test")
+	})
+
+	t.RunT("NewRequest last header value less", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			"Foo", "Bar",
+			"Zip")
+
+		t.String(req.Header.Get("Foo"), "Bar")
+		t.String(req.Header.Get("Zip"), "")
+	})
+}
+
 type TestStruct struct {
 	Name string `json:"name" xml:"name"`
 }
@@ -21,13 +43,17 @@ type TestStruct struct {
 func TestNewJSONRequest(tt *testing.T) {
 	t := td.NewT(tt)
 
-	t.Run("NewJSONRequest", func(t *td.T) {
+	t.RunT("NewJSONRequest", func(t *td.T) {
 		req := tdhttp.NewJSONRequest("GET", "/path",
 			TestStruct{
 				Name: "Bob",
-			})
+			},
+			"Foo", "Bar",
+			"Zip", "Test")
 
 		t.String(req.Header.Get("Content-Type"), "application/json")
+		t.String(req.Header.Get("Foo"), "Bar")
+		t.String(req.Header.Get("Zip"), "Test")
 
 		body, err := ioutil.ReadAll(req.Body)
 		if t.CmpNoError(err, "read request body") {
@@ -35,7 +61,7 @@ func TestNewJSONRequest(tt *testing.T) {
 		}
 	})
 
-	t.Run("NewJSONRequest panic", func(t *td.T) {
+	t.RunT("NewJSONRequest panic", func(t *td.T) {
 		t.CmpPanic(
 			func() { tdhttp.NewJSONRequest("GET", "/path", func() {}) },
 			td.NotEmpty(),
@@ -46,13 +72,17 @@ func TestNewJSONRequest(tt *testing.T) {
 func TestNewXMLRequest(tt *testing.T) {
 	t := td.NewT(tt)
 
-	t.Run("NewXMLRequest", func(t *td.T) {
+	t.RunT("NewXMLRequest", func(t *td.T) {
 		req := tdhttp.NewXMLRequest("GET", "/path",
 			TestStruct{
 				Name: "Bob",
-			})
+			},
+			"Foo", "Bar",
+			"Zip", "Test")
 
 		t.String(req.Header.Get("Content-Type"), "application/xml")
+		t.String(req.Header.Get("Foo"), "Bar")
+		t.String(req.Header.Get("Zip"), "Test")
 
 		body, err := ioutil.ReadAll(req.Body)
 		if t.CmpNoError(err, "read request body") {
@@ -60,7 +90,7 @@ func TestNewXMLRequest(tt *testing.T) {
 		}
 	})
 
-	t.Run("NewXMLRequest panic", func(t *td.T) {
+	t.RunT("NewXMLRequest panic", func(t *td.T) {
 		t.CmpPanic(
 			func() { tdhttp.NewXMLRequest("GET", "/path", func() {}) },
 			td.NotEmpty(),

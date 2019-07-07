@@ -81,6 +81,24 @@ func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {
 	return ctx.CollectError(&err)
 }
 
+func isCustomEqual(a, b reflect.Value) (bool, bool) {
+	aType, bType := a.Type(), b.Type()
+
+	equal, ok := aType.MethodByName("Equal")
+	if ok {
+		ft := equal.Type
+		if !ft.IsVariadic() &&
+			ft.NumIn() == 2 &&
+			ft.NumOut() == 1 &&
+			ft.In(0).AssignableTo(ft.In(1)) &&
+			ft.Out(0) == boolType &&
+			bType.AssignableTo(ft.In(1)) {
+			return true, equal.Func.Call([]reflect.Value{a, b})[0].Bool()
+		}
+	}
+	return false, false
+}
+
 func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxerr.Error) {
 	if !got.IsValid() || !expected.IsValid() {
 		if got.IsValid() == expected.IsValid() {
@@ -89,10 +107,27 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		return nilHandler(ctx, got, expected)
 	}
 
-	// Special case, "got" implements testDeeper: only if allowed
+	// "got" must not implement testDeeper
 	if got.Type().Implements(testDeeper) {
 		panic("Found a TestDeep operator in got param, " +
 			"can only use it in expected one!")
+	}
+
+	if ctx.UseEqual {
+		hasEqual, isEqual := isCustomEqual(got, expected)
+		if hasEqual {
+			if isEqual {
+				return
+			}
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+			return ctx.CollectError(&ctxerr.Error{
+				Message:  "got.Equal(expected) failed",
+				Got:      got,
+				Expected: expected,
+			})
+		}
 	}
 
 	if got.Type() != expected.Type() {

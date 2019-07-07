@@ -12,7 +12,7 @@ import (
 
 // tdSmugglerBase is the base class of all smuggler TestDeep operators.
 type tdSmugglerBase struct {
-	Base
+	base
 	expectedValue reflect.Value
 	isTestDeeper  bool
 }
@@ -22,7 +22,7 @@ func newSmugglerBase(val interface{}, depth ...int) (ret tdSmugglerBase) {
 	if len(depth) > 0 {
 		callDepth = depth[0]
 	}
-	ret.Base = NewBase(callDepth)
+	ret.base = newBase(callDepth)
 
 	// Initializes only if TestDeep operator. Other cases are specific.
 	if _, ok := val.(TestDeep); ok {

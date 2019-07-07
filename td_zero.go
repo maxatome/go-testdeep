@@ -13,7 +13,7 @@ import (
 )
 
 type tdZero struct {
-	BaseOKNil
+	baseOKNil
 }
 
 var _ TestDeep = &tdZero{}
@@ -32,7 +32,7 @@ var _ TestDeep = &tdZero{}
 //   Cmp(t, &AnyStruct{}, Ptr(Zero())) // is true
 func Zero() TestDeep {
 	return &tdZero{
-		BaseOKNil: NewBaseOKNil(3),
+		baseOKNil: newBaseOKNil(3),
 	}
 }
 
@@ -49,7 +49,7 @@ func (z *tdZero) String() string {
 }
 
 type tdNotZero struct {
-	BaseOKNil
+	baseOKNil
 }
 
 var _ TestDeep = &tdNotZero{}
@@ -68,7 +68,7 @@ var _ TestDeep = &tdNotZero{}
 //   Cmp(t, &AnyStruct{}, Ptr(NotZero())) // is false
 func NotZero() TestDeep {
 	return &tdNotZero{
-		BaseOKNil: NewBaseOKNil(3),
+		baseOKNil: newBaseOKNil(3),
 	}
 }
 

@@ -16,6 +16,8 @@ type T struct {
 	Config ContextConfig // defaults to DefaultContextConfig
 }
 
+var _ TestingFT = T{}
+
 // NewT returns a new T instance. Typically used as:
 //
 //   import (
@@ -58,8 +60,8 @@ type T struct {
 //   }
 //
 // "config" is an optional argument and, if passed, must be unique. It
-// allows to configure how failures will be rendered during the life
-// time of the returned instance.
+// allows to configure how failures will be rendered during the
+// lifetime of the returned instance.
 //
 //   t := NewT(tt)
 //   t.Cmp(
@@ -115,24 +117,36 @@ type T struct {
 // DefaultContextConfig.MaxErrors which is potentially dependent from
 // the TESTDEEP_MAX_ERRORS environment variable (else defaults to 10.)
 // See ContextConfig documentation for details.
+//
+// Of course "t" can already be a *T, in this special case if "config"
+// is omitted, the Config of the new instance is a copy of the "t"
+// Config.
 func NewT(t TestingFT, config ...ContextConfig) *T {
-	switch len(config) {
-	case 0:
-		return &T{
-			TestingFT: t,
-			Config:    DefaultContextConfig,
-		}
+	var newT T
 
-	case 1:
-		config[0].sanitize()
-		return &T{
-			TestingFT: t,
-			Config:    config[0],
-		}
-
-	default:
-		panic("usage: NewT(*testing.T[, ContextConfig]")
+	if len(config) > 1 {
+		panic("usage: NewT(TestingFT[, ContextConfig]")
 	}
+
+	// Already a *T, so steal its TestingFT and its Config if needed
+	if tdT, ok := t.(*T); ok {
+		newT.TestingFT = tdT.TestingFT
+		if len(config) == 0 {
+			newT.Config = tdT.Config
+		} else {
+			newT.Config = config[0]
+		}
+	} else {
+		newT.TestingFT = t
+		if len(config) == 0 {
+			newT.Config = DefaultContextConfig
+		} else {
+			newT.Config = config[0]
+		}
+	}
+	newT.Config.sanitize()
+
+	return &newT
 }
 
 // RootName changes the name of the got data. By default it is
@@ -160,8 +174,13 @@ func NewT(t TestingFT, config ...ContextConfig) *T {
 // Which is more readable than the generic:
 //
 //   DATA.Age: values differ
+//
+// If "" is passed the name is set to "DATA", the default value.
 func (t *T) RootName(rootName string) *T {
 	new := *t
+	if rootName == "" {
+		rootName = contextDefaultRootName
+	}
 	new.Config.RootName = rootName
 	return &new
 }
@@ -194,6 +213,20 @@ func (t *T) RootName(rootName string) *T {
 func (t *T) FailureIsFatal(enable ...bool) *T {
 	new := *t
 	new.Config.FailureIsFatal = len(enable) == 0 || enable[0]
+	return &new
+}
+
+// UseEqual allows to use the Equal method on got (if it exists) or
+// on any of its component to compare got and expected values.
+//
+// The signature should be:
+//   (A) Equal(B) bool
+// with B assignable to A.
+//
+// See time.Time as an example of accepted Equal() method.
+func (t *T) UseEqual(enable ...bool) *T {
+	new := *t
+	new.Config.UseEqual = len(enable) == 0 || enable[0]
 	return &new
 }
 
@@ -313,18 +346,23 @@ func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
 	return cmpNotPanic(newContextWithConfig(t.Config), t, fn, args...)
 }
 
-// Run runs "f" as a subtest of t called "name". It runs "f" in a separate
-// goroutine and blocks until "f" returns or calls t.Parallel to become
-// a parallel test. Run reports whether "f" succeeded (or at least did
-// not fail before calling t.Parallel).
+// RunT runs "f" as a subtest of t called "name". It runs "f" in a
+// separate goroutine and blocks until "f" returns or calls t.Parallel
+// to become a parallel test. RunT reports whether "f" succeeded (or at
+// least did not fail before calling t.Parallel).
 //
-// Run may be called simultaneously from multiple goroutines, but all
+// RunT may be called simultaneously from multiple goroutines, but all
 // such calls must return before the outer test function for t
 // returns.
 //
-// Under the hood, Run delegates all this stuff to testing.Run. That
+// Under the hood, RunT delegates all this stuff to testing.Run. That
 // is why this documentation is a copy/paste of testing.Run one.
-func (t *T) Run(name string, f func(t *T)) bool {
+//
+// In versions up to v1.0.8, the name of this function was Run. As *T
+// now implements TestingFT interface, the original
+// (*testing.T).Run(string, func(t *testing.T)) is callable directly
+// on *T.
+func (t *T) RunT(name string, f func(t *T)) bool {
 	t.Helper()
-	return t.TestingFT.Run(name, func(tt *testing.T) { f(NewT(tt)) })
+	return t.TestingFT.Run(name, func(tt *testing.T) { f(NewT(tt, t.Config)) })
 }

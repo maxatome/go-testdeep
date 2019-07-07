@@ -15,7 +15,7 @@ import (
 // Edge cases not tested elsewhere...
 
 func TestBase(t *testing.T) {
-	td := Base{}
+	td := base{}
 
 	td.setLocation(200)
 	if td.location.File != "???" && td.location.Line != 0 {

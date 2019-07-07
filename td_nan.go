@@ -15,7 +15,7 @@ import (
 )
 
 type tdNaN struct {
-	Base
+	base
 }
 
 var _ TestDeep = &tdNaN{}
@@ -23,7 +23,7 @@ var _ TestDeep = &tdNaN{}
 // NaN operator checks that data is a float and is not-a-number.
 func NaN() TestDeep {
 	return &tdNaN{
-		Base: NewBase(3),
+		base: newBase(3),
 	}
 }
 
@@ -53,7 +53,7 @@ func (n *tdNaN) String() string {
 }
 
 type tdNotNaN struct {
-	Base
+	base
 }
 
 var _ TestDeep = &tdNotNaN{}
@@ -61,7 +61,7 @@ var _ TestDeep = &tdNotNaN{}
 // NotNaN operator checks that data is a float and is not not-a-number.
 func NotNaN() TestDeep {
 	return &tdNotNaN{
-		Base: NewBase(3),
+		base: newBase(3),
 	}
 }
 

@@ -8,6 +8,7 @@ package testdeep_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
@@ -625,4 +626,147 @@ func TestEqualPanic(t *testing.T) {
 			testdeep.EqDeeply(testdeep.Ignore(), testdeep.Ignore())
 		},
 		"Found a TestDeep operator in got param, can only use it in expected one!")
+}
+
+type AssignableType1 struct{ x, Ignore int }
+
+func (a AssignableType1) Equal(b AssignableType1) bool {
+	return a.x == b.x
+}
+
+type AssignableType2 struct{ x, Ignore int }
+
+func (a AssignableType2) Equal(b struct{ x, Ignore int }) bool {
+	return a.x == b.x
+}
+
+type AssignablePtrType3 struct{ x, Ignore int }
+
+func (a *AssignablePtrType3) Equal(b *AssignablePtrType3) bool {
+	if a == nil {
+		return b == nil
+	}
+	return b != nil && a.x == b.x
+}
+
+type BadEqual1 int
+
+func (b BadEqual1) Equal(o ...BadEqual1) bool { return true } // IsVariadic
+
+type BadEqual2 int
+
+func (b BadEqual2) Equal() bool { return true } // NumIn() ≠ 2
+
+type BadEqual3 int
+
+func (b BadEqual3) Equal(o BadEqual3) (int, int) { return 1, 2 } // NumOut() ≠ 1
+
+type BadEqual4 int
+
+func (b BadEqual4) Equal(o string) int { return 1 } // !AssignableTo
+
+type BadEqual5 int
+
+func (b BadEqual5) Equal(o BadEqual5) int { return 1 } // Out=bool
+
+func TestUseEqualGlobalt(t *testing.T) {
+	defer func() { testdeep.DefaultContextConfig.UseEqual = false }()
+	testdeep.DefaultContextConfig.UseEqual = true
+
+	// Real case with time.Time
+	time1 := time.Now()
+	time2 := time1.Truncate(0)
+	if !time1.Equal(time2) || !time2.Equal(time1) {
+		t.Fatal("time.Equal() does not work as expected")
+	}
+
+	checkOK(t, time1, time2)
+	checkOK(t, time2, time1)
+
+	// AssignableType1
+	a1 := AssignableType1{x: 13, Ignore: 666}
+	b1 := AssignableType1{x: 13, Ignore: 789}
+	checkOK(t, a1, b1)
+	checkOK(t, b1, a1)
+	checkError(t, a1, AssignableType1{x: 14, Ignore: 666},
+		expectedError{
+			Message:  mustBe("got.Equal(expected) failed"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("x: (int) 13,"),
+			Expected: mustContain("x: (int) 14,"),
+		})
+
+	bs := struct{ x, Ignore int }{x: 13, Ignore: 789}
+	checkOK(t, a1, bs) // bs type is assignable to AssignableType1
+	checkError(t, bs, a1,
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("struct { x int; Ignore int }"),
+			Expected: mustBe("testdeep_test.AssignableType1"),
+		})
+
+	// AssignableType2
+	a2 := AssignableType2{x: 13, Ignore: 666}
+	b2 := AssignableType2{x: 13, Ignore: 789}
+	checkOK(t, a2, b2)
+	checkOK(t, b2, a2)
+	checkOK(t, a2, bs) // bs type is assignable to AssignableType2
+	checkError(t, bs, a2,
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("struct { x int; Ignore int }"),
+			Expected: mustBe("testdeep_test.AssignableType2"),
+		})
+
+	// AssignablePtrType3
+	a3 := &AssignablePtrType3{x: 13, Ignore: 666}
+	b3 := &AssignablePtrType3{x: 13, Ignore: 789}
+	checkOK(t, a3, b3)
+	checkOK(t, b3, a3)
+	checkError(t, a3, &bs, // &bs type not assignable to AssignablePtrType3
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*testdeep_test.AssignablePtrType3"),
+			Expected: mustBe("*struct { x int; Ignore int }"),
+		})
+	checkOK(t, (*AssignablePtrType3)(nil), (*AssignablePtrType3)(nil))
+	checkError(t, (*AssignablePtrType3)(nil), b3,
+		expectedError{
+			Message:  mustBe("got.Equal(expected) failed"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("(*testdeep_test.AssignablePtrType3)(<nil>)"),
+			Expected: mustContain("x: (int) 13,"),
+		})
+	checkError(t, b3, (*AssignablePtrType3)(nil),
+		expectedError{
+			Message:  mustBe("got.Equal(expected) failed"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("x: (int) 13,"),
+			Expected: mustBe("(*testdeep_test.AssignablePtrType3)(<nil>)"),
+		})
+
+	// (A) Equal(A) method not found
+	checkError(t, BadEqual1(1), BadEqual1(2),
+		expectedError{
+			Message: mustBe("values differ"),
+		})
+	checkError(t, BadEqual2(1), BadEqual2(2),
+		expectedError{
+			Message: mustBe("values differ"),
+		})
+	checkError(t, BadEqual3(1), BadEqual3(2),
+		expectedError{
+			Message: mustBe("values differ"),
+		})
+	checkError(t, BadEqual4(1), BadEqual4(2),
+		expectedError{
+			Message: mustBe("values differ"),
+		})
+	checkError(t, BadEqual5(1), BadEqual5(2),
+		expectedError{
+			Message: mustBe("values differ"),
+		})
 }

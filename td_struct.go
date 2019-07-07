@@ -48,7 +48,7 @@ func newStruct(model interface{}) (*tdStruct, reflect.Value) {
 
 	st := tdStruct{
 		tdExpectedType: tdExpectedType{
-			Base: NewBase(4),
+			base: newBase(4),
 		},
 	}
 

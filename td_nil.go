@@ -13,7 +13,7 @@ import (
 )
 
 type tdNil struct {
-	BaseOKNil
+	baseOKNil
 }
 
 var _ TestDeep = &tdNil{}
@@ -22,7 +22,7 @@ var _ TestDeep = &tdNil{}
 // but containing a nil pointer.)
 func Nil() TestDeep {
 	return &tdNil{
-		BaseOKNil: NewBaseOKNil(3),
+		baseOKNil: newBaseOKNil(3),
 	}
 }
 
@@ -54,7 +54,7 @@ func (n *tdNil) String() string {
 }
 
 type tdNotNil struct {
-	BaseOKNil
+	baseOKNil
 }
 
 var _ TestDeep = &tdNotNil{}
@@ -63,7 +63,7 @@ var _ TestDeep = &tdNotNil{}
 // interface, containing a non-nil pointer.)
 func NotNil() TestDeep {
 	return &tdNotNil{
-		BaseOKNil: NewBaseOKNil(3),
+		baseOKNil: newBaseOKNil(3),
 	}
 }
 

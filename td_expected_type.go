@@ -14,7 +14,7 @@ import (
 )
 
 type tdExpectedType struct {
-	Base
+	base
 	expectedType reflect.Type
 	isPtr        bool
 }
