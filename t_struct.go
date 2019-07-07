@@ -134,7 +134,6 @@ func NewT(t TestingFT, config ...ContextConfig) *T {
 		if len(config) == 0 {
 			newT.Config = tdT.Config
 		} else {
-			config[0].sanitize()
 			newT.Config = config[0]
 		}
 	} else {
@@ -142,10 +141,10 @@ func NewT(t TestingFT, config ...ContextConfig) *T {
 		if len(config) == 0 {
 			newT.Config = DefaultContextConfig
 		} else {
-			config[0].sanitize()
 			newT.Config = config[0]
 		}
 	}
+	newT.Config.sanitize()
 
 	return &newT
 }
