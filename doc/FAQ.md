@@ -1,5 +1,6 @@
 # FAQ
 
+- [Table of contents for all these functions/methods?](#table-of-contents-for-all-these-functionsmethods)
 - [How to mix strict requirements and simple assertions?](#how-to-mix-strict-requirements-and-simple-assertions)
 - [How to test `io.Reader` contents, like `http.Response.Body` for example?](#how-to-test-ioreader-contents-like-httpresponsebody-for-example)
 - [OK, but I prefer comparing `string`s instead of `byte`s](#ok-but-I-prefer-comparing-strings-instead-of-bytes)
@@ -8,6 +9,11 @@
 - [What about testing the response using my API?](#what-about-testing-the-response-using-my-api)
 - [Arf, I use Gin Gonic, and so no `net/http` handlers](#arf-i-use-gin-gonic-and-so-no-nethttp-handlers)
 - [How to add a new operator?](#how-to-add-a-new-operator)
+
+
+## Table of contents for all these functions/methods?
+
+Of course! See the [Godoc table of contents](toc.md#godoc-table-of-contents).
 
 
 ## How to mix strict requirements and simple assertions?
@@ -323,6 +329,13 @@ You want to add a new `FooBar` operator.
     small description, respecting the alphabetical order;
   - in the [Operators vs go types](../README.md#operators-vs-go-types)
     matrix, still respecting the alphabetical order.
+- [ ] in [`toc.md#godoc-table-of-contents`](toc.md#godoc-table-of-contents),
+  add this new new `FooBar` operator:
+  - in [Main shortcut functions](toc.md#main-shortcut-functions);
+  - in [Shortcut methods of `*testdeep.T`](toc.md#shortcut-methods-of-testdeep-t);
+  - in [`Testdeep` operators](toc.md#testdeep-operators), a simple copy
+    of the line inserted in [Available operators](../README.md#available-operators)
+	and its corresponding link of course.
 
 Each time you change `example_test.go`, re-run `./tools/gen_funcs.pl .`
 to update corresponding `CmpFooBar` & `T.FooBar` examples.

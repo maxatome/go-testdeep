@@ -14,6 +14,7 @@ go-testdeep
 
 - [Latest news](#latest-news)
 - [Synopsis](#synopsis)
+- [Godoc table of contents](doc/toc.md#godoc-table-of-contents)
 - [Installation](#installation)
 - [Presentation](#presentation)
 - [Available operators](#available-operators)
@@ -28,6 +29,15 @@ go-testdeep
 
 ## Latest news
 
+- 2019/07/07: multiple changes occurred:
+  - `*T` type now implements `TestingFT`,
+  - add [`UseEqual` feature](https://godoc.org/github.com/maxatome/go-testdeep#T.UseEqual)
+    aka. delegates comparison to `Equal()` method of object,
+  - [`tdhttp.NewRequest()`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#NewRequest),
+    [`tdhttp.NewJSONRequest()`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#NewJSONRequest)
+    and
+    [`tdhttp.NewXMLRequest()`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#NewXMLRequest)
+    now accept headers definition,
 - 2019/05/01: new [`Keys`] & [`Values`] operators (and their friends
   [`CmpKeys`](https://godoc.org/github.com/maxatome/go-testdeep#CmpKeys),
   [`CmpValues`](https://godoc.org/github.com/maxatome/go-testdeep#CmpValues),
@@ -41,8 +51,6 @@ go-testdeep
   and [`T.CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpDeeply);
 - 2019/01/13: test failures output is now colored by default. See
   [Environment variables](#environment-variables) to configure it;
-- 2019/01/07: introducing TestDeep helpers. First one is
-  [`tdhttp` or HTTP API testing helper](#tdhttp-or-http-api-testing-helper);
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -200,6 +208,8 @@ func TestCreateRecord(tt *testing.T) {
   }
 }
 ```
+
+See [godoc table of contents](doc/toc.md#godoc-table-of-contents) for details.
 
 
 ## Installation
@@ -368,6 +378,8 @@ func TestCreateRecord(tt *testing.T) {
   }
 }
 ```
+
+See [godoc table of contents](doc/toc.md#godoc-table-of-contents) for details.
 
 
 ## Available operators
