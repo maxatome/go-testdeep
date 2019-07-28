@@ -210,7 +210,7 @@ import (
 
 func TestMyFunc(tt *testing.T) {
   t := testdeep.NewT(tt).UseEqual()
-  t.CmpBetween(MyFunc(), 100, 199, testdeep.BoundsInIn,
+  t.Between(MyFunc(), 100, 199, testdeep.BoundsInIn,
     "MyFunc() result is between 100 and 199")
 }
 ```
@@ -220,9 +220,9 @@ For each of these methods, it is always a shortcut on
 the correponding [Testdeep operator](#testdeep-operators):
 
 ```
-T.CmpNot(got, expected, args...) ⇒ T.Cmp(t, got, Not(expected), args...)
-     ^-^                                         ^-^
-      +-------------------------------------------+
+T.Not(got, expected, args...) ⇒ T.Cmp(t, got, Not(expected), args...)
+  ^-^                                          ^-^
+   +--------------------------------------------+
 ```
 
 - [`func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.All)
