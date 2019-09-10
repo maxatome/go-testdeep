@@ -81,7 +81,7 @@ func TestCmpResponse(tt *testing.T) {
 			},
 		},
 		{
-			Name:    "ignore body explicitely",
+			Name:    "ignore body explicitly",
 			Handler: handlerNonEmpty,
 			Success: true,
 			ExpectedResp: tdhttp.Response{
