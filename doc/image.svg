@@ -14,11 +14,11 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="image.svg"
    inkscape:export-filename="/home/max/Projet/go/src/github.com/maxatome/go-testdeep/doc/image.png"
-   inkscape:export-xdpi="72.649117"
-   inkscape:export-ydpi="72.649117">
+   inkscape:export-xdpi="99.970001"
+   inkscape:export-ydpi="99.970001">
   <defs
      id="defs2">
     <inkscape:path-effect
@@ -99,13 +99,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="281.9235"
-     inkscape:cy="288.32152"
+     inkscape:cx="294.85119"
+     inkscape:cy="231.75298"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1918"
-     inkscape:window-height="1056"
+     inkscape:window-height="1052"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -1829,6 +1829,62 @@
          id="path4521"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ssscsscssssssssssssssssssssccsss" />
+    </g>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4005"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion4007"><rect
+           id="rect4009"
+           width="101.11626"
+           height="70.003571"
+           x="-85.559921"
+           y="984.63385" /></flowRegion><flowPara
+         id="flowPara4011"></flowPara></flowRoot>    <g
+       id="g4948"
+       transform="matrix(0.06643196,0.02541623,-0.02541623,0.06643196,29.756735,185.90483)">
+      <rect
+         y="288.11328"
+         x="181.56955"
+         height="82.506096"
+         width="110.19522"
+         id="rect4906-7"
+         style="opacity:1;fill:#ffffff;fill-opacity:0.99310345;stroke:#000000;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text4820-8"
+         y="315.05405"
+         x="182.69209"
+         style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:31.75px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px"
+           y="315.05405"
+           x="182.69209"
+           id="tspan4818-7"
+           sodipodi:role="line">ENLARGE</tspan></text>
+      <text
+         transform="scale(1.2660289,0.78987139)"
+         id="text4820-3-4"
+         y="432.98462"
+         x="145.45598"
+         style="font-style:normal;font-weight:normal;font-size:13.39880466px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.33497012px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:40.19641495px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.33497012px"
+           y="432.98462"
+           x="145.45598"
+           id="tspan4818-8-9"
+           sodipodi:role="line">YOUR</tspan></text>
+      <text
+         transform="scale(1.1895051,0.84068576)"
+         id="text4820-5-2"
+         y="438.86823"
+         x="154.49707"
+         style="font-style:normal;font-weight:normal;font-size:12.58892918px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.31472322px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:37.76678848px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.31472322px"
+           y="438.86823"
+           x="154.49707"
+           id="tspan4818-9-8"
+           sodipodi:role="line">TESTS</tspan></text>
     </g>
   </g>
 </svg>
