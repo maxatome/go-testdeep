@@ -55,6 +55,10 @@ func (t *tdExpectedType) checkPtr(ctx ctxerr.Context, pGot *reflect.Value, nilAl
 
 func (t *tdExpectedType) checkType(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Type() != t.expectedType {
+		if ctx.BeLax && t.expectedType.ConvertibleTo(got.Type()) {
+			return nil
+		}
+
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}

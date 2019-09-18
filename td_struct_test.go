@@ -214,6 +214,29 @@ func TestStruct(t *testing.T) {
 		})
 
 	//
+	// Be lax...
+	type Struct1 struct {
+		name string
+		age  int
+	}
+	type Struct2 struct {
+		name string
+		age  int
+	}
+
+	// Without Lax → error
+	checkError(t,
+		Struct1{name: "Bob", age: 42},
+		testdeep.Struct(Struct2{name: "Bob", age: 42}, nil),
+		expectedError{
+			Message: mustBe("type mismatch"),
+		})
+	// With Lax → OK
+	checkOK(t,
+		Struct1{name: "Bob", age: 42},
+		testdeep.Lax(testdeep.Struct(Struct2{name: "Bob", age: 42}, nil)))
+
+	//
 	// Bad usage
 	test.CheckPanic(t, func() { testdeep.Struct("test", nil) }, "usage: Struct")
 

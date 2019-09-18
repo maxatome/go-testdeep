@@ -29,6 +29,12 @@ go-testdeep
 
 ## Latest news
 
+- 2019/09/22: new
+  [`BeLax` feature](https://godoc.org/github.com/maxatome/go-testdeep#T.BeLax)
+  with its [`Lax`] operator counterpart (and its friends
+  [`CmpLax`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLax)
+  &
+  [`T.CmpLax`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax));
 - 2019/07/07: multiple changes occurred:
   - `*T` type now implements `TestingFT`,
   - add [`UseEqual` feature](https://godoc.org/github.com/maxatome/go-testdeep#T.UseEqual)
@@ -49,8 +55,6 @@ go-testdeep
   method, shorter versions of
   [`CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#CmpDeeply)
   and [`T.CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpDeeply);
-- 2019/01/13: test failures output is now colored by default. See
-  [Environment variables](#environment-variables) to configure it;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -415,6 +419,8 @@ See functions returning [`TestDeep` interface][`TestDeep`]:
 - [`Isa`] checks the data type or whether data implements an interface
   or not;
 - [`Keys`] checks keys of a map;
+- [`Lax`] temporarily enables
+  [`BeLax` config flag](https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig);
 - [`Len`] checks an array, slice, map, string or channel length;
 - [`Lt`] checks that a number, string or [`time.Time`] is lesser than a value;
 - [`Lte`] checks that a number, string or [`time.Time`] is lesser or equal
@@ -563,12 +569,13 @@ TESTDEEP_COLOR_OK=black:green \
 | [`Ignore`]          | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓             | ✓                             | ✓ | ✓ | ✓ | [`Ignore`] |
 | [`Isa`]             | ✗ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓             | ✓                             | ✓ | ✓ | ✓ | [`Isa`] |
 | [`Keys`]            | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗ | ✓ | ✗             | ✗                             | ✓ | ✗ | ✗ | [`Keys`] |
+| [`Lax`]             | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓             | ✓                             | ✓ | ✓ | ✓ | [`Lax`] |
 | [`Len`]             | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓ | ✓ | ✗             | ✗                             | ✓ | ✓ | ✗ | [`Len`] |
-| [`Lt`]              | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Lt`] |
-| [`Lte`]             | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                             | ✓ | ✗ | ✗ | [`Lte`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`Lt`]              | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                 | ✓ | ✗ | ✗ | [`Lt`] |
+| [`Lte`]             | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗                 | ✓ | ✗ | ✗ | [`Lte`] |
 | [`Map`]             | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗ | ✓ | ✗ | ptr on map                    | ✓ | ✗ | ✗ | [`Map`] |
 | [`MapEach`]         | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✗ | ✗ | ✓ | ✗ | ptr on map                    | ✓ | ✗ | ✗ | [`MapEach`] |
 | [`N`]               | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | ✗ | ✗                             | ✓ | ✗ | ✗ | [`N`] |
@@ -577,11 +584,11 @@ TESTDEEP_COLOR_OK=black:green \
 | [`None`]            | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓ | ✓                             | ✓ | ✓ | ✓ | [`None`] |
 | [`NotAny`]          | ✗ | ✗ | ✗ | ✗ | ✗ | ✗    | ✓ | ✓ | ✗ | ✗ | ptr on array/slice            | ✓ | ✗ | ✗ | [`NotAny`] |
 | [`Not`]             | ✓ | ✓ | ✓ | ✓ | ✓ | ✓    | ✓ | ✓ | ✓ | ✓ | ✓                             | ✓ | ✓ | ✓ | [`Not`] |
-| [`NotEmpty`]        | ✗ | ✗ | ✓ | ✗ | ✗ | ✗    | ✓ | ✓ | ✓ | ✗ | ptr on array/slice/map/string | ✓ | ✓ | ✗ | [`NotEmpty`] |
-| [`NotNaN`]          | ✗ | ✗ | ✗ | ✗ | ✓ | ✗    | ✗ | ✗ | ✗ | ✗ | ✗                             | ✓ | ✗ | ✗ | [`NotNaN`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`NotEmpty`]        | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓        | ✓ | ✗ | ptr on array/slice/map/string | ✓ | ✓ | ✗ | [`NotEmpty`] |
+| [`NotNaN`]          | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✗        | ✗ | ✗ | ✗                  | ✓ | ✗ | ✗ | [`NotNaN`] |
 | [`NotNil`]          | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓        | ✓ | ✗ | ✓                  | ✓ | ✓ | ✓ | [`NotNil`] |
 | [`NotZero`]         | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓        | ✓ | ✓ | ✓                  | ✓ | ✓ | ✓ | [`NotZero`] |
 | [`PPtr`]            | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗        | ✗ | ✗ | ✓                  | ✓ | ✗ | ✗ | [`PPtr`] |
@@ -590,22 +597,25 @@ TESTDEEP_COLOR_OK=black:green \
 | [`ReAll`]           | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗                  | ✓ + [`fmt.Stringer`], [`error`] | ✗ | ✗ | [`ReAll`] |
 | [`Set`]             | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓        | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`Set`] |
 | [`Shallow`]         | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✓        | ✓ | ✗ | ✓                  | ✓ | ✓ | ✓ | [`Shallow`] |
-| [`Slice`]           | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓        | ✗ | ✗ | ptr on slice       | ✓ | ✗ | ✗ | [`Slice`] |
-| [`Smuggle`]         | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓        | ✓ | ✓ | ✓                  | ✓ | ✓ | ✓ | [`Smuggle`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
-| [`String`]          | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗             | ✗                  | ✓ + [`fmt.Stringer`], [`error`] | ✗ | ✗ | [`String`] |
-| [`Struct`]          | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓             | ptr on struct      | ✓ | ✗ | ✗ | [`Struct`] |
-| [`SubBagOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`SubBagOf`] |
-| [`SubMapOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗             | ptr on map         | ✓ | ✗ | ✗ | [`SubMapOf`] |
-| [`SubSetOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`] |
-| [`SuperBagOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`] |
-| [`SuperMapOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗             | ptr on map         | ✓ | ✗ | ✗ | [`SuperMapOf`] |
-| [`SuperSetOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗             | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperSetOf`] |
-| [`TruncTime`]       | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | [`time.Time`] | todo               | ✓ | ✗ | ✗ | [`TruncTime`] |
-| [`Values`]          | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗             | ✗                  | ✓ | ✗ | ✗ | [`Values`] |
-| [`Zero`]            | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓             | ✓                  | ✓ | ✓ | ✓ | [`Zero`] |
+| [`Slice`]           | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ptr on slice       | ✓ | ✗ | ✗ | [`Slice`] |
+| [`Smuggle`]         | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓                  | ✓ | ✓ | ✓ | [`Smuggle`] |
+| [`String`]          | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗                  | ✓ + [`fmt.Stringer`], [`error`] | ✗ | ✗ | [`String`] |
+| [`Struct`]          | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ptr on struct      | ✓ | ✗ | ✗ | [`Struct`] |
+| [`SubBagOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubBagOf`] |
+| [`SubMapOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map         | ✓ | ✗ | ✗ | [`SubMapOf`] |
+| [`SubSetOf`]        | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`] |
+| [`SuperBagOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`] |
+| [`SuperMapOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map         | ✓ | ✗ | ✗ | [`SuperMapOf`] |
+| [`SuperSetOf`]      | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperSetOf`] |
+
+| Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
+| ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`TruncTime`]       | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | [`time.Time`] | todo | ✓ | ✗ | ✗ | [`TruncTime`] |
+| [`Values`]          | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗             | ✗    | ✓ | ✗ | ✗ | [`Values`] |
+| [`Zero`]            | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓             | ✓    | ✓ | ✓ | ✓ | [`Zero`] |
 
 Legend:
 - ✗ means using this operator with a value type of this kind will always fail

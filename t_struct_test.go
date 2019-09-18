@@ -179,3 +179,21 @@ func TestUseEqual(tt *testing.T) {
 	t = testdeep.NewT(ttt).UseEqual(false)
 	test.IsFalse(tt, t.Cmp(time1, time2))
 }
+
+func TestBeLax(tt *testing.T) {
+	ttt := &test.TestingFT{}
+
+	// Using default config
+	t := testdeep.NewT(ttt)
+	test.IsFalse(tt, t.Cmp(int64(123), 123))
+
+	// BeLax
+	t = testdeep.NewT(ttt).BeLax()
+	test.IsTrue(tt, t.Cmp(int64(123), 123))
+
+	t = testdeep.NewT(ttt).BeLax(true)
+	test.IsTrue(tt, t.Cmp(int64(123), 123))
+
+	t = testdeep.NewT(ttt).BeLax(false)
+	test.IsFalse(tt, t.Cmp(int64(123), 123))
+}

@@ -39,6 +39,9 @@ my %IGNORE_VARIADIC = (Between   => 'BoundsInIn',
 		       Re        => 'nil',
 		       TruncTime => 0);
 
+# These operators should be renamed when used as *T method
+my %RENAME_METHOD = (Lax => 'CmpLax');
+
 my $dir = shift;
 
 opendir(my $dh, $dir);
@@ -95,6 +98,7 @@ EOH
 foreach my $func (sort keys %funcs)
 {
     my $func_name = "Cmp$func";
+    my $method_name = $RENAME_METHOD{$func} // $func;
 
     my $cmp_args = 'got interface{}';
     my $call_args = '';
@@ -126,7 +130,7 @@ EOF
 
     $t_contents .= <<EOF;
 
-// $func is a shortcut for:
+// $method_name is a shortcut for:
 //
 //   t.Cmp(got, $func($call_args), args...)
 //
@@ -161,7 +165,7 @@ EOF
 
     $t_contents .= $func_comment . <<EOF;
 $ARGS_COMMENT
-func (t *T)$func($cmp_args, args ...interface{}) bool {
+func (t *T)$method_name($cmp_args, args ...interface{}) bool {
 \tt.Helper()
 \treturn t.Cmp(got, $func($call_args), args...)
 }
@@ -244,13 +248,14 @@ sub extract_params
 foreach my $func (sort keys %funcs)
 {
     my $args = $funcs{$func}{args};
+    my $method = $RENAME_METHOD{$func} // $func;
 
     foreach my $example (@{$funcs{$func}{examples}})
     {
 	my $name = $example->{name};
 
 	foreach my $info ([ "Cmp$func(t, ", "Cmp$func", \$funcs_test_contents ],
-			  [ "t.$func(",     "T_$func",  \$t_test_contents ])
+			  [ "t.$method(",   "T_$method",\$t_test_contents ])
 	{
 	    (my $code = $example->{code}) =~
 		s%Cmp\(t,\s+($rparam),\s+$func($rep)%

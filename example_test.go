@@ -916,6 +916,32 @@ func ExampleKeys() {
 	// Each key is 3 bytes long: true
 }
 
+func ExampleLax() {
+	t := &testing.T{}
+
+	gotInt64 := int64(1234)
+	gotInt32 := int32(1235)
+
+	type myInt uint16
+	gotMyInt := myInt(1236)
+
+	expected := Between(1230, 1240) // int type here
+
+	ok := Cmp(t, gotInt64, Lax(expected))
+	fmt.Println("int64 got between ints [1230 .. 1240]:", ok)
+
+	ok = Cmp(t, gotInt32, Lax(expected))
+	fmt.Println("int32 got between ints [1230 .. 1240]:", ok)
+
+	ok = Cmp(t, gotMyInt, Lax(expected))
+	fmt.Println("myInt got between ints [1230 .. 1240]:", ok)
+
+	// Output:
+	// int64 got between ints [1230 .. 1240]: true
+	// int32 got between ints [1230 .. 1240]: true
+	// myInt got between ints [1230 .. 1240]: true
+}
+
 func ExampleLen_slice() {
 	t := &testing.T{}
 

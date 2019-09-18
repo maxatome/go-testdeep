@@ -860,6 +860,32 @@ func ExampleCmpKeys() {
 	// Each key is 3 bytes long: true
 }
 
+func ExampleCmpLax() {
+	t := &testing.T{}
+
+	gotInt64 := int64(1234)
+	gotInt32 := int32(1235)
+
+	type myInt uint16
+	gotMyInt := myInt(1236)
+
+	expected := Between(1230, 1240) // int type here
+
+	ok := CmpLax(t, gotInt64, expected)
+	fmt.Println("int64 got between ints [1230 .. 1240]:", ok)
+
+	ok = CmpLax(t, gotInt32, expected)
+	fmt.Println("int32 got between ints [1230 .. 1240]:", ok)
+
+	ok = CmpLax(t, gotMyInt, expected)
+	fmt.Println("myInt got between ints [1230 .. 1240]:", ok)
+
+	// Output:
+	// int64 got between ints [1230 .. 1240]: true
+	// int32 got between ints [1230 .. 1240]: true
+	// myInt got between ints [1230 .. 1240]: true
+}
+
 func ExampleCmpLen_slice() {
 	t := &testing.T{}
 

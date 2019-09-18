@@ -415,14 +415,21 @@ func (b *tdBetween) matchString(got reflect.Value) (ok bool) {
 
 func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Type() != b.expectedMin.Type() {
-		if ctx.BooleanError {
-			return ctxerr.BooleanError
+		if ctx.BeLax && b.expectedMin.Type().ConvertibleTo(got.Type()) {
+			nb := *b
+			nb.expectedMin = b.expectedMin.Convert(got.Type())
+			nb.expectedMax = b.expectedMax.Convert(got.Type())
+			b = &nb
+		} else {
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+			return ctx.CollectError(&ctxerr.Error{
+				Message:  "type mismatch",
+				Got:      types.RawString(got.Type().String()),
+				Expected: types.RawString(b.expectedMin.Type().String()),
+			})
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "type mismatch",
-			Got:      types.RawString(got.Type().String()),
-			Expected: types.RawString(b.expectedMin.Type().String()),
-		})
 	}
 
 	var ok bool
@@ -519,6 +526,8 @@ var _ TestDeep = &tdBetweenTime{}
 
 func (b *tdBetweenTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Type() != b.expectedType {
+		// No need to test ctx.BeLax here, already converted in constructor
+
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}

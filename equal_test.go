@@ -770,3 +770,42 @@ func TestUseEqualGlobalt(t *testing.T) {
 			Message: mustBe("values differ"),
 		})
 }
+
+func TestBeLaxGlobalt(t *testing.T) {
+	defer func() { testdeep.DefaultContextConfig.BeLax = false }()
+	testdeep.DefaultContextConfig.BeLax = true
+
+	// expected float64 value first converted to int64 before comparison
+	checkOK(t, int64(123), float64(123.56))
+
+	type MyInt int32
+	checkOK(t, int64(123), MyInt(123))
+	checkOK(t, MyInt(123), int64(123))
+
+	type gotStruct struct {
+		name string
+		age  int
+	}
+	type expectedStruct struct {
+		name string
+		age  int
+	}
+	checkOK(t,
+		gotStruct{
+			name: "bob",
+			age:  42,
+		},
+		expectedStruct{
+			name: "bob",
+			age:  42,
+		})
+	checkOK(t,
+		&gotStruct{
+			name: "bob",
+			age:  42,
+		},
+		&expectedStruct{
+			name: "bob",
+			age:  42,
+		})
+}

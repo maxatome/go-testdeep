@@ -219,6 +219,20 @@ func TestMap(t *testing.T) {
 	checkOK(t, gotNilTypedMap, testdeep.Map(MyMap{}, nil))
 	checkOK(t, &gotNilTypedMap, testdeep.Map(&MyMap{}, nil))
 
+	// Be lax...
+	// Without Lax → error
+	checkError(t, MyMap{}, testdeep.Map(map[string]int{}, nil),
+		expectedError{
+			Message: mustBe("type mismatch"),
+		})
+	checkError(t, map[string]int{}, testdeep.Map(MyMap{}, nil),
+		expectedError{
+			Message: mustBe("type mismatch"),
+		})
+	// With Lax → OK
+	checkOK(t, MyMap{}, testdeep.Lax(testdeep.Map(map[string]int{}, nil)))
+	checkOK(t, map[string]int{}, testdeep.Lax(testdeep.Map(MyMap{}, nil)))
+
 	//
 	// SuperMapOf
 	checkOK(t, gotMap, testdeep.SuperMapOf(map[string]int{"foo": 1}, nil))
