@@ -183,6 +183,21 @@ func TestPtr(t *testing.T) {
 }
 
 func TestPtrTypeBehind(t *testing.T) {
-	equalTypes(t, testdeep.Ptr(6), nil)
-	equalTypes(t, testdeep.PPtr(6), nil)
+	var num int
+	equalTypes(t, testdeep.Ptr(6), &num)
+
+	// Another TestDeep operator delegation
+	var num64 int64
+	equalTypes(t, testdeep.Ptr(testdeep.Between(int64(1), int64(2))), &num64)
+	equalTypes(t, testdeep.Ptr(testdeep.Any(1, 1.2)), nil)
+}
+
+func TestPPtrTypeBehind(t *testing.T) {
+	var pnum *int
+	equalTypes(t, testdeep.PPtr(6), &pnum)
+
+	// Another TestDeep operator delegation
+	var pnum64 *int64
+	equalTypes(t, testdeep.PPtr(testdeep.Between(int64(1), int64(2))), &pnum64)
+	equalTypes(t, testdeep.PPtr(testdeep.Any(1, 1.2)), nil)
 }
