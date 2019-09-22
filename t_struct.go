@@ -210,6 +210,8 @@ func (t *T) RootName(rootName string) *T {
 //   // Following t.Cmp() won't call Fatal() if failure
 //   t.Cmp(...)
 //   t.Cmp(...)
+//
+// Note that t.FailureIsFatal() acts as t.FailureIsFatal(true).
 func (t *T) FailureIsFatal(enable ...bool) *T {
 	new := *t
 	new.Config.FailureIsFatal = len(enable) == 0 || enable[0]
@@ -224,9 +226,29 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 // with B assignable to A.
 //
 // See time.Time as an example of accepted Equal() method.
+//
+// It returns a new instance of *T so does not alter the original t.
+//
+// Note that t.UseEqual() acts as t.UseEqual(true).
 func (t *T) UseEqual(enable ...bool) *T {
 	new := *t
 	new.Config.UseEqual = len(enable) == 0 || enable[0]
+	return &new
+}
+
+// BeLax allows to to compare different but convertible types. If
+// set to false, got and expected types must be the same. If set to
+// true and expected type is convertible to got one, expected is
+// first converted to go type before its comparison. See CmpLax
+// function/method and Lax operator to set this flag without
+// providing a specific configuration.
+//
+// It returns a new instance of *T so does not alter the original t.
+//
+// Note that t.BeLax() acts as t.BeLax(true).
+func (t *T) BeLax(enable ...bool) *T {
+	new := *t
+	new.Config.BeLax = len(enable) == 0 || enable[0]
 	return &new
 }
 

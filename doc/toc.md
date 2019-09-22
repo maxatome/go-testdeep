@@ -36,6 +36,7 @@ func TestMyFunc(t *testing.T) {
 - [`func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp)
 - [`func CmpError(t TestingT, got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpError)
 - [`func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpFalse)
+- [`func CmpLax(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLax)
 - [`func CmpNoError(t TestingT, got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNoError)
 - [`func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotPanic)
 - [`func CmpPanic(t TestingT, fn func(), expectedPanic interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpPanic)
@@ -43,8 +44,9 @@ func TestMyFunc(t *testing.T) {
 - [`func EqDeeply(got, expected interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#EqDeeply)
 - [`func EqDeeplyError(got, expected interface{}) error`](https://godoc.org/github.com/maxatome/go-testdeep#EqDeeplyError)
 
-Note that the convenient [`CmpNot()`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNot) function is listed
-in the shortcut section below.
+Note that the convenient
+[`CmpNot()`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNot)
+function is listed in the shortcut section below.
 
 [`CmpDeeply()`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp)
 is now replaced by
@@ -93,6 +95,7 @@ CmpNot(t, got, expected, args...) ⇒ Cmp(t, got, Not(expected), args...)
 - [`func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpHasSuffix)
 - [`func CmpIsa(t TestingT, got interface{}, model interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpIsa)
 - [`func CmpKeys(t TestingT, got interface{}, val interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpKeys)
+- [`func CmpLax(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLax)
 - [`func CmpLen(t TestingT, got interface{}, val interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLen)
 - [`func CmpLt(t TestingT, got interface{}, val interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLt)
 - [`func CmpLte(t TestingT, got interface{}, val interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLte)
@@ -101,9 +104,9 @@ CmpNot(t, got, expected, args...) ⇒ Cmp(t, got, Not(expected), args...)
 - [`func CmpN(t TestingT, got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpN)
 - [`func CmpNaN(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNaN)
 - [`func CmpNil(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNil)
-- [`func CmpNone(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNone)
-- [`func CmpNot(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNot)
-- [`func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotAny)
+- [`func CmpNone(t TestingT, got interface{}, unexpectedValues []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNone)
+- [`func CmpNot(t TestingT, got interface{}, unexpected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNot)
+- [`func CmpNotAny(t TestingT, got interface{}, unexpectedItems []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotAny)
 - [`func CmpNotEmpty(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotEmpty)
 - [`func CmpNotNaN(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNaN)
 - [`func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNil)
@@ -156,6 +159,7 @@ func TestMyFunc(tt *testing.T) {
 }
 ```
 
+- [`func (t *T) BeLax(enable ...bool) *T`](https://godoc.org/github.com/maxatome/go-testdeep#T.BeLax)
 - [`func (t *T) FailureIsFatal(enable ...bool) *T`](https://godoc.org/github.com/maxatome/go-testdeep#T.FailureIsFatal)
 - [`func (t *T) RootName(rootName string) *T`](https://godoc.org/github.com/maxatome/go-testdeep#T.RootName)
 - [`func (t *T) UseEqual(enable ...bool) *T`](https://godoc.org/github.com/maxatome/go-testdeep#T.UseEqual)
@@ -183,6 +187,7 @@ func TestMyFunc(tt *testing.T) {
 
 - [`func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp)
 - [`func (t *T) CmpError(got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpError)
+- [`func (t *T) CmpLax(got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax)
 - [`func (t *T) CmpNoError(got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNoError)
 - [`func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpNotPanic)
 - [`func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpPanic)
@@ -221,8 +226,8 @@ the correponding [Testdeep operator](#testdeep-operators):
 
 ```
 T.Not(got, expected, args...) ⇒ T.Cmp(t, got, Not(expected), args...)
-  ^-^                                          ^-^
-   +--------------------------------------------+
+  ^-^                                         ^-^
+   +-------------------------------------------+
 ```
 
 - [`func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.All)
@@ -242,6 +247,11 @@ T.Not(got, expected, args...) ⇒ T.Cmp(t, got, Not(expected), args...)
 - [`func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.HasSuffix)
 - [`func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Isa)
 - [`func (t *T) Keys(got interface{}, val interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Keys)
+- `Lax` operator appears as more readable
+  [`T.CmpLax()`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax)
+  considering it just sets the
+  [`BeLax` config flag](https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig)
+  but provides a first-class global feature
 - [`func (t *T) Len(got interface{}, val interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Len)
 - [`func (t *T) Lt(got interface{}, val interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Lt)
 - [`func (t *T) Lte(got interface{}, val interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Lte)
@@ -250,9 +260,9 @@ T.Not(got, expected, args...) ⇒ T.Cmp(t, got, Not(expected), args...)
 - [`func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.N)
 - [`func (t *T) NaN(got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.NaN)
 - [`func (t *T) Nil(got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Nil)
-- [`func (t *T) None(got interface{}, expectedValues []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.None)
-- [`func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Not)
-- [`func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.NotAny)
+- [`func (t *T) None(got interface{}, unexpectedValues []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.None)
+- [`func (t *T) Not(got interface{}, unexpected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.Not)
+- [`func (t *T) NotAny(got interface{}, unexpectedItems []interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.NotAny)
 - [`func (t *T) NotEmpty(got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.NotEmpty)
 - [`func (t *T) NotNaN(got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.NotNaN)
 - [`func (t *T) NotNil(got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.NotNil)
@@ -309,6 +319,8 @@ T.Not(got, expected, args...) ⇒ T.Cmp(t, got, Not(expected), args...)
 - [`Isa`] checks the data type or whether data implements an interface
   or not;
 - [`Keys`] checks keys of a map;
+- [`Lax`] temporarily enables
+  [`BeLax` config flag](https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig);
 - [`Len`] checks an array, slice, map, string or channel length;
 - [`Lt`] checks that a number, string or [`time.Time`] is lesser than a value;
 - [`Lte`] checks that a number, string or [`time.Time`] is lesser or equal
@@ -385,6 +397,7 @@ T.Not(got, expected, args...) ⇒ T.Cmp(t, got, Not(expected), args...)
 [`Ignore`]: https://godoc.org/github.com/maxatome/go-testdeep#Isa
 [`Isa`]: https://godoc.org/github.com/maxatome/go-testdeep#Isa
 [`Keys`]: https://godoc.org/github.com/maxatome/go-testdeep#Keys
+[`Lax`]: https://godoc.org/github.com/maxatome/go-testdeep#Lax
 [`Len`]: https://godoc.org/github.com/maxatome/go-testdeep#Len
 [`Lt`]: https://godoc.org/github.com/maxatome/go-testdeep#Lt
 [`Lte`]: https://godoc.org/github.com/maxatome/go-testdeep#Lte

@@ -147,6 +147,19 @@ func TestArray(t *testing.T) {
 			Expected: mustBe("6"),
 		})
 
+	// Be lax...
+	// Without Lax → error
+	checkError(t, MyArray{}, testdeep.Array([5]int{}, nil),
+		expectedError{
+			Message: mustBe("type mismatch"),
+		})
+	checkError(t, [5]int{}, testdeep.Array(MyArray{}, nil),
+		expectedError{
+			Message: mustBe("type mismatch"),
+		})
+	checkOK(t, MyArray{}, testdeep.Lax(testdeep.Array([5]int{}, nil)))
+	checkOK(t, [5]int{}, testdeep.Lax(testdeep.Array(MyArray{}, nil)))
+
 	//
 	// Bad usage
 	test.CheckPanic(t, func() { testdeep.Array("test", nil) }, "usage: Array(")
@@ -374,6 +387,19 @@ func TestSlice(t *testing.T) {
 	checkOK(t, gotNilSlice, testdeep.Slice([]int{}, nil))
 	checkOK(t, gotNilTypedSlice, testdeep.Slice(MySlice{}, nil))
 	checkOK(t, &gotNilTypedSlice, testdeep.Slice(&MySlice{}, nil))
+
+	// Be lax...
+	// Without Lax → error
+	checkError(t, MySlice{}, testdeep.Slice([]int{}, nil),
+		expectedError{
+			Message: mustBe("type mismatch"),
+		})
+	checkError(t, []int{}, testdeep.Slice(MySlice{}, nil),
+		expectedError{
+			Message: mustBe("type mismatch"),
+		})
+	checkOK(t, MySlice{}, testdeep.Lax(testdeep.Slice([]int{}, nil)))
+	checkOK(t, []int{}, testdeep.Lax(testdeep.Slice(MySlice{}, nil)))
 
 	//
 	// Bad usage

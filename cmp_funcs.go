@@ -305,6 +305,23 @@ func CmpKeys(t TestingT, got interface{}, val interface{}, args ...interface{}) 
 	return Cmp(t, got, Keys(val), args...)
 }
 
+// CmpLax is a shortcut for:
+//
+//   Cmp(t, got, Lax(expectedValue), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#Lax for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// logged as is in case of failure. If len(args) > 1 and the first
+// item of args is a string and contains a '%' rune then fmt.Fprintf
+// is used to compose the name, else args are passed to fmt.Fprint.
+func CmpLax(t TestingT, got interface{}, expectedValue interface{}, args ...interface{}) bool {
+	t.Helper()
+	return Cmp(t, got, Lax(expectedValue), args...)
+}
+
 // CmpLen is a shortcut for:
 //
 //   Cmp(t, got, Len(val), args...)

@@ -29,10 +29,12 @@ type Context struct {
 	// checked. Can be used to avoid filling Error{} with expensive
 	// computations.
 	BooleanError bool
-	// See ContexConfig.FailureIsFatal for details.
+	// See ContextConfig.FailureIsFatal for details.
 	FailureIsFatal bool
-	// See ContexConfig.UseEqual for details.
+	// See ContextConfig.UseEqual for details.
 	UseEqual bool
+	// See ContextConfig.BeLax for details.
+	BeLax bool
 }
 
 // InitErrors initializes Context *Errors slice, if MaxErrors < 0 or

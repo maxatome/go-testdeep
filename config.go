@@ -49,6 +49,13 @@ type ContextConfig struct {
 	//
 	// See time.Time as an example of accepted Equal() method.
 	UseEqual bool
+	// BeLax allows to compare different but convertible types. If set
+	// to false (default), got and expected types must be the same. If
+	// set to true and expected type is convertible to got one, expected
+	// is first converted to go type before its comparison. See CmpLax
+	// function/method and Lax operator to set this flag without
+	// providing a specific configuration.
+	BeLax bool
 }
 
 const (
@@ -76,6 +83,7 @@ var DefaultContextConfig = ContextConfig{
 	MaxErrors:      getMaxErrorsFromEnv(),
 	FailureIsFatal: false,
 	UseEqual:       false,
+	BeLax:          false,
 }
 
 func (c *ContextConfig) sanitize() {
@@ -104,6 +112,7 @@ func newContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 		MaxErrors:      config.MaxErrors,
 		FailureIsFatal: config.FailureIsFatal,
 		UseEqual:       config.UseEqual,
+		BeLax:          config.BeLax,
 	}
 
 	ctx.InitErrors()
@@ -116,5 +125,6 @@ func newBooleanContext() ctxerr.Context {
 		Visited:      visited.NewVisited(),
 		BooleanError: true,
 		UseEqual:     DefaultContextConfig.UseEqual,
+		BeLax:        DefaultContextConfig.BeLax,
 	}
 }

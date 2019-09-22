@@ -332,7 +332,7 @@ You want to add a new `FooBar` operator.
 - [ ] in [`toc.md#godoc-table-of-contents`](toc.md#godoc-table-of-contents),
   add this new new `FooBar` operator:
   - in [Main shortcut functions](toc.md#main-shortcut-functions);
-  - in [Shortcut methods of `*testdeep.T`](toc.md#shortcut-methods-of-testdeep-t);
+  - in [Shortcut methods of `*testdeep.T`](toc.md#shortcut-methods-of-testdeept);
   - in [`Testdeep` operators](toc.md#testdeep-operators), a simple copy
     of the line inserted in [Available operators](../README.md#available-operators)
 	and its corresponding link of course.

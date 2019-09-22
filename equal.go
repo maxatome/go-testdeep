@@ -40,7 +40,7 @@ func deepValueEqualFinal(ctx ctxerr.Context, got, expected reflect.Value) (err *
 }
 
 // nilHandler is called when one of got or expected is nil (but never
-// both, it is caller responsibility)
+// both, it is caller responsibility).
 func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {
 	err := ctxerr.Error{}
 
@@ -64,10 +64,18 @@ func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {
 
 		err.Expected = expected
 	} else { // here: !expected.IsValid() && got.IsValid()
+		switch got.Kind() {
 		// Special case: "got" is a nil interface, so consider as equal
 		// to "expected" nil.
-		if got.Kind() == reflect.Interface && got.IsNil() {
-			return nil
+		case reflect.Interface:
+			if got.IsNil() {
+				return nil
+			}
+		case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr, reflect.Slice:
+			// If BeLax, it is OK: we consider typed nil is equal to (untyped) nil
+			if ctx.BeLax && got.IsNil() {
+				return nil
+			}
 		}
 
 		if ctx.BooleanError {
@@ -148,6 +156,10 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		}
 
 		// "expected" is not a TestDeep operator
+
+		if ctx.BeLax && expected.Type().ConvertibleTo(got.Type()) {
+			return deepValueEqual(ctx, got, expected.Convert(got.Type()))
+		}
 
 		// If "got" is an interface, try to see what is behind before failing
 		// Used by Set/Bag Match method in such cases:

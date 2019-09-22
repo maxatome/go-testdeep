@@ -27,6 +27,11 @@ var _ TestDeep = &tdPtr{}
 //   Ptr(12)
 // as well as an other operator:
 //   Ptr(Between(3, 4))
+//
+// TypeBehind method returns the reflect.Type of a pointer on "val",
+// except if "val" is a TestDeep operator. In this case, it delegates
+// TypeBehind() to the operator and returns the reflect.Type of a
+// pointer on the returned value (if non-nil of course).
 func Ptr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
@@ -68,6 +73,19 @@ func (p *tdPtr) String() string {
 	return p.expectedValue.Type().String()
 }
 
+func (p *tdPtr) TypeBehind() reflect.Type {
+	// If the expected value is a TestDeep operator, delegate TypeBehind to it
+	if p.isTestDeeper {
+		typ := p.expectedValue.Interface().(TestDeep).TypeBehind()
+		if typ == nil {
+			return nil
+		}
+		// Add a level of pointer
+		return reflect.New(typ).Type()
+	}
+	return p.expectedValue.Type()
+}
+
 type tdPPtr struct {
 	tdSmugglerBase
 }
@@ -85,6 +103,12 @@ var _ TestDeep = &tdPPtr{}
 //
 // It is more efficient and shorter to write than:
 //   Ptr(Ptr(val))
+//
+// TypeBehind method returns the reflect.Type of a pointer on a
+// pointer on "val", except if "val" is a TestDeep operator. In this
+// case, it delegates TypeBehind() to the operator and returns the
+// reflect.Type of a pointer on a pointer on the returned value (if
+// non-nil of course).
 func PPtr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
@@ -127,4 +151,17 @@ func (p *tdPPtr) String() string {
 		return "**<something>"
 	}
 	return p.expectedValue.Type().String()
+}
+
+func (p *tdPPtr) TypeBehind() reflect.Type {
+	// If the expected value is a TestDeep operator, delegate TypeBehind to it
+	if p.isTestDeeper {
+		typ := p.expectedValue.Interface().(TestDeep).TypeBehind()
+		if typ == nil {
+			return nil
+		}
+		// Add 2 levels of pointer
+		return reflect.New(reflect.New(typ).Type()).Type()
+	}
+	return p.expectedValue.Type()
 }
