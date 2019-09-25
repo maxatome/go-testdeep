@@ -34,6 +34,12 @@ var _ TestDeep = &tdLax{}
 //
 // Note that in the latter case, CmpLax() could be used as well:
 //   CmpLax(t, floatValue, bw)
+//
+// TypeBehind method returns the greatest convertible or more common
+// reflect.Type of "expectedValue" if it is a base type (bool, int*,
+// uint*, float*, complex*, string), the reflect.Type of
+// "expectedValue" otherwise, except if "val" is a TestDeep
+// operator. In this case, it delegates TypeBehind() to the operator.
 func Lax(expectedValue interface{}) TestDeep {
 	c := tdLax{
 		tdSmugglerBase: newSmugglerBase(expectedValue),

@@ -150,6 +150,8 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 			}
 			bt.expectedMin = b.expectedMin.Convert(timeType)
 			bt.expectedMax = b.expectedMax.Convert(timeType)
+		} else {
+			break
 		}
 
 		if bt.expectedMin.Interface().(time.Time).After(
@@ -526,16 +528,18 @@ var _ TestDeep = &tdBetweenTime{}
 
 func (b *tdBetweenTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Type() != b.expectedType {
-		// No need to test ctx.BeLax here, already converted in constructor
-
-		if ctx.BooleanError {
-			return ctxerr.BooleanError
+		if ctx.BeLax && got.Type().ConvertibleTo(b.expectedType) {
+			got = got.Convert(b.expectedType)
+		} else {
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+			return ctx.CollectError(&ctxerr.Error{
+				Message:  "type mismatch",
+				Got:      types.RawString(got.Type().String()),
+				Expected: types.RawString(b.expectedType.String()),
+			})
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "type mismatch",
-			Got:      types.RawString(got.Type().String()),
-			Expected: types.RawString(b.expectedType.String()),
-		})
 	}
 
 	cmpGot, err := getTime(ctx, got, b.mustConvert)

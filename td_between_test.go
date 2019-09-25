@@ -90,6 +90,12 @@ func TestBetween(t *testing.T) {
 	test.CheckPanic(t,
 		func() { testdeep.Between(1, 2, testdeep.BoundsInIn, testdeep.BoundsInOut) },
 		"usage: Between(")
+	test.CheckPanic(t,
+		func() {
+			type notTime struct{}
+			testdeep.Between(notTime{}, notTime{})
+		},
+		"usage: Between(")
 }
 
 func TestN(t *testing.T) {
@@ -427,12 +433,19 @@ func TestBetweenTime(t *testing.T) {
 	checkOK(t, now, testdeep.Between(now.Add(time.Second), now.Add(-time.Second)))
 
 	checkOK(t, MyTime(now),
-		testdeep.Between(MyTime(now.Add(-time.Second)),
+		testdeep.Between(
+			MyTime(now.Add(-time.Second)),
 			MyTime(now.Add(time.Second))))
 
+	// Lax mode
 	checkOK(t, MyTime(now),
-		testdeep.Between(MyTime(now.Add(time.Second)),
-			MyTime(now.Add(-time.Second))))
+		testdeep.Lax(testdeep.Between(
+			now.Add(time.Second),
+			now.Add(-time.Second))))
+	checkOK(t, now,
+		testdeep.Lax(testdeep.Between(
+			MyTime(now.Add(time.Second)),
+			MyTime(now.Add(-time.Second)))))
 
 	date := time.Date(2018, time.March, 4, 0, 0, 0, 0, time.UTC)
 	checkError(t, date,
