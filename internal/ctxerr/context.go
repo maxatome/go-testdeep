@@ -98,6 +98,18 @@ func (c Context) MergeErrors() *Error {
 	return (*c.Errors)[0]
 }
 
+// CannotCompare returns a generic error used when the access of
+// unexported fields cannot be overridden.
+func (c Context) CannotCompareError() *Error {
+	if c.BooleanError {
+		return BooleanError
+	}
+	return &Error{
+		Message: "cannot compare",
+		Summary: NewSummary("unexported field that cannot be overridden"),
+	}
+}
+
 // AddCustomLevel creates a new Context from current one plus pathAdd.
 func (c Context) AddCustomLevel(pathAdd string) (new Context) {
 	new = c

@@ -1,0 +1,30 @@
+---
+title: "Tag"
+weight: 10
+---
+
+```go
+func Tag(tag string, expectedValue interface{}) TestDeep
+```
+
+[`Tag`]({{< ref "Tag" >}}) is a [smuggler operator]({{< ref "operators#smuggler-operators" >}}). It only allows to name *expectedValue*,
+which can be an operator or a value. The data is then compared
+against *expectedValue* as if [`Tag`]({{< ref "Tag" >}}) was never called. It is only
+useful as [`JSON`]({{< ref "JSON" >}}) operator parameter, to name placeholders. See [`JSON`]({{< ref "JSON" >}})
+operator for more details.
+
+```go
+Cmp(t, gotValue,
+  JSON(`{"fullname": $name, "age": $age, "gender": $gender}`,
+    Tag("name", HasPrefix("Foo")), // matches $name
+    Tag("age", Between(41, 43)),   // matches $age
+    Tag("gender", "male")))        // matches $gender
+```
+
+[TypeBehind]({{< ref "operators#typebehind-method" >}}) method is delegated to *expectedValue* one if
+*expectedValue* is a [TestDeep operator]({{< ref "operators" >}}), otherwise it returns the
+type of *expectedValue* (or `nil` if it is originally untyped `nil`).
+
+
+### Examples
+

@@ -20,6 +20,7 @@ import (
 
 var (
 	testDeeper         = reflect.TypeOf((*TestDeep)(nil)).Elem()
+	interfaceInterface = reflect.TypeOf((*interface{})(nil)).Elem()
 	stringerInterface  = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
 	errorInterface     = reflect.TypeOf((*error)(nil)).Elem()
 	timeType           = reflect.TypeOf(time.Time{})

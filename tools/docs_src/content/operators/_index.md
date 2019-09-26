@@ -58,6 +58,9 @@ weight = 15
 [`Isa`]({{< ref "Isa" >}})
 : checks the data type or whether data implements an interface or not
 
+[`JSON`]({{< ref "JSON" >}})
+: compares against JSON representation
+
 [`Keys`]({{< ref "Keys" >}})
 : checks keys of a map
 
@@ -157,6 +160,9 @@ weight = 15
 [`SuperSetOf`]({{< ref "SuperSetOf" >}})
 : compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items but with potentially some extra items
 
+[`Tag`]({{< ref "Tag" >}})
+: names an operator or a value. Only useful as a parameter of JSON operator, to name placeholders
+
 [`TruncTime`]({{< ref "TruncTime" >}})
 : compares [`time.Time`] (or assignable) values after truncating them
 
@@ -204,6 +210,9 @@ The following operators are smuggler ones:
 [`Smuggle`]({{< ref "Smuggle" >}})
 : changes data contents or mutates it into another type via a custom function or a struct fields-path before stepping down in favor of generic comparison process
 
+[`Tag`]({{< ref "Tag" >}})
+: names an operator or a value. Only useful as a parameter of JSON operator, to name placeholders
+
 [`Values`]({{< ref "Values" >}})
 : checks values of a map
 
@@ -237,6 +246,7 @@ The following operators are smuggler ones:
 [`HasSuffix`]: {{< ref "HasSuffix" >}}
 [`Ignore`]: {{< ref "Ignore" >}}
 [`Isa`]: {{< ref "Isa" >}}
+[`JSON`]: {{< ref "JSON" >}}
 [`Keys`]: {{< ref "Keys" >}}
 [`Lax`]: {{< ref "Lax" >}}
 [`Len`]: {{< ref "Len" >}}
@@ -270,6 +280,7 @@ The following operators are smuggler ones:
 [`SuperBagOf`]: {{< ref "SuperBagOf" >}}
 [`SuperMapOf`]: {{< ref "SuperMapOf" >}}
 [`SuperSetOf`]: {{< ref "SuperSetOf" >}}
+[`Tag`]: {{< ref "Tag" >}}
 [`TruncTime`]: {{< ref "TruncTime" >}}
 [`Values`]: {{< ref "Values" >}}
 [`Zero`]: {{< ref "Zero" >}}
@@ -290,6 +301,7 @@ The following operators are smuggler ones:
 [`CmpHasPrefix`]: {{< ref "HasPrefix#cmphasprefix-shortcut" >}}
 [`CmpHasSuffix`]: {{< ref "HasSuffix#cmphassuffix-shortcut" >}}
 [`CmpIsa`]: {{< ref "Isa#cmpisa-shortcut" >}}
+[`CmpJSON`]: {{< ref "JSON#cmpjson-shortcut" >}}
 [`CmpKeys`]: {{< ref "Keys#cmpkeys-shortcut" >}}
 [`CmpLax`]: {{< ref "Lax#cmplax-shortcut" >}}
 [`CmpLen`]: {{< ref "Len#cmplen-shortcut" >}}
@@ -343,6 +355,7 @@ The following operators are smuggler ones:
 [`T.HasPrefix`]: {{< ref "HasPrefix#t-hasprefix-shortcut" >}}
 [`T.HasSuffix`]: {{< ref "HasSuffix#t-hassuffix-shortcut" >}}
 [`T.Isa`]: {{< ref "Isa#t-isa-shortcut" >}}
+[`T.JSON`]: {{< ref "JSON#t-json-shortcut" >}}
 [`T.Keys`]: {{< ref "Keys#t-keys-shortcut" >}}
 [`T.CmpLax`]: {{< ref "Lax#t-cmplax-shortcut" >}}
 [`T.Len`]: {{< ref "Len#t-len-shortcut" >}}

@@ -203,6 +203,19 @@ func TestContextCollectError(t *testing.T) {
 	}
 }
 
+func TestCannotCompareError(t *testing.T) {
+	ctx := ctxerr.Context{BooleanError: true}
+
+	err := ctx.CannotCompareError()
+	if err != ctxerr.BooleanError {
+		t.Error("CannotCompareError does not return ctxerr.BooleanError")
+	}
+
+	ctx = ctxerr.Context{}
+	err = ctx.CannotCompareError()
+	test.EqualStr(t, err.Message, "cannot compare")
+}
+
 func TestContextPath(t *testing.T) {
 	ctx := ctxerr.Context{Path: ctxerr.NewPath("DATA")}
 	ctx = ctx.AddField("field")

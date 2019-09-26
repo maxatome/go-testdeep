@@ -27,6 +27,8 @@ go-testdeep
 
 ## Latest news
 
+- 2019/10/31: new [`JSON`] operator (and its friends [`CmpJSON`]
+  & [`T.JSON`] along with new fully dedicated [`Tag`] operator;
 - 2019/10/29: new web site
   [go-testdeep.zetta.rocks](https://go-testdeep.zetta.rocks/)
 - 2019/09/22: new
@@ -46,22 +48,6 @@ go-testdeep
     and
     [`tdhttp.NewXMLRequest()`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#NewXMLRequest)
     now accept headers definition,
-- 2019/05/01: new
-  [`Keys`](https://godoc.org/github.com/maxatome/go-testdeep#Keys) &
-  [`Values`](https://godoc.org/github.com/maxatome/go-testdeep#Values)
-  operators (and their friends
-  [`CmpKeys`](https://godoc.org/github.com/maxatome/go-testdeep#CmpKeys),
-  [`CmpValues`](https://godoc.org/github.com/maxatome/go-testdeep#CmpValues),
-  [`T.Keys`](https://godoc.org/github.com/maxatome/go-testdeep#T.Keys)
-  &
-  [`T.Values`](https://godoc.org/github.com/maxatome/go-testdeep#T.Values));
-- 2019/04/27: new
-  [`Cmp`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp)
-  function and
-  [`T.Cmp`](https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp)
-  method, shorter versions of
-  [`CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#CmpDeeply)
-  and [`T.CmpDeeply`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpDeeply);
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -196,6 +182,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`HasSuffix`]: https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix
 [`Ignore`]: https://godoc.org/github.com/maxatome/go-testdeep#Ignore
 [`Isa`]: https://godoc.org/github.com/maxatome/go-testdeep#Isa
+[`JSON`]: https://godoc.org/github.com/maxatome/go-testdeep#JSON
 [`Keys`]: https://godoc.org/github.com/maxatome/go-testdeep#Keys
 [`Lax`]: https://godoc.org/github.com/maxatome/go-testdeep#Lax
 [`Len`]: https://godoc.org/github.com/maxatome/go-testdeep#Len
@@ -229,6 +216,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`SuperBagOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf
 [`SuperMapOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf
 [`SuperSetOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf
+[`Tag`]: https://godoc.org/github.com/maxatome/go-testdeep#Tag
 [`TruncTime`]: https://godoc.org/github.com/maxatome/go-testdeep#TruncTime
 [`Values`]: https://godoc.org/github.com/maxatome/go-testdeep#Values
 [`Zero`]: https://godoc.org/github.com/maxatome/go-testdeep#Zero
@@ -249,6 +237,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpHasPrefix`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpHasPrefix
 [`CmpHasSuffix`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpHasSuffix
 [`CmpIsa`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpIsa
+[`CmpJSON`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpJSON
 [`CmpKeys`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpKeys
 [`CmpLax`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpLax
 [`CmpLen`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpLen
@@ -302,6 +291,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.HasPrefix`]: https://godoc.org/github.com/maxatome/go-testdeep#T.HasPrefix
 [`T.HasSuffix`]: https://godoc.org/github.com/maxatome/go-testdeep#T.HasSuffix
 [`T.Isa`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Isa
+[`T.JSON`]: https://godoc.org/github.com/maxatome/go-testdeep#T.JSON
 [`T.Keys`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Keys
 [`T.CmpLax`]: https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax
 [`T.Len`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Len
