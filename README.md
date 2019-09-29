@@ -672,6 +672,7 @@ See [FAQ](doc/FAQ.md).
 [`Ignore`]: https://godoc.org/github.com/maxatome/go-testdeep#Isa
 [`Isa`]: https://godoc.org/github.com/maxatome/go-testdeep#Isa
 [`Keys`]: https://godoc.org/github.com/maxatome/go-testdeep#Keys
+[`Lax`]: https://godoc.org/github.com/maxatome/go-testdeep#Lax
 [`Len`]: https://godoc.org/github.com/maxatome/go-testdeep#Len
 [`Lt`]: https://godoc.org/github.com/maxatome/go-testdeep#Lt
 [`Lte`]: https://godoc.org/github.com/maxatome/go-testdeep#Lte
