@@ -8,13 +8,13 @@ go-testdeep
 [![Version](https://img.shields.io/github/tag/maxatome/go-testdeep.svg)](https://github.com/maxatome/go-testdeep/releases)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go/#testing)
 
-![testdeep](doc/image.png)
+![testdeep](docs/image.png)
 
 **Extremely flexible golang deep comparison, extends the go testing package.**
 
 - [Latest news](#latest-news)
 - [Synopsis](#synopsis)
-- [Godoc table of contents](doc/toc.md#godoc-table-of-contents)
+- [Godoc table of contents](docs/toc.md#godoc-table-of-contents)
 - [Installation](#installation)
 - [Presentation](#presentation)
 - [Available operators](#available-operators)
@@ -24,7 +24,7 @@ go-testdeep
 - [Operators vs go types](#operators-vs-go-types)
 - [See also](#see-also)
 - [License](#license)
-- [FAQ](doc/FAQ.md)
+- [FAQ](docs/FAQ.md)
 
 
 ## Latest news
@@ -61,7 +61,7 @@ go-testdeep
 
 ## Synopsis
 
-![error output](doc/colored-output.svg)
+![error output](docs/colored-output.svg)
 
 ```go
 import (
@@ -131,17 +131,17 @@ go test -run=TestCreateRecord
 
 outputs for last `td.Cmp` call:
 
-![error output](doc/colored-newly1.svg)
+![error output](docs/colored-newly1.svg)
 
 If `CreateRecord` had not set correctly `Id` field, output would have
 been:
 
-![error output](doc/colored-newly2.svg)
+![error output](docs/colored-newly2.svg)
 
 If `CreateRecord` had set `Name` field to "Alice" value instead of
 expected "Bob", output would have been:
 
-![error output](doc/colored-newly3.svg)
+![error output](docs/colored-newly3.svg)
 
 Using [`testdeep.T`][`T`]
 type, `TestCreateRecord` can also be written as:
@@ -213,7 +213,7 @@ func TestCreateRecord(tt *testing.T) {
 }
 ```
 
-See [godoc table of contents](doc/toc.md#godoc-table-of-contents) for details.
+See [godoc table of contents](docs/toc.md#godoc-table-of-contents) for details.
 
 
 ## Installation
@@ -383,7 +383,7 @@ func TestCreateRecord(tt *testing.T) {
 }
 ```
 
-See [godoc table of contents](doc/toc.md#godoc-table-of-contents) for details.
+See [godoc table of contents](docs/toc.md#godoc-table-of-contents) for details.
 
 
 ## Available operators
@@ -492,7 +492,7 @@ The package `github.com/maxatome/go-testdeep/helpers/tdhttp` provides
 some functions to easily test HTTP handlers.
 
 See [`tdhttp`] documentation for details or
-[FAQ](doc/FAQ.md#what-about-testing-the-response-using-my-api) for an
+[FAQ](docs/FAQ.md#what-about-testing-the-response-using-my-api) for an
 example of use.
 
 
@@ -652,7 +652,7 @@ by [Egon Elbre](http://egonelbre.com/). The Go gopher was designed by
 
 ## FAQ
 
-See [FAQ](doc/FAQ.md).
+See [FAQ](docs/FAQ.md).
 
 [`All`]: https://godoc.org/github.com/maxatome/go-testdeep#All
 [`Any`]: https://godoc.org/github.com/maxatome/go-testdeep#Any
