@@ -19,6 +19,8 @@ type tdLax struct {
 
 var _ TestDeep = &tdLax{}
 
+// summary(Lax): temporarily enables [`BeLax` config flag]
+
 // Lax is a smuggler operator, it temporarily enables the config BeLax
 // flag before letting the comparison process continue its course.
 //

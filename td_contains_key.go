@@ -21,6 +21,8 @@ type tdContainsKey struct {
 
 var _ TestDeep = &tdContainsKey{}
 
+// summary(ContainsKey): checks that a map contains a key
+
 // ContainsKey is a smuggler operator and works on maps only. It
 // compares each key of map against "expectedValue".
 //

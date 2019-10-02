@@ -76,6 +76,9 @@ func newStruct(model interface{}) (*tdStruct, reflect.Value) {
 	panic("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)")
 }
 
+// summary(Struct): compares the contents of a struct or a pointer on
+// a struct
+
 // Struct operator compares the contents of a struct or a pointer on a
 // struct against the non-zero values of "model" (if any) and the
 // values of "expectedFields".

@@ -46,41 +46,58 @@ my $dir = shift;
 
 opendir(my $dh, $dir);
 
-my %funcs;
+my(%funcs, %operators);
 
 while (readdir $dh)
 {
     if (/^td_.*\.go\z/ and not /_test.go\z/)
     {
-        open(my $fh, '<', "$dir/$_");
-        while (defined(my $line = <$fh>))
-        {
-            if ($line =~ /^func ([A-Z]\w*)\((.*?)\) TestDeep \{$/)
-            {
-		my $func = $1;
-		if ($func ne 'Ignore')
-		{
-		    my @args;
-		    foreach my $arg (split(/, /, $2))
-		    {
-			my %arg;
-			@arg{qw(name type)} = split(/ /, $arg, 2);
-			if ($arg{variadic} = $arg{type} =~ s/^\.{3}//)
-			{
-			    if (exists $IGNORE_VARIADIC{$func})
-			    {
-				$arg{default} = $IGNORE_VARIADIC{$func};
-				delete $arg{variadic};
-			    }
-			}
+	my $contents = do { local $/; open(my $fh, '<', "$dir/$_"); <$fh> };
 
-			push(@args, \%arg);
+	my %ops;
+	while ($contents =~ m,^// summary\((\w+)\): (.*\n(?://.*\n)*),gm)
+	{
+	    my $op = $1;
+	    $ops{$op} = $2 =~ s,\n(?://|\z),,gr;
+	}
+
+	while ($contents =~ m,^// (([A-Z]\w*) .*\n(?://.*\n)*)func \2\((.*?)\) TestDeep \{\n,gm)
+        {
+	    exists $ops{$2} or die "$_: no summary found for $2\n";
+
+	    my($doc, $func, $params) = ($1, $2, $3);
+	    if ($func ne 'Ignore' and $func ne 'Tag')
+	    {
+		my @args;
+		foreach my $arg (split(/, /, $params))
+		{
+		    my %arg;
+		    @arg{qw(name type)} = split(/ /, $arg, 2);
+		    if ($arg{variadic} = $arg{type} =~ s/^\.{3}//)
+		    {
+			if (exists $IGNORE_VARIADIC{$func})
+			{
+			    $arg{default} = $IGNORE_VARIADIC{$func};
+			    delete $arg{variadic};
+			}
 		    }
-		    $funcs{$func}{args} = \@args;
+
+		    push(@args, \%arg);
 		}
-            }
+		$funcs{$func}{args} = \@args;
+	    }
+
+	    $operators{$func} = {
+		summary => delete $ops{$func},
+		doc     => $doc =~ s,\n//,,gr,
+	    };
         }
-        close $fh;
+
+	if (%ops)
+	{
+	    die "$_: summary found without operator definition: "
+		. join(', ', keys %ops) . "\n";
+	}
     }
 }
 
@@ -315,7 +332,6 @@ EOF
 #
 # Check "args..." comment is the same everywhere it needs to be
 my @args_errors;
-#foreach my $go_file (qw(cmp_funcs.go cmp_funcs_misc.go equal.go t.go))
 foreach my $go_file (do { opendir(my $dh, $dir);
 			  grep /(?<!_test)\.go\z/, readdir $dh })
 {
@@ -343,4 +359,51 @@ if (@args_errors)
     die "*** At least one args comment is missing or not conform:\n- "
 	. join("\n- ", @args_errors)
 	. "\n";
+}
+
+my $links = do
+{
+    my $url = 'https://godoc.org/github.com/maxatome/go-testdeep';
+    join("\n", map "[`$_`]: $url#$_", sort keys %operators)
+	. "\n\n"
+	. join("\n", map "[`Cmp$_`]: $url#Cmp$_", sort keys %funcs)
+	. "\n\n"
+	. join("\n", map
+	       {
+		   my $m = $RENAME_METHOD{$_} // $_;
+		   "[`T.$m`]: $url#T.$m"
+	       }
+	       sort keys %funcs)
+};
+
+# README.md
+{
+    my $readme = do { local $/; open(my $fh, '<', 'README.md'); <$fh> };
+
+    # Operators summaries
+    my $summaries = join(
+	"\n",
+	map "- [`$_`] $operators{$_}{summary};", sort keys %operators);
+    $summaries =~ s/;\z/./;
+
+    $readme =~ s{(<!-- operators:begin -->).*(<!-- operators:end -->)}
+                {$1\n$summaries\n$2}s;
+
+    # Links
+    $readme =~ s{(<!-- links:begin -->).*(<!-- links:end -->)}
+                {$1\n$links\n$2}s;
+
+    open(my $fh, '>', 'README.md.new');
+    print $fh $readme;
+    close $fh;
+    rename 'README.md.new', 'README.md';
+    say 'README.md modified';
+}
+
+# Hugo
+{
+    # dans layout/partial/links.md
+    # -> les liens
+
+    # Dans chaque page: {{ partial "links.md" . }}
 }

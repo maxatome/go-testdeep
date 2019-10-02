@@ -58,6 +58,9 @@ type tdBetweenTime struct {
 
 var _ TestDeep = &tdBetweenTime{}
 
+// summary(Between): checks that a number, string or [`time.Time`] is
+// between two bounds
+
 // Between operator checks that data is between "from" and
 // "to". "from" and "to" can be any numeric, string or time.Time (or
 // assignable) value. "from" and "to" must be the same kind as the
@@ -220,6 +223,8 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 	}
 }
 
+// summary(N): compares a number with a tolerance value
+
 // N operator compares a numeric data against "num" ± "tolerance". If
 // "tolerance" is missing, it defaults to 0. "num" and "tolerance"
 // must be the same kind as the compared value.
@@ -271,6 +276,9 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 	return &n
 }
 
+// summary(Gt): checks that a number, string or [`time.Time`] is
+// greater than a value
+
 // Gt operator checks that data is greater than "val". "val" can be
 // any numeric or time.Time (or assignable) value. "val" must be the
 // same kind as the compared value if numeric, and the same type if
@@ -284,6 +292,9 @@ func Gt(val interface{}) TestDeep {
 	}
 	return b.initBetween("usage: Gt(NUM|STRING|TIME)")
 }
+
+// summary(Gte): checks that a number, string or [`time.Time`] is
+// greater or equal than a value
 
 // Gte operator checks that data is greater or equal than "val". "val"
 // can be any numeric or time.Time (or assignable) value. "val" must
@@ -299,6 +310,9 @@ func Gte(val interface{}) TestDeep {
 	return b.initBetween("usage: Gte(NUM|STRING|TIME)")
 }
 
+// summary(Lt): checks that a number, string or [`time.Time`] is
+// lesser than a value
+
 // Lt operator checks that data is lesser than "val". "val" can be
 // any numeric or time.Time (or assignable) value. "val" must be the
 // same kind as the compared value if numeric, and the same type if
@@ -312,6 +326,9 @@ func Lt(val interface{}) TestDeep {
 	}
 	return b.initBetween("usage: Lt(NUM|STRING|TIME)")
 }
+
+// summary(Lte): checks that a number, string or [`time.Time`] is
+// lesser or equal than a value
 
 // Lte operator checks that data is lesser or equal than "val". "val"
 // can be any numeric or time.Time (or assignable) value. "val" must

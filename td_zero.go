@@ -18,6 +18,8 @@ type tdZero struct {
 
 var _ TestDeep = &tdZero{}
 
+// summary(Zero): checks data against its zero'ed conterpart
+
 // Zero operator checks that data is zero regarding its type.
 //
 //   nil is the zero value of pointers, maps, slices, channels and functions;
@@ -53,6 +55,8 @@ type tdNotZero struct {
 }
 
 var _ TestDeep = &tdNotZero{}
+
+// summary(NotZero): checks that data is not zero regarding its type
 
 // NotZero operator checks that data is not zero regarding its type.
 //

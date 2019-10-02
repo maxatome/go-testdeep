@@ -22,6 +22,10 @@ type tdContains struct {
 
 var _ TestDeep = &tdContains{}
 
+// summary(Contains): checks that a string, [`error`] or
+// [`fmt.Stringer`] interfaces contain a sub-string; or an array,
+// slice or map contain a value
+
 // Contains is a smuggler operator with a little convenient exception
 // for strings. Contains has to be applied on arrays, slices, maps or
 // strings. It compares each item of data array/slice/map/string (rune

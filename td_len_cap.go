@@ -54,6 +54,8 @@ type tdLen struct {
 
 var _ TestDeep = &tdLen{}
 
+// summary(Len): checks an array, slice, map, string or channel length
+
 // Len is a smuggler operator. It takes data, applies len() function
 // on it and compares its result to "val". Of course, the compared
 // value must be an array, a channel, a map, a slice or a string.
@@ -110,6 +112,8 @@ type tdCap struct {
 }
 
 var _ TestDeep = &tdCap{}
+
+// summary(Cap): checks an array, slice or channel capacity
 
 // Cap is a smuggler operator. It takes data, applies cap() function
 // on it and compares its result to "val". Of course, the compared

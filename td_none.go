@@ -19,6 +19,8 @@ type tdNone struct {
 
 var _ TestDeep = &tdNone{}
 
+// summary(None): no values have to match
+
 // None operator compares data against several expected values. During
 // a match, none of them have to match to succeed.
 func None(expectedValues ...interface{}) TestDeep {
@@ -26,6 +28,8 @@ func None(expectedValues ...interface{}) TestDeep {
 		tdList: newList(expectedValues...),
 	}
 }
+
+// summary(Not): value must not match
 
 // Not operator compares data against the expected value. During a
 // match, it must not match to succeed.

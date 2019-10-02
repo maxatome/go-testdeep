@@ -117,6 +117,10 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 	}, nil
 }
 
+// summary(Smuggle): changes data contents or mutates it into another
+// type via a custom function or a struct fields-path before stepping
+// down in favor of generic comparison process
+
 // Smuggle operator allows to change data contents or mutate it into
 // another type before stepping down in favor of generic comparison
 // process. So "fn" is a function that must take one parameter whose

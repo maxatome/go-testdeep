@@ -20,6 +20,9 @@ type tdIsa struct {
 
 var _ TestDeep = &tdIsa{}
 
+// summary(Isa): checks the data type or whether data implements an
+// interface or not
+
 // Isa operator checks the data type or whether data implements an
 // interface or not.
 //

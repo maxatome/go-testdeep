@@ -18,6 +18,8 @@ type tdAny struct {
 
 var _ TestDeep = &tdAny{}
 
+// summary(Any): at least one expected value have to match
+
 // Any operator compares data against several expected values. During
 // a match, at least one of them has to match to succeed.
 //

@@ -20,6 +20,8 @@ type tdNaN struct {
 
 var _ TestDeep = &tdNaN{}
 
+// summary(NaN): checks a floating number is [`math.NaN`]
+
 // NaN operator checks that data is a float and is not-a-number.
 func NaN() TestDeep {
 	return &tdNaN{
@@ -57,6 +59,8 @@ type tdNotNaN struct {
 }
 
 var _ TestDeep = &tdNotNaN{}
+
+// summary(NotNaN): checks a floating number is not [`math.NaN`]
 
 // NotNaN operator checks that data is a float and is not not-a-number.
 func NotNaN() TestDeep {

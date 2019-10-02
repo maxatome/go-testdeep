@@ -28,6 +28,8 @@ func stringPointer(s string) uintptr {
 	return (*reflect.StringHeader)(unsafe.Pointer(&s)).Data
 }
 
+// summary(Shallow): compares pointers only, not their contents
+
 // Shallow operator compares pointers only, not their contents. It
 // applies on channels, functions (with some restrictions), maps,
 // pointers, slices and strings.

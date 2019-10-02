@@ -18,6 +18,8 @@ type tdIgnore struct {
 
 var ignoreSingleton TestDeep = &tdIgnore{}
 
+// summary(Ignore): allows to ignore a comparison
+
 // Ignore operator is always true, whatever data is. It is useful when
 // comparing a slice and wanting to ignore some indexes, for example.
 func Ignore() TestDeep {

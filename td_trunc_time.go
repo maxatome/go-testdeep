@@ -23,6 +23,9 @@ type tdTruncTime struct {
 
 var _ TestDeep = &tdTruncTime{}
 
+// summary(TruncTime): compares time.Time (or assignable) values after
+// truncating them
+
 // TruncTime operator compares time.Time (or assignable) values after
 // truncating them to the optional "trunc" duration. See time.Truncate
 // for details about the truncation.

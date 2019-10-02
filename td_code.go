@@ -21,6 +21,8 @@ type tdCode struct {
 
 var _ TestDeep = &tdCode{}
 
+// summary(Code): checks using a custom function
+
 // Code operator allows to check data using a custom function. So
 // "fn" is a function that must take one parameter whose type must be
 // the same as the type of the compared value.
