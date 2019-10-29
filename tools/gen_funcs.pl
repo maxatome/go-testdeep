@@ -519,15 +519,6 @@ my $gh_links = do
 {
     my $readme = do { local $/; open(my $fh, '<', "$DIR/README.md"); <$fh> };
 
-    # Operators summaries
-    my $summaries = join(
-        "\n",
-        map "- [`$_`] $operators{$_}{summary};", sort keys %operators);
-    $summaries =~ s/;\z/./;
-
-    $readme =~ s{(<!-- operators:begin -->).*(<!-- operators:end -->)}
-                {$1\n$summaries\n$2}s;
-
     # Links
     $readme =~ s{(<!-- links:begin -->).*(<!-- links:end -->)}
                 {$1\n$gh_links\n$2}s;
@@ -744,6 +735,14 @@ EOH
         rename "$DIR/$matrix_file.new", "$DIR/$matrix_file";
     }
 }
+
+# Final publish
+if ($ENV{PROD_SITE})
+{
+    chdir "$DIR/tools/docs_src";
+    exec qw(hugo --baseURL https://go-testdeep.zetta.rocks -d ../../docs);
+}
+
 
 sub go_comment
 {

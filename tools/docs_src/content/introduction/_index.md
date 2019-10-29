@@ -38,6 +38,7 @@ up to the caller to display it. Not easy when comparing big data
 structures.
 
 The purpose of testdeep package is to do its best to introduce this
-missing flexibility using ["operators"]({{< ref "operators" >}}) when
+missing flexibility using ["operators"]({{< ref "operators" >}}), when
 the expected value (or one of its component) cannot be matched
-exactly.
+exactly, mixed with some useful
+[comparison functions]({{< ref "functions" >}}).

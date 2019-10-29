@@ -14,18 +14,21 @@ go-testdeep
 
 - [Latest news](#latest-news)
 - [Synopsis](#synopsis)
-- [Godoc table of contents](docs/toc.md#godoc-table-of-contents)
+- [Description](#description)
 - [Installation](#installation)
-- [Available operators](#available-operators)
+- [Functions](https://go-testdeep.zetta.rocks/functions/)
+- [Available operators](https://go-testdeep.zetta.rocks/operators/)
 - [Helpers](#helpers)
   - [`tdhttp` or HTTP API testing helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
 - [See also](#see-also)
 - [License](#license)
-- [FAQ](docs/FAQ.md)
+- [FAQ](https://go-testdeep.zetta.rocks/faq/)
 
 
 ## Latest news
 
+- 2019/10/29: new web site
+  [go-testdeep.zetta.rocks](https://go-testdeep.zetta.rocks/)
 - 2019/09/22: new
   [`BeLax` feature](https://godoc.org/github.com/maxatome/go-testdeep#T.BeLax)
   with its
@@ -83,7 +86,29 @@ Example of produced error in case of mismatch:
 ![error output](tools/docs_src/static/images/colored-output.svg)
 
 
-See [godoc table of contents](docs/toc.md#godoc-table-of-contents) for details.
+## Description
+
+go-testdeep is a go rewrite and adaptation of wonderful
+[Test::Deep perl](https://metacpan.org/pod/Test::Deep).
+
+In golang, comparing data structure is usually done using
+[reflect.DeepEqual](https://golang.org/pkg/reflect/#DeepEqual) or
+using a package that uses this function behind the scene.
+
+This function works very well, but it is not flexible. Both compared
+structures must match exactly and when a difference is returned, it is
+up to the caller to display it. Not easy when comparing big data
+structures.
+
+The purpose of testdeep package is to do its best to introduce this
+missing flexibility using
+["operators"](https://go-testdeep.zetta.rocks/operators/), when the
+expected value (or one of its component) cannot be matched exactly,
+mixed with some useful
+[comparison functions](https://go-testdeep.zetta.rocks/functions/).
+
+**See [go-testdeep.zetta.rocks](https://go-testdeep.zetta.rocks/) for
+details.**
 
 
 ## Installation
@@ -93,71 +118,11 @@ $ go get -u github.com/maxatome/go-testdeep
 ```
 
 
-## Available operators
-
-See functions returning [`TestDeep` interface][`TestDeep`]:
-
-<!-- operators:begin -->
-- [`All`] all expected values have to match;
-- [`Any`] at least one expected value have to match;
-- [`Array`] compares the contents of an array or a pointer on an array;
-- [`ArrayEach`] compares each array or slice item;
-- [`Bag`] compares the contents of an array or a slice without taking care of the order of items;
-- [`Between`] checks that a number, string or [`time.Time`] is between two bounds;
-- [`Cap`] checks an array, slice or channel capacity;
-- [`Code`] checks using a custom function;
-- [`Contains`] checks that a string, [`error`] or [`fmt.Stringer`] interfaces contain a sub-string; or an array, slice or map contain a value;
-- [`ContainsKey`] checks that a map contains a key;
-- [`Empty`] checks that an array, a channel, a map, a slice or a string is empty;
-- [`Gt`] checks that a number, string or [`time.Time`] is greater than a value;
-- [`Gte`] checks that a number, string or [`time.Time`] is greater or equal than a value;
-- [`HasPrefix`] checks the prefix of a string, [`error`] or [`fmt.Stringer`] interfaces;
-- [`HasSuffix`] checks the suffix of a string, [`error`] or [`fmt.Stringer`] interfaces;
-- [`Ignore`] allows to ignore a comparison;
-- [`Isa`] checks the data type or whether data implements an interface or not;
-- [`Keys`] checks keys of a map;
-- [`Lax`] temporarily enables [`BeLax` config flag];
-- [`Len`] checks an array, slice, map, string or channel length;
-- [`Lt`] checks that a number, string or [`time.Time`] is lesser than a value;
-- [`Lte`] checks that a number, string or [`time.Time`] is lesser or equal than a value;
-- [`Map`] compares the contents of a map;
-- [`MapEach`] compares each map entry;
-- [`N`] compares a number with a tolerance value;
-- [`NaN`] checks a floating number is [`math.NaN`];
-- [`Nil`] compares to `nil`;
-- [`None`] no values have to match;
-- [`Not`] value must not match;
-- [`NotAny`] compares the contents of an array or a slice, no values have to match;
-- [`NotEmpty`] checks that an array, a channel, a map, a slice or a string is not empty;
-- [`NotNaN`] checks a floating number is not [`math.NaN`];
-- [`NotNil`] checks that data is not `nil`;
-- [`NotZero`] checks that data is not zero regarding its type;
-- [`PPtr`] allows to easily test a pointer of pointer value;
-- [`Ptr`] allows to easily test a pointer value;
-- [`Re`] allows to apply a regexp on a string (or convertible), `[]byte`, [`error`] or [`fmt.Stringer`] interfaces, and even test the captured groups;
-- [`ReAll`] allows to successively apply a regexp on a string (or convertible), `[]byte`, [`error`] or [`fmt.Stringer`] interfaces, and even test the captured groups;
-- [`Set`] compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items;
-- [`Shallow`] compares pointers only, not their contents;
-- [`Slice`] compares the contents of a slice or a pointer on a slice;
-- [`Smuggle`] changes data contents or mutates it into another type via a custom function or a struct fields-path before stepping down in favor of generic comparison process;
-- [`String`] checks a string, [`error`] or [`fmt.Stringer`] interfaces string contents;
-- [`Struct`] compares the contents of a struct or a pointer on a struct;
-- [`SubBagOf`] compares the contents of an array or a slice without taking care of the order of items but with potentially some exclusions;
-- [`SubMapOf`] compares the contents of a map but with potentially some exclusions;
-- [`SubSetOf`] compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items but with potentially some exclusions;
-- [`SuperBagOf`] compares the contents of an array or a slice without taking care of the order of items but with potentially some extra items;
-- [`SuperMapOf`] compares the contents of a map but with potentially some extra entries;
-- [`SuperSetOf`] compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items but with potentially some extra items;
-- [`TruncTime`] compares [`time.Time`] (or assignable) values after truncating them;
-- [`Values`] checks values of a map;
-- [`Zero`] checks data against its zero'ed conterpart.
-<!-- operators:end -->
-
-
 ## Helpers
 
 The goal of helpers is to make use of `go-testdeep` even more powerful
-by providing common features using [TestDeep operators](#available-operators)
+by providing common features using
+[TestDeep operators](https://go-testdeep.zetta.rocks/operators/)
 behind the scene.
 
 ### `tdhttp` or HTTP API testing helper
@@ -166,7 +131,7 @@ The package `github.com/maxatome/go-testdeep/helpers/tdhttp` provides
 some functions to easily test HTTP handlers.
 
 See [`tdhttp`] documentation for details or
-[FAQ](docs/FAQ.md#what-about-testing-the-response-using-my-api) for an
+[FAQ](https://go-testdeep.zetta.rocks/faq/#what-about-testing-the-response-using-my-api) for an
 example of use.
 
 
@@ -197,7 +162,8 @@ by [Egon Elbre](http://egonelbre.com/). The Go gopher was designed by
 
 ## FAQ
 
-See [FAQ](docs/FAQ.md).
+See [FAQ](https://go-testdeep.zetta.rocks/faq/).
+
 
 <!-- links:begin -->
 [`T`]: https://godoc.org/github.com/maxatome/go-testdeep#T
