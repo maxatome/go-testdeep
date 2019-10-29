@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>go-testdeep on My New Hugo Site</title>
+    <link>http://example.org/</link>
+    <description>Recent content in go-testdeep on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Operators matrices</title>
+      <link>http://example.org/operators/matrix/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/matrix/</guid>
+      <description>Operator → go type matrix    Operator vs go type nil bool string {u,}int* float* complex* array slice map struct pointer interface¹ chan func operator     All ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ All   Any ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ Any   Array ✗ ✗ ✗ ✗ ✗ ✗ ✓ ✗ ✗ ✗ ptr on array ✓ ✗ ✗ Array   ArrayEach ✗ ✗ ✗ ✗ ✗ ✗ ✓ ✓ ✗ ✗ ptr on array/slice ✓ ✗ ✗ ArrayEach   Bag ✗ ✗ ✗ ✗ ✗ ✗ ✓ ✓ ✗ ✗ ptr on array/slice ✓ ✗ ✗ Bag   Between ✗ ✗ ✓ ✓ ✓ todo ✗ ✗ ✗ time.</description>
+    </item>
+    
+    <item>
+      <title>All</title>
+      <link>http://example.org/operators/all/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/all/</guid>
+      <description>func All(expectedValues ...interface{}) TestDeep All operator compares data against several expected values. During a match, all of them have to match to succeed.
+TypeBehind method can return a non-nil reflect.Type if all items known non-interface types are equal, or if only interface types are found (mostly issued from Isa()) and they are equal.
+Examples   Base example   t := &amp;amp;testing.T{} got := &amp;quot;foo/bar&amp;quot; // Checks got string against: // &amp;quot;o/b&amp;quot; regexp *AND* &amp;quot;bar&amp;quot; suffix *AND* exact &amp;quot;foo/bar&amp;quot; string ok := Cmp(t, got, All(Re(&amp;quot;o/b&amp;quot;), HasSuffix(&amp;quot;bar&amp;quot;), &amp;quot;foo/bar&amp;quot;), &amp;quot;checks value %s&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Any</title>
+      <link>http://example.org/operators/any/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/any/</guid>
+      <description>func Any(expectedValues ...interface{}) TestDeep Any operator compares data against several expected values. During a match, at least one of them has to match to succeed.
+TypeBehind method can return a non-nil reflect.Type if all items known non-interface types are equal, or if only interface types are found (mostly issued from Isa()) and they are equal.
+Examples   Base example   t := &amp;amp;testing.T{} got := &amp;quot;foo/bar&amp;quot; // Checks got string against: // &amp;quot;zip&amp;quot; regexp *OR* &amp;quot;bar&amp;quot; suffix ok := Cmp(t, got, Any(Re(&amp;quot;zip&amp;quot;), HasSuffix(&amp;quot;bar&amp;quot;)), &amp;quot;checks value %s&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Array</title>
+      <link>http://example.org/operators/array/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/array/</guid>
+      <description>func Array(model interface{}, expectedEntries ArrayEntries) TestDeep Array operator compares the contents of an array or a pointer on an array against the non-zero values of model (if any) and the values of expectedEntries.
+model must be the same type as compared data.
+expectedEntries can be nil, if no zero entries are expected and no TestDeep operator are involved.
+TypeBehind method returns the reflect.Type of model.
+Examples    Array example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>ArrayEach</title>
+      <link>http://example.org/operators/arrayeach/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/arrayeach/</guid>
+      <description>func ArrayEach(expectedValue interface{}) TestDeep ArrayEach operator has to be applied on arrays or slices or on pointers on array/slice. It compares each item of data array/slice against expectedValue. During a match, all items have to match to succeed.
+Examples    Array example   t := &amp;amp;testing.T{} got := [3]int{42, 58, 26} ok := Cmp(t, got, ArrayEach(Between(25, 60)), &amp;quot;checks each item of array %v is in [25 .</description>
+    </item>
+    
+    <item>
+      <title>Bag</title>
+      <link>http://example.org/operators/bag/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/bag/</guid>
+      <description>func Bag(expectedItems ...interface{}) TestDeep Bag operator compares the contents of an array or a slice (or a pointer on array/slice) without taking care of the order of items.
+During a match, each expected item should match in the compared array/slice, and each array/slice item should be matched by an expected item to succeed.
+Cmp(t, []int{1, 1, 2}, Bag(1, 1, 2)) // succeeds Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1)) // succeeds Cmp(t, []int{1, 1, 2}, Bag(2, 1, 1)) // succeeds Cmp(t, []int{1, 1, 2}, Bag(1, 2)) // fails, one 1 is missing Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Between</title>
+      <link>http://example.org/operators/between/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/between/</guid>
+      <description>func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep Between operator checks that data is between from and to. from and to can be any numeric, string or time.Time (or assignable) value. from and to must be the same kind as the compared value if numeric, and the same type if string or time.Time (or assignable). bounds allows to specify whether bounds are included or not:
+ BoundsInIn (default): between from and to both included BoundsInOut: between from included and to excluded BoundsOutIn: between from excluded and to included BoundsOutOut: between from and to both excluded  If bounds is missing, it defaults to BoundsInIn.</description>
+    </item>
+    
+    <item>
+      <title>Cap</title>
+      <link>http://example.org/operators/cap/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/cap/</guid>
+      <description>func Cap(expectedCap interface{}) TestDeep Cap is a smuggler operator. It takes data, applies cap() function on it and compares its result to expectedCap. Of course, the compared value must be an array, a channel or a slice.
+expectedCap can be an int value:
+Cmp(t, gotSlice, Cap(12)) as well as an other operator:
+Cmp(t, gotSlice, Cap(Between(3, 4))) Examples    Base example   t := &amp;amp;testing.T{} got := make([]int, 0, 12) ok := Cmp(t, got, Cap(12), &amp;quot;checks %v capacity is 12&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Code</title>
+      <link>http://example.org/operators/code/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/code/</guid>
+      <description>func Code(fn interface{}) TestDeep Code operator allows to check data using a custom function. So fn is a function that must take one parameter whose type must be the same as the type of the compared value.
+fn can return a single bool kind value, telling that yes or no the custom test is successful:
+Cmp(t, gotTime, Code(func (date time.Time) bool { return date.Year() == 2018 })) or two values (bool, string) kinds.</description>
+    </item>
+    
+    <item>
+      <title>Contains</title>
+      <link>http://example.org/operators/contains/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/contains/</guid>
+      <description>func Contains(expectedValue interface{}) TestDeep Contains is a smuggler operator with a little convenient exception for strings. Contains has to be applied on arrays, slices, maps or strings. It compares each item of data array/slice/map/string (rune for strings) against expectedValue.
+list := []int{12, 34, 28} Cmp(t, list, Contains(34)) // succeeds Cmp(t, list, Contains(Between(30, 35))) // succeeds too Cmp(t, list, Contains(35)) // fails  hash := map[string]int{&amp;#34;foo&amp;#34;: 12, &amp;#34;bar&amp;#34;: 34, &amp;#34;zip&amp;#34;: 28} Cmp(t, hash, Contains(34)) // succeeds Cmp(t, hash, Contains(Between(30, 35))) // succeeds too Cmp(t, hash, Contains(35)) // fails  got := &amp;#34;foo bar&amp;#34; Cmp(t, got, Contains(&amp;#39;o&amp;#39;)) // succeeds Cmp(t, got, Contains(rune(&amp;#39;o&amp;#39;))) // succeeds Cmp(t, got, Contains(Between(&amp;#39;n&amp;#39;, &amp;#39;p&amp;#39;))) // succeeds When Contains(nil) is used, nil is automatically converted to a typed nil on the fly to avoid confusion (if the array/slice/map item type allows it of course.</description>
+    </item>
+    
+    <item>
+      <title>ContainsKey</title>
+      <link>http://example.org/operators/containskey/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/containskey/</guid>
+      <description>func ContainsKey(expectedValue interface{}) TestDeep ContainsKey is a smuggler operator and works on maps only. It compares each key of map against expectedValue.
+hash := map[string]int{&amp;#34;foo&amp;#34;: 12, &amp;#34;bar&amp;#34;: 34, &amp;#34;zip&amp;#34;: 28} Cmp(t, hash, ContainsKey(&amp;#34;foo&amp;#34;)) // succeeds Cmp(t, hash, ContainsKey(HasPrefix(&amp;#34;z&amp;#34;))) // succeeds Cmp(t, hash, ContainsKey(HasPrefix(&amp;#34;x&amp;#34;)) // fails  hnum := map[int]string{1: &amp;#34;foo&amp;#34;, 42: &amp;#34;bar&amp;#34;} Cmp(t, hash, ContainsKey(42)) // succeeds Cmp(t, hash, ContainsKey(Between(40, 45)) // succeeds When ContainsKey(nil) is used, nil is automatically converted to a typed nil on the fly to avoid confusion (if the map key type allows it of course.</description>
+    </item>
+    
+    <item>
+      <title>Empty</title>
+      <link>http://example.org/operators/empty/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/empty/</guid>
+      <description>func Empty() TestDeep Empty operator checks that an array, a channel, a map, a slice or a string is empty. As a special case (non-typed) nil, as well as nil channel, map or slice are considered empty.
+Note that the compared data can be a pointer (of pointer of pointer etc.) on an array, a channel, a map, a slice or a string.
+Examples    Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Gt</title>
+      <link>http://example.org/operators/gt/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/gt/</guid>
+      <description>func Gt(minExpectedValue interface{}) TestDeep Gt operator checks that data is greater than minExpectedValue. minExpectedValue can be any numeric or time.Time (or assignable) value. minExpectedValue must be the same kind as the compared value if numeric, and the same type if time.Time (or assignable).
+TypeBehind method returns the reflect.Type of minExpectedValue.
+Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := Cmp(t, got, Gt(155), &amp;quot;checks %v is &amp;gt; 155&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Gte</title>
+      <link>http://example.org/operators/gte/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/gte/</guid>
+      <description>func Gte(minExpectedValue interface{}) TestDeep Gte operator checks that data is greater or equal than minExpectedValue. minExpectedValue can be any numeric or time.Time (or assignable) value. minExpectedValue must be the same kind as the compared value if numeric, and the same type if time.Time (or assignable).
+TypeBehind method returns the reflect.Type of minExpectedValue.
+Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := Cmp(t, got, Gte(156), &amp;quot;checks %v is ≥ 156&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>HasPrefix</title>
+      <link>http://example.org/operators/hasprefix/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/hasprefix/</guid>
+      <description>func HasPrefix(expected string) TestDeep HasPrefix operator allows to compare the prefix of a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
+type Foobar string Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), HasPrefix(&amp;#34;foo&amp;#34;)) // succeeds  err := errors.New(&amp;#34;error!&amp;#34;) Cmp(t, err, HasPrefix(&amp;#34;err&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) Cmp(t, bstr, HasPrefix(&amp;#34;fmt&amp;#34;)) // succeeds Examples    Base example   t := &amp;amp;testing.T{} got := &amp;quot;foobar&amp;quot; ok := Cmp(t, got, HasPrefix(&amp;quot;foo&amp;quot;), &amp;quot;checks %s&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>HasSuffix</title>
+      <link>http://example.org/operators/hassuffix/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/hassuffix/</guid>
+      <description>func HasSuffix(expected string) TestDeep HasSuffix operator allows to compare the suffix of a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
+type Foobar string Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), HasSuffix(&amp;#34;bar&amp;#34;)) // succeeds  err := errors.New(&amp;#34;error!&amp;#34;) Cmp(t, err, HasSuffix(&amp;#34;!&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) Cmp(t, bstr, HasSuffix(&amp;#34;!&amp;#34;)) // succeeds Examples    Base example   t := &amp;amp;testing.T{} got := &amp;quot;foobar&amp;quot; ok := Cmp(t, got, HasSuffix(&amp;quot;bar&amp;quot;), &amp;quot;checks %s&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Ignore</title>
+      <link>http://example.org/operators/ignore/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/ignore/</guid>
+      <description> func Ignore() TestDeep Ignore operator is always true, whatever data is. It is useful when comparing a slice and wanting to ignore some indexes, for example.
+Examples   Base example   t := &amp;amp;testing.T{} ok := Cmp(t, []int{1, 2, 3}, Slice([]int{}, ArrayEntries{ 0: 1, 1: Ignore(), // do not care about this entry 2: 3, })) fmt.Println(ok) // Output: // true    </description>
+    </item>
+    
+    <item>
+      <title>Isa</title>
+      <link>http://example.org/operators/isa/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/isa/</guid>
+      <description>func Isa(model interface{}) TestDeep Isa operator checks the data type or whether data implements an interface or not.
+Typically type checks:
+Isa(time.Time{}) Isa(&amp;amp;time.Time{}) Isa(map[string]time.Time{}) For interfaces it is a bit more complicated, as:
+fmt.Stringer(nil) is not an interface, but just nil&amp;hellip; To bypass this golang limitation, Isa accepts pointers on interfaces. So checking that data implements fmt.Stringer interface should be written as:
+Isa((*fmt.Stringer)(nil)) Of course, in the latter case, if data type is *fmt.</description>
+    </item>
+    
+    <item>
+      <title>Keys</title>
+      <link>http://example.org/operators/keys/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/keys/</guid>
+      <description>func Keys(val interface{}) TestDeep Keys is a smuggler operator. It takes a map and compares its ordered keys to val.
+val can be a slice of items of the same type as the map keys:
+Keys([]string{&amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;, &amp;#34;c&amp;#34;}) as well as an other operator:
+Keys(Bag(&amp;#34;c&amp;#34;, &amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;)) Examples   Base example   t := &amp;amp;testing.T{} got := map[string]int{&amp;quot;foo&amp;quot;: 1, &amp;quot;bar&amp;quot;: 2, &amp;quot;zip&amp;quot;: 3} // Keys tests keys in an ordered manner ok := Cmp(t, got, Keys([]string{&amp;quot;bar&amp;quot;, &amp;quot;foo&amp;quot;, &amp;quot;zip&amp;quot;})) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Lax</title>
+      <link>http://example.org/operators/lax/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/lax/</guid>
+      <description>func Lax(expectedValue interface{}) TestDeep Lax is a smuggler operator, it temporarily enables the BeLax config flag before letting the comparison process continue its course.
+It is more commonly used as CmpLax function than as an operator. It could be used when, for example, an operator is constructed once but applied to different, but compatible types as in:
+bw := Between(20, 30) intValue := 21 floatValue := 21.89 Cmp(t, intValue, bw) // no need to be lax here: same int types Cmp(t, floatValue, Lax(bw)) // be lax please, as float64 ≠ int Note that in the latter case, CmpLax() could be used as well:</description>
+    </item>
+    
+    <item>
+      <title>Len</title>
+      <link>http://example.org/operators/len/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/len/</guid>
+      <description>func Len(expectedLen interface{}) TestDeep Len is a smuggler operator. It takes data, applies len() function on it and compares its result to expectedLen. Of course, the compared value must be an array, a channel, a map, a slice or a string.
+expectedLen can be an int value:
+Cmp(t, gotSlice, Len(12)) as well as an other operator:
+Cmp(t, gotSlice, Len(Between(3, 4))) Examples    Slice example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Lt</title>
+      <link>http://example.org/operators/lt/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/lt/</guid>
+      <description>func Lt(maxExpectedValue interface{}) TestDeep Lt operator checks that data is lesser than maxExpectedValue. maxExpectedValue can be any numeric or time.Time (or assignable) value. maxExpectedValue must be the same kind as the compared value if numeric, and the same type if time.Time (or assignable).
+TypeBehind method returns the reflect.Type of maxExpectedValue.
+Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := Cmp(t, got, Lt(157), &amp;quot;checks %v is &amp;lt; 157&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Lte</title>
+      <link>http://example.org/operators/lte/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/lte/</guid>
+      <description>func Lte(maxExpectedValue interface{}) TestDeep Lte operator checks that data is lesser or equal than maxExpectedValue. maxExpectedValue can be any numeric or time.Time (or assignable) value. maxExpectedValue must be the same kind as the compared value if numeric, and the same type if time.Time (or assignable).
+TypeBehind method returns the reflect.Type of maxExpectedValue.
+Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := Cmp(t, got, Lte(156), &amp;quot;checks %v is ≤ 156&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Map</title>
+      <link>http://example.org/operators/map/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/map/</guid>
+      <description>func Map(model interface{}, expectedEntries MapEntries) TestDeep Map operator compares the contents of a map against the non-zero values of model (if any) and the values of expectedEntries.
+model must be the same type as compared data.
+expectedEntries can be nil, if no zero entries are expected and no TestDeep operator are involved.
+During a match, all expected entries must be found and all data entries must be expected to succeed.</description>
+    </item>
+    
+    <item>
+      <title>MapEach</title>
+      <link>http://example.org/operators/mapeach/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/mapeach/</guid>
+      <description>func MapEach(expectedValue interface{}) TestDeep MapEach operator has to be applied on maps. It compares each value of data map against expected value. During a match, all values have to match to succeed.
+Examples    Map example   t := &amp;amp;testing.T{} got := map[string]int{&amp;quot;foo&amp;quot;: 12, &amp;quot;bar&amp;quot;: 42, &amp;quot;zip&amp;quot;: 89} ok := Cmp(t, got, MapEach(Between(10, 90)), &amp;quot;checks each value of map %v is in [10 .. 90]&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>N</title>
+      <link>http://example.org/operators/n/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/n/</guid>
+      <description>func N(num interface{}, tolerance ...interface{}) TestDeep N operator compares a numeric data against num ± tolerance. If tolerance is missing, it defaults to 0. num and tolerance must be the same kind as the compared value.
+TypeBehind method returns the reflect.Type of num.
+Examples   Base example   t := &amp;amp;testing.T{} got := 1.12345 ok := Cmp(t, got, N(1.1234, 0.00006), &amp;quot;checks %v = 1.1234 ± 0.00006&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>NaN</title>
+      <link>http://example.org/operators/nan/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/nan/</guid>
+      <description>func NaN() TestDeep NaN operator checks that data is a float and is not-a-number.
+Examples    Float32 example   t := &amp;amp;testing.T{} got := float32(math.NaN()) ok := Cmp(t, got, NaN(), &amp;quot;checks %v is not-a-number&amp;quot;, got) fmt.Println(&amp;quot;float32(math.NaN()) is float32 not-a-number:&amp;quot;, ok) got = 12 ok = Cmp(t, got, NaN(), &amp;quot;checks %v is not-a-number&amp;quot;, got) fmt.Println(&amp;quot;float32(12) is float32 not-a-number:&amp;quot;, ok) // Output: // float32(math.NaN()) is float32 not-a-number: true // float32(12) is float32 not-a-number: false      Float64 example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Nil</title>
+      <link>http://example.org/operators/nil/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/nil/</guid>
+      <description>func Nil() TestDeep Nil operator checks that data is nil (or is a non-nil interface, but containing a nil pointer.)
+Examples   Base example   t := &amp;amp;testing.T{} var got fmt.Stringer // interface // nil value can be compared directly with nil, no need of Nil() here ok := Cmp(t, got, nil) fmt.Println(ok) // But it works with Nil() anyway ok = Cmp(t, got, Nil()) fmt.Println(ok) got = (*bytes.</description>
+    </item>
+    
+    <item>
+      <title>None</title>
+      <link>http://example.org/operators/none/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/none/</guid>
+      <description>func None(notExpectedValues ...interface{}) TestDeep None operator compares data against several not expected values. During a match, none of them have to match to succeed.
+Examples   Base example   t := &amp;amp;testing.T{} got := 18 ok := Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)), &amp;quot;checks %v is non-null, and ≠ 10, 20 &amp;amp; 30, and not in [100-199]&amp;quot;, got) fmt.Println(ok) got = 20 ok = Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)), &amp;quot;checks %v is non-null, and ≠ 10, 20 &amp;amp; 30, and not in [100-199]&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Not</title>
+      <link>http://example.org/operators/not/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/not/</guid>
+      <description>func Not(notExpected interface{}) TestDeep Not operator compares data against the not expected value. During a match, it must not match to succeed.
+Not is the same operator as None() with only one argument. It is provided as a more readable function when only one argument is needed.
+Examples   Base example   t := &amp;amp;testing.T{} got := 42 ok := Cmp(t, got, Not(0), &amp;quot;checks %v is non-null&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>NotAny</title>
+      <link>http://example.org/operators/notany/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/notany/</guid>
+      <description>func NotAny(expectedItems ...interface{}) TestDeep NotAny operator checks that the contents of an array or a slice (or a pointer on array/slice) does not contain any of expectedItems.
+Cmp(t, []int{1}, NotAny(1, 2, 3)) // fails Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds Examples   Base example   t := &amp;amp;testing.T{} got := []int{4, 5, 9, 42} ok := Cmp(t, got, NotAny(3, 6, 8, 41, 43), &amp;quot;checks %v contains no item listed in NotAny()&amp;quot;, got) fmt.</description>
+    </item>
+    
+    <item>
+      <title>NotEmpty</title>
+      <link>http://example.org/operators/notempty/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/notempty/</guid>
+      <description>func NotEmpty() TestDeep NotEmpty operator checks that an array, a channel, a map, a slice or a string is not empty. As a special case (non-typed) nil, as well as nil channel, map or slice are considered empty.
+Note that the compared data can be a pointer (of pointer of pointer etc.) on an array, a channel, a map, a slice or a string.
+Examples    Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>NotNaN</title>
+      <link>http://example.org/operators/notnan/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/notnan/</guid>
+      <description>func NotNaN() TestDeep NotNaN operator checks that data is a float and is not not-a-number.
+Examples    Float32 example   t := &amp;amp;testing.T{} got := float32(math.NaN()) ok := Cmp(t, got, NotNaN(), &amp;quot;checks %v is not-a-number&amp;quot;, got) fmt.Println(&amp;quot;float32(math.NaN()) is NOT float32 not-a-number:&amp;quot;, ok) got = 12 ok = Cmp(t, got, NotNaN(), &amp;quot;checks %v is not-a-number&amp;quot;, got) fmt.Println(&amp;quot;float32(12) is NOT float32 not-a-number:&amp;quot;, ok) // Output: // float32(math.NaN()) is NOT float32 not-a-number: false // float32(12) is NOT float32 not-a-number: true      Float64 example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>NotNil</title>
+      <link>http://example.org/operators/notnil/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/notnil/</guid>
+      <description>func NotNil() TestDeep NotNil operator checks that data is not nil (or is a non-nil interface, containing a non-nil pointer.)
+Examples   Base example   t := &amp;amp;testing.T{} var got fmt.Stringer = &amp;amp;bytes.Buffer{} // nil value can be compared directly with Not(nil), no need of NotNil() here ok := Cmp(t, got, Not(nil)) fmt.Println(ok) // But it works with NotNil() anyway ok = Cmp(t, got, NotNil()) fmt.Println(ok) got = (*bytes.</description>
+    </item>
+    
+    <item>
+      <title>NotZero</title>
+      <link>http://example.org/operators/notzero/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/notzero/</guid>
+      <description>func NotZero() TestDeep NotZero operator checks that data is not zero regarding its type.
+ nil is the zero value of pointers, maps, slices, channels and functions; 0 is the zero value of numbers; &amp;rdquo;&amp;rdquo; is the 0 value of strings; false is the zero value of booleans; zero value of structs is the struct with no fields initialized.  Beware that:
+Cmp(t, AnyStruct{}, NotZero()) // is false Cmp(t, &amp;amp;AnyStruct{}, NotZero()) // is true, coz pointer ≠ nil Cmp(t, &amp;amp;AnyStruct{}, Ptr(NotZero())) // is false Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>PPtr</title>
+      <link>http://example.org/operators/pptr/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/pptr/</guid>
+      <description>func PPtr(val interface{}) TestDeep PPtr is a smuggler operator. It takes the address of the address of data and compares it to val.
+val depends on data type. For example, if the compared data is an **int, one can have:
+PPtr(12) as well as an other operator:
+PPtr(Between(3, 4)) It is more efficient and shorter to write than:
+Ptr(Ptr(val)) TypeBehind method returns the reflect.Type of a pointer on a pointer on val, except if val is a TestDeep operator.</description>
+    </item>
+    
+    <item>
+      <title>Ptr</title>
+      <link>http://example.org/operators/ptr/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/ptr/</guid>
+      <description>func Ptr(val interface{}) TestDeep Ptr is a smuggler operator. It takes the address of data and compares it to val.
+val depends on data type. For example, if the compared data is an *int, one can have:
+Ptr(12) as well as an other operator:
+Ptr(Between(3, 4)) TypeBehind method returns the reflect.Type of a pointer on val, except if val is a TestDeep operator. In this case, it delegates TypeBehind() to the operator and returns the reflect.</description>
+    </item>
+    
+    <item>
+      <title>Re</title>
+      <link>http://example.org/operators/re/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/re/</guid>
+      <description>func Re(reg interface{}, capture ...interface{}) TestDeep Re operator allows to apply a regexp on a string (or convertible), []byte, error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
+reg is the regexp. It can be a string that is automatically compiled using regexp.MustCompile, or a *regexp.Regexp.
+Optional capture parameter can be used to match the contents of regexp groups. Groups are presented as a []string or [][]byte depending the original matched data.</description>
+    </item>
+    
+    <item>
+      <title>ReAll</title>
+      <link>http://example.org/operators/reall/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/reall/</guid>
+      <description>func ReAll(reg interface{}, capture interface{}) TestDeep ReAll operator allows to successively apply a regexp on a string (or convertible), []byte, error or fmt.Stringer interface (error interface is tested before fmt.Stringer) and to match its groups contents.
+reg is the regexp. It can be a string that is automatically compiled using regexp.MustCompile, or a *regexp.Regexp.
+capture is used to match the contents of regexp groups. Groups are presented as a []string or [][]byte depending the original matched data.</description>
+    </item>
+    
+    <item>
+      <title>Set</title>
+      <link>http://example.org/operators/set/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/set/</guid>
+      <description>func Set(expectedItems ...interface{}) TestDeep Set operator compares the contents of an array or a slice (or a pointer on array/slice) ignoring duplicates and without taking care of the order of items.
+During a match, each expected item should match in the compared array/slice, and each array/slice item should be matched by an expected item to succeed.
+Cmp(t, []int{1, 1, 2}, Set(1, 2)) // succeeds Cmp(t, []int{1, 1, 2}, Set(2, 1)) // succeeds Cmp(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Shallow</title>
+      <link>http://example.org/operators/shallow/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/shallow/</guid>
+      <description>func Shallow(expectedPtr interface{}) TestDeep Shallow operator compares pointers only, not their contents. It applies on channels, functions (with some restrictions), maps, pointers, slices and strings.
+During a match, the compared data must be the same as expectedPtr to succeed.
+a, b := 123, 123 Cmp(t, &amp;amp;a, Shallow(&amp;amp;a)) // succeeds Cmp(t, &amp;amp;a, Shallow(&amp;amp;b)) // fails even if a == b as &amp;amp;a != &amp;amp;b  back := &amp;#34;foobarfoobar&amp;#34; a, b := back[:6], back[6:] // a == b but.</description>
+    </item>
+    
+    <item>
+      <title>Slice</title>
+      <link>http://example.org/operators/slice/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/slice/</guid>
+      <description>func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep Slice operator compares the contents of a slice or a pointer on a slice against the non-zero values of model (if any) and the values of expectedEntries.
+model must be the same type as compared data.
+expectedEntries can be nil, if no zero entries are expected and no TestDeep operator are involved.
+TypeBehind method returns the reflect.Type of model.
+Examples    Slice example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Smuggle</title>
+      <link>http://example.org/operators/smuggle/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/smuggle/</guid>
+      <description>func Smuggle(fn interface{}, expectedValue interface{}) TestDeep Smuggle operator allows to change data contents or mutate it into another type before stepping down in favor of generic comparison process. Of course it is a smuggler operator. So fn is a function that must take one parameter whose type must be convertible to the type of the compared value (as a convenient shortcut, fn can be a string specifying a fields-path through structs, see below for details).</description>
+    </item>
+    
+    <item>
+      <title>String</title>
+      <link>http://example.org/operators/string/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/string/</guid>
+      <description>func String(expected string) TestDeep String operator allows to compare a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
+err := errors.New(&amp;#34;error!&amp;#34;) Cmp(t, err, String(&amp;#34;error!&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) Cmp(t, bstr, String(&amp;#34;fmt.Stringer!&amp;#34;)) // succeeds Examples    Base example   t := &amp;amp;testing.T{} got := &amp;quot;foobar&amp;quot; ok := Cmp(t, got, String(&amp;quot;foobar&amp;quot;), &amp;quot;checks %s&amp;quot;, got) fmt.Println(ok) // Output: // true      Stringer example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Struct</title>
+      <link>http://example.org/operators/struct/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/struct/</guid>
+      <description>func Struct(model interface{}, expectedFields StructFields) TestDeep Struct operator compares the contents of a struct or a pointer on a struct against the non-zero values of model (if any) and the values of expectedFields.
+model must be the same type as compared data.
+expectedFields can be nil, if no zero entries are expected and no TestDeep operator are involved.
+During a match, all expected fields must be found to succeed. Non-expected fields are ignored.</description>
+    </item>
+    
+    <item>
+      <title>SubBagOf</title>
+      <link>http://example.org/operators/subbagof/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/subbagof/</guid>
+      <description>func SubBagOf(expectedItems ...interface{}) TestDeep SubBagOf operator compares the contents of an array or a slice (or a pointer on array/slice) without taking care of the order of items.
+During a match, each array/slice item should be matched by an expected item to succeed. But some expected items can be missing from the compared array/slice.
+Cmp(t, []int{1}, SubBagOf(1, 1, 2)) // succeeds Cmp(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // fails, one 1 is an extra item Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>SubMapOf</title>
+      <link>http://example.org/operators/submapof/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/submapof/</guid>
+      <description>func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep SubMapOf operator compares the contents of a map against the non-zero values of model (if any) and the values of expectedEntries.
+model must be the same type as compared data.
+expectedEntries can be nil, if no zero entries are expected and no TestDeep operator are involved.
+During a match, each map entry should be matched by an expected entry to succeed. But some expected entries can be missing from the compared map.</description>
+    </item>
+    
+    <item>
+      <title>SubSetOf</title>
+      <link>http://example.org/operators/subsetof/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/subsetof/</guid>
+      <description>func SubSetOf(expectedItems ...interface{}) TestDeep SubSetOf operator compares the contents of an array or a slice (or a pointer on array/slice) ignoring duplicates and without taking care of the order of items.
+During a match, each array/slice item should be matched by an expected item to succeed. But some expected items can be missing from the compared array/slice.
+Cmp(t, []int{1, 1}, SubSetOf(1, 2)) // succeeds Cmp(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>SuperBagOf</title>
+      <link>http://example.org/operators/superbagof/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/superbagof/</guid>
+      <description>func SuperBagOf(expectedItems ...interface{}) TestDeep SuperBagOf operator compares the contents of an array or a slice (or a pointer on array/slice) without taking care of the order of items.
+During a match, each expected item should match in the compared array/slice. But some items in the compared array/slice may not be expected.
+Cmp(t, []int{1, 1, 2}, SuperBagOf(1)) // succeeds Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>SuperMapOf</title>
+      <link>http://example.org/operators/supermapof/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/supermapof/</guid>
+      <description>func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep SuperMapOf operator compares the contents of a map against the non-zero values of model (if any) and the values of expectedEntries.
+model must be the same type as compared data.
+expectedEntries can be nil, if no zero entries are expected and no TestDeep operator are involved.
+During a match, each expected entry should match in the compared map. But some entries in the compared map may not be expected.</description>
+    </item>
+    
+    <item>
+      <title>SuperSetOf</title>
+      <link>http://example.org/operators/supersetof/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/supersetof/</guid>
+      <description>func SuperSetOf(expectedItems ...interface{}) TestDeep SuperSetOf operator compares the contents of an array or a slice (or a pointer on array/slice) ignoring duplicates and without taking care of the order of items.
+During a match, each expected item should match in the compared array/slice. But some items in the compared array/slice may not be expected.
+Cmp(t, []int{1, 1, 2}, SuperSetOf(1)) // succeeds Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>TruncTime</title>
+      <link>http://example.org/operators/trunctime/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/trunctime/</guid>
+      <description>func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep TruncTime operator compares time.Time (or assignable) values after truncating them to the optional trunc duration. See time.Truncate for details about the truncation.
+If trunc is missing, it defaults to 0.
+During comparison, location does not matter as time.Equal method is used behind the scenes: a time instant in two different locations is the same time instant.
+Whatever the trunc value is, the monotonic clock is stripped before the comparison against expectedTime.</description>
+    </item>
+    
+    <item>
+      <title>Using testing package</title>
+      <link>http://example.org/example/using-testing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/example/using-testing/</guid>
+      <description>To check the freshly created record contents using standard testing package, we have to do something like that:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if err != nil { t.Errorf(&amp;#34;An error occurred: %s&amp;#34;, err) } else { expected := Record{Name: &amp;#34;Bob&amp;#34;, Age: 23} if record.Id == 0 { t.Error(&amp;#34;Id probably not initialized&amp;#34;) } if record.Name != expected.Name { t.Errorf(&amp;#34;Name field differs, got=%s, expected=%s&amp;#34;, record.</description>
+    </item>
+    
+    <item>
+      <title>Values</title>
+      <link>http://example.org/operators/values/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/values/</guid>
+      <description>func Values(val interface{}) TestDeep Values is a smuggler operator. It takes a map and compares its ordered values to val.
+val can be a slice of items of the same type as the map values:
+Values([]string{&amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;, &amp;#34;c&amp;#34;}) as well as an other operator:
+Values(Bag(&amp;#34;c&amp;#34;, &amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;)) Examples   Base example   t := &amp;amp;testing.T{} got := map[string]int{&amp;quot;foo&amp;quot;: 1, &amp;quot;bar&amp;quot;: 2, &amp;quot;zip&amp;quot;: 3} // Values tests values in an ordered manner ok := Cmp(t, got, Values([]int{1, 2, 3})) fmt.</description>
+    </item>
+    
+    <item>
+      <title>Zero</title>
+      <link>http://example.org/operators/zero/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/operators/zero/</guid>
+      <description>func Zero() TestDeep Zero operator checks that data is zero regarding its type.
+ nil is the zero value of pointers, maps, slices, channels and functions; 0 is the zero value of numbers; &amp;rdquo;&amp;rdquo; is the 0 value of strings; false is the zero value of booleans; zero value of structs is the struct with no fields initialized.  Beware that:
+Cmp(t, AnyStruct{}, Zero()) // is true Cmp(t, &amp;amp;AnyStruct{}, Zero()) // is false, coz pointer ≠ nil Cmp(t, &amp;amp;AnyStruct{}, Ptr(Zero())) // is true Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Basic testdeep approach</title>
+      <link>http://example.org/example/basic-testdeep/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/example/basic-testdeep/</guid>
+      <description>testdeep package, via its Cmp* functions, handles the tests and all the error message boiler plate. Let&amp;rsquo;s do it:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record.Id, td.NotZero(), &amp;#34;Id initialized&amp;#34;) td.Cmp(t, record.Name, &amp;#34;Bob&amp;#34;) td.Cmp(t, record.Age, 23) td.Cmp(t, record.CreatedAt, td.Between(before, time.Now())) } } As we cannot guess the Id field value before its creation, we use the NotZero operator to check it is set by CreateRecord() call.</description>
+    </item>
+    
+    <item>
+      <title>Advanced testdeep technique</title>
+      <link>http://example.org/example/advanced-testdeep/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/example/advanced-testdeep/</guid>
+      <description>Of course we can test struct fields one by one, but with testdeep, the whole struct can be compared with one Cmp call.
+We can choose to ignore the non-guessable fields set by CreateRecord():
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record, td.Struct( &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, nil), &amp;#34;Newly created record&amp;#34;) } } The Struct operator, used here, ignores zero fields in its model parameter.</description>
+    </item>
+    
+    <item>
+      <title>testdeep Cmp shortcuts</title>
+      <link>http://example.org/example/testdeep-cmp-shortcuts/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/example/testdeep-cmp-shortcuts/</guid>
+      <description>The Cmp function is the keystone of this package, but to make the writing of tests even easier, the family of Cmp* functions are provided and act as shortcuts. Using CmpStruct function, the previous example can be written as:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.CmpStruct(t, record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.</description>
+    </item>
+    
+    <item>
+      <title>testdeep.T type</title>
+      <link>http://example.org/example/testdeep-t/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/example/testdeep-t/</guid>
+      <description>Last, testing.T can be encapsulated in testdeep T type, simplifying again the test:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t := t.RootName(&amp;#34;RECORD&amp;#34;) // Use RECORD instead of DATA in failure reports  // Using Struct shortcut method  t.Struct(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.NotZero(), &amp;#34;CreatedAt&amp;#34;: td.Between(before, time.Now()), }, &amp;#34;Newly created record&amp;#34;) // Or using Cmp method, it&amp;#39;s a matter of taste  t.</description>
+    </item>
+    
+    <item>
+      <title>testdeep.T</title>
+      <link>http://example.org/functions/testdeep-t/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/functions/testdeep-t/</guid>
+      <description>Constructing *testdeep.T import ( &amp;#34;testing&amp;#34; &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestMyFunc(tt *testing.T) { t := testdeep.NewT(tt) t.Cmp(MyFunc(), 12) }  func NewT(t TestingFT, config ...ContextConfig) *T  Configuring *testdeep.T func TestMyFunc(tt *testing.T) { t := testdeep.NewT(tt).UseEqual().RootName(&amp;#34;RECORD&amp;#34;) ... }  func (t *T) BeLax(enable ...bool) *T func (t *T) FailureIsFatal(enable ...bool) *T func (t *T) RootName(rootName string) *T func (t *T) UseEqual(enable ...bool) *T  Main methods of *testdeep.T import ( &amp;#34;testing&amp;#34; &amp;#34;github.</description>
+    </item>
+    
+  </channel>
+</rss>
