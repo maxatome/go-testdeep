@@ -61,10 +61,17 @@ type TestingFT interface {
 // intended to be used directly, but through Cmp* functions.
 type TestDeep interface {
 	types.TestDeepStringer
-	Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 	location.GetLocationer
+	// Match checks "got" against the operator. It returns nil if it matches.
+	Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 	setLocation(int)
+	// HandleInvalid returns true if the operator is able to handle
+	// untyped nil value. Otherwise the untyped nil value is handled
+	// generically.
 	HandleInvalid() bool
+	// TypeBehind returns the type handled by the operator or nil if it
+	// is not known. tdhttp helper uses it to know how to unmarshal HTTP
+	// responses bodies before comparing them using the operator.
 	TypeBehind() reflect.Type
 }
 

@@ -22,9 +22,10 @@ type tdContains struct {
 
 var _ TestDeep = &tdContains{}
 
-// summary(Contains): checks that a string, [`error`] or
-// [`fmt.Stringer`] interfaces contain a sub-string; or an array,
-// slice or map contain a value
+// summary(Contains): checks that a string, error or fmt.Stringer
+// interfaces contain a sub-string; or an array, slice or map contain
+// a value
+// input(Contains): str,array,slice,map
 
 // Contains is a smuggler operator with a little convenient exception
 // for strings. Contains has to be applied on arrays, slices, maps or
@@ -42,9 +43,9 @@ var _ TestDeep = &tdContains{}
 //   Cmp(t, hash, Contains(35))              // fails
 //
 //   got := "foo bar"
-//   Cmp(t, hash, Contains('o'))               // succeeds
-//   Cmp(t, hash, Contains(rune('o')))         // succeeds
-//   Cmp(t, hash, Contains(Between('n', 'p'))) // succeeds
+//   Cmp(t, got, Contains('o'))               // succeeds
+//   Cmp(t, got, Contains(rune('o')))         // succeeds
+//   Cmp(t, got, Contains(Between('n', 'p'))) // succeeds
 //
 // When Contains(nil) is used, nil is automatically converted to a
 // typed nil on the fly to avoid confusion (if the array/slice/map
@@ -69,7 +70,7 @@ var _ TestDeep = &tdContains{}
 // As a special case for string (or convertible), error or
 // fmt.Stringer interface (error interface is tested before
 // fmt.Stringer), "expectedValue" can be a string, a rune or a
-// byte. In this case, it will test if the got string contains this
+// byte. In this case, it tests if the got string contains this
 // expected string, rune or byte.
 //
 //   type Foobar string

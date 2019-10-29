@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
+   width="151.67601mm"
+   height="82.384575mm"
+   viewBox="0 0 151.67601 82.384575"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
@@ -99,8 +99,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="294.85119"
-     inkscape:cy="231.75298"
+     inkscape:cx="251.42477"
+     inkscape:cy="127.1972"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -114,14 +114,18 @@
      inkscape:snap-grids="true"
      inkscape:snap-to-guides="true"
      inkscape:snap-others="true"
-     inkscape:snap-global="false">
+     inkscape:snap-global="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
     <sodipodi:guide
-       position="32.676047,139.83248"
+       position="10.691082,82.234573"
        orientation="0,1"
        id="guide7123"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="28.811654,57.623312"
+       position="6.8266891,0.025407643"
        orientation="0,1"
        id="guide7125"
        inkscape:locked="false" />
@@ -134,14 +138,15 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(-21.984965,-157.01752)">
     <path
        style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 122.36988,158.49062 c -15.4963,0.86077 -27.85927,2.41783 -46.5006,2.57969 -16.4393,-0.5045 -28.442708,-1.89618 -42.664062,-2.84427 -1.379983,0.56289 -5.465275,0.11719 -6.217709,2.24896 l -0.529167,3.57187 c -0.01124,1.38647 0.773388,2.17604 3.571875,1.45521 1.432359,-0.84105 2.620446,-2.65919 4.365626,-2.24896 1.339453,0.3638 3.48164,3.71986 3.727749,9.95479 0.907567,-6.59735 3.887807,-8.46374 5.580449,-8.22608 1.692642,0.23767 4.611228,-0.46333 4.734029,7.30866 0.519677,-7.04469 3.799819,-6.14557 5.421823,-5.88268 3.244009,0.52578 4.485674,2.47539 5.020962,9.43978 0.932163,-7.5877 7.243365,-5.39812 7.661862,-3.86322 l 8.334375,24.20938 z"
@@ -1833,14 +1838,14 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot4005"
-       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
          id="flowRegion4007"><rect
            id="rect4009"
            width="101.11626"
            height="70.003571"
            x="-85.559921"
            y="984.63385" /></flowRegion><flowPara
-         id="flowPara4011"></flowPara></flowRoot>    <g
+         id="flowPara4011" /></flowRoot>    <g
        id="g4948"
        transform="matrix(0.06643196,0.02541623,-0.02541623,0.06643196,29.756735,185.90483)">
       <rect

@@ -74,7 +74,7 @@
          id="tspan887"
          x="-30.864933"
          y="76.93869"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px">client.go:449: <tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px">client_test.go:449: <tspan
    id="tspan968"
    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:monospace;-inkscape-font-specification:'monospace Bold';fill:#ffff00;stroke-width:0.26458332px">Failed test 'body contents is OK'</tspan></tspan><tspan
          sodipodi:role="line"

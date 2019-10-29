@@ -14,6 +14,7 @@ var _ TestDeep = &tdBag{}
 
 // summary(Bag): compares the contents of an array or a slice without taking
 // care of the order of items
+// input(Bag): array,slice,ptr(ptr on array/slice)
 
 // Bag operator compares the contents of an array or a slice (or a
 // pointer on array/slice) without taking care of the order of items.
@@ -44,6 +45,7 @@ var _ TestDeep = &tdSubBagOf{}
 // summary(SubBagOf): compares the contents of an array or a slice
 // without taking care of the order of items but with potentially some
 // exclusions
+// input(SubBagOf): array,slice,ptr(ptr on array/slice)
 
 // SubBagOf operator compares the contents of an array or a slice (or a
 // pointer on array/slice) without taking care of the order of items.
@@ -71,6 +73,7 @@ var _ TestDeep = &tdSuperBagOf{}
 // summary(SuperBagOf): compares the contents of an array or a slice
 // without taking care of the order of items but with potentially some
 // extra items
+// input(SuperBagOf): array,slice,ptr(ptr on array/slice)
 
 // SuperBagOf operator compares the contents of an array or a slice (or a
 // pointer on array/slice) without taking care of the order of items.

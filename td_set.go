@@ -14,6 +14,7 @@ var _ TestDeep = &tdSet{}
 
 // summary(Set): compares the contents of an array or a slice ignoring
 // duplicates and without taking care of the order of items
+// input(Set): array,slice,ptr(ptr on array/slice)
 
 // Set operator compares the contents of an array or a slice (or a
 // pointer on array/slice) ignoring duplicates and without taking care
@@ -43,6 +44,7 @@ var _ TestDeep = &tdSubSetOf{}
 // summary(SubSetOf): compares the contents of an array or a slice
 // ignoring duplicates and without taking care of the order of items
 // but with potentially some exclusions
+// input(SubSetOf): array,slice,ptr(ptr on array/slice)
 
 // SubSetOf operator compares the contents of an array or a slice (or a
 // pointer on array/slice) ignoring duplicates and without taking care
@@ -71,6 +73,7 @@ var _ TestDeep = &tdSuperSetOf{}
 // summary(SuperSetOf): compares the contents of an array or a slice
 // ignoring duplicates and without taking care of the order of items
 // but with potentially some extra items
+// input(SuperSetOf): array,slice,ptr(ptr on array/slice)
 
 // SuperSetOf operator compares the contents of an array or a slice (or
 // a pointer on array/slice) ignoring duplicates and without taking
@@ -98,6 +101,7 @@ var _ TestDeep = &tdNotAny{}
 
 // summary(NotAny): compares the contents of an array or a slice, no
 // values have to match
+// input(NotAny): array,slice,ptr(ptr on array/slice)
 
 // NotAny operator checks that the contents of an array or a slice (or
 // a pointer on array/slice) does not contain any of "expectedItems".

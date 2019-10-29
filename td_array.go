@@ -65,6 +65,7 @@ func newArray(kind reflect.Kind, model interface{}, expectedEntries ArrayEntries
 }
 
 // summary(Array): compares the contents of an array or a pointer on an array
+// input(Array): array,ptr(ptr on array)
 
 // Array operator compares the contents of an array or a pointer on an
 // array against the non-zero values of "model" (if any) and the
@@ -85,6 +86,7 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 }
 
 // summary(Slice): compares the contents of a slice or a pointer on a slice
+// input(Slice): slice,ptr(ptr on slice)
 
 // Slice operator compares the contents of a slice or a pointer on a
 // slice against the non-zero values of "model" (if any) and the

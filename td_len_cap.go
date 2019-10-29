@@ -55,18 +55,20 @@ type tdLen struct {
 var _ TestDeep = &tdLen{}
 
 // summary(Len): checks an array, slice, map, string or channel length
+// input(Len): array,slice,map,chan
 
 // Len is a smuggler operator. It takes data, applies len() function
-// on it and compares its result to "val". Of course, the compared
-// value must be an array, a channel, a map, a slice or a string.
+// on it and compares its result to "expectedLen". Of course, the
+// compared value must be an array, a channel, a map, a slice or a
+// string.
 //
-// "val" can be an int value:
-//   Len(12)
+// "expectedLen" can be an int value:
+//   Cmp(t, gotSlice, Len(12))
 // as well as an other operator:
-//   Len(Between(3, 4))
-func Len(val interface{}) TestDeep {
+//   Cmp(t, gotSlice, Len(Between(3, 4)))
+func Len(expectedLen interface{}) TestDeep {
 	l := tdLen{}
-	if l.initLenCapBase(val) {
+	if l.initLenCapBase(expectedLen) {
 		return &l
 	}
 	panic("usage: Len(TESTDEEP_OPERATOR|INT)")
@@ -114,18 +116,19 @@ type tdCap struct {
 var _ TestDeep = &tdCap{}
 
 // summary(Cap): checks an array, slice or channel capacity
+// input(Cap): array,slice,chan
 
 // Cap is a smuggler operator. It takes data, applies cap() function
-// on it and compares its result to "val". Of course, the compared
-// value must be an array, a channel or a slice.
+// on it and compares its result to "expectedCap". Of course, the
+// compared value must be an array, a channel or a slice.
 //
-// "val" can be an int value:
-//   Cap(12)
+// "expectedCap" can be an int value:
+//   Cmp(t, gotSlice, Cap(12))
 // as well as an other operator:
-//   Cap(Between(3, 4))
-func Cap(val interface{}) TestDeep {
+//   Cmp(t, gotSlice, Cap(Between(3, 4)))
+func Cap(expectedCap interface{}) TestDeep {
 	c := tdCap{}
-	if c.initLenCapBase(val) {
+	if c.initLenCapBase(expectedCap) {
 		return &c
 	}
 	panic("usage: Cap(TESTDEEP_OPERATOR|INT)")

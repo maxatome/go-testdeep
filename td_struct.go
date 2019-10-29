@@ -78,6 +78,7 @@ func newStruct(model interface{}) (*tdStruct, reflect.Value) {
 
 // summary(Struct): compares the contents of a struct or a pointer on
 // a struct
+// input(Struct): struct,ptr(ptr on struct)
 
 // Struct operator compares the contents of a struct or a pointer on a
 // struct against the non-zero values of "model" (if any) and the

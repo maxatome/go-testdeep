@@ -20,8 +20,9 @@ type tdLax struct {
 var _ TestDeep = &tdLax{}
 
 // summary(Lax): temporarily enables [`BeLax` config flag]
+// input(Lax): all
 
-// Lax is a smuggler operator, it temporarily enables the config BeLax
+// Lax is a smuggler operator, it temporarily enables the BeLax config
 // flag before letting the comparison process continue its course.
 //
 // It is more commonly used as CmpLax function than as an operator. It
@@ -32,7 +33,7 @@ var _ TestDeep = &tdLax{}
 //   intValue := 21
 //   floatValue := 21.89
 //   Cmp(t, intValue, bw)        // no need to be lax here: same int types
-//   Cmp(t, floatValue, Lax(bw)) // be lax please, as int ≠ float64
+//   Cmp(t, floatValue, Lax(bw)) // be lax please, as float64 ≠ int
 //
 // Note that in the latter case, CmpLax() could be used as well:
 //   CmpLax(t, floatValue, bw)
@@ -40,7 +41,7 @@ var _ TestDeep = &tdLax{}
 // TypeBehind method returns the greatest convertible or more common
 // reflect.Type of "expectedValue" if it is a base type (bool, int*,
 // uint*, float*, complex*, string), the reflect.Type of
-// "expectedValue" otherwise, except if "val" is a TestDeep
+// "expectedValue" otherwise, except if "expectedValue" is a TestDeep
 // operator. In this case, it delegates TypeBehind() to the operator.
 func Lax(expectedValue interface{}) TestDeep {
 	c := tdLax{

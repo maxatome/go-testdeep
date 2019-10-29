@@ -18,7 +18,8 @@ type tdNil struct {
 
 var _ TestDeep = &tdNil{}
 
-// summary(Nil): compares to `nil`
+// summary(Nil): compares to nil
+// input(Nil): nil,slice,map,ptr,chan,func
 
 // Nil operator checks that data is nil (or is a non-nil interface,
 // but containing a nil pointer.)
@@ -61,7 +62,8 @@ type tdNotNil struct {
 
 var _ TestDeep = &tdNotNil{}
 
-// summary(NotNil): checks that data is not `nil`
+// summary(NotNil): checks that data is not nil
+// input(NotNil): nil,slice,map,ptr,chan,func
 
 // NotNil operator checks that data is not nil (or is a non-nil
 // interface, containing a non-nil pointer.)

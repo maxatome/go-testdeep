@@ -52,8 +52,9 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 }
 
 // summary(Re): allows to apply a regexp on a string (or convertible),
-// `[]byte`, [`error`] or [`fmt.Stringer`] interfaces, and even test
-// the captured groups
+// []byte, error or fmt.Stringer interfaces, and even test the
+// captured groups
+// input(Re): str,slice([]byte),if(✓ + fmt.Stringer/error)
 
 // Re operator allows to apply a regexp on a string (or convertible),
 // []byte, error or fmt.Stringer interface (error interface is tested
@@ -79,8 +80,9 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 }
 
 // summary(ReAll): allows to successively apply a regexp on a string
-// (or convertible), `[]byte`, [`error`] or [`fmt.Stringer`]
-// interfaces, and even test the captured groups
+// (or convertible), []byte, error or fmt.Stringer interfaces, and
+// even test the captured groups
+// input(ReAll): str,slice([]byte),if(✓ + fmt.Stringer/error)
 
 // ReAll operator allows to successively apply a regexp on a string
 // (or convertible), []byte, error or fmt.Stringer interface (error

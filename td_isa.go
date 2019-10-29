@@ -22,6 +22,7 @@ var _ TestDeep = &tdIsa{}
 
 // summary(Isa): checks the data type or whether data implements an
 // interface or not
+// input(Isa): bool,str,int,float,cplx,array,slice,map,struct,ptr,chan,func
 
 // Isa operator checks the data type or whether data implements an
 // interface or not.

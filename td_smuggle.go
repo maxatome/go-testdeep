@@ -120,15 +120,17 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 // summary(Smuggle): changes data contents or mutates it into another
 // type via a custom function or a struct fields-path before stepping
 // down in favor of generic comparison process
+// input(Smuggle): all
 
 // Smuggle operator allows to change data contents or mutate it into
 // another type before stepping down in favor of generic comparison
-// process. So "fn" is a function that must take one parameter whose
-// type must be convertible to the type of the compared value (as a
-// convenient shortcut, "fn" can be a string specifying a fields-path
-// through structs, see below for details).
+// process. Of course it is a smuggler operator. So "fn" is a function
+// that must take one parameter whose type must be convertible to the
+// type of the compared value (as a convenient shortcut, "fn" can be a
+// string specifying a fields-path through structs, see below for
+// details).
 //
-// "fn" must return at least one value, these value will be compared as is
+// "fn" must return at least one value. These value will be compared as is
 // to "expectedValue", here integer 28:
 //
 //   Smuggle(func (value string) int {
@@ -189,7 +191,7 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 //     Between(2010, 2020))
 //
 // In this case the data location forwarded to next test will be
-// something like DATA.MyTimeField<smuggled>, but you can act on it
+// something like "DATA.MyTimeField<smuggled>", but you can act on it
 // too by returning a SmuggledGot struct (by value or by address):
 //
 //   Smuggle(func (date time.Time) SmuggledGot {
@@ -201,7 +203,7 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 //     Between(2010, 2020))
 //
 // then the data location forwarded to next test will be something like
-// DATA.MyTimeField.Year. The "."  between the current path (here
+// "DATA.MyTimeField.Year". The "."  between the current path (here
 // "DATA.MyTimeField") and the returned Name "Year" is automatically
 // added when Name starts with a Letter.
 //
@@ -279,7 +281,7 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 //
 // TypeBehind method returns the reflect.Type of only parameter of
 // "fn". For the case where "fn" is a fields-path, it is always
-// Interface{}, as the type can not be known in advance.
+// interface{}, as the type can not be known in advance.
 func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
