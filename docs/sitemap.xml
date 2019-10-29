@@ -3,277 +3,277 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://example.org/operators/matrix/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/matrix/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/</loc>
+    <loc>https://go-testdeep.zetta.rocks/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/introduction/</loc>
+    <loc>https://go-testdeep.zetta.rocks/introduction/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/all/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/all/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/any/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/any/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/array/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/array/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/arrayeach/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/arrayeach/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/bag/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/bag/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/between/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/between/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/cap/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/cap/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/code/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/code/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/contains/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/contains/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/containskey/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/containskey/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/empty/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/empty/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/gt/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/gt/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/gte/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/gte/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/hasprefix/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/hasprefix/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/hassuffix/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/hassuffix/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/ignore/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/ignore/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/isa/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/isa/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/keys/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/keys/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/lax/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/lax/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/len/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/len/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/lt/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/lt/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/lte/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/lte/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/map/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/map/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/mapeach/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/mapeach/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/n/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/n/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/nan/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/nan/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/nil/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/nil/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/none/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/none/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/not/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/not/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/notany/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/notany/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/notempty/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/notempty/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/notnan/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/notnan/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/notnil/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/notnil/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/notzero/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/notzero/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/pptr/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/pptr/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/ptr/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/ptr/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/re/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/re/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/reall/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/reall/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/set/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/set/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/shallow/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/shallow/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/slice/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/slice/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/smuggle/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/smuggle/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/string/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/string/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/struct/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/struct/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/subbagof/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/subbagof/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/submapof/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/submapof/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/subsetof/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/subsetof/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/superbagof/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/superbagof/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/supermapof/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/supermapof/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/supersetof/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/supersetof/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/trunctime/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/trunctime/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/example/using-testing/</loc>
+    <loc>https://go-testdeep.zetta.rocks/example/using-testing/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/values/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/values/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/zero/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/zero/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/example/</loc>
+    <loc>https://go-testdeep.zetta.rocks/example/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/functions/</loc>
+    <loc>https://go-testdeep.zetta.rocks/functions/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operators/</loc>
+    <loc>https://go-testdeep.zetta.rocks/operators/</loc>
     <lastmod>2019-10-03T22:20:09+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/example/basic-testdeep/</loc>
+    <loc>https://go-testdeep.zetta.rocks/example/basic-testdeep/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/faq/</loc>
+    <loc>https://go-testdeep.zetta.rocks/faq/</loc>
     <lastmod>2019-10-08T21:28:21+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/example/advanced-testdeep/</loc>
+    <loc>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/example/testdeep-cmp-shortcuts/</loc>
+    <loc>https://go-testdeep.zetta.rocks/example/testdeep-cmp-shortcuts/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/example/testdeep-t/</loc>
+    <loc>https://go-testdeep.zetta.rocks/example/testdeep-t/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>https://go-testdeep.zetta.rocks/categories/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://go-testdeep.zetta.rocks/tags/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/functions/testdeep-t/</loc>
+    <loc>https://go-testdeep.zetta.rocks/functions/testdeep-t/</loc>
   </url>
   
 </urlset>
