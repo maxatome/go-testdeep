@@ -59,9 +59,11 @@ func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected interface{},
 // method.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	return cmpDeeply(newContext(), t, got, expected, args...)

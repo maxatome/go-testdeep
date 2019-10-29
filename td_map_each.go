@@ -23,6 +23,9 @@ type tdMapEach struct {
 
 var _ TestDeep = &tdMapEach{}
 
+// summary(MapEach): compares each map entry
+// input(MapEach): map,ptr(ptr on map)
+
 // MapEach operator has to be applied on maps. It compares each value
 // of data map against expected value. During a match, all values have
 // to match to succeed.

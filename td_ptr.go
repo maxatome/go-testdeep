@@ -19,6 +19,9 @@ type tdPtr struct {
 
 var _ TestDeep = &tdPtr{}
 
+// summary(Ptr): allows to easily test a pointer value
+// input(Ptr): ptr
+
 // Ptr is a smuggler operator. It takes the address of data and
 // compares it to "val".
 //
@@ -91,6 +94,9 @@ type tdPPtr struct {
 }
 
 var _ TestDeep = &tdPPtr{}
+
+// summary(PPtr): allows to easily test a pointer of pointer value
+// input(PPtr): ptr
 
 // PPtr is a smuggler operator. It takes the address of the address of
 // data and compares it to "val".

@@ -58,13 +58,22 @@ type tdBetweenTime struct {
 
 var _ TestDeep = &tdBetweenTime{}
 
+// summary(Between): checks that a number, string or time.Time is
+// between two bounds
+// input(Between): str,int,float,cplx(todo),struct(time.Time)
+
 // Between operator checks that data is between "from" and
 // "to". "from" and "to" can be any numeric, string or time.Time (or
 // assignable) value. "from" and "to" must be the same kind as the
 // compared value if numeric, and the same type if string or time.Time (or
 // assignable). "bounds" allows to specify whether bounds are included
-// or not. See Bounds* constants for details. If "bounds" is missing,
-// it defaults to BoundsInIn.
+// or not:
+//   - BoundsInIn (default): between "from" and "to" both included
+//   - BoundsInOut: between "from" included and "to" excluded
+//   - BoundsOutIn: between "from" excluded and "to" included
+//   - BoundsOutOut: between "from" and "to" both excluded
+//
+// If "bounds" is missing, it defaults to BoundsInIn.
 //
 // TypeBehind method returns the reflect.Type of "from" (same as the "to" one.)
 func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
@@ -220,6 +229,9 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 	}
 }
 
+// summary(N): compares a number with a tolerance value
+// input(N): int,float,cplx(todo)
+
 // N operator compares a numeric data against "num" ± "tolerance". If
 // "tolerance" is missing, it defaults to 0. "num" and "tolerance"
 // must be the same kind as the compared value.
@@ -271,57 +283,77 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 	return &n
 }
 
-// Gt operator checks that data is greater than "val". "val" can be
-// any numeric or time.Time (or assignable) value. "val" must be the
+// summary(Gt): checks that a number, string or time.Time is
+// greater than a value
+// input(Gt): str,int,float,cplx(todo),struct(time.Time)
+
+// Gt operator checks that data is greater than
+// "minExpectedValue". "minExpectedValue" can be any numeric or
+// time.Time (or assignable) value. "minExpectedValue" must be the
 // same kind as the compared value if numeric, and the same type if
 // time.Time (or assignable).
 //
-// TypeBehind method returns the reflect.Type of "val".
-func Gt(val interface{}) TestDeep {
+// TypeBehind method returns the reflect.Type of "minExpectedValue".
+func Gt(minExpectedValue interface{}) TestDeep {
 	b := &tdBetween{
-		expectedMin: reflect.ValueOf(val),
+		expectedMin: reflect.ValueOf(minExpectedValue),
 		minBound:    boundOut,
 	}
 	return b.initBetween("usage: Gt(NUM|STRING|TIME)")
 }
 
-// Gte operator checks that data is greater or equal than "val". "val"
-// can be any numeric or time.Time (or assignable) value. "val" must
-// be the same kind as the compared value if numeric, and the same
-// type if time.Time (or assignable).
+// summary(Gte): checks that a number, string or time.Time is
+// greater or equal than a value
+// input(Gte): str,int,float,cplx(todo),struct(time.Time)
+
+// Gte operator checks that data is greater or equal than
+// "minExpectedValue". "minExpectedValue" can be any numeric or
+// time.Time (or assignable) value. "minExpectedValue" must be the
+// same kind as the compared value if numeric, and the same type if
+// time.Time (or assignable).
 //
-// TypeBehind method returns the reflect.Type of "val".
-func Gte(val interface{}) TestDeep {
+// TypeBehind method returns the reflect.Type of "minExpectedValue".
+func Gte(minExpectedValue interface{}) TestDeep {
 	b := &tdBetween{
-		expectedMin: reflect.ValueOf(val),
+		expectedMin: reflect.ValueOf(minExpectedValue),
 		minBound:    boundIn,
 	}
 	return b.initBetween("usage: Gte(NUM|STRING|TIME)")
 }
 
-// Lt operator checks that data is lesser than "val". "val" can be
-// any numeric or time.Time (or assignable) value. "val" must be the
+// summary(Lt): checks that a number, string or time.Time is
+// lesser than a value
+// input(Lt): str,int,float,cplx(todo),struct(time.Time)
+
+// Lt operator checks that data is lesser than
+// "maxExpectedValue". "maxExpectedValue" can be any numeric or
+// time.Time (or assignable) value. "maxExpectedValue" must be the
 // same kind as the compared value if numeric, and the same type if
 // time.Time (or assignable).
 //
-// TypeBehind method returns the reflect.Type of "val".
-func Lt(val interface{}) TestDeep {
+// TypeBehind method returns the reflect.Type of "maxExpectedValue".
+func Lt(maxExpectedValue interface{}) TestDeep {
 	b := &tdBetween{
-		expectedMin: reflect.ValueOf(val),
+		expectedMin: reflect.ValueOf(maxExpectedValue),
 		maxBound:    boundOut,
 	}
 	return b.initBetween("usage: Lt(NUM|STRING|TIME)")
 }
 
-// Lte operator checks that data is lesser or equal than "val". "val"
-// can be any numeric or time.Time (or assignable) value. "val" must
-// be the same kind as the compared value if numeric, and the same
-// type if time.Time (or assignable).
+// summary(Lte): checks that a number, string or time.Time is
+// lesser or equal than a value
+// input(Lte): str,int,float,cplx(todo),struct(time.Time)
+
+// Lte operator checks that data is lesser or equal than
+// "maxExpectedValue". "maxExpectedValue" can be any numeric or
+// time.Time (or assignable) value. "maxExpectedValue" must be the
+// same kind as the compared value if numeric, and the same type if
+// time.Time (or assignable).
 //
-// TypeBehind method returns the reflect.Type of "val".
-func Lte(val interface{}) TestDeep {
+// TypeBehind method returns the reflect.Type of "maxExpectedValue".
+func Lte(maxExpectedValue interface{}) TestDeep {
 	b := &tdBetween{
-		expectedMin: reflect.ValueOf(val),
+		expectedMin: reflect.ValueOf(maxExpectedValue),
 		maxBound:    boundIn,
 	}
 	return b.initBetween("usage: Lte(NUM|STRING|TIME)")

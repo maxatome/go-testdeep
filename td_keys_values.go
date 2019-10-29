@@ -42,6 +42,9 @@ type tdKeys struct {
 
 var _ TestDeep = &tdKeys{}
 
+// summary(Keys): checks keys of a map
+// input(Keys): map
+
 // Keys is a smuggler operator. It takes a map and compares its
 // ordered keys to "val".
 //
@@ -90,6 +93,9 @@ type tdValues struct {
 }
 
 var _ TestDeep = &tdValues{}
+
+// summary(Values): checks values of a map
+// input(Values): map
 
 // Values is a smuggler operator. It takes a map and compares its
 // ordered values to "val".

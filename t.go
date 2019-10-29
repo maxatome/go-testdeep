@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018, 2019, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -21,9 +21,11 @@ import (
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, All(expectedValues...), args...)
@@ -38,9 +40,11 @@ func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Any(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Any(expectedValues...), args...)
@@ -55,9 +59,11 @@ func (t *T) Any(got interface{}, expectedValues []interface{}, args ...interface
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Array(got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Array(model, expectedEntries), args...)
@@ -72,9 +78,11 @@ func (t *T) Array(got interface{}, model interface{}, expectedEntries ArrayEntri
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) ArrayEach(got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, ArrayEach(expectedValue), args...)
@@ -89,9 +97,11 @@ func (t *T) ArrayEach(got interface{}, expectedValue interface{}, args ...interf
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Bag(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Bag(expectedItems...), args...)
@@ -110,9 +120,11 @@ func (t *T) Bag(got interface{}, expectedItems []interface{}, args ...interface{
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Between(got interface{}, from interface{}, to interface{}, bounds BoundsKind, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Between(from, to, bounds), args...)
@@ -120,19 +132,21 @@ func (t *T) Between(got interface{}, from interface{}, to interface{}, bounds Bo
 
 // Cap is a shortcut for:
 //
-//   t.Cmp(got, Cap(val), args...)
+//   t.Cmp(got, Cap(expectedCap), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Cap for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) Cap(got interface{}, val interface{}, args ...interface{}) bool {
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Cap(got interface{}, expectedCap interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, Cap(val), args...)
+	return t.Cmp(got, Cap(expectedCap), args...)
 }
 
 // Code is a shortcut for:
@@ -144,9 +158,11 @@ func (t *T) Cap(got interface{}, val interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Code(fn), args...)
@@ -161,9 +177,11 @@ func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Contains(got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Contains(expectedValue), args...)
@@ -178,9 +196,11 @@ func (t *T) Contains(got interface{}, expectedValue interface{}, args ...interfa
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) ContainsKey(got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, ContainsKey(expectedValue), args...)
@@ -195,9 +215,11 @@ func (t *T) ContainsKey(got interface{}, expectedValue interface{}, args ...inte
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Empty(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Empty(), args...)
@@ -205,36 +227,40 @@ func (t *T) Empty(got interface{}, args ...interface{}) bool {
 
 // Gt is a shortcut for:
 //
-//   t.Cmp(got, Gt(val), args...)
+//   t.Cmp(got, Gt(minExpectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Gt for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) Gt(got interface{}, val interface{}, args ...interface{}) bool {
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Gt(got interface{}, minExpectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, Gt(val), args...)
+	return t.Cmp(got, Gt(minExpectedValue), args...)
 }
 
 // Gte is a shortcut for:
 //
-//   t.Cmp(got, Gte(val), args...)
+//   t.Cmp(got, Gte(minExpectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Gte for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) Gte(got interface{}, val interface{}, args ...interface{}) bool {
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Gte(got interface{}, minExpectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, Gte(val), args...)
+	return t.Cmp(got, Gte(minExpectedValue), args...)
 }
 
 // HasPrefix is a shortcut for:
@@ -246,9 +272,11 @@ func (t *T) Gte(got interface{}, val interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) HasPrefix(got interface{}, expected string, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, HasPrefix(expected), args...)
@@ -263,9 +291,11 @@ func (t *T) HasPrefix(got interface{}, expected string, args ...interface{}) boo
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, HasSuffix(expected), args...)
@@ -280,9 +310,11 @@ func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) boo
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Isa(model), args...)
@@ -297,9 +329,11 @@ func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Keys(got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Keys(val), args...)
@@ -314,9 +348,11 @@ func (t *T) Keys(got interface{}, val interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) CmpLax(got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Lax(expectedValue), args...)
@@ -324,53 +360,59 @@ func (t *T) CmpLax(got interface{}, expectedValue interface{}, args ...interface
 
 // Len is a shortcut for:
 //
-//   t.Cmp(got, Len(val), args...)
+//   t.Cmp(got, Len(expectedLen), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Len for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) Len(got interface{}, val interface{}, args ...interface{}) bool {
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Len(got interface{}, expectedLen interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, Len(val), args...)
+	return t.Cmp(got, Len(expectedLen), args...)
 }
 
 // Lt is a shortcut for:
 //
-//   t.Cmp(got, Lt(val), args...)
+//   t.Cmp(got, Lt(maxExpectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Lt for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) Lt(got interface{}, val interface{}, args ...interface{}) bool {
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Lt(got interface{}, maxExpectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, Lt(val), args...)
+	return t.Cmp(got, Lt(maxExpectedValue), args...)
 }
 
 // Lte is a shortcut for:
 //
-//   t.Cmp(got, Lte(val), args...)
+//   t.Cmp(got, Lte(maxExpectedValue), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Lte for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) Lte(got interface{}, val interface{}, args ...interface{}) bool {
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Lte(got interface{}, maxExpectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, Lte(val), args...)
+	return t.Cmp(got, Lte(maxExpectedValue), args...)
 }
 
 // Map is a shortcut for:
@@ -382,9 +424,11 @@ func (t *T) Lte(got interface{}, val interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Map(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Map(model, expectedEntries), args...)
@@ -399,9 +443,11 @@ func (t *T) Map(got interface{}, model interface{}, expectedEntries MapEntries, 
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) MapEach(got interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, MapEach(expectedValue), args...)
@@ -420,9 +466,11 @@ func (t *T) MapEach(got interface{}, expectedValue interface{}, args ...interfac
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, N(num, tolerance), args...)
@@ -437,9 +485,11 @@ func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...i
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) NaN(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, NaN(), args...)
@@ -454,9 +504,11 @@ func (t *T) NaN(got interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Nil(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Nil(), args...)
@@ -464,36 +516,40 @@ func (t *T) Nil(got interface{}, args ...interface{}) bool {
 
 // None is a shortcut for:
 //
-//   t.Cmp(got, None(expectedValues...), args...)
+//   t.Cmp(got, None(notExpectedValues...), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#None for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) None(got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) None(got interface{}, notExpectedValues []interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, None(expectedValues...), args...)
+	return t.Cmp(got, None(notExpectedValues...), args...)
 }
 
 // Not is a shortcut for:
 //
-//   t.Cmp(got, Not(expected), args...)
+//   t.Cmp(got, Not(notExpected), args...)
 //
 // See https://godoc.org/github.com/maxatome/go-testdeep#Not for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
-func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool {
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Not(got interface{}, notExpected interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, Not(expected), args...)
+	return t.Cmp(got, Not(notExpected), args...)
 }
 
 // NotAny is a shortcut for:
@@ -505,9 +561,11 @@ func (t *T) Not(got interface{}, expected interface{}, args ...interface{}) bool
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, NotAny(expectedItems...), args...)
@@ -522,9 +580,11 @@ func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interfa
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) NotEmpty(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, NotEmpty(), args...)
@@ -539,9 +599,11 @@ func (t *T) NotEmpty(got interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) NotNaN(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, NotNaN(), args...)
@@ -556,9 +618,11 @@ func (t *T) NotNaN(got interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) NotNil(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, NotNil(), args...)
@@ -573,9 +637,11 @@ func (t *T) NotNil(got interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) NotZero(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, NotZero(), args...)
@@ -590,9 +656,11 @@ func (t *T) NotZero(got interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) PPtr(got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, PPtr(val), args...)
@@ -607,9 +675,11 @@ func (t *T) PPtr(got interface{}, val interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Ptr(got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Ptr(val), args...)
@@ -628,9 +698,11 @@ func (t *T) Ptr(got interface{}, val interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Re(got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Re(reg, capture), args...)
@@ -645,9 +717,11 @@ func (t *T) Re(got interface{}, reg interface{}, capture interface{}, args ...in
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) ReAll(got interface{}, reg interface{}, capture interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, ReAll(reg, capture), args...)
@@ -662,9 +736,11 @@ func (t *T) ReAll(got interface{}, reg interface{}, capture interface{}, args ..
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Set(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Set(expectedItems...), args...)
@@ -679,9 +755,11 @@ func (t *T) Set(got interface{}, expectedItems []interface{}, args ...interface{
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Shallow(got interface{}, expectedPtr interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Shallow(expectedPtr), args...)
@@ -696,9 +774,11 @@ func (t *T) Shallow(got interface{}, expectedPtr interface{}, args ...interface{
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Slice(got interface{}, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Slice(model, expectedEntries), args...)
@@ -713,9 +793,11 @@ func (t *T) Slice(got interface{}, model interface{}, expectedEntries ArrayEntri
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Smuggle(got interface{}, fn interface{}, expectedValue interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Smuggle(fn, expectedValue), args...)
@@ -730,9 +812,11 @@ func (t *T) Smuggle(got interface{}, fn interface{}, expectedValue interface{}, 
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) String(got interface{}, expected string, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, String(expected), args...)
@@ -747,9 +831,11 @@ func (t *T) String(got interface{}, expected string, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Struct(model, expectedFields), args...)
@@ -764,9 +850,11 @@ func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFiel
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) SubBagOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, SubBagOf(expectedItems...), args...)
@@ -781,9 +869,11 @@ func (t *T) SubBagOf(got interface{}, expectedItems []interface{}, args ...inter
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) SubMapOf(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, SubMapOf(model, expectedEntries), args...)
@@ -798,9 +888,11 @@ func (t *T) SubMapOf(got interface{}, model interface{}, expectedEntries MapEntr
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) SubSetOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, SubSetOf(expectedItems...), args...)
@@ -815,9 +907,11 @@ func (t *T) SubSetOf(got interface{}, expectedItems []interface{}, args ...inter
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) SuperBagOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, SuperBagOf(expectedItems...), args...)
@@ -832,9 +926,11 @@ func (t *T) SuperBagOf(got interface{}, expectedItems []interface{}, args ...int
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) SuperMapOf(got interface{}, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, SuperMapOf(model, expectedEntries), args...)
@@ -849,9 +945,11 @@ func (t *T) SuperMapOf(got interface{}, model interface{}, expectedEntries MapEn
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, SuperSetOf(expectedItems...), args...)
@@ -870,9 +968,11 @@ func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...int
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, TruncTime(expectedTime, trunc), args...)
@@ -887,9 +987,11 @@ func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Dura
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Values(got interface{}, val interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Values(val), args...)
@@ -904,9 +1006,11 @@ func (t *T) Values(got interface{}, val interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func (t *T) Zero(got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return t.Cmp(got, Zero(), args...)

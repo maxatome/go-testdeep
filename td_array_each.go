@@ -22,9 +22,12 @@ type tdArrayEach struct {
 
 var _ TestDeep = &tdArrayEach{}
 
+// summary(ArrayEach): compares each array or slice item
+// input(ArrayEach): array,slice,ptr(ptr on array/slice)
+
 // ArrayEach operator has to be applied on arrays or slices or on
 // pointers on array/slice. It compares each item of data array/slice
-// against expected value. During a match, all items have to match to
+// against "expectedValue". During a match, all items have to match to
 // succeed.
 func ArrayEach(expectedValue interface{}) TestDeep {
 	return &tdArrayEach{

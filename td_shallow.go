@@ -28,12 +28,15 @@ func stringPointer(s string) uintptr {
 	return (*reflect.StringHeader)(unsafe.Pointer(&s)).Data
 }
 
+// summary(Shallow): compares pointers only, not their contents
+// input(Shallow): nil,str,slice,map,ptr,chan,func
+
 // Shallow operator compares pointers only, not their contents. It
 // applies on channels, functions (with some restrictions), maps,
 // pointers, slices and strings.
 //
-// During a match, the compared data must be the same as
-// "expectedPointer" to succeed.
+// During a match, the compared data must be the same as "expectedPtr"
+// to succeed.
 //
 //   a, b := 123, 123
 //   Cmp(t, &a, Shallow(&a)) // succeeds

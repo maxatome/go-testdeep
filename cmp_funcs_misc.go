@@ -21,9 +21,11 @@ import (
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return Cmp(t, got, true, args...)
@@ -36,9 +38,11 @@ func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool {
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool {
 	t.Helper()
 	return Cmp(t, got, false, args...)
@@ -90,9 +94,11 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) 
 //   CmpError(t, err, "MyFunction(1, 2, 3) should return an error")
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func CmpError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 	return cmpError(newContext(), t, got, args...)
@@ -106,9 +112,11 @@ func CmpError(t TestingT, got error, args ...interface{}) bool {
 //   }
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func CmpNoError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
 	return cmpNoError(newContext(), t, got, args...)
@@ -203,9 +211,11 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 // (in this case "expectedPanic" has to be nil.)
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 	args ...interface{}) bool {
 	t.Helper()
@@ -219,9 +229,11 @@ func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 // Note that calling panic(nil) in "fn" body is detected as a panic.
 //
 // "args..." are optional and allow to name the test. This name is
-// logged as is in case of failure. If len(args) > 1 and the first
-// item of args is a string and contains a '%' rune then fmt.Fprintf
-// is used to compose the name, else args are passed to fmt.Fprint.
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
 func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool {
 	t.Helper()
 	return cmpNotPanic(newContext(), t, fn, args...)

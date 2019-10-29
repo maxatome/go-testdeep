@@ -1,21 +1,3 @@
-# FAQ
-
-- [Table of contents for all these functions/methods?](#table-of-contents-for-all-these-functionsmethods)
-- [How to mix strict requirements and simple assertions?](#how-to-mix-strict-requirements-and-simple-assertions)
-- [How to test `io.Reader` contents, like `http.Response.Body` for example?](#how-to-test-ioreader-contents-like-httpresponsebody-for-example)
-- [OK, but I prefer comparing `string`s instead of `byte`s](#ok-but-I-prefer-comparing-strings-instead-of-bytes)
-- [OK, but my response is in fact a JSON marshaled struct of my own](#ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own)
-- [OK, but you are funny, this response sends a new created object, so I don't know the ID in advance!](#ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-dont-know-the-id-in-advance)
-- [What about testing the response using my API?](#what-about-testing-the-response-using-my-api)
-- [Arf, I use Gin Gonic, and so no `net/http` handlers](#arf-i-use-gin-gonic-and-so-no-nethttp-handlers)
-- [How to add a new operator?](#how-to-add-a-new-operator)
-
-
-## Table of contents for all these functions/methods?
-
-Of course! See the [Godoc table of contents](toc.md#godoc-table-of-contents).
-
-
 ## How to mix strict requirements and simple assertions?
 
 ```golang
@@ -38,9 +20,8 @@ func TestAssertionsAndRequirements(t *testing.T) {
 
 ## How to test `io.Reader` contents, like http.Response.Body for example?
 
-The [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
-operator is done for that, here with the help of
-[`ReadAll`](https://golang.org/pkg/io/ioutil/#ReadAll).
+The [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle) operator is done for that,
+here with the help of [`ReadAll`](https://golang.org/pkg/io/ioutil/#ReadAll).
 
 ```golang
 import (
@@ -64,9 +45,7 @@ func TestResponseBody(t *testing.T) {
 
 No problem, [`ReadAll`](https://golang.org/pkg/io/ioutil/#ReadAll) the
 body by yourself and cast returned `[]byte` contents to `string`,
-still using
-[`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle)
-operator:
+still using [`Smuggle`](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle) operator:
 
 ```golang
 import (
@@ -137,9 +116,8 @@ func TestResponseBody(t *testing.T) {
 
 ## OK, but you are funny, this response sends a new created object, so I don't know the ID in advance!
 
-No problem, use
-[`Struct`](https://godoc.org/github.com/maxatome/go-testdeep#Struct)
-operator to test that ID field is non-zero:
+No problem, use [`Struct`](https://godoc.org/github.com/maxatome/go-testdeep#Struct) operator to test
+that ID field is non-zero:
 
 ```golang
 import (
@@ -310,32 +288,93 @@ func TestMyGinGonicApi(t *testing.T) {
 }
 ```
 
+
+## go-testdeep dumps only 10 errors, how to have more (or less)?
+
+Using the environment variable `TESTDEEP_MAX_ERRORS`.
+
+`TESTDEEP_MAX_ERRORS` contains the maximum number of errors to report
+before stopping during one comparison (one
+[`Cmp`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp)
+execution for example). It defaults to `10`.
+
+Example:
+```shell
+TESTDEEP_MAX_ERRORS=30 go test
+```
+
+Setting it to `-1` means no limit:
+```shell
+TESTDEEP_MAX_ERRORS=-1 go test
+```
+
+
+## How do I change these crappy colors?
+
+Using some environment variables:
+
+- `TESTDEEP_COLOR` enable (`on`) or disable (`off`) the color
+  output. It defaults to `on`;
+- `TESTDEEP_COLOR_TEST_NAME` color of the test name. See below
+  for color format, it defaults to `yellow`;
+- `TESTDEEP_COLOR_TITLE` color of the test failure title. See below
+  for color format, it defaults to `cyan`;
+- `TESTDEEP_COLOR_OK` color of the test expected value. See below
+  for color format, it defaults to `green`;
+- `TESTDEEP_COLOR_BAD` color of the test got value. See below
+  for color format, it defaults to `red`;
+
+### Color format
+
+A color in `TESTDEEP_COLOR_*` environment variables has the following
+format:
+
+```
+foreground_color                    # set foreground color, background one untouched
+foreground_color:background_color   # set foreground AND background color
+:background_color                   # set background color, foreground one untouched
+```
+
+`foreground_color` and `background_color` can be:
+
+- `black`
+- `red`
+- `green`
+- `yellow`
+- `blue`
+- `magenta`
+- `cyan`
+- `white`
+- `gray`
+
+For example:
+
+```shell
+TESTDEEP_COLOR_OK=black:green \
+    TESTDEEP_COLOR_BAD=white:red \
+    TESTDEEP_COLOR_TITLE=yellow \
+    go test
+```
+
+
 ## How to add a new operator?
 
 You want to add a new `FooBar` operator.
 
 - [ ] check that another operator does not exist with the same meaning;
 - [ ] add the operator definition in `td_foo_bar.go` file and fully
-  document its usage;
+  document its usage:
+  - add a `// summary(FooBar): small description` line, before
+    operator comment,
+  - add a `// input(FooBar): …` line, just aftezr `summary(FooBar)`
+    line. This one lists all inputs accepted by the operator;
 - [ ] add operator tests in `td_foo_bar_test.go` file;
 - [ ] in `example_test.go` file, add examples function(s) `ExampleFooBar*`
   in alphabetical order;
 - [ ] automatically generate `CmpFooBar` & `T.FooBar` (+ examples) code:
   `./tools/gen_funcs.pl .`
 - [ ] do not forget to run tests: `go test ./...`
-- [ ] run `golangci-lint` as in [`.travis.yml`](../.travis.yml);
-- [ ] in [`README.md`](../README.md), add this new `FooBar` operator:
-  - in [Available operators](../README.md#available-operators) with a
-    small description, respecting the alphabetical order;
-  - in the [Operators vs go types](../README.md#operators-vs-go-types)
-    matrix, still respecting the alphabetical order.
-- [ ] in [`toc.md#godoc-table-of-contents`](toc.md#godoc-table-of-contents),
-  add this new new `FooBar` operator:
-  - in [Main shortcut functions](toc.md#main-shortcut-functions);
-  - in [Shortcut methods of `*testdeep.T`](toc.md#shortcut-methods-of-testdeept);
-  - in [`Testdeep` operators](toc.md#testdeep-operators), a simple copy
-    of the line inserted in [Available operators](../README.md#available-operators)
-	and its corresponding link of course.
+- [ ] run `golangci-lint` as in [`.travis.yml`](https://github.com/maxatome/go-testdeep/blob/master/.travis.yml);
 
 Each time you change `example_test.go`, re-run `./tools/gen_funcs.pl .`
 to update corresponding `CmpFooBar` & `T.FooBar` examples.

@@ -4,8 +4,8 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-// Package testdeep allows extremely flexible deep comparison, built
-// for testing.
+// Package testdeep allows extremely flexible deep comparison. It is
+// built for testing.
 //
 // It is a go rewrite and adaptation of wonderful Test::Deep perl
 // module (see https://metacpan.org/pod/Test::Deep).
@@ -21,14 +21,11 @@
 // missing flexibility using "operators" when the expected value (or
 // one of its component) cannot be matched exactly.
 //
+// Example of use
+//
 // Imagine a function returning a struct containing a newly created
 // database record. The Id and the CreatedAt fields are set by the
-// database layer. In this case we have to do something like that to
-// check the record contents:
-//
-//   import (
-//     "testing"
-//   )
+// database layer:
 //
 //   type Record struct {
 //     Id        uint64
@@ -38,11 +35,21 @@
 //   }
 //
 //   func CreateRecord(name string, age int) (*Record, error) {
-//     ...
+//     // Do INSERT INTO … and return newly created record or error if it failed
 //   }
 //
+// Using standard testing package
+//
+// To check the freshly created record contents using standard testing
+// package, we have to do something like that:
+//
+//   import (
+//     "testing"
+//     "time"
+//   )
+//
 //   func TestCreateRecord(t *testing.T) {
-//     before := time.Now()
+//     before := time.Now().Truncate(time.Second)
 //     record, err := CreateRecord()
 //
 //     if err != nil {
@@ -58,33 +65,93 @@
 //         t.Errorf("CreatedAt field not expected: %s", record.CreatedAt)
 //       }
 //       if record.Name != expected.Name {
-//         t.Errorf("Name field differ, got=%s, expected=%s",
+//         t.Errorf("Name field differs, got=%s, expected=%s",
 //           record.Name, expected.Name)
 //       }
 //       if record.Age != expected.Age {
-//         t.Errorf("Age field differ, got=%s, expected=%s",
+//         t.Errorf("Age field differs, got=%s, expected=%s",
 //           record.Age, expected.Age)
 //       }
 //     }
 //   }
 //
-// With testdeep, it is a way simple, thanks to Cmp and
-// CmpNoError functions:
+// Using basic testdeep approach
+//
+// testdeep package, via its Cmp* functions, handles the tests and all
+// the error message boiler plate. Let's do it:
 //
 //   import (
 //     "testing"
+//     "time"
+//
 //     td "github.com/maxatome/go-testdeep"
 //   )
 //
-//   ...
+//   func TestCreateRecord(t *testing.T) {
+//     before := time.Now().Truncate(time.Second)
+//     record, err := CreateRecord()
+//
+//     if td.CmpNoError(t, err) {
+//       td.Cmp(t, record.Id, td.NotZero(), "Id initialized")
+//       td.Cmp(t, record.Name, "Bob")
+//       td.Cmp(t, record.Age, 23)
+//       td.Cmp(t, record.CreatedAt, td.Between(before, time.Now()))
+//     }
+//   }
+//
+// As we cannot guess the Id field value before its creation, we use
+// the NotZero operator to check it is set by CreateRecord() call. The
+// same it true for the creation date field CreatedAt. Thanks to the
+// Between operator we can check it is set with a value included
+// between the date before CreateRecord() call and the date just
+// after.
+//
+// Note that if `Id` and `CreateAt` could be known in advance, we could
+// simply do:
+//
+//   import (
+//     "testing"
+//     "time"
+//
+//     td "github.com/maxatome/go-testdeep"
+//   )
 //
 //   func TestCreateRecord(t *testing.T) {
-//     before := time.Now()
+//     before := time.Now().Truncate(time.Second)
+//     record, err := CreateRecord()
+//
+//     if td.CmpNoError(t, err) {
+//       td.Cmp(t, record, &Record{
+//         Id:        1234,
+//         Name:      "Bob",
+//         Age:       23,
+//         CreatedAt: time.Date(2019, time.May, 1, 12, 13, 14, 0, time.UTC),
+//      })
+//     }
+//   }
+//
+// But unfortunately, it is common to not know exactly the value of some
+// fields…
+//
+// Using advanced testdeep technique
+//
+// Of course we can test struct fields one by one, but with testdeep,
+// the whole struct can be compared with one Cmp call.
+//
+//   import (
+//     "testing"
+//     "time"
+//
+//     td "github.com/maxatome/go-testdeep"
+//   )
+//
+//   func TestCreateRecord(t *testing.T) {
+//     before := time.Now().Truncate(time.Second)
 //     record, err := CreateRecord()
 //
 //     if td.CmpNoError(t, err) {
 //       td.Cmp(t, record,
-//         Struct(
+//         td.Struct(
 //           &Record{
 //             Name: "Bob",
 //             Age:  23,
@@ -97,9 +164,15 @@
 //     }
 //   }
 //
-// Of course not only structs can be compared. A lot of operators can
+// See the use of the Struct operator. It is needed here to overcome
+// the go static typing system and so use other testdeep operators for
+// some fields, here NotZero and Between.
+//
+// Not only structs can be compared. A lot of operators can
 // be found below to cover most (all?) needed tests. See
 // https://godoc.org/github.com/maxatome/go-testdeep#TestDeep
+//
+// Using testdeep Cmp shortcuts
 //
 // The Cmp function is the keystone of this package, but to make
 // the writing of tests even easier, the family of Cmp* functions are
@@ -108,13 +181,13 @@
 //
 //   import (
 //     "testing"
+//     "time"
+//
 //     td "github.com/maxatome/go-testdeep"
 //   )
 //
-//   ...
-//
 //   func TestCreateRecord(t *testing.T) {
-//     before := time.Now()
+//     before := time.Now().Truncate(time.Second)
 //     record, err := CreateRecord()
 //
 //     if td.CmpNoError(t, err) {
@@ -131,20 +204,22 @@
 //     }
 //   }
 //
+// Using testdeep.T type
+//
 // Last, testing.T can be encapsulated in testdeep T type, simplifying
 // again the test:
 //
 //   import (
 //     "testing"
+//     "time"
+//
 //     td "github.com/maxatome/go-testdeep"
 //   )
-//
-//   ...
 //
 //   func TestCreateRecord(tt *testing.T) {
 //     t := td.NewT(tt)
 //
-//     before := time.Now()
+//     before := time.Now().Truncate(time.Second)
 //     record, err := CreateRecord()
 //
 //     if t.CmpNoError(err) {
@@ -160,4 +235,7 @@
 //         "Newly created record")
 //     }
 //   }
+//
+// Note the use of RootName method, it allows to name what we are
+// going to test, instead of the default "DATA".
 package testdeep // import "github.com/maxatome/go-testdeep"

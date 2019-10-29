@@ -1,0 +1,2739 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.58.3" />
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Operators :: My New Hugo Site</title>
+
+    
+    <link href="/css/nucleus.css?1572383131" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572383131" rel="stylesheet">
+    <link href="/css/hybrid.css?1572383131" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572383131" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572383131" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572383131" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572383131" rel="stylesheet">
+    <link href="/css/theme.css?1572383131" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572383131" rel="stylesheet">
+    
+      <link href="/css/theme-green.css?1572383131" rel="stylesheet">
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1572383131"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/operators/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="http://example.org/"><img src="http://example.org//images/logo.svg" /></a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1572383131"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572383131"></script>
+<script type="text/javascript">
+    
+        var baseurl = "http:\/\/example.org\/";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1572383131"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/introduction/" title="Introduction" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/introduction/">
+          Introduction
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/example/" title="Example" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/example/">
+          Example
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/example/using-testing/" title="Using testing package" class="dd-item ">
+        <a href="/example/using-testing/">
+        Using testing package
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/example/basic-testdeep/" title="Basic testdeep approach" class="dd-item ">
+        <a href="/example/basic-testdeep/">
+        Basic testdeep approach
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/example/advanced-testdeep/" title="Advanced testdeep technique" class="dd-item ">
+        <a href="/example/advanced-testdeep/">
+        Advanced testdeep technique
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/example/testdeep-cmp-shortcuts/" title="testdeep Cmp shortcuts" class="dd-item ">
+        <a href="/example/testdeep-cmp-shortcuts/">
+        testdeep Cmp shortcuts
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/example/testdeep-t/" title="testdeep.T type" class="dd-item ">
+        <a href="/example/testdeep-t/">
+        testdeep.T type
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/functions/" title="Functions" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/functions/">
+          Functions
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/functions/testdeep-t/" title="testdeep.T" class="dd-item ">
+        <a href="/functions/testdeep-t/">
+        testdeep.T
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/operators/" title="Operators" class="dd-item 
+        parent
+        active
+        
+        ">
+      <a href="/operators/">
+          Operators
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/matrix/" title="Operators matrices" class="dd-item ">
+        <a href="/operators/matrix/">
+        Operators matrices
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/all/" title="All" class="dd-item ">
+        <a href="/operators/all/">
+        All
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/any/" title="Any" class="dd-item ">
+        <a href="/operators/any/">
+        Any
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/array/" title="Array" class="dd-item ">
+        <a href="/operators/array/">
+        Array
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/arrayeach/" title="ArrayEach" class="dd-item ">
+        <a href="/operators/arrayeach/">
+        ArrayEach
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/bag/" title="Bag" class="dd-item ">
+        <a href="/operators/bag/">
+        Bag
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/between/" title="Between" class="dd-item ">
+        <a href="/operators/between/">
+        Between
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/cap/" title="Cap" class="dd-item ">
+        <a href="/operators/cap/">
+        Cap
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/code/" title="Code" class="dd-item ">
+        <a href="/operators/code/">
+        Code
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/contains/" title="Contains" class="dd-item ">
+        <a href="/operators/contains/">
+        Contains
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/containskey/" title="ContainsKey" class="dd-item ">
+        <a href="/operators/containskey/">
+        ContainsKey
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/empty/" title="Empty" class="dd-item ">
+        <a href="/operators/empty/">
+        Empty
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/gt/" title="Gt" class="dd-item ">
+        <a href="/operators/gt/">
+        Gt
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/gte/" title="Gte" class="dd-item ">
+        <a href="/operators/gte/">
+        Gte
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/hasprefix/" title="HasPrefix" class="dd-item ">
+        <a href="/operators/hasprefix/">
+        HasPrefix
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/hassuffix/" title="HasSuffix" class="dd-item ">
+        <a href="/operators/hassuffix/">
+        HasSuffix
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/ignore/" title="Ignore" class="dd-item ">
+        <a href="/operators/ignore/">
+        Ignore
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/isa/" title="Isa" class="dd-item ">
+        <a href="/operators/isa/">
+        Isa
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/keys/" title="Keys" class="dd-item ">
+        <a href="/operators/keys/">
+        Keys
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/lax/" title="Lax" class="dd-item ">
+        <a href="/operators/lax/">
+        Lax
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/len/" title="Len" class="dd-item ">
+        <a href="/operators/len/">
+        Len
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/lt/" title="Lt" class="dd-item ">
+        <a href="/operators/lt/">
+        Lt
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/lte/" title="Lte" class="dd-item ">
+        <a href="/operators/lte/">
+        Lte
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/map/" title="Map" class="dd-item ">
+        <a href="/operators/map/">
+        Map
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/mapeach/" title="MapEach" class="dd-item ">
+        <a href="/operators/mapeach/">
+        MapEach
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/n/" title="N" class="dd-item ">
+        <a href="/operators/n/">
+        N
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/nan/" title="NaN" class="dd-item ">
+        <a href="/operators/nan/">
+        NaN
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/nil/" title="Nil" class="dd-item ">
+        <a href="/operators/nil/">
+        Nil
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/none/" title="None" class="dd-item ">
+        <a href="/operators/none/">
+        None
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/not/" title="Not" class="dd-item ">
+        <a href="/operators/not/">
+        Not
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/notany/" title="NotAny" class="dd-item ">
+        <a href="/operators/notany/">
+        NotAny
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/notempty/" title="NotEmpty" class="dd-item ">
+        <a href="/operators/notempty/">
+        NotEmpty
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/notnan/" title="NotNaN" class="dd-item ">
+        <a href="/operators/notnan/">
+        NotNaN
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/notnil/" title="NotNil" class="dd-item ">
+        <a href="/operators/notnil/">
+        NotNil
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/notzero/" title="NotZero" class="dd-item ">
+        <a href="/operators/notzero/">
+        NotZero
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/pptr/" title="PPtr" class="dd-item ">
+        <a href="/operators/pptr/">
+        PPtr
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/ptr/" title="Ptr" class="dd-item ">
+        <a href="/operators/ptr/">
+        Ptr
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/re/" title="Re" class="dd-item ">
+        <a href="/operators/re/">
+        Re
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/reall/" title="ReAll" class="dd-item ">
+        <a href="/operators/reall/">
+        ReAll
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/set/" title="Set" class="dd-item ">
+        <a href="/operators/set/">
+        Set
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/shallow/" title="Shallow" class="dd-item ">
+        <a href="/operators/shallow/">
+        Shallow
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/slice/" title="Slice" class="dd-item ">
+        <a href="/operators/slice/">
+        Slice
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/smuggle/" title="Smuggle" class="dd-item ">
+        <a href="/operators/smuggle/">
+        Smuggle
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/string/" title="String" class="dd-item ">
+        <a href="/operators/string/">
+        String
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/struct/" title="Struct" class="dd-item ">
+        <a href="/operators/struct/">
+        Struct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/subbagof/" title="SubBagOf" class="dd-item ">
+        <a href="/operators/subbagof/">
+        SubBagOf
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/submapof/" title="SubMapOf" class="dd-item ">
+        <a href="/operators/submapof/">
+        SubMapOf
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/subsetof/" title="SubSetOf" class="dd-item ">
+        <a href="/operators/subsetof/">
+        SubSetOf
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/superbagof/" title="SuperBagOf" class="dd-item ">
+        <a href="/operators/superbagof/">
+        SuperBagOf
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/supermapof/" title="SuperMapOf" class="dd-item ">
+        <a href="/operators/supermapof/">
+        SuperMapOf
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/supersetof/" title="SuperSetOf" class="dd-item ">
+        <a href="/operators/supersetof/">
+        SuperSetOf
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/trunctime/" title="TruncTime" class="dd-item ">
+        <a href="/operators/trunctime/">
+        TruncTime
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/values/" title="Values" class="dd-item ">
+        <a href="/operators/values/">
+        Values
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/zero/" title="Zero" class="dd-item ">
+        <a href="/operators/zero/">
+        Zero
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/faq/" title="FAQ" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/faq/">
+          FAQ
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://github.com/maxatome/go-testdeep"><i class='fab fa-github'></i> Github repo</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            <a href='/'>go-testdeep</a> > Operators
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#all-operators">All operators</a></li>
+<li><a href="#smuggler-operators">Smuggler operators</a></li>
+<li><a href="#typebehind-method"><code>TypeBehind</code> method</a></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Operators
+            </h1>
+          
+
+        
+
+
+
+
+	
+
+<h2 id="all-operators">All operators</h2>
+
+<!-- operators:begin -->
+
+<dl>
+<dt><a href="/operators/all/"><code>All</code></a></dt>
+<dd>all expected values have to match</dd>
+<dt><a href="/operators/any/"><code>Any</code></a></dt>
+<dd>at least one expected value have to match</dd>
+<dt><a href="/operators/arrayeach/"><code>ArrayEach</code></a></dt>
+<dd>compares each array or slice item</dd>
+<dt><a href="/operators/array/"><code>Array</code></a></dt>
+<dd>compares the contents of an array or a pointer on an array</dd>
+<dt><a href="/operators/bag/"><code>Bag</code></a></dt>
+<dd>compares the contents of an array or a slice without taking care of the order of items</dd>
+<dt><a href="/operators/between/"><code>Between</code></a></dt>
+<dd>checks that a number, string or <a href="https://godoc.org/pkg/time/#Time"><code>time.Time</code></a> is between two bounds</dd>
+<dt><a href="/operators/cap/"><code>Cap</code></a></dt>
+<dd>checks an array, slice or channel capacity</dd>
+<dt><a href="/operators/code/"><code>Code</code></a></dt>
+<dd>checks using a custom function</dd>
+<dt><a href="/operators/containskey/"><code>ContainsKey</code></a></dt>
+<dd>checks that a map contains a key</dd>
+<dt><a href="/operators/contains/"><code>Contains</code></a></dt>
+<dd>checks that a string, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces contain a sub-string; or an array, slice or map contain a value</dd>
+<dt><a href="/operators/empty/"><code>Empty</code></a></dt>
+<dd>checks that an array, a channel, a map, a slice or a string is empty</dd>
+<dt><a href="/operators/gt/"><code>Gt</code></a></dt>
+<dd>checks that a number, string or <a href="https://godoc.org/pkg/time/#Time"><code>time.Time</code></a> is greater than a value</dd>
+<dt><a href="/operators/gte/"><code>Gte</code></a></dt>
+<dd>checks that a number, string or <a href="https://godoc.org/pkg/time/#Time"><code>time.Time</code></a> is greater or equal than a value</dd>
+<dt><a href="/operators/hasprefix/"><code>HasPrefix</code></a></dt>
+<dd>checks the prefix of a string, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces</dd>
+<dt><a href="/operators/hassuffix/"><code>HasSuffix</code></a></dt>
+<dd>checks the suffix of a string, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces</dd>
+<dt><a href="/operators/ignore/"><code>Ignore</code></a></dt>
+<dd>allows to ignore a comparison</dd>
+<dt><a href="/operators/isa/"><code>Isa</code></a></dt>
+<dd>checks the data type or whether data implements an interface or not</dd>
+<dt><a href="/operators/keys/"><code>Keys</code></a></dt>
+<dd>checks keys of a map</dd>
+<dt><a href="/operators/lax/"><code>Lax</code></a></dt>
+<dd>temporarily enables <a href="https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig"><code>BeLax</code> config flag</a></dd>
+<dt><a href="/operators/len/"><code>Len</code></a></dt>
+<dd>checks an array, slice, map, string or channel length</dd>
+<dt><a href="/operators/lt/"><code>Lt</code></a></dt>
+<dd>checks that a number, string or <a href="https://godoc.org/pkg/time/#Time"><code>time.Time</code></a> is lesser than a value</dd>
+<dt><a href="/operators/lte/"><code>Lte</code></a></dt>
+<dd>checks that a number, string or <a href="https://godoc.org/pkg/time/#Time"><code>time.Time</code></a> is lesser or equal than a value</dd>
+<dt><a href="/operators/mapeach/"><code>MapEach</code></a></dt>
+<dd>compares each map entry</dd>
+<dt><a href="/operators/map/"><code>Map</code></a></dt>
+<dd>compares the contents of a map</dd>
+<dt><a href="/operators/n/"><code>N</code></a></dt>
+<dd>compares a number with a tolerance value</dd>
+<dt><a href="/operators/nan/"><code>NaN</code></a></dt>
+<dd>checks a floating number is <a href="https://godoc.org/pkg/math/#NaN"><code>math.NaN</code></a></dd>
+<dt><a href="/operators/nil/"><code>Nil</code></a></dt>
+<dd>compares to <code>nil</code></dd>
+<dt><a href="/operators/none/"><code>None</code></a></dt>
+<dd>no values have to match</dd>
+<dt><a href="/operators/notany/"><code>NotAny</code></a></dt>
+<dd>compares the contents of an array or a slice, no values have to match</dd>
+<dt><a href="/operators/notempty/"><code>NotEmpty</code></a></dt>
+<dd>checks that an array, a channel, a map, a slice or a string is not empty</dd>
+<dt><a href="/operators/notnan/"><code>NotNaN</code></a></dt>
+<dd>checks a floating number is not <a href="https://godoc.org/pkg/math/#NaN"><code>math.NaN</code></a></dd>
+<dt><a href="/operators/notnil/"><code>NotNil</code></a></dt>
+<dd>checks that data is not <code>nil</code></dd>
+<dt><a href="/operators/notzero/"><code>NotZero</code></a></dt>
+<dd>checks that data is not zero regarding its type</dd>
+<dt><a href="/operators/not/"><code>Not</code></a></dt>
+<dd>value must not match</dd>
+<dt><a href="/operators/pptr/"><code>PPtr</code></a></dt>
+<dd>allows to easily test a pointer of pointer value</dd>
+<dt><a href="/operators/ptr/"><code>Ptr</code></a></dt>
+<dd>allows to easily test a pointer value</dd>
+<dt><a href="/operators/reall/"><code>ReAll</code></a></dt>
+<dd>allows to successively apply a regexp on a string (or convertible), <code>[]byte</code>, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces, and even test the captured groups</dd>
+<dt><a href="/operators/re/"><code>Re</code></a></dt>
+<dd>allows to apply a regexp on a string (or convertible), <code>[]byte</code>, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces, and even test the captured groups</dd>
+<dt><a href="/operators/set/"><code>Set</code></a></dt>
+<dd>compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items</dd>
+<dt><a href="/operators/shallow/"><code>Shallow</code></a></dt>
+<dd>compares pointers only, not their contents</dd>
+<dt><a href="/operators/slice/"><code>Slice</code></a></dt>
+<dd>compares the contents of a slice or a pointer on a slice</dd>
+<dt><a href="/operators/smuggle/"><code>Smuggle</code></a></dt>
+<dd>changes data contents or mutates it into another type via a custom function or a struct fields-path before stepping down in favor of generic comparison process</dd>
+<dt><a href="/operators/string/"><code>String</code></a></dt>
+<dd>checks a string, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces string contents</dd>
+<dt><a href="/operators/struct/"><code>Struct</code></a></dt>
+<dd>compares the contents of a struct or a pointer on a struct</dd>
+<dt><a href="/operators/subbagof/"><code>SubBagOf</code></a></dt>
+<dd>compares the contents of an array or a slice without taking care of the order of items but with potentially some exclusions</dd>
+<dt><a href="/operators/submapof/"><code>SubMapOf</code></a></dt>
+<dd>compares the contents of a map but with potentially some exclusions</dd>
+<dt><a href="/operators/subsetof/"><code>SubSetOf</code></a></dt>
+<dd>compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items but with potentially some exclusions</dd>
+<dt><a href="/operators/superbagof/"><code>SuperBagOf</code></a></dt>
+<dd>compares the contents of an array or a slice without taking care of the order of items but with potentially some extra items</dd>
+<dt><a href="/operators/supermapof/"><code>SuperMapOf</code></a></dt>
+<dd>compares the contents of a map but with potentially some extra entries</dd>
+<dt><a href="/operators/supersetof/"><code>SuperSetOf</code></a></dt>
+<dd>compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items but with potentially some extra items</dd>
+<dt><a href="/operators/trunctime/"><code>TruncTime</code></a></dt>
+<dd>compares <a href="or assignable"><code>time.Time</code></a> values after truncating them</dd>
+<dt><a href="/operators/values/"><code>Values</code></a></dt>
+<dd>checks values of a map</dd>
+<dt><a href="/operators/zero/"><code>Zero</code></a></dt>
+<dd>checks data against its zero&rsquo;ed conterpart</dd>
+</dl>
+
+<!-- operators:end -->
+
+<h2 id="smuggler-operators">Smuggler operators</h2>
+
+<p>A smuggler operator is an operator able to transform the value (by
+changing its value or even its type) before comparing it.</p>
+
+<p>The following operators are smuggler ones:</p>
+
+<!-- smugglers:begin -->
+
+<dl>
+<dt><a href="/operators/cap/"><code>Cap</code></a></dt>
+<dd>checks an array, slice or channel capacity</dd>
+<dt><a href="/operators/containskey/"><code>ContainsKey</code></a></dt>
+<dd>checks that a map contains a key</dd>
+<dt><a href="/operators/contains/"><code>Contains</code></a></dt>
+<dd>checks that a string, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces contain a sub-string; or an array, slice or map contain a value</dd>
+<dt><a href="/operators/keys/"><code>Keys</code></a></dt>
+<dd>checks keys of a map</dd>
+<dt><a href="/operators/lax/"><code>Lax</code></a></dt>
+<dd>temporarily enables <a href="https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig"><code>BeLax</code> config flag</a></dd>
+<dt><a href="/operators/len/"><code>Len</code></a></dt>
+<dd>checks an array, slice, map, string or channel length</dd>
+<dt><a href="/operators/pptr/"><code>PPtr</code></a></dt>
+<dd>allows to easily test a pointer of pointer value</dd>
+<dt><a href="/operators/ptr/"><code>Ptr</code></a></dt>
+<dd>allows to easily test a pointer value</dd>
+<dt><a href="/operators/smuggle/"><code>Smuggle</code></a></dt>
+<dd>changes data contents or mutates it into another type via a custom function or a struct fields-path before stepping down in favor of generic comparison process</dd>
+<dt><a href="/operators/values/"><code>Values</code></a></dt>
+<dd>checks values of a map</dd>
+</dl>
+
+<!-- smugglers:end -->
+
+<h2 id="typebehind-method"><code>TypeBehind</code> method</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">TypeBehind</span>() reflect.Type</code></pre></div>
+<p>This method returns the type handled by the operator or <code>nil</code> if it is
+not known. tdhttp helper uses it to know how to unmarshal HTTP
+responses bodies before comparing them using the operator.</p>
+
+<p>It is usually not used outside the
+<a href="https://github.com/maxatome/go-testdeep">go-testdeep repository</a>.</p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/functions/testdeep-t/" title="testdeep.T"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/operators/matrix/" title="Operators matrices" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1572383131"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572383131"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572383131"></script>
+    <script src="/js/jquery.sticky.js?1572383131"></script>
+    <script src="/js/featherlight.min.js?1572383131"></script>
+    <script src="/js/highlight.pack.js?1572383131"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572383131"></script>
+    <script src="/js/learn.js?1572383131"></script>
+    <script src="/js/hugo-learn.js?1572383131"></script>
+
+    <link href="/mermaid/mermaid.css?1572383131" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572383131"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    
+
+  </body>
+</html>

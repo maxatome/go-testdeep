@@ -61,6 +61,10 @@ type tdString struct {
 
 var _ TestDeep = &tdString{}
 
+// summary(String): checks a string, error or fmt.Stringer
+// interfaces string contents
+// input(String): str,if(✓ + fmt.Stringer/error)
+
 // String operator allows to compare a string (or convertible), error
 // or fmt.Stringer interface (error interface is tested before
 // fmt.Stringer.)
@@ -104,6 +108,10 @@ type tdHasPrefix struct {
 }
 
 var _ TestDeep = &tdHasPrefix{}
+
+// summary(HasPrefix): checks the prefix of a string, error or
+// fmt.Stringer interfaces
+// input(HasPrefix): str,if(✓ + fmt.Stringer/error)
 
 // HasPrefix operator allows to compare the prefix of a string (or
 // convertible), error or fmt.Stringer interface (error interface is
@@ -151,6 +159,10 @@ type tdHasSuffix struct {
 }
 
 var _ TestDeep = &tdHasSuffix{}
+
+// summary(HasSuffix): checks the suffix of a string, error or
+// fmt.Stringer interfaces
+// input(HasSuffix): str,if(✓ + fmt.Stringer/error)
 
 // HasSuffix operator allows to compare the suffix of a string (or
 // convertible), error or fmt.Stringer interface (error interface is

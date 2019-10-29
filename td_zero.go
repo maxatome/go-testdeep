@@ -18,12 +18,16 @@ type tdZero struct {
 
 var _ TestDeep = &tdZero{}
 
+// summary(Zero): checks data against its zero'ed conterpart
+// input(Zero): all
+
 // Zero operator checks that data is zero regarding its type.
 //
-//   nil is the zero value of pointers, maps, slices, channels and functions;
-//   0 is the zero value of numbers;
-//   false is the zero value of booleans;
-//   zero value of structs is the struct with no fields initialized.
+//   - nil is the zero value of pointers, maps, slices, channels and functions;
+//   - 0 is the zero value of numbers;
+//   - "" is the 0 value of strings;
+//   - false is the zero value of booleans;
+//   - zero value of structs is the struct with no fields initialized.
 //
 // Beware that:
 //
@@ -54,12 +58,16 @@ type tdNotZero struct {
 
 var _ TestDeep = &tdNotZero{}
 
+// summary(NotZero): checks that data is not zero regarding its type
+// input(NotZero): all
+
 // NotZero operator checks that data is not zero regarding its type.
 //
-//   nil is the zero value of pointers, maps, slices, channels and functions;
-//   0 is the zero value of numbers;
-//   false is the zero value of booleans;
-//   zero value of structs is the struct with no fields initialized.
+//   - nil is the zero value of pointers, maps, slices, channels and functions;
+//   - 0 is the zero value of numbers;
+//   - "" is the 0 value of strings;
+//   - false is the zero value of booleans;
+//   - zero value of structs is the struct with no fields initialized.
 //
 // Beware that:
 //

@@ -21,6 +21,10 @@ type tdEmpty struct {
 
 var _ TestDeep = &tdEmpty{}
 
+// summary(Empty): checks that an array, a channel, a map, a slice or
+// a string is empty
+// input(Empty): str,array,slice,map,ptr(ptr on array/slice/map/string),chan
+
 // Empty operator checks that an array, a channel, a map, a slice or a
 // string is empty. As a special case (non-typed) nil, as well as nil
 // channel, map or slice are considered empty.
@@ -100,6 +104,10 @@ type tdNotEmpty struct {
 }
 
 var _ TestDeep = &tdNotEmpty{}
+
+// summary(NotEmpty): checks that an array, a channel, a map, a slice
+// or a string is not empty
+// input(NotEmpty): str,array,slice,map,ptr(ptr on array/slice/map/string),chan
 
 // NotEmpty operator checks that an array, a channel, a map, a slice
 // or a string is not empty. As a special case (non-typed) nil, as

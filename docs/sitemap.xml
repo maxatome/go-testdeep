@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://example.org/operators/matrix/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/introduction/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/all/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/any/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/array/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/arrayeach/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/bag/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/between/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/cap/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/code/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/contains/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/containskey/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/empty/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/gt/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/gte/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/hasprefix/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/hassuffix/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/ignore/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/isa/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/keys/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/lax/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/len/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/lt/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/lte/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/map/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/mapeach/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/n/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/nan/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/nil/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/none/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/not/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/notany/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/notempty/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/notnan/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/notnil/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/notzero/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/pptr/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/ptr/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/re/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/reall/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/set/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/shallow/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/slice/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/smuggle/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/string/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/struct/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/subbagof/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/submapof/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/subsetof/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/superbagof/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/supermapof/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/supersetof/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/trunctime/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/example/using-testing/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/values/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/zero/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/example/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/functions/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/operators/</loc>
+    <lastmod>2019-10-03T22:20:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/example/basic-testdeep/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/faq/</loc>
+    <lastmod>2019-10-08T21:28:21+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/example/advanced-testdeep/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/example/testdeep-cmp-shortcuts/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/example/testdeep-t/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/functions/testdeep-t/</loc>
+  </url>
+  
+</urlset>
