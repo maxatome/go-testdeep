@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Any :: My New Hugo Site</title>
+    <title>JSON :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1572558769" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/operators/any/">
+  <body class="" data-url="/operators/json/">
     <nav id="sidebar" class="">
 
 
@@ -342,7 +342,7 @@
  
   
     
-      <li data-nav-id="/operators/any/" title="Any" class="dd-item active">
+      <li data-nav-id="/operators/any/" title="Any" class="dd-item ">
         <a href="/operators/any/">
         Any
         
@@ -646,7 +646,7 @@
  
   
     
-      <li data-nav-id="/operators/json/" title="JSON" class="dd-item ">
+      <li data-nav-id="/operators/json/" title="JSON" class="dd-item active">
         <a href="/operators/json/">
         JSON
         
@@ -1451,7 +1451,7 @@
             
           
           
-            <a href='/'>go-testdeep</a> > <a href='/operators/'>Operators</a> > Any
+            <a href='/'>go-testdeep</a> > <a href='/operators/'>Operators</a> > JSON
           
          
           
@@ -1472,11 +1472,11 @@
 <ul>
 <li><a href="#examples">Examples</a></li>
 </ul></li>
-<li><a href="#cmpany-shortcut">CmpAny shortcut</a>
+<li><a href="#cmpjson-shortcut">CmpJSON shortcut</a>
 <ul>
 <li><a href="#examples-1">Examples</a></li>
 </ul></li>
-<li><a href="#t-any-shortcut">T.Any shortcut</a>
+<li><a href="#t-json-shortcut">T.JSON shortcut</a>
 <ul>
 <li><a href="#examples-2">Examples</a></li>
 </ul></li>
@@ -1498,7 +1498,7 @@
           
             <h1>
               
-              Any
+              JSON
             </h1>
           
 
@@ -1508,16 +1508,106 @@
 
 
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Any</span>(expectedValues ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep</code></pre></div>
-<p><a href="/operators/any/"><code>Any</code></a> operator compares data against several expected values. During
-a match, at least one of them has to match to succeed.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">JSON</span>(expectedJSON <span style="color:#6ab825;font-weight:bold">interface</span>{}, params ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep</code></pre></div>
+<p><a href="/operators/json/"><code>JSON</code></a> operator allows to compare the JSON representation of data
+against <em>expectedJSON</em>. <em>expectedJSON</em> can be a:</p>
 
-<p><a href="/operators/#typebehind-method">TypeBehind</a> method can return a non-<code>nil</code> <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> if all items
-known non-interface types are equal, or if only interface types
-are found (mostly issued from <a href="/operators/isa/"><code>Isa()</code></a>) and they are equal.</p>
+<ul>
+<li><code>string</code> containing JSON data like <code>{&quot;fullname&quot;:&quot;Bob&quot;,&quot;age&quot;:42}</code></li>
+<li><code>string</code> containing a JSON filename, ending with &ldquo;.json&rdquo; (its
+content is <a href="https://golang.org/pkg/ioutil/#ReadFile"><code>ioutil.ReadFile</code></a> before unmarshaling)</li>
+<li><code>[]byte</code> containing JSON data</li>
+<li><a href="https://golang.org/pkg/io/#Reader"><code>io.Reader</code></a> stream containing JSON data (is <a href="https://golang.org/pkg/ioutil/#ReadAll"><code>ioutil.ReadAll</code></a> before
+unmarshaling)</li>
+</ul>
+
+<p><em>expectedJSON</em> JSON value can contain placeholders. The <em>params</em>
+are for any placeholder parameters in <em>expectedJSON</em>. <em>params</em> can
+contain <a href="/operators/">TestDeep operators</a> as well as raw values. A placeholder can
+be numeric like <code>$2</code> or named like <code>$name</code> and always references an
+item in <em>params</em>.</p>
+
+<p>Numeric placeholders reference the n&rsquo;th &ldquo;operators&rdquo; item (starting
+at 1). Named placeholders are used with <a href="/operators/tag/"><code>Tag</code></a> operator as follows:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
+  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: $name, &#34;age&#34;: $2, &#34;gender&#34;: $3}`</span>,
+    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>),               <span style="color:#999;font-style:italic">// matches only $2
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#ed9d13">&#34;male&#34;</span>))                       // matches only <span style="color:#a61717;background-color:#e3d2d2">$</span><span style="color:#3677a9">3</span></code></pre></div>
+<p>Note that placeholders can be double-quoted as in:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
+  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: &#34;$name&#34;, &#34;age&#34;: &#34;$2&#34;, &#34;gender&#34;: &#34;$3&#34;}`</span>,
+    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>),               <span style="color:#999;font-style:italic">// matches only $2
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#ed9d13">&#34;male&#34;</span>))                       // matches only <span style="color:#a61717;background-color:#e3d2d2">$</span><span style="color:#3677a9">3</span></code></pre></div>
+<p>It makes no difference whatever the underlying type of the replaced
+item is (= double quoting a placeholder matching a number is not a
+problem). It is just a matter of taste, double-quoting placeholders
+can be preferred when the JSON data has to conform to the <a href="/operators/json/"><code>JSON</code></a>
+specification, like when used in a &ldquo;.json&rdquo; file.</p>
+
+<p>Note <em>expectedJSON</em> can be a <code>[]byte</code>, JSON filename or <a href="https://golang.org/pkg/io/#Reader"><code>io.Reader</code></a>:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">&#34;file.json&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))
+<span style="color:#447fcf">Cmp</span>(t, gotValue, <span style="color:#447fcf">JSON</span>([]<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`[1, $1, 3]`</span>), <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))
+<span style="color:#447fcf">Cmp</span>(t, gotValue, <span style="color:#447fcf">JSON</span>(osFile, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))</code></pre></div>
+<p>A JSON filename ends with &ldquo;.json&rdquo;.</p>
+
+<p>To avoid a legit &ldquo;$&rdquo; <code>string</code> prefix cause a bad placeholder <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a>,
+just double it to escpe it. Note it is only needed when the &ldquo;$&rdquo; is
+the first character of a <code>string</code>:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
+  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: &#34;$name&#34;, &#34;details&#34;: &#34;$$info&#34;, &#34;age&#34;: $2}`</span>,
+    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)))              // matches only <span style="color:#a61717;background-color:#e3d2d2">$</span><span style="color:#3677a9">2</span></code></pre></div>
+<p>For the &ldquo;details&rdquo; key, the raw value &ldquo;<code>$info</code>&rdquo; is expected, no
+placeholder are involved here..</p>
+
+<p>Last but not least, <a href="/operators/lax/"><code>Lax</code></a> mode is automatically enabled by <a href="/operators/json/"><code>JSON</code></a>
+operator to simplify numeric tests.</p>
+
+<p><a href="/operators/#typebehind-method">TypeBehind</a> method returns the <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> of the <em>expectedJSON</em>
+<a href="https://golang.org/pkg/json/#Unmarshal"><code>json.Unmarshal</code></a>&lsquo;ed. So it can be <code>bool</code>, <code>string</code>, <code>float64</code>,
+<code>[]interface{}</code>, <code>map[string]interface{}</code> or <code>interface{}</code> in case
+<em>expectedJSON</em> is &ldquo;null&rdquo;.</p>
 
 <h3 id="examples">Examples</h3>
 
+<p>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	Basic example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <pre><code>t := &amp;testing.T{}
+
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+}{
+    Fullname: &quot;Bob&quot;,
+    Age:      42,
+}
+
+ok := Cmp(t, got, JSON(`{&quot;age&quot;:42,&quot;fullname&quot;:&quot;Bob&quot;}`))
+fmt.Println(&quot;check got with age then fullname:&quot;, ok)
+
+ok = Cmp(t, got, JSON(`{&quot;fullname&quot;:&quot;Bob&quot;,&quot;age&quot;:42}`))
+fmt.Println(&quot;check got with fullname then age:&quot;, ok)
+
+ok = Cmp(t, got, JSON(`{
+</code></pre>
+
+<p>&ldquo;fullname&rdquo;: &ldquo;Bob&rdquo;,
+  &ldquo;age&rdquo;:      42</p>
+
+    </div>
+</div>
 
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1525,39 +1615,97 @@ are found (mostly issued from <a href="/operators/isa/"><code>Isa()</code></a>) 
         <span>
         
     	
-    	Base example
+    	Placeholders example
     	
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
         <pre><code>t := &amp;testing.T{}
 
-got := &quot;foo/bar&quot;
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+}{
+    Fullname: &quot;Bob Foobar&quot;,
+    Age:      42,
+}
 
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;bar&quot; suffix
-ok := Cmp(t, got, Any(Re(&quot;zip&quot;), HasSuffix(&quot;bar&quot;)),
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
+ok := Cmp(t, got, JSON(`{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, 42, &quot;Bob Foobar&quot;))
+fmt.Println(&quot;check got with numeric placeholders without operators:&quot;, ok)
 
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;foo&quot; suffix
-ok = Cmp(t, got, Any(Re(&quot;zip&quot;), HasSuffix(&quot;foo&quot;)),
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
+ok = Cmp(t, got,
+    JSON(`{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`,
+        Between(40, 45),
+        HasSuffix(&quot;Foobar&quot;)))
+fmt.Println(&quot;check got with numeric placeholders:&quot;, ok)
+
+ok = Cmp(t, got,
+    JSON(`{&quot;age&quot;: &quot;$1&quot;, &quot;fullname&quot;: &quot;$2&quot;}`,
+        Between(40, 45),
+        HasSuffix(&quot;Foobar&quot;)))
+fmt.Println(&quot;check got with double-quoted numeric placeholders:&quot;, ok)
+
+ok = Cmp(t, got,
+    JSON(`{&quot;age&quot;: $age, &quot;fullname&quot;: $name}`,
+        Tag(&quot;age&quot;, Between(40, 45)),
+        Tag(&quot;name&quot;, HasSuffix(&quot;Foobar&quot;))))
+fmt.Println(&quot;check got with named placeholders:&quot;, ok)
 
 // Output:
-// true
-// false
+// check got with numeric placeholders without operators: true
+// check got with numeric placeholders: true
+// check got with double-quoted numeric placeholders: true
+// check got with named placeholders: true
 </code></pre>
 
     </div>
 </div>
 
-<h2 id="cmpany-shortcut">CmpAny shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpAny</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValues []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p>CmpAny is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Any</span>(expectedValues...), args...)</code></pre></div>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	File example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <pre><code>t := &amp;testing.T{}
+
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+    Gender   string `json:&quot;gender&quot;`
+}{
+    Fullname: &quot;Bob Foobar&quot;,
+    Age:      42,
+    Gender:   &quot;male&quot;,
+}
+
+tmpDir, err := ioutil.TempDir(&quot;&quot;, &quot;&quot;)
+if err != nil {
+    t.Fatal(err)
+}
+defer os.RemoveAll(tmpDir) // clean up
+
+filename := tmpDir + &quot;/test.json&quot;
+if err = ioutil.WriteFile(filename, []byte(`
+</code></pre>
+
+<p>{
+  &ldquo;fullname&rdquo;: &ldquo;$name&rdquo;,
+  &ldquo;age&rdquo;:      &ldquo;$age&rdquo;,
+  &ldquo;gender&rdquo;:   &ldquo;$gender&rdquo;</p>
+
+    </div>
+</div></p>
+
+<h2 id="cmpjson-shortcut">CmpJSON shortcut</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpJSON</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedJSON <span style="color:#6ab825;font-weight:bold">interface</span>{}, params []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
+<p>CmpJSON is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(expectedJSON, params...), args...)</code></pre></div>
 <p>See above for details.</p>
 
 <p>Returns true if the test is OK, false if it fails.</p>
@@ -1571,6 +1719,42 @@ reason of a potential failure.</p>
 
 <h3 id="examples-1">Examples</h3>
 
+<p>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	Basic example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <pre><code>t := &amp;testing.T{}
+
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+}{
+    Fullname: &quot;Bob&quot;,
+    Age:      42,
+}
+
+ok := CmpJSON(t, got, `{&quot;age&quot;:42,&quot;fullname&quot;:&quot;Bob&quot;}`, nil)
+fmt.Println(&quot;check got with age then fullname:&quot;, ok)
+
+ok = CmpJSON(t, got, `{&quot;fullname&quot;:&quot;Bob&quot;,&quot;age&quot;:42}`, nil)
+fmt.Println(&quot;check got with fullname then age:&quot;, ok)
+
+ok = CmpJSON(t, got, `{
+</code></pre>
+
+<p>&ldquo;fullname&rdquo;: &ldquo;Bob&rdquo;,
+  &ldquo;age&rdquo;:      42</p>
+
+    </div>
+</div>
 
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1578,39 +1762,88 @@ reason of a potential failure.</p>
         <span>
         
     	
-    	Base example
+    	Placeholders example
     	
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
         <pre><code>t := &amp;testing.T{}
 
-got := &quot;foo/bar&quot;
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+}{
+    Fullname: &quot;Bob Foobar&quot;,
+    Age:      42,
+}
 
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;bar&quot; suffix
-ok := CmpAny(t, got, []interface{}{Re(&quot;zip&quot;), HasSuffix(&quot;bar&quot;)},
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
+ok := CmpJSON(t, got, `{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, []interface{}{42, &quot;Bob Foobar&quot;})
+fmt.Println(&quot;check got with numeric placeholders without operators:&quot;, ok)
 
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;foo&quot; suffix
-ok = CmpAny(t, got, []interface{}{Re(&quot;zip&quot;), HasSuffix(&quot;foo&quot;)},
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
+ok = CmpJSON(t, got, `{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, []interface{}{Between(40, 45), HasSuffix(&quot;Foobar&quot;)})
+fmt.Println(&quot;check got with numeric placeholders:&quot;, ok)
+
+ok = CmpJSON(t, got, `{&quot;age&quot;: &quot;$1&quot;, &quot;fullname&quot;: &quot;$2&quot;}`, []interface{}{Between(40, 45), HasSuffix(&quot;Foobar&quot;)})
+fmt.Println(&quot;check got with double-quoted numeric placeholders:&quot;, ok)
+
+ok = CmpJSON(t, got, `{&quot;age&quot;: $age, &quot;fullname&quot;: $name}`, []interface{}{Tag(&quot;age&quot;, Between(40, 45)), Tag(&quot;name&quot;, HasSuffix(&quot;Foobar&quot;))})
+fmt.Println(&quot;check got with named placeholders:&quot;, ok)
 
 // Output:
-// true
-// false
+// check got with numeric placeholders without operators: true
+// check got with numeric placeholders: true
+// check got with double-quoted numeric placeholders: true
+// check got with named placeholders: true
 </code></pre>
 
     </div>
 </div>
 
-<h2 id="t-any-shortcut">T.Any shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Any</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValues []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p><a href="/operators/any/"><code>Any</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Any</span>(expectedValues...), args...)</code></pre></div>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	File example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <pre><code>t := &amp;testing.T{}
+
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+    Gender   string `json:&quot;gender&quot;`
+}{
+    Fullname: &quot;Bob Foobar&quot;,
+    Age:      42,
+    Gender:   &quot;male&quot;,
+}
+
+tmpDir, err := ioutil.TempDir(&quot;&quot;, &quot;&quot;)
+if err != nil {
+    t.Fatal(err)
+}
+defer os.RemoveAll(tmpDir) // clean up
+
+filename := tmpDir + &quot;/test.json&quot;
+if err = ioutil.WriteFile(filename, []byte(`
+</code></pre>
+
+<p>{
+  &ldquo;fullname&rdquo;: &ldquo;$name&rdquo;,
+  &ldquo;age&rdquo;:      &ldquo;$age&rdquo;,
+  &ldquo;gender&rdquo;:   &ldquo;$gender&rdquo;</p>
+
+    </div>
+</div></p>
+
+<h2 id="t-json-shortcut">T.JSON shortcut</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">JSON</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedJSON <span style="color:#6ab825;font-weight:bold">interface</span>{}, params []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
+<p><a href="/operators/json/"><code>JSON</code></a> is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">JSON</span>(expectedJSON, params...), args...)</code></pre></div>
 <p>See above for details.</p>
 
 <p>Returns true if the test is OK, false if it fails.</p>
@@ -1624,6 +1857,42 @@ reason of a potential failure.</p>
 
 <h3 id="examples-2">Examples</h3>
 
+<p>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	Basic example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <pre><code>t := NewT(&amp;testing.T{})
+
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+}{
+    Fullname: &quot;Bob&quot;,
+    Age:      42,
+}
+
+ok := t.JSON(got, `{&quot;age&quot;:42,&quot;fullname&quot;:&quot;Bob&quot;}`, nil)
+fmt.Println(&quot;check got with age then fullname:&quot;, ok)
+
+ok = t.JSON(got, `{&quot;fullname&quot;:&quot;Bob&quot;,&quot;age&quot;:42}`, nil)
+fmt.Println(&quot;check got with fullname then age:&quot;, ok)
+
+ok = t.JSON(got, `{
+</code></pre>
+
+<p>&ldquo;fullname&rdquo;: &ldquo;Bob&rdquo;,
+  &ldquo;age&rdquo;:      42</p>
+
+    </div>
+</div>
 
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1631,34 +1900,83 @@ reason of a potential failure.</p>
         <span>
         
     	
-    	Base example
+    	Placeholders example
     	
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
         <pre><code>t := NewT(&amp;testing.T{})
 
-got := &quot;foo/bar&quot;
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+}{
+    Fullname: &quot;Bob Foobar&quot;,
+    Age:      42,
+}
 
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;bar&quot; suffix
-ok := t.Any(got, []interface{}{Re(&quot;zip&quot;), HasSuffix(&quot;bar&quot;)},
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
+ok := t.JSON(got, `{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, []interface{}{42, &quot;Bob Foobar&quot;})
+fmt.Println(&quot;check got with numeric placeholders without operators:&quot;, ok)
 
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;foo&quot; suffix
-ok = t.Any(got, []interface{}{Re(&quot;zip&quot;), HasSuffix(&quot;foo&quot;)},
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
+ok = t.JSON(got, `{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, []interface{}{Between(40, 45), HasSuffix(&quot;Foobar&quot;)})
+fmt.Println(&quot;check got with numeric placeholders:&quot;, ok)
+
+ok = t.JSON(got, `{&quot;age&quot;: &quot;$1&quot;, &quot;fullname&quot;: &quot;$2&quot;}`, []interface{}{Between(40, 45), HasSuffix(&quot;Foobar&quot;)})
+fmt.Println(&quot;check got with double-quoted numeric placeholders:&quot;, ok)
+
+ok = t.JSON(got, `{&quot;age&quot;: $age, &quot;fullname&quot;: $name}`, []interface{}{Tag(&quot;age&quot;, Between(40, 45)), Tag(&quot;name&quot;, HasSuffix(&quot;Foobar&quot;))})
+fmt.Println(&quot;check got with named placeholders:&quot;, ok)
 
 // Output:
-// true
-// false
+// check got with numeric placeholders without operators: true
+// check got with numeric placeholders: true
+// check got with double-quoted numeric placeholders: true
+// check got with named placeholders: true
 </code></pre>
 
     </div>
 </div>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	File example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <pre><code>t := NewT(&amp;testing.T{})
+
+got := &amp;struct {
+    Fullname string `json:&quot;fullname&quot;`
+    Age      int    `json:&quot;age&quot;`
+    Gender   string `json:&quot;gender&quot;`
+}{
+    Fullname: &quot;Bob Foobar&quot;,
+    Age:      42,
+    Gender:   &quot;male&quot;,
+}
+
+tmpDir, err := ioutil.TempDir(&quot;&quot;, &quot;&quot;)
+if err != nil {
+    t.Fatal(err)
+}
+defer os.RemoveAll(tmpDir) // clean up
+
+filename := tmpDir + &quot;/test.json&quot;
+if err = ioutil.WriteFile(filename, []byte(`
+</code></pre>
+
+<p>{
+  &ldquo;fullname&rdquo;: &ldquo;$name&rdquo;,
+  &ldquo;age&rdquo;:      &ldquo;$age&rdquo;,
+  &ldquo;gender&rdquo;:   &ldquo;$gender&rdquo;</p>
+
+    </div>
+</div></p>
 
 
 <footer class=" footline" >
@@ -1893,26 +2211,6 @@ fmt.Println(ok)
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -2168,6 +2466,26 @@ fmt.Println(ok)
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -2784,10 +3102,10 @@ fmt.Println(ok)
 	 
 	 
 		
-			<a class="nav nav-prev" href="/operators/all/" title="All"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/operators/isa/" title="Isa"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/operators/array/" title="Array" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/operators/keys/" title="Keys" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

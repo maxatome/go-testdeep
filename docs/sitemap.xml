@@ -83,6 +83,10 @@
   </url>
   
   <url>
+    <loc>https://go-testdeep.zetta.rocks/operators/json/</loc>
+  </url>
+  
+  <url>
     <loc>https://go-testdeep.zetta.rocks/operators/keys/</loc>
   </url>
   
@@ -212,6 +216,10 @@
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/supersetof/</loc>
+  </url>
+  
+  <url>
+    <loc>https://go-testdeep.zetta.rocks/operators/tag/</loc>
   </url>
   
   <url>

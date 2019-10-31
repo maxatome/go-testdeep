@@ -12,20 +12,20 @@
     <title>Operators :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572385903" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572385903" rel="stylesheet">
-    <link href="/css/hybrid.css?1572385903" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572385903" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572385903" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572385903" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572385903" rel="stylesheet">
-    <link href="/css/theme.css?1572385903" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572385903" rel="stylesheet">
+    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
+    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
+    <link href="/css/theme.css?1572558769" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572385903" rel="stylesheet">
+      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572385903"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572385903"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572385903"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572385903"></script>
+<script type="text/javascript" src="/js/search.js?1572558769"></script>
 
     
   </div>
@@ -630,6 +630,25 @@
       <li data-nav-id="/operators/isa/" title="Isa" class="dd-item ">
         <a href="/operators/isa/">
         Isa
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/json/" title="JSON" class="dd-item ">
+        <a href="/operators/json/">
+        JSON
         
         </a>
     </li>
@@ -1273,6 +1292,25 @@
  
   
     
+      <li data-nav-id="/operators/tag/" title="Tag" class="dd-item ">
+        <a href="/operators/tag/">
+        Tag
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/trunctime/" title="TruncTime" class="dd-item ">
         <a href="/operators/trunctime/">
         TruncTime
@@ -1495,6 +1533,8 @@
 <dd>allows to ignore a comparison</dd>
 <dt><a href="/operators/isa/"><code>Isa</code></a></dt>
 <dd>checks the data type or whether data implements an interface or not</dd>
+<dt><a href="/operators/json/"><code>JSON</code></a></dt>
+<dd>compares against JSON representation</dd>
 <dt><a href="/operators/keys/"><code>Keys</code></a></dt>
 <dd>checks keys of a map</dd>
 <dt><a href="/operators/lax/"><code>Lax</code></a></dt>
@@ -1561,6 +1601,8 @@
 <dd>compares the contents of a map but with potentially some extra entries</dd>
 <dt><a href="/operators/supersetof/"><code>SuperSetOf</code></a></dt>
 <dd>compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items but with potentially some extra items</dd>
+<dt><a href="/operators/tag/"><code>Tag</code></a></dt>
+<dd>names an operator or a value. Only useful as a parameter of JSON operator, to name placeholders</dd>
 <dt><a href="/operators/trunctime/"><code>TruncTime</code></a></dt>
 <dd>compares <a href="or assignable"><code>time.Time</code></a> values after truncating them</dd>
 <dt><a href="/operators/values/"><code>Values</code></a></dt>
@@ -1599,6 +1641,8 @@ changing its value or even its type) before comparing it.</p>
 <dd>allows to easily test a pointer value</dd>
 <dt><a href="/operators/smuggle/"><code>Smuggle</code></a></dt>
 <dd>changes data contents or mutates it into another type via a custom function or a struct fields-path before stepping down in favor of generic comparison process</dd>
+<dt><a href="/operators/tag/"><code>Tag</code></a></dt>
+<dd>names an operator or a value. Only useful as a parameter of JSON operator, to name placeholders</dd>
 <dt><a href="/operators/values/"><code>Values</code></a></dt>
 <dd>checks values of a map</dd>
 </dl>
@@ -2676,6 +2720,38 @@ responses bodies before comparing them using the operator.</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -2717,19 +2793,19 @@ responses bodies before comparing them using the operator.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572385903"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572385903"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572385903"></script>
-    <script src="/js/jquery.sticky.js?1572385903"></script>
-    <script src="/js/featherlight.min.js?1572385903"></script>
-    <script src="/js/highlight.pack.js?1572385903"></script>
+    <script src="/js/clipboard.min.js?1572558769"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
+    <script src="/js/jquery.sticky.js?1572558769"></script>
+    <script src="/js/featherlight.min.js?1572558769"></script>
+    <script src="/js/highlight.pack.js?1572558769"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572385903"></script>
-    <script src="/js/learn.js?1572385903"></script>
-    <script src="/js/hugo-learn.js?1572385903"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
+    <script src="/js/learn.js?1572558769"></script>
+    <script src="/js/hugo-learn.js?1572558769"></script>
 
-    <link href="/mermaid/mermaid.css?1572385903" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572385903"></script>
+    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572558769"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

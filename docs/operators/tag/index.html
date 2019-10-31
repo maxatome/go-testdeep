@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Any :: My New Hugo Site</title>
+    <title>Tag :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1572558769" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/operators/any/">
+  <body class="" data-url="/operators/tag/">
     <nav id="sidebar" class="">
 
 
@@ -342,7 +342,7 @@
  
   
     
-      <li data-nav-id="/operators/any/" title="Any" class="dd-item active">
+      <li data-nav-id="/operators/any/" title="Any" class="dd-item ">
         <a href="/operators/any/">
         Any
         
@@ -1292,7 +1292,7 @@
  
   
     
-      <li data-nav-id="/operators/tag/" title="Tag" class="dd-item ">
+      <li data-nav-id="/operators/tag/" title="Tag" class="dd-item active">
         <a href="/operators/tag/">
         Tag
         
@@ -1451,7 +1451,7 @@
             
           
           
-            <a href='/'>go-testdeep</a> > <a href='/operators/'>Operators</a> > Any
+            <a href='/'>go-testdeep</a> > <a href='/operators/'>Operators</a> > Tag
           
          
           
@@ -1472,14 +1472,6 @@
 <ul>
 <li><a href="#examples">Examples</a></li>
 </ul></li>
-<li><a href="#cmpany-shortcut">CmpAny shortcut</a>
-<ul>
-<li><a href="#examples-1">Examples</a></li>
-</ul></li>
-<li><a href="#t-any-shortcut">T.Any shortcut</a>
-<ul>
-<li><a href="#examples-2">Examples</a></li>
-</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -1498,7 +1490,7 @@
           
             <h1>
               
-              Any
+              Tag
             </h1>
           
 
@@ -1508,157 +1500,22 @@
 
 
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Any</span>(expectedValues ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep</code></pre></div>
-<p><a href="/operators/any/"><code>Any</code></a> operator compares data against several expected values. During
-a match, at least one of them has to match to succeed.</p>
-
-<p><a href="/operators/#typebehind-method">TypeBehind</a> method can return a non-<code>nil</code> <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> if all items
-known non-interface types are equal, or if only interface types
-are found (mostly issued from <a href="/operators/isa/"><code>Isa()</code></a>) and they are equal.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Tag</span>(tag <span style="color:#6ab825;font-weight:bold">string</span>, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep</code></pre></div>
+<p><a href="/operators/tag/"><code>Tag</code></a> is a <a href="/operators/#smuggler-operators">smuggler operator</a>. It only allows to name <em>expectedValue</em>,
+which can be an operator or a value. The data is then compared
+against <em>expectedValue</em> as if <a href="/operators/tag/"><code>Tag</code></a> was never called. It is only
+useful as <a href="/operators/json/"><code>JSON</code></a> operator parameter, to name placeholders. See <a href="/operators/json/"><code>JSON</code></a>
+operator for more details.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
+  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: $name, &#34;age&#34;: $age, &#34;gender&#34;: $gender}`</span>,
+    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $name
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)),   <span style="color:#999;font-style:italic">// matches $age
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#ed9d13">&#34;male&#34;</span>)))        // matches <span style="color:#a61717;background-color:#e3d2d2">$</span>gender</code></pre></div>
+<p><a href="/operators/#typebehind-method">TypeBehind</a> method is delegated to <em>expectedValue</em> one if
+<em>expectedValue</em> is a <a href="/operators/">TestDeep operator</a>, otherwise it returns the
+type of <em>expectedValue</em> (or <code>nil</code> if it is originally untyped <code>nil</code>).</p>
 
 <h3 id="examples">Examples</h3>
-
-
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Base example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
-
-got := &quot;foo/bar&quot;
-
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;bar&quot; suffix
-ok := Cmp(t, got, Any(Re(&quot;zip&quot;), HasSuffix(&quot;bar&quot;)),
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
-
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;foo&quot; suffix
-ok = Cmp(t, got, Any(Re(&quot;zip&quot;), HasSuffix(&quot;foo&quot;)),
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
-
-// Output:
-// true
-// false
-</code></pre>
-
-    </div>
-</div>
-
-<h2 id="cmpany-shortcut">CmpAny shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpAny</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValues []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p>CmpAny is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Any</span>(expectedValues...), args...)</code></pre></div>
-<p>See above for details.</p>
-
-<p>Returns true if the test is OK, false if it fails.</p>
-
-<p><em>args&hellip;</em> are optional and allow to name the test. This name is
-used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
-the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
-<a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
-<a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
-reason of a potential failure.</p>
-
-<h3 id="examples-1">Examples</h3>
-
-
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Base example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
-
-got := &quot;foo/bar&quot;
-
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;bar&quot; suffix
-ok := CmpAny(t, got, []interface{}{Re(&quot;zip&quot;), HasSuffix(&quot;bar&quot;)},
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
-
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;foo&quot; suffix
-ok = CmpAny(t, got, []interface{}{Re(&quot;zip&quot;), HasSuffix(&quot;foo&quot;)},
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
-
-// Output:
-// true
-// false
-</code></pre>
-
-    </div>
-</div>
-
-<h2 id="t-any-shortcut">T.Any shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Any</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValues []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p><a href="/operators/any/"><code>Any</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Any</span>(expectedValues...), args...)</code></pre></div>
-<p>See above for details.</p>
-
-<p>Returns true if the test is OK, false if it fails.</p>
-
-<p><em>args&hellip;</em> are optional and allow to name the test. This name is
-used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
-the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
-<a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
-<a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
-reason of a potential failure.</p>
-
-<h3 id="examples-2">Examples</h3>
-
-
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Base example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
-
-got := &quot;foo/bar&quot;
-
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;bar&quot; suffix
-ok := t.Any(got, []interface{}{Re(&quot;zip&quot;), HasSuffix(&quot;bar&quot;)},
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
-
-// Checks got string against:
-//   &quot;zip&quot; regexp *OR* &quot;foo&quot; suffix
-ok = t.Any(got, []interface{}{Re(&quot;zip&quot;), HasSuffix(&quot;foo&quot;)},
-    &quot;checks value %s&quot;, got)
-fmt.Println(ok)
-
-// Output:
-// true
-// false
-</code></pre>
-
-    </div>
-</div>
 
 
 <footer class=" footline" >
@@ -1893,26 +1750,6 @@ fmt.Println(ok)
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -2712,6 +2549,26 @@ fmt.Println(ok)
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -2784,10 +2641,10 @@ fmt.Println(ok)
 	 
 	 
 		
-			<a class="nav nav-prev" href="/operators/all/" title="All"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/operators/supersetof/" title="SuperSetOf"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/operators/array/" title="Array" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/operators/trunctime/" title="TruncTime" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

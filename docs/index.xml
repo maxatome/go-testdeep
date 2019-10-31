@@ -205,6 +205,16 @@ Isa((*fmt.Stringer)(nil)) Of course, in the latter case, if data type is *fmt.</
     </item>
     
     <item>
+      <title>JSON</title>
+      <link>https://go-testdeep.zetta.rocks/operators/json/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://go-testdeep.zetta.rocks/operators/json/</guid>
+      <description>func JSON(expectedJSON interface{}, params ...interface{}) TestDeep JSON operator allows to compare the JSON representation of data against expectedJSON. expectedJSON can be a:
+ string containing JSON data like {&amp;quot;fullname&amp;quot;:&amp;quot;Bob&amp;quot;,&amp;quot;age&amp;quot;:42} string containing a JSON filename, ending with &amp;ldquo;.json&amp;rdquo; (its content is ioutil.ReadFile before unmarshaling) []byte containing JSON data io.Reader stream containing JSON data (is ioutil.ReadAll before unmarshaling)  expectedJSON JSON value can contain placeholders. The params are for any placeholder parameters in expectedJSON.</description>
+    </item>
+    
+    <item>
       <title>Keys</title>
       <link>https://go-testdeep.zetta.rocks/operators/keys/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -566,6 +576,16 @@ During a match, each expected entry should match in the compared map. But some e
       <description>func SuperSetOf(expectedItems ...interface{}) TestDeep SuperSetOf operator compares the contents of an array or a slice (or a pointer on array/slice) ignoring duplicates and without taking care of the order of items.
 During a match, each expected item should match in the compared array/slice. But some items in the compared array/slice may not be expected.
 Cmp(t, []int{1, 1, 2}, SuperSetOf(1)) // succeeds Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing Examples   Base example   t := &amp;amp;testing.</description>
+    </item>
+    
+    <item>
+      <title>Tag</title>
+      <link>https://go-testdeep.zetta.rocks/operators/tag/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://go-testdeep.zetta.rocks/operators/tag/</guid>
+      <description>func Tag(tag string, expectedValue interface{}) TestDeep Tag is a smuggler operator. It only allows to name expectedValue, which can be an operator or a value. The data is then compared against expectedValue as if Tag was never called. It is only useful as JSON operator parameter, to name placeholders. See JSON operator for more details.
+Cmp(t, gotValue, JSON(`{&amp;#34;fullname&amp;#34;: $name, &amp;#34;age&amp;#34;: $age, &amp;#34;gender&amp;#34;: $gender}`, Tag(&amp;#34;name&amp;#34;, HasPrefix(&amp;#34;Foo&amp;#34;)), // matches $name  Tag(&amp;#34;age&amp;#34;, Between(41, 43)), // matches $age  Tag(&amp;#34;gender&amp;#34;, &amp;#34;male&amp;#34;))) // matches $gender TypeBehind method is delegated to expectedValue one if expectedValue is a TestDeep operator, otherwise it returns the type of expectedValue (or nil if it is originally untyped nil).</description>
     </item>
     
     <item>
