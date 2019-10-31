@@ -372,7 +372,7 @@ You want to add a new `FooBar` operator.
   document its usage:
   - add a `// summary(FooBar): small description` line, before
     operator comment,
-  - add a `// input(FooBar): …` line, just aftezr `summary(FooBar)`
+  - add a `// input(FooBar): …` line, just after `summary(FooBar)`
     line. This one lists all inputs accepted by the operator;
 - [ ] add operator tests in `td_foo_bar_test.go` file;
 - [ ] in `example_test.go` file, add examples function(s) `ExampleFooBar*`

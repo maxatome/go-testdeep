@@ -29,12 +29,13 @@ weight: 1
 | [`HasSuffix`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`HasSuffix`] |
 | [`Ignore`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Ignore`] |
 | [`Isa`] | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Isa`] |
+| [`JSON`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | [`JSON`] |
 | [`Keys`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`Keys`] |
 | [`Lax`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Lax`] |
-| [`Len`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | ✓ | ✗ | [`Len`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`Len`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | ✓ | ✗ | [`Len`] |
 | [`Lt`] | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗ | ✓ | ✗ | ✗ | [`Lt`] |
 | [`Lte`] | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗ | ✓ | ✗ | ✗ | [`Lte`] |
 | [`Map`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map | ✓ | ✗ | ✗ | [`Map`] |
@@ -44,10 +45,10 @@ weight: 1
 | [`Nil`] | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | [`Nil`] |
 | [`None`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`None`] |
 | [`Not`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Not`] |
-| [`NotAny`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`NotAny`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`NotAny`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`NotAny`] |
 | [`NotEmpty`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ptr on array/slice/map/string | ✓ | ✓ | ✗ | [`NotEmpty`] |
 | [`NotNaN`] | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | [`NotNaN`] |
 | [`NotNil`] | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | [`NotNil`] |
@@ -57,10 +58,10 @@ weight: 1
 | [`Re`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`Re`] |
 | [`ReAll`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`ReAll`] |
 | [`Set`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`Set`] |
-| [`Shallow`] | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | [`Shallow`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`Shallow`] | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | [`Shallow`] |
 | [`Slice`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ptr on slice | ✓ | ✗ | ✗ | [`Slice`] |
 | [`Smuggle`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Smuggle`] |
 | [`String`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`String`] |
@@ -70,10 +71,11 @@ weight: 1
 | [`SubSetOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`] |
 | [`SuperBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`] |
 | [`SuperMapOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map | ✓ | ✗ | ✗ | [`SuperMapOf`] |
-| [`SuperSetOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperSetOf`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`SuperSetOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperSetOf`] |
+| [`Tag`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Tag`] |
 | [`TruncTime`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | [`time.Time`] | todo | ✓ | ✗ | ✗ | [`TruncTime`] |
 | [`Values`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`Values`] |
 | [`Zero`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Zero`] |
@@ -107,6 +109,7 @@ weight: 1
 [`HasSuffix`]: {{< ref "HasSuffix" >}}
 [`Ignore`]: {{< ref "Ignore" >}}
 [`Isa`]: {{< ref "Isa" >}}
+[`JSON`]: {{< ref "JSON" >}}
 [`Keys`]: {{< ref "Keys" >}}
 [`Lax`]: {{< ref "Lax" >}}
 [`Len`]: {{< ref "Len" >}}
@@ -140,6 +143,7 @@ weight: 1
 [`SuperBagOf`]: {{< ref "SuperBagOf" >}}
 [`SuperMapOf`]: {{< ref "SuperMapOf" >}}
 [`SuperSetOf`]: {{< ref "SuperSetOf" >}}
+[`Tag`]: {{< ref "Tag" >}}
 [`TruncTime`]: {{< ref "TruncTime" >}}
 [`Values`]: {{< ref "Values" >}}
 [`Zero`]: {{< ref "Zero" >}}
@@ -160,6 +164,7 @@ weight: 1
 [`CmpHasPrefix`]: {{< ref "HasPrefix#cmphasprefix-shortcut" >}}
 [`CmpHasSuffix`]: {{< ref "HasSuffix#cmphassuffix-shortcut" >}}
 [`CmpIsa`]: {{< ref "Isa#cmpisa-shortcut" >}}
+[`CmpJSON`]: {{< ref "JSON#cmpjson-shortcut" >}}
 [`CmpKeys`]: {{< ref "Keys#cmpkeys-shortcut" >}}
 [`CmpLax`]: {{< ref "Lax#cmplax-shortcut" >}}
 [`CmpLen`]: {{< ref "Len#cmplen-shortcut" >}}
@@ -213,6 +218,7 @@ weight: 1
 [`T.HasPrefix`]: {{< ref "HasPrefix#t-hasprefix-shortcut" >}}
 [`T.HasSuffix`]: {{< ref "HasSuffix#t-hassuffix-shortcut" >}}
 [`T.Isa`]: {{< ref "Isa#t-isa-shortcut" >}}
+[`T.JSON`]: {{< ref "JSON#t-json-shortcut" >}}
 [`T.Keys`]: {{< ref "Keys#t-keys-shortcut" >}}
 [`T.CmpLax`]: {{< ref "Lax#t-cmplax-shortcut" >}}
 [`T.Len`]: {{< ref "Len#t-len-shortcut" >}}
@@ -272,6 +278,7 @@ Operators likely to succeed for each go type:
 - [`Any`]
 - [`Code`]
 - [`Ignore`]
+- [`JSON`]
 - [`Lax`]
 - [`Nil`]
 - [`None`]
@@ -280,6 +287,7 @@ Operators likely to succeed for each go type:
 - [`NotZero`]
 - [`Shallow`]
 - [`Smuggle`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-nil-matrix:end -->
 
@@ -291,11 +299,13 @@ Operators likely to succeed for each go type:
 - [`Code`]
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Lax`]
 - [`None`]
 - [`Not`]
 - [`NotZero`]
 - [`Smuggle`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-bool-matrix:end -->
 
@@ -314,6 +324,7 @@ Operators likely to succeed for each go type:
 - [`HasSuffix`]
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Lax`]
 - [`Lt`]
 - [`Lte`]
@@ -326,6 +337,7 @@ Operators likely to succeed for each go type:
 - [`Shallow`]
 - [`Smuggle`]
 - [`String`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-str-matrix:end -->
 
@@ -340,6 +352,7 @@ Operators likely to succeed for each go type:
 - [`Gte`]
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Lax`]
 - [`Lt`]
 - [`Lte`]
@@ -348,6 +361,7 @@ Operators likely to succeed for each go type:
 - [`Not`]
 - [`NotZero`]
 - [`Smuggle`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-int-matrix:end -->
 
@@ -362,6 +376,7 @@ Operators likely to succeed for each go type:
 - [`Gte`]
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Lax`]
 - [`Lt`]
 - [`Lte`]
@@ -372,6 +387,7 @@ Operators likely to succeed for each go type:
 - [`NotNaN`]
 - [`NotZero`]
 - [`Smuggle`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-float-matrix:end -->
 
@@ -388,6 +404,7 @@ Operators likely to succeed for each go type:
 - [`Not`]
 - [`NotZero`]
 - [`Smuggle`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-cplx-matrix:end -->
 
@@ -405,6 +422,7 @@ Operators likely to succeed for each go type:
 - [`Empty`]
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Lax`]
 - [`Len`]
 - [`None`]
@@ -418,6 +436,7 @@ Operators likely to succeed for each go type:
 - [`SubSetOf`]
 - [`SuperBagOf`]
 - [`SuperSetOf`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-array-matrix:end -->
 
@@ -434,6 +453,7 @@ Operators likely to succeed for each go type:
 - [`Empty`]
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Lax`]
 - [`Len`]
 - [`Nil`]
@@ -453,6 +473,7 @@ Operators likely to succeed for each go type:
 - [`SubSetOf`]
 - [`SuperBagOf`]
 - [`SuperSetOf`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-slice-matrix:end -->
 
@@ -467,6 +488,7 @@ Operators likely to succeed for each go type:
 - [`Empty`]
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Keys`]
 - [`Lax`]
 - [`Len`]
@@ -482,6 +504,7 @@ Operators likely to succeed for each go type:
 - [`Smuggle`]
 - [`SubMapOf`]
 - [`SuperMapOf`]
+- [`Tag`]
 - [`Values`]
 - [`Zero`]
 <!-- go-map-matrix:end -->
@@ -497,6 +520,7 @@ Operators likely to succeed for each go type:
 - [`Gte`] only [`time.Time`]
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Lax`]
 - [`Lt`] only [`time.Time`]
 - [`Lte`] only [`time.Time`]
@@ -505,6 +529,7 @@ Operators likely to succeed for each go type:
 - [`NotZero`]
 - [`Smuggle`]
 - [`Struct`]
+- [`Tag`]
 - [`TruncTime`] only [`time.Time`]
 - [`Zero`]
 <!-- go-struct-matrix:end -->
@@ -534,6 +559,7 @@ listed below:
 - [`Empty`] only ptr on array/slice/map/string
 - [`Ignore`]
 - [`Isa`]
+- [`JSON`]
 - [`Lax`]
 - [`Map`] only ptr on map
 - [`MapEach`] only ptr on map
@@ -557,6 +583,7 @@ listed below:
 - [`SuperBagOf`] only ptr on array/slice
 - [`SuperMapOf`] only ptr on map
 - [`SuperSetOf`] only ptr on array/slice
+- [`Tag`]
 - [`Zero`]
 <!-- go-ptr-matrix:end -->
 
@@ -580,6 +607,7 @@ listed below:
 - [`NotZero`]
 - [`Shallow`]
 - [`Smuggle`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-chan-matrix:end -->
 
@@ -599,5 +627,6 @@ listed below:
 - [`NotZero`]
 - [`Shallow`]
 - [`Smuggle`]
+- [`Tag`]
 - [`Zero`]
 <!-- go-func-matrix:end -->

@@ -286,7 +286,7 @@ my $funcs_reg = join('|', keys %funcs);
 
 my($imports) = ($examples =~ /^(import \(.+?^\))$/ms);
 
-while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}/gms)
+while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}$/gms)
 {
     push(@{$funcs{$1}{examples}}, { name => $2 // '', code => $3 });
 }
@@ -469,24 +469,24 @@ my $common_links = do
         . "\n\n"
         # Specific links
         . "[`BeLax` config flag]: $td_url#ContextConfig\n"
-	. "[`error`]: https://golang.org/pkg/builtin/#error\n"
+        . "[`error`]: https://golang.org/pkg/builtin/#error\n"
         . "\n\n"
         # Foreign types
         . join("\n", map "[`$_->[0]`]: https://godoc.org/$_->[1]",
                [ 'fmt.Stringer' => 'pkg/fmt/#Stringer' ],
                [ 'time.Time'    => 'pkg/time/#Time' ],
                [ 'math.NaN'     => 'pkg/math/#NaN' ])
-	. "\n";
+        . "\n";
 };
 
 my $md_links = do
 {
     $common_links
-	. join("\n", map qq([`$_`]: {{< ref "$_" >}}), sort keys %operators)
+        . join("\n", map qq([`$_`]: {{< ref "$_" >}}), sort keys %operators)
         . "\n\n"
         # Cmp* functions
         . join("\n", map qq([`Cmp$_`]: {{< ref "$_#cmp\L$_\E-shortcut" >}}),
-	             sort keys %funcs)
+                     sort keys %funcs)
         . "\n\n"
         # T.Cmp* methods
         . join("\n", map
@@ -501,7 +501,7 @@ my $gh_links = do
 {
     my $td_url = 'https://godoc.org/github.com/maxatome/go-testdeep';
     $common_links
-	. join("\n", map qq([`$_`]: $td_url#$_), sort keys %operators)
+        . join("\n", map qq([`$_`]: $td_url#$_), sort keys %operators)
         . "\n\n"
         # Cmp* functions
         . join("\n", map qq([`Cmp$_`]:$td_url#Cmp$_), sort keys %funcs)
@@ -687,45 +687,45 @@ EOH
                             $repl .= $header if $num++ % 10 == 0;
                             $repl .= "| [`$op`]";
                             for my $label (@INPUT_LABELS)
-			    {
-	                        $repl .= " | "
-				    . ($operators{$op}{input}{$label} // '✗');
-			    }
+                            {
+                                $repl .= " | "
+                                    . ($operators{$op}{input}{$label} // '✗');
+                            }
                             $repl .= " | [`$op`] |\n";
                         }
                         "$repl$md_links\n$2"
                     }se or die "op-go-matrix tags not found in $matrix_file\n";
 
-	my %by_input;
-	while (my($op, $info) = each %operators)
-	{
-	    while (my($label, $comment) = each %{$operators{$op}{input}})
-	    {
-		$by_input{$label}{$op} = $comment;
-	    }
-	}
+        my %by_input;
+        while (my($op, $info) = each %operators)
+        {
+            while (my($label, $comment) = each %{$operators{$op}{input}})
+            {
+                $by_input{$label}{$op} = $comment;
+            }
+        }
         $matrix =~ s{(<!-- go-(\w+)-matrix:begin -->).*(<!-- go-\2-matrix:end -->)}
                     {
                         my $repl = "$1\n";
-	                foreach my $op (sort keys %{$by_input{$2}})
-			{
-	                    my $comment = $by_input{$2}{$op};
-	                    next if $comment eq 'todo';
-	                    if ($comment eq '✓')
-			    {
-	                        next if $2 eq 'if';
-	                        $comment = '';
-			    }
-	                    elsif ($2 eq 'if')
-			    {
-	                        $comment =~ s/^✓ \+/ →/;
-			    }
-			    else
-			    {
-	                        substr($comment, 0, 0, ' only ');
-			    }
-	                    $repl .= "- [`$op`]$comment\n";
-			}
+                        foreach my $op (sort keys %{$by_input{$2}})
+                        {
+                            my $comment = $by_input{$2}{$op};
+                            next if $comment eq 'todo';
+                            if ($comment eq '✓')
+                            {
+                                next if $2 eq 'if';
+                                $comment = '';
+                            }
+                            elsif ($2 eq 'if')
+                            {
+                                $comment =~ s/^✓ \+/ →/;
+                            }
+                            else
+                            {
+                                substr($comment, 0, 0, ' only ');
+                            }
+                            $repl .= "- [`$op`]$comment\n";
+                        }
                         $repl . $3
                     }gse or die "go-op-matrix tags not found in $matrix_file\n";
 
@@ -820,23 +820,30 @@ sub process_doc
     $doc =~ s/^(```go\n.*?^```\n)/push(@codes, $1); "CODE<$#codes>"/gems;
 
     $doc =~ s<
-        (\b(${\join('|', keys %operators)})(?:\([^)]*\)|\b))  # $1 $2
+        (\b(${\join('|', grep !/^JSON/, keys %operators)}
+           |JSON(?!\ (?:value|data|filename|representation|specification)))
+        (?:\([^)]*\)|\b))                  # $1 $2
       | ((?:(?:\[\])+|\*+|\b)(?:bool\b
                                |u?int(?:\*|(?:8|16|32|64)?\b)
                                |float(?:\*|(?:32|64)\b)
                                |complex(?:\*|(?:64|128)\b)
                                |string\b
                                |rune\b
-                               |byte\b)
+                               |byte\b
+                               |interface\{\})
         |\(\*byte\)\(nil\)
+        |\bmap\[string\]interface\{\}
         |\b(?:len|cap)\(\)
-        |\binterface\{\}
-        |\bnil\b)                          # $3
+        |\bnil\b
+        |\$(?:\d+|[a-zA-Z_]\w*))           # $3
       | ((?:\b|\*)fmt\.Stringer
         |\breflect\.Type
         |\bregexp\.MustCompile
         |\*regexp\.Regexp
-        |\btime\.[A-Z][a-zA-Z]+)\b         # $4
+        |\btime\.[A-Z][a-zA-Z]+
+        |\bjson\.(?:Unm|M)arshal
+        |\bio\.Reader
+        |\bioutil\.Read(?:All|File))\b     # $4
       | (\berror\b)                        # $5
       | (\bTypeBehind(?:\(\)|\b))          # $6
       | \b(${\join('|', keys %consts)})\b  # $7

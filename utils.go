@@ -27,13 +27,7 @@ func getTime(ctx ctxerr.Context, got reflect.Value, mustConvert bool) (time.Time
 		gotIf, ok = dark.GetInterface(got, true)
 	}
 	if !ok {
-		if ctx.BooleanError {
-			return time.Time{}, ctxerr.BooleanError
-		}
-		return time.Time{}, &ctxerr.Error{
-			Message: "cannot compare",
-			Summary: ctxerr.NewSummary("unexported field that cannot be overridden"),
-		}
+		return time.Time{}, ctx.CannotCompareError()
 	}
 	return gotIf.(time.Time), nil
 }

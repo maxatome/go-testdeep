@@ -13,7 +13,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"math"
+	"os"
 	"regexp"
 	"strconv"
 	"testing"
@@ -830,6 +832,132 @@ func ExampleT_Isa_interface() {
 	// true
 	// false
 	// true
+}
+
+func ExampleT_JSON_basic() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob",
+		Age:      42,
+	}
+
+	ok := t.JSON(got, `{"age":42,"fullname":"Bob"}`, nil)
+	fmt.Println("check got with age then fullname:", ok)
+
+	ok = t.JSON(got, `{"fullname":"Bob","age":42}`, nil)
+	fmt.Println("check got with fullname then age:", ok)
+
+	ok = t.JSON(got, `{
+  "fullname": "Bob",
+  "age":      42
+}`, nil)
+	fmt.Println("check got with nicely formatted JSON:", ok)
+
+	ok = t.JSON(got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
+	fmt.Println("check got with gender field:", ok)
+
+	ok = t.JSON(got, `{"fullname":"Bob"}`, nil)
+	fmt.Println("check got with fullname only:", ok)
+
+	ok = t.JSON(true, `true`, nil)
+	fmt.Println("check boolean got is true:", ok)
+
+	ok = t.JSON(42, `42`, nil)
+	fmt.Println("check numeric got is 42:", ok)
+
+	got = nil
+	ok = t.JSON(got, `null`, nil)
+	fmt.Println("check nil got is null:", ok)
+
+	// Output:
+	// check got with age then fullname: true
+	// check got with fullname then age: true
+	// check got with nicely formatted JSON: true
+	// check got with gender field: false
+	// check got with fullname only: false
+	// check boolean got is true: true
+	// check numeric got is 42: true
+	// check nil got is null: true
+}
+
+func ExampleT_JSON_placeholders() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+	}
+
+	ok := t.JSON(got, `{"age": $1, "fullname": $2}`, []interface{}{42, "Bob Foobar"})
+	fmt.Println("check got with numeric placeholders without operators:", ok)
+
+	ok = t.JSON(got, `{"age": $1, "fullname": $2}`, []interface{}{Between(40, 45), HasSuffix("Foobar")})
+	fmt.Println("check got with numeric placeholders:", ok)
+
+	ok = t.JSON(got, `{"age": "$1", "fullname": "$2"}`, []interface{}{Between(40, 45), HasSuffix("Foobar")})
+	fmt.Println("check got with double-quoted numeric placeholders:", ok)
+
+	ok = t.JSON(got, `{"age": $age, "fullname": $name}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar"))})
+	fmt.Println("check got with named placeholders:", ok)
+
+	// Output:
+	// check got with numeric placeholders without operators: true
+	// check got with numeric placeholders: true
+	// check got with double-quoted numeric placeholders: true
+	// check got with named placeholders: true
+}
+
+func ExampleT_JSON_file() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+		Gender:   "male",
+	}
+
+	tmpDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir) // clean up
+
+	filename := tmpDir + "/test.json"
+	if err = ioutil.WriteFile(filename, []byte(`
+{
+  "fullname": "$name",
+  "age":      "$age",
+  "gender":   "$gender"
+}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// OK let's test with this file
+	ok := t.JSON(got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from file name:", ok)
+
+	// When the file is already open
+	file, err := os.Open(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok = t.JSON(got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from io.Reader:", ok)
+
+	// Output:
+	// Full match from file name: true
+	// Full match from io.Reader: true
 }
 
 func ExampleT_Keys() {
