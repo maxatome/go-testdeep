@@ -15,6 +15,8 @@ Note that the compared data can be a pointer (of pointer of pointer
 etc.) on an array, a channel, a map, a slice or a `string`.
 
 
+> See also [<i class='fas fa-book'></i> Empty godoc](https://godoc.org/github.com/maxatome/go-testdeep#Empty).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -124,6 +126,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpEmpty godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpEmpty).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -232,6 +236,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Empty godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Empty).
 
 ### Examples
 

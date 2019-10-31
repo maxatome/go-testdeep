@@ -16,6 +16,8 @@ same kind as the compared value if numeric, and the same type if
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *maxExpectedValue*.
 
 
+> See also [<i class='fas fa-book'></i> Lt godoc](https://godoc.org/github.com/maxatome/go-testdeep#Lt).
+
 ### Examples
 
 {{%expand "Int example" %}}```go
@@ -74,6 +76,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpLt godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpLt).
+
 ### Examples
 
 {{%expand "Int example" %}}```go
@@ -131,6 +135,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Lt godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Lt).
 
 ### Examples
 

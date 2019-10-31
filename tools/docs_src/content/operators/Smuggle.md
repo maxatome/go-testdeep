@@ -193,6 +193,8 @@ type. The fields-path `string` *fn* shortcut is not available with
 `interface{}`, as the type can not be known in advance.
 
 
+> See also [<i class='fas fa-book'></i> Smuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle).
+
 ### Examples
 
 {{%expand "Convert example" %}}```go
@@ -455,6 +457,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpSmuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle).
+
 ### Examples
 
 {{%expand "Convert example" %}}```go
@@ -688,6 +692,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Smuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle).
 
 ### Examples
 

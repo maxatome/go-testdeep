@@ -23,6 +23,8 @@ Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing
 ```
 
 
+> See also [<i class='fas fa-book'></i> Bag godoc](https://godoc.org/github.com/maxatome/go-testdeep#Bag).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -84,6 +86,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpBag godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpBag).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -144,6 +148,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Bag godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Bag).
 
 ### Examples
 

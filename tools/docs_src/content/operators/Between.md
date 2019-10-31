@@ -25,6 +25,8 @@ If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.c
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *from* (same as the *to* one.)
 
 
+> See also [<i class='fas fa-book'></i> Between godoc](https://godoc.org/github.com/maxatome/go-testdeep#Between).
+
 ### Examples
 
 {{%expand "Int example" %}}```go
@@ -123,6 +125,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpBetween godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpBetween).
+
 ### Examples
 
 {{%expand "Int example" %}}```go
@@ -220,6 +224,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Between godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Between).
 
 ### Examples
 

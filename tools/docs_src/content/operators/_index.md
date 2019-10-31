@@ -28,6 +28,9 @@ weight = 15
 [`Cap`]({{< ref "Cap" >}})
 : checks an array, slice or channel capacity
 
+[`Catch`]({{< ref "Catch" >}})
+: catches data on the fly before comparing it
+
 [`Code`]({{< ref "Code" >}})
 : checks using a custom function
 
@@ -186,6 +189,9 @@ The following operators are smuggler ones:
 [`Cap`]({{< ref "Cap" >}})
 : checks an array, slice or channel capacity
 
+[`Catch`]({{< ref "Catch" >}})
+: catches data on the fly before comparing it
+
 [`ContainsKey`]({{< ref "ContainsKey" >}})
 : checks that a map contains a key
 
@@ -236,6 +242,7 @@ The following operators are smuggler ones:
 [`Bag`]: {{< ref "Bag" >}}
 [`Between`]: {{< ref "Between" >}}
 [`Cap`]: {{< ref "Cap" >}}
+[`Catch`]: {{< ref "Catch" >}}
 [`Code`]: {{< ref "Code" >}}
 [`Contains`]: {{< ref "Contains" >}}
 [`ContainsKey`]: {{< ref "ContainsKey" >}}

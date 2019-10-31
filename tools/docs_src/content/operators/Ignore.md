@@ -11,6 +11,8 @@ func Ignore() TestDeep
 comparing a slice and wanting to ignore some indexes, for example.
 
 
+> See also [<i class='fas fa-book'></i> Ignore godoc](https://godoc.org/github.com/maxatome/go-testdeep#Ignore).
+
 ### Examples
 
 {{%expand "Base example" %}}```go

@@ -32,6 +32,8 @@ case, it delegates [TypeBehind()]({{< ref "operators#typebehind-method" >}}) to 
 non-`nil` of course).
 
 
+> See also [<i class='fas fa-book'></i> PPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep#PPtr).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -75,6 +77,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpPPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpPPtr).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -117,6 +121,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.PPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.PPtr).
 
 ### Examples
 

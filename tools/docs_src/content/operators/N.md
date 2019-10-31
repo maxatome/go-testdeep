@@ -14,6 +14,8 @@ must be the same kind as the compared value.
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *num*.
 
 
+> See also [<i class='fas fa-book'></i> N godoc](https://godoc.org/github.com/maxatome/go-testdeep#N).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -57,6 +59,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpN godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpN).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -99,6 +103,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.N godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.N).
 
 ### Examples
 

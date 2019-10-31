@@ -27,6 +27,8 @@ Cmp(t, "John Doe",
 ```
 
 
+> See also [<i class='fas fa-book'></i> ReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep#ReAll).
+
 ### Examples
 
 {{%expand "Capture example" %}}```go
@@ -147,6 +149,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpReAll).
+
 ### Examples
 
 {{%expand "Capture example" %}}```go
@@ -262,6 +266,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.ReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.ReAll).
 
 ### Examples
 

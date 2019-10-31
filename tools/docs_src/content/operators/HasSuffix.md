@@ -23,6 +23,8 @@ Cmp(t, bstr, HasSuffix("!")) // succeeds
 ```
 
 
+> See also [<i class='fas fa-book'></i> HasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -86,6 +88,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpHasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpHasSuffix).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -148,6 +152,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.HasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.HasSuffix).
 
 ### Examples
 

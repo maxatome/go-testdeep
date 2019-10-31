@@ -11,6 +11,8 @@ func NotNil() TestDeep
 interface, containing a non-`nil` pointer.)
 
 
+> See also [<i class='fas fa-book'></i> NotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep#NotNil).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -68,6 +70,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpNotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNil).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -124,6 +128,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.NotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.NotNil).
 
 ### Examples
 

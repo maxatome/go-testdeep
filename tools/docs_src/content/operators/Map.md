@@ -21,6 +21,8 @@ entries must be expected to succeed.
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
+> See also [<i class='fas fa-book'></i> Map godoc](https://godoc.org/github.com/maxatome/go-testdeep#Map).
+
 ### Examples
 
 {{%expand "Map example" %}}```go
@@ -109,6 +111,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpMap godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpMap).
+
 ### Examples
 
 {{%expand "Map example" %}}```go
@@ -187,6 +191,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Map godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Map).
 
 ### Examples
 

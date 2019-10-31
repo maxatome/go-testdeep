@@ -137,7 +137,7 @@ while (readdir $dh)
                 push(@args, \%arg);
             }
 
-            if ($func ne 'Ignore' and $func ne 'Tag')
+            if ($func ne 'Ignore' and $func ne 'Tag' and $func ne 'Catch')
             {
                 $funcs{$func}{args} = \@args;
             }
@@ -499,18 +499,18 @@ my $md_links = do
 
 my $gh_links = do
 {
-    my $td_url = 'https://godoc.org/github.com/maxatome/go-testdeep';
+    my $td_url = 'https://go-testdeep.zetta.rocks/operators/';
     $common_links
-        . join("\n", map qq([`$_`]: $td_url#$_), sort keys %operators)
+        . join("\n", map qq([`$_`]: $td_url\L$_/), sort keys %operators)
         . "\n\n"
         # Cmp* functions
-        . join("\n", map qq([`Cmp$_`]:$td_url#Cmp$_), sort keys %funcs)
+        . join("\n", map qq([`Cmp$_`]:$td_url\L$_/#cmp$_-shortcut), sort keys %funcs)
         . "\n\n"
         # T.Cmp* methods
         . join("\n", map
                {
                    my $m = $RENAME_METHOD{$_} // $_;
-                   qq([`T.$m`]: $td_url#T.$m)
+                   qq([`T.$m`]: $td_url\L$_/#t-$m-shortcut)
                }
                sort keys %funcs);
 };
@@ -562,6 +562,8 @@ $operators{$operator}{signature}
 
 $doc
 
+> See also [<i class='fas fa-book'></i> $operator godoc](https://godoc.org/github.com/maxatome/go-testdeep#$operator).
+
 ### Examples
 
 EOM
@@ -589,6 +591,8 @@ $cmp->{signature}
 ```
 
 $doc
+
+> See also [<i class='fas fa-book'></i> $cmp->{name} godoc](https://godoc.org/github.com/maxatome/go-testdeep#$cmp->{name}).
 
 ### Examples
 
@@ -618,6 +622,8 @@ $t->{signature}
 ```
 
 $doc
+
+> See also [<i class='fas fa-book'></i> T.$t->{name} godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.$t->{name}).
 
 ### Examples
 
