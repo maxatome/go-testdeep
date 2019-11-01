@@ -12,20 +12,20 @@
     <title>SuperBagOf :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572598486" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572598486" rel="stylesheet">
-    <link href="/css/hybrid.css?1572598486" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572598486" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572598486" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572598486" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572598486" rel="stylesheet">
-    <link href="/css/theme.css?1572598486" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572598486" rel="stylesheet">
+    <link href="/css/nucleus.css?1572645552" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572645552" rel="stylesheet">
+    <link href="/css/hybrid.css?1572645552" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572645552" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572645552" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572645552" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572645552" rel="stylesheet">
+    <link href="/css/theme.css?1572645552" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572645552" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572598486" rel="stylesheet">
+      <link href="/css/theme-green.css?1572645552" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572598486"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572645552"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572598486"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572598486"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572645552"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572645552"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572598486"></script>
+<script type="text/javascript" src="/js/search.js?1572645552"></script>
 
     
   </div>
@@ -440,6 +440,25 @@
       <li data-nav-id="/operators/cap/" title="Cap" class="dd-item ">
         <a href="/operators/cap/">
         Cap
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/catch/" title="Catch" class="dd-item ">
+        <a href="/operators/catch/">
+        Catch
         
         </a>
     </li>
@@ -1404,6 +1423,10 @@
                   <a class="padding" href="https://github.com/maxatome/go-testdeep"><i class='fab fa-github'></i> Github repo</a>
               </li>
           
+              <li> 
+                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep"><i class='fas fa-book'></i> godoc</a>
+              </li>
+          
         </ul>
       </section>
     
@@ -1517,6 +1540,10 @@ array/slice. But some items in the compared array/slice may not be
 expected.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>, <span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>}, <span style="color:#447fcf">SuperBagOf</span>(<span style="color:#3677a9">1</span>))       <span style="color:#999;font-style:italic">// succeeds
 </span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>, <span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>}, <span style="color:#447fcf">SuperBagOf</span>(<span style="color:#3677a9">1</span>, <span style="color:#3677a9">1</span>, <span style="color:#3677a9">1</span>)) // fails, one <span style="color:#3677a9">1</span> is missing</code></pre></div>
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf"><i class='fas fa-book'></i> SuperBagOf godoc</a>.</p>
+</blockquote>
+
 <h3 id="examples">Examples</h3>
 
 
@@ -1564,6 +1591,10 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperBagOf"><i class='fas fa-book'></i> CmpSuperBagOf godoc</a>.</p>
+</blockquote>
+
 <h3 id="examples-1">Examples</h3>
 
 
@@ -1610,6 +1641,10 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
+
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.SuperBagOf"><i class='fas fa-book'></i> T.SuperBagOf godoc</a>.</p>
+</blockquote>
 
 <h3 id="examples-2">Examples</h3>
 
@@ -2628,6 +2663,22 @@ reason of a potential failure.</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                     
                 
                 
@@ -2780,19 +2831,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572598486"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572598486"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572598486"></script>
-    <script src="/js/jquery.sticky.js?1572598486"></script>
-    <script src="/js/featherlight.min.js?1572598486"></script>
-    <script src="/js/highlight.pack.js?1572598486"></script>
+    <script src="/js/clipboard.min.js?1572645552"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572645552"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572645552"></script>
+    <script src="/js/jquery.sticky.js?1572645552"></script>
+    <script src="/js/featherlight.min.js?1572645552"></script>
+    <script src="/js/highlight.pack.js?1572645552"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572598486"></script>
-    <script src="/js/learn.js?1572598486"></script>
-    <script src="/js/hugo-learn.js?1572598486"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572645552"></script>
+    <script src="/js/learn.js?1572645552"></script>
+    <script src="/js/hugo-learn.js?1572645552"></script>
 
-    <link href="/mermaid/mermaid.css?1572598486" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572598486"></script>
+    <link href="/mermaid/mermaid.css?1572645552" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572645552"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

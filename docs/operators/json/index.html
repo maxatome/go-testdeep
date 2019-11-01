@@ -12,20 +12,20 @@
     <title>JSON :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
-    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
-    <link href="/css/theme.css?1572598485" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
+    <link href="/css/nucleus.css?1572645552" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572645552" rel="stylesheet">
+    <link href="/css/hybrid.css?1572645552" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572645552" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572645552" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572645552" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572645552" rel="stylesheet">
+    <link href="/css/theme.css?1572645552" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572645552" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
+      <link href="/css/theme-green.css?1572645552" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572645552"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572645552"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572645552"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572598485"></script>
+<script type="text/javascript" src="/js/search.js?1572645552"></script>
 
     
   </div>
@@ -440,6 +440,25 @@
       <li data-nav-id="/operators/cap/" title="Cap" class="dd-item ">
         <a href="/operators/cap/">
         Cap
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/catch/" title="Catch" class="dd-item ">
+        <a href="/operators/catch/">
+        Catch
         
         </a>
     </li>
@@ -1404,6 +1423,10 @@
                   <a class="padding" href="https://github.com/maxatome/go-testdeep"><i class='fab fa-github'></i> Github repo</a>
               </li>
           
+              <li> 
+                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep"><i class='fas fa-book'></i> godoc</a>
+              </li>
+          
         </ul>
       </section>
     
@@ -1560,7 +1583,7 @@ the first character of a <code>string</code>:</p>
     <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
 </span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)))              // matches only <span style="color:#a61717;background-color:#e3d2d2">$</span><span style="color:#3677a9">2</span></code></pre></div>
 <p>For the &ldquo;details&rdquo; key, the raw value &ldquo;<code>$info</code>&rdquo; is expected, no
-placeholders are involved here..</p>
+placeholders are involved here.</p>
 
 <p>Last but not least, <a href="/operators/lax/"><code>Lax</code></a> mode is automatically enabled by <a href="/operators/json/"><code>JSON</code></a>
 operator to simplify numeric tests.</p>
@@ -1569,6 +1592,10 @@ operator to simplify numeric tests.</p>
 <a href="https://golang.org/pkg/json/#Unmarshal"><code>json.Unmarshal</code></a>&lsquo;ed. So it can be <code>bool</code>, <code>string</code>, <code>float64</code>,
 <code>[]interface{}</code>, <code>map[string]interface{}</code> or <code>interface{}</code> in case
 <em>expectedJSON</em> is &ldquo;null&rdquo;.</p>
+
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#JSON"><i class='fas fa-book'></i> JSON godoc</a>.</p>
+</blockquote>
 
 <h3 id="examples">Examples</h3>
 
@@ -1764,6 +1791,10 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpJSON"><i class='fas fa-book'></i> CmpJSON godoc</a>.</p>
+</blockquote>
+
 <h3 id="examples-1">Examples</h3>
 
 <p>
@@ -1940,6 +1971,10 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
+
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.JSON"><i class='fas fa-book'></i> T.JSON godoc</a>.</p>
+</blockquote>
 
 <h3 id="examples-2">Examples</h3>
 
@@ -2303,6 +2338,22 @@ reason of a potential failure.</p>
                     
                         
                         
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -3240,19 +3291,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572598485"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
-    <script src="/js/jquery.sticky.js?1572598485"></script>
-    <script src="/js/featherlight.min.js?1572598485"></script>
-    <script src="/js/highlight.pack.js?1572598485"></script>
+    <script src="/js/clipboard.min.js?1572645552"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572645552"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572645552"></script>
+    <script src="/js/jquery.sticky.js?1572645552"></script>
+    <script src="/js/featherlight.min.js?1572645552"></script>
+    <script src="/js/highlight.pack.js?1572645552"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
-    <script src="/js/learn.js?1572598485"></script>
-    <script src="/js/hugo-learn.js?1572598485"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572645552"></script>
+    <script src="/js/learn.js?1572645552"></script>
+    <script src="/js/hugo-learn.js?1572645552"></script>
 
-    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572598485"></script>
+    <link href="/mermaid/mermaid.css?1572645552" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572645552"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
