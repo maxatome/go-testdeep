@@ -21,6 +21,11 @@ import (
 // Run() method.
 type T struct {
 	testing.T
+	name string
+}
+
+func NewT(name string) *T {
+	return &T{name: name}
 }
 
 // Run is a simplified version of testing.T.Run() method, without edge
@@ -28,6 +33,11 @@ type T struct {
 func (t *T) Run(name string, f func(*testing.T)) bool {
 	f(&t.T)
 	return !t.Failed()
+}
+
+// Name returns the name of the running test (in fact the one set by NewT).
+func (t *T) Name() string {
+	return t.name
 }
 
 // LogBuf is an ugly hack allowing to access internal testing.T log

@@ -19,7 +19,7 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 During a match, all expected fields must be found to
 succeed. Non-expected fields are ignored.
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
 > See also [<i class='fas fa-book'></i> Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep#Struct).

@@ -22,11 +22,11 @@ func TestContext(t *testing.T) {
 	}
 
 	ctx := ContextConfig{}
-	if ctx == DefaultContextConfig {
+	if ctx.Equal(DefaultContextConfig) {
 		t.Errorf("Empty ContextConfig should be ≠ from DefaultContextConfig")
 	}
 	ctx.sanitize()
-	if ctx != DefaultContextConfig {
+	if !ctx.Equal(DefaultContextConfig) {
 		t.Errorf("Sanitized empty ContextConfig should be = to DefaultContextConfig")
 	}
 }

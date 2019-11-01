@@ -186,6 +186,11 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		return
 	}
 
+	// Try to see if a TestDeep operator is anchored in expected
+	if op, ok := ctx.Anchors.ResolveAnchor(expected); ok {
+		return deepValueEqual(ctx, got, op)
+	}
+
 	switch got.Kind() {
 	case reflect.Array:
 		for i, l := 0, got.Len(); i < l; i++ {

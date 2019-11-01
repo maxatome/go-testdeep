@@ -21,7 +21,7 @@ Cmp(t, gotValue,
     Tag("gender", "male")))        // matches $gender
 ```
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method is delegated to *expectedValue* one if
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method is delegated to *expectedValue* one if
 *expectedValue* is a [TestDeep operator]({{< ref "operators" >}}), otherwise it returns the
 type of *expectedValue* (or `nil` if it is originally untyped `nil`).
 

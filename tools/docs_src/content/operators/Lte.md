@@ -13,7 +13,7 @@ func Lte(maxExpectedValue interface{}) TestDeep
 same kind as the compared value if numeric, and the same type if
 [`time.Time`](https://golang.org/pkg/time/#Time) (or assignable).
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *maxExpectedValue*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *maxExpectedValue*.
 
 
 > See also [<i class='fas fa-book'></i> Lte godoc](https://godoc.org/github.com/maxatome/go-testdeep#Lte).

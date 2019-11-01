@@ -59,7 +59,7 @@ confusion produced by output in case of failure. When the data
 needs to be transformed before being compared again, [`Smuggle`]({{< ref "Smuggle" >}})
 operator should be used instead.
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of only parameter of *fn*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of only parameter of *fn*.
 
 
 > See also [<i class='fas fa-book'></i> Code godoc](https://godoc.org/github.com/maxatome/go-testdeep#Code).

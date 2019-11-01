@@ -10,7 +10,7 @@ func Any(expectedValues ...interface{}) TestDeep
 [`Any`]({{< ref "Any" >}}) operator compares data against several expected values. During
 a match, at least one of them has to match to succeed.
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method can return a non-`nil` [`reflect.Type`](https://golang.org/pkg/reflect/#Type) if all items
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method can return a non-`nil` [`reflect.Type`](https://golang.org/pkg/reflect/#Type) if all items
 known non-interface types are equal, or if only interface types
 are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 

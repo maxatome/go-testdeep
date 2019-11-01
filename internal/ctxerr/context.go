@@ -7,6 +7,7 @@
 package ctxerr
 
 import (
+	"github.com/maxatome/go-testdeep/internal/anchors"
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
@@ -25,6 +26,7 @@ type Context struct {
 	// < 0 do not stop until comparison ends.
 	MaxErrors int
 	Errors    *[]*Error
+	Anchors   *anchors.Info
 	// If true, the contents of the returned *Error will not be
 	// checked. Can be used to avoid filling Error{} with expensive
 	// computations.

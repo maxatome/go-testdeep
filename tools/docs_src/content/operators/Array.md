@@ -16,7 +16,7 @@ values of *expectedEntries*.
 *expectedEntries* can be `nil`, if no zero entries are expected and
 no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
 > See also [<i class='fas fa-book'></i> Array godoc](https://godoc.org/github.com/maxatome/go-testdeep#Array).

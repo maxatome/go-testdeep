@@ -26,7 +26,7 @@ Cmp(t, map[string]int{"a": 1, "c": 3},
   SuperMapOf(map[string]int{"a": 1, "b": 2}, nil)) // fails, missing {"b": 2}
 ```
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
 > See also [<i class='fas fa-book'></i> SuperMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf).

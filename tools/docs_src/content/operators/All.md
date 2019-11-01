@@ -10,7 +10,7 @@ func All(expectedValues ...interface{}) TestDeep
 [`All`]({{< ref "All" >}}) operator compares data against several expected values. During
 a match, all of them have to match to succeed.
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method can return a non-`nil` [`reflect.Type`](https://golang.org/pkg/reflect/#Type) if all items
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method can return a non-`nil` [`reflect.Type`](https://golang.org/pkg/reflect/#Type) if all items
 known non-interface types are equal, or if only interface types
 are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 

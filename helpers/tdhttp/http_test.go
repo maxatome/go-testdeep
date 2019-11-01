@@ -242,6 +242,84 @@ func TestCmpJSONResponse(tt *testing.T) {
 	}
 }
 
+func TestCmpJSONResponseAnchor(tt *testing.T) {
+	t := td.NewT(tt)
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(242)
+		fmt.Fprintln(w, `{"name":"Bob"}`)
+	})
+	req := httptest.NewRequest("GET", "/path", nil)
+
+	type JResp struct {
+		Name string `json:"name"`
+	}
+
+	// With *td.T
+	tdhttp.CmpJSONResponse(t, req, handler,
+		tdhttp.Response{
+			Status: 242,
+			Body: JResp{
+				Name: t.A(td.Re("(?i)bob"), "").(string),
+			},
+		})
+
+	// With *testing.T
+	tdhttp.CmpJSONResponse(tt, req, handler,
+		tdhttp.Response{
+			Status: 242,
+			Body: JResp{
+				Name: t.A(td.Re("(?i)bob"), "").(string),
+			},
+		})
+
+	func() {
+		defer t.AnchorsPersistTemporarily()()
+
+		op := t.A(td.Re("(?i)bob"), "").(string)
+
+		// All calls should succeed, as op persists
+		tdhttp.CmpJSONResponse(t, req, handler,
+			tdhttp.Response{
+				Status: 242,
+				Body:   JResp{Name: op},
+			})
+
+		tdhttp.CmpJSONResponse(t, req, handler,
+			tdhttp.Response{
+				Status: 242,
+				Body:   JResp{Name: op},
+			})
+
+		// Even with the original *testing.T instance (here tt)
+		tdhttp.CmpJSONResponse(tt, req, handler,
+			tdhttp.Response{
+				Status: 242,
+				Body:   JResp{Name: op},
+			})
+	}()
+
+	// Failures
+	t.FailureIsFatal().False(t.DoAnchorsPersist()) // just to be sure
+
+	mt := td.NewT(tdutil.NewT("tdhttp_persistence_test"))
+	op := mt.A(td.Re("(?i)bob"), "").(string)
+
+	// First call should succeed
+	t.True(tdhttp.CmpJSONResponse(mt, req, handler,
+		tdhttp.Response{
+			Status: 242,
+			Body:   JResp{Name: op},
+		}))
+
+	// Second one should fail, as previously anchored operator has been reset
+	t.False(tdhttp.CmpJSONResponse(mt, req, handler,
+		tdhttp.Response{
+			Status: 242,
+			Body:   JResp{Name: op},
+		}))
+}
+
 func TestCmpXMLResponse(tt *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("X-TestDeep", "foobar")
@@ -309,7 +387,7 @@ func testCmpResponse(t *td.T,
 ) {
 	t.Helper()
 
-	mockT := &tdutil.T{}
+	mockT := tdutil.NewT(cmpName)
 
 	t.Cmp(cmp(mockT,
 		httptest.NewRequest("GET", "/path", nil),
@@ -464,7 +542,7 @@ func TestMux(t *testing.T) {
 		t.Run("zeroed body", func(tt *testing.T) {
 			t := td.NewT(tt)
 
-			mockT := &tdutil.T{}
+			mockT := tdutil.NewT("zeroed_body")
 			ok := tdhttp.CmpJSONResponse(mockT,
 				tdhttp.NewRequest("PUT", "/json", nil),
 				mux.ServeHTTP,
@@ -534,7 +612,7 @@ func TestMux(t *testing.T) {
 		t.Run("Unmarshal is failing", func(tt *testing.T) {
 			t := td.NewT(tt)
 
-			mockT := &tdutil.T{}
+			mockT := tdutil.NewT("Unmarshal_is_failing")
 			ok := tdhttp.CmpXMLResponse(mockT,
 				tdhttp.NewRequest("PUT", "/xml", nil),
 				mux.ServeHTTP,

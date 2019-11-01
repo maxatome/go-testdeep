@@ -132,7 +132,7 @@ parameters) have shortcuts. They follow:
 - [`Zero`]({{< ref "Zero" >}})     → `$^Zero`
 
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of the *expectedJSON*
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of the *expectedJSON*
 [`json.Unmarshal`](https://golang.org/pkg/json/#Unmarshal)'ed. So it can be `bool`, `string`, `float64`,
 `[]interface{}`, `map[string]interface{}` or `interface{}` in case
 *expectedJSON* is "null".

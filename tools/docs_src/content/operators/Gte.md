@@ -13,7 +13,7 @@ func Gte(minExpectedValue interface{}) TestDeep
 same kind as the compared value if numeric, and the same type if
 [`time.Time`](https://golang.org/pkg/time/#Time) (or assignable).
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *minExpectedValue*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *minExpectedValue*.
 
 
 > See also [<i class='fas fa-book'></i> Gte godoc](https://godoc.org/github.com/maxatome/go-testdeep#Gte).
