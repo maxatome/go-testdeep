@@ -18,7 +18,8 @@ Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := []int{4, 5, 9, 42}
 
@@ -33,7 +34,8 @@ Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpNotAny shortcut
 
 ```go
@@ -60,7 +62,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := []int{4, 5, 9, 42}
 
@@ -75,7 +78,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.NotAny shortcut
 
 ```go
@@ -102,7 +106,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := []int{4, 5, 9, 42}
 
@@ -117,4 +122,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

@@ -23,7 +23,8 @@ Cmp(t, gotSlice, Cap(Between(3, 4)))
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := make([]int, 0, 12)
 
@@ -42,8 +43,10 @@ Cmp(t, gotSlice, Cap(Between(3, 4)))
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Operator example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Operator example" %}}```go
+	t := &testing.T{}
 
 	got := make([]int, 0, 12)
 
@@ -58,7 +61,8 @@ Cmp(t, gotSlice, Cap(Between(3, 4)))
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpCap shortcut
 
 ```go
@@ -85,7 +89,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := make([]int, 0, 12)
 
@@ -104,8 +109,10 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Operator example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Operator example" %}}```go
+	t := &testing.T{}
 
 	got := make([]int, 0, 12)
 
@@ -120,7 +127,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Cap shortcut
 
 ```go
@@ -147,7 +155,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := make([]int, 0, 12)
 
@@ -166,8 +175,10 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Operator example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Operator example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := make([]int, 0, 12)
 
@@ -182,4 +193,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

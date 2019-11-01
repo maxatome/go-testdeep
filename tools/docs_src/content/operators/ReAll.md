@@ -29,7 +29,8 @@ Cmp(t, "John Doe",
 
 ### Examples
 
-{{%expand "Capture example" %}}	t := &testing.T{}
+{{%expand "Capture example" %}}```go
+	t := &testing.T{}
 
 	got := "foo bar biz"
 	ok := Cmp(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
@@ -45,8 +46,10 @@ Cmp(t, "John Doe",
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CaptureComplex example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CaptureComplex example" %}}```go
+	t := &testing.T{}
 
 	got := "11 45 23 56 85 96"
 	ok := Cmp(t, got,
@@ -69,8 +72,10 @@ Cmp(t, "John Doe",
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledCapture example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledCapture example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile(`(\w+)`)
 
@@ -88,8 +93,10 @@ Cmp(t, "John Doe",
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledCaptureComplex example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledCaptureComplex example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile(`(\d+)`)
 
@@ -114,7 +121,8 @@ Cmp(t, "John Doe",
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpReAll shortcut
 
 ```go
@@ -141,7 +149,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Capture example" %}}	t := &testing.T{}
+{{%expand "Capture example" %}}```go
+	t := &testing.T{}
 
 	got := "foo bar biz"
 	ok := CmpReAll(t, got, `(\w+)`, Set("biz", "foo", "bar"),
@@ -157,8 +166,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CaptureComplex example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CaptureComplex example" %}}```go
+	t := &testing.T{}
 
 	got := "11 45 23 56 85 96"
 	ok := CmpReAll(t, got, `(\d+)`, ArrayEach(Code(func(num string) bool {
@@ -179,8 +190,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledCapture example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledCapture example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile(`(\w+)`)
 
@@ -198,8 +211,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledCaptureComplex example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledCaptureComplex example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile(`(\d+)`)
 
@@ -222,7 +237,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.ReAll shortcut
 
 ```go
@@ -249,7 +265,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Capture example" %}}	t := NewT(&testing.T{})
+{{%expand "Capture example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "foo bar biz"
 	ok := t.ReAll(got, `(\w+)`, Set("biz", "foo", "bar"),
@@ -265,8 +282,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CaptureComplex example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "CaptureComplex example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "11 45 23 56 85 96"
 	ok := t.ReAll(got, `(\d+)`, ArrayEach(Code(func(num string) bool {
@@ -287,8 +306,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledCapture example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "CompiledCapture example" %}}```go
+	t := NewT(&testing.T{})
 
 	expected := regexp.MustCompile(`(\w+)`)
 
@@ -306,8 +327,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledCaptureComplex example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "CompiledCaptureComplex example" %}}```go
+	t := NewT(&testing.T{})
 
 	expected := regexp.MustCompile(`(\d+)`)
 
@@ -330,4 +353,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

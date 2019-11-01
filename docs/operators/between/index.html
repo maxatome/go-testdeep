@@ -12,20 +12,20 @@
     <title>Between :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1541,39 +1541,37 @@ or not:</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := 156
+	got := <span style="color:#3677a9">156</span>
 
-ok := Cmp(t, got, Between(154, 156),
-    &quot;checks %v is in [154 .. 156]&quot;, got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>),
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BoundsInIn is implicit
-ok = Cmp(t, got, Between(154, 156, BoundsInIn),
-    &quot;checks %v is in [154 .. 156]&quot;, got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsInIn),
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, got, Between(154, 156, BoundsInOut),
-    &quot;checks %v is in [154 .. 156[&quot;, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsInOut),
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156[&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, got, Between(154, 156, BoundsOutIn),
-    &quot;checks %v is in ]154 .. 156]&quot;, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsOutIn),
+		<span style="color:#ed9d13">&#34;checks %v is in ]154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, got, Between(154, 156, BoundsOutOut),
-    &quot;checks %v is in ]154 .. 156[&quot;, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsOutOut),
+		<span style="color:#ed9d13">&#34;checks %v is in ]154 .. 156[&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1588,39 +1586,37 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &quot;abc&quot;
+	got := <span style="color:#ed9d13">&#34;abc&#34;</span>
 
-ok := Cmp(t, got, Between(&quot;aaa&quot;, &quot;abc&quot;),
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>),
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BoundsInIn is implicit
-ok = Cmp(t, got, Between(&quot;aaa&quot;, &quot;abc&quot;, BoundsInIn),
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsInIn),
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, got, Between(&quot;aaa&quot;, &quot;abc&quot;, BoundsInOut),
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;[`, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsInOut),
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, got, Between(&quot;aaa&quot;, &quot;abc&quot;, BoundsOutIn),
-    `checks &quot;%v&quot; is in ]&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsOutIn),
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, got, Between(&quot;aaa&quot;, &quot;abc&quot;, BoundsOutOut),
-    `checks &quot;%v&quot; is in ]&quot;aaa&quot; .. &quot;abc&quot;[`, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsOutOut),
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1657,39 +1653,37 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := 156
+	got := <span style="color:#3677a9">156</span>
 
-ok := CmpBetween(t, got, 154, 156, BoundsInIn,
-    &quot;checks %v is in [154 .. 156]&quot;, got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsInIn,
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BoundsInIn is implicit
-ok = CmpBetween(t, got, 154, 156, BoundsInIn,
-    &quot;checks %v is in [154 .. 156]&quot;, got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsInIn,
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpBetween(t, got, 154, 156, BoundsInOut,
-    &quot;checks %v is in [154 .. 156[&quot;, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsInOut,
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156[&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpBetween(t, got, 154, 156, BoundsOutIn,
-    &quot;checks %v is in ]154 .. 156]&quot;, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsOutIn,
+		<span style="color:#ed9d13">&#34;checks %v is in ]154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpBetween(t, got, 154, 156, BoundsOutOut,
-    &quot;checks %v is in ]154 .. 156[&quot;, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsOutOut,
+		<span style="color:#ed9d13">&#34;checks %v is in ]154 .. 156[&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1704,39 +1698,37 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &quot;abc&quot;
+	got := <span style="color:#ed9d13">&#34;abc&#34;</span>
 
-ok := CmpBetween(t, got, &quot;aaa&quot;, &quot;abc&quot;, BoundsInIn,
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsInIn,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BoundsInIn is implicit
-ok = CmpBetween(t, got, &quot;aaa&quot;, &quot;abc&quot;, BoundsInIn,
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsInIn,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpBetween(t, got, &quot;aaa&quot;, &quot;abc&quot;, BoundsInOut,
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;[`, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsInOut,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpBetween(t, got, &quot;aaa&quot;, &quot;abc&quot;, BoundsOutIn,
-    `checks &quot;%v&quot; is in ]&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsOutIn,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpBetween(t, got, &quot;aaa&quot;, &quot;abc&quot;, BoundsOutOut,
-    `checks &quot;%v&quot; is in ]&quot;aaa&quot; .. &quot;abc&quot;[`, got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsOutOut,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1773,39 +1765,37 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := 156
+	got := <span style="color:#3677a9">156</span>
 
-ok := t.Between(got, 154, 156, BoundsInIn,
-    &quot;checks %v is in [154 .. 156]&quot;, got)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">Between</span>(got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsInIn,
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BoundsInIn is implicit
-ok = t.Between(got, 154, 156, BoundsInIn,
-    &quot;checks %v is in [154 .. 156]&quot;, got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsInIn,
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Between(got, 154, 156, BoundsInOut,
-    &quot;checks %v is in [154 .. 156[&quot;, got)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsInOut,
+		<span style="color:#ed9d13">&#34;checks %v is in [154 .. 156[&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Between(got, 154, 156, BoundsOutIn,
-    &quot;checks %v is in ]154 .. 156]&quot;, got)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsOutIn,
+		<span style="color:#ed9d13">&#34;checks %v is in ]154 .. 156]&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Between(got, 154, 156, BoundsOutOut,
-    &quot;checks %v is in ]154 .. 156[&quot;, got)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#3677a9">154</span>, <span style="color:#3677a9">156</span>, BoundsOutOut,
+		<span style="color:#ed9d13">&#34;checks %v is in ]154 .. 156[&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1820,39 +1810,37 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := &quot;abc&quot;
+	got := <span style="color:#ed9d13">&#34;abc&#34;</span>
 
-ok := t.Between(got, &quot;aaa&quot;, &quot;abc&quot;, BoundsInIn,
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsInIn,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BoundsInIn is implicit
-ok = t.Between(got, &quot;aaa&quot;, &quot;abc&quot;, BoundsInIn,
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsInIn,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Between(got, &quot;aaa&quot;, &quot;abc&quot;, BoundsInOut,
-    `checks &quot;%v&quot; is in [&quot;aaa&quot; .. &quot;abc&quot;[`, got)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsInOut,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Between(got, &quot;aaa&quot;, &quot;abc&quot;, BoundsOutIn,
-    `checks &quot;%v&quot; is in ]&quot;aaa&quot; .. &quot;abc&quot;]`, got)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsOutIn,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Between(got, &quot;aaa&quot;, &quot;abc&quot;, BoundsOutOut,
-    `checks &quot;%v&quot; is in ]&quot;aaa&quot; .. &quot;abc&quot;[`, got)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, BoundsOutOut,
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -2993,19 +2981,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
+    <script src="/js/jquery.sticky.js?1572598485"></script>
+    <script src="/js/featherlight.min.js?1572598485"></script>
+    <script src="/js/highlight.pack.js?1572598485"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
+    <script src="/js/learn.js?1572598485"></script>
+    <script src="/js/hugo-learn.js?1572598485"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598485"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

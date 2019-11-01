@@ -21,7 +21,8 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
 ### Examples
 
-{{%expand "Array example" %}}	t := &testing.T{}
+{{%expand "Array example" %}}```go
+	t := &testing.T{}
 
 	got := [3]int{42, 58, 26}
 
@@ -31,8 +32,10 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedArray example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedArray example" %}}```go
+	t := &testing.T{}
 
 	type MyArray [3]int
 
@@ -61,7 +64,8 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpArray shortcut
 
 ```go
@@ -88,7 +92,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Array example" %}}	t := &testing.T{}
+{{%expand "Array example" %}}```go
+	t := &testing.T{}
 
 	got := [3]int{42, 58, 26}
 
@@ -98,8 +103,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedArray example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedArray example" %}}```go
+	t := &testing.T{}
 
 	type MyArray [3]int
 
@@ -126,7 +133,8 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Array shortcut
 
 ```go
@@ -153,7 +161,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Array example" %}}	t := NewT(&testing.T{})
+{{%expand "Array example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := [3]int{42, 58, 26}
 
@@ -163,8 +172,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedArray example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "TypedArray example" %}}```go
+	t := NewT(&testing.T{})
 
 	type MyArray [3]int
 
@@ -191,4 +202,5 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

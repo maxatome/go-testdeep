@@ -27,7 +27,8 @@ Cmp(t, &AnyStruct{}, Ptr(Zero())) // is true
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	ok := Cmp(t, 0, Zero())
 	fmt.Println(ok)
@@ -78,7 +79,8 @@ Cmp(t, &AnyStruct{}, Ptr(Zero())) // is true
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpZero shortcut
 
 ```go
@@ -105,7 +107,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	ok := CmpZero(t, 0)
 	fmt.Println(ok)
@@ -156,7 +159,8 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Zero shortcut
 
 ```go
@@ -183,7 +187,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	ok := t.Zero(0)
 	fmt.Println(ok)
@@ -234,4 +239,5 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

@@ -12,20 +12,20 @@
     <title>NotEmpty :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1530,36 +1530,34 @@ etc.) on an array, a channel, a map, a slice or a <code>string</code>.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-ok := Cmp(t, nil, NotEmpty()) // fails, as nil is considered empty
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">nil</span>, <span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// fails, as nil is considered empty
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &quot;foobar&quot;, NotEmpty())
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;foobar&#34;</span>, <span style="color:#447fcf">NotEmpty</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Fails as 0 is a number, so not empty. Use NotZero() instead
-ok = Cmp(t, 0, NotEmpty())
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Fails as 0 is a number, so not empty. Use NotZero() instead
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">0</span>, <span style="color:#447fcf">NotEmpty</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, map[string]int{&quot;foobar&quot;: 42}, NotEmpty())
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foobar&#34;</span>: <span style="color:#3677a9">42</span>}, <span style="color:#447fcf">NotEmpty</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, []int{1}, NotEmpty())
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>}, <span style="color:#447fcf">NotEmpty</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, [3]int{}, NotEmpty()) // succeeds, NotEmpty() is not NotZero()!
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, <span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// succeeds, NotEmpty() is not NotZero()!
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// false
-// true
-// false
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1574,39 +1572,37 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type MySlice []int
+	<span style="color:#6ab825;font-weight:bold">type</span> MySlice []<span style="color:#6ab825;font-weight:bold">int</span>
 
-ok := Cmp(t, MySlice{12}, NotEmpty())
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, MySlice{<span style="color:#3677a9">12</span>}, <span style="color:#447fcf">NotEmpty</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &amp;MySlice{12}, NotEmpty()) // Ptr() not needed
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;MySlice{<span style="color:#3677a9">12</span>}, <span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// Ptr() not needed
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-l1 := &amp;MySlice{12}
-l2 := &amp;l1
-l3 := &amp;l2
-ok = Cmp(t, &amp;l3, NotEmpty())
-fmt.Println(ok)
+	l1 := &amp;MySlice{<span style="color:#3677a9">12</span>}
+	l2 := &amp;l1
+	l3 := &amp;l2
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;l3, <span style="color:#447fcf">NotEmpty</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Works the same for array, map, channel and string
+	<span style="color:#999;font-style:italic">// Works the same for array, map, channel and string
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#999;font-style:italic">// But not for others types as:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> MyStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Value <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-// But not for others types as:
-type MyStruct struct {
-    Value int
-}
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;MyStruct{}, <span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// fails, use NotZero() instead
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &amp;MyStruct{}, NotEmpty()) // fails, use NotZero() instead
-fmt.Println(ok)
-
-// Output:
-// true
-// true
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1639,36 +1635,34 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-ok := CmpNotEmpty(t, nil) // fails, as nil is considered empty
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#6ab825;font-weight:bold">nil</span>) <span style="color:#999;font-style:italic">// fails, as nil is considered empty
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotEmpty(t, &quot;foobar&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#ed9d13">&#34;foobar&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Fails as 0 is a number, so not empty. Use NotZero() instead
-ok = CmpNotEmpty(t, 0)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Fails as 0 is a number, so not empty. Use NotZero() instead
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#3677a9">0</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotEmpty(t, map[string]int{&quot;foobar&quot;: 42})
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foobar&#34;</span>: <span style="color:#3677a9">42</span>})
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotEmpty(t, []int{1})
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>})
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotEmpty(t, [3]int{}) // succeeds, NotEmpty() is not NotZero()!
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, NotEmpty() is not NotZero()!
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// false
-// true
-// false
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1683,39 +1677,37 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type MySlice []int
+	<span style="color:#6ab825;font-weight:bold">type</span> MySlice []<span style="color:#6ab825;font-weight:bold">int</span>
 
-ok := CmpNotEmpty(t, MySlice{12})
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpNotEmpty</span>(t, MySlice{<span style="color:#3677a9">12</span>})
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotEmpty(t, &amp;MySlice{12}) // Ptr() not needed
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;MySlice{<span style="color:#3677a9">12</span>}) <span style="color:#999;font-style:italic">// Ptr() not needed
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-l1 := &amp;MySlice{12}
-l2 := &amp;l1
-l3 := &amp;l2
-ok = CmpNotEmpty(t, &amp;l3)
-fmt.Println(ok)
+	l1 := &amp;MySlice{<span style="color:#3677a9">12</span>}
+	l2 := &amp;l1
+	l3 := &amp;l2
+	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;l3)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Works the same for array, map, channel and string
+	<span style="color:#999;font-style:italic">// Works the same for array, map, channel and string
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#999;font-style:italic">// But not for others types as:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> MyStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Value <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-// But not for others types as:
-type MyStruct struct {
-    Value int
-}
+	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;MyStruct{}) <span style="color:#999;font-style:italic">// fails, use NotZero() instead
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotEmpty(t, &amp;MyStruct{}) // fails, use NotZero() instead
-fmt.Println(ok)
-
-// Output:
-// true
-// true
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1748,36 +1740,34 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-ok := t.NotEmpty(nil) // fails, as nil is considered empty
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">NotEmpty</span>(<span style="color:#6ab825;font-weight:bold">nil</span>) <span style="color:#999;font-style:italic">// fails, as nil is considered empty
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotEmpty(&quot;foobar&quot;)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotEmpty</span>(<span style="color:#ed9d13">&#34;foobar&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Fails as 0 is a number, so not empty. Use NotZero() instead
-ok = t.NotEmpty(0)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Fails as 0 is a number, so not empty. Use NotZero() instead
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">NotEmpty</span>(<span style="color:#3677a9">0</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotEmpty(map[string]int{&quot;foobar&quot;: 42})
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotEmpty</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foobar&#34;</span>: <span style="color:#3677a9">42</span>})
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotEmpty([]int{1})
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotEmpty</span>([]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>})
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotEmpty([3]int{}) // succeeds, NotEmpty() is not NotZero()!
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotEmpty</span>([<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, NotEmpty() is not NotZero()!
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// false
-// true
-// false
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1792,39 +1782,37 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-type MySlice []int
+	<span style="color:#6ab825;font-weight:bold">type</span> MySlice []<span style="color:#6ab825;font-weight:bold">int</span>
 
-ok := t.NotEmpty(MySlice{12})
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">NotEmpty</span>(MySlice{<span style="color:#3677a9">12</span>})
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotEmpty(&amp;MySlice{12}) // Ptr() not needed
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotEmpty</span>(&amp;MySlice{<span style="color:#3677a9">12</span>}) <span style="color:#999;font-style:italic">// Ptr() not needed
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-l1 := &amp;MySlice{12}
-l2 := &amp;l1
-l3 := &amp;l2
-ok = t.NotEmpty(&amp;l3)
-fmt.Println(ok)
+	l1 := &amp;MySlice{<span style="color:#3677a9">12</span>}
+	l2 := &amp;l1
+	l3 := &amp;l2
+	ok = t.<span style="color:#447fcf">NotEmpty</span>(&amp;l3)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Works the same for array, map, channel and string
+	<span style="color:#999;font-style:italic">// Works the same for array, map, channel and string
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#999;font-style:italic">// But not for others types as:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> MyStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Value <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-// But not for others types as:
-type MyStruct struct {
-    Value int
-}
+	ok = t.<span style="color:#447fcf">NotEmpty</span>(&amp;MyStruct{}) <span style="color:#999;font-style:italic">// fails, use NotZero() instead
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotEmpty(&amp;MyStruct{}) // fails, use NotZero() instead
-fmt.Println(ok)
-
-// Output:
-// true
-// true
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -2965,19 +2953,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
+    <script src="/js/jquery.sticky.js?1572598485"></script>
+    <script src="/js/featherlight.min.js?1572598485"></script>
+    <script src="/js/highlight.pack.js?1572598485"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
+    <script src="/js/learn.js?1572598485"></script>
+    <script src="/js/hugo-learn.js?1572598485"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598485"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

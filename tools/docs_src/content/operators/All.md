@@ -17,7 +17,8 @@ are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := "foo/bar"
 
@@ -40,7 +41,8 @@ are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpAll shortcut
 
 ```go
@@ -67,7 +69,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := "foo/bar"
 
@@ -86,7 +89,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.All shortcut
 
 ```go
@@ -113,7 +117,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "foo/bar"
 
@@ -132,4 +137,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

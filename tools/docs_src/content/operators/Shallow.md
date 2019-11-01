@@ -46,7 +46,8 @@ Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even 
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	type MyStruct struct {
 		Value int
@@ -66,8 +67,10 @@ Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even 
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Slice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Slice example" %}}```go
+	t := &testing.T{}
 
 	back := []int{1, 2, 3, 1, 2, 3}
 	a := back[:3]
@@ -82,8 +85,10 @@ Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even 
 	// Output:
 	// are ≠ but share the same area: true
 	// are = but do not point to same area: false
-{{% /expand%}}
-{{%expand "String example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := &testing.T{}
 
 	back := "foobarfoobar"
 	a := back[:6]
@@ -98,7 +103,8 @@ Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even 
 	// Output:
 	// are ≠ but share the same area: true
 	// are = but do not point to same area: false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpShallow shortcut
 
 ```go
@@ -125,7 +131,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	type MyStruct struct {
 		Value int
@@ -145,8 +152,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Slice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Slice example" %}}```go
+	t := &testing.T{}
 
 	back := []int{1, 2, 3, 1, 2, 3}
 	a := back[:3]
@@ -161,8 +170,10 @@ reason of a potential failure.
 	// Output:
 	// are ≠ but share the same area: true
 	// are = but do not point to same area: false
-{{% /expand%}}
-{{%expand "String example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := &testing.T{}
 
 	back := "foobarfoobar"
 	a := back[:6]
@@ -177,7 +188,8 @@ reason of a potential failure.
 	// Output:
 	// are ≠ but share the same area: true
 	// are = but do not point to same area: false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Shallow shortcut
 
 ```go
@@ -204,7 +216,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	type MyStruct struct {
 		Value int
@@ -224,8 +237,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Slice example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Slice example" %}}```go
+	t := NewT(&testing.T{})
 
 	back := []int{1, 2, 3, 1, 2, 3}
 	a := back[:3]
@@ -240,8 +255,10 @@ reason of a potential failure.
 	// Output:
 	// are ≠ but share the same area: true
 	// are = but do not point to same area: false
-{{% /expand%}}
-{{%expand "String example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := NewT(&testing.T{})
 
 	back := "foobarfoobar"
 	a := back[:6]
@@ -256,4 +273,5 @@ reason of a potential failure.
 	// Output:
 	// are ≠ but share the same area: true
 	// are = but do not point to same area: false
-{{% /expand%}}
+
+```{{% /expand%}}

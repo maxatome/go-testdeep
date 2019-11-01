@@ -22,7 +22,8 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := "foobar"
 
@@ -31,8 +32,10 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := &testing.T{}
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -42,8 +45,10 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Error example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := &testing.T{}
 
 	got := errors.New("foobar")
 
@@ -52,7 +57,8 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 
 	// Output:
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpString shortcut
 
 ```go
@@ -79,7 +85,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := "foobar"
 
@@ -88,8 +95,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := &testing.T{}
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -99,8 +108,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Error example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := &testing.T{}
 
 	got := errors.New("foobar")
 
@@ -109,7 +120,8 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.String shortcut
 
 ```go
@@ -136,7 +148,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "foobar"
 
@@ -145,8 +158,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := NewT(&testing.T{})
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -156,8 +171,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Error example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := errors.New("foobar")
 
@@ -166,4 +183,5 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

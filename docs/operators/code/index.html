@@ -12,20 +12,20 @@
     <title>Code :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1568,57 +1568,55 @@ operator should be used instead.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &quot;12&quot;
+	got := <span style="color:#ed9d13">&#34;12&#34;</span>
 
-ok := Cmp(t, got,
-    Code(func(num string) bool {
-        n, err := strconv.Atoi(num)
-        return err == nil &amp;&amp; n &gt; 10 &amp;&amp; n &lt; 100
-    }),
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+			n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+			<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
+		}),
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same with failure reason
-ok = Cmp(t, got,
-    Code(func(num string) (bool, string) {
-        n, err := strconv.Atoi(num)
-        if err != nil {
-            return false, &quot;not a number&quot;
-        }
-        if n &gt; 10 &amp;&amp; n &lt; 100 {
-            return true, &quot;&quot;
-        }
-        return false, &quot;not in ]10 .. 100[&quot;
-    }),
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same with failure reason
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">bool</span>, <span style="color:#6ab825;font-weight:bold">string</span>) {
+			n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+			<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+				<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;not a number&#34;</span>
+			}
+			<span style="color:#6ab825;font-weight:bold">if</span> n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span> {
+				<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">&#34;&#34;</span>
+			}
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;not in ]10 .. 100[&#34;</span>
+		}),
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same with failure reason thanks to error
-ok = Cmp(t, got,
-    Code(func(num string) error {
-        n, err := strconv.Atoi(num)
-        if err != nil {
-            return err
-        }
-        if n &gt; 10 &amp;&amp; n &lt; 100 {
-            return nil
-        }
-        return fmt.Errorf(&quot;%d not in ]10 .. 100[&quot;, n)
-    }),
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same with failure reason thanks to error
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">error</span> {
+			n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+			<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+				<span style="color:#6ab825;font-weight:bold">return</span> err
+			}
+			<span style="color:#6ab825;font-weight:bold">if</span> n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span> {
+				<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">nil</span>
+			}
+			<span style="color:#6ab825;font-weight:bold">return</span> fmt.<span style="color:#447fcf">Errorf</span>(<span style="color:#ed9d13">&#34;%d not in ]10 .. 100[&#34;</span>, n)
+		}),
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1651,54 +1649,52 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &quot;12&quot;
+	got := <span style="color:#ed9d13">&#34;12&#34;</span>
 
-ok := CmpCode(t, got, func(num string) bool {
-    n, err := strconv.Atoi(num)
-    return err == nil &amp;&amp; n &gt; 10 &amp;&amp; n &lt; 100
-},
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpCode</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+		<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
+	},
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same with failure reason
-ok = CmpCode(t, got, func(num string) (bool, string) {
-    n, err := strconv.Atoi(num)
-    if err != nil {
-        return false, &quot;not a number&quot;
-    }
-    if n &gt; 10 &amp;&amp; n &lt; 100 {
-        return true, &quot;&quot;
-    }
-    return false, &quot;not in ]10 .. 100[&quot;
-},
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same with failure reason
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpCode</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">bool</span>, <span style="color:#6ab825;font-weight:bold">string</span>) {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+		<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;not a number&#34;</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">if</span> n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">&#34;&#34;</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;not in ]10 .. 100[&#34;</span>
+	},
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same with failure reason thanks to error
-ok = CmpCode(t, got, func(num string) error {
-    n, err := strconv.Atoi(num)
-    if err != nil {
-        return err
-    }
-    if n &gt; 10 &amp;&amp; n &lt; 100 {
-        return nil
-    }
-    return fmt.Errorf(&quot;%d not in ]10 .. 100[&quot;, n)
-},
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same with failure reason thanks to error
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpCode</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">error</span> {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+		<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> err
+		}
+		<span style="color:#6ab825;font-weight:bold">if</span> n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">nil</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">return</span> fmt.<span style="color:#447fcf">Errorf</span>(<span style="color:#ed9d13">&#34;%d not in ]10 .. 100[&#34;</span>, n)
+	},
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1731,54 +1727,52 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := &quot;12&quot;
+	got := <span style="color:#ed9d13">&#34;12&#34;</span>
 
-ok := t.Code(got, func(num string) bool {
-    n, err := strconv.Atoi(num)
-    return err == nil &amp;&amp; n &gt; 10 &amp;&amp; n &lt; 100
-},
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">Code</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+		<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
+	},
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same with failure reason
-ok = t.Code(got, func(num string) (bool, string) {
-    n, err := strconv.Atoi(num)
-    if err != nil {
-        return false, &quot;not a number&quot;
-    }
-    if n &gt; 10 &amp;&amp; n &lt; 100 {
-        return true, &quot;&quot;
-    }
-    return false, &quot;not in ]10 .. 100[&quot;
-},
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same with failure reason
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Code</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">bool</span>, <span style="color:#6ab825;font-weight:bold">string</span>) {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+		<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;not a number&#34;</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">if</span> n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">&#34;&#34;</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;not in ]10 .. 100[&#34;</span>
+	},
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same with failure reason thanks to error
-ok = t.Code(got, func(num string) error {
-    n, err := strconv.Atoi(num)
-    if err != nil {
-        return err
-    }
-    if n &gt; 10 &amp;&amp; n &lt; 100 {
-        return nil
-    }
-    return fmt.Errorf(&quot;%d not in ]10 .. 100[&quot;, n)
-},
-    &quot;checks string `%s` contains a number and this number is in ]10 .. 100[&quot;,
-    got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same with failure reason thanks to error
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Code</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">error</span> {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
+		<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> err
+		}
+		<span style="color:#6ab825;font-weight:bold">if</span> n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">nil</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">return</span> fmt.<span style="color:#447fcf">Errorf</span>(<span style="color:#ed9d13">&#34;%d not in ]10 .. 100[&#34;</span>, n)
+	},
+		<span style="color:#ed9d13">&#34;checks string `%s` contains a number and this number is in ]10 .. 100[&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2919,19 +2913,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
+    <script src="/js/jquery.sticky.js?1572598485"></script>
+    <script src="/js/featherlight.min.js?1572598485"></script>
+    <script src="/js/highlight.pack.js?1572598485"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
+    <script src="/js/learn.js?1572598485"></script>
+    <script src="/js/hugo-learn.js?1572598485"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598485"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

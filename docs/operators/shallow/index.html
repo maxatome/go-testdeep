@@ -12,20 +12,20 @@
     <title>Shallow :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598486" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598486" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598486" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598486" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598486" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598486" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598486" rel="stylesheet">
+    <link href="/css/theme.css?1572598486" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598486" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598486" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598486"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598486"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598486"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598486"></script>
 
     
   </div>
@@ -1547,28 +1547,26 @@ b := a[:<span style="color:#3677a9">2</span>]                    <span style="co
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type MyStruct struct {
-    Value int
-}
-data := MyStruct{Value: 12}
-got := &amp;data
+	<span style="color:#6ab825;font-weight:bold">type</span> MyStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Value <span style="color:#6ab825;font-weight:bold">int</span>
+	}
+	data := MyStruct{Value: <span style="color:#3677a9">12</span>}
+	got := &amp;data
 
-ok := Cmp(t, got, Shallow(&amp;data),
-    &quot;checks pointers only, not contents&quot;)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Shallow</span>(&amp;data),
+		<span style="color:#ed9d13">&#34;checks pointers only, not contents&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same contents, but not same pointer
-ok = Cmp(t, got, Shallow(&amp;MyStruct{Value: 12}),
-    &quot;checks pointers only, not contents&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same contents, but not same pointer
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Shallow</span>(&amp;MyStruct{Value: <span style="color:#3677a9">12</span>}),
+		<span style="color:#ed9d13">&#34;checks pointers only, not contents&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1583,23 +1581,21 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-back := []int{1, 2, 3, 1, 2, 3}
-a := back[:3]
-b := back[3:]
+	back := []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>, <span style="color:#3677a9">3</span>, <span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>, <span style="color:#3677a9">3</span>}
+	a := back[:<span style="color:#3677a9">3</span>]
+	b := back[<span style="color:#3677a9">3</span>:]
 
-ok := Cmp(t, a, Shallow(back))
-fmt.Println(&quot;are ≠ but share the same area:&quot;, ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, a, <span style="color:#447fcf">Shallow</span>(back))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are ≠ but share the same area:&#34;</span>, ok)
 
-ok = Cmp(t, b, Shallow(back))
-fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, b, <span style="color:#447fcf">Shallow</span>(back))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are = but do not point to same area:&#34;</span>, ok)
 
-// Output:
-// are ≠ but share the same area: true
-// are = but do not point to same area: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// are ≠ but share the same area: true
+</span><span style="color:#999;font-style:italic"></span>	// are = but do not point to same area: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1614,23 +1610,21 @@ fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-back := &quot;foobarfoobar&quot;
-a := back[:6]
-b := back[6:]
+	back := <span style="color:#ed9d13">&#34;foobarfoobar&#34;</span>
+	a := back[:<span style="color:#3677a9">6</span>]
+	b := back[<span style="color:#3677a9">6</span>:]
 
-ok := Cmp(t, a, Shallow(back))
-fmt.Println(&quot;are ≠ but share the same area:&quot;, ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, a, <span style="color:#447fcf">Shallow</span>(back))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are ≠ but share the same area:&#34;</span>, ok)
 
-ok = Cmp(t, b, Shallow(a))
-fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, b, <span style="color:#447fcf">Shallow</span>(a))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are = but do not point to same area:&#34;</span>, ok)
 
-// Output:
-// are ≠ but share the same area: true
-// are = but do not point to same area: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// are ≠ but share the same area: true
+</span><span style="color:#999;font-style:italic"></span>	// are = but do not point to same area: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1663,28 +1657,26 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type MyStruct struct {
-    Value int
-}
-data := MyStruct{Value: 12}
-got := &amp;data
+	<span style="color:#6ab825;font-weight:bold">type</span> MyStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Value <span style="color:#6ab825;font-weight:bold">int</span>
+	}
+	data := MyStruct{Value: <span style="color:#3677a9">12</span>}
+	got := &amp;data
 
-ok := CmpShallow(t, got, &amp;data,
-    &quot;checks pointers only, not contents&quot;)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpShallow</span>(t, got, &amp;data,
+		<span style="color:#ed9d13">&#34;checks pointers only, not contents&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same contents, but not same pointer
-ok = CmpShallow(t, got, &amp;MyStruct{Value: 12},
-    &quot;checks pointers only, not contents&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same contents, but not same pointer
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpShallow</span>(t, got, &amp;MyStruct{Value: <span style="color:#3677a9">12</span>},
+		<span style="color:#ed9d13">&#34;checks pointers only, not contents&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1699,23 +1691,21 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-back := []int{1, 2, 3, 1, 2, 3}
-a := back[:3]
-b := back[3:]
+	back := []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>, <span style="color:#3677a9">3</span>, <span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>, <span style="color:#3677a9">3</span>}
+	a := back[:<span style="color:#3677a9">3</span>]
+	b := back[<span style="color:#3677a9">3</span>:]
 
-ok := CmpShallow(t, a, back)
-fmt.Println(&quot;are ≠ but share the same area:&quot;, ok)
+	ok := <span style="color:#447fcf">CmpShallow</span>(t, a, back)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are ≠ but share the same area:&#34;</span>, ok)
 
-ok = CmpShallow(t, b, back)
-fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpShallow</span>(t, b, back)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are = but do not point to same area:&#34;</span>, ok)
 
-// Output:
-// are ≠ but share the same area: true
-// are = but do not point to same area: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// are ≠ but share the same area: true
+</span><span style="color:#999;font-style:italic"></span>	// are = but do not point to same area: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1730,23 +1720,21 @@ fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-back := &quot;foobarfoobar&quot;
-a := back[:6]
-b := back[6:]
+	back := <span style="color:#ed9d13">&#34;foobarfoobar&#34;</span>
+	a := back[:<span style="color:#3677a9">6</span>]
+	b := back[<span style="color:#3677a9">6</span>:]
 
-ok := CmpShallow(t, a, back)
-fmt.Println(&quot;are ≠ but share the same area:&quot;, ok)
+	ok := <span style="color:#447fcf">CmpShallow</span>(t, a, back)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are ≠ but share the same area:&#34;</span>, ok)
 
-ok = CmpShallow(t, b, a)
-fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpShallow</span>(t, b, a)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are = but do not point to same area:&#34;</span>, ok)
 
-// Output:
-// are ≠ but share the same area: true
-// are = but do not point to same area: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// are ≠ but share the same area: true
+</span><span style="color:#999;font-style:italic"></span>	// are = but do not point to same area: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1779,28 +1767,26 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-type MyStruct struct {
-    Value int
-}
-data := MyStruct{Value: 12}
-got := &amp;data
+	<span style="color:#6ab825;font-weight:bold">type</span> MyStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Value <span style="color:#6ab825;font-weight:bold">int</span>
+	}
+	data := MyStruct{Value: <span style="color:#3677a9">12</span>}
+	got := &amp;data
 
-ok := t.Shallow(got, &amp;data,
-    &quot;checks pointers only, not contents&quot;)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">Shallow</span>(got, &amp;data,
+		<span style="color:#ed9d13">&#34;checks pointers only, not contents&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Same contents, but not same pointer
-ok = t.Shallow(got, &amp;MyStruct{Value: 12},
-    &quot;checks pointers only, not contents&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Same contents, but not same pointer
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Shallow</span>(got, &amp;MyStruct{Value: <span style="color:#3677a9">12</span>},
+		<span style="color:#ed9d13">&#34;checks pointers only, not contents&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1815,23 +1801,21 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-back := []int{1, 2, 3, 1, 2, 3}
-a := back[:3]
-b := back[3:]
+	back := []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>, <span style="color:#3677a9">3</span>, <span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>, <span style="color:#3677a9">3</span>}
+	a := back[:<span style="color:#3677a9">3</span>]
+	b := back[<span style="color:#3677a9">3</span>:]
 
-ok := t.Shallow(a, back)
-fmt.Println(&quot;are ≠ but share the same area:&quot;, ok)
+	ok := t.<span style="color:#447fcf">Shallow</span>(a, back)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are ≠ but share the same area:&#34;</span>, ok)
 
-ok = t.Shallow(b, back)
-fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
+	ok = t.<span style="color:#447fcf">Shallow</span>(b, back)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are = but do not point to same area:&#34;</span>, ok)
 
-// Output:
-// are ≠ but share the same area: true
-// are = but do not point to same area: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// are ≠ but share the same area: true
+</span><span style="color:#999;font-style:italic"></span>	// are = but do not point to same area: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1846,23 +1830,21 @@ fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-back := &quot;foobarfoobar&quot;
-a := back[:6]
-b := back[6:]
+	back := <span style="color:#ed9d13">&#34;foobarfoobar&#34;</span>
+	a := back[:<span style="color:#3677a9">6</span>]
+	b := back[<span style="color:#3677a9">6</span>:]
 
-ok := t.Shallow(a, back)
-fmt.Println(&quot;are ≠ but share the same area:&quot;, ok)
+	ok := t.<span style="color:#447fcf">Shallow</span>(a, back)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are ≠ but share the same area:&#34;</span>, ok)
 
-ok = t.Shallow(b, a)
-fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
+	ok = t.<span style="color:#447fcf">Shallow</span>(b, a)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;are = but do not point to same area:&#34;</span>, ok)
 
-// Output:
-// are ≠ but share the same area: true
-// are = but do not point to same area: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// are ≠ but share the same area: true
+</span><span style="color:#999;font-style:italic"></span>	// are = but do not point to same area: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -3003,19 +2985,19 @@ fmt.Println(&quot;are = but do not point to same area:&quot;, ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598486"></script>
+    <script src="/js/jquery.sticky.js?1572598486"></script>
+    <script src="/js/featherlight.min.js?1572598486"></script>
+    <script src="/js/highlight.pack.js?1572598486"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598486"></script>
+    <script src="/js/learn.js?1572598486"></script>
+    <script src="/js/hugo-learn.js?1572598486"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598486" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598486"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

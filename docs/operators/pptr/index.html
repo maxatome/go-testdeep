@@ -12,20 +12,20 @@
     <title>PPtr :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1539,22 +1539,20 @@ non-<code>nil</code> of course).</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-num := 12
-got := &amp;num
+	num := <span style="color:#3677a9">12</span>
+	got := &amp;num
 
-ok := Cmp(t, &amp;got, PPtr(12))
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, &amp;got, <span style="color:#447fcf">PPtr</span>(<span style="color:#3677a9">12</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &amp;got, PPtr(Between(4, 15)))
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;got, <span style="color:#447fcf">PPtr</span>(<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">4</span>, <span style="color:#3677a9">15</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1587,22 +1585,20 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-num := 12
-got := &amp;num
+	num := <span style="color:#3677a9">12</span>
+	got := &amp;num
 
-ok := CmpPPtr(t, &amp;got, 12)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpPPtr</span>(t, &amp;got, <span style="color:#3677a9">12</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpPPtr(t, &amp;got, Between(4, 15))
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpPPtr</span>(t, &amp;got, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">4</span>, <span style="color:#3677a9">15</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1635,22 +1631,20 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-num := 12
-got := &amp;num
+	num := <span style="color:#3677a9">12</span>
+	got := &amp;num
 
-ok := t.PPtr(&amp;got, 12)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">PPtr</span>(&amp;got, <span style="color:#3677a9">12</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.PPtr(&amp;got, Between(4, 15))
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">PPtr</span>(&amp;got, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">4</span>, <span style="color:#3677a9">15</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2791,19 +2785,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598486"></script>
+    <script src="/js/jquery.sticky.js?1572598486"></script>
+    <script src="/js/featherlight.min.js?1572598486"></script>
+    <script src="/js/highlight.pack.js?1572598486"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598486"></script>
+    <script src="/js/learn.js?1572598486"></script>
+    <script src="/js/hugo-learn.js?1572598486"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598486" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598486"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

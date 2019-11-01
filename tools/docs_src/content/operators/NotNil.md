@@ -13,7 +13,8 @@ interface, containing a non-`nil` pointer.)
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	var got fmt.Stringer = &bytes.Buffer{}
 
@@ -41,7 +42,8 @@ interface, containing a non-`nil` pointer.)
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpNotNil shortcut
 
 ```go
@@ -68,7 +70,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	var got fmt.Stringer = &bytes.Buffer{}
 
@@ -96,7 +99,8 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.NotNil shortcut
 
 ```go
@@ -123,7 +127,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	var got fmt.Stringer = &bytes.Buffer{}
 
@@ -151,4 +156,5 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

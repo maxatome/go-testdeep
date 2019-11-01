@@ -13,7 +13,8 @@ comparing a slice and wanting to ignore some indexes, for example.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	ok := Cmp(t, []int{1, 2, 3},
 		Slice([]int{}, ArrayEntries{
@@ -25,4 +26,5 @@ comparing a slice and wanting to ignore some indexes, for example.
 
 	// Output:
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

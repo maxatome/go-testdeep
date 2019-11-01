@@ -18,7 +18,8 @@ same kind as the compared value if numeric, and the same type if
 
 ### Examples
 
-{{%expand "Int example" %}}	t := &testing.T{}
+{{%expand "Int example" %}}```go
+	t := &testing.T{}
 
 	got := 156
 
@@ -35,8 +36,10 @@ same kind as the compared value if numeric, and the same type if
 	// true
 	// true
 	// false
-{{% /expand%}}
-{{%expand "String example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := &testing.T{}
 
 	got := "abc"
 
@@ -53,7 +56,8 @@ same kind as the compared value if numeric, and the same type if
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpGte shortcut
 
 ```go
@@ -80,7 +84,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Int example" %}}	t := &testing.T{}
+{{%expand "Int example" %}}```go
+	t := &testing.T{}
 
 	got := 156
 
@@ -97,8 +102,10 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
-{{%expand "String example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := &testing.T{}
 
 	got := "abc"
 
@@ -115,7 +122,8 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Gte shortcut
 
 ```go
@@ -142,7 +150,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Int example" %}}	t := NewT(&testing.T{})
+{{%expand "Int example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := 156
 
@@ -159,8 +168,10 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
-{{%expand "String example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "abc"
 
@@ -177,4 +188,5 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

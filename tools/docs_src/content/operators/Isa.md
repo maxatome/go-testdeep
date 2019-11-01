@@ -37,7 +37,8 @@ will match too (in fact before checking whether it implements
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	type TstStruct struct {
 		Field int
@@ -60,8 +61,10 @@ will match too (in fact before checking whether it implements
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Interface example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Interface example" %}}```go
+	t := &testing.T{}
 
 	got := bytes.NewBufferString("foobar")
 
@@ -93,7 +96,8 @@ will match too (in fact before checking whether it implements
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpIsa shortcut
 
 ```go
@@ -120,7 +124,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	type TstStruct struct {
 		Field int
@@ -143,8 +148,10 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Interface example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Interface example" %}}```go
+	t := &testing.T{}
 
 	got := bytes.NewBufferString("foobar")
 
@@ -176,7 +183,8 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Isa shortcut
 
 ```go
@@ -203,7 +211,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	type TstStruct struct {
 		Field int
@@ -226,8 +235,10 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Interface example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Interface example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := bytes.NewBufferString("foobar")
 
@@ -259,4 +270,5 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

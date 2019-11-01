@@ -566,13 +566,15 @@ $doc
 
 EOM
 
-        my $re = qr/^func Example${operator}(?:_(\w+))?\(\) \{\n(.+?)^\}/ms;
+        my $re = qr/^func Example${operator}(?:_(\w+))?\(\) \{\n(.+?)^\}$/ms;
         while ($op_examples =~ /$re/g)
         {
             my $name = ucfirst($1 // 'Base');
 
             print $fh <<EOE;
-{{%expand "$name example" %}}${2}{{% /expand%}}
+{{%expand "$name example" %}}```go
+${2}
+```{{% /expand%}}
 EOE
         }
 
@@ -592,13 +594,15 @@ $doc
 
 EOM
 
-            my $re = qr/func ExampleCmp${operator}(?:_(\w+))?\(\) \{\n(.+?)^\}/ms;
+            my $re = qr/func ExampleCmp${operator}(?:_(\w+))?\(\) \{\n(.+?)^\}$/ms;
             while ($cmp_examples =~ /$re/g)
             {
                 my $name = ucfirst($1 // 'Base');
 
                 print $fh <<EOE;
-{{%expand "$name example" %}}${2}{{% /expand%}}
+{{%expand "$name example" %}}```go
+${2}
+```{{% /expand%}}
 EOE
             }
         }
@@ -619,13 +623,15 @@ $doc
 
 EOM
 
-            my $re = qr/func ExampleT_$t->{name}(?:_(\w+))?\(\) \{\n(.+?)^\}/ms;
+            my $re = qr/func ExampleT_$t->{name}(?:_(\w+))?\(\) \{\n(.+?)^\}$/ms;
             while ($t_examples =~ /$re/g)
             {
                 my $name = ucfirst($1 // 'Base');
 
                 print $fh <<EOE;
-{{%expand "$name example" %}}${2}{{% /expand%}}
+{{%expand "$name example" %}}```go
+${2}
+```{{% /expand%}}
 EOE
             }
         }

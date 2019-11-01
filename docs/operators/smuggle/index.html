@@ -12,20 +12,20 @@
     <title>Smuggle :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598486" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598486" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598486" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598486" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598486" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598486" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598486" rel="stylesheet">
+    <link href="/css/theme.css?1572598486" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598486" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598486" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598486"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598486"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598486"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598486"></script>
 
     
   </div>
@@ -1660,61 +1660,59 @@ type. The fields-path <code>string</code> <em>fn</em> shortcut is not available 
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := int64(123)
+	got := <span style="color:#24909d">int64</span>(<span style="color:#3677a9">123</span>)
 
-ok := Cmp(t, got,
-    Smuggle(func(n int64) int { return int(n) }, 123),
-    &quot;checks int64 got against an int value&quot;)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(n <span style="color:#6ab825;font-weight:bold">int64</span>) <span style="color:#6ab825;font-weight:bold">int</span> { <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#24909d">int</span>(n) }, <span style="color:#3677a9">123</span>),
+		<span style="color:#ed9d13">&#34;checks int64 got against an int value&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &quot;123&quot;,
-    Smuggle(
-        func(numStr string) (int, bool) {
-            n, err := strconv.Atoi(numStr)
-            return n, err == nil
-        },
-        Between(120, 130)),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;123&#34;</span>,
+		<span style="color:#447fcf">Smuggle</span>(
+			<span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">bool</span>) {
+				n, err := strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+				<span style="color:#6ab825;font-weight:bold">return</span> n, err == <span style="color:#6ab825;font-weight:bold">nil</span>
+			},
+			<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>)),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &quot;123&quot;,
-    Smuggle(
-        func(numStr string) (int, bool, string) {
-            n, err := strconv.Atoi(numStr)
-            if err != nil {
-                return 0, false, &quot;string must contain a number&quot;
-            }
-            return n, true, &quot;&quot;
-        },
-        Between(120, 130)),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;123&#34;</span>,
+		<span style="color:#447fcf">Smuggle</span>(
+			<span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">bool</span>, <span style="color:#6ab825;font-weight:bold">string</span>) {
+				n, err := strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+				<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+					<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;string must contain a number&#34;</span>
+				}
+				<span style="color:#6ab825;font-weight:bold">return</span> n, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">&#34;&#34;</span>
+			},
+			<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>)),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &quot;123&quot;,
-    Smuggle(
-        func(numStr string) (int, error) {
-            return strconv.Atoi(numStr)
-        },
-        Between(120, 130)),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;123&#34;</span>,
+		<span style="color:#447fcf">Smuggle</span>(
+			<span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">error</span>) {
+				<span style="color:#6ab825;font-weight:bold">return</span> strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+			},
+			<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>)),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Short version :)
-ok = Cmp(t, &quot;123&quot;,
-    Smuggle(strconv.Atoi, Between(120, 130)),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Short version :)
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;123&#34;</span>,
+		<span style="color:#447fcf">Smuggle</span>(strconv.Atoi, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>)),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1729,19 +1727,17 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-// got is an int16 and Smuggle func input is an int64: it is OK
-got := int(123)
+	<span style="color:#999;font-style:italic">// got is an int16 and Smuggle func input is an int64: it is OK
+</span><span style="color:#999;font-style:italic"></span>	got := <span style="color:#24909d">int</span>(<span style="color:#3677a9">123</span>)
 
-ok := Cmp(t, got,
-    Smuggle(func(n int64) uint32 { return uint32(n) }, uint32(123)))
-fmt.Println(&quot;got int16(123) → smuggle via int64 → uint32(123):&quot;, ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(n <span style="color:#6ab825;font-weight:bold">int64</span>) <span style="color:#6ab825;font-weight:bold">uint32</span> { <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#24909d">uint32</span>(n) }, <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;got int16(123) → smuggle via int64 → uint32(123):&#34;</span>, ok)
 
-// Output:
-// got int16(123) → smuggle via int64 → uint32(123): true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// got <span style="color:#24909d">int16</span>(<span style="color:#3677a9">123</span>) <span style="color:#a61717;background-color:#e3d2d2">→</span> smuggle via <span style="color:#6ab825;font-weight:bold">int64</span> <span style="color:#a61717;background-color:#e3d2d2">→</span> <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>): <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1756,27 +1752,25 @@ fmt.Println(&quot;got int16(123) → smuggle via int64 → uint32(123):&quot;, o
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-// Automatically json.Unmarshal to compare
-got := []byte(`{&quot;a&quot;:1,&quot;b&quot;:2}`)
+	<span style="color:#999;font-style:italic">// Automatically json.Unmarshal to compare
+</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`{&#34;a&#34;:1,&#34;b&#34;:2}`</span>)
 
-ok := Cmp(t, got,
-    Smuggle(
-        func(b json.RawMessage) (r map[string]int, err error) {
-            err = json.Unmarshal(b, &amp;r)
-            return
-        },
-        map[string]int{
-            &quot;a&quot;: 1,
-            &quot;b&quot;: 2,
-        }))
-fmt.Println(&quot;JSON contents is OK:&quot;, ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Smuggle</span>(
+			<span style="color:#6ab825;font-weight:bold">func</span>(b json.RawMessage) (r <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>, err <span style="color:#6ab825;font-weight:bold">error</span>) {
+				err = json.<span style="color:#447fcf">Unmarshal</span>(b, &amp;r)
+				<span style="color:#6ab825;font-weight:bold">return</span>
+			},
+			<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{
+				<span style="color:#ed9d13">&#34;a&#34;</span>: <span style="color:#3677a9">1</span>,
+				<span style="color:#ed9d13">&#34;b&#34;</span>: <span style="color:#3677a9">2</span>,
+			}))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;JSON contents is OK:&#34;</span>, ok)
 
-// Output:
-// JSON contents is OK: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// JSON contents is OK: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1791,60 +1785,58 @@ fmt.Println(&quot;JSON contents is OK:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-// No end date but a start date and a duration
-type StartDuration struct {
-    StartDate time.Time
-    Duration  time.Duration
-}
+	<span style="color:#999;font-style:italic">// No end date but a start date and a duration
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> StartDuration <span style="color:#6ab825;font-weight:bold">struct</span> {
+		StartDate time.Time
+		Duration  time.Duration
+	}
 
-// Checks that end date is between 17th and 19th February both at 0h
-// for each of these durations in hours
+	<span style="color:#999;font-style:italic">// Checks that end date is between 17th and 19th February both at 0h
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// for each of these durations in hours
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#6ab825;font-weight:bold">for</span> _, duration := <span style="color:#6ab825;font-weight:bold">range</span> []time.Duration{<span style="color:#3677a9">48</span>, <span style="color:#3677a9">72</span>, <span style="color:#3677a9">96</span>} {
+		got := StartDuration{
+			StartDate: time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">14</span>, <span style="color:#3677a9">12</span>, <span style="color:#3677a9">13</span>, <span style="color:#3677a9">14</span>, <span style="color:#3677a9">0</span>, time.UTC),
+			Duration:  duration * time.Hour,
+		}
 
-for _, duration := range []time.Duration{48, 72, 96} {
-    got := StartDuration{
-        StartDate: time.Date(2018, time.February, 14, 12, 13, 14, 0, time.UTC),
-        Duration:  duration * time.Hour,
-    }
+		<span style="color:#999;font-style:italic">// Simplest way, but in case of Between() failure, error will be bound
+</span><span style="color:#999;font-style:italic"></span>		<span style="color:#999;font-style:italic">// to DATA&lt;smuggled&gt;, not very clear...
+</span><span style="color:#999;font-style:italic"></span>		ok := <span style="color:#447fcf">Cmp</span>(t, got,
+			<span style="color:#447fcf">Smuggle</span>(
+				<span style="color:#6ab825;font-weight:bold">func</span>(sd StartDuration) time.Time {
+					<span style="color:#6ab825;font-weight:bold">return</span> sd.StartDate.<span style="color:#447fcf">Add</span>(sd.Duration)
+				},
+				<span style="color:#447fcf">Between</span>(
+					time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">17</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC),
+					time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">19</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC))))
+		fmt.<span style="color:#447fcf">Println</span>(ok)
 
-    // Simplest way, but in case of Between() failure, error will be bound
-    // to DATA&lt;smuggled&gt;, not very clear...
-    ok := Cmp(t, got,
-        Smuggle(
-            func(sd StartDuration) time.Time {
-                return sd.StartDate.Add(sd.Duration)
-            },
-            Between(
-                time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
-                time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC))))
-    fmt.Println(ok)
+		<span style="color:#999;font-style:italic">// Name the computed value &#34;ComputedEndDate&#34; to render a Between() failure
+</span><span style="color:#999;font-style:italic"></span>		<span style="color:#999;font-style:italic">// more understandable, so error will be bound to DATA.ComputedEndDate
+</span><span style="color:#999;font-style:italic"></span>		ok = <span style="color:#447fcf">Cmp</span>(t, got,
+			<span style="color:#447fcf">Smuggle</span>(
+				<span style="color:#6ab825;font-weight:bold">func</span>(sd StartDuration) SmuggledGot {
+					<span style="color:#6ab825;font-weight:bold">return</span> SmuggledGot{
+						Name: <span style="color:#ed9d13">&#34;ComputedEndDate&#34;</span>,
+						Got:  sd.StartDate.<span style="color:#447fcf">Add</span>(sd.Duration),
+					}
+				},
+				<span style="color:#447fcf">Between</span>(
+					time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">17</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC),
+					time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">19</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC))))
+		fmt.<span style="color:#447fcf">Println</span>(ok)
+	}
 
-    // Name the computed value &quot;ComputedEndDate&quot; to render a Between() failure
-    // more understandable, so error will be bound to DATA.ComputedEndDate
-    ok = Cmp(t, got,
-        Smuggle(
-            func(sd StartDuration) SmuggledGot {
-                return SmuggledGot{
-                    Name: &quot;ComputedEndDate&quot;,
-                    Got:  sd.StartDate.Add(sd.Duration),
-                }
-            },
-            Between(
-                time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
-                time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC))))
-    fmt.Println(ok)
-}
-
-// Output:
-// false
-// false
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1859,37 +1851,35 @@ for _, duration := range []time.Duration{48, 72, 96} {
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-gotTime, err := time.Parse(time.RFC3339, &quot;2018-05-23T12:13:14Z&quot;)
-if err != nil {
-    t.Fatal(err)
-}
+	gotTime, err := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2018-05-23T12:13:14Z&#34;</span>)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
 
-// Do not check the struct itself, but its stringified form
-ok := Cmp(t, gotTime,
-    Smuggle(func(s fmt.Stringer) string {
-        return s.String()
-    },
-        &quot;2018-05-23 12:13:14 +0000 UTC&quot;))
-fmt.Println(&quot;stringified time.Time OK:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Do not check the struct itself, but its stringified form
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, gotTime,
+		<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s fmt.Stringer) <span style="color:#6ab825;font-weight:bold">string</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> s.<span style="color:#447fcf">String</span>()
+		},
+			<span style="color:#ed9d13">&#34;2018-05-23 12:13:14 +0000 UTC&#34;</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;stringified time.Time OK:&#34;</span>, ok)
 
-// If got does not implement the fmt.Stringer interface, it fails
-// without calling the Smuggle func
-type MyTime time.Time
-ok = Cmp(t, MyTime(gotTime),
-    Smuggle(func(s fmt.Stringer) string {
-        fmt.Println(&quot;Smuggle func called!&quot;)
-        return s.String()
-    },
-        &quot;2018-05-23 12:13:14 +0000 UTC&quot;))
-fmt.Println(&quot;stringified MyTime OK:&quot;, ok)
+	<span style="color:#999;font-style:italic">// If got does not implement the fmt.Stringer interface, it fails
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// without calling the Smuggle func
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> MyTime time.Time
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">MyTime</span>(gotTime),
+		<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s fmt.Stringer) <span style="color:#6ab825;font-weight:bold">string</span> {
+			fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Smuggle func called!&#34;</span>)
+			<span style="color:#6ab825;font-weight:bold">return</span> s.<span style="color:#447fcf">String</span>()
+		},
+			<span style="color:#ed9d13">&#34;2018-05-23 12:13:14 +0000 UTC&#34;</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;stringified MyTime OK:&#34;</span>, ok)
 
-// Output
-// stringified time.Time OK: true
-// stringified MyTime OK: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified time.Time OK: true
+</span><span style="color:#999;font-style:italic"></span>	// stringified MyTime OK: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1904,62 +1894,60 @@ fmt.Println(&quot;stringified MyTime OK:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type Body struct {
-    Name  string
-    Value interface{}
-}
-type Request struct {
-    Body *Body
-}
-type Transaction struct {
-    Request
-}
-type ValueNum struct {
-    Num int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> Body <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name  <span style="color:#6ab825;font-weight:bold">string</span>
+		Value <span style="color:#6ab825;font-weight:bold">interface</span>{}
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> Request <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Body *Body
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> Transaction <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Request
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> ValueNum <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Num <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := &amp;Transaction{
-    Request: Request{
-        Body: &amp;Body{
-            Name:  &quot;test&quot;,
-            Value: &amp;ValueNum{Num: 123},
-        },
-    },
-}
+	got := &amp;Transaction{
+		Request: Request{
+			Body: &amp;Body{
+				Name:  <span style="color:#ed9d13">&#34;test&#34;</span>,
+				Value: &amp;ValueNum{Num: <span style="color:#3677a9">123</span>},
+			},
+		},
+	}
 
-// Want to check whether Num is between 100 and 200?
-ok := Cmp(t, got,
-    Smuggle(
-        func(t *Transaction) (int, error) {
-            if t.Request.Body == nil ||
-                t.Request.Body.Value == nil {
-                return 0, errors.New(&quot;Request.Body or Request.Body.Value is nil&quot;)
-            }
-            if v, ok := t.Request.Body.Value.(*ValueNum); ok &amp;&amp; v != nil {
-                return v.Num, nil
-            }
-            return 0, errors.New(&quot;Request.Body.Value isn't *ValueNum or nil&quot;)
-        },
-        Between(100, 200)))
-fmt.Println(&quot;check Num by hand:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Want to check whether Num is between 100 and 200?
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Smuggle</span>(
+			<span style="color:#6ab825;font-weight:bold">func</span>(t *Transaction) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">error</span>) {
+				<span style="color:#6ab825;font-weight:bold">if</span> t.Request.Body == <span style="color:#6ab825;font-weight:bold">nil</span> ||
+					t.Request.Body.Value == <span style="color:#6ab825;font-weight:bold">nil</span> {
+					<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, errors.<span style="color:#447fcf">New</span>(<span style="color:#ed9d13">&#34;Request.Body or Request.Body.Value is nil&#34;</span>)
+				}
+				<span style="color:#6ab825;font-weight:bold">if</span> v, ok := t.Request.Body.Value.(*ValueNum); ok &amp;&amp; v != <span style="color:#6ab825;font-weight:bold">nil</span> {
+					<span style="color:#6ab825;font-weight:bold">return</span> v.Num, <span style="color:#6ab825;font-weight:bold">nil</span>
+				}
+				<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, errors.<span style="color:#447fcf">New</span>(<span style="color:#ed9d13">&#34;Request.Body.Value isn&#39;t *ValueNum or nil&#34;</span>)
+			},
+			<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num by hand:&#34;</span>, ok)
 
-// Same, but automagically generated...
-ok = Cmp(t, got, Smuggle(&quot;Request.Body.Value.Num&quot;, Between(100, 200)))
-fmt.Println(&quot;check Num using a fields-path:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Same, but automagically generated...
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Smuggle</span>(<span style="color:#ed9d13">&#34;Request.Body.Value.Num&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num using a fields-path:&#34;</span>, ok)
 
-// And as Request is an anonymous field, can be simplified further
-// as it can be omitted
-ok = Cmp(t, got, Smuggle(&quot;Body.Value.Num&quot;, Between(100, 200)))
-fmt.Println(&quot;check Num using an other fields-path:&quot;, ok)
+	<span style="color:#999;font-style:italic">// And as Request is an anonymous field, can be simplified further
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// as it can be omitted
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Smuggle</span>(<span style="color:#ed9d13">&#34;Body.Value.Num&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num using an other fields-path:&#34;</span>, ok)
 
-// Output:
-// check Num by hand: true
-// check Num using a fields-path: true
-// check Num using an other fields-path: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num by hand: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using a fields-path: true
+</span><span style="color:#999;font-style:italic"></span>	// check Num using an other fields-path: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1992,50 +1980,48 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := int64(123)
+	got := <span style="color:#24909d">int64</span>(<span style="color:#3677a9">123</span>)
 
-ok := CmpSmuggle(t, got, func(n int64) int { return int(n) }, 123,
-    &quot;checks int64 got against an int value&quot;)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(n <span style="color:#6ab825;font-weight:bold">int64</span>) <span style="color:#6ab825;font-weight:bold">int</span> { <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#24909d">int</span>(n) }, <span style="color:#3677a9">123</span>,
+		<span style="color:#ed9d13">&#34;checks int64 got against an int value&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpSmuggle(t, &quot;123&quot;, func(numStr string) (int, bool) {
-    n, err := strconv.Atoi(numStr)
-    return n, err == nil
-}, Between(120, 130),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpSmuggle</span>(t, <span style="color:#ed9d13">&#34;123&#34;</span>, <span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">bool</span>) {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+		<span style="color:#6ab825;font-weight:bold">return</span> n, err == <span style="color:#6ab825;font-weight:bold">nil</span>
+	}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpSmuggle(t, &quot;123&quot;, func(numStr string) (int, bool, string) {
-    n, err := strconv.Atoi(numStr)
-    if err != nil {
-        return 0, false, &quot;string must contain a number&quot;
-    }
-    return n, true, &quot;&quot;
-}, Between(120, 130),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpSmuggle</span>(t, <span style="color:#ed9d13">&#34;123&#34;</span>, <span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">bool</span>, <span style="color:#6ab825;font-weight:bold">string</span>) {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+		<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;string must contain a number&#34;</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">return</span> n, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">&#34;&#34;</span>
+	}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpSmuggle(t, &quot;123&quot;, func(numStr string) (int, error) {
-    return strconv.Atoi(numStr)
-}, Between(120, 130),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpSmuggle</span>(t, <span style="color:#ed9d13">&#34;123&#34;</span>, <span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">error</span>) {
+		<span style="color:#6ab825;font-weight:bold">return</span> strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+	}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Short version :)
-ok = CmpSmuggle(t, &quot;123&quot;, strconv.Atoi, Between(120, 130),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Short version :)
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpSmuggle</span>(t, <span style="color:#ed9d13">&#34;123&#34;</span>, strconv.Atoi, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2050,18 +2036,16 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-// got is an int16 and Smuggle func input is an int64: it is OK
-got := int(123)
+	<span style="color:#999;font-style:italic">// got is an int16 and Smuggle func input is an int64: it is OK
+</span><span style="color:#999;font-style:italic"></span>	got := <span style="color:#24909d">int</span>(<span style="color:#3677a9">123</span>)
 
-ok := CmpSmuggle(t, got, func(n int64) uint32 { return uint32(n) }, uint32(123))
-fmt.Println(&quot;got int16(123) → smuggle via int64 → uint32(123):&quot;, ok)
+	ok := <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(n <span style="color:#6ab825;font-weight:bold">int64</span>) <span style="color:#6ab825;font-weight:bold">uint32</span> { <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#24909d">uint32</span>(n) }, <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;got int16(123) → smuggle via int64 → uint32(123):&#34;</span>, ok)
 
-// Output:
-// got int16(123) → smuggle via int64 → uint32(123): true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// got <span style="color:#24909d">int16</span>(<span style="color:#3677a9">123</span>) <span style="color:#a61717;background-color:#e3d2d2">→</span> smuggle via <span style="color:#6ab825;font-weight:bold">int64</span> <span style="color:#a61717;background-color:#e3d2d2">→</span> <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>): <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2076,24 +2060,22 @@ fmt.Println(&quot;got int16(123) → smuggle via int64 → uint32(123):&quot;, o
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-// Automatically json.Unmarshal to compare
-got := []byte(`{&quot;a&quot;:1,&quot;b&quot;:2}`)
+	<span style="color:#999;font-style:italic">// Automatically json.Unmarshal to compare
+</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`{&#34;a&#34;:1,&#34;b&#34;:2}`</span>)
 
-ok := CmpSmuggle(t, got, func(b json.RawMessage) (r map[string]int, err error) {
-    err = json.Unmarshal(b, &amp;r)
-    return
-}, map[string]int{
-    &quot;a&quot;: 1,
-    &quot;b&quot;: 2,
-})
-fmt.Println(&quot;JSON contents is OK:&quot;, ok)
+	ok := <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(b json.RawMessage) (r <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>, err <span style="color:#6ab825;font-weight:bold">error</span>) {
+		err = json.<span style="color:#447fcf">Unmarshal</span>(b, &amp;r)
+		<span style="color:#6ab825;font-weight:bold">return</span>
+	}, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{
+		<span style="color:#ed9d13">&#34;a&#34;</span>: <span style="color:#3677a9">1</span>,
+		<span style="color:#ed9d13">&#34;b&#34;</span>: <span style="color:#3677a9">2</span>,
+	})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;JSON contents is OK:&#34;</span>, ok)
 
-// Output:
-// JSON contents is OK: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// JSON contents is OK: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2108,54 +2090,52 @@ fmt.Println(&quot;JSON contents is OK:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-// No end date but a start date and a duration
-type StartDuration struct {
-    StartDate time.Time
-    Duration  time.Duration
-}
+	<span style="color:#999;font-style:italic">// No end date but a start date and a duration
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> StartDuration <span style="color:#6ab825;font-weight:bold">struct</span> {
+		StartDate time.Time
+		Duration  time.Duration
+	}
 
-// Checks that end date is between 17th and 19th February both at 0h
-// for each of these durations in hours
+	<span style="color:#999;font-style:italic">// Checks that end date is between 17th and 19th February both at 0h
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// for each of these durations in hours
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#6ab825;font-weight:bold">for</span> _, duration := <span style="color:#6ab825;font-weight:bold">range</span> []time.Duration{<span style="color:#3677a9">48</span>, <span style="color:#3677a9">72</span>, <span style="color:#3677a9">96</span>} {
+		got := StartDuration{
+			StartDate: time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">14</span>, <span style="color:#3677a9">12</span>, <span style="color:#3677a9">13</span>, <span style="color:#3677a9">14</span>, <span style="color:#3677a9">0</span>, time.UTC),
+			Duration:  duration * time.Hour,
+		}
 
-for _, duration := range []time.Duration{48, 72, 96} {
-    got := StartDuration{
-        StartDate: time.Date(2018, time.February, 14, 12, 13, 14, 0, time.UTC),
-        Duration:  duration * time.Hour,
-    }
+		<span style="color:#999;font-style:italic">// Simplest way, but in case of Between() failure, error will be bound
+</span><span style="color:#999;font-style:italic"></span>		<span style="color:#999;font-style:italic">// to DATA&lt;smuggled&gt;, not very clear...
+</span><span style="color:#999;font-style:italic"></span>		ok := <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(sd StartDuration) time.Time {
+			<span style="color:#6ab825;font-weight:bold">return</span> sd.StartDate.<span style="color:#447fcf">Add</span>(sd.Duration)
+		}, <span style="color:#447fcf">Between</span>(
+			time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">17</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC),
+			time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">19</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC)))
+		fmt.<span style="color:#447fcf">Println</span>(ok)
 
-    // Simplest way, but in case of Between() failure, error will be bound
-    // to DATA&lt;smuggled&gt;, not very clear...
-    ok := CmpSmuggle(t, got, func(sd StartDuration) time.Time {
-        return sd.StartDate.Add(sd.Duration)
-    }, Between(
-        time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
-        time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
-    fmt.Println(ok)
+		<span style="color:#999;font-style:italic">// Name the computed value &#34;ComputedEndDate&#34; to render a Between() failure
+</span><span style="color:#999;font-style:italic"></span>		<span style="color:#999;font-style:italic">// more understandable, so error will be bound to DATA.ComputedEndDate
+</span><span style="color:#999;font-style:italic"></span>		ok = <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(sd StartDuration) SmuggledGot {
+			<span style="color:#6ab825;font-weight:bold">return</span> SmuggledGot{
+				Name: <span style="color:#ed9d13">&#34;ComputedEndDate&#34;</span>,
+				Got:  sd.StartDate.<span style="color:#447fcf">Add</span>(sd.Duration),
+			}
+		}, <span style="color:#447fcf">Between</span>(
+			time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">17</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC),
+			time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">19</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC)))
+		fmt.<span style="color:#447fcf">Println</span>(ok)
+	}
 
-    // Name the computed value &quot;ComputedEndDate&quot; to render a Between() failure
-    // more understandable, so error will be bound to DATA.ComputedEndDate
-    ok = CmpSmuggle(t, got, func(sd StartDuration) SmuggledGot {
-        return SmuggledGot{
-            Name: &quot;ComputedEndDate&quot;,
-            Got:  sd.StartDate.Add(sd.Duration),
-        }
-    }, Between(
-        time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
-        time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
-    fmt.Println(ok)
-}
-
-// Output:
-// false
-// false
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2170,33 +2150,31 @@ for _, duration := range []time.Duration{48, 72, 96} {
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-gotTime, err := time.Parse(time.RFC3339, &quot;2018-05-23T12:13:14Z&quot;)
-if err != nil {
-    t.Fatal(err)
-}
+	gotTime, err := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2018-05-23T12:13:14Z&#34;</span>)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
 
-// Do not check the struct itself, but its stringified form
-ok := CmpSmuggle(t, gotTime, func(s fmt.Stringer) string {
-    return s.String()
-}, &quot;2018-05-23 12:13:14 +0000 UTC&quot;)
-fmt.Println(&quot;stringified time.Time OK:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Do not check the struct itself, but its stringified form
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">CmpSmuggle</span>(t, gotTime, <span style="color:#6ab825;font-weight:bold">func</span>(s fmt.Stringer) <span style="color:#6ab825;font-weight:bold">string</span> {
+		<span style="color:#6ab825;font-weight:bold">return</span> s.<span style="color:#447fcf">String</span>()
+	}, <span style="color:#ed9d13">&#34;2018-05-23 12:13:14 +0000 UTC&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;stringified time.Time OK:&#34;</span>, ok)
 
-// If got does not implement the fmt.Stringer interface, it fails
-// without calling the Smuggle func
-type MyTime time.Time
-ok = CmpSmuggle(t, MyTime(gotTime), func(s fmt.Stringer) string {
-    fmt.Println(&quot;Smuggle func called!&quot;)
-    return s.String()
-}, &quot;2018-05-23 12:13:14 +0000 UTC&quot;)
-fmt.Println(&quot;stringified MyTime OK:&quot;, ok)
+	<span style="color:#999;font-style:italic">// If got does not implement the fmt.Stringer interface, it fails
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// without calling the Smuggle func
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> MyTime time.Time
+	ok = <span style="color:#447fcf">CmpSmuggle</span>(t, <span style="color:#447fcf">MyTime</span>(gotTime), <span style="color:#6ab825;font-weight:bold">func</span>(s fmt.Stringer) <span style="color:#6ab825;font-weight:bold">string</span> {
+		fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Smuggle func called!&#34;</span>)
+		<span style="color:#6ab825;font-weight:bold">return</span> s.<span style="color:#447fcf">String</span>()
+	}, <span style="color:#ed9d13">&#34;2018-05-23 12:13:14 +0000 UTC&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;stringified MyTime OK:&#34;</span>, ok)
 
-// Output
-// stringified time.Time OK: true
-// stringified MyTime OK: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified time.Time OK: true
+</span><span style="color:#999;font-style:italic"></span>	// stringified MyTime OK: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -2211,59 +2189,57 @@ fmt.Println(&quot;stringified MyTime OK:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type Body struct {
-    Name  string
-    Value interface{}
-}
-type Request struct {
-    Body *Body
-}
-type Transaction struct {
-    Request
-}
-type ValueNum struct {
-    Num int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> Body <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name  <span style="color:#6ab825;font-weight:bold">string</span>
+		Value <span style="color:#6ab825;font-weight:bold">interface</span>{}
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> Request <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Body *Body
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> Transaction <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Request
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> ValueNum <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Num <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := &amp;Transaction{
-    Request: Request{
-        Body: &amp;Body{
-            Name:  &quot;test&quot;,
-            Value: &amp;ValueNum{Num: 123},
-        },
-    },
-}
+	got := &amp;Transaction{
+		Request: Request{
+			Body: &amp;Body{
+				Name:  <span style="color:#ed9d13">&#34;test&#34;</span>,
+				Value: &amp;ValueNum{Num: <span style="color:#3677a9">123</span>},
+			},
+		},
+	}
 
-// Want to check whether Num is between 100 and 200?
-ok := CmpSmuggle(t, got, func(t *Transaction) (int, error) {
-    if t.Request.Body == nil ||
-        t.Request.Body.Value == nil {
-        return 0, errors.New(&quot;Request.Body or Request.Body.Value is nil&quot;)
-    }
-    if v, ok := t.Request.Body.Value.(*ValueNum); ok &amp;&amp; v != nil {
-        return v.Num, nil
-    }
-    return 0, errors.New(&quot;Request.Body.Value isn't *ValueNum or nil&quot;)
-}, Between(100, 200))
-fmt.Println(&quot;check Num by hand:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Want to check whether Num is between 100 and 200?
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(t *Transaction) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">error</span>) {
+		<span style="color:#6ab825;font-weight:bold">if</span> t.Request.Body == <span style="color:#6ab825;font-weight:bold">nil</span> ||
+			t.Request.Body.Value == <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, errors.<span style="color:#447fcf">New</span>(<span style="color:#ed9d13">&#34;Request.Body or Request.Body.Value is nil&#34;</span>)
+		}
+		<span style="color:#6ab825;font-weight:bold">if</span> v, ok := t.Request.Body.Value.(*ValueNum); ok &amp;&amp; v != <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> v.Num, <span style="color:#6ab825;font-weight:bold">nil</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, errors.<span style="color:#447fcf">New</span>(<span style="color:#ed9d13">&#34;Request.Body.Value isn&#39;t *ValueNum or nil&#34;</span>)
+	}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num by hand:&#34;</span>, ok)
 
-// Same, but automagically generated...
-ok = CmpSmuggle(t, got, &quot;Request.Body.Value.Num&quot;, Between(100, 200))
-fmt.Println(&quot;check Num using a fields-path:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Same, but automagically generated...
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#ed9d13">&#34;Request.Body.Value.Num&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num using a fields-path:&#34;</span>, ok)
 
-// And as Request is an anonymous field, can be simplified further
-// as it can be omitted
-ok = CmpSmuggle(t, got, &quot;Body.Value.Num&quot;, Between(100, 200))
-fmt.Println(&quot;check Num using an other fields-path:&quot;, ok)
+	<span style="color:#999;font-style:italic">// And as Request is an anonymous field, can be simplified further
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// as it can be omitted
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#ed9d13">&#34;Body.Value.Num&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num using an other fields-path:&#34;</span>, ok)
 
-// Output:
-// check Num by hand: true
-// check Num using a fields-path: true
-// check Num using an other fields-path: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num by hand: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using a fields-path: true
+</span><span style="color:#999;font-style:italic"></span>	// check Num using an other fields-path: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -2296,50 +2272,48 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := int64(123)
+	got := <span style="color:#24909d">int64</span>(<span style="color:#3677a9">123</span>)
 
-ok := t.Smuggle(got, func(n int64) int { return int(n) }, 123,
-    &quot;checks int64 got against an int value&quot;)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(n <span style="color:#6ab825;font-weight:bold">int64</span>) <span style="color:#6ab825;font-weight:bold">int</span> { <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#24909d">int</span>(n) }, <span style="color:#3677a9">123</span>,
+		<span style="color:#ed9d13">&#34;checks int64 got against an int value&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Smuggle(&quot;123&quot;, func(numStr string) (int, bool) {
-    n, err := strconv.Atoi(numStr)
-    return n, err == nil
-}, Between(120, 130),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Smuggle</span>(<span style="color:#ed9d13">&#34;123&#34;</span>, <span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">bool</span>) {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+		<span style="color:#6ab825;font-weight:bold">return</span> n, err == <span style="color:#6ab825;font-weight:bold">nil</span>
+	}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Smuggle(&quot;123&quot;, func(numStr string) (int, bool, string) {
-    n, err := strconv.Atoi(numStr)
-    if err != nil {
-        return 0, false, &quot;string must contain a number&quot;
-    }
-    return n, true, &quot;&quot;
-}, Between(120, 130),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Smuggle</span>(<span style="color:#ed9d13">&#34;123&#34;</span>, <span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">bool</span>, <span style="color:#6ab825;font-weight:bold">string</span>) {
+		n, err := strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+		<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;string must contain a number&#34;</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">return</span> n, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">&#34;&#34;</span>
+	}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Smuggle(&quot;123&quot;, func(numStr string) (int, error) {
-    return strconv.Atoi(numStr)
-}, Between(120, 130),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Smuggle</span>(<span style="color:#ed9d13">&#34;123&#34;</span>, <span style="color:#6ab825;font-weight:bold">func</span>(numStr <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">error</span>) {
+		<span style="color:#6ab825;font-weight:bold">return</span> strconv.<span style="color:#447fcf">Atoi</span>(numStr)
+	}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Short version :)
-ok = t.Smuggle(&quot;123&quot;, strconv.Atoi, Between(120, 130),
-    &quot;checks that number in %#v is in [120 .. 130]&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Short version :)
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Smuggle</span>(<span style="color:#ed9d13">&#34;123&#34;</span>, strconv.Atoi, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">120</span>, <span style="color:#3677a9">130</span>),
+		<span style="color:#ed9d13">&#34;checks that number in %#v is in [120 .. 130]&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2354,18 +2328,16 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-// got is an int16 and Smuggle func input is an int64: it is OK
-got := int(123)
+	<span style="color:#999;font-style:italic">// got is an int16 and Smuggle func input is an int64: it is OK
+</span><span style="color:#999;font-style:italic"></span>	got := <span style="color:#24909d">int</span>(<span style="color:#3677a9">123</span>)
 
-ok := t.Smuggle(got, func(n int64) uint32 { return uint32(n) }, uint32(123))
-fmt.Println(&quot;got int16(123) → smuggle via int64 → uint32(123):&quot;, ok)
+	ok := t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(n <span style="color:#6ab825;font-weight:bold">int64</span>) <span style="color:#6ab825;font-weight:bold">uint32</span> { <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#24909d">uint32</span>(n) }, <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;got int16(123) → smuggle via int64 → uint32(123):&#34;</span>, ok)
 
-// Output:
-// got int16(123) → smuggle via int64 → uint32(123): true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// got <span style="color:#24909d">int16</span>(<span style="color:#3677a9">123</span>) <span style="color:#a61717;background-color:#e3d2d2">→</span> smuggle via <span style="color:#6ab825;font-weight:bold">int64</span> <span style="color:#a61717;background-color:#e3d2d2">→</span> <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>): <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2380,24 +2352,22 @@ fmt.Println(&quot;got int16(123) → smuggle via int64 → uint32(123):&quot;, o
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-// Automatically json.Unmarshal to compare
-got := []byte(`{&quot;a&quot;:1,&quot;b&quot;:2}`)
+	<span style="color:#999;font-style:italic">// Automatically json.Unmarshal to compare
+</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`{&#34;a&#34;:1,&#34;b&#34;:2}`</span>)
 
-ok := t.Smuggle(got, func(b json.RawMessage) (r map[string]int, err error) {
-    err = json.Unmarshal(b, &amp;r)
-    return
-}, map[string]int{
-    &quot;a&quot;: 1,
-    &quot;b&quot;: 2,
-})
-fmt.Println(&quot;JSON contents is OK:&quot;, ok)
+	ok := t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(b json.RawMessage) (r <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>, err <span style="color:#6ab825;font-weight:bold">error</span>) {
+		err = json.<span style="color:#447fcf">Unmarshal</span>(b, &amp;r)
+		<span style="color:#6ab825;font-weight:bold">return</span>
+	}, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{
+		<span style="color:#ed9d13">&#34;a&#34;</span>: <span style="color:#3677a9">1</span>,
+		<span style="color:#ed9d13">&#34;b&#34;</span>: <span style="color:#3677a9">2</span>,
+	})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;JSON contents is OK:&#34;</span>, ok)
 
-// Output:
-// JSON contents is OK: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// JSON contents is OK: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2412,54 +2382,52 @@ fmt.Println(&quot;JSON contents is OK:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-// No end date but a start date and a duration
-type StartDuration struct {
-    StartDate time.Time
-    Duration  time.Duration
-}
+	<span style="color:#999;font-style:italic">// No end date but a start date and a duration
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> StartDuration <span style="color:#6ab825;font-weight:bold">struct</span> {
+		StartDate time.Time
+		Duration  time.Duration
+	}
 
-// Checks that end date is between 17th and 19th February both at 0h
-// for each of these durations in hours
+	<span style="color:#999;font-style:italic">// Checks that end date is between 17th and 19th February both at 0h
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// for each of these durations in hours
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#6ab825;font-weight:bold">for</span> _, duration := <span style="color:#6ab825;font-weight:bold">range</span> []time.Duration{<span style="color:#3677a9">48</span>, <span style="color:#3677a9">72</span>, <span style="color:#3677a9">96</span>} {
+		got := StartDuration{
+			StartDate: time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">14</span>, <span style="color:#3677a9">12</span>, <span style="color:#3677a9">13</span>, <span style="color:#3677a9">14</span>, <span style="color:#3677a9">0</span>, time.UTC),
+			Duration:  duration * time.Hour,
+		}
 
-for _, duration := range []time.Duration{48, 72, 96} {
-    got := StartDuration{
-        StartDate: time.Date(2018, time.February, 14, 12, 13, 14, 0, time.UTC),
-        Duration:  duration * time.Hour,
-    }
+		<span style="color:#999;font-style:italic">// Simplest way, but in case of Between() failure, error will be bound
+</span><span style="color:#999;font-style:italic"></span>		<span style="color:#999;font-style:italic">// to DATA&lt;smuggled&gt;, not very clear...
+</span><span style="color:#999;font-style:italic"></span>		ok := t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(sd StartDuration) time.Time {
+			<span style="color:#6ab825;font-weight:bold">return</span> sd.StartDate.<span style="color:#447fcf">Add</span>(sd.Duration)
+		}, <span style="color:#447fcf">Between</span>(
+			time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">17</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC),
+			time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">19</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC)))
+		fmt.<span style="color:#447fcf">Println</span>(ok)
 
-    // Simplest way, but in case of Between() failure, error will be bound
-    // to DATA&lt;smuggled&gt;, not very clear...
-    ok := t.Smuggle(got, func(sd StartDuration) time.Time {
-        return sd.StartDate.Add(sd.Duration)
-    }, Between(
-        time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
-        time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
-    fmt.Println(ok)
+		<span style="color:#999;font-style:italic">// Name the computed value &#34;ComputedEndDate&#34; to render a Between() failure
+</span><span style="color:#999;font-style:italic"></span>		<span style="color:#999;font-style:italic">// more understandable, so error will be bound to DATA.ComputedEndDate
+</span><span style="color:#999;font-style:italic"></span>		ok = t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(sd StartDuration) SmuggledGot {
+			<span style="color:#6ab825;font-weight:bold">return</span> SmuggledGot{
+				Name: <span style="color:#ed9d13">&#34;ComputedEndDate&#34;</span>,
+				Got:  sd.StartDate.<span style="color:#447fcf">Add</span>(sd.Duration),
+			}
+		}, <span style="color:#447fcf">Between</span>(
+			time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">17</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC),
+			time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2018</span>, time.February, <span style="color:#3677a9">19</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, <span style="color:#3677a9">0</span>, time.UTC)))
+		fmt.<span style="color:#447fcf">Println</span>(ok)
+	}
 
-    // Name the computed value &quot;ComputedEndDate&quot; to render a Between() failure
-    // more understandable, so error will be bound to DATA.ComputedEndDate
-    ok = t.Smuggle(got, func(sd StartDuration) SmuggledGot {
-        return SmuggledGot{
-            Name: &quot;ComputedEndDate&quot;,
-            Got:  sd.StartDate.Add(sd.Duration),
-        }
-    }, Between(
-        time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
-        time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
-    fmt.Println(ok)
-}
-
-// Output:
-// false
-// false
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2474,33 +2442,31 @@ for _, duration := range []time.Duration{48, 72, 96} {
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-gotTime, err := time.Parse(time.RFC3339, &quot;2018-05-23T12:13:14Z&quot;)
-if err != nil {
-    t.Fatal(err)
-}
+	gotTime, err := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2018-05-23T12:13:14Z&#34;</span>)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
 
-// Do not check the struct itself, but its stringified form
-ok := t.Smuggle(gotTime, func(s fmt.Stringer) string {
-    return s.String()
-}, &quot;2018-05-23 12:13:14 +0000 UTC&quot;)
-fmt.Println(&quot;stringified time.Time OK:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Do not check the struct itself, but its stringified form
+</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">Smuggle</span>(gotTime, <span style="color:#6ab825;font-weight:bold">func</span>(s fmt.Stringer) <span style="color:#6ab825;font-weight:bold">string</span> {
+		<span style="color:#6ab825;font-weight:bold">return</span> s.<span style="color:#447fcf">String</span>()
+	}, <span style="color:#ed9d13">&#34;2018-05-23 12:13:14 +0000 UTC&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;stringified time.Time OK:&#34;</span>, ok)
 
-// If got does not implement the fmt.Stringer interface, it fails
-// without calling the Smuggle func
-type MyTime time.Time
-ok = t.Smuggle(MyTime(gotTime), func(s fmt.Stringer) string {
-    fmt.Println(&quot;Smuggle func called!&quot;)
-    return s.String()
-}, &quot;2018-05-23 12:13:14 +0000 UTC&quot;)
-fmt.Println(&quot;stringified MyTime OK:&quot;, ok)
+	<span style="color:#999;font-style:italic">// If got does not implement the fmt.Stringer interface, it fails
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// without calling the Smuggle func
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#6ab825;font-weight:bold">type</span> MyTime time.Time
+	ok = t.<span style="color:#447fcf">Smuggle</span>(<span style="color:#447fcf">MyTime</span>(gotTime), <span style="color:#6ab825;font-weight:bold">func</span>(s fmt.Stringer) <span style="color:#6ab825;font-weight:bold">string</span> {
+		fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Smuggle func called!&#34;</span>)
+		<span style="color:#6ab825;font-weight:bold">return</span> s.<span style="color:#447fcf">String</span>()
+	}, <span style="color:#ed9d13">&#34;2018-05-23 12:13:14 +0000 UTC&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;stringified MyTime OK:&#34;</span>, ok)
 
-// Output
-// stringified time.Time OK: true
-// stringified MyTime OK: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified time.Time OK: true
+</span><span style="color:#999;font-style:italic"></span>	// stringified MyTime OK: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -2515,59 +2481,57 @@ fmt.Println(&quot;stringified MyTime OK:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-type Body struct {
-    Name  string
-    Value interface{}
-}
-type Request struct {
-    Body *Body
-}
-type Transaction struct {
-    Request
-}
-type ValueNum struct {
-    Num int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> Body <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name  <span style="color:#6ab825;font-weight:bold">string</span>
+		Value <span style="color:#6ab825;font-weight:bold">interface</span>{}
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> Request <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Body *Body
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> Transaction <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Request
+	}
+	<span style="color:#6ab825;font-weight:bold">type</span> ValueNum <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Num <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := &amp;Transaction{
-    Request: Request{
-        Body: &amp;Body{
-            Name:  &quot;test&quot;,
-            Value: &amp;ValueNum{Num: 123},
-        },
-    },
-}
+	got := &amp;Transaction{
+		Request: Request{
+			Body: &amp;Body{
+				Name:  <span style="color:#ed9d13">&#34;test&#34;</span>,
+				Value: &amp;ValueNum{Num: <span style="color:#3677a9">123</span>},
+			},
+		},
+	}
 
-// Want to check whether Num is between 100 and 200?
-ok := t.Smuggle(got, func(t *Transaction) (int, error) {
-    if t.Request.Body == nil ||
-        t.Request.Body.Value == nil {
-        return 0, errors.New(&quot;Request.Body or Request.Body.Value is nil&quot;)
-    }
-    if v, ok := t.Request.Body.Value.(*ValueNum); ok &amp;&amp; v != nil {
-        return v.Num, nil
-    }
-    return 0, errors.New(&quot;Request.Body.Value isn't *ValueNum or nil&quot;)
-}, Between(100, 200))
-fmt.Println(&quot;check Num by hand:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Want to check whether Num is between 100 and 200?
+</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(t *Transaction) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">error</span>) {
+		<span style="color:#6ab825;font-weight:bold">if</span> t.Request.Body == <span style="color:#6ab825;font-weight:bold">nil</span> ||
+			t.Request.Body.Value == <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, errors.<span style="color:#447fcf">New</span>(<span style="color:#ed9d13">&#34;Request.Body or Request.Body.Value is nil&#34;</span>)
+		}
+		<span style="color:#6ab825;font-weight:bold">if</span> v, ok := t.Request.Body.Value.(*ValueNum); ok &amp;&amp; v != <span style="color:#6ab825;font-weight:bold">nil</span> {
+			<span style="color:#6ab825;font-weight:bold">return</span> v.Num, <span style="color:#6ab825;font-weight:bold">nil</span>
+		}
+		<span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, errors.<span style="color:#447fcf">New</span>(<span style="color:#ed9d13">&#34;Request.Body.Value isn&#39;t *ValueNum or nil&#34;</span>)
+	}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num by hand:&#34;</span>, ok)
 
-// Same, but automagically generated...
-ok = t.Smuggle(got, &quot;Request.Body.Value.Num&quot;, Between(100, 200))
-fmt.Println(&quot;check Num using a fields-path:&quot;, ok)
+	<span style="color:#999;font-style:italic">// Same, but automagically generated...
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#ed9d13">&#34;Request.Body.Value.Num&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num using a fields-path:&#34;</span>, ok)
 
-// And as Request is an anonymous field, can be simplified further
-// as it can be omitted
-ok = t.Smuggle(got, &quot;Body.Value.Num&quot;, Between(100, 200))
-fmt.Println(&quot;check Num using an other fields-path:&quot;, ok)
+	<span style="color:#999;font-style:italic">// And as Request is an anonymous field, can be simplified further
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// as it can be omitted
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#ed9d13">&#34;Body.Value.Num&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">200</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check Num using an other fields-path:&#34;</span>, ok)
 
-// Output:
-// check Num by hand: true
-// check Num using a fields-path: true
-// check Num using an other fields-path: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num by hand: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using a fields-path: true
+</span><span style="color:#999;font-style:italic"></span>	// check Num using an other fields-path: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -3708,19 +3672,19 @@ fmt.Println(&quot;check Num using an other fields-path:&quot;, ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598486"></script>
+    <script src="/js/jquery.sticky.js?1572598486"></script>
+    <script src="/js/featherlight.min.js?1572598486"></script>
+    <script src="/js/highlight.pack.js?1572598486"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598486"></script>
+    <script src="/js/learn.js?1572598486"></script>
+    <script src="/js/hugo-learn.js?1572598486"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598486" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598486"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

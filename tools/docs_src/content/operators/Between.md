@@ -27,7 +27,8 @@ If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.c
 
 ### Examples
 
-{{%expand "Int example" %}}	t := &testing.T{}
+{{%expand "Int example" %}}```go
+	t := &testing.T{}
 
 	got := 156
 
@@ -58,8 +59,10 @@ If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.c
 	// false
 	// true
 	// false
-{{% /expand%}}
-{{%expand "String example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := &testing.T{}
 
 	got := "abc"
 
@@ -90,7 +93,8 @@ If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.c
 	// false
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpBetween shortcut
 
 ```go
@@ -121,7 +125,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Int example" %}}	t := &testing.T{}
+{{%expand "Int example" %}}```go
+	t := &testing.T{}
 
 	got := 156
 
@@ -152,8 +157,10 @@ reason of a potential failure.
 	// false
 	// true
 	// false
-{{% /expand%}}
-{{%expand "String example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := &testing.T{}
 
 	got := "abc"
 
@@ -184,7 +191,8 @@ reason of a potential failure.
 	// false
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Between shortcut
 
 ```go
@@ -215,7 +223,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Int example" %}}	t := NewT(&testing.T{})
+{{%expand "Int example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := 156
 
@@ -246,8 +255,10 @@ reason of a potential failure.
 	// false
 	// true
 	// false
-{{% /expand%}}
-{{%expand "String example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "abc"
 
@@ -278,4 +289,5 @@ reason of a potential failure.
 	// false
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

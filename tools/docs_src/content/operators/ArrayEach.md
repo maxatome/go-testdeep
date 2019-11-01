@@ -15,7 +15,8 @@ succeed.
 
 ### Examples
 
-{{%expand "Array example" %}}	t := &testing.T{}
+{{%expand "Array example" %}}```go
+	t := &testing.T{}
 
 	got := [3]int{42, 58, 26}
 
@@ -25,8 +26,10 @@ succeed.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedArray example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedArray example" %}}```go
+	t := &testing.T{}
 
 	type MyArray [3]int
 
@@ -43,8 +46,10 @@ succeed.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Slice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Slice example" %}}```go
+	t := &testing.T{}
 
 	got := []int{42, 58, 26}
 
@@ -54,8 +59,10 @@ succeed.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedSlice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedSlice example" %}}```go
+	t := &testing.T{}
 
 	type MySlice []int
 
@@ -72,7 +79,8 @@ succeed.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpArrayEach shortcut
 
 ```go
@@ -99,7 +107,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Array example" %}}	t := &testing.T{}
+{{%expand "Array example" %}}```go
+	t := &testing.T{}
 
 	got := [3]int{42, 58, 26}
 
@@ -109,8 +118,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedArray example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedArray example" %}}```go
+	t := &testing.T{}
 
 	type MyArray [3]int
 
@@ -127,8 +138,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Slice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Slice example" %}}```go
+	t := &testing.T{}
 
 	got := []int{42, 58, 26}
 
@@ -138,8 +151,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedSlice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedSlice example" %}}```go
+	t := &testing.T{}
 
 	type MySlice []int
 
@@ -156,7 +171,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.ArrayEach shortcut
 
 ```go
@@ -183,7 +199,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Array example" %}}	t := NewT(&testing.T{})
+{{%expand "Array example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := [3]int{42, 58, 26}
 
@@ -193,8 +210,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedArray example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "TypedArray example" %}}```go
+	t := NewT(&testing.T{})
 
 	type MyArray [3]int
 
@@ -211,8 +230,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Slice example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Slice example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := []int{42, 58, 26}
 
@@ -222,8 +243,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedSlice example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "TypedSlice example" %}}```go
+	t := NewT(&testing.T{})
 
 	type MySlice []int
 
@@ -240,4 +263,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

@@ -23,7 +23,8 @@ Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -38,7 +39,8 @@ Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpSuperSetOf shortcut
 
 ```go
@@ -65,7 +67,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -80,7 +83,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.SuperSetOf shortcut
 
 ```go
@@ -107,7 +111,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -122,4 +127,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

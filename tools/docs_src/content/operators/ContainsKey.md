@@ -39,7 +39,8 @@ Cmp(t, hnum, ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	ok := Cmp(t,
 		map[string]int{"foo": 11, "bar": 22, "zip": 33}, ContainsKey("foo"))
@@ -53,8 +54,10 @@ Cmp(t, hnum, ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 	// Output:
 	// map contains key "foo": true
 	// map contains at least a key in [40 .. 50]: true
-{{% /expand%}}
-{{%expand "Nil example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Nil example" %}}```go
+	t := &testing.T{}
 
 	num := 1234
 	got := map[*int]bool{&num: false, nil: true}
@@ -76,7 +79,8 @@ Cmp(t, hnum, ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 	// map contains *int nil key: true
 	// map contains Nil() key: true
 	// map contains *byte nil key: false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpContainsKey shortcut
 
 ```go
@@ -103,7 +107,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	ok := CmpContainsKey(t, map[string]int{"foo": 11, "bar": 22, "zip": 33}, "foo")
 	fmt.Println(`map contains key "foo":`, ok)
@@ -114,8 +119,10 @@ reason of a potential failure.
 	// Output:
 	// map contains key "foo": true
 	// map contains at least a key in [40 .. 50]: true
-{{% /expand%}}
-{{%expand "Nil example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Nil example" %}}```go
+	t := &testing.T{}
 
 	num := 1234
 	got := map[*int]bool{&num: false, nil: true}
@@ -137,7 +144,8 @@ reason of a potential failure.
 	// map contains *int nil key: true
 	// map contains Nil() key: true
 	// map contains *byte nil key: false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.ContainsKey shortcut
 
 ```go
@@ -164,7 +172,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	ok := t.ContainsKey(map[string]int{"foo": 11, "bar": 22, "zip": 33}, "foo")
 	fmt.Println(`map contains key "foo":`, ok)
@@ -175,8 +184,10 @@ reason of a potential failure.
 	// Output:
 	// map contains key "foo": true
 	// map contains at least a key in [40 .. 50]: true
-{{% /expand%}}
-{{%expand "Nil example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Nil example" %}}```go
+	t := NewT(&testing.T{})
 
 	num := 1234
 	got := map[*int]bool{&num: false, nil: true}
@@ -198,4 +209,5 @@ reason of a potential failure.
 	// map contains *int nil key: true
 	// map contains Nil() key: true
 	// map contains *byte nil key: false
-{{% /expand%}}
+
+```{{% /expand%}}

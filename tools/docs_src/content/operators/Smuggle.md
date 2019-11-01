@@ -195,7 +195,8 @@ type. The fields-path `string` *fn* shortcut is not available with
 
 ### Examples
 
-{{%expand "Convert example" %}}	t := &testing.T{}
+{{%expand "Convert example" %}}```go
+	t := &testing.T{}
 
 	got := int64(123)
 
@@ -248,8 +249,10 @@ type. The fields-path `string` *fn* shortcut is not available with
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Lax example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Lax example" %}}```go
+	t := &testing.T{}
 
 	// got is an int16 and Smuggle func input is an int64: it is OK
 	got := int(123)
@@ -260,8 +263,10 @@ type. The fields-path `string` *fn* shortcut is not available with
 
 	// Output:
 	// got int16(123) → smuggle via int64 → uint32(123): true
-{{% /expand%}}
-{{%expand "Auto_unmarshal example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Auto_unmarshal example" %}}```go
+	t := &testing.T{}
 
 	// Automatically json.Unmarshal to compare
 	got := []byte(`{"a":1,"b":2}`)
@@ -280,8 +285,10 @@ type. The fields-path `string` *fn* shortcut is not available with
 
 	// Output:
 	// JSON contents is OK: true
-{{% /expand%}}
-{{%expand "Complex example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Complex example" %}}```go
+	t := &testing.T{}
 
 	// No end date but a start date and a duration
 	type StartDuration struct {
@@ -333,8 +340,10 @@ type. The fields-path `string` *fn* shortcut is not available with
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Interface example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Interface example" %}}```go
+	t := &testing.T{}
 
 	gotTime, err := time.Parse(time.RFC3339, "2018-05-23T12:13:14Z")
 	if err != nil {
@@ -363,8 +372,10 @@ type. The fields-path `string` *fn* shortcut is not available with
 	// Output
 	// stringified time.Time OK: true
 	// stringified MyTime OK: false
-{{% /expand%}}
-{{%expand "Field_path example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Field_path example" %}}```go
+	t := &testing.T{}
 
 	type Body struct {
 		Name  string
@@ -418,7 +429,8 @@ type. The fields-path `string` *fn* shortcut is not available with
 	// check Num by hand: true
 	// check Num using a fields-path: true
 	// check Num using an other fields-path: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpSmuggle shortcut
 
 ```go
@@ -445,7 +457,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Convert example" %}}	t := &testing.T{}
+{{%expand "Convert example" %}}```go
+	t := &testing.T{}
 
 	got := int64(123)
 
@@ -487,8 +500,10 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Lax example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Lax example" %}}```go
+	t := &testing.T{}
 
 	// got is an int16 and Smuggle func input is an int64: it is OK
 	got := int(123)
@@ -498,8 +513,10 @@ reason of a potential failure.
 
 	// Output:
 	// got int16(123) → smuggle via int64 → uint32(123): true
-{{% /expand%}}
-{{%expand "Auto_unmarshal example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Auto_unmarshal example" %}}```go
+	t := &testing.T{}
 
 	// Automatically json.Unmarshal to compare
 	got := []byte(`{"a":1,"b":2}`)
@@ -515,8 +532,10 @@ reason of a potential failure.
 
 	// Output:
 	// JSON contents is OK: true
-{{% /expand%}}
-{{%expand "Complex example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Complex example" %}}```go
+	t := &testing.T{}
 
 	// No end date but a start date and a duration
 	type StartDuration struct {
@@ -562,8 +581,10 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Interface example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Interface example" %}}```go
+	t := &testing.T{}
 
 	gotTime, err := time.Parse(time.RFC3339, "2018-05-23T12:13:14Z")
 	if err != nil {
@@ -588,8 +609,10 @@ reason of a potential failure.
 	// Output
 	// stringified time.Time OK: true
 	// stringified MyTime OK: false
-{{% /expand%}}
-{{%expand "Field_path example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Field_path example" %}}```go
+	t := &testing.T{}
 
 	type Body struct {
 		Name  string
@@ -640,7 +663,8 @@ reason of a potential failure.
 	// check Num by hand: true
 	// check Num using a fields-path: true
 	// check Num using an other fields-path: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Smuggle shortcut
 
 ```go
@@ -667,7 +691,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Convert example" %}}	t := NewT(&testing.T{})
+{{%expand "Convert example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := int64(123)
 
@@ -709,8 +734,10 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Lax example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Lax example" %}}```go
+	t := NewT(&testing.T{})
 
 	// got is an int16 and Smuggle func input is an int64: it is OK
 	got := int(123)
@@ -720,8 +747,10 @@ reason of a potential failure.
 
 	// Output:
 	// got int16(123) → smuggle via int64 → uint32(123): true
-{{% /expand%}}
-{{%expand "Auto_unmarshal example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Auto_unmarshal example" %}}```go
+	t := NewT(&testing.T{})
 
 	// Automatically json.Unmarshal to compare
 	got := []byte(`{"a":1,"b":2}`)
@@ -737,8 +766,10 @@ reason of a potential failure.
 
 	// Output:
 	// JSON contents is OK: true
-{{% /expand%}}
-{{%expand "Complex example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Complex example" %}}```go
+	t := NewT(&testing.T{})
 
 	// No end date but a start date and a duration
 	type StartDuration struct {
@@ -784,8 +815,10 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Interface example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Interface example" %}}```go
+	t := NewT(&testing.T{})
 
 	gotTime, err := time.Parse(time.RFC3339, "2018-05-23T12:13:14Z")
 	if err != nil {
@@ -810,8 +843,10 @@ reason of a potential failure.
 	// Output
 	// stringified time.Time OK: true
 	// stringified MyTime OK: false
-{{% /expand%}}
-{{%expand "Field_path example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Field_path example" %}}```go
+	t := NewT(&testing.T{})
 
 	type Body struct {
 		Name  string
@@ -862,4 +897,5 @@ reason of a potential failure.
 	// check Num by hand: true
 	// check Num using a fields-path: true
 	// check Num using an other fields-path: true
-{{% /expand%}}
+
+```{{% /expand%}}
