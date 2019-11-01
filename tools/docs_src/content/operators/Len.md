@@ -24,7 +24,8 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 
 ### Examples
 
-{{%expand "Slice example" %}}	t := &testing.T{}
+{{%expand "Slice example" %}}```go
+	t := &testing.T{}
 
 	got := []int{11, 22, 33}
 
@@ -43,8 +44,10 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Map example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Map example" %}}```go
+	t := &testing.T{}
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
@@ -63,8 +66,10 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "OperatorSlice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "OperatorSlice example" %}}```go
+	t := &testing.T{}
 
 	got := []int{11, 22, 33}
 
@@ -78,8 +83,10 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 	// Output:
 	// true
 	// true
-{{% /expand%}}
-{{%expand "OperatorMap example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "OperatorMap example" %}}```go
+	t := &testing.T{}
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
@@ -93,7 +100,8 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpLen shortcut
 
 ```go
@@ -120,7 +128,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Slice example" %}}	t := &testing.T{}
+{{%expand "Slice example" %}}```go
+	t := &testing.T{}
 
 	got := []int{11, 22, 33}
 
@@ -139,8 +148,10 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Map example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Map example" %}}```go
+	t := &testing.T{}
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
@@ -159,8 +170,10 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "OperatorSlice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "OperatorSlice example" %}}```go
+	t := &testing.T{}
 
 	got := []int{11, 22, 33}
 
@@ -174,8 +187,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
-{{%expand "OperatorMap example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "OperatorMap example" %}}```go
+	t := &testing.T{}
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
@@ -189,7 +204,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Len shortcut
 
 ```go
@@ -216,7 +232,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Slice example" %}}	t := NewT(&testing.T{})
+{{%expand "Slice example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := []int{11, 22, 33}
 
@@ -235,8 +252,10 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "Map example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Map example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
@@ -255,8 +274,10 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
-{{%expand "OperatorSlice example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "OperatorSlice example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := []int{11, 22, 33}
 
@@ -270,8 +291,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
-{{%expand "OperatorMap example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "OperatorMap example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
@@ -285,4 +308,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

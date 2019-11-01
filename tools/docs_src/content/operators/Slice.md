@@ -21,7 +21,8 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
 ### Examples
 
-{{%expand "Slice example" %}}	t := &testing.T{}
+{{%expand "Slice example" %}}```go
+	t := &testing.T{}
 
 	got := []int{42, 58, 26}
 
@@ -43,8 +44,10 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "TypedSlice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedSlice example" %}}```go
+	t := &testing.T{}
 
 	type MySlice []int
 
@@ -73,7 +76,8 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpSlice shortcut
 
 ```go
@@ -100,7 +104,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Slice example" %}}	t := &testing.T{}
+{{%expand "Slice example" %}}```go
+	t := &testing.T{}
 
 	got := []int{42, 58, 26}
 
@@ -120,8 +125,10 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "TypedSlice example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedSlice example" %}}```go
+	t := &testing.T{}
 
 	type MySlice []int
 
@@ -148,7 +155,8 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Slice shortcut
 
 ```go
@@ -175,7 +183,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Slice example" %}}	t := NewT(&testing.T{})
+{{%expand "Slice example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := []int{42, 58, 26}
 
@@ -195,8 +204,10 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "TypedSlice example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "TypedSlice example" %}}```go
+	t := NewT(&testing.T{})
 
 	type MySlice []int
 
@@ -223,4 +234,5 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

@@ -17,7 +17,8 @@ needed.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := 42
 
@@ -37,7 +38,8 @@ needed.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpNot shortcut
 
 ```go
@@ -64,7 +66,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := 42
 
@@ -84,7 +87,8 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Not shortcut
 
 ```go
@@ -111,7 +115,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := 42
 
@@ -131,4 +136,5 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

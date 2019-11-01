@@ -34,7 +34,8 @@ non-`nil` of course).
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	num := 12
 	got := &num
@@ -48,7 +49,8 @@ non-`nil` of course).
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpPPtr shortcut
 
 ```go
@@ -75,7 +77,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	num := 12
 	got := &num
@@ -89,7 +92,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.PPtr shortcut
 
 ```go
@@ -116,7 +120,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	num := 12
 	got := &num
@@ -130,4 +135,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

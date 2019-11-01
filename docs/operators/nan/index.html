@@ -12,20 +12,20 @@
     <title>NaN :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1525,27 +1525,25 @@
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := float32(math.NaN())
+	got := <span style="color:#24909d">float32</span>(math.<span style="color:#447fcf">NaN</span>())
 
-ok := Cmp(t, got, NaN(),
-    &quot;checks %v is not-a-number&quot;, got)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">NaN</span>(),
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float32(math.NaN()) is float32 not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float32(math.NaN()) is float32 not-a-number:&#34;</span>, ok)
 
-got = 12
+	got = <span style="color:#3677a9">12</span>
 
-ok = Cmp(t, got, NaN(),
-    &quot;checks %v is not-a-number&quot;, got)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">NaN</span>(),
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float32(12) is float32 not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float32(12) is float32 not-a-number:&#34;</span>, ok)
 
-// Output:
-// float32(math.NaN()) is float32 not-a-number: true
-// float32(12) is float32 not-a-number: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// float32(math.NaN()) is float32 not-a-number: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#24909d">float32</span>(<span style="color:#3677a9">12</span>) is <span style="color:#6ab825;font-weight:bold">float32</span> not-a-number: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1560,26 +1558,24 @@ fmt.Println(&quot;float32(12) is float32 not-a-number:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := math.NaN()
+	got := math.<span style="color:#447fcf">NaN</span>()
 
-ok := Cmp(t, got, NaN(),
-    &quot;checks %v is not-a-number&quot;, got)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">NaN</span>(),
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;math.NaN() is not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;math.NaN() is not-a-number:&#34;</span>, ok)
 
-got = 12
+	got = <span style="color:#3677a9">12</span>
 
-ok = Cmp(t, got, NaN(),
-    &quot;checks %v is not-a-number&quot;, got)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">NaN</span>(),
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float64(12) is not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float64(12) is not-a-number:&#34;</span>, ok)
 
-// math.NaN() is not-a-number: true
-// float64(12) is not-a-number: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// math.NaN() is not-a-number: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#24909d">float64</span>(<span style="color:#3677a9">12</span>) is not-a-number: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1612,27 +1608,25 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := float32(math.NaN())
+	got := <span style="color:#24909d">float32</span>(math.<span style="color:#447fcf">NaN</span>())
 
-ok := CmpNaN(t, got,
-    &quot;checks %v is not-a-number&quot;, got)
+	ok := <span style="color:#447fcf">CmpNaN</span>(t, got,
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float32(math.NaN()) is float32 not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float32(math.NaN()) is float32 not-a-number:&#34;</span>, ok)
 
-got = 12
+	got = <span style="color:#3677a9">12</span>
 
-ok = CmpNaN(t, got,
-    &quot;checks %v is not-a-number&quot;, got)
+	ok = <span style="color:#447fcf">CmpNaN</span>(t, got,
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float32(12) is float32 not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float32(12) is float32 not-a-number:&#34;</span>, ok)
 
-// Output:
-// float32(math.NaN()) is float32 not-a-number: true
-// float32(12) is float32 not-a-number: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// float32(math.NaN()) is float32 not-a-number: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#24909d">float32</span>(<span style="color:#3677a9">12</span>) is <span style="color:#6ab825;font-weight:bold">float32</span> not-a-number: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1647,26 +1641,24 @@ fmt.Println(&quot;float32(12) is float32 not-a-number:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := math.NaN()
+	got := math.<span style="color:#447fcf">NaN</span>()
 
-ok := CmpNaN(t, got,
-    &quot;checks %v is not-a-number&quot;, got)
+	ok := <span style="color:#447fcf">CmpNaN</span>(t, got,
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;math.NaN() is not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;math.NaN() is not-a-number:&#34;</span>, ok)
 
-got = 12
+	got = <span style="color:#3677a9">12</span>
 
-ok = CmpNaN(t, got,
-    &quot;checks %v is not-a-number&quot;, got)
+	ok = <span style="color:#447fcf">CmpNaN</span>(t, got,
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float64(12) is not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float64(12) is not-a-number:&#34;</span>, ok)
 
-// math.NaN() is not-a-number: true
-// float64(12) is not-a-number: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// math.NaN() is not-a-number: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#24909d">float64</span>(<span style="color:#3677a9">12</span>) is not-a-number: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1699,27 +1691,25 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := float32(math.NaN())
+	got := <span style="color:#24909d">float32</span>(math.<span style="color:#447fcf">NaN</span>())
 
-ok := t.NaN(got,
-    &quot;checks %v is not-a-number&quot;, got)
+	ok := t.<span style="color:#447fcf">NaN</span>(got,
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float32(math.NaN()) is float32 not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float32(math.NaN()) is float32 not-a-number:&#34;</span>, ok)
 
-got = 12
+	got = <span style="color:#3677a9">12</span>
 
-ok = t.NaN(got,
-    &quot;checks %v is not-a-number&quot;, got)
+	ok = t.<span style="color:#447fcf">NaN</span>(got,
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float32(12) is float32 not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float32(12) is float32 not-a-number:&#34;</span>, ok)
 
-// Output:
-// float32(math.NaN()) is float32 not-a-number: true
-// float32(12) is float32 not-a-number: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// float32(math.NaN()) is float32 not-a-number: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#24909d">float32</span>(<span style="color:#3677a9">12</span>) is <span style="color:#6ab825;font-weight:bold">float32</span> not-a-number: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1734,26 +1724,24 @@ fmt.Println(&quot;float32(12) is float32 not-a-number:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := math.NaN()
+	got := math.<span style="color:#447fcf">NaN</span>()
 
-ok := t.NaN(got,
-    &quot;checks %v is not-a-number&quot;, got)
+	ok := t.<span style="color:#447fcf">NaN</span>(got,
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;math.NaN() is not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;math.NaN() is not-a-number:&#34;</span>, ok)
 
-got = 12
+	got = <span style="color:#3677a9">12</span>
 
-ok = t.NaN(got,
-    &quot;checks %v is not-a-number&quot;, got)
+	ok = t.<span style="color:#447fcf">NaN</span>(got,
+		<span style="color:#ed9d13">&#34;checks %v is not-a-number&#34;</span>, got)
 
-fmt.Println(&quot;float64(12) is not-a-number:&quot;, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;float64(12) is not-a-number:&#34;</span>, ok)
 
-// math.NaN() is not-a-number: true
-// float64(12) is not-a-number: false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// math.NaN() is not-a-number: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#24909d">float64</span>(<span style="color:#3677a9">12</span>) is not-a-number: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -2894,19 +2882,19 @@ fmt.Println(&quot;float64(12) is not-a-number:&quot;, ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598486"></script>
+    <script src="/js/jquery.sticky.js?1572598486"></script>
+    <script src="/js/featherlight.min.js?1572598486"></script>
+    <script src="/js/highlight.pack.js?1572598486"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598486"></script>
+    <script src="/js/learn.js?1572598486"></script>
+    <script src="/js/hugo-learn.js?1572598486"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598486" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598486"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

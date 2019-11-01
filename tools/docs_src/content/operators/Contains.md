@@ -73,7 +73,8 @@ Cmp(t, bstr, Contains("String")) // succeeds
 
 ### Examples
 
-{{%expand "ArraySlice example" %}}	t := &testing.T{}
+{{%expand "ArraySlice example" %}}```go
+	t := &testing.T{}
 
 	ok := Cmp(t, [...]int{11, 22, 33, 44}, Contains(22))
 	fmt.Println("array contains 22:", ok)
@@ -92,8 +93,10 @@ Cmp(t, bstr, Contains("String")) // succeeds
 	// array contains at least one item in [20 .. 25]: true
 	// slice contains 22: true
 	// slice contains at least one item in [20 .. 25]: true
-{{% /expand%}}
-{{%expand "Nil example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Nil example" %}}```go
+	t := &testing.T{}
 
 	num := 123
 	got := [...]*int{&num, nil}
@@ -115,8 +118,10 @@ Cmp(t, bstr, Contains("String")) // succeeds
 	// array contains *int nil: true
 	// array contains Nil(): true
 	// array contains *byte nil: false
-{{% /expand%}}
-{{%expand "Map example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Map example" %}}```go
+	t := &testing.T{}
 
 	ok := Cmp(t,
 		map[string]int{"foo": 11, "bar": 22, "zip": 33}, Contains(22))
@@ -130,8 +135,10 @@ Cmp(t, bstr, Contains("String")) // succeeds
 	// Output:
 	// map contains value 22: true
 	// map contains at least one value in [20 .. 25]: true
-{{% /expand%}}
-{{%expand "String example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := &testing.T{}
 
 	got := "foobar"
 
@@ -152,8 +159,10 @@ Cmp(t, bstr, Contains("String")) // succeeds
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// contains at least one character ['n' .. 'p']: true
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := &testing.T{}
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -177,8 +186,10 @@ Cmp(t, bstr, Contains("String")) // succeeds
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// try TestDeep operator: false
-{{% /expand%}}
-{{%expand "Error example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := &testing.T{}
 
 	got := errors.New("foobar")
 
@@ -201,7 +212,8 @@ Cmp(t, bstr, Contains("String")) // succeeds
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// try TestDeep operator: false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpContains shortcut
 
 ```go
@@ -228,7 +240,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "ArraySlice example" %}}	t := &testing.T{}
+{{%expand "ArraySlice example" %}}```go
+	t := &testing.T{}
 
 	ok := CmpContains(t, [...]int{11, 22, 33, 44}, 22)
 	fmt.Println("array contains 22:", ok)
@@ -247,8 +260,10 @@ reason of a potential failure.
 	// array contains at least one item in [20 .. 25]: true
 	// slice contains 22: true
 	// slice contains at least one item in [20 .. 25]: true
-{{% /expand%}}
-{{%expand "Nil example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Nil example" %}}```go
+	t := &testing.T{}
 
 	num := 123
 	got := [...]*int{&num, nil}
@@ -270,8 +285,10 @@ reason of a potential failure.
 	// array contains *int nil: true
 	// array contains Nil(): true
 	// array contains *byte nil: false
-{{% /expand%}}
-{{%expand "Map example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Map example" %}}```go
+	t := &testing.T{}
 
 	ok := CmpContains(t, map[string]int{"foo": 11, "bar": 22, "zip": 33}, 22)
 	fmt.Println("map contains value 22:", ok)
@@ -282,8 +299,10 @@ reason of a potential failure.
 	// Output:
 	// map contains value 22: true
 	// map contains at least one value in [20 .. 25]: true
-{{% /expand%}}
-{{%expand "String example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := &testing.T{}
 
 	got := "foobar"
 
@@ -304,8 +323,10 @@ reason of a potential failure.
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// contains at least one character ['n' .. 'p']: true
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := &testing.T{}
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -329,8 +350,10 @@ reason of a potential failure.
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// try TestDeep operator: false
-{{% /expand%}}
-{{%expand "Error example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := &testing.T{}
 
 	got := errors.New("foobar")
 
@@ -353,7 +376,8 @@ reason of a potential failure.
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// try TestDeep operator: false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Contains shortcut
 
 ```go
@@ -380,7 +404,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "ArraySlice example" %}}	t := NewT(&testing.T{})
+{{%expand "ArraySlice example" %}}```go
+	t := NewT(&testing.T{})
 
 	ok := t.Contains([...]int{11, 22, 33, 44}, 22)
 	fmt.Println("array contains 22:", ok)
@@ -399,8 +424,10 @@ reason of a potential failure.
 	// array contains at least one item in [20 .. 25]: true
 	// slice contains 22: true
 	// slice contains at least one item in [20 .. 25]: true
-{{% /expand%}}
-{{%expand "Nil example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Nil example" %}}```go
+	t := NewT(&testing.T{})
 
 	num := 123
 	got := [...]*int{&num, nil}
@@ -422,8 +449,10 @@ reason of a potential failure.
 	// array contains *int nil: true
 	// array contains Nil(): true
 	// array contains *byte nil: false
-{{% /expand%}}
-{{%expand "Map example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Map example" %}}```go
+	t := NewT(&testing.T{})
 
 	ok := t.Contains(map[string]int{"foo": 11, "bar": 22, "zip": 33}, 22)
 	fmt.Println("map contains value 22:", ok)
@@ -434,8 +463,10 @@ reason of a potential failure.
 	// Output:
 	// map contains value 22: true
 	// map contains at least one value in [20 .. 25]: true
-{{% /expand%}}
-{{%expand "String example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "String example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "foobar"
 
@@ -456,8 +487,10 @@ reason of a potential failure.
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// contains at least one character ['n' .. 'p']: true
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := NewT(&testing.T{})
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -481,8 +514,10 @@ reason of a potential failure.
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// try TestDeep operator: false
-{{% /expand%}}
-{{%expand "Error example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := errors.New("foobar")
 
@@ -505,4 +540,5 @@ reason of a potential failure.
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// try TestDeep operator: false
-{{% /expand%}}
+
+```{{% /expand%}}

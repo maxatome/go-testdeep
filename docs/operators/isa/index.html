@@ -12,20 +12,20 @@
     <title>Isa :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1542,31 +1542,29 @@ will match too (in fact before checking whether it implements
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type TstStruct struct {
-    Field int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> TstStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Field <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := TstStruct{Field: 1}
+	got := TstStruct{Field: <span style="color:#3677a9">1</span>}
 
-ok := Cmp(t, got, Isa(TstStruct{}), &quot;checks got is a TstStruct&quot;)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Isa</span>(TstStruct{}), <span style="color:#ed9d13">&#34;checks got is a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, got, Isa(&amp;TstStruct{}),
-    &quot;checks got is a pointer on a TstStruct&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Isa</span>(&amp;TstStruct{}),
+		<span style="color:#ed9d13">&#34;checks got is a pointer on a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &amp;got, Isa(&amp;TstStruct{}),
-    &quot;checks &amp;got is a pointer on a TstStruct&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;got, <span style="color:#447fcf">Isa</span>(&amp;TstStruct{}),
+		<span style="color:#ed9d13">&#34;checks &amp;got is a pointer on a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// false
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1581,40 +1579,38 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := bytes.NewBufferString(&quot;foobar&quot;)
+	got := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="color:#ed9d13">&#34;foobar&#34;</span>)
 
-ok := Cmp(t, got, Isa((*fmt.Stringer)(nil)),
-    &quot;checks got implements fmt.Stringer interface&quot;)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Isa</span>((*fmt.Stringer)(<span style="color:#6ab825;font-weight:bold">nil</span>)),
+		<span style="color:#ed9d13">&#34;checks got implements fmt.Stringer interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-errGot := fmt.Errorf(&quot;An error #%d occurred&quot;, 123)
+	errGot := fmt.<span style="color:#447fcf">Errorf</span>(<span style="color:#ed9d13">&#34;An error #%d occurred&#34;</span>, <span style="color:#3677a9">123</span>)
 
-ok = Cmp(t, errGot, Isa((*error)(nil)),
-    &quot;checks errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, errGot, <span style="color:#447fcf">Isa</span>((*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)),
+		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// As nil, is passed below, it is not an interface but nil... So it
-// does not match
-errGot = nil
+	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil... So it
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// does not match
+</span><span style="color:#999;font-style:italic"></span>	errGot = <span style="color:#6ab825;font-weight:bold">nil</span>
 
-ok = Cmp(t, errGot, Isa((*error)(nil)),
-    &quot;checks errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, errGot, <span style="color:#447fcf">Isa</span>((*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)),
+		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BUT if its address is passed, now it is OK as the types match
-ok = Cmp(t, &amp;errGot, Isa((*error)(nil)),
-    &quot;checks &amp;errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BUT if its address is passed, now it is OK as the types match
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;errGot, <span style="color:#447fcf">Isa</span>((*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)),
+		<span style="color:#ed9d13">&#34;checks &amp;errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1647,31 +1643,29 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type TstStruct struct {
-    Field int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> TstStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Field <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := TstStruct{Field: 1}
+	got := TstStruct{Field: <span style="color:#3677a9">1</span>}
 
-ok := CmpIsa(t, got, TstStruct{}, &quot;checks got is a TstStruct&quot;)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpIsa</span>(t, got, TstStruct{}, <span style="color:#ed9d13">&#34;checks got is a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpIsa(t, got, &amp;TstStruct{},
-    &quot;checks got is a pointer on a TstStruct&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpIsa</span>(t, got, &amp;TstStruct{},
+		<span style="color:#ed9d13">&#34;checks got is a pointer on a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpIsa(t, &amp;got, &amp;TstStruct{},
-    &quot;checks &amp;got is a pointer on a TstStruct&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpIsa</span>(t, &amp;got, &amp;TstStruct{},
+		<span style="color:#ed9d13">&#34;checks &amp;got is a pointer on a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// false
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1686,40 +1680,38 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := bytes.NewBufferString(&quot;foobar&quot;)
+	got := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="color:#ed9d13">&#34;foobar&#34;</span>)
 
-ok := CmpIsa(t, got, (*fmt.Stringer)(nil),
-    &quot;checks got implements fmt.Stringer interface&quot;)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpIsa</span>(t, got, (*fmt.Stringer)(<span style="color:#6ab825;font-weight:bold">nil</span>),
+		<span style="color:#ed9d13">&#34;checks got implements fmt.Stringer interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-errGot := fmt.Errorf(&quot;An error #%d occurred&quot;, 123)
+	errGot := fmt.<span style="color:#447fcf">Errorf</span>(<span style="color:#ed9d13">&#34;An error #%d occurred&#34;</span>, <span style="color:#3677a9">123</span>)
 
-ok = CmpIsa(t, errGot, (*error)(nil),
-    &quot;checks errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpIsa</span>(t, errGot, (*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>),
+		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// As nil, is passed below, it is not an interface but nil... So it
-// does not match
-errGot = nil
+	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil... So it
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// does not match
+</span><span style="color:#999;font-style:italic"></span>	errGot = <span style="color:#6ab825;font-weight:bold">nil</span>
 
-ok = CmpIsa(t, errGot, (*error)(nil),
-    &quot;checks errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpIsa</span>(t, errGot, (*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>),
+		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BUT if its address is passed, now it is OK as the types match
-ok = CmpIsa(t, &amp;errGot, (*error)(nil),
-    &quot;checks &amp;errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BUT if its address is passed, now it is OK as the types match
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpIsa</span>(t, &amp;errGot, (*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>),
+		<span style="color:#ed9d13">&#34;checks &amp;errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1752,31 +1744,29 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-type TstStruct struct {
-    Field int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> TstStruct <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Field <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := TstStruct{Field: 1}
+	got := TstStruct{Field: <span style="color:#3677a9">1</span>}
 
-ok := t.Isa(got, TstStruct{}, &quot;checks got is a TstStruct&quot;)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">Isa</span>(got, TstStruct{}, <span style="color:#ed9d13">&#34;checks got is a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Isa(got, &amp;TstStruct{},
-    &quot;checks got is a pointer on a TstStruct&quot;)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Isa</span>(got, &amp;TstStruct{},
+		<span style="color:#ed9d13">&#34;checks got is a pointer on a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Isa(&amp;got, &amp;TstStruct{},
-    &quot;checks &amp;got is a pointer on a TstStruct&quot;)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Isa</span>(&amp;got, &amp;TstStruct{},
+		<span style="color:#ed9d13">&#34;checks &amp;got is a pointer on a TstStruct&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// false
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1791,40 +1781,38 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := bytes.NewBufferString(&quot;foobar&quot;)
+	got := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="color:#ed9d13">&#34;foobar&#34;</span>)
 
-ok := t.Isa(got, (*fmt.Stringer)(nil),
-    &quot;checks got implements fmt.Stringer interface&quot;)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">Isa</span>(got, (*fmt.Stringer)(<span style="color:#6ab825;font-weight:bold">nil</span>),
+		<span style="color:#ed9d13">&#34;checks got implements fmt.Stringer interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-errGot := fmt.Errorf(&quot;An error #%d occurred&quot;, 123)
+	errGot := fmt.<span style="color:#447fcf">Errorf</span>(<span style="color:#ed9d13">&#34;An error #%d occurred&#34;</span>, <span style="color:#3677a9">123</span>)
 
-ok = t.Isa(errGot, (*error)(nil),
-    &quot;checks errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Isa</span>(errGot, (*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>),
+		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// As nil, is passed below, it is not an interface but nil... So it
-// does not match
-errGot = nil
+	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil... So it
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// does not match
+</span><span style="color:#999;font-style:italic"></span>	errGot = <span style="color:#6ab825;font-weight:bold">nil</span>
 
-ok = t.Isa(errGot, (*error)(nil),
-    &quot;checks errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Isa</span>(errGot, (*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>),
+		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// BUT if its address is passed, now it is OK as the types match
-ok = t.Isa(&amp;errGot, (*error)(nil),
-    &quot;checks &amp;errGot is a *error or implements error interface&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// BUT if its address is passed, now it is OK as the types match
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Isa</span>(&amp;errGot, (*<span style="color:#6ab825;font-weight:bold">error</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>),
+		<span style="color:#ed9d13">&#34;checks &amp;errGot is a *error or implements error interface&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// false
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -2965,19 +2953,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
+    <script src="/js/jquery.sticky.js?1572598485"></script>
+    <script src="/js/featherlight.min.js?1572598485"></script>
+    <script src="/js/highlight.pack.js?1572598485"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
+    <script src="/js/learn.js?1572598485"></script>
+    <script src="/js/hugo-learn.js?1572598485"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598485"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

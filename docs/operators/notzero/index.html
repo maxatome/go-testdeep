@@ -12,20 +12,20 @@
     <title>NotZero :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1537,59 +1537,57 @@
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-ok := Cmp(t, 0, NotZero()) // fails
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">0</span>, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, float64(0), NotZero()) // fails
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#24909d">float64</span>(<span style="color:#3677a9">0</span>), <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, 12, NotZero())
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">12</span>, <span style="color:#447fcf">NotZero</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, (map[string]int)(nil), NotZero()) // fails, as nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, (<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>), <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails, as nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, map[string]int{}, NotZero()) // succeeds, as not nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, ([]int)(nil), NotZero()) // fails, as nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, ([]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>), <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails, as nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, []int{}, NotZero()) // succeeds, as not nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, [3]int{}, NotZero()) // fails
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, [3]int{0, 1}, NotZero()) // succeeds, DATA[1] is not 0
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">0</span>, <span style="color:#3677a9">1</span>}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, DATA[1] is not 0
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, bytes.Buffer{}, NotZero()) // fails
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, bytes.Buffer{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &amp;bytes.Buffer{}, NotZero()) // succeeds, as pointer not nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as pointer not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &amp;bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, <span style="color:#447fcf">Ptr</span>(<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// false
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1622,59 +1620,57 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-ok := CmpNotZero(t, 0) // fails
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#3677a9">0</span>) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, float64(0)) // fails
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#24909d">float64</span>(<span style="color:#3677a9">0</span>)) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, 12)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#3677a9">12</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, (map[string]int)(nil)) // fails, as nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, (<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)) <span style="color:#999;font-style:italic">// fails, as nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, map[string]int{}) // succeeds, as not nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, as not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, ([]int)(nil)) // fails, as nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, ([]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)) <span style="color:#999;font-style:italic">// fails, as nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, []int{}) // succeeds, as not nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, as not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, [3]int{}) // fails
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, [3]int{0, 1}) // succeeds, DATA[1] is not 0
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">0</span>, <span style="color:#3677a9">1</span>}) <span style="color:#999;font-style:italic">// succeeds, DATA[1] is not 0
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, bytes.Buffer{}) // fails
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, bytes.Buffer{}) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpNotZero(t, &amp;bytes.Buffer{}) // succeeds, as pointer not nil
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpNotZero</span>(t, &amp;bytes.Buffer{}) <span style="color:#999;font-style:italic">// succeeds, as pointer not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &amp;bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, <span style="color:#447fcf">Ptr</span>(<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// false
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1707,59 +1703,57 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-ok := t.NotZero(0) // fails
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">NotZero</span>(<span style="color:#3677a9">0</span>) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero(float64(0)) // fails
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>(<span style="color:#24909d">float64</span>(<span style="color:#3677a9">0</span>)) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero(12)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>(<span style="color:#3677a9">12</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero((map[string]int)(nil)) // fails, as nil
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>((<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)) <span style="color:#999;font-style:italic">// fails, as nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero(map[string]int{}) // succeeds, as not nil
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, as not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero(([]int)(nil)) // fails, as nil
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>(([]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)) <span style="color:#999;font-style:italic">// fails, as nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero([]int{}) // succeeds, as not nil
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>([]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, as not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero([3]int{}) // fails
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>([<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero([3]int{0, 1}) // succeeds, DATA[1] is not 0
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>([<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">0</span>, <span style="color:#3677a9">1</span>}) <span style="color:#999;font-style:italic">// succeeds, DATA[1] is not 0
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero(bytes.Buffer{}) // fails
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>(bytes.Buffer{}) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.NotZero(&amp;bytes.Buffer{}) // succeeds, as pointer not nil
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">NotZero</span>(&amp;bytes.Buffer{}) <span style="color:#999;font-style:italic">// succeeds, as pointer not nil
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.Cmp(&amp;bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">Cmp</span>(&amp;bytes.Buffer{}, <span style="color:#447fcf">Ptr</span>(<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
+</span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// false
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -2900,19 +2894,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598486"></script>
+    <script src="/js/jquery.sticky.js?1572598486"></script>
+    <script src="/js/featherlight.min.js?1572598486"></script>
+    <script src="/js/highlight.pack.js?1572598486"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598486"></script>
+    <script src="/js/learn.js?1572598486"></script>
+    <script src="/js/hugo-learn.js?1572598486"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598486" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598486"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

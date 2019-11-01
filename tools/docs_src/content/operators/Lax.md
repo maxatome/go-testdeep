@@ -36,7 +36,8 @@ operator]({{< ref "operators" >}}). In this case, it delegates [TypeBehind()]({{
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	gotInt64 := int64(1234)
 	gotInt32 := int32(1235)
@@ -59,7 +60,8 @@ operator]({{< ref "operators" >}}). In this case, it delegates [TypeBehind()]({{
 	// int64 got between ints [1230 .. 1240]: true
 	// int32 got between ints [1230 .. 1240]: true
 	// myInt got between ints [1230 .. 1240]: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpLax shortcut
 
 ```go
@@ -86,7 +88,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	gotInt64 := int64(1234)
 	gotInt32 := int32(1235)
@@ -109,7 +112,8 @@ reason of a potential failure.
 	// int64 got between ints [1230 .. 1240]: true
 	// int32 got between ints [1230 .. 1240]: true
 	// myInt got between ints [1230 .. 1240]: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.CmpLax shortcut
 
 ```go
@@ -136,7 +140,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	gotInt64 := int64(1234)
 	gotInt32 := int32(1235)
@@ -159,4 +164,5 @@ reason of a potential failure.
 	// int64 got between ints [1230 .. 1240]: true
 	// int32 got between ints [1230 .. 1240]: true
 	// myInt got between ints [1230 .. 1240]: true
-{{% /expand%}}
+
+```{{% /expand%}}

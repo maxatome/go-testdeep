@@ -12,20 +12,20 @@
     <title>Lax :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1542,31 +1542,29 @@ operator</a>. In this case, it delegates <a href="/operators/#typebehind-method"
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-gotInt64 := int64(1234)
-gotInt32 := int32(1235)
+	gotInt64 := <span style="color:#24909d">int64</span>(<span style="color:#3677a9">1234</span>)
+	gotInt32 := <span style="color:#24909d">int32</span>(<span style="color:#3677a9">1235</span>)
 
-type myInt uint16
-gotMyInt := myInt(1236)
+	<span style="color:#6ab825;font-weight:bold">type</span> myInt <span style="color:#6ab825;font-weight:bold">uint16</span>
+	gotMyInt := <span style="color:#447fcf">myInt</span>(<span style="color:#3677a9">1236</span>)
 
-expected := Between(1230, 1240) // int type here
+	expected := <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">1230</span>, <span style="color:#3677a9">1240</span>) <span style="color:#999;font-style:italic">// int type here
+</span><span style="color:#999;font-style:italic"></span>
+	ok := <span style="color:#447fcf">Cmp</span>(t, gotInt64, <span style="color:#447fcf">Lax</span>(expected))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;int64 got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok := Cmp(t, gotInt64, Lax(expected))
-fmt.Println(&quot;int64 got between ints [1230 .. 1240]:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, gotInt32, <span style="color:#447fcf">Lax</span>(expected))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;int32 got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok = Cmp(t, gotInt32, Lax(expected))
-fmt.Println(&quot;int32 got between ints [1230 .. 1240]:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, gotMyInt, <span style="color:#447fcf">Lax</span>(expected))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;myInt got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok = Cmp(t, gotMyInt, Lax(expected))
-fmt.Println(&quot;myInt got between ints [1230 .. 1240]:&quot;, ok)
-
-// Output:
-// int64 got between ints [1230 .. 1240]: true
-// int32 got between ints [1230 .. 1240]: true
-// myInt got between ints [1230 .. 1240]: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// int64 got between ints [1230 .. 1240]: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// int32 got between ints [1230 .. 1240]: true
+</span><span style="color:#999;font-style:italic"></span>	// myInt got between ints [<span style="color:#3677a9">1230</span> .. <span style="color:#3677a9">1240</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1599,31 +1597,29 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-gotInt64 := int64(1234)
-gotInt32 := int32(1235)
+	gotInt64 := <span style="color:#24909d">int64</span>(<span style="color:#3677a9">1234</span>)
+	gotInt32 := <span style="color:#24909d">int32</span>(<span style="color:#3677a9">1235</span>)
 
-type myInt uint16
-gotMyInt := myInt(1236)
+	<span style="color:#6ab825;font-weight:bold">type</span> myInt <span style="color:#6ab825;font-weight:bold">uint16</span>
+	gotMyInt := <span style="color:#447fcf">myInt</span>(<span style="color:#3677a9">1236</span>)
 
-expected := Between(1230, 1240) // int type here
+	expected := <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">1230</span>, <span style="color:#3677a9">1240</span>) <span style="color:#999;font-style:italic">// int type here
+</span><span style="color:#999;font-style:italic"></span>
+	ok := <span style="color:#447fcf">CmpLax</span>(t, gotInt64, expected)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;int64 got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok := CmpLax(t, gotInt64, expected)
-fmt.Println(&quot;int64 got between ints [1230 .. 1240]:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpLax</span>(t, gotInt32, expected)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;int32 got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok = CmpLax(t, gotInt32, expected)
-fmt.Println(&quot;int32 got between ints [1230 .. 1240]:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpLax</span>(t, gotMyInt, expected)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;myInt got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok = CmpLax(t, gotMyInt, expected)
-fmt.Println(&quot;myInt got between ints [1230 .. 1240]:&quot;, ok)
-
-// Output:
-// int64 got between ints [1230 .. 1240]: true
-// int32 got between ints [1230 .. 1240]: true
-// myInt got between ints [1230 .. 1240]: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// int64 got between ints [1230 .. 1240]: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// int32 got between ints [1230 .. 1240]: true
+</span><span style="color:#999;font-style:italic"></span>	// myInt got between ints [<span style="color:#3677a9">1230</span> .. <span style="color:#3677a9">1240</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1656,31 +1652,29 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-gotInt64 := int64(1234)
-gotInt32 := int32(1235)
+	gotInt64 := <span style="color:#24909d">int64</span>(<span style="color:#3677a9">1234</span>)
+	gotInt32 := <span style="color:#24909d">int32</span>(<span style="color:#3677a9">1235</span>)
 
-type myInt uint16
-gotMyInt := myInt(1236)
+	<span style="color:#6ab825;font-weight:bold">type</span> myInt <span style="color:#6ab825;font-weight:bold">uint16</span>
+	gotMyInt := <span style="color:#447fcf">myInt</span>(<span style="color:#3677a9">1236</span>)
 
-expected := Between(1230, 1240) // int type here
+	expected := <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">1230</span>, <span style="color:#3677a9">1240</span>) <span style="color:#999;font-style:italic">// int type here
+</span><span style="color:#999;font-style:italic"></span>
+	ok := t.<span style="color:#447fcf">CmpLax</span>(gotInt64, expected)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;int64 got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok := t.CmpLax(gotInt64, expected)
-fmt.Println(&quot;int64 got between ints [1230 .. 1240]:&quot;, ok)
+	ok = t.<span style="color:#447fcf">CmpLax</span>(gotInt32, expected)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;int32 got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok = t.CmpLax(gotInt32, expected)
-fmt.Println(&quot;int32 got between ints [1230 .. 1240]:&quot;, ok)
+	ok = t.<span style="color:#447fcf">CmpLax</span>(gotMyInt, expected)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;myInt got between ints [1230 .. 1240]:&#34;</span>, ok)
 
-ok = t.CmpLax(gotMyInt, expected)
-fmt.Println(&quot;myInt got between ints [1230 .. 1240]:&quot;, ok)
-
-// Output:
-// int64 got between ints [1230 .. 1240]: true
-// int32 got between ints [1230 .. 1240]: true
-// myInt got between ints [1230 .. 1240]: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// int64 got between ints [1230 .. 1240]: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// int32 got between ints [1230 .. 1240]: true
+</span><span style="color:#999;font-style:italic"></span>	// myInt got between ints [<span style="color:#3677a9">1230</span> .. <span style="color:#3677a9">1240</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2821,19 +2815,19 @@ fmt.Println(&quot;myInt got between ints [1230 .. 1240]:&quot;, ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
+    <script src="/js/jquery.sticky.js?1572598485"></script>
+    <script src="/js/featherlight.min.js?1572598485"></script>
+    <script src="/js/highlight.pack.js?1572598485"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
+    <script src="/js/learn.js?1572598485"></script>
+    <script src="/js/hugo-learn.js?1572598485"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598485"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

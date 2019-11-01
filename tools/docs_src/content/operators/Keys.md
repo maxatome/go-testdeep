@@ -22,7 +22,8 @@ Keys(Bag("c", "a", "b"))
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
@@ -47,7 +48,8 @@ Keys(Bag("c", "a", "b"))
 	// All unsorted keys are found: false
 	// All unsorted keys are found, with the help of Bag operator: true
 	// Each key is 3 bytes long: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpKeys shortcut
 
 ```go
@@ -74,7 +76,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
@@ -99,7 +102,8 @@ reason of a potential failure.
 	// All unsorted keys are found: false
 	// All unsorted keys are found, with the help of Bag operator: true
 	// Each key is 3 bytes long: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Keys shortcut
 
 ```go
@@ -126,7 +130,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
@@ -151,4 +156,5 @@ reason of a potential failure.
 	// All unsorted keys are found: false
 	// All unsorted keys are found, with the help of Bag operator: true
 	// Each key is 3 bytes long: true
-{{% /expand%}}
+
+```{{% /expand%}}

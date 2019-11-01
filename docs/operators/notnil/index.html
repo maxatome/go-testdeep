@@ -12,20 +12,20 @@
     <title>NotNil :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1526,36 +1526,34 @@ interface, containing a non-<code>nil</code> pointer.)</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-var got fmt.Stringer = &amp;bytes.Buffer{}
+	<span style="color:#6ab825;font-weight:bold">var</span> got fmt.Stringer = &amp;bytes.Buffer{}
 
-// nil value can be compared directly with Not(nil), no need of NotNil() here
-ok := Cmp(t, got, Not(nil))
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// nil value can be compared directly with Not(nil), no need of NotNil() here
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Not</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// But it works with NotNil() anyway
-ok = Cmp(t, got, NotNil())
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// But it works with NotNil() anyway
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">NotNil</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-got = (*bytes.Buffer)(nil)
+	got = (*bytes.Buffer)(<span style="color:#6ab825;font-weight:bold">nil</span>)
 
-// In the case of an interface containing a nil pointer, comparing
-// with Not(nil) succeeds, as the interface is not nil
-ok = Cmp(t, got, Not(nil))
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// In the case of an interface containing a nil pointer, comparing
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// with Not(nil) succeeds, as the interface is not nil
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Not</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// In this case NotNil() fails
-ok = Cmp(t, got, NotNil())
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// In this case NotNil() fails
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">NotNil</span>())
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1588,36 +1586,34 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-var got fmt.Stringer = &amp;bytes.Buffer{}
+	<span style="color:#6ab825;font-weight:bold">var</span> got fmt.Stringer = &amp;bytes.Buffer{}
 
-// nil value can be compared directly with Not(nil), no need of NotNil() here
-ok := Cmp(t, got, Not(nil))
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// nil value can be compared directly with Not(nil), no need of NotNil() here
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Not</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// But it works with NotNil() anyway
-ok = CmpNotNil(t, got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// But it works with NotNil() anyway
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpNotNil</span>(t, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-got = (*bytes.Buffer)(nil)
+	got = (*bytes.Buffer)(<span style="color:#6ab825;font-weight:bold">nil</span>)
 
-// In the case of an interface containing a nil pointer, comparing
-// with Not(nil) succeeds, as the interface is not nil
-ok = Cmp(t, got, Not(nil))
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// In the case of an interface containing a nil pointer, comparing
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// with Not(nil) succeeds, as the interface is not nil
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Not</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// In this case NotNil() fails
-ok = CmpNotNil(t, got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// In this case NotNil() fails
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpNotNil</span>(t, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -1650,36 +1646,34 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-var got fmt.Stringer = &amp;bytes.Buffer{}
+	<span style="color:#6ab825;font-weight:bold">var</span> got fmt.Stringer = &amp;bytes.Buffer{}
 
-// nil value can be compared directly with Not(nil), no need of NotNil() here
-ok := t.Cmp(got, Not(nil))
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// nil value can be compared directly with Not(nil), no need of NotNil() here
+</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Not</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// But it works with NotNil() anyway
-ok = t.NotNil(got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// But it works with NotNil() anyway
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">NotNil</span>(got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-got = (*bytes.Buffer)(nil)
+	got = (*bytes.Buffer)(<span style="color:#6ab825;font-weight:bold">nil</span>)
 
-// In the case of an interface containing a nil pointer, comparing
-// with Not(nil) succeeds, as the interface is not nil
-ok = t.Cmp(got, Not(nil))
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// In the case of an interface containing a nil pointer, comparing
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// with Not(nil) succeeds, as the interface is not nil
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Not</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// In this case NotNil() fails
-ok = t.NotNil(got)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// In this case NotNil() fails
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">NotNil</span>(got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// false
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div>
 
@@ -2820,19 +2814,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
+    <script src="/js/jquery.sticky.js?1572598485"></script>
+    <script src="/js/featherlight.min.js?1572598485"></script>
+    <script src="/js/highlight.pack.js?1572598485"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
+    <script src="/js/learn.js?1572598485"></script>
+    <script src="/js/hugo-learn.js?1572598485"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598485"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

@@ -12,20 +12,20 @@
     <title>SuperMapOf :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598486" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598486" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598486" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598486" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598486" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598486" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598486" rel="stylesheet">
+    <link href="/css/theme.css?1572598486" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598486" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598486" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598486"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598486"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598486"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598486"></script>
 
     
   </div>
@@ -1540,19 +1540,17 @@ map. But some entries in the compared map may not be expected.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := map[string]int{&quot;foo&quot;: 12, &quot;bar&quot;: 42, &quot;zip&quot;: 89}
+	got := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
 
-ok := Cmp(t, got,
-    SuperMapOf(map[string]int{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)}),
-    &quot;checks map %v contains at leat all expected keys/values&quot;, got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">SuperMapOf</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)}),
+		<span style="color:#ed9d13">&#34;checks map %v contains at leat all expected keys/values&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1567,28 +1565,26 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type MyMap map[string]int
+	<span style="color:#6ab825;font-weight:bold">type</span> MyMap <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>
 
-got := MyMap{&quot;foo&quot;: 12, &quot;bar&quot;: 42, &quot;zip&quot;: 89}
+	got := MyMap{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
 
-ok := Cmp(t, got,
-    SuperMapOf(MyMap{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)}),
-    &quot;checks typed map %v contains at leat all expected keys/values&quot;, got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">SuperMapOf</span>(MyMap{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)}),
+		<span style="color:#ed9d13">&#34;checks typed map %v contains at leat all expected keys/values&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = Cmp(t, &amp;got,
-    SuperMapOf(&amp;MyMap{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)}),
-    &quot;checks pointed typed map %v contains at leat all expected keys/values&quot;,
-    got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;got,
+		<span style="color:#447fcf">SuperMapOf</span>(&amp;MyMap{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)}),
+		<span style="color:#ed9d13">&#34;checks pointed typed map %v contains at leat all expected keys/values&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1621,18 +1617,16 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := map[string]int{&quot;foo&quot;: 12, &quot;bar&quot;: 42, &quot;zip&quot;: 89}
+	got := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
 
-ok := CmpSuperMapOf(t, got, map[string]int{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)},
-    &quot;checks map %v contains at leat all expected keys/values&quot;, got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpSuperMapOf</span>(t, got, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)},
+		<span style="color:#ed9d13">&#34;checks map %v contains at leat all expected keys/values&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1647,26 +1641,24 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type MyMap map[string]int
+	<span style="color:#6ab825;font-weight:bold">type</span> MyMap <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>
 
-got := MyMap{&quot;foo&quot;: 12, &quot;bar&quot;: 42, &quot;zip&quot;: 89}
+	got := MyMap{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
 
-ok := CmpSuperMapOf(t, got, MyMap{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)},
-    &quot;checks typed map %v contains at leat all expected keys/values&quot;, got)
-fmt.Println(ok)
+	ok := <span style="color:#447fcf">CmpSuperMapOf</span>(t, got, MyMap{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)},
+		<span style="color:#ed9d13">&#34;checks typed map %v contains at leat all expected keys/values&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = CmpSuperMapOf(t, &amp;got, &amp;MyMap{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)},
-    &quot;checks pointed typed map %v contains at leat all expected keys/values&quot;,
-    got)
-fmt.Println(ok)
+	ok = <span style="color:#447fcf">CmpSuperMapOf</span>(t, &amp;got, &amp;MyMap{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)},
+		<span style="color:#ed9d13">&#34;checks pointed typed map %v contains at leat all expected keys/values&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1699,18 +1691,16 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := map[string]int{&quot;foo&quot;: 12, &quot;bar&quot;: 42, &quot;zip&quot;: 89}
+	got := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
 
-ok := t.SuperMapOf(got, map[string]int{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)},
-    &quot;checks map %v contains at leat all expected keys/values&quot;, got)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">SuperMapOf</span>(got, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)},
+		<span style="color:#ed9d13">&#34;checks map %v contains at leat all expected keys/values&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1725,26 +1715,24 @@ fmt.Println(ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-type MyMap map[string]int
+	<span style="color:#6ab825;font-weight:bold">type</span> MyMap <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>
 
-got := MyMap{&quot;foo&quot;: 12, &quot;bar&quot;: 42, &quot;zip&quot;: 89}
+	got := MyMap{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
 
-ok := t.SuperMapOf(got, MyMap{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)},
-    &quot;checks typed map %v contains at leat all expected keys/values&quot;, got)
-fmt.Println(ok)
+	ok := t.<span style="color:#447fcf">SuperMapOf</span>(got, MyMap{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)},
+		<span style="color:#ed9d13">&#34;checks typed map %v contains at leat all expected keys/values&#34;</span>, got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-ok = t.SuperMapOf(&amp;got, &amp;MyMap{&quot;bar&quot;: 42}, MapEntries{&quot;foo&quot;: Lt(15)},
-    &quot;checks pointed typed map %v contains at leat all expected keys/values&quot;,
-    got)
-fmt.Println(ok)
+	ok = t.<span style="color:#447fcf">SuperMapOf</span>(&amp;got, &amp;MyMap{<span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>}, MapEntries{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#447fcf">Lt</span>(<span style="color:#3677a9">15</span>)},
+		<span style="color:#ed9d13">&#34;checks pointed typed map %v contains at leat all expected keys/values&#34;</span>,
+		got)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -2885,19 +2873,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598486"></script>
+    <script src="/js/jquery.sticky.js?1572598486"></script>
+    <script src="/js/featherlight.min.js?1572598486"></script>
+    <script src="/js/highlight.pack.js?1572598486"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598486"></script>
+    <script src="/js/learn.js?1572598486"></script>
+    <script src="/js/hugo-learn.js?1572598486"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598486" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598486"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

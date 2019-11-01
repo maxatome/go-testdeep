@@ -12,20 +12,20 @@
     <title>ContainsKey :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1544,22 +1544,20 @@ hnum := <span style="color:#6ab825;font-weight:bold">map</span>[*<span style="co
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-ok := Cmp(t,
-    map[string]int{&quot;foo&quot;: 11, &quot;bar&quot;: 22, &quot;zip&quot;: 33}, ContainsKey(&quot;foo&quot;))
-fmt.Println(`map contains key &quot;foo&quot;:`, ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t,
+		<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">11</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">22</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">33</span>}, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#ed9d13">&#34;foo&#34;</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`map contains key &#34;foo&#34;:`</span>, ok)
 
-ok = Cmp(t,
-    map[int]bool{12: true, 24: false, 42: true, 51: false},
-    ContainsKey(Between(40, 50)))
-fmt.Println(&quot;map contains at least a key in [40 .. 50]:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t,
+		<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{<span style="color:#3677a9">12</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">24</span>: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#3677a9">42</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">51</span>: <span style="color:#6ab825;font-weight:bold">false</span>},
+		<span style="color:#447fcf">ContainsKey</span>(<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains at least a key in [40 .. 50]:&#34;</span>, ok)
 
-// Output:
-// map contains key &quot;foo&quot;: true
-// map contains at least a key in [40 .. 50]: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains key &#34;foo&#34;: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains at least a key in [<span style="color:#3677a9">40</span> .. <span style="color:#3677a9">50</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1574,30 +1572,28 @@ fmt.Println(&quot;map contains at least a key in [40 .. 50]:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-num := 1234
-got := map[*int]bool{&amp;num: false, nil: true}
+	num := <span style="color:#3677a9">1234</span>
+	got := <span style="color:#6ab825;font-weight:bold">map</span>[*<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{&amp;num: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#6ab825;font-weight:bold">nil</span>: <span style="color:#6ab825;font-weight:bold">true</span>}
 
-ok := Cmp(t, got, ContainsKey(nil))
-fmt.Println(&quot;map contains untyped nil key:&quot;, ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains untyped nil key:&#34;</span>, ok)
 
-ok = Cmp(t, got, ContainsKey((*int)(nil)))
-fmt.Println(&quot;map contains *int nil key:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">ContainsKey</span>((*<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains *int nil key:&#34;</span>, ok)
 
-ok = Cmp(t, got, ContainsKey(Nil()))
-fmt.Println(&quot;map contains Nil() key:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#447fcf">Nil</span>()))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains Nil() key:&#34;</span>, ok)
 
-ok = Cmp(t, got, ContainsKey((*byte)(nil)))
-fmt.Println(&quot;map contains *byte nil key:&quot;, ok) // types differ: *byte ≠ *int
-
-// Output:
-// map contains untyped nil key: true
-// map contains *int nil key: true
-// map contains Nil() key: true
-// map contains *byte nil key: false
-</code></pre>
-
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">ContainsKey</span>((*<span style="color:#6ab825;font-weight:bold">byte</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains *byte nil key:&#34;</span>, ok) <span style="color:#999;font-style:italic">// types differ: *byte ≠ *int
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains untyped nil key: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains *int nil key: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains Nil() key: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains *<span style="color:#6ab825;font-weight:bold">byte</span> <span style="color:#6ab825;font-weight:bold">nil</span> key: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1630,19 +1626,17 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-ok := CmpContainsKey(t, map[string]int{&quot;foo&quot;: 11, &quot;bar&quot;: 22, &quot;zip&quot;: 33}, &quot;foo&quot;)
-fmt.Println(`map contains key &quot;foo&quot;:`, ok)
+	ok := <span style="color:#447fcf">CmpContainsKey</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">11</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">22</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">33</span>}, <span style="color:#ed9d13">&#34;foo&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`map contains key &#34;foo&#34;:`</span>, ok)
 
-ok = CmpContainsKey(t, map[int]bool{12: true, 24: false, 42: true, 51: false}, Between(40, 50))
-fmt.Println(&quot;map contains at least a key in [40 .. 50]:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpContainsKey</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{<span style="color:#3677a9">12</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">24</span>: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#3677a9">42</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">51</span>: <span style="color:#6ab825;font-weight:bold">false</span>}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains at least a key in [40 .. 50]:&#34;</span>, ok)
 
-// Output:
-// map contains key &quot;foo&quot;: true
-// map contains at least a key in [40 .. 50]: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains key &#34;foo&#34;: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains at least a key in [<span style="color:#3677a9">40</span> .. <span style="color:#3677a9">50</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1657,30 +1651,28 @@ fmt.Println(&quot;map contains at least a key in [40 .. 50]:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-num := 1234
-got := map[*int]bool{&amp;num: false, nil: true}
+	num := <span style="color:#3677a9">1234</span>
+	got := <span style="color:#6ab825;font-weight:bold">map</span>[*<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{&amp;num: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#6ab825;font-weight:bold">nil</span>: <span style="color:#6ab825;font-weight:bold">true</span>}
 
-ok := CmpContainsKey(t, got, nil)
-fmt.Println(&quot;map contains untyped nil key:&quot;, ok)
+	ok := <span style="color:#447fcf">CmpContainsKey</span>(t, got, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains untyped nil key:&#34;</span>, ok)
 
-ok = CmpContainsKey(t, got, (*int)(nil))
-fmt.Println(&quot;map contains *int nil key:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpContainsKey</span>(t, got, (*<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains *int nil key:&#34;</span>, ok)
 
-ok = CmpContainsKey(t, got, Nil())
-fmt.Println(&quot;map contains Nil() key:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpContainsKey</span>(t, got, <span style="color:#447fcf">Nil</span>())
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains Nil() key:&#34;</span>, ok)
 
-ok = CmpContainsKey(t, got, (*byte)(nil))
-fmt.Println(&quot;map contains *byte nil key:&quot;, ok) // types differ: *byte ≠ *int
-
-// Output:
-// map contains untyped nil key: true
-// map contains *int nil key: true
-// map contains Nil() key: true
-// map contains *byte nil key: false
-</code></pre>
-
+	ok = <span style="color:#447fcf">CmpContainsKey</span>(t, got, (*<span style="color:#6ab825;font-weight:bold">byte</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains *byte nil key:&#34;</span>, ok) <span style="color:#999;font-style:italic">// types differ: *byte ≠ *int
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains untyped nil key: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains *int nil key: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains Nil() key: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains *<span style="color:#6ab825;font-weight:bold">byte</span> <span style="color:#6ab825;font-weight:bold">nil</span> key: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1713,19 +1705,17 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-ok := t.ContainsKey(map[string]int{&quot;foo&quot;: 11, &quot;bar&quot;: 22, &quot;zip&quot;: 33}, &quot;foo&quot;)
-fmt.Println(`map contains key &quot;foo&quot;:`, ok)
+	ok := t.<span style="color:#447fcf">ContainsKey</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">11</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">22</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">33</span>}, <span style="color:#ed9d13">&#34;foo&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`map contains key &#34;foo&#34;:`</span>, ok)
 
-ok = t.ContainsKey(map[int]bool{12: true, 24: false, 42: true, 51: false}, Between(40, 50))
-fmt.Println(&quot;map contains at least a key in [40 .. 50]:&quot;, ok)
+	ok = t.<span style="color:#447fcf">ContainsKey</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{<span style="color:#3677a9">12</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">24</span>: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#3677a9">42</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">51</span>: <span style="color:#6ab825;font-weight:bold">false</span>}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains at least a key in [40 .. 50]:&#34;</span>, ok)
 
-// Output:
-// map contains key &quot;foo&quot;: true
-// map contains at least a key in [40 .. 50]: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains key &#34;foo&#34;: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains at least a key in [<span style="color:#3677a9">40</span> .. <span style="color:#3677a9">50</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1740,30 +1730,28 @@ fmt.Println(&quot;map contains at least a key in [40 .. 50]:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-num := 1234
-got := map[*int]bool{&amp;num: false, nil: true}
+	num := <span style="color:#3677a9">1234</span>
+	got := <span style="color:#6ab825;font-weight:bold">map</span>[*<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{&amp;num: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#6ab825;font-weight:bold">nil</span>: <span style="color:#6ab825;font-weight:bold">true</span>}
 
-ok := t.ContainsKey(got, nil)
-fmt.Println(&quot;map contains untyped nil key:&quot;, ok)
+	ok := t.<span style="color:#447fcf">ContainsKey</span>(got, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains untyped nil key:&#34;</span>, ok)
 
-ok = t.ContainsKey(got, (*int)(nil))
-fmt.Println(&quot;map contains *int nil key:&quot;, ok)
+	ok = t.<span style="color:#447fcf">ContainsKey</span>(got, (*<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains *int nil key:&#34;</span>, ok)
 
-ok = t.ContainsKey(got, Nil())
-fmt.Println(&quot;map contains Nil() key:&quot;, ok)
+	ok = t.<span style="color:#447fcf">ContainsKey</span>(got, <span style="color:#447fcf">Nil</span>())
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains Nil() key:&#34;</span>, ok)
 
-ok = t.ContainsKey(got, (*byte)(nil))
-fmt.Println(&quot;map contains *byte nil key:&quot;, ok) // types differ: *byte ≠ *int
-
-// Output:
-// map contains untyped nil key: true
-// map contains *int nil key: true
-// map contains Nil() key: true
-// map contains *byte nil key: false
-</code></pre>
-
+	ok = t.<span style="color:#447fcf">ContainsKey</span>(got, (*<span style="color:#6ab825;font-weight:bold">byte</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains *byte nil key:&#34;</span>, ok) <span style="color:#999;font-style:italic">// types differ: *byte ≠ *int
+</span><span style="color:#999;font-style:italic"></span>
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains untyped nil key: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains *int nil key: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains Nil() key: true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains *<span style="color:#6ab825;font-weight:bold">byte</span> <span style="color:#6ab825;font-weight:bold">nil</span> key: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
     </div>
 </div></p>
 
@@ -2904,19 +2892,19 @@ fmt.Println(&quot;map contains *byte nil key:&quot;, ok) // types differ: *byte 
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
+    <script src="/js/jquery.sticky.js?1572598485"></script>
+    <script src="/js/featherlight.min.js?1572598485"></script>
+    <script src="/js/highlight.pack.js?1572598485"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
+    <script src="/js/learn.js?1572598485"></script>
+    <script src="/js/hugo-learn.js?1572598485"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598485"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

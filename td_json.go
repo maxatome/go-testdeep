@@ -77,7 +77,7 @@ type tdJSON struct {
 // A JSON filename ends with ".json".
 //
 // To avoid a legit "$" string prefix cause a bad placeholder error,
-// just double it to escpe it. Note it is only needed when the "$" is
+// just double it to escape it. Note it is only needed when the "$" is
 // the first character of a string:
 //
 //   Cmp(t, gotValue,
@@ -86,7 +86,7 @@ type tdJSON struct {
 //       Between(41, 43)))              // matches only $2
 //
 // For the "details" key, the raw value "$info" is expected, no
-// placeholder are involved here..
+// placeholders are involved here.
 //
 // Last but not least, Lax mode is automatically enabled by JSON
 // operator to simplify numeric tests.

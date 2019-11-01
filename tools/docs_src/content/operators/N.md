@@ -16,7 +16,8 @@ must be the same kind as the compared value.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := 1.12345
 
@@ -26,7 +27,8 @@ must be the same kind as the compared value.
 
 	// Output:
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpN shortcut
 
 ```go
@@ -57,7 +59,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := 1.12345
 
@@ -67,7 +70,8 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.N shortcut
 
 ```go
@@ -98,7 +102,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := 1.12345
 
@@ -108,4 +113,5 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

@@ -24,7 +24,8 @@ succeed. Non-expected fields are ignored.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	type Person struct {
 		Name        string
@@ -81,7 +82,8 @@ succeed. Non-expected fields are ignored.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpStruct shortcut
 
 ```go
@@ -108,7 +110,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	type Person struct {
 		Name        string
@@ -161,7 +164,8 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Struct shortcut
 
 ```go
@@ -188,7 +192,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	type Person struct {
 		Name        string
@@ -241,4 +246,5 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

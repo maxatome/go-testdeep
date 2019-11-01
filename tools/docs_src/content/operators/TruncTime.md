@@ -25,7 +25,8 @@ before the comparison against *expectedTime*.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	dateToTime := func(str string) time.Time {
 		t, err := time.Parse(time.RFC3339Nano, str)
@@ -59,7 +60,8 @@ before the comparison against *expectedTime*.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpTruncTime shortcut
 
 ```go
@@ -90,7 +92,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	dateToTime := func(str string) time.Time {
 		t, err := time.Parse(time.RFC3339Nano, str)
@@ -124,7 +127,8 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.TruncTime shortcut
 
 ```go
@@ -155,7 +159,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	dateToTime := func(str string) time.Time {
 		t, err := time.Parse(time.RFC3339Nano, str)
@@ -189,4 +194,5 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

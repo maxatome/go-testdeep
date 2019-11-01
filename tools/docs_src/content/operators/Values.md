@@ -22,7 +22,8 @@ Values(Bag("c", "a", "b"))
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
@@ -47,7 +48,8 @@ Values(Bag("c", "a", "b"))
 	// All unsorted values are found: false
 	// All unsorted values are found, with the help of Bag operator: true
 	// Each value is between 1 and 3: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpValues shortcut
 
 ```go
@@ -74,7 +76,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
@@ -99,7 +102,8 @@ reason of a potential failure.
 	// All unsorted values are found: false
 	// All unsorted values are found, with the help of Bag operator: true
 	// Each value is between 1 and 3: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Values shortcut
 
 ```go
@@ -126,7 +130,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
@@ -151,4 +156,5 @@ reason of a potential failure.
 	// All unsorted values are found: false
 	// All unsorted values are found, with the help of Bag operator: true
 	// Each value is between 1 and 3: true
-{{% /expand%}}
+
+```{{% /expand%}}

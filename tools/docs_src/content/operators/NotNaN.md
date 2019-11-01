@@ -12,7 +12,8 @@ func NotNaN() TestDeep
 
 ### Examples
 
-{{%expand "Float32 example" %}}	t := &testing.T{}
+{{%expand "Float32 example" %}}```go
+	t := &testing.T{}
 
 	got := float32(math.NaN())
 
@@ -31,8 +32,10 @@ func NotNaN() TestDeep
 	// Output:
 	// float32(math.NaN()) is NOT float32 not-a-number: false
 	// float32(12) is NOT float32 not-a-number: true
-{{% /expand%}}
-{{%expand "Float64 example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Float64 example" %}}```go
+	t := &testing.T{}
 
 	got := math.NaN()
 
@@ -50,7 +53,8 @@ func NotNaN() TestDeep
 
 	// math.NaN() is NOT not-a-number: false
 	// float64(12) is NOT not-a-number: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpNotNaN shortcut
 
 ```go
@@ -77,7 +81,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Float32 example" %}}	t := &testing.T{}
+{{%expand "Float32 example" %}}```go
+	t := &testing.T{}
 
 	got := float32(math.NaN())
 
@@ -96,8 +101,10 @@ reason of a potential failure.
 	// Output:
 	// float32(math.NaN()) is NOT float32 not-a-number: false
 	// float32(12) is NOT float32 not-a-number: true
-{{% /expand%}}
-{{%expand "Float64 example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Float64 example" %}}```go
+	t := &testing.T{}
 
 	got := math.NaN()
 
@@ -115,7 +122,8 @@ reason of a potential failure.
 
 	// math.NaN() is NOT not-a-number: false
 	// float64(12) is NOT not-a-number: true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.NotNaN shortcut
 
 ```go
@@ -142,7 +150,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Float32 example" %}}	t := NewT(&testing.T{})
+{{%expand "Float32 example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := float32(math.NaN())
 
@@ -161,8 +170,10 @@ reason of a potential failure.
 	// Output:
 	// float32(math.NaN()) is NOT float32 not-a-number: false
 	// float32(12) is NOT float32 not-a-number: true
-{{% /expand%}}
-{{%expand "Float64 example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Float64 example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := math.NaN()
 
@@ -180,4 +191,5 @@ reason of a potential failure.
 
 	// math.NaN() is NOT not-a-number: false
 	// float64(12) is NOT not-a-number: true
-{{% /expand%}}
+
+```{{% /expand%}}

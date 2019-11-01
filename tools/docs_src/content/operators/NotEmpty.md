@@ -17,7 +17,8 @@ etc.) on an array, a channel, a map, a slice or a `string`.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	ok := Cmp(t, nil, NotEmpty()) // fails, as nil is considered empty
 	fmt.Println(ok)
@@ -45,8 +46,10 @@ etc.) on an array, a channel, a map, a slice or a `string`.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Pointers example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Pointers example" %}}```go
+	t := &testing.T{}
 
 	type MySlice []int
 
@@ -77,7 +80,8 @@ etc.) on an array, a channel, a map, a slice or a `string`.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpNotEmpty shortcut
 
 ```go
@@ -104,7 +108,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	ok := CmpNotEmpty(t, nil) // fails, as nil is considered empty
 	fmt.Println(ok)
@@ -132,8 +137,10 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Pointers example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Pointers example" %}}```go
+	t := &testing.T{}
 
 	type MySlice []int
 
@@ -164,7 +171,8 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.NotEmpty shortcut
 
 ```go
@@ -191,7 +199,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	ok := t.NotEmpty(nil) // fails, as nil is considered empty
 	fmt.Println(ok)
@@ -219,8 +228,10 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
-{{%expand "Pointers example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Pointers example" %}}```go
+	t := NewT(&testing.T{})
 
 	type MySlice []int
 
@@ -251,4 +262,5 @@ reason of a potential failure.
 	// true
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

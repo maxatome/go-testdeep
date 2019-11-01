@@ -30,7 +30,8 @@ Cmp(t, "John Doe",
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := "foo bar"
 	ok := Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
@@ -43,8 +44,10 @@ Cmp(t, "John Doe",
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := &testing.T{}
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
@@ -53,8 +56,10 @@ Cmp(t, "John Doe",
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Error example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := &testing.T{}
 
 	got := errors.New("foo bar")
 	ok := Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
@@ -62,8 +67,10 @@ Cmp(t, "John Doe",
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Capture example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Capture example" %}}```go
+	t := &testing.T{}
 
 	got := "foo bar biz"
 	ok := Cmp(t, got, Re(`^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar")),
@@ -78,8 +85,10 @@ Cmp(t, "John Doe",
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Compiled example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Compiled example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -94,8 +103,10 @@ Cmp(t, "John Doe",
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledStringer example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledStringer example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -106,8 +117,10 @@ Cmp(t, "John Doe",
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "CompiledError example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledError example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -117,8 +130,10 @@ Cmp(t, "John Doe",
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "CompiledCapture example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledCapture example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
@@ -135,7 +150,8 @@ Cmp(t, "John Doe",
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpRe shortcut
 
 ```go
@@ -166,7 +182,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := "foo bar"
 	ok := CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
@@ -179,8 +196,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := &testing.T{}
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
@@ -189,8 +208,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Error example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := &testing.T{}
 
 	got := errors.New("foo bar")
 	ok := CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
@@ -198,8 +219,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Capture example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Capture example" %}}```go
+	t := &testing.T{}
 
 	got := "foo bar biz"
 	ok := CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar"),
@@ -214,8 +237,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Compiled example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "Compiled example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -230,8 +255,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledStringer example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledStringer example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -242,8 +269,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "CompiledError example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledError example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -253,8 +282,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "CompiledCapture example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "CompiledCapture example" %}}```go
+	t := &testing.T{}
 
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
@@ -271,7 +302,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Re shortcut
 
 ```go
@@ -302,7 +334,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "foo bar"
 	ok := t.Re(got, "(zip|bar)$", nil, "checks value %s", got)
@@ -315,8 +348,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Stringer example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Stringer example" %}}```go
+	t := NewT(&testing.T{})
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
@@ -325,8 +360,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Error example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Error example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := errors.New("foo bar")
 	ok := t.Re(got, "(zip|bar)$", nil, "checks value %s", got)
@@ -334,8 +371,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "Capture example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Capture example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "foo bar biz"
 	ok := t.Re(got, `^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar"),
@@ -350,8 +389,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "Compiled example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "Compiled example" %}}```go
+	t := NewT(&testing.T{})
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -366,8 +407,10 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
-{{%expand "CompiledStringer example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "CompiledStringer example" %}}```go
+	t := NewT(&testing.T{})
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -378,8 +421,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "CompiledError example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "CompiledError example" %}}```go
+	t := NewT(&testing.T{})
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -389,8 +434,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "CompiledCapture example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "CompiledCapture example" %}}```go
+	t := NewT(&testing.T{})
 
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
@@ -407,4 +454,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

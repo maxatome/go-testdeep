@@ -12,20 +12,20 @@
     <title>Struct :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598486" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598486" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598486" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598486" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598486" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598486" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598486" rel="stylesheet">
+    <link href="/css/theme.css?1572598486" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598486" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598486" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598486"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598486"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598486"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598486"></script>
 
     
   </div>
@@ -1537,65 +1537,63 @@ succeed. Non-expected fields are ignored.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type Person struct {
-    Name        string
-    Age         int
-    NumChildren int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name        <span style="color:#6ab825;font-weight:bold">string</span>
+		Age         <span style="color:#6ab825;font-weight:bold">int</span>
+		NumChildren <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := Person{
-    Name:        &quot;Foobar&quot;,
-    Age:         42,
-    NumChildren: 3,
-}
+	got := Person{
+		Name:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		Age:         <span style="color:#3677a9">42</span>,
+		NumChildren: <span style="color:#3677a9">3</span>,
+	}
 
-// As NumChildren is zero in Struct() call, it is not checked
-ok := Cmp(t, got,
-    Struct(Person{Name: &quot;Foobar&quot;}, StructFields{
-        &quot;Age&quot;: Between(40, 50),
-    }),
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// As NumChildren is zero in Struct() call, it is not checked
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Struct</span>(Person{Name: <span style="color:#ed9d13">&#34;Foobar&#34;</span>}, StructFields{
+			<span style="color:#ed9d13">&#34;Age&#34;</span>: <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		}),
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Model can be empty
-ok = Cmp(t, got,
-    Struct(Person{}, StructFields{
-        &quot;Name&quot;:        &quot;Foobar&quot;,
-        &quot;Age&quot;:         Between(40, 50),
-        &quot;NumChildren&quot;: Not(0),
-    }),
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Model can be empty
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">Struct</span>(Person{}, StructFields{
+			<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+			<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+			<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+		}),
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Works with pointers too
-ok = Cmp(t, &amp;got,
-    Struct(&amp;Person{}, StructFields{
-        &quot;Name&quot;:        &quot;Foobar&quot;,
-        &quot;Age&quot;:         Between(40, 50),
-        &quot;NumChildren&quot;: Not(0),
-    }),
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Works with pointers too
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;got,
+		<span style="color:#447fcf">Struct</span>(&amp;Person{}, StructFields{
+			<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+			<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+			<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+		}),
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Model does not need to be instanciated
-ok = Cmp(t, &amp;got,
-    Struct((*Person)(nil), StructFields{
-        &quot;Name&quot;:        &quot;Foobar&quot;,
-        &quot;Age&quot;:         Between(40, 50),
-        &quot;NumChildren&quot;: Not(0),
-    }),
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Model does not need to be instanciated
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;got,
+		<span style="color:#447fcf">Struct</span>((*Person)(<span style="color:#6ab825;font-weight:bold">nil</span>), StructFields{
+			<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+			<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+			<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+		}),
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1628,61 +1626,59 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-type Person struct {
-    Name        string
-    Age         int
-    NumChildren int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name        <span style="color:#6ab825;font-weight:bold">string</span>
+		Age         <span style="color:#6ab825;font-weight:bold">int</span>
+		NumChildren <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := Person{
-    Name:        &quot;Foobar&quot;,
-    Age:         42,
-    NumChildren: 3,
-}
+	got := Person{
+		Name:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		Age:         <span style="color:#3677a9">42</span>,
+		NumChildren: <span style="color:#3677a9">3</span>,
+	}
 
-// As NumChildren is zero in Struct() call, it is not checked
-ok := CmpStruct(t, got, Person{Name: &quot;Foobar&quot;}, StructFields{
-    &quot;Age&quot;: Between(40, 50),
-},
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// As NumChildren is zero in Struct() call, it is not checked
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">CmpStruct</span>(t, got, Person{Name: <span style="color:#ed9d13">&#34;Foobar&#34;</span>}, StructFields{
+		<span style="color:#ed9d13">&#34;Age&#34;</span>: <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Model can be empty
-ok = CmpStruct(t, got, Person{}, StructFields{
-    &quot;Name&quot;:        &quot;Foobar&quot;,
-    &quot;Age&quot;:         Between(40, 50),
-    &quot;NumChildren&quot;: Not(0),
-},
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Model can be empty
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpStruct</span>(t, got, Person{}, StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Works with pointers too
-ok = CmpStruct(t, &amp;got, &amp;Person{}, StructFields{
-    &quot;Name&quot;:        &quot;Foobar&quot;,
-    &quot;Age&quot;:         Between(40, 50),
-    &quot;NumChildren&quot;: Not(0),
-},
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Works with pointers too
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpStruct</span>(t, &amp;got, &amp;Person{}, StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Model does not need to be instanciated
-ok = CmpStruct(t, &amp;got, (*Person)(nil), StructFields{
-    &quot;Name&quot;:        &quot;Foobar&quot;,
-    &quot;Age&quot;:         Between(40, 50),
-    &quot;NumChildren&quot;: Not(0),
-},
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Model does not need to be instanciated
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpStruct</span>(t, &amp;got, (*Person)(<span style="color:#6ab825;font-weight:bold">nil</span>), StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1715,61 +1711,59 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-type Person struct {
-    Name        string
-    Age         int
-    NumChildren int
-}
+	<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name        <span style="color:#6ab825;font-weight:bold">string</span>
+		Age         <span style="color:#6ab825;font-weight:bold">int</span>
+		NumChildren <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-got := Person{
-    Name:        &quot;Foobar&quot;,
-    Age:         42,
-    NumChildren: 3,
-}
+	got := Person{
+		Name:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		Age:         <span style="color:#3677a9">42</span>,
+		NumChildren: <span style="color:#3677a9">3</span>,
+	}
 
-// As NumChildren is zero in Struct() call, it is not checked
-ok := t.Struct(got, Person{Name: &quot;Foobar&quot;}, StructFields{
-    &quot;Age&quot;: Between(40, 50),
-},
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// As NumChildren is zero in Struct() call, it is not checked
+</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">Struct</span>(got, Person{Name: <span style="color:#ed9d13">&#34;Foobar&#34;</span>}, StructFields{
+		<span style="color:#ed9d13">&#34;Age&#34;</span>: <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Model can be empty
-ok = t.Struct(got, Person{}, StructFields{
-    &quot;Name&quot;:        &quot;Foobar&quot;,
-    &quot;Age&quot;:         Between(40, 50),
-    &quot;NumChildren&quot;: Not(0),
-},
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Model can be empty
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Struct</span>(got, Person{}, StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Works with pointers too
-ok = t.Struct(&amp;got, &amp;Person{}, StructFields{
-    &quot;Name&quot;:        &quot;Foobar&quot;,
-    &quot;Age&quot;:         Between(40, 50),
-    &quot;NumChildren&quot;: Not(0),
-},
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Works with pointers too
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Struct</span>(&amp;got, &amp;Person{}, StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Model does not need to be instanciated
-ok = t.Struct(&amp;got, (*Person)(nil), StructFields{
-    &quot;Name&quot;:        &quot;Foobar&quot;,
-    &quot;Age&quot;:         Between(40, 50),
-    &quot;NumChildren&quot;: Not(0),
-},
-    &quot;checks %v is the right Person&quot;)
-fmt.Println(ok)
+	<span style="color:#999;font-style:italic">// Model does not need to be instanciated
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Struct</span>(&amp;got, (*Person)(<span style="color:#6ab825;font-weight:bold">nil</span>), StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-// Output:
-// true
-// true
-// true
-// true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -2910,19 +2904,19 @@ fmt.Println(ok)
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598486"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598486"></script>
+    <script src="/js/jquery.sticky.js?1572598486"></script>
+    <script src="/js/featherlight.min.js?1572598486"></script>
+    <script src="/js/highlight.pack.js?1572598486"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598486"></script>
+    <script src="/js/learn.js?1572598486"></script>
+    <script src="/js/hugo-learn.js?1572598486"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598486" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598486"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

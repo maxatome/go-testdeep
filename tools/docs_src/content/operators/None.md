@@ -13,7 +13,8 @@ values. During a match, none of them have to match to succeed.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := 18
 
@@ -37,7 +38,8 @@ values. During a match, none of them have to match to succeed.
 	// true
 	// false
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpNone shortcut
 
 ```go
@@ -64,7 +66,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := 18
 
@@ -88,7 +91,8 @@ reason of a potential failure.
 	// true
 	// false
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.None shortcut
 
 ```go
@@ -115,7 +119,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := 18
 
@@ -139,4 +144,5 @@ reason of a potential failure.
 	// true
 	// false
 	// false
-{{% /expand%}}
+
+```{{% /expand%}}

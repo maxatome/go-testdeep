@@ -64,7 +64,8 @@ operator should be used instead.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := "12"
 
@@ -113,7 +114,8 @@ operator should be used instead.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpCode shortcut
 
 ```go
@@ -140,7 +142,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	got := "12"
 
@@ -186,7 +189,8 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Code shortcut
 
 ```go
@@ -213,7 +217,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := "12"
 
@@ -259,4 +264,5 @@ reason of a potential failure.
 	// true
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

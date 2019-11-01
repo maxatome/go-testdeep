@@ -12,20 +12,20 @@
     <title>JSON :: My New Hugo Site</title>
 
     
-    <link href="/css/nucleus.css?1572558769" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572558769" rel="stylesheet">
-    <link href="/css/hybrid.css?1572558769" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572558769" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572558769" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572558769" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572558769" rel="stylesheet">
-    <link href="/css/theme.css?1572558769" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572558769" rel="stylesheet">
+    <link href="/css/nucleus.css?1572598485" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572598485" rel="stylesheet">
+    <link href="/css/hybrid.css?1572598485" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572598485" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572598485" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572598485" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572598485" rel="stylesheet">
+    <link href="/css/theme.css?1572598485" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572598485" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572558769" rel="stylesheet">
+      <link href="/css/theme-green.css?1572598485" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572558769"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572598485"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572558769"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572558769"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572598485"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572598485"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572558769"></script>
+<script type="text/javascript" src="/js/search.js?1572598485"></script>
 
     
   </div>
@@ -1553,14 +1553,14 @@ specification, like when used in a &ldquo;.json&rdquo; file.</p>
 <p>A JSON filename ends with &ldquo;.json&rdquo;.</p>
 
 <p>To avoid a legit &ldquo;$&rdquo; <code>string</code> prefix cause a bad placeholder <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a>,
-just double it to escpe it. Note it is only needed when the &ldquo;$&rdquo; is
+just double it to escape it. Note it is only needed when the &ldquo;$&rdquo; is
 the first character of a <code>string</code>:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
   <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: &#34;$name&#34;, &#34;details&#34;: &#34;$$info&#34;, &#34;age&#34;: $2}`</span>,
     <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
 </span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)))              // matches only <span style="color:#a61717;background-color:#e3d2d2">$</span><span style="color:#3677a9">2</span></code></pre></div>
 <p>For the &ldquo;details&rdquo; key, the raw value &ldquo;<code>$info</code>&rdquo; is expected, no
-placeholder are involved here..</p>
+placeholders are involved here..</p>
 
 <p>Last but not least, <a href="/operators/lax/"><code>Lax</code></a> mode is automatically enabled by <a href="/operators/json/"><code>JSON</code></a>
 operator to simplify numeric tests.</p>
@@ -1584,28 +1584,53 @@ operator to simplify numeric tests.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-}{
-    Fullname: &quot;Bob&quot;,
-    Age:      42,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+	}
 
-ok := Cmp(t, got, JSON(`{&quot;age&quot;:42,&quot;fullname&quot;:&quot;Bob&quot;}`))
-fmt.Println(&quot;check got with age then fullname:&quot;, ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}`</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with age then fullname:&#34;</span>, ok)
 
-ok = Cmp(t, got, JSON(`{&quot;fullname&quot;:&quot;Bob&quot;,&quot;age&quot;:42}`))
-fmt.Println(&quot;check got with fullname then age:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}`</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname then age:&#34;</span>, ok)
 
-ok = Cmp(t, got, JSON(`{
-</code></pre>
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{
+</span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;Bob&#34;,
+</span><span style="color:#ed9d13">  &#34;age&#34;:      42
+</span><span style="color:#ed9d13">}`</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with nicely formatted JSON:&#34;</span>, ok)
 
-<p>&ldquo;fullname&rdquo;: &ldquo;Bob&rdquo;,
-  &ldquo;age&rdquo;:      42</p>
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}`</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with gender field:&#34;</span>, ok)
 
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;}`</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname only:&#34;</span>, ok)
+
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`true`</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check boolean got is true:&#34;</span>, ok)
+
+	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">42</span>, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`42`</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check numeric got is 42:&#34;</span>, ok)
+
+	got = <span style="color:#6ab825;font-weight:bold">nil</span>
+	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`null`</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check nil got is null:&#34;</span>, ok)
+
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with age then fullname: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with fullname then age: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with nicely formatted JSON: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with gender field: false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with fullname only: false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check boolean got is true: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check numeric got is 42: true
+</span><span style="color:#999;font-style:italic"></span>	// check <span style="color:#6ab825;font-weight:bold">nil</span> got is null: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1620,44 +1645,42 @@ ok = Cmp(t, got, JSON(`{
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-}{
-    Fullname: &quot;Bob Foobar&quot;,
-    Age:      42,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+	}
 
-ok := Cmp(t, got, JSON(`{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, 42, &quot;Bob Foobar&quot;))
-fmt.Println(&quot;check got with numeric placeholders without operators:&quot;, ok)
+	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders without operators:&#34;</span>, ok)
 
-ok = Cmp(t, got,
-    JSON(`{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`,
-        Between(40, 45),
-        HasSuffix(&quot;Foobar&quot;)))
-fmt.Println(&quot;check got with numeric placeholders:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>,
+			<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>),
+			<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders:&#34;</span>, ok)
 
-ok = Cmp(t, got,
-    JSON(`{&quot;age&quot;: &quot;$1&quot;, &quot;fullname&quot;: &quot;$2&quot;}`,
-        Between(40, 45),
-        HasSuffix(&quot;Foobar&quot;)))
-fmt.Println(&quot;check got with double-quoted numeric placeholders:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}`</span>,
+			<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>),
+			<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with double-quoted numeric placeholders:&#34;</span>, ok)
 
-ok = Cmp(t, got,
-    JSON(`{&quot;age&quot;: $age, &quot;fullname&quot;: $name}`,
-        Tag(&quot;age&quot;, Between(40, 45)),
-        Tag(&quot;name&quot;, HasSuffix(&quot;Foobar&quot;))))
-fmt.Println(&quot;check got with named placeholders:&quot;, ok)
+	ok = <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: $age, &#34;fullname&#34;: $name}`</span>,
+			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
+			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with named placeholders:&#34;</span>, ok)
 
-// Output:
-// check got with numeric placeholders without operators: true
-// check got with numeric placeholders: true
-// check got with double-quoted numeric placeholders: true
-// check got with named placeholders: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with numeric placeholders without operators: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with numeric placeholders: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with double-quoted numeric placeholders: true
+</span><span style="color:#999;font-style:italic"></span>	// check got with named placeholders: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1672,33 +1695,57 @@ fmt.Println(&quot;check got with named placeholders:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-    Gender   string `json:&quot;gender&quot;`
-}{
-    Fullname: &quot;Bob Foobar&quot;,
-    Age:      42,
-    Gender:   &quot;male&quot;,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;gender&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+		Gender:   <span style="color:#ed9d13">&#34;male&#34;</span>,
+	}
 
-tmpDir, err := ioutil.TempDir(&quot;&quot;, &quot;&quot;)
-if err != nil {
-    t.Fatal(err)
-}
-defer os.RemoveAll(tmpDir) // clean up
+	tmpDir, err := ioutil.<span style="color:#447fcf">TempDir</span>(<span style="color:#ed9d13">&#34;&#34;</span>, <span style="color:#ed9d13">&#34;&#34;</span>)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
+	<span style="color:#6ab825;font-weight:bold">defer</span> os.<span style="color:#447fcf">RemoveAll</span>(tmpDir) <span style="color:#999;font-style:italic">// clean up
+</span><span style="color:#999;font-style:italic"></span>
+	filename := tmpDir + <span style="color:#ed9d13">&#34;/test.json&#34;</span>
+	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
+</span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;$name&#34;,
+</span><span style="color:#ed9d13">  &#34;age&#34;:      &#34;$age&#34;,
+</span><span style="color:#ed9d13">  &#34;gender&#34;:   &#34;$gender&#34;
+</span><span style="color:#ed9d13">}`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
 
-filename := tmpDir + &quot;/test.json&quot;
-if err = ioutil.WriteFile(filename, []byte(`
-</code></pre>
+	<span style="color:#999;font-style:italic">// OK let&#39;s test with this file
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">JSON</span>(filename,
+			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)),
+			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
+			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from file name:&#34;</span>, ok)
 
-<p>{
-  &ldquo;fullname&rdquo;: &ldquo;$name&rdquo;,
-  &ldquo;age&rdquo;:      &ldquo;$age&rdquo;,
-  &ldquo;gender&rdquo;:   &ldquo;$gender&rdquo;</p>
+	<span style="color:#999;font-style:italic">// When the file is already open
+</span><span style="color:#999;font-style:italic"></span>	file, err := os.<span style="color:#447fcf">Open</span>(filename)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
+	ok = <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">JSON</span>(file,
+			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)),
+			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
+			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))))
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from io.Reader:&#34;</span>, ok)
 
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// Full match from file name: true
+</span><span style="color:#999;font-style:italic"></span>	// Full match from io.Reader: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1731,28 +1778,53 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-}{
-    Fullname: &quot;Bob&quot;,
-    Age:      42,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+	}
 
-ok := CmpJSON(t, got, `{&quot;age&quot;:42,&quot;fullname&quot;:&quot;Bob&quot;}`, nil)
-fmt.Println(&quot;check got with age then fullname:&quot;, ok)
+	ok := <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with age then fullname:&#34;</span>, ok)
 
-ok = CmpJSON(t, got, `{&quot;fullname&quot;:&quot;Bob&quot;,&quot;age&quot;:42}`, nil)
-fmt.Println(&quot;check got with fullname then age:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname then age:&#34;</span>, ok)
 
-ok = CmpJSON(t, got, `{
-</code></pre>
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{
+</span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;Bob&#34;,
+</span><span style="color:#ed9d13">  &#34;age&#34;:      42
+</span><span style="color:#ed9d13">}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with nicely formatted JSON:&#34;</span>, ok)
 
-<p>&ldquo;fullname&rdquo;: &ldquo;Bob&rdquo;,
-  &ldquo;age&rdquo;:      42</p>
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with gender field:&#34;</span>, ok)
 
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname only:&#34;</span>, ok)
+
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">`true`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check boolean got is true:&#34;</span>, ok)
+
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">`42`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check numeric got is 42:&#34;</span>, ok)
+
+	got = <span style="color:#6ab825;font-weight:bold">nil</span>
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`null`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check nil got is null:&#34;</span>, ok)
+
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with age then fullname: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with fullname then age: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with nicely formatted JSON: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with gender field: false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with fullname only: false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check boolean got is true: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check numeric got is 42: true
+</span><span style="color:#999;font-style:italic"></span>	// check <span style="color:#6ab825;font-weight:bold">nil</span> got is null: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1767,35 +1839,33 @@ ok = CmpJSON(t, got, `{
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-}{
-    Fullname: &quot;Bob Foobar&quot;,
-    Age:      42,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+	}
 
-ok := CmpJSON(t, got, `{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, []interface{}{42, &quot;Bob Foobar&quot;})
-fmt.Println(&quot;check got with numeric placeholders without operators:&quot;, ok)
+	ok := <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders without operators:&#34;</span>, ok)
 
-ok = CmpJSON(t, got, `{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, []interface{}{Between(40, 45), HasSuffix(&quot;Foobar&quot;)})
-fmt.Println(&quot;check got with numeric placeholders:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders:&#34;</span>, ok)
 
-ok = CmpJSON(t, got, `{&quot;age&quot;: &quot;$1&quot;, &quot;fullname&quot;: &quot;$2&quot;}`, []interface{}{Between(40, 45), HasSuffix(&quot;Foobar&quot;)})
-fmt.Println(&quot;check got with double-quoted numeric placeholders:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with double-quoted numeric placeholders:&#34;</span>, ok)
 
-ok = CmpJSON(t, got, `{&quot;age&quot;: $age, &quot;fullname&quot;: $name}`, []interface{}{Tag(&quot;age&quot;, Between(40, 45)), Tag(&quot;name&quot;, HasSuffix(&quot;Foobar&quot;))})
-fmt.Println(&quot;check got with named placeholders:&quot;, ok)
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: $age, &#34;fullname&#34;: $name}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with named placeholders:&#34;</span>, ok)
 
-// Output:
-// check got with numeric placeholders without operators: true
-// check got with numeric placeholders: true
-// check got with double-quoted numeric placeholders: true
-// check got with named placeholders: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with numeric placeholders without operators: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with numeric placeholders: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with double-quoted numeric placeholders: true
+</span><span style="color:#999;font-style:italic"></span>	// check got with named placeholders: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1810,33 +1880,49 @@ fmt.Println(&quot;check got with named placeholders:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := &amp;testing.T{}
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-    Gender   string `json:&quot;gender&quot;`
-}{
-    Fullname: &quot;Bob Foobar&quot;,
-    Age:      42,
-    Gender:   &quot;male&quot;,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;gender&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+		Gender:   <span style="color:#ed9d13">&#34;male&#34;</span>,
+	}
 
-tmpDir, err := ioutil.TempDir(&quot;&quot;, &quot;&quot;)
-if err != nil {
-    t.Fatal(err)
-}
-defer os.RemoveAll(tmpDir) // clean up
+	tmpDir, err := ioutil.<span style="color:#447fcf">TempDir</span>(<span style="color:#ed9d13">&#34;&#34;</span>, <span style="color:#ed9d13">&#34;&#34;</span>)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
+	<span style="color:#6ab825;font-weight:bold">defer</span> os.<span style="color:#447fcf">RemoveAll</span>(tmpDir) <span style="color:#999;font-style:italic">// clean up
+</span><span style="color:#999;font-style:italic"></span>
+	filename := tmpDir + <span style="color:#ed9d13">&#34;/test.json&#34;</span>
+	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
+</span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;$name&#34;,
+</span><span style="color:#ed9d13">  &#34;age&#34;:      &#34;$age&#34;,
+</span><span style="color:#ed9d13">  &#34;gender&#34;:   &#34;$gender&#34;
+</span><span style="color:#ed9d13">}`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
 
-filename := tmpDir + &quot;/test.json&quot;
-if err = ioutil.WriteFile(filename, []byte(`
-</code></pre>
+	<span style="color:#999;font-style:italic">// OK let&#39;s test with this file
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">CmpJSON</span>(t, got, filename, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from file name:&#34;</span>, ok)
 
-<p>{
-  &ldquo;fullname&rdquo;: &ldquo;$name&rdquo;,
-  &ldquo;age&rdquo;:      &ldquo;$age&rdquo;,
-  &ldquo;gender&rdquo;:   &ldquo;$gender&rdquo;</p>
+	<span style="color:#999;font-style:italic">// When the file is already open
+</span><span style="color:#999;font-style:italic"></span>	file, err := os.<span style="color:#447fcf">Open</span>(filename)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
+	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, file, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from io.Reader:&#34;</span>, ok)
 
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// Full match from file name: true
+</span><span style="color:#999;font-style:italic"></span>	// Full match from io.Reader: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -1869,28 +1955,53 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-}{
-    Fullname: &quot;Bob&quot;,
-    Age:      42,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+	}
 
-ok := t.JSON(got, `{&quot;age&quot;:42,&quot;fullname&quot;:&quot;Bob&quot;}`, nil)
-fmt.Println(&quot;check got with age then fullname:&quot;, ok)
+	ok := t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with age then fullname:&#34;</span>, ok)
 
-ok = t.JSON(got, `{&quot;fullname&quot;:&quot;Bob&quot;,&quot;age&quot;:42}`, nil)
-fmt.Println(&quot;check got with fullname then age:&quot;, ok)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname then age:&#34;</span>, ok)
 
-ok = t.JSON(got, `{
-</code></pre>
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{
+</span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;Bob&#34;,
+</span><span style="color:#ed9d13">  &#34;age&#34;:      42
+</span><span style="color:#ed9d13">}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with nicely formatted JSON:&#34;</span>, ok)
 
-<p>&ldquo;fullname&rdquo;: &ldquo;Bob&rdquo;,
-  &ldquo;age&rdquo;:      42</p>
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with gender field:&#34;</span>, ok)
 
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname only:&#34;</span>, ok)
+
+	ok = t.<span style="color:#447fcf">JSON</span>(<span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">`true`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check boolean got is true:&#34;</span>, ok)
+
+	ok = t.<span style="color:#447fcf">JSON</span>(<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">`42`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check numeric got is 42:&#34;</span>, ok)
+
+	got = <span style="color:#6ab825;font-weight:bold">nil</span>
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`null`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check nil got is null:&#34;</span>, ok)
+
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with age then fullname: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with fullname then age: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with nicely formatted JSON: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with gender field: false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with fullname only: false
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check boolean got is true: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check numeric got is 42: true
+</span><span style="color:#999;font-style:italic"></span>	// check <span style="color:#6ab825;font-weight:bold">nil</span> got is null: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1905,35 +2016,33 @@ ok = t.JSON(got, `{
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-}{
-    Fullname: &quot;Bob Foobar&quot;,
-    Age:      42,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+	}
 
-ok := t.JSON(got, `{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, []interface{}{42, &quot;Bob Foobar&quot;})
-fmt.Println(&quot;check got with numeric placeholders without operators:&quot;, ok)
+	ok := t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders without operators:&#34;</span>, ok)
 
-ok = t.JSON(got, `{&quot;age&quot;: $1, &quot;fullname&quot;: $2}`, []interface{}{Between(40, 45), HasSuffix(&quot;Foobar&quot;)})
-fmt.Println(&quot;check got with numeric placeholders:&quot;, ok)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders:&#34;</span>, ok)
 
-ok = t.JSON(got, `{&quot;age&quot;: &quot;$1&quot;, &quot;fullname&quot;: &quot;$2&quot;}`, []interface{}{Between(40, 45), HasSuffix(&quot;Foobar&quot;)})
-fmt.Println(&quot;check got with double-quoted numeric placeholders:&quot;, ok)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with double-quoted numeric placeholders:&#34;</span>, ok)
 
-ok = t.JSON(got, `{&quot;age&quot;: $age, &quot;fullname&quot;: $name}`, []interface{}{Tag(&quot;age&quot;, Between(40, 45)), Tag(&quot;name&quot;, HasSuffix(&quot;Foobar&quot;))})
-fmt.Println(&quot;check got with named placeholders:&quot;, ok)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: $age, &#34;fullname&#34;: $name}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with named placeholders:&#34;</span>, ok)
 
-// Output:
-// check got with numeric placeholders without operators: true
-// check got with numeric placeholders: true
-// check got with double-quoted numeric placeholders: true
-// check got with named placeholders: true
-</code></pre>
-
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with numeric placeholders without operators: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with numeric placeholders: true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check got with double-quoted numeric placeholders: true
+</span><span style="color:#999;font-style:italic"></span>	// check got with named placeholders: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div>
 
@@ -1948,33 +2057,49 @@ fmt.Println(&quot;check got with named placeholders:&quot;, ok)
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <pre><code>t := NewT(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-got := &amp;struct {
-    Fullname string `json:&quot;fullname&quot;`
-    Age      int    `json:&quot;age&quot;`
-    Gender   string `json:&quot;gender&quot;`
-}{
-    Fullname: &quot;Bob Foobar&quot;,
-    Age:      42,
-    Gender:   &quot;male&quot;,
-}
+	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;gender&#34;`</span>
+	}{
+		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
+		Age:      <span style="color:#3677a9">42</span>,
+		Gender:   <span style="color:#ed9d13">&#34;male&#34;</span>,
+	}
 
-tmpDir, err := ioutil.TempDir(&quot;&quot;, &quot;&quot;)
-if err != nil {
-    t.Fatal(err)
-}
-defer os.RemoveAll(tmpDir) // clean up
+	tmpDir, err := ioutil.<span style="color:#447fcf">TempDir</span>(<span style="color:#ed9d13">&#34;&#34;</span>, <span style="color:#ed9d13">&#34;&#34;</span>)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
+	<span style="color:#6ab825;font-weight:bold">defer</span> os.<span style="color:#447fcf">RemoveAll</span>(tmpDir) <span style="color:#999;font-style:italic">// clean up
+</span><span style="color:#999;font-style:italic"></span>
+	filename := tmpDir + <span style="color:#ed9d13">&#34;/test.json&#34;</span>
+	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
+</span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;$name&#34;,
+</span><span style="color:#ed9d13">  &#34;age&#34;:      &#34;$age&#34;,
+</span><span style="color:#ed9d13">  &#34;gender&#34;:   &#34;$gender&#34;
+</span><span style="color:#ed9d13">}`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
 
-filename := tmpDir + &quot;/test.json&quot;
-if err = ioutil.WriteFile(filename, []byte(`
-</code></pre>
+	<span style="color:#999;font-style:italic">// OK let&#39;s test with this file
+</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">JSON</span>(got, filename, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from file name:&#34;</span>, ok)
 
-<p>{
-  &ldquo;fullname&rdquo;: &ldquo;$name&rdquo;,
-  &ldquo;age&rdquo;:      &ldquo;$age&rdquo;,
-  &ldquo;gender&rdquo;:   &ldquo;$gender&rdquo;</p>
+	<span style="color:#999;font-style:italic">// When the file is already open
+</span><span style="color:#999;font-style:italic"></span>	file, err := os.<span style="color:#447fcf">Open</span>(filename)
+	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+		t.<span style="color:#447fcf">Fatal</span>(err)
+	}
+	ok = t.<span style="color:#447fcf">JSON</span>(got, file, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))})
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from io.Reader:&#34;</span>, ok)
 
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// Full match from file name: true
+</span><span style="color:#999;font-style:italic"></span>	// Full match from io.Reader: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
     </div>
 </div></p>
 
@@ -3115,19 +3240,19 @@ if err = ioutil.WriteFile(filename, []byte(`
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572558769"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572558769"></script>
-    <script src="/js/jquery.sticky.js?1572558769"></script>
-    <script src="/js/featherlight.min.js?1572558769"></script>
-    <script src="/js/highlight.pack.js?1572558769"></script>
+    <script src="/js/clipboard.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572598485"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572598485"></script>
+    <script src="/js/jquery.sticky.js?1572598485"></script>
+    <script src="/js/featherlight.min.js?1572598485"></script>
+    <script src="/js/highlight.pack.js?1572598485"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572558769"></script>
-    <script src="/js/learn.js?1572558769"></script>
-    <script src="/js/hugo-learn.js?1572558769"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572598485"></script>
+    <script src="/js/learn.js?1572598485"></script>
+    <script src="/js/hugo-learn.js?1572598485"></script>
 
-    <link href="/mermaid/mermaid.css?1572558769" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572558769"></script>
+    <link href="/mermaid/mermaid.css?1572598485" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572598485"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

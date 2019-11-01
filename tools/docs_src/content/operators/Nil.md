@@ -13,7 +13,8 @@ but containing a `nil` pointer.)
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	var got fmt.Stringer // interface
 
@@ -41,7 +42,8 @@ but containing a `nil` pointer.)
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpNil shortcut
 
 ```go
@@ -68,7 +70,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := &testing.T{}
+{{%expand "Base example" %}}```go
+	t := &testing.T{}
 
 	var got fmt.Stringer // interface
 
@@ -96,7 +99,8 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.Nil shortcut
 
 ```go
@@ -123,7 +127,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Base example" %}}	t := NewT(&testing.T{})
+{{%expand "Base example" %}}```go
+	t := NewT(&testing.T{})
 
 	var got fmt.Stringer // interface
 
@@ -151,4 +156,5 @@ reason of a potential failure.
 	// true
 	// false
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}

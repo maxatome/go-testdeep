@@ -62,7 +62,7 @@ Cmp(t, gotValue, JSON(osFile, Between(12, 34)))
 A JSON filename ends with ".json".
 
 To avoid a legit "$" `string` prefix cause a bad placeholder [`error`](https://golang.org/pkg/builtin/#error),
-just double it to escpe it. Note it is only needed when the "$" is
+just double it to escape it. Note it is only needed when the "$" is
 the first character of a `string`:
 
 ```go
@@ -73,7 +73,7 @@ Cmp(t, gotValue,
 ```
 
 For the "details" key, the raw value "`$info`" is expected, no
-placeholder are involved here..
+placeholders are involved here..
 
 Last but not least, [`Lax`]({{< ref "Lax" >}}) mode is automatically enabled by [`JSON`]({{< ref "JSON" >}})
 operator to simplify numeric tests.
@@ -86,7 +86,8 @@ operator to simplify numeric tests.
 
 ### Examples
 
-{{%expand "Basic example" %}}	t := &testing.T{}
+{{%expand "Basic example" %}}```go
+	t := &testing.T{}
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -105,8 +106,38 @@ operator to simplify numeric tests.
 	ok = Cmp(t, got, JSON(`{
   "fullname": "Bob",
   "age":      42
-{{% /expand%}}
-{{%expand "Placeholders example" %}}	t := &testing.T{}
+}`))
+	fmt.Println("check got with nicely formatted JSON:", ok)
+
+	ok = Cmp(t, got, JSON(`{"fullname":"Bob","age":42,"gender":"male"}`))
+	fmt.Println("check got with gender field:", ok)
+
+	ok = Cmp(t, got, JSON(`{"fullname":"Bob"}`))
+	fmt.Println("check got with fullname only:", ok)
+
+	ok = Cmp(t, true, JSON(`true`))
+	fmt.Println("check boolean got is true:", ok)
+
+	ok = Cmp(t, 42, JSON(`42`))
+	fmt.Println("check numeric got is 42:", ok)
+
+	got = nil
+	ok = Cmp(t, got, JSON(`null`))
+	fmt.Println("check nil got is null:", ok)
+
+	// Output:
+	// check got with age then fullname: true
+	// check got with fullname then age: true
+	// check got with nicely formatted JSON: true
+	// check got with gender field: false
+	// check got with fullname only: false
+	// check boolean got is true: true
+	// check numeric got is 42: true
+	// check nil got is null: true
+
+```{{% /expand%}}
+{{%expand "Placeholders example" %}}```go
+	t := &testing.T{}
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -142,8 +173,10 @@ operator to simplify numeric tests.
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
-{{% /expand%}}
-{{%expand "File example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "File example" %}}```go
+	t := &testing.T{}
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -167,7 +200,35 @@ operator to simplify numeric tests.
   "fullname": "$name",
   "age":      "$age",
   "gender":   "$gender"
-{{% /expand%}}
+}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// OK let's test with this file
+	ok := Cmp(t, got,
+		JSON(filename,
+			Tag("name", HasPrefix("Bob")),
+			Tag("age", Between(40, 45)),
+			Tag("gender", Re(`^(male|female)\z`))))
+	fmt.Println("Full match from file name:", ok)
+
+	// When the file is already open
+	file, err := os.Open(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok = Cmp(t, got,
+		JSON(file,
+			Tag("name", HasPrefix("Bob")),
+			Tag("age", Between(40, 45)),
+			Tag("gender", Re(`^(male|female)\z`))))
+	fmt.Println("Full match from io.Reader:", ok)
+
+	// Output:
+	// Full match from file name: true
+	// Full match from io.Reader: true
+
+```{{% /expand%}}
 ## CmpJSON shortcut
 
 ```go
@@ -194,7 +255,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Basic example" %}}	t := &testing.T{}
+{{%expand "Basic example" %}}```go
+	t := &testing.T{}
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -213,8 +275,38 @@ reason of a potential failure.
 	ok = CmpJSON(t, got, `{
   "fullname": "Bob",
   "age":      42
-{{% /expand%}}
-{{%expand "Placeholders example" %}}	t := &testing.T{}
+}`, nil)
+	fmt.Println("check got with nicely formatted JSON:", ok)
+
+	ok = CmpJSON(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
+	fmt.Println("check got with gender field:", ok)
+
+	ok = CmpJSON(t, got, `{"fullname":"Bob"}`, nil)
+	fmt.Println("check got with fullname only:", ok)
+
+	ok = CmpJSON(t, true, `true`, nil)
+	fmt.Println("check boolean got is true:", ok)
+
+	ok = CmpJSON(t, 42, `42`, nil)
+	fmt.Println("check numeric got is 42:", ok)
+
+	got = nil
+	ok = CmpJSON(t, got, `null`, nil)
+	fmt.Println("check nil got is null:", ok)
+
+	// Output:
+	// check got with age then fullname: true
+	// check got with fullname then age: true
+	// check got with nicely formatted JSON: true
+	// check got with gender field: false
+	// check got with fullname only: false
+	// check boolean got is true: true
+	// check numeric got is 42: true
+	// check nil got is null: true
+
+```{{% /expand%}}
+{{%expand "Placeholders example" %}}```go
+	t := &testing.T{}
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -241,8 +333,10 @@ reason of a potential failure.
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
-{{% /expand%}}
-{{%expand "File example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "File example" %}}```go
+	t := &testing.T{}
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -266,7 +360,27 @@ reason of a potential failure.
   "fullname": "$name",
   "age":      "$age",
   "gender":   "$gender"
-{{% /expand%}}
+}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// OK let's test with this file
+	ok := CmpJSON(t, got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from file name:", ok)
+
+	// When the file is already open
+	file, err := os.Open(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok = CmpJSON(t, got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from io.Reader:", ok)
+
+	// Output:
+	// Full match from file name: true
+	// Full match from io.Reader: true
+
+```{{% /expand%}}
 ## T.JSON shortcut
 
 ```go
@@ -293,7 +407,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Basic example" %}}	t := NewT(&testing.T{})
+{{%expand "Basic example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -312,8 +427,38 @@ reason of a potential failure.
 	ok = t.JSON(got, `{
   "fullname": "Bob",
   "age":      42
-{{% /expand%}}
-{{%expand "Placeholders example" %}}	t := NewT(&testing.T{})
+}`, nil)
+	fmt.Println("check got with nicely formatted JSON:", ok)
+
+	ok = t.JSON(got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
+	fmt.Println("check got with gender field:", ok)
+
+	ok = t.JSON(got, `{"fullname":"Bob"}`, nil)
+	fmt.Println("check got with fullname only:", ok)
+
+	ok = t.JSON(true, `true`, nil)
+	fmt.Println("check boolean got is true:", ok)
+
+	ok = t.JSON(42, `42`, nil)
+	fmt.Println("check numeric got is 42:", ok)
+
+	got = nil
+	ok = t.JSON(got, `null`, nil)
+	fmt.Println("check nil got is null:", ok)
+
+	// Output:
+	// check got with age then fullname: true
+	// check got with fullname then age: true
+	// check got with nicely formatted JSON: true
+	// check got with gender field: false
+	// check got with fullname only: false
+	// check boolean got is true: true
+	// check numeric got is 42: true
+	// check nil got is null: true
+
+```{{% /expand%}}
+{{%expand "Placeholders example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -340,8 +485,10 @@ reason of a potential failure.
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
-{{% /expand%}}
-{{%expand "File example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "File example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -365,4 +512,24 @@ reason of a potential failure.
   "fullname": "$name",
   "age":      "$age",
   "gender":   "$gender"
-{{% /expand%}}
+}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// OK let's test with this file
+	ok := t.JSON(got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from file name:", ok)
+
+	// When the file is already open
+	file, err := os.Open(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok = t.JSON(got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from io.Reader:", ok)
+
+	// Output:
+	// Full match from file name: true
+	// Full match from io.Reader: true
+
+```{{% /expand%}}

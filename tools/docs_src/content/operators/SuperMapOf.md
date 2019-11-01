@@ -31,7 +31,8 @@ Cmp(t, map[string]int{"a": 1, "c": 3},
 
 ### Examples
 
-{{%expand "Map example" %}}	t := &testing.T{}
+{{%expand "Map example" %}}```go
+	t := &testing.T{}
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
@@ -42,8 +43,10 @@ Cmp(t, map[string]int{"a": 1, "c": 3},
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedMap example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedMap example" %}}```go
+	t := &testing.T{}
 
 	type MyMap map[string]int
 
@@ -63,7 +66,8 @@ Cmp(t, map[string]int{"a": 1, "c": 3},
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## CmpSuperMapOf shortcut
 
 ```go
@@ -90,7 +94,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Map example" %}}	t := &testing.T{}
+{{%expand "Map example" %}}```go
+	t := &testing.T{}
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
@@ -100,8 +105,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedMap example" %}}	t := &testing.T{}
+
+```{{% /expand%}}
+{{%expand "TypedMap example" %}}```go
+	t := &testing.T{}
 
 	type MyMap map[string]int
 
@@ -119,7 +126,8 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
 ## T.SuperMapOf shortcut
 
 ```go
@@ -146,7 +154,8 @@ reason of a potential failure.
 
 ### Examples
 
-{{%expand "Map example" %}}	t := NewT(&testing.T{})
+{{%expand "Map example" %}}```go
+	t := NewT(&testing.T{})
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
@@ -156,8 +165,10 @@ reason of a potential failure.
 
 	// Output:
 	// true
-{{% /expand%}}
-{{%expand "TypedMap example" %}}	t := NewT(&testing.T{})
+
+```{{% /expand%}}
+{{%expand "TypedMap example" %}}```go
+	t := NewT(&testing.T{})
 
 	type MyMap map[string]int
 
@@ -175,4 +186,5 @@ reason of a potential failure.
 	// Output:
 	// true
 	// true
-{{% /expand%}}
+
+```{{% /expand%}}
