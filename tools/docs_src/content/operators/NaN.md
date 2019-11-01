@@ -10,6 +10,8 @@ func NaN() TestDeep
 [`NaN`]({{< ref "NaN" >}}) operator checks that data is a float and is not-a-number.
 
 
+> See also [<i class='fas fa-book'></i> NaN godoc](https://godoc.org/github.com/maxatome/go-testdeep#NaN).
+
 ### Examples
 
 {{%expand "Float32 example" %}}```go
@@ -79,6 +81,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpNaN godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNaN).
+
 ### Examples
 
 {{%expand "Float32 example" %}}```go
@@ -147,6 +151,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.NaN godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.NaN).
 
 ### Examples
 

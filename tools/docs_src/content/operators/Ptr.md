@@ -26,6 +26,8 @@ except if *val* is a [TestDeep operator]({{< ref "operators" >}}). In this case,
 pointer on the returned value (if non-`nil` of course).
 
 
+> See also [<i class='fas fa-book'></i> Ptr godoc](https://godoc.org/github.com/maxatome/go-testdeep#Ptr).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -68,6 +70,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpPtr).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -109,6 +113,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Ptr godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Ptr).
 
 ### Examples
 

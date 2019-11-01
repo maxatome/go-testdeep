@@ -62,6 +62,8 @@ operator should be used instead.
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of only parameter of *fn*.
 
 
+> See also [<i class='fas fa-book'></i> Code godoc](https://godoc.org/github.com/maxatome/go-testdeep#Code).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -140,6 +142,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpCode godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpCode).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -214,6 +218,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Code godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Code).
 
 ### Examples
 

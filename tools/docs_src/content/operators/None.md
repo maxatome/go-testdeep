@@ -11,6 +11,8 @@ func None(notExpectedValues ...interface{}) TestDeep
 values. During a match, none of them have to match to succeed.
 
 
+> See also [<i class='fas fa-book'></i> None godoc](https://godoc.org/github.com/maxatome/go-testdeep#None).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -64,6 +66,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpNone godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNone).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -116,6 +120,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.None godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.None).
 
 ### Examples
 

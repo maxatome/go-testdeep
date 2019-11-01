@@ -13,6 +13,8 @@ against *expectedValue*. During a match, all items have to match to
 succeed.
 
 
+> See also [<i class='fas fa-book'></i> ArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach).
+
 ### Examples
 
 {{%expand "Array example" %}}```go
@@ -105,6 +107,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpArrayEach).
+
 ### Examples
 
 {{%expand "Array example" %}}```go
@@ -196,6 +200,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.ArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.ArrayEach).
 
 ### Examples
 

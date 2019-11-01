@@ -15,6 +15,8 @@ provided as a more readable function when only one argument is
 needed.
 
 
+> See also [<i class='fas fa-book'></i> Not godoc](https://godoc.org/github.com/maxatome/go-testdeep#Not).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -64,6 +66,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpNot godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNot).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -112,6 +116,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Not godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Not).
 
 ### Examples
 

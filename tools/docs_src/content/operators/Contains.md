@@ -71,6 +71,8 @@ Cmp(t, bstr, Contains("String")) // succeeds
 ```
 
 
+> See also [<i class='fas fa-book'></i> Contains godoc](https://godoc.org/github.com/maxatome/go-testdeep#Contains).
+
 ### Examples
 
 {{%expand "ArraySlice example" %}}```go
@@ -238,6 +240,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpContains godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpContains).
+
 ### Examples
 
 {{%expand "ArraySlice example" %}}```go
@@ -401,6 +405,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Contains godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Contains).
 
 ### Examples
 

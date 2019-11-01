@@ -439,6 +439,29 @@ func ExampleCap_operator() {
 	// true
 }
 
+func ExampleCatch() {
+	t := &testing.T{}
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob",
+		Age:      42,
+	}
+
+	var age int
+	ok := Cmp(t, got,
+		JSON(`{"age":$1,"fullname":"Bob"}`,
+			Catch(&age, Between(40, 45))))
+	fmt.Println("check got age+fullname:", ok)
+	fmt.Println("caught age:", age)
+
+	// Output:
+	// check got age+fullname: true
+	// caught age: 42
+}
+
 func ExampleCode() {
 	t := &testing.T{}
 

@@ -21,6 +21,8 @@ Cmp(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item
 ```
 
 
+> See also [<i class='fas fa-book'></i> SubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -68,6 +70,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpSubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSubSetOf).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -114,6 +118,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.SubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SubSetOf).
 
 ### Examples
 

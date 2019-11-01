@@ -12,6 +12,8 @@ of data map against expected value. During a match, all values have
 to match to succeed.
 
 
+> See also [<i class='fas fa-book'></i> MapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#MapEach).
+
 ### Examples
 
 {{%expand "Map example" %}}```go
@@ -71,6 +73,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpMapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpMapEach).
+
 ### Examples
 
 {{%expand "Map example" %}}```go
@@ -129,6 +133,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.MapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.MapEach).
 
 ### Examples
 

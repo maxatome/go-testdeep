@@ -16,6 +16,8 @@ same kind as the compared value if numeric, and the same type if
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *minExpectedValue*.
 
 
+> See also [<i class='fas fa-book'></i> Gte godoc](https://godoc.org/github.com/maxatome/go-testdeep#Gte).
+
 ### Examples
 
 {{%expand "Int example" %}}```go
@@ -82,6 +84,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpGte godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpGte).
+
 ### Examples
 
 {{%expand "Int example" %}}```go
@@ -147,6 +151,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Gte godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Gte).
 
 ### Examples
 

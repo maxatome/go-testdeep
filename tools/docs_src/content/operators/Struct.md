@@ -22,6 +22,8 @@ succeed. Non-expected fields are ignored.
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
+> See also [<i class='fas fa-book'></i> Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep#Struct).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -108,6 +110,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpStruct).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -189,6 +193,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Struct).
 
 ### Examples
 

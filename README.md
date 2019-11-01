@@ -27,6 +27,7 @@ go-testdeep
 
 ## Latest news
 
+- 2019/11/01: new [`Catch`] operator;
 - 2019/10/31: new [`JSON`] operator (and its friends [`CmpJSON`]
   & [`T.JSON`] along with new fully dedicated [`Tag`] operator;
 - 2019/10/29: new web site
@@ -39,15 +40,6 @@ go-testdeep
   [`CmpLax`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLax)
   &
   [`T.CmpLax`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax));
-- 2019/07/07: multiple changes occurred:
-  - `*T` type now implements `TestingFT`,
-  - add [`UseEqual` feature](https://godoc.org/github.com/maxatome/go-testdeep#T.UseEqual)
-    aka. delegates comparison to `Equal()` method of object,
-  - [`tdhttp.NewRequest()`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#NewRequest),
-    [`tdhttp.NewJSONRequest()`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#NewJSONRequest)
-    and
-    [`tdhttp.NewXMLRequest()`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#NewXMLRequest)
-    now accept headers definition,
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -165,167 +157,168 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`fmt.Stringer`]: https://godoc.org/pkg/fmt/#Stringer
 [`time.Time`]: https://godoc.org/pkg/time/#Time
 [`math.NaN`]: https://godoc.org/pkg/math/#NaN
-[`All`]: https://godoc.org/github.com/maxatome/go-testdeep#All
-[`Any`]: https://godoc.org/github.com/maxatome/go-testdeep#Any
-[`Array`]: https://godoc.org/github.com/maxatome/go-testdeep#Array
-[`ArrayEach`]: https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach
-[`Bag`]: https://godoc.org/github.com/maxatome/go-testdeep#Bag
-[`Between`]: https://godoc.org/github.com/maxatome/go-testdeep#Between
-[`Cap`]: https://godoc.org/github.com/maxatome/go-testdeep#Cap
-[`Code`]: https://godoc.org/github.com/maxatome/go-testdeep#Code
-[`Contains`]: https://godoc.org/github.com/maxatome/go-testdeep#Contains
-[`ContainsKey`]: https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey
-[`Empty`]: https://godoc.org/github.com/maxatome/go-testdeep#Empty
-[`Gt`]: https://godoc.org/github.com/maxatome/go-testdeep#Gt
-[`Gte`]: https://godoc.org/github.com/maxatome/go-testdeep#Gte
-[`HasPrefix`]: https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix
-[`HasSuffix`]: https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix
-[`Ignore`]: https://godoc.org/github.com/maxatome/go-testdeep#Ignore
-[`Isa`]: https://godoc.org/github.com/maxatome/go-testdeep#Isa
-[`JSON`]: https://godoc.org/github.com/maxatome/go-testdeep#JSON
-[`Keys`]: https://godoc.org/github.com/maxatome/go-testdeep#Keys
-[`Lax`]: https://godoc.org/github.com/maxatome/go-testdeep#Lax
-[`Len`]: https://godoc.org/github.com/maxatome/go-testdeep#Len
-[`Lt`]: https://godoc.org/github.com/maxatome/go-testdeep#Lt
-[`Lte`]: https://godoc.org/github.com/maxatome/go-testdeep#Lte
-[`Map`]: https://godoc.org/github.com/maxatome/go-testdeep#Map
-[`MapEach`]: https://godoc.org/github.com/maxatome/go-testdeep#MapEach
-[`N`]: https://godoc.org/github.com/maxatome/go-testdeep#N
-[`NaN`]: https://godoc.org/github.com/maxatome/go-testdeep#NaN
-[`Nil`]: https://godoc.org/github.com/maxatome/go-testdeep#Nil
-[`None`]: https://godoc.org/github.com/maxatome/go-testdeep#None
-[`Not`]: https://godoc.org/github.com/maxatome/go-testdeep#Not
-[`NotAny`]: https://godoc.org/github.com/maxatome/go-testdeep#NotAny
-[`NotEmpty`]: https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty
-[`NotNaN`]: https://godoc.org/github.com/maxatome/go-testdeep#NotNaN
-[`NotNil`]: https://godoc.org/github.com/maxatome/go-testdeep#NotNil
-[`NotZero`]: https://godoc.org/github.com/maxatome/go-testdeep#NotZero
-[`PPtr`]: https://godoc.org/github.com/maxatome/go-testdeep#PPtr
-[`Ptr`]: https://godoc.org/github.com/maxatome/go-testdeep#Ptr
-[`Re`]: https://godoc.org/github.com/maxatome/go-testdeep#Re
-[`ReAll`]: https://godoc.org/github.com/maxatome/go-testdeep#ReAll
-[`Set`]: https://godoc.org/github.com/maxatome/go-testdeep#Set
-[`Shallow`]: https://godoc.org/github.com/maxatome/go-testdeep#Shallow
-[`Slice`]: https://godoc.org/github.com/maxatome/go-testdeep#Slice
-[`Smuggle`]: https://godoc.org/github.com/maxatome/go-testdeep#Smuggle
-[`String`]: https://godoc.org/github.com/maxatome/go-testdeep#String
-[`Struct`]: https://godoc.org/github.com/maxatome/go-testdeep#Struct
-[`SubBagOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf
-[`SubMapOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SubMapOf
-[`SubSetOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf
-[`SuperBagOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf
-[`SuperMapOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf
-[`SuperSetOf`]: https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf
-[`Tag`]: https://godoc.org/github.com/maxatome/go-testdeep#Tag
-[`TruncTime`]: https://godoc.org/github.com/maxatome/go-testdeep#TruncTime
-[`Values`]: https://godoc.org/github.com/maxatome/go-testdeep#Values
-[`Zero`]: https://godoc.org/github.com/maxatome/go-testdeep#Zero
+[`All`]: https://go-testdeep.zetta.rocks/operators/all/
+[`Any`]: https://go-testdeep.zetta.rocks/operators/any/
+[`Array`]: https://go-testdeep.zetta.rocks/operators/array/
+[`ArrayEach`]: https://go-testdeep.zetta.rocks/operators/arrayeach/
+[`Bag`]: https://go-testdeep.zetta.rocks/operators/bag/
+[`Between`]: https://go-testdeep.zetta.rocks/operators/between/
+[`Cap`]: https://go-testdeep.zetta.rocks/operators/cap/
+[`Catch`]: https://go-testdeep.zetta.rocks/operators/catch/
+[`Code`]: https://go-testdeep.zetta.rocks/operators/code/
+[`Contains`]: https://go-testdeep.zetta.rocks/operators/contains/
+[`ContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/
+[`Empty`]: https://go-testdeep.zetta.rocks/operators/empty/
+[`Gt`]: https://go-testdeep.zetta.rocks/operators/gt/
+[`Gte`]: https://go-testdeep.zetta.rocks/operators/gte/
+[`HasPrefix`]: https://go-testdeep.zetta.rocks/operators/hasprefix/
+[`HasSuffix`]: https://go-testdeep.zetta.rocks/operators/hassuffix/
+[`Ignore`]: https://go-testdeep.zetta.rocks/operators/ignore/
+[`Isa`]: https://go-testdeep.zetta.rocks/operators/isa/
+[`JSON`]: https://go-testdeep.zetta.rocks/operators/json/
+[`Keys`]: https://go-testdeep.zetta.rocks/operators/keys/
+[`Lax`]: https://go-testdeep.zetta.rocks/operators/lax/
+[`Len`]: https://go-testdeep.zetta.rocks/operators/len/
+[`Lt`]: https://go-testdeep.zetta.rocks/operators/lt/
+[`Lte`]: https://go-testdeep.zetta.rocks/operators/lte/
+[`Map`]: https://go-testdeep.zetta.rocks/operators/map/
+[`MapEach`]: https://go-testdeep.zetta.rocks/operators/mapeach/
+[`N`]: https://go-testdeep.zetta.rocks/operators/n/
+[`NaN`]: https://go-testdeep.zetta.rocks/operators/nan/
+[`Nil`]: https://go-testdeep.zetta.rocks/operators/nil/
+[`None`]: https://go-testdeep.zetta.rocks/operators/none/
+[`Not`]: https://go-testdeep.zetta.rocks/operators/not/
+[`NotAny`]: https://go-testdeep.zetta.rocks/operators/notany/
+[`NotEmpty`]: https://go-testdeep.zetta.rocks/operators/notempty/
+[`NotNaN`]: https://go-testdeep.zetta.rocks/operators/notnan/
+[`NotNil`]: https://go-testdeep.zetta.rocks/operators/notnil/
+[`NotZero`]: https://go-testdeep.zetta.rocks/operators/notzero/
+[`PPtr`]: https://go-testdeep.zetta.rocks/operators/pptr/
+[`Ptr`]: https://go-testdeep.zetta.rocks/operators/ptr/
+[`Re`]: https://go-testdeep.zetta.rocks/operators/re/
+[`ReAll`]: https://go-testdeep.zetta.rocks/operators/reall/
+[`Set`]: https://go-testdeep.zetta.rocks/operators/set/
+[`Shallow`]: https://go-testdeep.zetta.rocks/operators/shallow/
+[`Slice`]: https://go-testdeep.zetta.rocks/operators/slice/
+[`Smuggle`]: https://go-testdeep.zetta.rocks/operators/smuggle/
+[`String`]: https://go-testdeep.zetta.rocks/operators/string/
+[`Struct`]: https://go-testdeep.zetta.rocks/operators/struct/
+[`SubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/
+[`SubMapOf`]: https://go-testdeep.zetta.rocks/operators/submapof/
+[`SubSetOf`]: https://go-testdeep.zetta.rocks/operators/subsetof/
+[`SuperBagOf`]: https://go-testdeep.zetta.rocks/operators/superbagof/
+[`SuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/
+[`SuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/
+[`Tag`]: https://go-testdeep.zetta.rocks/operators/tag/
+[`TruncTime`]: https://go-testdeep.zetta.rocks/operators/trunctime/
+[`Values`]: https://go-testdeep.zetta.rocks/operators/values/
+[`Zero`]: https://go-testdeep.zetta.rocks/operators/zero/
 
-[`CmpAll`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpAll
-[`CmpAny`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpAny
-[`CmpArray`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpArray
-[`CmpArrayEach`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpArrayEach
-[`CmpBag`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpBag
-[`CmpBetween`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpBetween
-[`CmpCap`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpCap
-[`CmpCode`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpCode
-[`CmpContains`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpContains
-[`CmpContainsKey`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpContainsKey
-[`CmpEmpty`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpEmpty
-[`CmpGt`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpGt
-[`CmpGte`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpGte
-[`CmpHasPrefix`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpHasPrefix
-[`CmpHasSuffix`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpHasSuffix
-[`CmpIsa`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpIsa
-[`CmpJSON`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpJSON
-[`CmpKeys`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpKeys
-[`CmpLax`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpLax
-[`CmpLen`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpLen
-[`CmpLt`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpLt
-[`CmpLte`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpLte
-[`CmpMap`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpMap
-[`CmpMapEach`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpMapEach
-[`CmpN`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpN
-[`CmpNaN`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNaN
-[`CmpNil`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNil
-[`CmpNone`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNone
-[`CmpNot`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNot
-[`CmpNotAny`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNotAny
-[`CmpNotEmpty`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNotEmpty
-[`CmpNotNaN`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNaN
-[`CmpNotNil`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNil
-[`CmpNotZero`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpNotZero
-[`CmpPPtr`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpPPtr
-[`CmpPtr`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpPtr
-[`CmpRe`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpRe
-[`CmpReAll`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpReAll
-[`CmpSet`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSet
-[`CmpShallow`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpShallow
-[`CmpSlice`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSlice
-[`CmpSmuggle`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle
-[`CmpString`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpString
-[`CmpStruct`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpStruct
-[`CmpSubBagOf`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSubBagOf
-[`CmpSubMapOf`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSubMapOf
-[`CmpSubSetOf`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSubSetOf
-[`CmpSuperBagOf`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperBagOf
-[`CmpSuperMapOf`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperMapOf
-[`CmpSuperSetOf`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperSetOf
-[`CmpTruncTime`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpTruncTime
-[`CmpValues`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpValues
-[`CmpZero`]:https://godoc.org/github.com/maxatome/go-testdeep#CmpZero
+[`CmpAll`]:https://go-testdeep.zetta.rocks/operators/all/#cmpall-shortcut
+[`CmpAny`]:https://go-testdeep.zetta.rocks/operators/any/#cmpany-shortcut
+[`CmpArray`]:https://go-testdeep.zetta.rocks/operators/array/#cmparray-shortcut
+[`CmpArrayEach`]:https://go-testdeep.zetta.rocks/operators/arrayeach/#cmparrayeach-shortcut
+[`CmpBag`]:https://go-testdeep.zetta.rocks/operators/bag/#cmpbag-shortcut
+[`CmpBetween`]:https://go-testdeep.zetta.rocks/operators/between/#cmpbetween-shortcut
+[`CmpCap`]:https://go-testdeep.zetta.rocks/operators/cap/#cmpcap-shortcut
+[`CmpCode`]:https://go-testdeep.zetta.rocks/operators/code/#cmpcode-shortcut
+[`CmpContains`]:https://go-testdeep.zetta.rocks/operators/contains/#cmpcontains-shortcut
+[`CmpContainsKey`]:https://go-testdeep.zetta.rocks/operators/containskey/#cmpcontainskey-shortcut
+[`CmpEmpty`]:https://go-testdeep.zetta.rocks/operators/empty/#cmpempty-shortcut
+[`CmpGt`]:https://go-testdeep.zetta.rocks/operators/gt/#cmpgt-shortcut
+[`CmpGte`]:https://go-testdeep.zetta.rocks/operators/gte/#cmpgte-shortcut
+[`CmpHasPrefix`]:https://go-testdeep.zetta.rocks/operators/hasprefix/#cmphasprefix-shortcut
+[`CmpHasSuffix`]:https://go-testdeep.zetta.rocks/operators/hassuffix/#cmphassuffix-shortcut
+[`CmpIsa`]:https://go-testdeep.zetta.rocks/operators/isa/#cmpisa-shortcut
+[`CmpJSON`]:https://go-testdeep.zetta.rocks/operators/json/#cmpjson-shortcut
+[`CmpKeys`]:https://go-testdeep.zetta.rocks/operators/keys/#cmpkeys-shortcut
+[`CmpLax`]:https://go-testdeep.zetta.rocks/operators/lax/#cmplax-shortcut
+[`CmpLen`]:https://go-testdeep.zetta.rocks/operators/len/#cmplen-shortcut
+[`CmpLt`]:https://go-testdeep.zetta.rocks/operators/lt/#cmplt-shortcut
+[`CmpLte`]:https://go-testdeep.zetta.rocks/operators/lte/#cmplte-shortcut
+[`CmpMap`]:https://go-testdeep.zetta.rocks/operators/map/#cmpmap-shortcut
+[`CmpMapEach`]:https://go-testdeep.zetta.rocks/operators/mapeach/#cmpmapeach-shortcut
+[`CmpN`]:https://go-testdeep.zetta.rocks/operators/n/#cmpn-shortcut
+[`CmpNaN`]:https://go-testdeep.zetta.rocks/operators/nan/#cmpnan-shortcut
+[`CmpNil`]:https://go-testdeep.zetta.rocks/operators/nil/#cmpnil-shortcut
+[`CmpNone`]:https://go-testdeep.zetta.rocks/operators/none/#cmpnone-shortcut
+[`CmpNot`]:https://go-testdeep.zetta.rocks/operators/not/#cmpnot-shortcut
+[`CmpNotAny`]:https://go-testdeep.zetta.rocks/operators/notany/#cmpnotany-shortcut
+[`CmpNotEmpty`]:https://go-testdeep.zetta.rocks/operators/notempty/#cmpnotempty-shortcut
+[`CmpNotNaN`]:https://go-testdeep.zetta.rocks/operators/notnan/#cmpnotnan-shortcut
+[`CmpNotNil`]:https://go-testdeep.zetta.rocks/operators/notnil/#cmpnotnil-shortcut
+[`CmpNotZero`]:https://go-testdeep.zetta.rocks/operators/notzero/#cmpnotzero-shortcut
+[`CmpPPtr`]:https://go-testdeep.zetta.rocks/operators/pptr/#cmppptr-shortcut
+[`CmpPtr`]:https://go-testdeep.zetta.rocks/operators/ptr/#cmpptr-shortcut
+[`CmpRe`]:https://go-testdeep.zetta.rocks/operators/re/#cmpre-shortcut
+[`CmpReAll`]:https://go-testdeep.zetta.rocks/operators/reall/#cmpreall-shortcut
+[`CmpSet`]:https://go-testdeep.zetta.rocks/operators/set/#cmpset-shortcut
+[`CmpShallow`]:https://go-testdeep.zetta.rocks/operators/shallow/#cmpshallow-shortcut
+[`CmpSlice`]:https://go-testdeep.zetta.rocks/operators/slice/#cmpslice-shortcut
+[`CmpSmuggle`]:https://go-testdeep.zetta.rocks/operators/smuggle/#cmpsmuggle-shortcut
+[`CmpString`]:https://go-testdeep.zetta.rocks/operators/string/#cmpstring-shortcut
+[`CmpStruct`]:https://go-testdeep.zetta.rocks/operators/struct/#cmpstruct-shortcut
+[`CmpSubBagOf`]:https://go-testdeep.zetta.rocks/operators/subbagof/#cmpsubbagof-shortcut
+[`CmpSubMapOf`]:https://go-testdeep.zetta.rocks/operators/submapof/#cmpsubmapof-shortcut
+[`CmpSubSetOf`]:https://go-testdeep.zetta.rocks/operators/subsetof/#cmpsubsetof-shortcut
+[`CmpSuperBagOf`]:https://go-testdeep.zetta.rocks/operators/superbagof/#cmpsuperbagof-shortcut
+[`CmpSuperMapOf`]:https://go-testdeep.zetta.rocks/operators/supermapof/#cmpsupermapof-shortcut
+[`CmpSuperSetOf`]:https://go-testdeep.zetta.rocks/operators/supersetof/#cmpsupersetof-shortcut
+[`CmpTruncTime`]:https://go-testdeep.zetta.rocks/operators/trunctime/#cmptrunctime-shortcut
+[`CmpValues`]:https://go-testdeep.zetta.rocks/operators/values/#cmpvalues-shortcut
+[`CmpZero`]:https://go-testdeep.zetta.rocks/operators/zero/#cmpzero-shortcut
 
-[`T.All`]: https://godoc.org/github.com/maxatome/go-testdeep#T.All
-[`T.Any`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Any
-[`T.Array`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Array
-[`T.ArrayEach`]: https://godoc.org/github.com/maxatome/go-testdeep#T.ArrayEach
-[`T.Bag`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Bag
-[`T.Between`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Between
-[`T.Cap`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Cap
-[`T.Code`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Code
-[`T.Contains`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Contains
-[`T.ContainsKey`]: https://godoc.org/github.com/maxatome/go-testdeep#T.ContainsKey
-[`T.Empty`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Empty
-[`T.Gt`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Gt
-[`T.Gte`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Gte
-[`T.HasPrefix`]: https://godoc.org/github.com/maxatome/go-testdeep#T.HasPrefix
-[`T.HasSuffix`]: https://godoc.org/github.com/maxatome/go-testdeep#T.HasSuffix
-[`T.Isa`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Isa
-[`T.JSON`]: https://godoc.org/github.com/maxatome/go-testdeep#T.JSON
-[`T.Keys`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Keys
-[`T.CmpLax`]: https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax
-[`T.Len`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Len
-[`T.Lt`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Lt
-[`T.Lte`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Lte
-[`T.Map`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Map
-[`T.MapEach`]: https://godoc.org/github.com/maxatome/go-testdeep#T.MapEach
-[`T.N`]: https://godoc.org/github.com/maxatome/go-testdeep#T.N
-[`T.NaN`]: https://godoc.org/github.com/maxatome/go-testdeep#T.NaN
-[`T.Nil`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Nil
-[`T.None`]: https://godoc.org/github.com/maxatome/go-testdeep#T.None
-[`T.Not`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Not
-[`T.NotAny`]: https://godoc.org/github.com/maxatome/go-testdeep#T.NotAny
-[`T.NotEmpty`]: https://godoc.org/github.com/maxatome/go-testdeep#T.NotEmpty
-[`T.NotNaN`]: https://godoc.org/github.com/maxatome/go-testdeep#T.NotNaN
-[`T.NotNil`]: https://godoc.org/github.com/maxatome/go-testdeep#T.NotNil
-[`T.NotZero`]: https://godoc.org/github.com/maxatome/go-testdeep#T.NotZero
-[`T.PPtr`]: https://godoc.org/github.com/maxatome/go-testdeep#T.PPtr
-[`T.Ptr`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Ptr
-[`T.Re`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Re
-[`T.ReAll`]: https://godoc.org/github.com/maxatome/go-testdeep#T.ReAll
-[`T.Set`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Set
-[`T.Shallow`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Shallow
-[`T.Slice`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Slice
-[`T.Smuggle`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle
-[`T.String`]: https://godoc.org/github.com/maxatome/go-testdeep#T.String
-[`T.Struct`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Struct
-[`T.SubBagOf`]: https://godoc.org/github.com/maxatome/go-testdeep#T.SubBagOf
-[`T.SubMapOf`]: https://godoc.org/github.com/maxatome/go-testdeep#T.SubMapOf
-[`T.SubSetOf`]: https://godoc.org/github.com/maxatome/go-testdeep#T.SubSetOf
-[`T.SuperBagOf`]: https://godoc.org/github.com/maxatome/go-testdeep#T.SuperBagOf
-[`T.SuperMapOf`]: https://godoc.org/github.com/maxatome/go-testdeep#T.SuperMapOf
-[`T.SuperSetOf`]: https://godoc.org/github.com/maxatome/go-testdeep#T.SuperSetOf
-[`T.TruncTime`]: https://godoc.org/github.com/maxatome/go-testdeep#T.TruncTime
-[`T.Values`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Values
-[`T.Zero`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Zero
+[`T.All`]: https://go-testdeep.zetta.rocks/operators/all/#t-all-shortcut
+[`T.Any`]: https://go-testdeep.zetta.rocks/operators/any/#t-any-shortcut
+[`T.Array`]: https://go-testdeep.zetta.rocks/operators/array/#t-array-shortcut
+[`T.ArrayEach`]: https://go-testdeep.zetta.rocks/operators/arrayeach/#t-arrayeach-shortcut
+[`T.Bag`]: https://go-testdeep.zetta.rocks/operators/bag/#t-bag-shortcut
+[`T.Between`]: https://go-testdeep.zetta.rocks/operators/between/#t-between-shortcut
+[`T.Cap`]: https://go-testdeep.zetta.rocks/operators/cap/#t-cap-shortcut
+[`T.Code`]: https://go-testdeep.zetta.rocks/operators/code/#t-code-shortcut
+[`T.Contains`]: https://go-testdeep.zetta.rocks/operators/contains/#t-contains-shortcut
+[`T.ContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/#t-containskey-shortcut
+[`T.Empty`]: https://go-testdeep.zetta.rocks/operators/empty/#t-empty-shortcut
+[`T.Gt`]: https://go-testdeep.zetta.rocks/operators/gt/#t-gt-shortcut
+[`T.Gte`]: https://go-testdeep.zetta.rocks/operators/gte/#t-gte-shortcut
+[`T.HasPrefix`]: https://go-testdeep.zetta.rocks/operators/hasprefix/#t-hasprefix-shortcut
+[`T.HasSuffix`]: https://go-testdeep.zetta.rocks/operators/hassuffix/#t-hassuffix-shortcut
+[`T.Isa`]: https://go-testdeep.zetta.rocks/operators/isa/#t-isa-shortcut
+[`T.JSON`]: https://go-testdeep.zetta.rocks/operators/json/#t-json-shortcut
+[`T.Keys`]: https://go-testdeep.zetta.rocks/operators/keys/#t-keys-shortcut
+[`T.CmpLax`]: https://go-testdeep.zetta.rocks/operators/lax/#t-cmplax-shortcut
+[`T.Len`]: https://go-testdeep.zetta.rocks/operators/len/#t-len-shortcut
+[`T.Lt`]: https://go-testdeep.zetta.rocks/operators/lt/#t-lt-shortcut
+[`T.Lte`]: https://go-testdeep.zetta.rocks/operators/lte/#t-lte-shortcut
+[`T.Map`]: https://go-testdeep.zetta.rocks/operators/map/#t-map-shortcut
+[`T.MapEach`]: https://go-testdeep.zetta.rocks/operators/mapeach/#t-mapeach-shortcut
+[`T.N`]: https://go-testdeep.zetta.rocks/operators/n/#t-n-shortcut
+[`T.NaN`]: https://go-testdeep.zetta.rocks/operators/nan/#t-nan-shortcut
+[`T.Nil`]: https://go-testdeep.zetta.rocks/operators/nil/#t-nil-shortcut
+[`T.None`]: https://go-testdeep.zetta.rocks/operators/none/#t-none-shortcut
+[`T.Not`]: https://go-testdeep.zetta.rocks/operators/not/#t-not-shortcut
+[`T.NotAny`]: https://go-testdeep.zetta.rocks/operators/notany/#t-notany-shortcut
+[`T.NotEmpty`]: https://go-testdeep.zetta.rocks/operators/notempty/#t-notempty-shortcut
+[`T.NotNaN`]: https://go-testdeep.zetta.rocks/operators/notnan/#t-notnan-shortcut
+[`T.NotNil`]: https://go-testdeep.zetta.rocks/operators/notnil/#t-notnil-shortcut
+[`T.NotZero`]: https://go-testdeep.zetta.rocks/operators/notzero/#t-notzero-shortcut
+[`T.PPtr`]: https://go-testdeep.zetta.rocks/operators/pptr/#t-pptr-shortcut
+[`T.Ptr`]: https://go-testdeep.zetta.rocks/operators/ptr/#t-ptr-shortcut
+[`T.Re`]: https://go-testdeep.zetta.rocks/operators/re/#t-re-shortcut
+[`T.ReAll`]: https://go-testdeep.zetta.rocks/operators/reall/#t-reall-shortcut
+[`T.Set`]: https://go-testdeep.zetta.rocks/operators/set/#t-set-shortcut
+[`T.Shallow`]: https://go-testdeep.zetta.rocks/operators/shallow/#t-shallow-shortcut
+[`T.Slice`]: https://go-testdeep.zetta.rocks/operators/slice/#t-slice-shortcut
+[`T.Smuggle`]: https://go-testdeep.zetta.rocks/operators/smuggle/#t-smuggle-shortcut
+[`T.String`]: https://go-testdeep.zetta.rocks/operators/string/#t-string-shortcut
+[`T.Struct`]: https://go-testdeep.zetta.rocks/operators/struct/#t-struct-shortcut
+[`T.SubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/#t-subbagof-shortcut
+[`T.SubMapOf`]: https://go-testdeep.zetta.rocks/operators/submapof/#t-submapof-shortcut
+[`T.SubSetOf`]: https://go-testdeep.zetta.rocks/operators/subsetof/#t-subsetof-shortcut
+[`T.SuperBagOf`]: https://go-testdeep.zetta.rocks/operators/superbagof/#t-superbagof-shortcut
+[`T.SuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/#t-supermapof-shortcut
+[`T.SuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/#t-supersetof-shortcut
+[`T.TruncTime`]: https://go-testdeep.zetta.rocks/operators/trunctime/#t-trunctime-shortcut
+[`T.Values`]: https://go-testdeep.zetta.rocks/operators/values/#t-values-shortcut
+[`T.Zero`]: https://go-testdeep.zetta.rocks/operators/zero/#t-zero-shortcut
 <!-- links:end -->

@@ -22,6 +22,8 @@ Cmp(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing
 ```
 
 
+> See also [<i class='fas fa-book'></i> Set godoc](https://godoc.org/github.com/maxatome/go-testdeep#Set).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -75,6 +77,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpSet godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSet).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -127,6 +131,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Set godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Set).
 
 ### Examples
 

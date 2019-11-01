@@ -20,6 +20,8 @@ Cmp(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
 ```
 
 
+> See also [<i class='fas fa-book'></i> SubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -78,6 +80,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpSubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSubBagOf).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -129,6 +133,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.SubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SubBagOf).
 
 ### Examples
 

@@ -25,6 +25,8 @@ Cmp(t, &AnyStruct{}, Ptr(NotZero())) // is false
 ```
 
 
+> See also [<i class='fas fa-book'></i> NotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep#NotZero).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -105,6 +107,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpNotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotZero).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -184,6 +188,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.NotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.NotZero).
 
 ### Examples
 

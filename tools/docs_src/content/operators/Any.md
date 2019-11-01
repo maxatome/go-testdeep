@@ -15,6 +15,8 @@ known non-interface types are equal, or if only interface types
 are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 
 
+> See also [<i class='fas fa-book'></i> Any godoc](https://godoc.org/github.com/maxatome/go-testdeep#Any).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -63,6 +65,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpAny godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpAny).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -110,6 +114,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.Any godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Any).
 
 ### Examples
 

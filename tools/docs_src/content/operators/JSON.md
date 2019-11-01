@@ -73,7 +73,7 @@ Cmp(t, gotValue,
 ```
 
 For the "details" key, the raw value "`$info`" is expected, no
-placeholders are involved here..
+placeholders are involved here.
 
 Last but not least, [`Lax`]({{< ref "Lax" >}}) mode is automatically enabled by [`JSON`]({{< ref "JSON" >}})
 operator to simplify numeric tests.
@@ -83,6 +83,8 @@ operator to simplify numeric tests.
 `[]interface{}`, `map[string]interface{}` or `interface{}` in case
 *expectedJSON* is "null".
 
+
+> See also [<i class='fas fa-book'></i> JSON godoc](https://godoc.org/github.com/maxatome/go-testdeep#JSON).
 
 ### Examples
 
@@ -253,6 +255,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpJSON godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpJSON).
+
 ### Examples
 
 {{%expand "Basic example" %}}```go
@@ -404,6 +408,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.JSON godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.JSON).
 
 ### Examples
 

@@ -20,6 +20,8 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 ```
 
 
+> See also [<i class='fas fa-book'></i> String godoc](https://godoc.org/github.com/maxatome/go-testdeep#String).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -83,6 +85,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpString godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpString).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -145,6 +149,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.String godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.String).
 
 ### Examples
 

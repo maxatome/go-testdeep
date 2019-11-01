@@ -20,3 +20,9 @@ name = "<i class='fab fa-github'></i> Github repo"
 identifier = "ds"
 url = "https://github.com/maxatome/go-testdeep"
 weight = 10
+
+[[menu.shortcuts]]
+name = "<i class='fas fa-book'></i> godoc"
+identifier = "godoc"
+url = "https://godoc.org/github.com/maxatome/go-testdeep"
+weight = 15

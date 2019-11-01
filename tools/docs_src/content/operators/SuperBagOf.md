@@ -20,6 +20,8 @@ Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 ```
 
 
+> See also [<i class='fas fa-book'></i> SuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -64,6 +66,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
+> See also [<i class='fas fa-book'></i> CmpSuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperBagOf).
+
 ### Examples
 
 {{%expand "Base example" %}}```go
@@ -107,6 +111,8 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 [`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
+
+> See also [<i class='fas fa-book'></i> T.SuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SuperBagOf).
 
 ### Examples
 
