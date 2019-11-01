@@ -15,7 +15,7 @@ matrix:
         - GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out ./..."
         - USE_LINTER=1
       install:
-        - wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $GOPATH/bin v1.18.0
+        - wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $GOPATH/bin v1.21.0
       after_success:
         - go get github.com/mattn/goveralls
         - go get github.com/wadey/gocovmerge
@@ -33,4 +33,4 @@ script:
   - go test -race $GO_TEST_UNSAFE_FLAGS ./...
   - >
     [ "$USE_LINTER" != 1 ] ||
-      golangci-lint run -E gofmt -E golint -E maligned -E misspell -E prealloc -E unconvert ./...
+      golangci-lint run -E gofmt -E golint -E maligned -E misspell -E prealloc -E unconvert -E whitespace ./...

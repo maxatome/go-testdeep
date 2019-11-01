@@ -404,7 +404,6 @@ func TestEqualChannel(t *testing.T) {
 			Got:      mustContain("0x"), // hexadecimal pointer
 			Expected: mustContain("0x"), // hexadecimal pointer
 		})
-
 }
 
 //

@@ -44,7 +44,6 @@ func TestBuildTestName(t *testing.T) {
 	} {
 		name := tdutil.BuildTestName(curTest.params...)
 		if name != curTest.expected {
-
 			t.Errorf(`BuildTestName#%d == "%s" but ≠ "%s"`, i, name, curTest.expected)
 		}
 	}
