@@ -37,6 +37,41 @@ func NewRequest(method, target string, body io.Reader, headers ...string) *http.
 	return addHeaders(httptest.NewRequest(method, target, body), headers)
 }
 
+// Get is shortcut for:
+//
+//   NewRequest(http.MethodGet, target, nil, headers...)
+func Get(target string, headers ...string) *http.Request {
+	return NewRequest(http.MethodGet, target, nil, headers...)
+}
+
+// Post is a shortcut for:
+//
+//   NewRequest(http.MethodPost, target, body, headers...)
+func Post(target string, body io.Reader, headers ...string) *http.Request {
+	return NewRequest(http.MethodPost, target, body, headers...)
+}
+
+// Put is a shortcut for:
+//
+//   NewRequest(http.MethodPut, target, body, headers...)
+func Put(target string, body io.Reader, headers ...string) *http.Request {
+	return NewRequest(http.MethodPut, target, body, headers...)
+}
+
+// Patch is a shortcut for:
+//
+//   NewRequest(http.MethodPatch, target, body, headers...)
+func Patch(target string, body io.Reader, headers ...string) *http.Request {
+	return NewRequest(http.MethodPatch, target, body, headers...)
+}
+
+// Delete is a shortcut for:
+//
+//   NewRequest(http.MethodDelete, target, body, headers...)
+func Delete(target string, body io.Reader, headers ...string) *http.Request {
+	return NewRequest(http.MethodDelete, target, body, headers...)
+}
+
 // NewJSONRequest creates a new HTTP request with body marshaled to
 // JSON. "Content-Type" header is automatically set to
 // "application/json". Other headers can be added via headers, as in:
@@ -56,6 +91,34 @@ func NewJSONRequest(method, target string, body interface{}, headers ...string) 
 			"Content-Type", "application/json"))
 }
 
+// PostJSON is a shortcut for:
+//
+//   NewJSONRequest(http.MethodPost, target, body, headers...)
+func PostJSON(target string, body interface{}, headers ...string) *http.Request {
+	return NewJSONRequest(http.MethodPost, target, body, headers...)
+}
+
+// PutJSON is a shortcut for:
+//
+//   NewJSONRequest(http.MethodPut, target, body, headers...)
+func PutJSON(target string, body interface{}, headers ...string) *http.Request {
+	return NewJSONRequest(http.MethodPut, target, body, headers...)
+}
+
+// PatchJSON is a shortcut for:
+//
+//   NewJSONRequest(http.MethodPatch, target, body, headers...)
+func PatchJSON(target string, body interface{}, headers ...string) *http.Request {
+	return NewJSONRequest(http.MethodPatch, target, body, headers...)
+}
+
+// DeleteJSON is a shortcut for:
+//
+//   NewJSONRequest(http.MethodDelete, target, body, headers...)
+func DeleteJSON(target string, body interface{}, headers ...string) *http.Request {
+	return NewJSONRequest(http.MethodDelete, target, body, headers...)
+}
+
 // NewXMLRequest creates a new HTTP request with body marshaled to
 // XML. "Content-Type" header is automatically set to
 // "application/xml". Other headers can be added via headers, as in:
@@ -73,4 +136,32 @@ func NewXMLRequest(method, target string, body interface{}, headers ...string) *
 	return addHeaders(NewRequest(method, target, bytes.NewBuffer(b)),
 		append(headers[:len(headers):len(headers)],
 			"Content-Type", "application/xml"))
+}
+
+// PostXML is a shortcut for:
+//
+//   NewXMLRequest(http.MethodPost, target, body, headers...)
+func PostXML(target string, body interface{}, headers ...string) *http.Request {
+	return NewXMLRequest(http.MethodPost, target, body, headers...)
+}
+
+// PutXML is a shortcut for:
+//
+//   NewXMLRequest(http.MethodPut, target, body, headers...)
+func PutXML(target string, body interface{}, headers ...string) *http.Request {
+	return NewXMLRequest(http.MethodPut, target, body, headers...)
+}
+
+// PatchXML is a shortcut for:
+//
+//   NewXMLRequest(http.MethodPatch, target, body, headers...)
+func PatchXML(target string, body interface{}, headers ...string) *http.Request {
+	return NewXMLRequest(http.MethodPatch, target, body, headers...)
+}
+
+// DeleteXML is a shortcut for:
+//
+//   NewXMLRequest(http.MethodDelete, target, body, headers...)
+func DeleteXML(target string, body interface{}, headers ...string) *http.Request {
+	return NewXMLRequest(http.MethodDelete, target, body, headers...)
 }

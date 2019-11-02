@@ -8,6 +8,7 @@ package tdhttp_test
 
 import (
 	"io/ioutil"
+	"net/http"
 	"testing"
 
 	td "github.com/maxatome/go-testdeep"
@@ -34,6 +35,61 @@ func TestNewRequest(tt *testing.T) {
 		t.String(req.Header.Get("Foo"), "Bar")
 		t.String(req.Header.Get("Zip"), "")
 	})
+
+	// Get
+	t.Cmp(tdhttp.Get("/path", "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "GET",
+				Header: http.Header{"Foo": []string{"Bar"}},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Post
+	t.Cmp(tdhttp.Post("/path", nil, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "POST",
+				Header: http.Header{"Foo": []string{"Bar"}},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Put
+	t.Cmp(tdhttp.Put("/path", nil, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "PUT",
+				Header: http.Header{"Foo": []string{"Bar"}},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Patch
+	t.Cmp(tdhttp.Patch("/path", nil, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "PATCH",
+				Header: http.Header{"Foo": []string{"Bar"}},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Delete
+	t.Cmp(tdhttp.Delete("/path", nil, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "DELETE",
+				Header: http.Header{"Foo": []string{"Bar"}},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
 }
 
 type TestStruct struct {
@@ -67,6 +123,62 @@ func TestNewJSONRequest(tt *testing.T) {
 			td.NotEmpty(),
 			"JSON encoding failed")
 	})
+
+	// Post
+	t.Cmp(tdhttp.PostJSON("/path", 42, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "POST",
+				Header: http.Header{
+					"Foo":          []string{"Bar"},
+					"Content-Type": []string{"application/json"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Put
+	t.Cmp(tdhttp.PutJSON("/path", 42, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "PUT",
+				Header: http.Header{
+					"Foo":          []string{"Bar"},
+					"Content-Type": []string{"application/json"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Patch
+	t.Cmp(tdhttp.PatchJSON("/path", 42, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "PATCH",
+				Header: http.Header{
+					"Foo":          []string{"Bar"},
+					"Content-Type": []string{"application/json"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Delete
+	t.Cmp(tdhttp.DeleteJSON("/path", 42, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "DELETE",
+				Header: http.Header{
+					"Foo":          []string{"Bar"},
+					"Content-Type": []string{"application/json"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
 }
 
 func TestNewXMLRequest(tt *testing.T) {
@@ -96,4 +208,60 @@ func TestNewXMLRequest(tt *testing.T) {
 			td.NotEmpty(),
 			"XML encoding failed")
 	})
+
+	// Post
+	t.Cmp(tdhttp.PostXML("/path", 42, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "POST",
+				Header: http.Header{
+					"Foo":          []string{"Bar"},
+					"Content-Type": []string{"application/xml"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Put
+	t.Cmp(tdhttp.PutXML("/path", 42, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "PUT",
+				Header: http.Header{
+					"Foo":          []string{"Bar"},
+					"Content-Type": []string{"application/xml"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Patch
+	t.Cmp(tdhttp.PatchXML("/path", 42, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "PATCH",
+				Header: http.Header{
+					"Foo":          []string{"Bar"},
+					"Content-Type": []string{"application/xml"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Delete
+	t.Cmp(tdhttp.DeleteXML("/path", 42, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "DELETE",
+				Header: http.Header{
+					"Foo":          []string{"Bar"},
+					"Content-Type": []string{"application/xml"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
 }
