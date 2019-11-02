@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Operators on My New Hugo Site</title>
+    <title>Operators on go-testdeep</title>
     <link>https://go-testdeep.zetta.rocks/operators/</link>
-    <description>Recent content in Operators on My New Hugo Site</description>
+    <description>Recent content in Operators on go-testdeep</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 03 Oct 2019 22:20:09 +0200</lastBuildDate>

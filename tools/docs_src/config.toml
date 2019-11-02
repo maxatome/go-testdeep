@@ -1,6 +1,6 @@
-baseURL = "http://example.org/"
+baseURL = "https://go-testdeep.zetta.rocks/"
 languageCode = "en-us"
-title = "My New Hugo Site"
+title = "go-testdeep"
 theme = "hugo-theme-learn-2.4.0"
 
 PygmentsCodeFences = true
@@ -11,7 +11,6 @@ PygmentsStyle = "native"
 home = [ "HTML", "RSS", "JSON"]
 
 [params]
-  # Change default color scheme with a variant one. Can be "red", "blue", "green".
   themeVariant = "green"
   disableInlineCopyToClipBoard = true
 

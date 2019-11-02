@@ -752,7 +752,7 @@ EOH
 if ($ENV{PROD_SITE})
 {
     chdir "$DIR/tools/docs_src";
-    exec qw(hugo --baseURL https://go-testdeep.zetta.rocks -d ../../docs);
+    exec qw(hugo -d ../../docs);
 }
 
 
