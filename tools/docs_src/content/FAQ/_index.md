@@ -294,6 +294,34 @@ func TestMyGinGonicApi(t *testing.T) {
 }
 ```
 
+## Fine, the request succeeds and the ID is not 0, but what is the ID real value?
+
+In fact you can [`Catch`]({{< ref "Catch" >}}) the ID before comparing
+it to 0. Try:
+
+```go
+func TestMyGinGonicApi(t *testing.T) {
+  myAPI := MyGinGonicAPI()
+
+  var id uint64
+  if tdhttp.CmpJSONResponse(t,
+    tdhttp.NewRequest("GET", "/json", nil),
+    myAPI.ServeHTTP,
+    tdhttp.Response{
+      Status: http.StatusOK,
+      // Header can be tested too… See tdhttp doc.
+      Body: td.Struct(&Person{
+        Name: "Bob",
+        Age:  28,
+      }, td.StructFields{
+        "ID": td.Catch(&id, td.NotZero()),
+      }),
+    },
+    "Testing GET /json") {
+    t.Logf("The ID is %d", id)
+  }
+}
+```
 
 ## go-testdeep dumps only 10 errors, how to have more (or less)?
 

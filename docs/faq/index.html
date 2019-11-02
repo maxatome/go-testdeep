@@ -12,20 +12,20 @@
     <title>FAQ :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1572716630" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572716630" rel="stylesheet">
-    <link href="/css/hybrid.css?1572716630" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572716630" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572716630" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572716630" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572716630" rel="stylesheet">
-    <link href="/css/theme.css?1572716630" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572716630" rel="stylesheet">
+    <link href="/css/nucleus.css?1572734417" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572734417" rel="stylesheet">
+    <link href="/css/hybrid.css?1572734417" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572734417" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572734417" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572734417" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572734417" rel="stylesheet">
+    <link href="/css/theme.css?1572734417" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572734417" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572716630" rel="stylesheet">
+      <link href="/css/theme-green.css?1572734417" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572716630"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572734417"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572716630"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572716630"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572734417"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572734417"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572716630"></script>
+<script type="text/javascript" src="/js/search.js?1572734417"></script>
 
     
   </div>
@@ -1492,6 +1492,7 @@
 <li><a href="#ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-don-t-know-the-id-in-advance">OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</a></li>
 <li><a href="#what-about-testing-the-response-using-my-api">What about testing the response using my API?</a></li>
 <li><a href="#arf-i-use-gin-gonic-and-so-no-net-http-handlers">Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</a></li>
+<li><a href="#fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</a></li>
 <li><a href="#go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</a></li>
 <li><a href="#how-do-i-change-these-crappy-colors">How do I change these crappy colors?</a>
 <ul>
@@ -1787,6 +1788,31 @@ So keep using
       }),
     },
     <span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>)
+}</code></pre></div>
+<h2 id="fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</h2>
+
+<p>In fact you can <a href="/operators/catch/"><code>Catch</code></a> the ID before comparing
+it to 0. Try:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyGinGonicApi</span>(t *testing.T) {
+  myAPI := <span style="color:#447fcf">MyGinGonicAPI</span>()
+
+  <span style="color:#6ab825;font-weight:bold">var</span> id <span style="color:#6ab825;font-weight:bold">uint64</span>
+  <span style="color:#6ab825;font-weight:bold">if</span> tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
+    tdhttp.<span style="color:#447fcf">NewRequest</span>(<span style="color:#ed9d13">&#34;GET&#34;</span>, <span style="color:#ed9d13">&#34;/json&#34;</span>, <span style="color:#6ab825;font-weight:bold">nil</span>),
+    myAPI.ServeHTTP,
+    tdhttp.Response{
+      Status: http.StatusOK,
+      <span style="color:#999;font-style:italic">// Header can be tested too… See tdhttp doc.
+</span><span style="color:#999;font-style:italic"></span>      Body: td.<span style="color:#447fcf">Struct</span>(&amp;Person{
+        Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+        Age:  <span style="color:#3677a9">28</span>,
+      }, td.StructFields{
+        <span style="color:#ed9d13">&#34;ID&#34;</span>: td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>()),
+      }),
+    },
+    <span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>) {
+    t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The ID is %d&#34;</span>, id)
+  }
 }</code></pre></div>
 <h2 id="go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</h2>
 
@@ -3024,19 +3050,19 @@ to update corresponding <code>CmpFooBar</code> &amp; <code>T.FooBar</code> examp
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572716630"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572716630"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572716630"></script>
-    <script src="/js/jquery.sticky.js?1572716630"></script>
-    <script src="/js/featherlight.min.js?1572716630"></script>
-    <script src="/js/highlight.pack.js?1572716630"></script>
+    <script src="/js/clipboard.min.js?1572734417"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572734417"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572734417"></script>
+    <script src="/js/jquery.sticky.js?1572734417"></script>
+    <script src="/js/featherlight.min.js?1572734417"></script>
+    <script src="/js/highlight.pack.js?1572734417"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572716630"></script>
-    <script src="/js/learn.js?1572716630"></script>
-    <script src="/js/hugo-learn.js?1572716630"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572734417"></script>
+    <script src="/js/learn.js?1572734417"></script>
+    <script src="/js/hugo-learn.js?1572734417"></script>
 
-    <link href="/mermaid/mermaid.css?1572716630" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572716630"></script>
+    <link href="/mermaid/mermaid.css?1572734417" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572734417"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
