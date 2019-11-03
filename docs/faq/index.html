@@ -12,20 +12,20 @@
     <title>FAQ :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1572734417" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572734417" rel="stylesheet">
-    <link href="/css/hybrid.css?1572734417" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572734417" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572734417" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572734417" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572734417" rel="stylesheet">
-    <link href="/css/theme.css?1572734417" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572734417" rel="stylesheet">
+    <link href="/css/nucleus.css?1572770971" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1572770971" rel="stylesheet">
+    <link href="/css/hybrid.css?1572770971" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1572770971" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1572770971" rel="stylesheet">
+    <link href="/css/auto-complete.css?1572770971" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1572770971" rel="stylesheet">
+    <link href="/css/theme.css?1572770971" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1572770971" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572734417" rel="stylesheet">
+      <link href="/css/theme-green.css?1572770971" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572734417"></script>
+    <script src="/js/jquery-3.3.1.min.js?1572770971"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572734417"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572734417"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1572770971"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1572770971"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572734417"></script>
+<script type="text/javascript" src="/js/search.js?1572770971"></script>
 
     
   </div>
@@ -1493,6 +1493,7 @@
 <li><a href="#what-about-testing-the-response-using-my-api">What about testing the response using my API?</a></li>
 <li><a href="#arf-i-use-gin-gonic-and-so-no-net-http-handlers">Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</a></li>
 <li><a href="#fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</a></li>
+<li><a href="#ok-but-how-to-be-sure-the-response-content-is-well-jsonified">OK, but how to be sure the response content is well JSONified?</a></li>
 <li><a href="#go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</a></li>
 <li><a href="#how-do-i-change-these-crappy-colors">How do I change these crappy colors?</a>
 <ul>
@@ -1719,7 +1720,7 @@ is done for that!</p>
   myAPI := <span style="color:#447fcf">MyAPI</span>()
 
   tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
-    tdhttp.<span style="color:#447fcf">NewRequest</span>(<span style="color:#ed9d13">&#34;GET&#34;</span>, <span style="color:#ed9d13">&#34;/json&#34;</span>, <span style="color:#6ab825;font-weight:bold">nil</span>),
+    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>),
     myAPI.ServeHTTP,
     tdhttp.Response{
       Status: http.StatusOK,
@@ -1775,7 +1776,7 @@ So keep using
   myAPI := <span style="color:#447fcf">MyGinGonicAPI</span>()
 
   tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
-    tdhttp.<span style="color:#447fcf">NewRequest</span>(<span style="color:#ed9d13">&#34;GET&#34;</span>, <span style="color:#ed9d13">&#34;/json&#34;</span>, <span style="color:#6ab825;font-weight:bold">nil</span>),
+    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>),
     myAPI.ServeHTTP,
     tdhttp.Response{
       Status: http.StatusOK,
@@ -1798,7 +1799,7 @@ it to 0. Try:</p>
 
   <span style="color:#6ab825;font-weight:bold">var</span> id <span style="color:#6ab825;font-weight:bold">uint64</span>
   <span style="color:#6ab825;font-weight:bold">if</span> tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
-    tdhttp.<span style="color:#447fcf">NewRequest</span>(<span style="color:#ed9d13">&#34;GET&#34;</span>, <span style="color:#ed9d13">&#34;/json&#34;</span>, <span style="color:#6ab825;font-weight:bold">nil</span>),
+    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>),
     myAPI.ServeHTTP,
     tdhttp.Response{
       Status: http.StatusOK,
@@ -1807,8 +1808,37 @@ it to 0. Try:</p>
         Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
         Age:  <span style="color:#3677a9">28</span>,
       }, td.StructFields{
-        <span style="color:#ed9d13">&#34;ID&#34;</span>: td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>()),
-      }),
+        <span style="color:#ed9d13">&#34;ID&#34;</span>: td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>()), <span style="color:#999;font-style:italic">// ← id set here
+</span><span style="color:#999;font-style:italic"></span>      }),
+    },
+    <span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>) {
+    t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The ID is %d&#34;</span>, id)
+  }
+}</code></pre></div>
+<h2 id="ok-but-how-to-be-sure-the-response-content-is-well-jsonified">OK, but how to be sure the response content is well JSONified?</h2>
+
+<p>With the help of <a href="/operators/json/"><code>JSON</code></a> operator of course! See
+it below, used with <a href="/operators/catch/"><code>Catch</code></a> (note it can be used
+without):</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+  ID   <span style="color:#6ab825;font-weight:bold">uint64</span> <span style="color:#ed9d13">`json:&#34;id&#34;`</span>
+  Name <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;name&#34;`</span>
+  Age  <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+}
+
+<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyGinGonicApi</span>(t *testing.T) {
+  myAPI := <span style="color:#447fcf">MyGinGonicAPI</span>()
+
+  <span style="color:#6ab825;font-weight:bold">var</span> id <span style="color:#6ab825;font-weight:bold">uint64</span>
+  <span style="color:#6ab825;font-weight:bold">if</span> tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
+    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>),
+    myAPI.ServeHTTP,
+    tdhttp.Response{
+      Status: http.StatusOK,
+      <span style="color:#999;font-style:italic">// Header can be tested too… See tdhttp doc.
+</span><span style="color:#999;font-style:italic"></span>      Body: td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;id&#34;: $id, &#34;name&#34;: &#34;Bob&#34;, &#34;age&#34;: 28}`</span>,
+	    td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;id&#34;</span>, td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>())), <span style="color:#999;font-style:italic">// $id placeholder
+</span><span style="color:#999;font-style:italic"></span>      ),
     },
     <span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>) {
     t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The ID is %d&#34;</span>, id)
@@ -3050,19 +3080,19 @@ to update corresponding <code>CmpFooBar</code> &amp; <code>T.FooBar</code> examp
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572734417"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572734417"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572734417"></script>
-    <script src="/js/jquery.sticky.js?1572734417"></script>
-    <script src="/js/featherlight.min.js?1572734417"></script>
-    <script src="/js/highlight.pack.js?1572734417"></script>
+    <script src="/js/clipboard.min.js?1572770971"></script>
+    <script src="/js/perfect-scrollbar.min.js?1572770971"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1572770971"></script>
+    <script src="/js/jquery.sticky.js?1572770971"></script>
+    <script src="/js/featherlight.min.js?1572770971"></script>
+    <script src="/js/highlight.pack.js?1572770971"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572734417"></script>
-    <script src="/js/learn.js?1572734417"></script>
-    <script src="/js/hugo-learn.js?1572734417"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1572770971"></script>
+    <script src="/js/learn.js?1572770971"></script>
+    <script src="/js/hugo-learn.js?1572770971"></script>
 
-    <link href="/mermaid/mermaid.css?1572734417" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572734417"></script>
+    <link href="/mermaid/mermaid.css?1572770971" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1572770971"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

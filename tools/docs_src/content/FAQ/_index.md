@@ -218,7 +218,7 @@ func TestMyApi(t *testing.T) {
   myAPI := MyAPI()
 
   tdhttp.CmpJSONResponse(t,
-    tdhttp.NewRequest("GET", "/json", nil),
+    tdhttp.Get("/json"),
     myAPI.ServeHTTP,
     tdhttp.Response{
       Status: http.StatusOK,
@@ -278,7 +278,7 @@ func TestMyGinGonicApi(t *testing.T) {
   myAPI := MyGinGonicAPI()
 
   tdhttp.CmpJSONResponse(t,
-    tdhttp.NewRequest("GET", "/json", nil),
+    tdhttp.Get("/json"),
     myAPI.ServeHTTP,
     tdhttp.Response{
       Status: http.StatusOK,
@@ -305,7 +305,7 @@ func TestMyGinGonicApi(t *testing.T) {
 
   var id uint64
   if tdhttp.CmpJSONResponse(t,
-    tdhttp.NewRequest("GET", "/json", nil),
+    tdhttp.Get("/json"),
     myAPI.ServeHTTP,
     tdhttp.Response{
       Status: http.StatusOK,
@@ -314,8 +314,41 @@ func TestMyGinGonicApi(t *testing.T) {
         Name: "Bob",
         Age:  28,
       }, td.StructFields{
-        "ID": td.Catch(&id, td.NotZero()),
+        "ID": td.Catch(&id, td.NotZero()), // ← id set here
       }),
+    },
+    "Testing GET /json") {
+    t.Logf("The ID is %d", id)
+  }
+}
+```
+
+## OK, but how to be sure the response content is well JSONified?
+
+With the help of [`JSON`]({{< ref "JSON" >}}) operator of course! See
+it below, used with [`Catch`]({{< ref "Catch" >}}) (note it can be used
+without):
+
+```go
+type Person struct {
+  ID   uint64 `json:"id"`
+  Name string `json:"name"`
+  Age  int    `json:"age"`
+}
+
+func TestMyGinGonicApi(t *testing.T) {
+  myAPI := MyGinGonicAPI()
+
+  var id uint64
+  if tdhttp.CmpJSONResponse(t,
+    tdhttp.Get("/json"),
+    myAPI.ServeHTTP,
+    tdhttp.Response{
+      Status: http.StatusOK,
+      // Header can be tested too… See tdhttp doc.
+      Body: td.JSON(`{"id": $id, "name": "Bob", "age": 28}`,
+	    td.Tag("id", td.Catch(&id, td.NotZero())), // $id placeholder
+      ),
     },
     "Testing GET /json") {
     t.Logf("The ID is %d", id)
