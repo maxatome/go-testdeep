@@ -8,7 +8,7 @@ go-testdeep
 [![Version](https://img.shields.io/github/tag/maxatome/go-testdeep.svg)](https://github.com/maxatome/go-testdeep/releases)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go/#testing)
 
-![testdeep](docs/image.png)
+![testdeep](tools/docs_src/static/images/logo.png)
 
 **Extremely flexible golang deep comparison, extends the go testing package.**
 

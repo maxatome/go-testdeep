@@ -448,6 +448,13 @@
 	"content": "testdeep package, via its Cmp* functions, handles the tests and all the error message boiler plate. Let\u0026rsquo;s do it:\nimport ( \u0026#34;testing\u0026#34; \u0026#34;time\u0026#34; td \u0026#34;github.com/maxatome/go-testdeep\u0026#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record.Id, td.NotZero(), \u0026#34;Id initialized\u0026#34;) td.Cmp(t, record.Name, \u0026#34;Bob\u0026#34;) td.Cmp(t, record.Age, 23) td.Cmp(t, record.CreatedAt, td.Between(before, time.Now())) } } As we cannot guess the Id field value before its creation, we use the NotZero operator to check it is set by CreateRecord() call. The same is true for the creation date field CreatedAt. Thanks to the Between operator we can check it is set with a value included between the date before CreateRecord() call and the date just after.\nNote that if Id and CreateAt could be known in advance, we could simply do:\nimport ( \u0026#34;testing\u0026#34; \u0026#34;time\u0026#34; td \u0026#34;github.com/maxatome/go-testdeep\u0026#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record, \u0026amp;Record{ Id: 1234, Name: \u0026#34;Bob\u0026#34;, Age: 23, CreatedAt: time.Date(2019, time.May, 1, 12, 13, 14, 0, time.UTC), }) } } But unfortunately, it is common to not know exactly the value of some fields…\n"
 },
 {
+	"uri": "https://go-testdeep.zetta.rocks/helpers/",
+	"title": "Helpers",
+	"tags": [],
+	"description": "",
+	"content": " HTTP API test helper aka. tdhttp The tdhttp package helper allows to easily test HTTP APIs.\nIt handles any kind of API, with some specific features for the routes accepting and/or returning JSON or XML.\nSee examples of use in FAQ.\nHelpers utils aka. tdutil To write helpers, some commonly used functions are shared in tdutil package.\n"
+},
+{
 	"uri": "https://go-testdeep.zetta.rocks/faq/",
 	"title": "FAQ",
 	"tags": [],

@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Any :: go-testdeep</title>
+    <title>Helpers :: go-testdeep</title>
 
     
     <link href="/css/nucleus.css?1572782833" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/operators/any/">
+  <body class="" data-url="/helpers/">
     <nav id="sidebar" class="">
 
 
@@ -280,7 +280,7 @@
   
     
     <li data-nav-id="/operators/" title="Operators" class="dd-item 
-        parent
+        
         
         
         ">
@@ -342,7 +342,7 @@
  
   
     
-      <li data-nav-id="/operators/any/" title="Any" class="dd-item active">
+      <li data-nav-id="/operators/any/" title="Any" class="dd-item ">
         <a href="/operators/any/">
         Any
         
@@ -1395,8 +1395,8 @@
   
     
     <li data-nav-id="/helpers/" title="Helpers" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/helpers/">
@@ -1492,13 +1492,7 @@
             
           
           
-            
-            
-          
-          
-            <a href='/'>go-testdeep</a> > <a href='/operators/'>Operators</a> > Any
-          
-         
+            <a href='/'>go-testdeep</a> > Helpers
           
          
           
@@ -1513,18 +1507,8 @@
 <ul>
 <li>
 <ul>
-<li>
-<ul>
-<li><a href="#examples">Examples</a></li>
-</ul></li>
-<li><a href="#cmpany-shortcut">CmpAny shortcut</a>
-<ul>
-<li><a href="#examples-1">Examples</a></li>
-</ul></li>
-<li><a href="#t-any-shortcut">T.Any shortcut</a>
-<ul>
-<li><a href="#examples-2">Examples</a></li>
-</ul></li>
+<li><a href="#http-api-test-helper-aka-tdhttp">HTTP API test helper aka. <code>tdhttp</code></a></li>
+<li><a href="#helpers-utils-aka-tdutil">Helpers utils aka. <code>tdutil</code></a></li>
 </ul></li>
 </ul>
 </nav>
@@ -1543,7 +1527,7 @@
           
             <h1>
               
-              Any
+              Helpers
             </h1>
           
 
@@ -1552,170 +1536,32 @@
 
 
 
+	
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Any</span>(expectedValues ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep</code></pre></div>
-<p><a href="/operators/any/"><code>Any</code></a> operator compares data against several expected values. During
-a match, at least one of them has to match to succeed.</p>
+<h2 id="http-api-test-helper-aka-tdhttp">HTTP API test helper aka. <code>tdhttp</code></h2>
 
-<p><a href="/operators/#typebehind-method">TypeBehind</a> method can return a non-<code>nil</code> <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> if all items
-known non-interface types are equal, or if only interface types
-are found (mostly issued from <a href="/operators/isa/"><code>Isa()</code></a>) and they are equal.</p>
+<p>The
+<a href="https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp"><code>tdhttp</code></a>
+package helper allows to easily test HTTP APIs.</p>
 
-<blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#Any"><i class='fas fa-book'></i> Any godoc</a>.</p>
-</blockquote>
+<p>It handles any kind of API, with some specific features for the routes
+accepting and/or returning JSON or XML.</p>
 
-<h3 id="examples">Examples</h3>
+<p>See examples of use in <a href="/faq/#what-about-testing-the-response-using-my-api">FAQ</a>.</p>
 
+<h2 id="helpers-utils-aka-tdutil">Helpers utils aka. <code>tdutil</code></h2>
 
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Base example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
-
-	got := <span style="color:#ed9d13">&#34;foo/bar&#34;</span>
-
-	<span style="color:#999;font-style:italic">// Checks got string against:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">//   &#34;zip&#34; regexp *OR* &#34;bar&#34; suffix
-</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Any</span>(<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">&#34;zip&#34;</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;bar&#34;</span>)),
-		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Checks got string against:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">//   &#34;zip&#34; regexp *OR* &#34;foo&#34; suffix
-</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Any</span>(<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">&#34;zip&#34;</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;foo&#34;</span>)),
-		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
-    </div>
-</div>
-
-<h2 id="cmpany-shortcut">CmpAny shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpAny</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValues []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p>CmpAny is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Any</span>(expectedValues...), args...)</code></pre></div>
-<p>See above for details.</p>
-
-<p>Returns true if the test is OK, false if it fails.</p>
-
-<p><em>args&hellip;</em> are optional and allow to name the test. This name is
-used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
-the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
-<a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
-<a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
-reason of a potential failure.</p>
-
-<blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpAny"><i class='fas fa-book'></i> CmpAny godoc</a>.</p>
-</blockquote>
-
-<h3 id="examples-1">Examples</h3>
+<p>To write helpers, some commonly used functions are shared in
+<a href="https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil"><code>tdutil</code></a>
+package.</p>
 
 
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Base example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	got := <span style="color:#ed9d13">&#34;foo/bar&#34;</span>
-
-	<span style="color:#999;font-style:italic">// Checks got string against:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">//   &#34;zip&#34; regexp *OR* &#34;bar&#34; suffix
-</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">CmpAny</span>(t, got, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">&#34;zip&#34;</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;bar&#34;</span>)},
-		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Checks got string against:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">//   &#34;zip&#34; regexp *OR* &#34;foo&#34; suffix
-</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpAny</span>(t, got, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">&#34;zip&#34;</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;foo&#34;</span>)},
-		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
-    </div>
-</div>
-
-<h2 id="t-any-shortcut">T.Any shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Any</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValues []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p><a href="/operators/any/"><code>Any</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Any</span>(expectedValues...), args...)</code></pre></div>
-<p>See above for details.</p>
-
-<p>Returns true if the test is OK, false if it fails.</p>
-
-<p><em>args&hellip;</em> are optional and allow to name the test. This name is
-used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
-the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
-<a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
-<a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
-reason of a potential failure.</p>
-
-<blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Any"><i class='fas fa-book'></i> T.Any godoc</a>.</p>
-</blockquote>
-
-<h3 id="examples-2">Examples</h3>
-
-
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Base example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
-
-	got := <span style="color:#ed9d13">&#34;foo/bar&#34;</span>
-
-	<span style="color:#999;font-style:italic">// Checks got string against:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">//   &#34;zip&#34; regexp *OR* &#34;bar&#34; suffix
-</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">Any</span>(got, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">&#34;zip&#34;</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;bar&#34;</span>)},
-		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Checks got string against:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">//   &#34;zip&#34; regexp *OR* &#34;foo&#34; suffix
-</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Any</span>(got, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">&#34;zip&#34;</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;foo&#34;</span>)},
-		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
-    </div>
-</div>
 
 
 <footer class=" footline" >
 	
 </footer>
-
 
         
         </div> 
@@ -1895,7 +1741,6 @@ reason of a potential failure.</p>
             
                 
                     
-                    
                 
                 
 
@@ -1909,8 +1754,21 @@ reason of a potential failure.</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
-                        
+            
+            
+                
                     
                 
                 
@@ -1943,26 +1801,6 @@ reason of a potential failure.</p>
             
             
                 
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
                     
                 
                 
@@ -2831,6 +2669,7 @@ reason of a potential failure.</p>
             
                 
                     
+                    
                 
                 
 
@@ -2846,6 +2685,9 @@ reason of a potential failure.</p>
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -2867,10 +2709,10 @@ reason of a potential failure.</p>
 	 
 	 
 		
-			<a class="nav nav-prev" href="/operators/all/" title="All"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/operators/zero/" title="Zero"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/operators/array/" title="Array" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/faq/" title="FAQ" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -2900,4 +2742,3 @@ reason of a potential failure.</p>
 
   </body>
 </html>
-

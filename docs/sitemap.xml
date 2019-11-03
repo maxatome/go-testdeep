@@ -260,6 +260,10 @@
   </url>
   
   <url>
+    <loc>https://go-testdeep.zetta.rocks/helpers/</loc>
+  </url>
+  
+  <url>
     <loc>https://go-testdeep.zetta.rocks/faq/</loc>
     <lastmod>2019-10-08T21:28:21+02:00</lastmod>
   </url>

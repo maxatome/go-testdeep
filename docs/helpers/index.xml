@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Helpers on go-testdeep</title>
+    <link>https://go-testdeep.zetta.rocks/helpers/</link>
+    <description>Recent content in Helpers on go-testdeep</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://go-testdeep.zetta.rocks/helpers/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+  </channel>
+</rss>
