@@ -6,12 +6,6 @@
 
 package testdeep
 
-type tdBag struct {
-	tdSetBase
-}
-
-var _ TestDeep = &tdBag{}
-
 // summary(Bag): compares the contents of an array or a slice without taking
 // care of the order of items
 // input(Bag): array,slice,ptr(ptr on array/slice)
@@ -29,18 +23,10 @@ var _ TestDeep = &tdBag{}
 //   Cmp(t, []int{1, 1, 2}, Bag(1, 2))       // fails, one 1 is missing
 //   Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing
 func Bag(expectedItems ...interface{}) TestDeep {
-	bag := &tdBag{
-		tdSetBase: newSetBase(allSet, false),
-	}
+	bag := newSetBase(allSet, false)
 	bag.Add(expectedItems...)
-	return bag
+	return &bag
 }
-
-type tdSubBagOf struct {
-	tdSetBase
-}
-
-var _ TestDeep = &tdSubBagOf{}
 
 // summary(SubBagOf): compares the contents of an array or a slice
 // without taking care of the order of items but with potentially some
@@ -57,18 +43,10 @@ var _ TestDeep = &tdSubBagOf{}
 //   Cmp(t, []int{1}, SubBagOf(1, 1, 2))       // succeeds
 //   Cmp(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
 func SubBagOf(expectedItems ...interface{}) TestDeep {
-	bag := &tdSubBagOf{
-		tdSetBase: newSetBase(subSet, false),
-	}
+	bag := newSetBase(subSet, false)
 	bag.Add(expectedItems...)
-	return bag
+	return &bag
 }
-
-type tdSuperBagOf struct {
-	tdSetBase
-}
-
-var _ TestDeep = &tdSuperBagOf{}
 
 // summary(SuperBagOf): compares the contents of an array or a slice
 // without taking care of the order of items but with potentially some
@@ -85,9 +63,7 @@ var _ TestDeep = &tdSuperBagOf{}
 //   Cmp(t, []int{1, 1, 2}, SuperBagOf(1))       // succeeds
 //   Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 func SuperBagOf(expectedItems ...interface{}) TestDeep {
-	bag := &tdSuperBagOf{
-		tdSetBase: newSetBase(superSet, false),
-	}
+	bag := newSetBase(superSet, false)
 	bag.Add(expectedItems...)
-	return bag
+	return &bag
 }

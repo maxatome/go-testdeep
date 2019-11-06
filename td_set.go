@@ -6,12 +6,6 @@
 
 package testdeep
 
-type tdSet struct {
-	tdSetBase
-}
-
-var _ TestDeep = &tdSet{}
-
 // summary(Set): compares the contents of an array or a slice ignoring
 // duplicates and without taking care of the order of items
 // input(Set): array,slice,ptr(ptr on array/slice)
@@ -28,18 +22,10 @@ var _ TestDeep = &tdSet{}
 //   Cmp(t, []int{1, 1, 2}, Set(2, 1))    // succeeds
 //   Cmp(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing
 func Set(expectedItems ...interface{}) TestDeep {
-	set := &tdSet{
-		tdSetBase: newSetBase(allSet, true),
-	}
+	set := newSetBase(allSet, true)
 	set.Add(expectedItems...)
-	return set
+	return &set
 }
-
-type tdSubSetOf struct {
-	tdSetBase
-}
-
-var _ TestDeep = &tdSubSetOf{}
 
 // summary(SubSetOf): compares the contents of an array or a slice
 // ignoring duplicates and without taking care of the order of items
@@ -57,18 +43,10 @@ var _ TestDeep = &tdSubSetOf{}
 //   Cmp(t, []int{1, 1}, SubSetOf(1, 2))    // succeeds
 //   Cmp(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item
 func SubSetOf(expectedItems ...interface{}) TestDeep {
-	set := &tdSubSetOf{
-		tdSetBase: newSetBase(subSet, true),
-	}
+	set := newSetBase(subSet, true)
 	set.Add(expectedItems...)
-	return set
+	return &set
 }
-
-type tdSuperSetOf struct {
-	tdSetBase
-}
-
-var _ TestDeep = &tdSuperSetOf{}
 
 // summary(SuperSetOf): compares the contents of an array or a slice
 // ignoring duplicates and without taking care of the order of items
@@ -86,18 +64,10 @@ var _ TestDeep = &tdSuperSetOf{}
 //   Cmp(t, []int{1, 1, 2}, SuperSetOf(1))    // succeeds
 //   Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
 func SuperSetOf(expectedItems ...interface{}) TestDeep {
-	set := &tdSuperSetOf{
-		tdSetBase: newSetBase(superSet, true),
-	}
+	set := newSetBase(superSet, true)
 	set.Add(expectedItems...)
-	return set
+	return &set
 }
-
-type tdNotAny struct {
-	tdSetBase
-}
-
-var _ TestDeep = &tdNotAny{}
 
 // summary(NotAny): compares the contents of an array or a slice, no
 // values have to match
@@ -109,9 +79,7 @@ var _ TestDeep = &tdNotAny{}
 //   Cmp(t, []int{1}, NotAny(1, 2, 3)) // fails
 //   Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds
 func NotAny(expectedItems ...interface{}) TestDeep {
-	set := &tdNotAny{
-		tdSetBase: newSetBase(noneSet, true),
-	}
+	set := newSetBase(noneSet, true)
 	set.Add(expectedItems...)
-	return set
+	return &set
 }
