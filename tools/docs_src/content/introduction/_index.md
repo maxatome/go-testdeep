@@ -5,16 +5,69 @@ weight = 5
 
 ## Synopsis
 
-Simplest usage:
+From simplest usage:
 
 ```go
 import (
   "testing"
+
   td "github.com/maxatome/go-testdeep"
 )
 
 func TestMyFunc(t *testing.T) {
   td.Cmp(t, MyFunc(), &Info{Name: "Alice", Age: 42})
+}
+```
+
+To most complex one, allowing to easily test API routes:
+
+```go
+import (
+  "testing"
+  "time"
+
+  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/helpers/tdhttp"
+)
+
+type Person struct {
+  ID        uint64    `json:"id"`
+  Name      string    `json:"name"`
+  Age       int       `json:"age"`
+  CreatedAt time.Time `json:"created_at"`
+}
+
+func TestMyApi(t *testing.T) {
+  var id uint64
+  var createdAt time.Time
+
+  beforeCreate := time.Now().Truncate(0)
+
+  tdhttp.CmpJSONResponse(td.NewT(t).FailureIsFatal(), // ← t.Fatal() if test fails
+    tdhttp.PostJSON("/person", Person{Name: "Bob", Age: 42}), // ← the request
+    myAPI.ServeHTTP, // ← the API handler
+    tdhttp.Response{ // ← the expected response
+      Status: http.StatusCreated,
+      // Header can be tested too… See tdhttp doc.
+      Body: td.JSON(`
+{
+  "id":         $id,
+  "name":       "Bob",
+  "age":        42,
+  "created_at": "$createdAt",
+}`,
+        td.Tag("id", td.Catch(&id, td.NotZero())), // catch $id and check ≠ 0
+        td.Tag("created_at", td.All( // ← All combines several operators like a AND
+          td.HasSuffix("Z"), // check the RFC3339 $created_at date ends with "Z"
+          td.Smuggle(func(s string) (time.Time, error) { // convert to time.Time
+            return time.Parse(time.RFC3339Nano, s)
+          }, td.Catch(&createdAt, td.Gte(beforeCreate))), // catch it and check ≥ beforeCreate
+        )),
+      ),
+    },
+    "Create a new Person")
+
+  t.Logf("The new Person ID is %d and was created at %s", id, createdAt)
 }
 ```
 

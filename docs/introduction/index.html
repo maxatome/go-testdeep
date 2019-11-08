@@ -12,20 +12,20 @@
     <title>Introduction :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1572782833" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1572782833" rel="stylesheet">
-    <link href="/css/hybrid.css?1572782833" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1572782833" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1572782833" rel="stylesheet">
-    <link href="/css/auto-complete.css?1572782833" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1572782833" rel="stylesheet">
-    <link href="/css/theme.css?1572782833" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1572782833" rel="stylesheet">
+    <link href="/css/nucleus.css?1573253812" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1573253812" rel="stylesheet">
+    <link href="/css/hybrid.css?1573253812" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1573253812" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1573253812" rel="stylesheet">
+    <link href="/css/auto-complete.css?1573253812" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1573253812" rel="stylesheet">
+    <link href="/css/theme.css?1573253812" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1573253812" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1572782833" rel="stylesheet">
+      <link href="/css/theme-green.css?1573253812" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1572782833"></script>
+    <script src="/js/jquery-3.3.1.min.js?1573253812"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -37,7 +37,12 @@
         }
       
     </style>
-    
+    <style type="text/css">
+  #body-inner pre {
+      white-space: pre;
+  }
+</style>
+
   </head>
   <body class="" data-url="/introduction/">
     <nav id="sidebar" class="">
@@ -56,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1572782833"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1572782833"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1573253812"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1573253812"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1572782833"></script>
+<script type="text/javascript" src="/js/search.js?1573253812"></script>
 
     
   </div>
@@ -1540,14 +1545,63 @@
 
 <h2 id="synopsis">Synopsis</h2>
 
-<p>Simplest usage:</p>
+<p>From simplest usage:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
+
   td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
 )
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
   td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">MyFunc</span>(), &amp;Info{Name: <span style="color:#ed9d13">&#34;Alice&#34;</span>, Age: <span style="color:#3677a9">42</span>})
+}</code></pre></div>
+<p>To most complex one, allowing to easily test API routes:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
+  <span style="color:#ed9d13">&#34;testing&#34;</span>
+  <span style="color:#ed9d13">&#34;time&#34;</span>
+
+  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/helpers/tdhttp&#34;</span>
+)
+
+<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>    <span style="color:#ed9d13">`json:&#34;id&#34;`</span>
+  Name      <span style="color:#6ab825;font-weight:bold">string</span>    <span style="color:#ed9d13">`json:&#34;name&#34;`</span>
+  Age       <span style="color:#6ab825;font-weight:bold">int</span>       <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+  CreatedAt time.Time <span style="color:#ed9d13">`json:&#34;created_at&#34;`</span>
+}
+
+<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyApi</span>(t *testing.T) {
+  <span style="color:#6ab825;font-weight:bold">var</span> id <span style="color:#6ab825;font-weight:bold">uint64</span>
+  <span style="color:#6ab825;font-weight:bold">var</span> createdAt time.Time
+
+  beforeCreate := time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Truncate</span>(<span style="color:#3677a9">0</span>)
+
+  tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(td.<span style="color:#447fcf">NewT</span>(t).<span style="color:#447fcf">FailureIsFatal</span>(), <span style="color:#999;font-style:italic">// ← t.Fatal() if test fails
+</span><span style="color:#999;font-style:italic"></span>    tdhttp.<span style="color:#447fcf">PostJSON</span>(<span style="color:#ed9d13">&#34;/person&#34;</span>, Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>}), <span style="color:#999;font-style:italic">// ← the request
+</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP, <span style="color:#999;font-style:italic">// ← the API handler
+</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{ <span style="color:#999;font-style:italic">// ← the expected response
+</span><span style="color:#999;font-style:italic"></span>      Status: http.StatusCreated,
+      <span style="color:#999;font-style:italic">// Header can be tested too… See tdhttp doc.
+</span><span style="color:#999;font-style:italic"></span>      Body: td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
+</span><span style="color:#ed9d13">  &#34;id&#34;:         $id,
+</span><span style="color:#ed9d13">  &#34;name&#34;:       &#34;Bob&#34;,
+</span><span style="color:#ed9d13">  &#34;age&#34;:        42,
+</span><span style="color:#ed9d13">  &#34;created_at&#34;: &#34;$createdAt&#34;,
+</span><span style="color:#ed9d13">}`</span>,
+        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;id&#34;</span>, td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>())), <span style="color:#999;font-style:italic">// catch $id and check ≠ 0
+</span><span style="color:#999;font-style:italic"></span>        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;created_at&#34;</span>, td.<span style="color:#447fcf">All</span>( <span style="color:#999;font-style:italic">// ← All combines several operators like a AND
+</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>), <span style="color:#999;font-style:italic">// check the RFC3339 $created_at date ends with &#34;Z&#34;
+</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s <span style="color:#6ab825;font-weight:bold">string</span>) (time.Time, <span style="color:#6ab825;font-weight:bold">error</span>) { <span style="color:#999;font-style:italic">// convert to time.Time
+</span><span style="color:#999;font-style:italic"></span>            <span style="color:#6ab825;font-weight:bold">return</span> time.<span style="color:#447fcf">Parse</span>(time.RFC3339Nano, s)
+          }, td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(beforeCreate))), <span style="color:#999;font-style:italic">// catch it and check ≥ beforeCreate
+</span><span style="color:#999;font-style:italic"></span>        )),
+      ),
+    },
+    <span style="color:#ed9d13">&#34;Create a new Person&#34;</span>)
+
+  t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The new Person ID is %d and was created at %s&#34;</span>, id, createdAt)
 }</code></pre></div>
 <p>Example of produced error in case of mismatch:</p>
 
@@ -2737,19 +2791,19 @@ exactly, mixed with some useful
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1572782833"></script>
-    <script src="/js/perfect-scrollbar.min.js?1572782833"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1572782833"></script>
-    <script src="/js/jquery.sticky.js?1572782833"></script>
-    <script src="/js/featherlight.min.js?1572782833"></script>
-    <script src="/js/highlight.pack.js?1572782833"></script>
+    <script src="/js/clipboard.min.js?1573253812"></script>
+    <script src="/js/perfect-scrollbar.min.js?1573253812"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1573253812"></script>
+    <script src="/js/jquery.sticky.js?1573253812"></script>
+    <script src="/js/featherlight.min.js?1573253812"></script>
+    <script src="/js/highlight.pack.js?1573253812"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1572782833"></script>
-    <script src="/js/learn.js?1572782833"></script>
-    <script src="/js/hugo-learn.js?1572782833"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1573253812"></script>
+    <script src="/js/learn.js?1573253812"></script>
+    <script src="/js/hugo-learn.js?1573253812"></script>
 
-    <link href="/mermaid/mermaid.css?1572782833" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1572782833"></script>
+    <link href="/mermaid/mermaid.css?1573253812" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1573253812"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

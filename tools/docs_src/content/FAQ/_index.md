@@ -24,7 +24,7 @@ func TestAssertionsAndRequirements(t *testing.T) {
 }
 ```
 
-## How to test `io.Reader` contents, like http.Response.Body for example?
+## How to test `io.Reader` contents, like `net/http.Response.Body` for example?
 
 The [`Smuggle`]({{< ref "Smuggle" >}}) operator is done for that,
 here with the help of [`ReadAll`](https://golang.org/pkg/io/ioutil/#ReadAll).
@@ -67,7 +67,7 @@ func TestResponseBody(t *testing.T) {
   // Expect this response sends "Expected Response!"
   var resp *http.Response = GetResponse()
 
-  td.Cmp(t, body, td.Smuggle(
+  td.Cmp(t, resp.Body, td.Smuggle( // ← transform a io.Reader to a string
     func(body io.Reader) (string, error) {
       b, err := ioutil.ReadAll(body)
       return string(b), err
@@ -79,14 +79,13 @@ func TestResponseBody(t *testing.T) {
 
 ## OK, but my response is in fact a JSON marshaled struct of my own
 
-No problem, [JSON unmarshal](https://golang.org/pkg/encoding/json/#Unmarshal)
-it just after reading the body:
+No problem, [JSON decode](https://golang.org/pkg/encoding/json/#Decoder)
+while reading the body:
 
 ```golang
 import (
   "encoding/json"
   "io"
-  "io/ioutil"
   "net/http"
   "testing"
 
@@ -103,16 +102,12 @@ func TestResponseBody(t *testing.T) {
     Age  int
   }
 
-  td.Cmp(t, body, td.Smuggle(
-    func(body io.Reader) (&Person, error) {
-      b, err := ioutil.ReadAll(body)
-      if err != nil {
-        return nil, err
-      }
-      var s Person
-      return &s, json.Unmarshal(b, &s)
+  td.Cmp(t, resp.Body, td.Smuggle( // ← transform a io.Reader in *Person
+    func(body io.Reader) (*Person, error) {
+	  var s Person
+	  return &s, json.NewDecoder(body).Decode(&s)
     },
-    &Person{
+    &Person{ // ← check Person content
       ID:   42,
       Name: "Bob",
       Age:  28,
@@ -123,13 +118,12 @@ func TestResponseBody(t *testing.T) {
 ## OK, but you are funny, this response sends a new created object, so I don't know the ID in advance!
 
 No problem, use [`Struct`]({{< ref "Struct" >}}) operator to test
-that ID field is non-zero:
+that `ID` field is non-zero (as a bonus, add a `CreatedAt` field):
 
 ```golang
 import (
   "encoding/json"
   "io"
-  "io/ioutil"
   "net/http"
   "testing"
 
@@ -137,29 +131,30 @@ import (
 )
 
 func TestResponseBody(t *testing.T) {
-  // Expect this response sends `{"ID":42,"Name":"Bob","Age":28}`
+  // Expect this response sends:
+  //   `{"ID":42,"Name":"Bob","Age":28,"CreatedAt":"2019-01-02T11:22:33Z"}`
   var resp *http.Response = GetResponse()
 
   type Person struct {
-    ID   uint64
-    Name string
-    Age  int
+    ID        uint64
+    Name      string
+    Age       int
+    CreatedAt time.Time
   }
 
-  td.Cmp(t, body, td.Smuggle(
+  y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
+
+  td.Cmp(t, resp.Body, td.Smuggle( // ← transform a io.Reader in *Person
     func(body io.Reader) (*Person, error) {
-      b, err := ioutil.ReadAll(body)
-      if err != nil {
-        return nil, err
-      }
-      var s Person
-      return &s, json.Unmarshal(b, &s)
+	  var s Person
+	  return &s, json.NewDecoder(body).Decode(&s)
     },
-    td.Struct(&Person{
+    td.Struct(&Person{ // ← check Person content
       Name: "Bob",
       Age:  28,
     }, td.StructFields{
-      "ID": td.NotZero(),
+      "ID":        td.NotZero(),  // check ID ≠ 0
+      "CreatedAt": td.Gte(y2019), // check CreatedAt ≥ 2019/01/01
     })))
 }
 ```
@@ -174,15 +169,17 @@ import (
   "encoding/json"
   "net/http"
   "testing"
+  "time"
 
   td "github.com/maxatome/go-testdeep"
   "github.com/maxatome/go-testdeep/helpers/tdhttp"
 )
 
 type Person struct {
-  ID   uint64
-  Name string
-  Age  int
+  ID        uint64
+  Name      string
+  Age       int
+  CreatedAt time.Time
 }
 
 // MyApi defines our API.
@@ -197,9 +194,10 @@ func MyAPI() *http.ServeMux {
     }
 
     b, err := json.Marshal(Person{
-      ID:   42,
-      Name: "Bob",
-      Age:  28,
+      ID:        42,
+      Name:      "Bob",
+      Age:       28,
+	  CreatedAt: time.Now().UTC(),
     })
     if err != nil {
       http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -217,17 +215,20 @@ func MyAPI() *http.ServeMux {
 func TestMyApi(t *testing.T) {
   myAPI := MyAPI()
 
+  y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
+
   tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"),
-    myAPI.ServeHTTP,
-    tdhttp.Response{
+    tdhttp.Get("/json"), // ← the request
+    myAPI.ServeHTTP,     // ← the API handler
+    tdhttp.Response{ // ← the expected response
       Status: http.StatusOK,
       // Header can be tested too… See tdhttp doc.
       Body: td.Struct(&Person{
         Name: "Bob",
         Age:  28,
       }, td.StructFields{
-        "ID": td.NotZero(),
+        "ID":        td.NotZero(),  // check ID ≠ 0
+		"CreatedAt": td.Gte(y2019), // check CreatedAt ≥ 2019/01/01
       }),
     },
     "Testing GET /json")
@@ -246,6 +247,7 @@ So keep using
 import (
   "net/http"
   "testing"
+  "time"
 
   "github.com/gin-gonic/gin"
 
@@ -254,9 +256,10 @@ import (
 )
 
 type Person struct {
-  ID   uint64
-  Name string
-  Age  int
+  ID        uint64
+  Name      string
+  Age       int
+  CreatedAt time.Time
 }
 
 // MyGinGonicApi defines our API.
@@ -265,9 +268,10 @@ func MyGinGonicAPI() *gin.Engine {
 
   router.GET("/json", func(c *gin.Context) {
     c.JSON(http.StatusOK, Person{
-      ID:   42,
-      Name: "Bob",
-      Age:  28,
+      ID:        42,
+      Name:      "Bob",
+      Age:       28,
+	  CreatedAt: time.Now().UTC(),
     })
   })
 
@@ -277,17 +281,20 @@ func MyGinGonicAPI() *gin.Engine {
 func TestMyGinGonicApi(t *testing.T) {
   myAPI := MyGinGonicAPI()
 
+  y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
+
   tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"),
-    myAPI.ServeHTTP,
-    tdhttp.Response{
+    tdhttp.Get("/json"), // ← the request
+    myAPI.ServeHTTP,     // ← the API handler
+    tdhttp.Response{ // ← the expected response
       Status: http.StatusOK,
       // Header can be tested too… See tdhttp doc.
       Body: td.Struct(&Person{
         Name: "Bob",
         Age:  28,
       }, td.StructFields{
-        "ID": td.NotZero(),
+        "ID":        td.NotZero(),  // check ID ≠ 0
+		"CreatedAt": td.Gte(y2019), // check CreatedAt ≥ 2019/01/01
       }),
     },
     "Testing GET /json")
@@ -296,29 +303,34 @@ func TestMyGinGonicApi(t *testing.T) {
 
 ## Fine, the request succeeds and the ID is not 0, but what is the ID real value?
 
-In fact you can [`Catch`]({{< ref "Catch" >}}) the ID before comparing
-it to 0. Try:
+In fact you can [`Catch`]({{< ref "Catch" >}}) the `ID` before comparing
+it to 0 (as well as `CreatedAt` in fact). Try:
 
 ```go
 func TestMyGinGonicApi(t *testing.T) {
   myAPI := MyGinGonicAPI()
 
   var id uint64
+  var createdAt time.Time
+
+  y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
+
   if tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"),
-    myAPI.ServeHTTP,
-    tdhttp.Response{
+    tdhttp.Get("/json"), // ← the request
+    myAPI.ServeHTTP,     // ← the API handler
+    tdhttp.Response{ // ← the expected response
       Status: http.StatusOK,
       // Header can be tested too… See tdhttp doc.
       Body: td.Struct(&Person{
         Name: "Bob",
         Age:  28,
       }, td.StructFields{
-        "ID": td.Catch(&id, td.NotZero()), // ← id set here
+        "ID":        td.Catch(&id, td.NotZero()),         // ← id set here
+		"CreatedAt": td.Catch(&createdAt, td.Gte(y2019)), // ← createdAt set here
       }),
     },
     "Testing GET /json") {
-    t.Logf("The ID is %d", id)
+    t.Logf("The ID is %d and was created at %s", id, createdAt)
   }
 }
 ```
@@ -327,31 +339,48 @@ func TestMyGinGonicApi(t *testing.T) {
 
 With the help of [`JSON`]({{< ref "JSON" >}}) operator of course! See
 it below, used with [`Catch`]({{< ref "Catch" >}}) (note it can be used
-without):
+without), for a `POST` example:
 
 ```go
 type Person struct {
-  ID   uint64 `json:"id"`
-  Name string `json:"name"`
-  Age  int    `json:"age"`
+  ID        uint64    `json:"id"`
+  Name      string    `json:"name"`
+  Age       int       `json:"age"`
+  CreatedAt time.Time `json:"created_at"`
 }
 
 func TestMyGinGonicApi(t *testing.T) {
   myAPI := MyGinGonicAPI()
 
   var id uint64
+  var createdAt time.Time
+
+  beforeCreate := time.Now().Truncate(0)
+
   if tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"),
-    myAPI.ServeHTTP,
-    tdhttp.Response{
-      Status: http.StatusOK,
-      // Header can be tested too… See tdhttp doc.
-      Body: td.JSON(`{"id": $id, "name": "Bob", "age": 28}`,
-	    td.Tag("id", td.Catch(&id, td.NotZero())), // $id placeholder
+    tdhttp.PostJSON("/person", Person{Name: "Bob", Age: 42}), // ← the request
+    myAPI.ServeHTTP, // ← the API handler
+    tdhttp.Response{ // ← the expected response
+      Status: http.StatusCreated,
+      Body: td.JSON(`
+{
+  "id":         $id,
+  "name":       "Bob",
+  "age":        42,
+  "created_at": "$createdAt",
+}`,
+        td.Tag("id", td.Catch(&id, td.NotZero())), // catch $id and check ≠ 0
+        td.Tag("created_at", td.All( // ← All combines several operators like a AND
+          td.HasSuffix("Z"), // check the RFC3339 $created_at date ends with "Z"
+          td.Smuggle(func(s string) (time.Time, error) { // convert to time.Time
+            return time.Parse(time.RFC3339Nano, s)
+          }, td.Catch(&createdAt, td.Gte(beforeCreate))), // catch it and check ≥ beforeCreate
+        )),
       ),
+      // Header can be tested too… See tdhttp doc.
     },
-    "Testing GET /json") {
-    t.Logf("The ID is %d", id)
+    "Create a new Person") {
+    t.Logf("The new Person ID is %d and was created at %s", id, createdAt)
   }
 }
 ```
