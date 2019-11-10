@@ -142,12 +142,62 @@ func TestFailureIsFatal(tt *testing.T) {
 	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
 	testdeep.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
 
+	// Using Require()
+	t = testdeep.Require(ttt)
+	t.True(false) // failure
+	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
+	testdeep.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+
+	// Using Require() with specific config (cannot override FailureIsFatal)
+	t = testdeep.Require(ttt, testdeep.ContextConfig{FailureIsFatal: false})
+	t.True(false) // failure
+	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
+	testdeep.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+
 	// Canceling specific config
 	t = testdeep.NewT(ttt, testdeep.ContextConfig{FailureIsFatal: false}).
 		FailureIsFatal(false)
 	t.True(false) // failure
 	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
 	testdeep.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+
+	// Using Assert()
+	t = testdeep.Assert(ttt)
+	t.True(false) // failure
+	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
+	testdeep.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+
+	// Using Assert() with specific config (cannot override FailureIsFatal)
+	t = testdeep.Assert(ttt, testdeep.ContextConfig{FailureIsFatal: true})
+	t.True(false) // failure
+	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
+	testdeep.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+
+	// AssertRequire() / assert
+	t, _ = testdeep.AssertRequire(ttt)
+	t.True(false) // failure
+	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
+	testdeep.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+
+	// Using AssertRequire() / assert with specific config (cannot
+	// override FailureIsFatal)
+	t, _ = testdeep.AssertRequire(ttt, testdeep.ContextConfig{FailureIsFatal: true})
+	t.True(false) // failure
+	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
+	testdeep.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+
+	// AssertRequire() / require
+	_, t = testdeep.AssertRequire(ttt)
+	t.True(false) // failure
+	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
+	testdeep.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+
+	// Using AssertRequire() / require with specific config (cannot
+	// override FailureIsFatal)
+	_, t = testdeep.AssertRequire(ttt, testdeep.ContextConfig{FailureIsFatal: true})
+	t.True(false) // failure
+	testdeep.CmpNotEmpty(tt, ttt.LastMessage)
+	testdeep.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
 }
 
 func TestUseEqual(tt *testing.T) {

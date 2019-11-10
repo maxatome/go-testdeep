@@ -17,6 +17,9 @@ func TestMyFunc(tt *testing.T) {
 ```
 
 - [`func NewT(t TestingFT, config ...ContextConfig) *T`](https://godoc.org/github.com/maxatome/go-testdeep#NewT)
+- [`func Assert(t TestingFT, config ...ContextConfig) *T`](https://godoc.org/github.com/maxatome/go-testdeep#Assert)
+- [`func Require(t TestingFT, config ...ContextConfig) *T`](https://godoc.org/github.com/maxatome/go-testdeep#Require)
+- [`func AssertRequire(t TestingFT, config ...ContextConfig) (*T, *T)`](https://godoc.org/github.com/maxatome/go-testdeep#AssertRequire)
 
 
 ### Configuring [`*testdeep.T`]

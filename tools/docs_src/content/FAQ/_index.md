@@ -14,8 +14,7 @@ import (
 )
 
 func TestAssertionsAndRequirements(t *testing.T) {
-  assert := td.NewT(t)
-  require := assert.FailureIsFatal()
+  assert, require := td.AssertRequire(t)
 
   got := SomeFunction()
 

@@ -149,6 +149,50 @@ func NewT(t TestingFT, config ...ContextConfig) *T {
 	return &newT
 }
 
+// Assert return a new T instance with FailureIsFatal flag set to
+// false.
+//
+//   assert := Assert(t)
+//
+// is roughly equivalent to:
+//
+//   assert := NewT(t).FailureIsFatal(false)
+//
+// See NewT documentation for usefulness of "config" optional parameter.
+func Assert(t TestingFT, config ...ContextConfig) *T {
+	return NewT(t, config...).FailureIsFatal(false)
+}
+
+// Require return a new T instance with FailureIsFatal flag set to
+// true.
+//
+//   require := Require(t)
+//
+// is roughly equivalent to:
+//
+//   require := NewT(t).FailureIsFatal(true)
+//
+// See NewT documentation for usefulness of "config" optional parameter.
+func Require(t TestingFT, config ...ContextConfig) *T {
+	return NewT(t, config...).FailureIsFatal()
+}
+
+// AssertRequire returns 2 instances of T. The first one called
+// "assert" with FailureIsFatal flag set to false, and the second
+// called "require" with FailureIsFatal flag set to true.
+//
+//   assert, require := AssertRequire(t)
+//
+// is roughly equivalent to:
+//
+//   assert, require := Assert(t), Require(t)
+//
+// See NewT documentation for usefulness of "config" optional parameter.
+func AssertRequire(t TestingFT, config ...ContextConfig) (*T, *T) {
+	assert := Assert(t, config...)
+	return assert, assert.FailureIsFatal()
+}
+
 // RootName changes the name of the got data. By default it is
 // "DATA". For an HTTP response body, it could be "BODY" for example.
 //
