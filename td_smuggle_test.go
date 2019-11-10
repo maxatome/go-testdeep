@@ -9,6 +9,7 @@ package testdeep_test
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"testing"
 	"time"
 
@@ -491,4 +492,8 @@ func TestSmuggleTypeBehind(t *testing.T) {
 			func(t MyTime) time.Time { return time.Time(t) },
 			time.Now()),
 		MyTime{})
+
+	equalTypes(t,
+		testdeep.Smuggle(func(from interface{}) interface{} { return from }, nil),
+		reflect.TypeOf((*interface{})(nil)).Elem())
 }

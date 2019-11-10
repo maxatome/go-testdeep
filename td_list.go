@@ -53,10 +53,12 @@ func (l *tdList) uniqTypeBehind() reflect.Type {
 				continue
 			}
 
-			// Ignore interface pointers too (see Isa), but keep them in
-			// mind in case we encounter always the same interface pointer
-			if curType.Kind() == reflect.Ptr &&
-				curType.Elem().Kind() == reflect.Interface {
+			// Ignore interfaces & interface pointers too (see Isa), but
+			// keep them in mind in case we encounter always the same
+			// interface pointer
+			if curType.Kind() == reflect.Interface ||
+				(curType.Kind() == reflect.Ptr &&
+					curType.Elem().Kind() == reflect.Interface) {
 				if lastIfType == nil {
 					lastIfType = curType
 				} else if lastIfType != curType {

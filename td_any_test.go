@@ -82,4 +82,11 @@ func TestAnyTypeBehind(t *testing.T) {
 			testdeep.Isa((*fmt.Stringer)(nil)),
 		),
 		nil)
+
+	equalTypes(t,
+		testdeep.Any(
+			testdeep.Code(func(x interface{}) bool { return true }),
+			testdeep.Code(func(y int) bool { return true }),
+		),
+		12)
 }
