@@ -367,7 +367,11 @@ func checkOKForEach(t *testing.T, gotList []interface{}, expected interface{},
 func equalTypes(t *testing.T, got testdeep.TestDeep, expected interface{},
 	args ...interface{}) bool {
 	gotType := got.TypeBehind()
-	expectedType := reflect.TypeOf(expected)
+
+	expectedType, ok := expected.(reflect.Type)
+	if !ok {
+		expectedType = reflect.TypeOf(expected)
+	}
 
 	if gotType == expectedType {
 		return true
