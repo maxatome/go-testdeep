@@ -5,8 +5,8 @@ weight = 5
 
 # go-testdeep
 
-The testdeep package allows golang extremely flexible deep
-comparison. It is built for testing.
+The testdeep package allows [golang](https://golang.org/) extremely
+flexible deep comparison. It is built for testing.
 
 ![logo](images/logo.png)
 

@@ -25,3 +25,15 @@ name = "<i class='fas fa-book'></i> godoc"
 identifier = "godoc"
 url = "https://godoc.org/github.com/maxatome/go-testdeep"
 weight = 15
+
+[[menu.shortcuts]]
+name = "<i class='fas fa-book'></i> godoc API tester — tdhttp"
+identifier = "godoc-tdhttp"
+url = "https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp"
+weight = 20
+
+[[menu.shortcuts]]
+name = "<i class='fas fa-book'></i> godoc helpers utils — tdutil"
+identifier = "godoc-tdutil"
+url = "https://godoc.org/github.com/maxatome/go-testdeephelpers/tdutil"
+weight = 25

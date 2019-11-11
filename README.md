@@ -46,7 +46,7 @@ go-testdeep
 
 ## Synopsis
 
-From simplest usage:
+Make golang tests easy, from simplest usage:
 
 ```go
 import (
@@ -60,7 +60,8 @@ func TestMyFunc(t *testing.T) {
 }
 ```
 
-To most complex one, allowing to easily test API routes:
+To most complex one, allowing to easily test golang API routes, using
+flexible [operators](https://go-testdeep.zetta.rocks/operators/):
 
 ```go
 import (
