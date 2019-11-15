@@ -35,5 +35,5 @@ weight = 20
 [[menu.shortcuts]]
 name = "<i class='fas fa-book'></i> godoc helpers utils — tdutil"
 identifier = "godoc-tdutil"
-url = "https://godoc.org/github.com/maxatome/go-testdeephelpers/tdutil"
+url = "https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil"
 weight = 25
