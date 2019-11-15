@@ -7,6 +7,7 @@
 package testdeep
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -21,9 +22,166 @@ import (
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
+var jsonEscaper = strings.NewReplacer(
+	"\n", `<testdeep:nl>`,
+	`\`, `<testdeep:bs>`,
+	`"`, `<testdeep:qq>`,
+)
+
+var jsonUnescaper = strings.NewReplacer(
+	`<testdeep:nl>`, "\n",
+	`<testdeep:bs>`, `\`,
+	`<testdeep:qq>`, `"`,
+)
+
+const (
+	commentStart = "<testdeep:opOn>"
+	commentEnd   = `<testdeep:opOff>"` // note final "
+
+	commentStartRepl = `" /* `
+	commentEndRepl   = ` */`
+)
+
+type tdJSONPlaceholder struct {
+	TestDeep
+	tag string
+	num uint64
+}
+
+func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
+	var b bytes.Buffer
+
+	if p.num == 0 {
+		fmt.Fprintf(&b, `"$%s`, p.tag)
+	} else {
+		fmt.Fprintf(&b, `"$%d`, p.num)
+	}
+
+	b.WriteString(commentStart)
+	b.WriteString(jsonEscaper.Replace(util.ToString(p.TestDeep)))
+	b.WriteString(commentEnd)
+
+	return b.Bytes(), nil
+}
+
 type tdJSON struct {
 	baseOKNil
 	expected reflect.Value
+}
+
+func unmarshal(expectedJSON interface{}, target interface{}) {
+	var (
+		err error
+		b   []byte
+	)
+
+	switch data := expectedJSON.(type) {
+	case string:
+		// Try to load this file (if it seems it can be a filename and not
+		// a JSON content)
+		if strings.HasSuffix(data, ".json") {
+			// It could be a file name, try to read from it
+			b, err = ioutil.ReadFile(data)
+			if err != nil {
+				panic(fmt.Sprintf("JSON file %s cannot be read: %s", data, err))
+			}
+			break
+		}
+		b = []byte(data)
+
+	case []byte:
+		b = data
+
+	case io.Reader:
+		b, err = ioutil.ReadAll(data)
+		if err != nil {
+			panic(fmt.Sprintf("JSON read error: %s", err))
+		}
+
+	default:
+		panic("usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)")
+	}
+
+	err = util.UnmarshalJSON(b, target)
+	if err != nil {
+		panic("JSON unmarshal error: " + err.Error())
+	}
+}
+
+// scan scans "*v" data structure to find strings containing
+// placeholders (like $123 or $name) corresponding to a value or
+// TestDeep operator contained in "params" and "byTag".
+func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path string) {
+	if *v == nil {
+		return
+	}
+
+	switch tv := (*v).(type) {
+	case map[string]interface{}:
+		for k, v := range tv {
+			scan(&v, params, byTag, path+`["`+k+`"]`)
+			tv[k] = v
+		}
+	case []interface{}:
+		for i := range tv {
+			scan(&tv[i], params, byTag, path+"["+strconv.Itoa(i)+"]")
+		}
+	case string:
+		if strings.HasPrefix(tv, "$") && len(tv) > 1 {
+			// Double $$ at start of strings escape a $
+			if strings.HasPrefix(tv[1:], "$") {
+				*v = tv[1:]
+				break
+			}
+
+			firstRune, _ := utf8.DecodeRuneInString(tv[1:])
+			// Test for $123
+			if firstRune >= '0' && firstRune <= '9' {
+				np, err := strconv.ParseUint(tv[1:], 10, 64)
+				if err != nil {
+					panic(fmt.Sprintf(
+						`JSON obj%s contains a bad numeric placeholder "%s"`,
+						path, tv))
+				}
+				if np == 0 {
+					panic(fmt.Sprintf(
+						`JSON obj%s contains invalid numeric placeholder "%s", it should start at "$1"`,
+						path, tv))
+				}
+				if np > uint64(len(params)) {
+					panic(fmt.Sprintf(
+						`JSON obj%s contains numeric placeholder "%s", but only %d params given`,
+						path, tv, len(params)))
+				}
+				val := params[np-1]
+				if op, ok := val.(TestDeep); ok {
+					*v = &tdJSONPlaceholder{
+						TestDeep: op,
+						num:      np,
+					}
+				} else {
+					*v = val
+				}
+				break
+			}
+
+			// Test for $tag
+			err := util.CheckTag(tv[1:])
+			if err != nil {
+				panic(fmt.Sprintf(`JSON obj%s contains a bad placeholder "%s"`,
+					path, tv))
+			}
+			op := byTag[tv[1:]]
+			if op == nil {
+				panic(fmt.Sprintf(`JSON obj%s contains a unknown placeholder "%s"`,
+					path, tv))
+			}
+			*v = &tdJSONPlaceholder{
+				TestDeep: op,
+				tag:      tv[1:],
+			}
+		}
+	}
 }
 
 // summary(JSON): compares against JSON representation
@@ -96,43 +254,8 @@ type tdJSON struct {
 // []interface{}, map[string]interface{} or interface{} in case
 // "expectedJSON" is "null".
 func JSON(expectedJSON interface{}, params ...interface{}) TestDeep {
-	var (
-		err error
-		b   []byte
-	)
-
-	switch data := expectedJSON.(type) {
-	case string:
-		// Try to load this file (if it seems it can be a filename and not
-		// a JSON content)
-		if strings.HasSuffix(data, ".json") {
-			// It could be a file name, try to read from it
-			b, err = ioutil.ReadFile(data)
-			if err != nil {
-				panic(fmt.Sprintf("JSON file %s cannot be read: %s", data, err))
-			}
-			break
-		}
-		b = []byte(data)
-
-	case []byte:
-		b = data
-
-	case io.Reader:
-		b, err = ioutil.ReadAll(data)
-		if err != nil {
-			panic(fmt.Sprintf("JSON read error: %s", err))
-		}
-
-	default:
-		panic("usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)")
-	}
-
 	var v interface{}
-	err = util.UnmarshalJSON(b, &v)
-	if err != nil {
-		panic("JSON unmarshal error: " + err.Error())
-	}
+	unmarshal(expectedJSON, &v)
 
 	// Load named placeholders
 	var byTag map[string]*tdTag
@@ -151,76 +274,11 @@ func JSON(expectedJSON interface{}, params ...interface{}) TestDeep {
 	j := tdJSON{
 		baseOKNil: newBaseOKNil(3),
 	}
-	j.init(&v, params, byTag, "")
+	scan(&v, params, byTag, "")
 
 	j.expected = reflect.ValueOf(v)
 
 	return &j
-}
-
-// init scans "*v" data structure to find strings containing
-// placeholders (like $123 or $name) corresponding to a value or
-// TestDeep operator contained in "params" and "byTag".
-func (j *tdJSON) init(v *interface{}, params []interface{}, byTag map[string]*tdTag, path string) {
-	if *v == nil {
-		return
-	}
-
-	switch tv := (*v).(type) {
-	case map[string]interface{}:
-		for k, v := range tv {
-			j.init(&v, params, byTag, path+`["`+k+`"]`)
-			tv[k] = v
-		}
-	case []interface{}:
-		for i := range tv {
-			j.init(&tv[i], params, byTag, path+"["+strconv.Itoa(i)+"]")
-		}
-	case string:
-		if strings.HasPrefix(tv, "$") && len(tv) > 1 {
-			// Double $$ at start of strings escape a $
-			if strings.HasPrefix(tv[1:], "$") {
-				*v = tv[1:]
-				break
-			}
-
-			firstRune, _ := utf8.DecodeRuneInString(tv[1:])
-			// Test for $123
-			if firstRune >= '0' && firstRune <= '9' {
-				np, err := strconv.ParseUint(tv[1:], 10, 64)
-				if err != nil {
-					panic(fmt.Sprintf(
-						`JSON obj%s contains a bad numeric placeholder "%s"`,
-						path, tv))
-				}
-				if np == 0 {
-					panic(fmt.Sprintf(
-						`JSON obj%s contains invalid numeric placeholder "%s", it should start at "$1"`,
-						path, tv))
-				}
-				if np > uint64(len(params)) {
-					panic(fmt.Sprintf(
-						`JSON obj%s contains numeric placeholder "%s", but only %d params given`,
-						path, tv, len(params)))
-				}
-				*v = params[np-1]
-				break
-			}
-
-			// Test for $tag
-			err := util.CheckTag(tv[1:])
-			if err != nil {
-				panic(fmt.Sprintf(`JSON obj%s contains a bad placeholder "%s"`,
-					path, tv))
-			}
-			op := byTag[tv[1:]]
-			if op == nil {
-				panic(fmt.Sprintf(`JSON obj%s contains a unknown placeholder "%s"`,
-					path, tv))
-			}
-			*v = op
-		}
-	}
 }
 
 func (j *tdJSON) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -250,19 +308,67 @@ func (j *tdJSON) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (j *tdJSON) String() string {
-	var b []byte
-	if j.expected.IsValid() {
-		b, _ = json.Marshal(j.expected.Interface()) // cannot return an error here
-	} else {
-		b = []byte(`null`)
+	if !j.expected.IsValid() {
+		return "JSON(null)"
 	}
 
-	// Avoid too long strings
-	if len(b) > 30 {
-		b = append(b[:30-len("…")], "…"...)
+	var b bytes.Buffer
+
+	b.WriteString("JSON(")
+
+	enc := json.NewEncoder(&b)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("     ", "  ")
+
+	// cannot return an error here
+	enc.Encode(j.expected.Interface()) //nolint: errcheck
+
+	b.Truncate(b.Len() - 1)
+	b.WriteByte(')')
+
+	str := jsonUnescaper.Replace(b.String())
+
+	b.Reset()
+	for {
+		beginPos := strings.Index(str, commentStart)
+		if beginPos < 0 {
+			break
+		}
+		endPos := strings.Index(str[beginPos+len(commentStart):], commentEnd)
+		if endPos < 0 {
+			break
+		}
+
+		b.WriteString(str[:beginPos])
+		b.WriteString(commentStartRepl)
+
+		// Multiline comment, compute indent level
+		indent := ""
+		if strings.ContainsRune(str[beginPos+len(commentStart):endPos+beginPos+len(commentStart)], '\n') {
+			begLine := strings.LastIndexByte(str[:beginPos], '\n') + 1
+			indent = strings.Repeat(" ", beginPos-begLine+len(commentStartRepl))
+		}
+
+		str = str[beginPos+len(commentStart):]
+
+		// Multiline comment?
+		if indent != "" {
+			b.WriteString(strings.Replace(str[:endPos], "\n", "\n"+indent, -1))
+		} else {
+			b.WriteString(str[:endPos])
+		}
+
+		b.WriteString(commentEndRepl)
+
+		str = str[endPos+len(commentEnd):]
 	}
 
-	return "JSON(" + util.ToString(string(b)) + ")"
+	if b.Len() == 0 {
+		return str
+	}
+
+	b.WriteString(str)
+	return b.String()
 }
 
 func (j *tdJSON) TypeBehind() reflect.Type {

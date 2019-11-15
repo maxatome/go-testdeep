@@ -158,11 +158,59 @@ func TestJSON(t *testing.T) {
 
 	//
 	// Stringification
-	test.EqualStr(t, testdeep.JSON(`[ 1, 2, 3 ]`).String(), `JSON("[1,2,3]")`)
-	test.EqualStr(t, testdeep.JSON(` null `).String(), `JSON("null")`)
+	test.EqualStr(t, testdeep.JSON(`1`).String(),
+		`JSON(1)`)
+
+	test.EqualStr(t, testdeep.JSON(`[ 1, 2, 3 ]`).String(),
+		`
+JSON([
+       1,
+       2,
+       3
+     ])`[1:])
+
+	test.EqualStr(t, testdeep.JSON(` null `).String(), `JSON(null)`)
+
 	test.EqualStr(t,
-		testdeep.JSON(`[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]`).String(),
-		`JSON("[1,2,3,4,5,6,7,8,9,10,11,12…")`)
+		testdeep.JSON(`[ $1, $name, $2 ]`,
+			testdeep.Between(12, 20),
+			"test",
+			testdeep.Tag("name", testdeep.Code(
+				func(s string) bool { return len(s) > 0 })),
+		).String(),
+		`
+JSON([
+       "$1" /* 12 ≤ got ≤ 20 */,
+       "$name" /* Code(func(string) bool) */,
+       "test"
+     ])`[1:])
+
+	test.EqualStr(t,
+		testdeep.JSON(`{"label": $value, "zip": 666}`,
+			testdeep.Tag("value", testdeep.Bag(
+				testdeep.JSON(`{"name": $1,"age":$2}`,
+					testdeep.HasPrefix("Bob"),
+					testdeep.Between(12, 24),
+				),
+				testdeep.JSON(`{"name": $1}`, testdeep.HasPrefix("Alice")),
+			)),
+		).String(),
+		`
+JSON({
+       "label": "$value" /* Bag(JSON({
+                                       "age": "$2" /* 12 ≤ got ≤ 24 */,
+                                       "name": "$1" /* HasPrefix("Bob") */
+                                     }),
+                                JSON({
+                                       "name": "$1" /* HasPrefix("Alice") */
+                                     })) */,
+       "zip": 666
+     })`[1:])
+
+	// Improbable edge-case
+	test.EqualStr(t,
+		testdeep.JSON(`"<testdeep:opOn>"`).String(),
+		`JSON("<testdeep:opOn>")`)
 }
 
 func TestJSONTypeBehind(t *testing.T) {
