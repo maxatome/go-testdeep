@@ -182,7 +182,7 @@ The difference between [`Smuggle`]({{< ref "Smuggle" >}}) and [`Code`]({{< ref "
 used to do a final comparison while [`Smuggle`]({{< ref "Smuggle" >}}) transforms the data and
 then steps down in favor of generic comparison process. Moreover,
 the type accepted as input for the function is more lax to
-facilitate the tests writing (eg. the function can accept a `float64`
+facilitate the tests writing (e.g. the function can accept a `float64`
 and the got value be an `int`). See examples. On the other hand, the
 output type is strict and must match exactly the expected value
 type. The fields-path `string` *fn* shortcut is not available with
