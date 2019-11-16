@@ -246,8 +246,30 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 // For the "details" key, the raw value "$info" is expected, no
 // placeholders are involved here.
 //
-// Last but not least, Lax mode is automatically enabled by JSON
-// operator to simplify numeric tests.
+// Note that Lax mode is automatically enabled by JSON operator to
+// simplify numeric tests.
+//
+// Last but not least, comments can be embedded in JSON data:
+//
+//   Cmp(t, gotValue,
+//     JSON(`
+//   {
+//     // A guy properties:
+//     "fullname": "$name",  // The full name of the guy
+//     "details":  "$$info", // Literally "$info", thanks to "$" escape
+//     "age":      $2        /* The age of the guy:
+//                              - placeholder unquoted, but could be without
+//                                any change
+//                              - to demonstrate a multi-lines comment */
+//   }`,
+//       Tag("name", HasPrefix("Foo")), // matches $1 and $name
+//       Between(41, 43)))              // matches only $2
+//
+// Comments, like in go, have 2 forms. To quote the Go language specification:
+//   - line comments start with the character sequence // and stop at the
+//     end of the line.
+//   - multi-lines comments start with the character sequence /* and stop
+//     with the first subsequent character sequence */.
 //
 // TypeBehind method returns the reflect.Type of the "expectedJSON"
 // json.Unmarshal'ed. So it can be bool, string, float64,

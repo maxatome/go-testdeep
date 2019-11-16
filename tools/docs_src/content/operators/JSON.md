@@ -75,8 +75,34 @@ Cmp(t, gotValue,
 For the "details" key, the raw value "`$info`" is expected, no
 placeholders are involved here.
 
-Last but not least, [`Lax`]({{< ref "Lax" >}}) mode is automatically enabled by [`JSON`]({{< ref "JSON" >}})
-operator to simplify numeric tests.
+Note that [`Lax`]({{< ref "Lax" >}}) mode is automatically enabled by [`JSON`]({{< ref "JSON" >}}) operator to
+simplify numeric tests.
+
+Last but not least, comments can be embedded in JSON data:
+
+```go
+Cmp(t, gotValue,
+  JSON(`
+{
+  // A guy properties:
+  "fullname": "$name",  // The full name of the guy
+  "details":  "$$info", // Literally "$info", thanks to "$" escape
+  "age":      $2        /* The age of the guy:
+                           - placeholder unquoted, but could be without
+                             any change
+                           - to demonstrate a multi-lines comment */
+}`,
+    Tag("name", HasPrefix("Foo")), // matches $1 and $name
+    Between(41, 43)))              // matches only $2
+```
+
+Comments, like in go, have 2 forms. To quote the Go language specification:
+
+- line comments start with the character sequence // and stop at the
+  end of the line.
+- multi-lines comments start with the character sequence /* and stop
+  with the first subsequent character sequence */.
+
 
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of the *expectedJSON*
 [`json.Unmarshal`](https://golang.org/pkg/json/#Unmarshal)'ed. So it can be `bool`, `string`, `float64`,
@@ -105,11 +131,16 @@ operator to simplify numeric tests.
 	ok = Cmp(t, got, JSON(`{"fullname":"Bob","age":42}`))
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = Cmp(t, got, JSON(`{
-  "fullname": "Bob",
-  "age":      42
+	ok = Cmp(t, got, JSON(`
+// This should be the JSON representation of a struct
+{
+  // A person:
+  "fullname": "Bob", // The name of this person
+  "age":      42     /* The age of this person:
+                        - 42 of course
+                        - to demonstrate a multi-lines comment */
 }`))
-	fmt.Println("check got with nicely formatted JSON:", ok)
+	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
 	ok = Cmp(t, got, JSON(`{"fullname":"Bob","age":42,"gender":"male"}`))
 	fmt.Println("check got with gender field:", ok)
@@ -130,7 +161,7 @@ operator to simplify numeric tests.
 	// Output:
 	// check got with age then fullname: true
 	// check got with fullname then age: true
-	// check got with nicely formatted JSON: true
+	// check got with nicely formatted and commented JSON: true
 	// check got with gender field: false
 	// check got with fullname only: false
 	// check boolean got is true: true
@@ -276,11 +307,16 @@ reason of a potential failure.
 	ok = CmpJSON(t, got, `{"fullname":"Bob","age":42}`, nil)
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = CmpJSON(t, got, `{
-  "fullname": "Bob",
-  "age":      42
+	ok = CmpJSON(t, got, `
+// This should be the JSON representation of a struct
+{
+  // A person:
+  "fullname": "Bob", // The name of this person
+  "age":      42     /* The age of this person:
+                        - 42 of course
+                        - to demonstrate a multi-lines comment */
 }`, nil)
-	fmt.Println("check got with nicely formatted JSON:", ok)
+	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
 	ok = CmpJSON(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
 	fmt.Println("check got with gender field:", ok)
@@ -301,7 +337,7 @@ reason of a potential failure.
 	// Output:
 	// check got with age then fullname: true
 	// check got with fullname then age: true
-	// check got with nicely formatted JSON: true
+	// check got with nicely formatted and commented JSON: true
 	// check got with gender field: false
 	// check got with fullname only: false
 	// check boolean got is true: true
@@ -430,11 +466,16 @@ reason of a potential failure.
 	ok = t.JSON(got, `{"fullname":"Bob","age":42}`, nil)
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = t.JSON(got, `{
-  "fullname": "Bob",
-  "age":      42
+	ok = t.JSON(got, `
+// This should be the JSON representation of a struct
+{
+  // A person:
+  "fullname": "Bob", // The name of this person
+  "age":      42     /* The age of this person:
+                        - 42 of course
+                        - to demonstrate a multi-lines comment */
 }`, nil)
-	fmt.Println("check got with nicely formatted JSON:", ok)
+	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
 	ok = t.JSON(got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
 	fmt.Println("check got with gender field:", ok)
@@ -455,7 +496,7 @@ reason of a potential failure.
 	// Output:
 	// check got with age then fullname: true
 	// check got with fullname then age: true
-	// check got with nicely formatted JSON: true
+	// check got with nicely formatted and commented JSON: true
 	// check got with gender field: false
 	// check got with fullname only: false
 	// check boolean got is true: true

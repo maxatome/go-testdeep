@@ -11,6 +11,7 @@ import (
 	"strings"
 	"testing"
 
+	"errors"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -103,22 +104,74 @@ func TestStringifyPlaceholder(t *testing.T) {
 func TestUnmarshalJSON(t *testing.T) {
 	var target interface{}
 
+	t.Run("clearComment", func(t *testing.T) {
+		origErr := errors.New("orig error")
+
+		from := []byte(`/* comment */`)
+		err := clearComment(from, 0, origErr)
+		if err != nil {
+			t.Errorf("clearComment failed: %s", err)
+		}
+		if !reflect.DeepEqual(from, []byte(`             `)) {
+			t.Errorf(`clearComment failed, unexpected buffer: "%s"`, string(from))
+		}
+
+		from = []byte(`foo // bar`)
+		err = clearComment(from, 4, origErr)
+		if err != nil {
+			t.Errorf("clearComment failed: %s", err)
+		}
+		if !reflect.DeepEqual(from, []byte(`foo       `)) {
+			t.Errorf(`clearComment failed, unexpected buffer: "%s"`, string(from))
+		}
+
+		from = []byte("foo // bar\nzip")
+		err = clearComment(from, 4, origErr)
+		if err != nil {
+			t.Errorf("clearComment failed: %s", err)
+		}
+		if !reflect.DeepEqual(from, []byte("foo       \nzip")) {
+			t.Errorf(`clearComment failed, unexpected buffer: "%s"`, string(from))
+		}
+
+		from = []byte("foo //\nzip")
+		err = clearComment(from, 4, origErr)
+		if err != nil {
+			t.Errorf("clearComment failed: %s", err)
+		}
+		if !reflect.DeepEqual(from, []byte("foo   \nzip")) {
+			t.Errorf(`clearComment failed, unexpected buffer: "%s"`, string(from))
+		}
+
+		from = []byte("foo /")
+		err = clearComment(from, 4, origErr)
+		if err != origErr {
+			t.Errorf("got: %s, expected: %s", err, origErr)
+		}
+
+		from = []byte("foo /*")
+		err = clearComment(from, 4, origErr)
+		if err == nil || err.Error() != `unterminated comment at offset 5` {
+			t.Errorf("got: %s, expected: %s", err, origErr)
+		}
+	})
+
 	// First call to initialize jsonErrorMesg variable
 	err := UnmarshalJSON([]byte(`{}`), &target)
 	if err != nil {
 		t.Fatalf("First UnmarshalJSON failed: %s", err)
 	}
-	if jsonErrorMesg == "" || jsonErrorMesg == "<NO_JSON_ERROR!>" {
+	if jsonErrPlaceholder == "" || jsonErrPlaceholder == "<NO_JSON_ERROR!>" {
 		t.Fatal("json.SyntaxError error not found!")
 	}
-	t.Logf("OK json.SyntaxError error found: %s", jsonErrorMesg)
+	t.Logf("OK json.SyntaxError error found: %s", jsonErrPlaceholder)
 
 	// Normal case with several placeholders
 	err = UnmarshalJSON([]byte(`
-{
-  "numeric_placeholders": [ $1, $2, $3 ],
-  "named_placeholders":   [ $foo, $bar, $zip ]
-}`), &target)
+/* comment */ { /* comment
+   */ "numeric_placeholders" /* comment */: [ $1, $2, $3 ], // comment
+  "named_placeholders":   [ $foo, $bar, /* commment */ $zip /* comment */ ]
+} // comment`), &target)
 	if err != nil {
 		t.Fatalf("UnmarshalJSON failed: %s", err)
 	}

@@ -851,11 +851,16 @@ func ExampleCmpJSON_basic() {
 	ok = CmpJSON(t, got, `{"fullname":"Bob","age":42}`, nil)
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = CmpJSON(t, got, `{
-  "fullname": "Bob",
-  "age":      42
+	ok = CmpJSON(t, got, `
+// This should be the JSON representation of a struct
+{
+  // A person:
+  "fullname": "Bob", // The name of this person
+  "age":      42     /* The age of this person:
+                        - 42 of course
+                        - to demonstrate a multi-lines comment */
 }`, nil)
-	fmt.Println("check got with nicely formatted JSON:", ok)
+	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
 	ok = CmpJSON(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
 	fmt.Println("check got with gender field:", ok)
@@ -876,7 +881,7 @@ func ExampleCmpJSON_basic() {
 	// Output:
 	// check got with age then fullname: true
 	// check got with fullname then age: true
-	// check got with nicely formatted JSON: true
+	// check got with nicely formatted and commented JSON: true
 	// check got with gender field: false
 	// check got with fullname only: false
 	// check boolean got is true: true

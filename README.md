@@ -92,11 +92,12 @@ func TestMyApi(t *testing.T) {
       Status: http.StatusCreated,
       // Header can be tested too… See tdhttp doc.
       Body: td.JSON(`
+// Note that comments are allowed
 {
-  "id":         $id,
+  "id":         $id,          // set by the API/DB
   "name":       "Bob",
   "age":        42,
-  "created_at": "$createdAt",
+  "created_at": "$createdAt", // set by the API/DB
 }`,
         td.Tag("id", td.Catch(&id, td.NotZero())), // catch $id and check ≠ 0
         td.Tag("created_at", td.All( // ← All combines several operators like a AND

@@ -70,6 +70,21 @@ func TestJSON(t *testing.T) {
 			testdeep.Tag("age", testdeep.Between(40, 45)),
 			testdeep.Tag("name", testdeep.Re(`^Bob`))))
 
+	// …with comments…
+	checkOK(t, MyStruct{Name: "Bob", Age: 42},
+		testdeep.JSON(`
+// This should be the JSON representation of MyStruct struct
+{
+  // A person:
+  "name": "$name", // The name of this person
+  "age":  $1       /* The age of this person:
+                      - placeholder unquoted, but could be without
+                        any change
+                      - to demonstrate a multi-lines comment */
+}`,
+			testdeep.Tag("age", testdeep.Between(40, 45)),
+			testdeep.Tag("name", testdeep.Re(`^Bob`))))
+
 	//
 	// []byte
 	checkOK(t, MyStruct{Name: "Bob", Age: 42},
