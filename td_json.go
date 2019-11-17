@@ -44,15 +44,21 @@ const (
 
 type tdJSONPlaceholder struct {
 	TestDeep
-	tag string
-	num uint64
+	name string
+	num  uint64
 }
 
 func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
 	var b bytes.Buffer
 
 	if p.num == 0 {
-		fmt.Fprintf(&b, `"$%s`, p.tag)
+		fmt.Fprintf(&b, `"$%s`, p.name)
+
+		// Don't add a comment for operator shorcuts (aka. $^NotZero)
+		if p.name[0] == '^' {
+			b.WriteByte('"')
+			return b.Bytes(), nil
+		}
 	} else {
 		fmt.Fprintf(&b, `"$%d`, p.num)
 	}
@@ -106,6 +112,18 @@ func unmarshal(expectedJSON interface{}, target interface{}) {
 	if err != nil {
 		panic("JSON unmarshal error: " + err.Error())
 	}
+}
+
+var jsonOpShortcuts = map[string]func() TestDeep{
+	"Empty":    Empty,
+	"Ignore":   Ignore,
+	"NaN":      NaN,
+	"Nil":      Nil,
+	"NotEmpty": NotEmpty,
+	"NotNaN":   NotNaN,
+	"NotNil":   NotNil,
+	"NotZero":  NotZero,
+	"Zero":     Zero,
 }
 
 // scan scans "*v" data structure to find strings containing
@@ -165,6 +183,21 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 				break
 			}
 
+			// Test for operator shortcut
+			if firstRune == '^' {
+				fn := jsonOpShortcuts[tv[2:]]
+				if fn == nil {
+					panic(fmt.Sprintf(`JSON obj%s contains a bad operator shortcut "%s"`,
+						path, tv))
+				}
+
+				*v = &tdJSONPlaceholder{
+					TestDeep: fn(),
+					name:     tv[1:],
+				}
+				break
+			}
+
 			// Test for $tag
 			err := util.CheckTag(tv[1:])
 			if err != nil {
@@ -178,7 +211,7 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 			}
 			*v = &tdJSONPlaceholder{
 				TestDeep: op,
-				tag:      tv[1:],
+				name:     tv[1:],
 			}
 		}
 	}
@@ -249,7 +282,7 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 // Note that Lax mode is automatically enabled by JSON operator to
 // simplify numeric tests.
 //
-// Last but not least, comments can be embedded in JSON data:
+// Comments can be embedded in JSON data:
 //
 //   Cmp(t, gotValue,
 //     JSON(`
@@ -270,6 +303,28 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 //     end of the line.
 //   - multi-lines comments start with the character sequence /* and stop
 //     with the first subsequent character sequence */.
+//
+// Last but not least, simple operators can be directly embedded in
+// JSON data without requiring any placeholder but using directly
+// $^OperatorName. They are operator shortcuts:
+//
+//   Cmp(t, gotValue, JSON(`{"id": $1}`, NotZero()))
+//
+// can be written as:
+//
+//   Cmp(t, gotValue, JSON(`{"id": $^NotZero}`))
+//
+// Unfortunately, only simple operators (in fact those which take no
+// parameters) have shortcuts. They follow:
+//   - Empty    → $^Empty
+//   - Ignore   → $^Ignore
+//   - NaN      → $^NaN
+//   - Nil      → $^Nil
+//   - NotEmpty → $^NotEmpty
+//   - NotNaN   → $^NotNaN
+//   - NotNil   → $^NotNil
+//   - NotZero  → $^NotZero
+//   - Zero     → $^Zero
 //
 // TypeBehind method returns the reflect.Type of the "expectedJSON"
 // json.Unmarshal'ed. So it can be bool, string, float64,

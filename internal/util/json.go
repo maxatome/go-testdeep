@@ -45,7 +45,8 @@ func stringifyPlaceholder(buf []byte, dollar int64) ([]byte, error) {
 		}
 		end = int64(len(buf))
 	endFound:
-	} else if unicode.IsLetter(r) || r == '_' { // Named placeholder: $pïpô12
+	} else if shortcut := r == '^'; shortcut || // Operator shortcut, e.g. $^Zero
+		unicode.IsLetter(r) || r == '_' { // Named placeholder: $pïpô12
 	runes:
 		for max := int64(len(buf)); cur < max; cur += int64(size) {
 			r, size = utf8.DecodeRune(buf[cur:])
@@ -55,6 +56,10 @@ func stringifyPlaceholder(buf []byte, dollar int64) ([]byte, error) {
 				break runes
 			default:
 				if !unicode.IsLetter(r) && !unicode.IsNumber(r) {
+					if shortcut {
+						return nil,
+							fmt.Errorf(`invalid operator shortcut at offset %d`, dollar+1)
+					}
 					return nil,
 						fmt.Errorf(`invalid named placeholder at offset %d`, dollar+1)
 				}
@@ -65,7 +70,7 @@ func stringifyPlaceholder(buf []byte, dollar int64) ([]byte, error) {
 		return nil, fmt.Errorf(`invalid placeholder at offset %d`, dollar+1)
 	}
 
-	// put "" around $éé123 or $12345
+	// put "" around $éé123, $12345 or $^NotZero
 	if cap(buf) == len(buf) {
 		// allocate room for 20 extra placeholders
 		buf = append(make([]byte, 0, len(buf)+40), buf...)

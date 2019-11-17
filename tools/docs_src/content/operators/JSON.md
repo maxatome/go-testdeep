@@ -78,7 +78,7 @@ placeholders are involved here.
 Note that [`Lax`]({{< ref "Lax" >}}) mode is automatically enabled by [`JSON`]({{< ref "JSON" >}}) operator to
 simplify numeric tests.
 
-Last but not least, comments can be embedded in JSON data:
+Comments can be embedded in JSON data:
 
 ```go
 Cmp(t, gotValue,
@@ -102,6 +102,34 @@ Comments, like in go, have 2 forms. To quote the Go language specification:
   end of the line.
 - multi-lines comments start with the character sequence /* and stop
   with the first subsequent character sequence */.
+
+
+Last but not least, simple operators can be directly embedded in
+JSON data without requiring any placeholder but using directly
+`$^OperatorName`. They are operator shortcuts:
+
+```go
+Cmp(t, gotValue, JSON(`{"id": $1}`, NotZero()))
+```
+
+can be written as:
+
+```go
+Cmp(t, gotValue, JSON(`{"id": $^NotZero}`))
+```
+
+Unfortunately, only simple operators (in fact those which take no
+parameters) have shortcuts. They follow:
+
+- [`Empty`]({{< ref "Empty" >}})    → `$^Empty`
+- [`Ignore`]({{< ref "Ignore" >}})   → `$^Ignore`
+- [`NaN`]({{< ref "NaN" >}})      → `$^NaN`
+- [`Nil`]({{< ref "Nil" >}})      → `$^Nil`
+- [`NotEmpty`]({{< ref "NotEmpty" >}}) → `$^NotEmpty`
+- [`NotNaN`]({{< ref "NotNaN" >}})   → `$^NotNaN`
+- [`NotNil`]({{< ref "NotNil" >}})   → `$^NotNil`
+- [`NotZero`]({{< ref "NotZero" >}})  → `$^NotZero`
+- [`Zero`]({{< ref "Zero" >}})     → `$^Zero`
 
 
 [TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of the *expectedJSON*

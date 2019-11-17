@@ -832,9 +832,10 @@ sub process_doc
     $doc =~ s/^(```go\n.*?^```\n)/push(@codes, $1); "CODE<$#codes>"/gems;
 
     $doc =~ s<
-        (\b(${\join('|', grep !/^JSON/, keys %operators)}
+	(\$\^[A-Za-z]+)                    # $1
+      | (\b(${\join('|', grep !/^JSON/, keys %operators)}
            |JSON(?!\ (?:value|data|filename|representation|specification)))
-        (?:\([^)]*\)|\b))                  # $1 $2
+        (?:\([^)]*\)|\b))                  # $2 $3
       | ((?:(?:\[\])+|\*+|\b)(?:bool\b
                                |u?int(?:\*|(?:8|16|32|64)?\b)
                                |float(?:\*|(?:32|64)\b)
@@ -847,7 +848,7 @@ sub process_doc
         |\bmap\[string\]interface\{\}
         |\b(?:len|cap)\(\)
         |\bnil\b
-        |\$(?:\d+|[a-zA-Z_]\w*))           # $3
+        |\$(?:\d+|[a-zA-Z_]\w*))           # $4
       | ((?:\b|\*)fmt\.Stringer
         |\breflect\.Type
         |\bregexp\.MustCompile
@@ -855,52 +856,56 @@ sub process_doc
         |\btime\.[A-Z][a-zA-Z]+
         |\bjson\.(?:Unm|M)arshal
         |\bio\.Reader
-        |\bioutil\.Read(?:All|File))\b     # $4
-      | (\berror\b)                        # $5
-      | (\bTypeBehind(?:\(\)|\b))          # $6
-      | \b(${\join('|', keys %consts)})\b  # $7
-      | \b(smuggler\s+operator)\b          # $8
-      | \b(TestDeep\s+operators?)\b        # $9
-      | (\*?SmuggledGot)\b                 # $10
+        |\bioutil\.Read(?:All|File))\b     # $5
+      | (\berror\b)                        # $6
+      | (\bTypeBehind(?:\(\)|\b))          # $7
+      | \b(${\join('|', keys %consts)})\b  # $8
+      | \b(smuggler\s+operator)\b          # $9
+      | \b(TestDeep\s+operators?)\b        # $10
+      | (\*?SmuggledGot)\b                 # $11
       >{
            if ($1)
            {
-               qq![`$1`]({{< ref "$2" >}})!
+               "`$1`"
            }
-           elsif ($3)
+           elsif ($2)
            {
-               "`$3`"
+               qq![`$2`]({{< ref "$3" >}})!
            }
            elsif ($4)
            {
-               my $all = $4;
+               "`$4`"
+           }
+           elsif ($5)
+           {
+               my $all = $5;
                my($pkg, $fn) = split('\.', $all, 2);
                $pkg =~ s/^\*//;
                "[`$all`](https://golang.org/pkg/$pkg/#$fn)"
            }
-           elsif ($5)
-           {
-               "[`$5`](https://golang.org/pkg/builtin/#error)"
-           }
            elsif ($6)
            {
-               qq![$6]({{< ref "operators#typebehind-method" >}})!
+               "[`$6`](https://golang.org/pkg/builtin/#error)"
            }
            elsif ($7)
            {
-               "[`$7`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind)"
+               qq![$7]({{< ref "operators#typebehind-method" >}})!
            }
            elsif ($8)
            {
-               qq![$8]({{< ref "operators#smuggler-operators" >}})!
+               "[`$8`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind)"
            }
            elsif ($9)
            {
-               qq![$9]({{< ref "operators" >}})!
+               qq![$9]({{< ref "operators#smuggler-operators" >}})!
            }
            elsif ($10)
            {
-               qq![$10](https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot)!
+               qq![$10]({{< ref "operators" >}})!
+           }
+           elsif ($11)
+           {
+               qq![$11](https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot)!
            }
        }geox;
 

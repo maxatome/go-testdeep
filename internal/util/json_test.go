@@ -89,6 +89,8 @@ func TestStringifyPlaceholder(t *testing.T) {
 		{jsonOrig: `[$456a]`, errExpected: `invalid numeric placeholder at offset 2`},
 		// Named placeholder
 		{jsonOrig: `[$name%]`, errExpected: `invalid named placeholder at offset 2`},
+		// Shortcut
+		{jsonOrig: `[$^Op%]`, errExpected: `invalid operator shortcut at offset 2`},
 		// Not a placeholder
 		{jsonOrig: `[$%]`, errExpected: `invalid placeholder at offset 2`},
 		{jsonOrig: `$`, errExpected: `invalid placeholder at offset 1`},
@@ -166,18 +168,18 @@ func TestUnmarshalJSON(t *testing.T) {
 	}
 	t.Logf("OK json.SyntaxError error found: %s", jsonErrPlaceholder)
 
-	// Normal case with several placeholders
+	// Normal case with several placeholders and operator shorcuts
 	err = UnmarshalJSON([]byte(`
 /* comment */ { /* comment
    */ "numeric_placeholders" /* comment */: [ $1, $2, $3 ], // comment
-  "named_placeholders":   [ $foo, $bar, /* commment */ $zip /* comment */ ]
+  "named_placeholders":   [ $foo, $^bar, /* ← op shortcut */ $zip /* comment */ ]
 } // comment`), &target)
 	if err != nil {
 		t.Fatalf("UnmarshalJSON failed: %s", err)
 	}
 	if !reflect.DeepEqual(target, map[string]interface{}{
 		"numeric_placeholders": []interface{}{"$1", "$2", "$3"},
-		"named_placeholders":   []interface{}{"$foo", "$bar", "$zip"},
+		"named_placeholders":   []interface{}{"$foo", "$^bar", "$zip"},
 	}) {
 		t.Errorf("UnmarshalJSON mismatch: %#+v", target)
 	}
