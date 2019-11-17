@@ -124,9 +124,14 @@ func TestContextCollectError(t *testing.T) {
 		t.Error("ctx.CollectError(nil) returned non-nil *Error")
 	}
 
+	err := ctxerr.Context{BooleanError: true}.CollectError(&ctxerr.Error{})
+	if err != ctxerr.BooleanError {
+		t.Error("boolean-ctx.CollectError(X) did not return BooleanError")
+	}
+
 	// !err.Location.IsInitialized() + ctx.CurOperator == nil
 	origErr := &ctxerr.Error{}
-	err := ctx.CollectError(origErr)
+	err = ctx.CollectError(origErr)
 	if err != origErr {
 		t.Error("ctx.CollectError(err) != err")
 	}
