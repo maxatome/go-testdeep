@@ -912,11 +912,15 @@ func ExampleT_JSON_placeholders() {
 	ok = t.JSON(got, `{"age": $age, "fullname": $name}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar"))})
 	fmt.Println("check got with named placeholders:", ok)
 
+	ok = t.JSON(got, `{"age": $^NotZero, "fullname": $^NotEmpty}`, nil)
+	fmt.Println("check got with operator shortcuts:", ok)
+
 	// Output:
 	// check got with numeric placeholders without operators: true
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
+	// check got with operator shortcuts: true
 }
 
 func ExampleT_JSON_file() {
@@ -2314,6 +2318,129 @@ func ExampleT_SubBagOf() {
 	// true
 }
 
+func ExampleT_SubJSONOf_basic() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob",
+		Age:      42,
+	}
+
+	ok := t.SubJSONOf(got, `{"age":42,"fullname":"Bob","gender":"male"}`, nil)
+	fmt.Println("check got with age then fullname:", ok)
+
+	ok = t.SubJSONOf(got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
+	fmt.Println("check got with fullname then age:", ok)
+
+	ok = t.SubJSONOf(got, `
+// This should be the JSON representation of a struct
+{
+  // A person:
+  "fullname": "Bob", // The name of this person
+  "age":      42,    /* The age of this person:
+                        - 42 of course
+                        - to demonstrate a multi-lines comment */
+  "gender":   "male" // This field is ignored as SubJSONOf
+}`, nil)
+	fmt.Println("check got with nicely formatted and commented JSON:", ok)
+
+	ok = t.SubJSONOf(got, `{"fullname":"Bob","gender":"male"}`, nil)
+	fmt.Println("check got without age field:", ok)
+
+	// Output:
+	// check got with age then fullname: true
+	// check got with fullname then age: true
+	// check got with nicely formatted and commented JSON: true
+	// check got without age field: false
+}
+
+func ExampleT_SubJSONOf_placeholders() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+	}
+
+	ok := t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
+	fmt.Println("check got with numeric placeholders without operators:", ok)
+
+	ok = t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	fmt.Println("check got with numeric placeholders:", ok)
+
+	ok = t.SubJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	fmt.Println("check got with double-quoted numeric placeholders:", ok)
+
+	ok = t.SubJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar")), Tag("gender", NotEmpty())})
+	fmt.Println("check got with named placeholders:", ok)
+
+	ok = t.SubJSONOf(got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
+	fmt.Println("check got with operator shortcuts:", ok)
+
+	// Output:
+	// check got with numeric placeholders without operators: true
+	// check got with numeric placeholders: true
+	// check got with double-quoted numeric placeholders: true
+	// check got with named placeholders: true
+	// check got with operator shortcuts: true
+}
+
+func ExampleT_SubJSONOf_file() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+		Gender:   "male",
+	}
+
+	tmpDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir) // clean up
+
+	filename := tmpDir + "/test.json"
+	if err = ioutil.WriteFile(filename, []byte(`
+{
+  "fullname": "$name",
+  "age":      "$age",
+  "gender":   "$gender",
+  "details":  {
+    "city": "TestCity",
+    "zip":  666
+  }
+}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// OK let's test with this file
+	ok := t.SubJSONOf(got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from file name:", ok)
+
+	// When the file is already open
+	file, err := os.Open(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok = t.SubJSONOf(got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from io.Reader:", ok)
+
+	// Output:
+	// Full match from file name: true
+	// Full match from io.Reader: true
+}
+
 func ExampleT_SubMapOf_map() {
 	t := NewT(&testing.T{})
 
@@ -2384,6 +2511,141 @@ func ExampleT_SuperBagOf() {
 	// Output:
 	// true
 	// true
+}
+
+func ExampleT_SuperJSONOf_basic() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+		City     string `json:"city"`
+		Zip      int    `json:"zip"`
+	}{
+		Fullname: "Bob",
+		Age:      42,
+		Gender:   "male",
+		City:     "TestCity",
+		Zip:      666,
+	}
+
+	ok := t.SuperJSONOf(got, `{"age":42,"fullname":"Bob","gender":"male"}`, nil)
+	fmt.Println("check got with age then fullname:", ok)
+
+	ok = t.SuperJSONOf(got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
+	fmt.Println("check got with fullname then age:", ok)
+
+	ok = t.SuperJSONOf(got, `
+// This should be the JSON representation of a struct
+{
+  // A person:
+  "fullname": "Bob", // The name of this person
+  "age":      42,    /* The age of this person:
+                        - 42 of course
+                        - to demonstrate a multi-lines comment */
+  "gender":   "male" // The gender!
+}`, nil)
+	fmt.Println("check got with nicely formatted and commented JSON:", ok)
+
+	ok = t.SuperJSONOf(got, `{"fullname":"Bob","gender":"male","details":{}}`, nil)
+	fmt.Println("check got with details field:", ok)
+
+	// Output:
+	// check got with age then fullname: true
+	// check got with fullname then age: true
+	// check got with nicely formatted and commented JSON: true
+	// check got with details field: false
+}
+
+func ExampleT_SuperJSONOf_placeholders() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+		City     string `json:"city"`
+		Zip      int    `json:"zip"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+		Gender:   "male",
+		City:     "TestCity",
+		Zip:      666,
+	}
+
+	ok := t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
+	fmt.Println("check got with numeric placeholders without operators:", ok)
+
+	ok = t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	fmt.Println("check got with numeric placeholders:", ok)
+
+	ok = t.SuperJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	fmt.Println("check got with double-quoted numeric placeholders:", ok)
+
+	ok = t.SuperJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar")), Tag("gender", NotEmpty())})
+	fmt.Println("check got with named placeholders:", ok)
+
+	ok = t.SuperJSONOf(got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
+	fmt.Println("check got with operator shortcuts:", ok)
+
+	// Output:
+	// check got with numeric placeholders without operators: true
+	// check got with numeric placeholders: true
+	// check got with double-quoted numeric placeholders: true
+	// check got with named placeholders: true
+	// check got with operator shortcuts: true
+}
+
+func ExampleT_SuperJSONOf_file() {
+	t := NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+		City     string `json:"city"`
+		Zip      int    `json:"zip"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+		Gender:   "male",
+		City:     "TestCity",
+		Zip:      666,
+	}
+
+	tmpDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir) // clean up
+
+	filename := tmpDir + "/test.json"
+	if err = ioutil.WriteFile(filename, []byte(`
+{
+  "fullname": "$name",
+  "age":      "$age",
+  "gender":   "$gender"
+}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// OK let's test with this file
+	ok := t.SuperJSONOf(got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from file name:", ok)
+
+	// When the file is already open
+	file, err := os.Open(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok = t.SuperJSONOf(got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	fmt.Println("Full match from io.Reader:", ok)
+
+	// Output:
+	// Full match from file name: true
+	// Full match from io.Reader: true
 }
 
 func ExampleT_SuperMapOf_map() {

@@ -231,6 +231,10 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		return ctx.CollectError(err)
 	}
 
+	return m.match(ctx, got)
+}
+
+func (m *tdMap) match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	err = m.checkType(ctx, got)
 	if err != nil {
 		return ctx.CollectError(err)

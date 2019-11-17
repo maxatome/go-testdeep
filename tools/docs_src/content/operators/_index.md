@@ -148,6 +148,9 @@ weight = 15
 [`SubBagOf`]({{< ref "SubBagOf" >}})
 : compares the contents of an array or a slice without taking care of the order of items but with potentially some exclusions
 
+[`SubJSONOf`]({{< ref "SubJSONOf" >}})
+: compares struct or map against JSON representation but with potentially some exclusions
+
 [`SubMapOf`]({{< ref "SubMapOf" >}})
 : compares the contents of a map but with potentially some exclusions
 
@@ -156,6 +159,9 @@ weight = 15
 
 [`SuperBagOf`]({{< ref "SuperBagOf" >}})
 : compares the contents of an array or a slice without taking care of the order of items but with potentially some extra items
+
+[`SuperJSONOf`]({{< ref "SuperJSONOf" >}})
+: compares struct or map against JSON representation but with potentially extra entries
 
 [`SuperMapOf`]({{< ref "SuperMapOf" >}})
 : compares the contents of a map but with potentially some extra entries
@@ -282,9 +288,11 @@ The following operators are smuggler ones:
 [`String`]: {{< ref "String" >}}
 [`Struct`]: {{< ref "Struct" >}}
 [`SubBagOf`]: {{< ref "SubBagOf" >}}
+[`SubJSONOf`]: {{< ref "SubJSONOf" >}}
 [`SubMapOf`]: {{< ref "SubMapOf" >}}
 [`SubSetOf`]: {{< ref "SubSetOf" >}}
 [`SuperBagOf`]: {{< ref "SuperBagOf" >}}
+[`SuperJSONOf`]: {{< ref "SuperJSONOf" >}}
 [`SuperMapOf`]: {{< ref "SuperMapOf" >}}
 [`SuperSetOf`]: {{< ref "SuperSetOf" >}}
 [`Tag`]: {{< ref "Tag" >}}
@@ -337,9 +345,11 @@ The following operators are smuggler ones:
 [`CmpString`]: {{< ref "String#cmpstring-shortcut" >}}
 [`CmpStruct`]: {{< ref "Struct#cmpstruct-shortcut" >}}
 [`CmpSubBagOf`]: {{< ref "SubBagOf#cmpsubbagof-shortcut" >}}
+[`CmpSubJSONOf`]: {{< ref "SubJSONOf#cmpsubjsonof-shortcut" >}}
 [`CmpSubMapOf`]: {{< ref "SubMapOf#cmpsubmapof-shortcut" >}}
 [`CmpSubSetOf`]: {{< ref "SubSetOf#cmpsubsetof-shortcut" >}}
 [`CmpSuperBagOf`]: {{< ref "SuperBagOf#cmpsuperbagof-shortcut" >}}
+[`CmpSuperJSONOf`]: {{< ref "SuperJSONOf#cmpsuperjsonof-shortcut" >}}
 [`CmpSuperMapOf`]: {{< ref "SuperMapOf#cmpsupermapof-shortcut" >}}
 [`CmpSuperSetOf`]: {{< ref "SuperSetOf#cmpsupersetof-shortcut" >}}
 [`CmpTruncTime`]: {{< ref "TruncTime#cmptrunctime-shortcut" >}}
@@ -391,9 +401,11 @@ The following operators are smuggler ones:
 [`T.String`]: {{< ref "String#t-string-shortcut" >}}
 [`T.Struct`]: {{< ref "Struct#t-struct-shortcut" >}}
 [`T.SubBagOf`]: {{< ref "SubBagOf#t-subbagof-shortcut" >}}
+[`T.SubJSONOf`]: {{< ref "SubJSONOf#t-subjsonof-shortcut" >}}
 [`T.SubMapOf`]: {{< ref "SubMapOf#t-submapof-shortcut" >}}
 [`T.SubSetOf`]: {{< ref "SubSetOf#t-subsetof-shortcut" >}}
 [`T.SuperBagOf`]: {{< ref "SuperBagOf#t-superbagof-shortcut" >}}
+[`T.SuperJSONOf`]: {{< ref "SuperJSONOf#t-superjsonof-shortcut" >}}
 [`T.SuperMapOf`]: {{< ref "SuperMapOf#t-supermapof-shortcut" >}}
 [`T.SuperSetOf`]: {{< ref "SuperSetOf#t-supersetof-shortcut" >}}
 [`T.TruncTime`]: {{< ref "TruncTime#t-trunctime-shortcut" >}}

@@ -1000,11 +1000,15 @@ func ExampleJSON_placeholders() {
 			Tag("name", HasSuffix("Foobar"))))
 	fmt.Println("check got with named placeholders:", ok)
 
+	ok = Cmp(t, got, JSON(`{"age": $^NotZero, "fullname": $^NotEmpty}`))
+	fmt.Println("check got with operator shortcuts:", ok)
+
 	// Output:
 	// check got with numeric placeholders without operators: true
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
+	// check got with operator shortcuts: true
 }
 
 func ExampleJSON_file() {
@@ -2539,6 +2543,152 @@ func ExampleSubBagOf() {
 	// true
 }
 
+func ExampleSubJSONOf_basic() {
+	t := &testing.T{}
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob",
+		Age:      42,
+	}
+
+	ok := Cmp(t, got, SubJSONOf(`{"age":42,"fullname":"Bob","gender":"male"}`))
+	fmt.Println("check got with age then fullname:", ok)
+
+	ok = Cmp(t, got, SubJSONOf(`{"fullname":"Bob","age":42,"gender":"male"}`))
+	fmt.Println("check got with fullname then age:", ok)
+
+	ok = Cmp(t, got, SubJSONOf(`
+// This should be the JSON representation of a struct
+{
+  // A person:
+  "fullname": "Bob", // The name of this person
+  "age":      42,    /* The age of this person:
+                        - 42 of course
+                        - to demonstrate a multi-lines comment */
+  "gender":   "male" // This field is ignored as SubJSONOf
+}`))
+	fmt.Println("check got with nicely formatted and commented JSON:", ok)
+
+	ok = Cmp(t, got, SubJSONOf(`{"fullname":"Bob","gender":"male"}`))
+	fmt.Println("check got without age field:", ok)
+
+	// Output:
+	// check got with age then fullname: true
+	// check got with fullname then age: true
+	// check got with nicely formatted and commented JSON: true
+	// check got without age field: false
+}
+
+func ExampleSubJSONOf_placeholders() {
+	t := &testing.T{}
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+	}
+
+	ok := Cmp(t, got,
+		SubJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
+			42, "Bob Foobar", "male"))
+	fmt.Println("check got with numeric placeholders without operators:", ok)
+
+	ok = Cmp(t, got,
+		SubJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
+			Between(40, 45),
+			HasSuffix("Foobar"),
+			NotEmpty()))
+	fmt.Println("check got with numeric placeholders:", ok)
+
+	ok = Cmp(t, got,
+		SubJSONOf(`{"age": "$1", "fullname": "$2", "gender": "$3"}`,
+			Between(40, 45),
+			HasSuffix("Foobar"),
+			NotEmpty()))
+	fmt.Println("check got with double-quoted numeric placeholders:", ok)
+
+	ok = Cmp(t, got,
+		SubJSONOf(`{"age": $age, "fullname": $name, "gender": $gender}`,
+			Tag("age", Between(40, 45)),
+			Tag("name", HasSuffix("Foobar")),
+			Tag("gender", NotEmpty())))
+	fmt.Println("check got with named placeholders:", ok)
+
+	ok = Cmp(t, got,
+		SubJSONOf(`{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`))
+	fmt.Println("check got with operator shortcuts:", ok)
+
+	// Output:
+	// check got with numeric placeholders without operators: true
+	// check got with numeric placeholders: true
+	// check got with double-quoted numeric placeholders: true
+	// check got with named placeholders: true
+	// check got with operator shortcuts: true
+}
+
+func ExampleSubJSONOf_file() {
+	t := &testing.T{}
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+		Gender:   "male",
+	}
+
+	tmpDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir) // clean up
+
+	filename := tmpDir + "/test.json"
+	if err = ioutil.WriteFile(filename, []byte(`
+{
+  "fullname": "$name",
+  "age":      "$age",
+  "gender":   "$gender",
+  "details":  {
+    "city": "TestCity",
+    "zip":  666
+  }
+}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// OK let's test with this file
+	ok := Cmp(t, got,
+		SubJSONOf(filename,
+			Tag("name", HasPrefix("Bob")),
+			Tag("age", Between(40, 45)),
+			Tag("gender", Re(`^(male|female)\z`))))
+	fmt.Println("Full match from file name:", ok)
+
+	// When the file is already open
+	file, err := os.Open(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok = Cmp(t, got,
+		SubJSONOf(file,
+			Tag("name", HasPrefix("Bob")),
+			Tag("age", Between(40, 45)),
+			Tag("gender", Re(`^(male|female)\z`))))
+	fmt.Println("Full match from io.Reader:", ok)
+
+	// Output:
+	// Full match from file name: true
+	// Full match from io.Reader: true
+}
+
 func ExampleSubMapOf_map() {
 	t := &testing.T{}
 
@@ -2612,6 +2762,165 @@ func ExampleSuperBagOf() {
 	// Output:
 	// true
 	// true
+}
+
+func ExampleSuperJSONOf_basic() {
+	t := &testing.T{}
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+		City     string `json:"city"`
+		Zip      int    `json:"zip"`
+	}{
+		Fullname: "Bob",
+		Age:      42,
+		Gender:   "male",
+		City:     "TestCity",
+		Zip:      666,
+	}
+
+	ok := Cmp(t, got, SuperJSONOf(`{"age":42,"fullname":"Bob","gender":"male"}`))
+	fmt.Println("check got with age then fullname:", ok)
+
+	ok = Cmp(t, got, SuperJSONOf(`{"fullname":"Bob","age":42,"gender":"male"}`))
+	fmt.Println("check got with fullname then age:", ok)
+
+	ok = Cmp(t, got, SuperJSONOf(`
+// This should be the JSON representation of a struct
+{
+  // A person:
+  "fullname": "Bob", // The name of this person
+  "age":      42,    /* The age of this person:
+                        - 42 of course
+                        - to demonstrate a multi-lines comment */
+  "gender":   "male" // The gender!
+}`))
+	fmt.Println("check got with nicely formatted and commented JSON:", ok)
+
+	ok = Cmp(t, got,
+		SuperJSONOf(`{"fullname":"Bob","gender":"male","details":{}}`))
+	fmt.Println("check got with details field:", ok)
+
+	// Output:
+	// check got with age then fullname: true
+	// check got with fullname then age: true
+	// check got with nicely formatted and commented JSON: true
+	// check got with details field: false
+}
+
+func ExampleSuperJSONOf_placeholders() {
+	t := &testing.T{}
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+		City     string `json:"city"`
+		Zip      int    `json:"zip"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+		Gender:   "male",
+		City:     "TestCity",
+		Zip:      666,
+	}
+
+	ok := Cmp(t, got,
+		SuperJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
+			42, "Bob Foobar", "male"))
+	fmt.Println("check got with numeric placeholders without operators:", ok)
+
+	ok = Cmp(t, got,
+		SuperJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
+			Between(40, 45),
+			HasSuffix("Foobar"),
+			NotEmpty()))
+	fmt.Println("check got with numeric placeholders:", ok)
+
+	ok = Cmp(t, got,
+		SuperJSONOf(`{"age": "$1", "fullname": "$2", "gender": "$3"}`,
+			Between(40, 45),
+			HasSuffix("Foobar"),
+			NotEmpty()))
+	fmt.Println("check got with double-quoted numeric placeholders:", ok)
+
+	ok = Cmp(t, got,
+		SuperJSONOf(`{"age": $age, "fullname": $name, "gender": $gender}`,
+			Tag("age", Between(40, 45)),
+			Tag("name", HasSuffix("Foobar")),
+			Tag("gender", NotEmpty())))
+	fmt.Println("check got with named placeholders:", ok)
+
+	ok = Cmp(t, got,
+		SuperJSONOf(`{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`))
+	fmt.Println("check got with operator shortcuts:", ok)
+
+	// Output:
+	// check got with numeric placeholders without operators: true
+	// check got with numeric placeholders: true
+	// check got with double-quoted numeric placeholders: true
+	// check got with named placeholders: true
+	// check got with operator shortcuts: true
+}
+
+func ExampleSuperJSONOf_file() {
+	t := &testing.T{}
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+		Gender   string `json:"gender"`
+		City     string `json:"city"`
+		Zip      int    `json:"zip"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+		Gender:   "male",
+		City:     "TestCity",
+		Zip:      666,
+	}
+
+	tmpDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir) // clean up
+
+	filename := tmpDir + "/test.json"
+	if err = ioutil.WriteFile(filename, []byte(`
+{
+  "fullname": "$name",
+  "age":      "$age",
+  "gender":   "$gender"
+}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// OK let's test with this file
+	ok := Cmp(t, got,
+		SuperJSONOf(filename,
+			Tag("name", HasPrefix("Bob")),
+			Tag("age", Between(40, 45)),
+			Tag("gender", Re(`^(male|female)\z`))))
+	fmt.Println("Full match from file name:", ok)
+
+	// When the file is already open
+	file, err := os.Open(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok = Cmp(t, got,
+		SuperJSONOf(file,
+			Tag("name", HasPrefix("Bob")),
+			Tag("age", Between(40, 45)),
+			Tag("gender", Re(`^(male|female)\z`))))
+	fmt.Println("Full match from io.Reader:", ok)
+
+	// Output:
+	// Full match from file name: true
+	// Full match from io.Reader: true
 }
 
 func ExampleSuperMapOf_map() {

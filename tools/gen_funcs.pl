@@ -834,7 +834,7 @@ sub process_doc
     $doc =~ s<
 	(\$\^[A-Za-z]+)                    # $1
       | (\b(${\join('|', grep !/^JSON/, keys %operators)}
-           |JSON(?!\ (?:value|data|filename|representation|specification)))
+           |JSON(?!\s+(?:value|data|filename|object|representation|specification)))
         (?:\([^)]*\)|\b))                  # $2 $3
       | ((?:(?:\[\])+|\*+|\b)(?:bool\b
                                |u?int(?:\*|(?:8|16|32|64)?\b)

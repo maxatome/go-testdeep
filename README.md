@@ -259,9 +259,11 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`String`]: https://go-testdeep.zetta.rocks/operators/string/
 [`Struct`]: https://go-testdeep.zetta.rocks/operators/struct/
 [`SubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/
+[`SubJSONOf`]: https://go-testdeep.zetta.rocks/operators/subjsonof/
 [`SubMapOf`]: https://go-testdeep.zetta.rocks/operators/submapof/
 [`SubSetOf`]: https://go-testdeep.zetta.rocks/operators/subsetof/
 [`SuperBagOf`]: https://go-testdeep.zetta.rocks/operators/superbagof/
+[`SuperJSONOf`]: https://go-testdeep.zetta.rocks/operators/superjsonof/
 [`SuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/
 [`SuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/
 [`Tag`]: https://go-testdeep.zetta.rocks/operators/tag/
@@ -314,9 +316,11 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpString`]:https://go-testdeep.zetta.rocks/operators/string/#cmpstring-shortcut
 [`CmpStruct`]:https://go-testdeep.zetta.rocks/operators/struct/#cmpstruct-shortcut
 [`CmpSubBagOf`]:https://go-testdeep.zetta.rocks/operators/subbagof/#cmpsubbagof-shortcut
+[`CmpSubJSONOf`]:https://go-testdeep.zetta.rocks/operators/subjsonof/#cmpsubjsonof-shortcut
 [`CmpSubMapOf`]:https://go-testdeep.zetta.rocks/operators/submapof/#cmpsubmapof-shortcut
 [`CmpSubSetOf`]:https://go-testdeep.zetta.rocks/operators/subsetof/#cmpsubsetof-shortcut
 [`CmpSuperBagOf`]:https://go-testdeep.zetta.rocks/operators/superbagof/#cmpsuperbagof-shortcut
+[`CmpSuperJSONOf`]:https://go-testdeep.zetta.rocks/operators/superjsonof/#cmpsuperjsonof-shortcut
 [`CmpSuperMapOf`]:https://go-testdeep.zetta.rocks/operators/supermapof/#cmpsupermapof-shortcut
 [`CmpSuperSetOf`]:https://go-testdeep.zetta.rocks/operators/supersetof/#cmpsupersetof-shortcut
 [`CmpTruncTime`]:https://go-testdeep.zetta.rocks/operators/trunctime/#cmptrunctime-shortcut
@@ -368,9 +372,11 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.String`]: https://go-testdeep.zetta.rocks/operators/string/#t-string-shortcut
 [`T.Struct`]: https://go-testdeep.zetta.rocks/operators/struct/#t-struct-shortcut
 [`T.SubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/#t-subbagof-shortcut
+[`T.SubJSONOf`]: https://go-testdeep.zetta.rocks/operators/subjsonof/#t-subjsonof-shortcut
 [`T.SubMapOf`]: https://go-testdeep.zetta.rocks/operators/submapof/#t-submapof-shortcut
 [`T.SubSetOf`]: https://go-testdeep.zetta.rocks/operators/subsetof/#t-subsetof-shortcut
 [`T.SuperBagOf`]: https://go-testdeep.zetta.rocks/operators/superbagof/#t-superbagof-shortcut
+[`T.SuperJSONOf`]: https://go-testdeep.zetta.rocks/operators/superjsonof/#t-superjsonof-shortcut
 [`T.SuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/#t-supermapof-shortcut
 [`T.SuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/#t-supersetof-shortcut
 [`T.TruncTime`]: https://go-testdeep.zetta.rocks/operators/trunctime/#t-trunctime-shortcut
