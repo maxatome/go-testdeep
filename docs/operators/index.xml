@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Operators on go-testdeep</title>
@@ -121,7 +121,7 @@ var id int64 if Cmp(t, CreateRecord(&amp;#34;test&amp;#34;), JSON(`{&amp;#34;id&
       <guid>https://go-testdeep.zetta.rocks/operators/code/</guid>
       <description>func Code(fn interface{}) TestDeep Code operator allows to check data using a custom function. So fn is a function that must take one parameter whose type must be the same as the type of the compared value.
 fn can return a single bool kind value, telling that yes or no the custom test is successful:
-Cmp(t, gotTime, Code(func (date time.Time) bool { return date.Year() == 2018 })) or two values (bool, string) kinds.</description>
+Cmp(t, gotTime, Code(func(date time.Time) bool { return date.Year() == 2018 })) or two values (bool, string) kinds.</description>
     </item>
     
     <item>
@@ -141,7 +141,7 @@ list := []int{12, 34, 28} Cmp(t, list, Contains(34)) // succeeds Cmp(t, list, Co
       
       <guid>https://go-testdeep.zetta.rocks/operators/containskey/</guid>
       <description>func ContainsKey(expectedValue interface{}) TestDeep ContainsKey is a smuggler operator and works on maps only. It compares each key of map against expectedValue.
-hash := map[string]int{&amp;#34;foo&amp;#34;: 12, &amp;#34;bar&amp;#34;: 34, &amp;#34;zip&amp;#34;: 28} Cmp(t, hash, ContainsKey(&amp;#34;foo&amp;#34;)) // succeeds Cmp(t, hash, ContainsKey(HasPrefix(&amp;#34;z&amp;#34;))) // succeeds Cmp(t, hash, ContainsKey(HasPrefix(&amp;#34;x&amp;#34;)) // fails  hnum := map[int]string{1: &amp;#34;foo&amp;#34;, 42: &amp;#34;bar&amp;#34;} Cmp(t, hash, ContainsKey(42)) // succeeds Cmp(t, hash, ContainsKey(Between(40, 45)) // succeeds When ContainsKey(nil) is used, nil is automatically converted to a typed nil on the fly to avoid confusion (if the map key type allows it of course.</description>
+hash := map[string]int{&amp;#34;foo&amp;#34;: 12, &amp;#34;bar&amp;#34;: 34, &amp;#34;zip&amp;#34;: 28} Cmp(t, hash, ContainsKey(&amp;#34;foo&amp;#34;)) // succeeds Cmp(t, hash, ContainsKey(HasPrefix(&amp;#34;z&amp;#34;))) // succeeds Cmp(t, hash, ContainsKey(HasPrefix(&amp;#34;x&amp;#34;))) // fails  hnum := map[int]string{1: &amp;#34;foo&amp;#34;, 42: &amp;#34;bar&amp;#34;} Cmp(t, hash, ContainsKey(42)) // succeeds Cmp(t, hash, ContainsKey(Between(40, 45))) // succeeds When ContainsKey(nil) is used, nil is automatically converted to a typed nil on the fly to avoid confusion (if the map key type allows it of course.</description>
     </item>
     
     <item>
@@ -557,6 +557,16 @@ Cmp(t, []int{1}, SubBagOf(1, 1, 2)) // succeeds Cmp(t, []int{1, 1, 1}, SubBagOf(
     </item>
     
     <item>
+      <title>SubJSONOf</title>
+      <link>https://go-testdeep.zetta.rocks/operators/subjsonof/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://go-testdeep.zetta.rocks/operators/subjsonof/</guid>
+      <description>func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep SubJSONOf operator allows to compare the JSON representation of data against expectedJSON. Unlike JSON operator, marshalled data must be a JSON object/map (aka. {…}). expectedJSON can be a:
+ string containing JSON data like {&amp;quot;fullname&amp;quot;:&amp;quot;Bob&amp;quot;,&amp;quot;age&amp;quot;:42} string containing a JSON filename, ending with &amp;ldquo;.json&amp;rdquo; (its content is ioutil.ReadFile before unmarshaling) []byte containing JSON data io.Reader stream containing JSON data (is ioutil.ReadAll before unmarshaling)  JSON data contained in expectedJSON must be a JSON object/map (aka.</description>
+    </item>
+    
+    <item>
       <title>SubMapOf</title>
       <link>https://go-testdeep.zetta.rocks/operators/submapof/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -588,6 +598,16 @@ Cmp(t, []int{1, 1}, SubSetOf(1, 2)) // succeeds Cmp(t, []int{1, 1, 2}, SubSetOf(
       <description>func SuperBagOf(expectedItems ...interface{}) TestDeep SuperBagOf operator compares the contents of an array or a slice (or a pointer on array/slice) without taking care of the order of items.
 During a match, each expected item should match in the compared array/slice. But some items in the compared array/slice may not be expected.
 Cmp(t, []int{1, 1, 2}, SuperBagOf(1)) // succeeds Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing  See also  SuperBagOf godoc.</description>
+    </item>
+    
+    <item>
+      <title>SuperJSONOf</title>
+      <link>https://go-testdeep.zetta.rocks/operators/superjsonof/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://go-testdeep.zetta.rocks/operators/superjsonof/</guid>
+      <description>func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep SuperJSONOf operator allows to compare the JSON representation of data against expectedJSON. Unlike JSON operator, marshalled data must be a JSON object/map (aka. {…}). expectedJSON can be a:
+ string containing JSON data like {&amp;quot;fullname&amp;quot;:&amp;quot;Bob&amp;quot;,&amp;quot;age&amp;quot;:42} string containing a JSON filename, ending with &amp;ldquo;.json&amp;rdquo; (its content is ioutil.ReadFile before unmarshaling) []byte containing JSON data io.Reader stream containing JSON data (is ioutil.ReadAll before unmarshaling)  JSON data contained in expectedJSON must be a JSON object/map (aka.</description>
     </item>
     
     <item>
