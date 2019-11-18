@@ -27,19 +27,16 @@ go-testdeep
 
 ## Latest news
 
+- 2019/11/18:
+  - new [`SubJSONOf`] & [`SuperJSONOf`] operators (and their
+    friends [`CmpSubJSONOf`], [`CmpSuperJSONOf`], [`T.SubJSONOf`] &
+    [`T.SuperJSONOf`]),
+  - JSON data can now contain comments and some operator shortcuts;
 - 2019/11/01: new [`Catch`] operator;
 - 2019/10/31: new [`JSON`] operator (and its friends [`CmpJSON`]
   & [`T.JSON`] along with new fully dedicated [`Tag`] operator;
 - 2019/10/29: new web site
   [go-testdeep.zetta.rocks](https://go-testdeep.zetta.rocks/)
-- 2019/09/22: new
-  [`BeLax` feature](https://godoc.org/github.com/maxatome/go-testdeep#T.BeLax)
-  with its
-  [`Lax`](https://godoc.org/github.com/maxatome/go-testdeep#Lax)
-  operator counterpart (and its friends
-  [`CmpLax`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLax)
-  &
-  [`T.CmpLax`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax));
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
