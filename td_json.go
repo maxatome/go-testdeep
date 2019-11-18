@@ -503,12 +503,12 @@ var _ TestDeep = &tdMapJSON{}
 //     Name string `json:"name"`
 //     Age  int    `json:"age"`
 //   }
-//   got := MyStruct
+//   got := MyStruct{
 //     Name: "Bob",
 //     Age:  42,
 //   }
 //   Cmp(t, got, SubJSONOf(`{"name": "Bob", "age": 42, "city": "NY"}`)) // succeeds
-//   Cmp(t, got, SubJSONOf(`{"name": "Bob", "zip": 666}`)) // fails, extra "age"
+//   Cmp(t, got, SubJSONOf(`{"name": "Bob", "zip": 666}`))              // fails, extra "age"
 //
 // "expectedJSON" JSON value can contain placeholders. The "params"
 // are for any placeholder parameters in "expectedJSON". "params" can
@@ -658,7 +658,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //     Age  int    `json:"age"`
 //     City string `json:"city"`
 //   }
-//   got := MyStruct
+//   got := MyStruct{
 //     Name: "Bob",
 //     Age:  42,
 //     City: "TestCity",

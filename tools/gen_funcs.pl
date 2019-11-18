@@ -11,6 +11,8 @@ use warnings;
 use autodie;
 use 5.010;
 
+use IPC::Open2;
+
 die "usage $0 [-h] DIR" if @ARGV == 0 or $ARGV[0] =~ /^--?h/;
 
 my $HEADER = <<'EOH';
@@ -145,6 +147,7 @@ while (readdir $dh)
             die "TAB detected in $func operator documentation" if $doc =~ /\t/;
 
             $operators{$func} = {
+		name      => $func,
                 summary   => delete $ops{$func},
                 input     => delete $inputs{$func},
                 doc       => $doc,
@@ -915,5 +918,52 @@ sub process_doc
                             @{$op->{args}})})"/*$1*/g;
     }
 
-    return $doc =~ s/^CODE<(\d+)>/$codes[$1]/gmr;
+    return $doc =~ s/^CODE<(\d+)>/go_format($op, $codes[$1])/egmr;
+}
+
+sub go_format
+{
+    my($operator, $code) = @_;
+
+    $code =~ s/^```go\n// or return $code;
+    $code =~ s/\n```\n\z//;
+
+    my $pid = open2(my $fmt_out, my $fmt_in, 'gofmt', '-s');
+
+    print $fmt_in <<EOM;
+package x
+
+//line $operator->{name}.go:1
+func x() {
+$code
+}
+EOM
+    close $fmt_in;
+
+    (my $new_code = do { local $/; <$fmt_out> }) =~ s/[^\t]+//;
+    $new_code =~ s/\n\}\n\z//;
+    $new_code =~ s/^\t//gm;
+
+    waitpid $pid, 0;
+    if ($? != 0)
+    {
+	die <<EOD
+gofmt of following example for function $operator->{name} failed:
+$code
+EOD
+    }
+
+    $new_code =~ s/^(\t+)/"  " x length $1/gme;
+
+    if ($new_code ne $code)
+    {
+	die <<EOD;
+Code example function $operator->{name} is not correctly indented:
+$code
+------------------ should be ------------------
+$new_code
+EOD
+    }
+
+    return "```go\n$new_code\n```\n";
 }

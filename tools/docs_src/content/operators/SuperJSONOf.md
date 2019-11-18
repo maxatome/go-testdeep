@@ -30,7 +30,7 @@ type MyStruct struct {
   Age  int    `json:"age"`
   City string `json:"city"`
 }
-got := MyStruct
+got := MyStruct{
   Name: "Bob",
   Age:  42,
   City: "TestCity",
