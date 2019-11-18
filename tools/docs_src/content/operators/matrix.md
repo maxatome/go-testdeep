@@ -68,12 +68,14 @@ weight: 1
 | [`String`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`String`] |
 | [`Struct`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ptr on struct | ✓ | ✗ | ✗ | [`Struct`] |
 | [`SubBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubBagOf`] |
+| [`SubJSONOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ptr on map/struct | ✓ | ✗ | ✗ | [`SubJSONOf`] |
 | [`SubMapOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map | ✓ | ✗ | ✗ | [`SubMapOf`] |
 | [`SubSetOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`] |
-| [`SuperBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`SuperBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`] |
+| [`SuperJSONOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ptr on map/struct | ✓ | ✗ | ✗ | [`SuperJSONOf`] |
 | [`SuperMapOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map | ✓ | ✗ | ✗ | [`SuperMapOf`] |
 | [`SuperSetOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperSetOf`] |
 | [`Tag`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Tag`] |
@@ -140,9 +142,11 @@ weight: 1
 [`String`]: {{< ref "String" >}}
 [`Struct`]: {{< ref "Struct" >}}
 [`SubBagOf`]: {{< ref "SubBagOf" >}}
+[`SubJSONOf`]: {{< ref "SubJSONOf" >}}
 [`SubMapOf`]: {{< ref "SubMapOf" >}}
 [`SubSetOf`]: {{< ref "SubSetOf" >}}
 [`SuperBagOf`]: {{< ref "SuperBagOf" >}}
+[`SuperJSONOf`]: {{< ref "SuperJSONOf" >}}
 [`SuperMapOf`]: {{< ref "SuperMapOf" >}}
 [`SuperSetOf`]: {{< ref "SuperSetOf" >}}
 [`Tag`]: {{< ref "Tag" >}}
@@ -195,9 +199,11 @@ weight: 1
 [`CmpString`]: {{< ref "String#cmpstring-shortcut" >}}
 [`CmpStruct`]: {{< ref "Struct#cmpstruct-shortcut" >}}
 [`CmpSubBagOf`]: {{< ref "SubBagOf#cmpsubbagof-shortcut" >}}
+[`CmpSubJSONOf`]: {{< ref "SubJSONOf#cmpsubjsonof-shortcut" >}}
 [`CmpSubMapOf`]: {{< ref "SubMapOf#cmpsubmapof-shortcut" >}}
 [`CmpSubSetOf`]: {{< ref "SubSetOf#cmpsubsetof-shortcut" >}}
 [`CmpSuperBagOf`]: {{< ref "SuperBagOf#cmpsuperbagof-shortcut" >}}
+[`CmpSuperJSONOf`]: {{< ref "SuperJSONOf#cmpsuperjsonof-shortcut" >}}
 [`CmpSuperMapOf`]: {{< ref "SuperMapOf#cmpsupermapof-shortcut" >}}
 [`CmpSuperSetOf`]: {{< ref "SuperSetOf#cmpsupersetof-shortcut" >}}
 [`CmpTruncTime`]: {{< ref "TruncTime#cmptrunctime-shortcut" >}}
@@ -249,9 +255,11 @@ weight: 1
 [`T.String`]: {{< ref "String#t-string-shortcut" >}}
 [`T.Struct`]: {{< ref "Struct#t-struct-shortcut" >}}
 [`T.SubBagOf`]: {{< ref "SubBagOf#t-subbagof-shortcut" >}}
+[`T.SubJSONOf`]: {{< ref "SubJSONOf#t-subjsonof-shortcut" >}}
 [`T.SubMapOf`]: {{< ref "SubMapOf#t-submapof-shortcut" >}}
 [`T.SubSetOf`]: {{< ref "SubSetOf#t-subsetof-shortcut" >}}
 [`T.SuperBagOf`]: {{< ref "SuperBagOf#t-superbagof-shortcut" >}}
+[`T.SuperJSONOf`]: {{< ref "SuperJSONOf#t-superjsonof-shortcut" >}}
 [`T.SuperMapOf`]: {{< ref "SuperMapOf#t-supermapof-shortcut" >}}
 [`T.SuperSetOf`]: {{< ref "SuperSetOf#t-supersetof-shortcut" >}}
 [`T.TruncTime`]: {{< ref "TruncTime#t-trunctime-shortcut" >}}
@@ -513,7 +521,9 @@ Operators likely to succeed for each go type:
 - [`NotZero`]
 - [`Shallow`]
 - [`Smuggle`]
+- [`SubJSONOf`]
 - [`SubMapOf`]
+- [`SuperJSONOf`]
 - [`SuperMapOf`]
 - [`Tag`]
 - [`Values`]
@@ -541,6 +551,8 @@ Operators likely to succeed for each go type:
 - [`NotZero`]
 - [`Smuggle`]
 - [`Struct`]
+- [`SubJSONOf`]
+- [`SuperJSONOf`]
 - [`Tag`]
 - [`TruncTime`] only [`time.Time`]
 - [`Zero`]
@@ -591,9 +603,11 @@ listed below:
 - [`Smuggle`]
 - [`Struct`] only ptr on struct
 - [`SubBagOf`] only ptr on array/slice
+- [`SubJSONOf`] only ptr on map/struct
 - [`SubMapOf`] only ptr on map
 - [`SubSetOf`] only ptr on array/slice
 - [`SuperBagOf`] only ptr on array/slice
+- [`SuperJSONOf`] only ptr on map/struct
 - [`SuperMapOf`] only ptr on map
 - [`SuperSetOf`] only ptr on array/slice
 - [`Tag`]

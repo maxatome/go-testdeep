@@ -52,13 +52,13 @@ func stringPointer(s string) uintptr {
 // lengths. For example:
 //
 //   a := "foobar yes!"
-//   b := a[:1]                    // aka. "f"
+//   b := a[:1]              // aka. "f"
 //   Cmp(t, &a, Shallow(&b)) // succeeds as both strings point to the same area, even if len() differ
 //
 // The same behavior occurs for slices:
 //
 //   a := []int{1, 2, 3, 4, 5, 6}
-//   b := a[:2]                    // aka. []int{1, 2}
+//   b := a[:2]              // aka. []int{1, 2}
 //   Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
 func Shallow(expectedPtr interface{}) TestDeep {
 	vptr := reflect.ValueOf(expectedPtr)

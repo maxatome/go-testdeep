@@ -879,6 +879,25 @@ func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 	return Cmp(t, got, SubBagOf(expectedItems...), args...)
 }
 
+// CmpSubJSONOf is a shortcut for:
+//
+//   Cmp(t, got, SubJSONOf(expectedJSON, params...), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#SubJSONOf for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpSubJSONOf(t TestingT, got interface{}, expectedJSON interface{}, params []interface{}, args ...interface{}) bool {
+	t.Helper()
+	return Cmp(t, got, SubJSONOf(expectedJSON, params...), args...)
+}
+
 // CmpSubMapOf is a shortcut for:
 //
 //   Cmp(t, got, SubMapOf(model, expectedEntries), args...)
@@ -934,6 +953,25 @@ func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return Cmp(t, got, SuperBagOf(expectedItems...), args...)
+}
+
+// CmpSuperJSONOf is a shortcut for:
+//
+//   Cmp(t, got, SuperJSONOf(expectedJSON, params...), args...)
+//
+// See https://godoc.org/github.com/maxatome/go-testdeep#SuperJSONOf for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpSuperJSONOf(t TestingT, got interface{}, expectedJSON interface{}, params []interface{}, args ...interface{}) bool {
+	t.Helper()
+	return Cmp(t, got, SuperJSONOf(expectedJSON, params...), args...)
 }
 
 // CmpSuperMapOf is a shortcut for:

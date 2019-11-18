@@ -11,6 +11,7 @@ import (
 	"strings"
 	"testing"
 
+	"errors"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -88,6 +89,8 @@ func TestStringifyPlaceholder(t *testing.T) {
 		{jsonOrig: `[$456a]`, errExpected: `invalid numeric placeholder at offset 2`},
 		// Named placeholder
 		{jsonOrig: `[$name%]`, errExpected: `invalid named placeholder at offset 2`},
+		// Shortcut
+		{jsonOrig: `[$^Op%]`, errExpected: `invalid operator shortcut at offset 2`},
 		// Not a placeholder
 		{jsonOrig: `[$%]`, errExpected: `invalid placeholder at offset 2`},
 		{jsonOrig: `$`, errExpected: `invalid placeholder at offset 1`},
@@ -103,28 +106,80 @@ func TestStringifyPlaceholder(t *testing.T) {
 func TestUnmarshalJSON(t *testing.T) {
 	var target interface{}
 
+	t.Run("clearComment", func(t *testing.T) {
+		origErr := errors.New("orig error")
+
+		from := []byte(`/* comment */`)
+		err := clearComment(from, 0, origErr)
+		if err != nil {
+			t.Errorf("clearComment failed: %s", err)
+		}
+		if !reflect.DeepEqual(from, []byte(`             `)) {
+			t.Errorf(`clearComment failed, unexpected buffer: "%s"`, string(from))
+		}
+
+		from = []byte(`foo // bar`)
+		err = clearComment(from, 4, origErr)
+		if err != nil {
+			t.Errorf("clearComment failed: %s", err)
+		}
+		if !reflect.DeepEqual(from, []byte(`foo       `)) {
+			t.Errorf(`clearComment failed, unexpected buffer: "%s"`, string(from))
+		}
+
+		from = []byte("foo // bar\nzip")
+		err = clearComment(from, 4, origErr)
+		if err != nil {
+			t.Errorf("clearComment failed: %s", err)
+		}
+		if !reflect.DeepEqual(from, []byte("foo       \nzip")) {
+			t.Errorf(`clearComment failed, unexpected buffer: "%s"`, string(from))
+		}
+
+		from = []byte("foo //\nzip")
+		err = clearComment(from, 4, origErr)
+		if err != nil {
+			t.Errorf("clearComment failed: %s", err)
+		}
+		if !reflect.DeepEqual(from, []byte("foo   \nzip")) {
+			t.Errorf(`clearComment failed, unexpected buffer: "%s"`, string(from))
+		}
+
+		from = []byte("foo /")
+		err = clearComment(from, 4, origErr)
+		if err != origErr {
+			t.Errorf("got: %s, expected: %s", err, origErr)
+		}
+
+		from = []byte("foo /*")
+		err = clearComment(from, 4, origErr)
+		if err == nil || err.Error() != `unterminated comment at offset 5` {
+			t.Errorf("got: %s, expected: %s", err, origErr)
+		}
+	})
+
 	// First call to initialize jsonErrorMesg variable
 	err := UnmarshalJSON([]byte(`{}`), &target)
 	if err != nil {
 		t.Fatalf("First UnmarshalJSON failed: %s", err)
 	}
-	if jsonErrorMesg == "" || jsonErrorMesg == "<NO_JSON_ERROR!>" {
+	if jsonErrPlaceholder == "" || jsonErrPlaceholder == "<NO_JSON_ERROR!>" {
 		t.Fatal("json.SyntaxError error not found!")
 	}
-	t.Logf("OK json.SyntaxError error found: %s", jsonErrorMesg)
+	t.Logf("OK json.SyntaxError error found: %s", jsonErrPlaceholder)
 
-	// Normal case with several placeholders
+	// Normal case with several placeholders and operator shorcuts
 	err = UnmarshalJSON([]byte(`
-{
-  "numeric_placeholders": [ $1, $2, $3 ],
-  "named_placeholders":   [ $foo, $bar, $zip ]
-}`), &target)
+/* comment */ { /* comment
+   */ "numeric_placeholders" /* comment */: [ $1, $2, $3 ], // comment
+  "named_placeholders":   [ $foo, $^bar, /* ← op shortcut */ $zip /* comment */ ]
+} // comment`), &target)
 	if err != nil {
 		t.Fatalf("UnmarshalJSON failed: %s", err)
 	}
 	if !reflect.DeepEqual(target, map[string]interface{}{
 		"numeric_placeholders": []interface{}{"$1", "$2", "$3"},
-		"named_placeholders":   []interface{}{"$foo", "$bar", "$zip"},
+		"named_placeholders":   []interface{}{"$foo", "$^bar", "$zip"},
 	}) {
 		t.Errorf("UnmarshalJSON mismatch: %#+v", target)
 	}

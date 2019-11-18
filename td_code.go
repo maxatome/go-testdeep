@@ -31,35 +31,35 @@ var _ TestDeep = &tdCode{}
 // "fn" can return a single bool kind value, telling that yes or no
 // the custom test is successful:
 //   Cmp(t, gotTime,
-//     Code(func (date time.Time) bool {
-//         return date.Year() == 2018
-//       }))
+//     Code(func(date time.Time) bool {
+//       return date.Year() == 2018
+//     }))
 //
 // or two values (bool, string) kinds. The bool value has the same
 // meaning as above, and the string value is used to describe the
 // test when it fails:
 //   Cmp(t, gotTime,
-//     Code(func (date time.Time) (bool, string) {
-//         if date.Year() == 2018 {
-//           return true, ""
-//         }
-//         return false, "year must be 2018"
-//       }))
+//     Code(func(date time.Time) (bool, string) {
+//       if date.Year() == 2018 {
+//         return true, ""
+//       }
+//       return false, "year must be 2018"
+//     }))
 //
 // or a single error value. If the returned error is nil, the test
 // succeeded, else the error contains the reason of failure:
 //   Cmp(t, gotJsonRawMesg,
-//     Code(func (b json.RawMessage) error {
-//         var c map[string]int
-//         err := json.Unmarshal(b, &c)
-//         if err != nil {
-//           return err
-//         }
-//         if c["test"] != 42 {
-//           return fmt.Errorf(`key "test" does not match 42`)
-//         }
-//         return nil
-//       }))
+//     Code(func(b json.RawMessage) error {
+//       var c map[string]int
+//       err := json.Unmarshal(b, &c)
+//       if err != nil {
+//         return err
+//       }
+//       if c["test"] != 42 {
+//         return fmt.Errorf(`key "test" does not match 42`)
+//       }
+//       return nil
+//     }))
 //
 // This operator allows to handle any specific comparison not handled
 // by standard operators.

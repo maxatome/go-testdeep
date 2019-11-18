@@ -55,9 +55,16 @@ func (c Context) ResetErrors() (new Context) {
 
 // CollectError collects an error in the context. It returns an error
 // if the collector is full, nil otherwise.
+//
+// In boolean context, ignore the passed error and return the BooleanError.
 func (c Context) CollectError(err *Error) *Error {
 	if err == nil {
 		return nil
+	}
+
+	// The boolean error must not be altered!
+	if c.BooleanError {
+		return BooleanError
 	}
 
 	// Error context not initialized yet

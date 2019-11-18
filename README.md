@@ -27,19 +27,16 @@ go-testdeep
 
 ## Latest news
 
+- 2019/11/18:
+  - new [`SubJSONOf`] & [`SuperJSONOf`] operators (and their
+    friends [`CmpSubJSONOf`], [`CmpSuperJSONOf`], [`T.SubJSONOf`] &
+    [`T.SuperJSONOf`]),
+  - JSON data can now contain comments and some operator shortcuts;
 - 2019/11/01: new [`Catch`] operator;
 - 2019/10/31: new [`JSON`] operator (and its friends [`CmpJSON`]
   & [`T.JSON`] along with new fully dedicated [`Tag`] operator;
 - 2019/10/29: new web site
   [go-testdeep.zetta.rocks](https://go-testdeep.zetta.rocks/)
-- 2019/09/22: new
-  [`BeLax` feature](https://godoc.org/github.com/maxatome/go-testdeep#T.BeLax)
-  with its
-  [`Lax`](https://godoc.org/github.com/maxatome/go-testdeep#Lax)
-  operator counterpart (and its friends
-  [`CmpLax`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLax)
-  &
-  [`T.CmpLax`](https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax));
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -92,11 +89,12 @@ func TestMyApi(t *testing.T) {
       Status: http.StatusCreated,
       // Header can be tested too… See tdhttp doc.
       Body: td.JSON(`
+// Note that comments are allowed
 {
-  "id":         $id,
+  "id":         $id,          // set by the API/DB
   "name":       "Bob",
   "age":        42,
-  "created_at": "$createdAt",
+  "created_at": "$createdAt", // set by the API/DB
 }`,
         td.Tag("id", td.Catch(&id, td.NotZero())), // catch $id and check ≠ 0
         td.Tag("created_at", td.All( // ← All combines several operators like a AND
@@ -258,9 +256,11 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`String`]: https://go-testdeep.zetta.rocks/operators/string/
 [`Struct`]: https://go-testdeep.zetta.rocks/operators/struct/
 [`SubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/
+[`SubJSONOf`]: https://go-testdeep.zetta.rocks/operators/subjsonof/
 [`SubMapOf`]: https://go-testdeep.zetta.rocks/operators/submapof/
 [`SubSetOf`]: https://go-testdeep.zetta.rocks/operators/subsetof/
 [`SuperBagOf`]: https://go-testdeep.zetta.rocks/operators/superbagof/
+[`SuperJSONOf`]: https://go-testdeep.zetta.rocks/operators/superjsonof/
 [`SuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/
 [`SuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/
 [`Tag`]: https://go-testdeep.zetta.rocks/operators/tag/
@@ -313,9 +313,11 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpString`]:https://go-testdeep.zetta.rocks/operators/string/#cmpstring-shortcut
 [`CmpStruct`]:https://go-testdeep.zetta.rocks/operators/struct/#cmpstruct-shortcut
 [`CmpSubBagOf`]:https://go-testdeep.zetta.rocks/operators/subbagof/#cmpsubbagof-shortcut
+[`CmpSubJSONOf`]:https://go-testdeep.zetta.rocks/operators/subjsonof/#cmpsubjsonof-shortcut
 [`CmpSubMapOf`]:https://go-testdeep.zetta.rocks/operators/submapof/#cmpsubmapof-shortcut
 [`CmpSubSetOf`]:https://go-testdeep.zetta.rocks/operators/subsetof/#cmpsubsetof-shortcut
 [`CmpSuperBagOf`]:https://go-testdeep.zetta.rocks/operators/superbagof/#cmpsuperbagof-shortcut
+[`CmpSuperJSONOf`]:https://go-testdeep.zetta.rocks/operators/superjsonof/#cmpsuperjsonof-shortcut
 [`CmpSuperMapOf`]:https://go-testdeep.zetta.rocks/operators/supermapof/#cmpsupermapof-shortcut
 [`CmpSuperSetOf`]:https://go-testdeep.zetta.rocks/operators/supersetof/#cmpsupersetof-shortcut
 [`CmpTruncTime`]:https://go-testdeep.zetta.rocks/operators/trunctime/#cmptrunctime-shortcut
@@ -367,9 +369,11 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.String`]: https://go-testdeep.zetta.rocks/operators/string/#t-string-shortcut
 [`T.Struct`]: https://go-testdeep.zetta.rocks/operators/struct/#t-struct-shortcut
 [`T.SubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/#t-subbagof-shortcut
+[`T.SubJSONOf`]: https://go-testdeep.zetta.rocks/operators/subjsonof/#t-subjsonof-shortcut
 [`T.SubMapOf`]: https://go-testdeep.zetta.rocks/operators/submapof/#t-submapof-shortcut
 [`T.SubSetOf`]: https://go-testdeep.zetta.rocks/operators/subsetof/#t-subsetof-shortcut
 [`T.SuperBagOf`]: https://go-testdeep.zetta.rocks/operators/superbagof/#t-superbagof-shortcut
+[`T.SuperJSONOf`]: https://go-testdeep.zetta.rocks/operators/superjsonof/#t-superjsonof-shortcut
 [`T.SuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/#t-supermapof-shortcut
 [`T.SuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/#t-supersetof-shortcut
 [`T.TruncTime`]: https://go-testdeep.zetta.rocks/operators/trunctime/#t-trunctime-shortcut

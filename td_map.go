@@ -189,10 +189,10 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 // compared map.
 //
 //   Cmp(t, map[string]int{"a": 1},
-//     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // succeeds
+//     SubMapOf(map[string]int{"a": 1, "b": 2}, nil)) // succeeds
 //
 //   Cmp(t, map[string]int{"a": 1, "c": 3},
-//     SubMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, extra {"c": 3}
+//     SubMapOf(map[string]int{"a": 1, "b": 2}, nil)) // fails, extra {"c": 3}
 //
 // TypeBehind method returns the reflect.Type of "model".
 func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
@@ -215,10 +215,10 @@ func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 // map. But some entries in the compared map may not be expected.
 //
 //   Cmp(t, map[string]int{"a": 1, "b": 2},
-//     SuperMapOf(map[string]int{"a": 1}, nil) // succeeds
+//     SuperMapOf(map[string]int{"a": 1}, nil)) // succeeds
 //
 //   Cmp(t, map[string]int{"a": 1, "c": 3},
-//     SuperMapOf(map[string]int{"a": 1, "b": 2}, nil) // fails, missing {"b": 2}
+//     SuperMapOf(map[string]int{"a": 1, "b": 2}, nil)) // fails, missing {"b": 2}
 //
 // TypeBehind method returns the reflect.Type of "model".
 func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
@@ -231,6 +231,10 @@ func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		return ctx.CollectError(err)
 	}
 
+	return m.match(ctx, got)
+}
+
+func (m *tdMap) match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
 	err = m.checkType(ctx, got)
 	if err != nil {
 		return ctx.CollectError(err)

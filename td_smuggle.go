@@ -133,50 +133,45 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 // "fn" must return at least one value. These value will be compared as is
 // to "expectedValue", here integer 28:
 //
-//   Smuggle(func (value string) int {
-//       num, _ := strconv.Atoi(value)
-//       return num
-//     },
-//     28)
+//   Smuggle(func(value string) int {
+//     num, _ := strconv.Atoi(value)
+//     return num
+//   }, 28)
 //
 // or using an other TestDeep operator, here Between(28, 30):
 //
-//   Smuggle(func (value string) int {
-//       num, _ := strconv.Atoi(value)
-//       return num
-//     },
-//     Between(28, 30))
+//   Smuggle(func(value string) int {
+//     num, _ := strconv.Atoi(value)
+//     return num
+//   }, Between(28, 30))
 //
 // "fn" can return a second boolean value, used to tell that a problem
 // occurred and so stop the comparison:
 //
-//   Smuggle(func (value string) (int, bool) {
-//       num, err := strconv.Atoi(value)
-//       return num, err == nil
-//     },
-//     Between(28, 30))
+//   Smuggle(func(value string) (int, bool) {
+//     num, err := strconv.Atoi(value)
+//     return num, err == nil
+//   }, Between(28, 30))
 //
 // "fn" can return a third string value which is used to describe the
 // test when a problem occurred (false second boolean value):
 //
-//   Smuggle(func (value string) (int, bool, string) {
-//       num, err := strconv.Atoi(value)
-//       if err != nil {
-//         return 0, false, "string must contain a number"
-//       }
-//       return num, true, ""
-//     },
-//     Between(28, 30))
+//   Smuggle(func(value string) (int, bool, string) {
+//     num, err := strconv.Atoi(value)
+//     if err != nil {
+//       return 0, false, "string must contain a number"
+//     }
+//     return num, true, ""
+//   }, Between(28, 30))
 //
 // Instead of returning (X, bool) or (X, bool, string), "fn" can
 // return (X, error). When a problem occurs, the returned error is
 // non-nil, as in:
 //
-//   Smuggle(func (value string) (int, error) {
-//       num, err := strconv.Atoi(value)
-//       return num, err
-//     },
-//     Between(28, 30))
+//   Smuggle(func(value string) (int, error) {
+//     num, err := strconv.Atoi(value)
+//     return num, err
+//   }, Between(28, 30))
 //
 // Which can be simplified to:
 //
@@ -185,22 +180,19 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 // Imagine you want to compare that the Year of a date is between 2010
 // and 2020:
 //
-//   Smuggle(func (date time.Time) int {
-//       return date.Year()
-//     },
+//   Smuggle(func(date time.Time) int { return date.Year() },
 //     Between(2010, 2020))
 //
 // In this case the data location forwarded to next test will be
 // something like "DATA.MyTimeField<smuggled>", but you can act on it
 // too by returning a SmuggledGot struct (by value or by address):
 //
-//   Smuggle(func (date time.Time) SmuggledGot {
-//       return SmuggledGot{
-//         Name: "Year",
-//         Got:  date.Year(),
-//       }
-//     },
-//     Between(2010, 2020))
+//   Smuggle(func(date time.Time) SmuggledGot {
+//     return SmuggledGot{
+//       Name: "Year",
+//       Got:  date.Year(),
+//     }
+//   }, Between(2010, 2020))
 //
 // then the data location forwarded to next test will be something like
 // "DATA.MyTimeField.Year". The "."  between the current path (here
@@ -215,48 +207,45 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 //
 //   // Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
 //   // whether this date is contained between 2 hours before now and now.
-//   Smuggle(func (date string) (*SmuggledGot, bool, string) {
-//       date, err := time.Parse("2006/01/02 15:04:05", date)
-//       if err != nil {
-//         return nil, false, `date must conform to "YYYY/mm/DD HH:MM:SS" format`
-//       }
-//       return &SmuggledGot{
-//         Name: "Date",
-//         Got:  date,
-//       }, true, ""
-//     },
-//     Between(time.Now().Add(-2*time.Hour), time.Now()))
+//   Smuggle(func(date string) (*SmuggledGot, bool, string) {
+//     date, err := time.Parse("2006/01/02 15:04:05", date)
+//     if err != nil {
+//       return nil, false, `date must conform to "YYYY/mm/DD HH:MM:SS" format`
+//     }
+//     return &SmuggledGot{
+//       Name: "Date",
+//       Got:  date,
+//     }, true, ""
+//   }, Between(time.Now().Add(-2*time.Hour), time.Now()))
 //
 // or:
 //
 //   // Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
 //   // whether this date is contained between 2 hours before now and now.
-//   Smuggle(func (date string) (*SmuggledGot, error) {
-//       date, err := time.Parse("2006/01/02 15:04:05", date)
-//       if err != nil {
-//         return nil, err
-//       }
-//       return &SmuggledGot{
-//         Name: "Date",
-//         Got:  date,
-//       }, nil
-//     },
-//     Between(time.Now().Add(-2*time.Hour), time.Now()))
+//   Smuggle(func(date string) (*SmuggledGot, error) {
+//     date, err := time.Parse("2006/01/02 15:04:05", date)
+//     if err != nil {
+//       return nil, err
+//     }
+//     return &SmuggledGot{
+//       Name: "Date",
+//       Got:  date,
+//     }, nil
+//   }, Between(time.Now().Add(-2*time.Hour), time.Now()))
 //
 // Smuggle can also be used to access a struct field embedded in
 // several struct layers.
 //
-//   type A struct { Num int }
-//   type B struct { A *A }
-//   type C struct { B B }
+//   type A struct{ Num int }
+//   type B struct{ A *A }
+//   type C struct{ B B }
 //   got := C{B: B{A: &A{Num: 12}}}
 //
 //   // Tests that got.B.A.Num is 12
 //   Cmp(t, got,
-//     Smuggle(func (c C) int {
-//         return c.B.A.Num
-//       },
-//       12))
+//     Smuggle(func(c C) int {
+//       return c.B.A.Num
+//     }, 12))
 //
 // As brought up above, a field-path can be passed as "fn" value
 // instead of a function pointer. Using this feature, the Cmp
@@ -273,7 +262,7 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 // used to do a final comparison while Smuggle transforms the data and
 // then steps down in favor of generic comparison process. Moreover,
 // the type accepted as input for the function is more lax to
-// facilitate the tests writing (eg. the function can accept a float64
+// facilitate the tests writing (e.g. the function can accept a float64
 // and the got value be an int). See examples. On the other hand, the
 // output type is strict and must match exactly the expected value
 // type. The fields-path string "fn" shortcut is not available with

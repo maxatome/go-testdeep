@@ -23,7 +23,7 @@ matched data. Note that an other operator can be used here.
 Cmp(t, "John Doe",
   ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
 Cmp(t, "John Doe",
-  ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))       // succeeds
+  ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))) // succeeds
 ```
 
 

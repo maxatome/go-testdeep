@@ -51,7 +51,7 @@ func New(callDepth int) (loc Location, ok bool) {
 }
 
 // IsInitialized returns true if the Location is initialized
-// (eg. NewLocation() called without an error), false otherwise.
+// (e.g. NewLocation() called without an error), false otherwise.
 func (l Location) IsInitialized() bool {
 	return l.File != ""
 }

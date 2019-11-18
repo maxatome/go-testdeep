@@ -7,15 +7,20 @@
 package util
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"sync"
 	"unicode"
 	"unicode/utf8"
 )
 
-var jsonErrorMesg = "<NO_JSON_ERROR!>" // will be overwritten by UnmarshalJSON
-var jsonErrorMesgOnce sync.Once
+var (
+	jsonErrPlaceholder   = "<NO_JSON_ERROR!>" // will be overwritten by UnmarshalJSON
+	jsonErrCommentPrefix = "<NO_JSON_ERROR!>" // will be overwritten by UnmarshalJSON
+	jsonErrorMesgOnce    sync.Once
+)
 
 // `{"foo": $bar}`, 8 → `{"foo": "$bar"}`
 func stringifyPlaceholder(buf []byte, dollar int64) ([]byte, error) {
@@ -40,7 +45,8 @@ func stringifyPlaceholder(buf []byte, dollar int64) ([]byte, error) {
 		}
 		end = int64(len(buf))
 	endFound:
-	} else if unicode.IsLetter(r) || r == '_' { // Named placeholder: $pïpô12
+	} else if shortcut := r == '^'; shortcut || // Operator shortcut, e.g. $^Zero
+		unicode.IsLetter(r) || r == '_' { // Named placeholder: $pïpô12
 	runes:
 		for max := int64(len(buf)); cur < max; cur += int64(size) {
 			r, size = utf8.DecodeRune(buf[cur:])
@@ -50,6 +56,10 @@ func stringifyPlaceholder(buf []byte, dollar int64) ([]byte, error) {
 				break runes
 			default:
 				if !unicode.IsLetter(r) && !unicode.IsNumber(r) {
+					if shortcut {
+						return nil,
+							fmt.Errorf(`invalid operator shortcut at offset %d`, dollar+1)
+					}
 					return nil,
 						fmt.Errorf(`invalid named placeholder at offset %d`, dollar+1)
 				}
@@ -60,7 +70,7 @@ func stringifyPlaceholder(buf []byte, dollar int64) ([]byte, error) {
 		return nil, fmt.Errorf(`invalid placeholder at offset %d`, dollar+1)
 	}
 
-	// put "" around $éé123 or $12345
+	// put "" around $éé123, $12345 or $^NotZero
 	if cap(buf) == len(buf) {
 		// allocate room for 20 extra placeholders
 		buf = append(make([]byte, 0, len(buf)+40), buf...)
@@ -74,6 +84,38 @@ func stringifyPlaceholder(buf []byte, dollar int64) ([]byte, error) {
 	return buf, nil
 }
 
+// `{"foo": 123 /* comment */}`, 13 → `{"foo": 123              }`
+func clearComment(buf []byte, slash int64, origErr error) error {
+	r, _ := utf8.DecodeRune(buf[slash+1:]) // just after /
+
+	var end int
+
+	switch r {
+	case '/': // → // = comment until end of line or buffer
+		end = bytes.IndexAny(buf[slash+2:], "\r\n")
+		if end < 0 {
+			end = len(buf)
+		} else {
+			end += int(slash) + 2
+		}
+
+	case '*': // → /* = comment until */
+		end = bytes.Index(buf[slash+2:], []byte(`*/`))
+		if end < 0 {
+			return fmt.Errorf(`unterminated comment at offset %d`, slash+1)
+		}
+		end += int(slash) + 2 + 2
+
+	default:
+		return origErr
+	}
+
+	for i := int(slash); i < end; i++ {
+		buf[i] = ' '
+	}
+	return nil
+}
+
 // UnmarshalJSON is a custom json.Unmarshal function allowing to
 // handle placeholders not enclosed in strings. It relies on
 // json.SyntaxError errors detected before any memory allocation. So
@@ -84,7 +126,8 @@ func UnmarshalJSON(buf []byte, target interface{}) error {
 		var dummy interface{}
 		err := json.Unmarshal([]byte(`$x`), &dummy)
 		if jerr, ok := err.(*json.SyntaxError); ok {
-			jsonErrorMesg = jerr.Error()
+			jsonErrPlaceholder = jerr.Error()
+			jsonErrCommentPrefix = jerr.Error()[:strings.Index(jsonErrPlaceholder, "$")] + "/"
 		}
 	})
 
@@ -94,13 +137,21 @@ func UnmarshalJSON(buf []byte, target interface{}) error {
 			return nil
 		}
 		jerr, ok := err.(*json.SyntaxError)
-		if !ok || jerr.Error() != jsonErrorMesg || jerr.Offset >= int64(len(buf)) {
-			return err
-		}
+		if ok && jerr.Offset < int64(len(buf)) {
+			switch {
+			case jerr.Error() == jsonErrPlaceholder:
+				buf, err = stringifyPlaceholder(buf, jerr.Offset-1) // "$" pos
+				if err == nil {
+					continue
+				}
 
-		buf, err = stringifyPlaceholder(buf, jerr.Offset-1) // $ pos
-		if err != nil {
-			return err
+			case strings.HasPrefix(jerr.Error(), jsonErrCommentPrefix):
+				err = clearComment(buf, jerr.Offset-1, err) // "/" pos
+				if err == nil {
+					continue
+				}
+			}
 		}
+		return err
 	}
 }

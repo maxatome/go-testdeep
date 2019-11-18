@@ -32,7 +32,7 @@ if tdhttp.CmpJSONResponse(t,
   api.Handler,
   tdhttp.Response{
     Status: http.StatusCreated,
-    Body:   testdeep.JSON(`{"id": $id, "name": "foo"}`,
+    Body: testdeep.JSON(`{"id": $id, "name": "foo"}`,
       testdeep.Tag("id", testdeep.Catch(&id, testdeep.Gt(0)))),
   }) {
   t.Logf("Created record ID is %d", id)

@@ -26,8 +26,9 @@ func (r errReader) Read(p []byte) (int, error) {
 
 func TestJSON(t *testing.T) {
 	type MyStruct struct {
-		Name string `json:"name"`
-		Age  uint   `json:"age"`
+		Name   string `json:"name"`
+		Age    uint   `json:"age"`
+		Gender string `json:"gender"`
 	}
 
 	//
@@ -45,35 +46,56 @@ func TestJSON(t *testing.T) {
 	//
 	// struct
 	//
+	got := MyStruct{Name: "Bob", Age: 42, Gender: "male"}
+
 	// No placeholder
-	checkOK(t, MyStruct{Name: "Bob", Age: 42},
-		testdeep.JSON(`{"name":"Bob","age":42}`))
+	checkOK(t, got,
+		testdeep.JSON(`{"name":"Bob","age":42,"gender":"male"}`))
 
 	// Numeric placeholders
-	checkOK(t, MyStruct{Name: "Bob", Age: 42},
-		testdeep.JSON(`{"name":"$1","age":$2}`, "Bob", 42)) // raw values
+	checkOK(t, got,
+		testdeep.JSON(`{"name":"$1","age":$2,"gender":$3}`,
+			"Bob", 42, "male")) // raw values
 
-	checkOK(t, MyStruct{Name: "Bob", Age: 42},
-		testdeep.JSON(`{"name":"$1","age":$2}`,
+	checkOK(t, got,
+		testdeep.JSON(`{"name":"$1","age":$2,"gender":"$3"}`,
 			testdeep.Re(`^Bob`),
-			testdeep.Between(40, 45)))
+			testdeep.Between(40, 45),
+			testdeep.NotEmpty()))
 
 	// Tag placeholders
-	checkOK(t, MyStruct{Name: "Bob", Age: 42},
-		testdeep.JSON(`{"name":"$name","age":$age}`,
+	checkOK(t, got,
+		testdeep.JSON(`{"name":"$name","age":$age,"gender":"$gender"}`,
 			testdeep.Tag("name", testdeep.Re(`^Bob`)),
-			testdeep.Tag("age", testdeep.Between(40, 45))))
+			testdeep.Tag("age", testdeep.Between(40, 45)),
+			testdeep.Tag("gender", testdeep.NotEmpty())))
 
-	// Mixed placeholders
-	checkOK(t, MyStruct{Name: "Bob", Age: 42},
-		testdeep.JSON(`{"name":"$name","age":$1}`,
+	// Mixed placeholders + operator shortcut
+	checkOK(t, got,
+		testdeep.JSON(`{"name":"$name","age":$1,"gender":$^NotEmpty}`,
+			testdeep.Tag("age", testdeep.Between(40, 45)),
+			testdeep.Tag("name", testdeep.Re(`^Bob`))))
+
+	// …with comments…
+	checkOK(t, got,
+		testdeep.JSON(`
+// This should be the JSON representation of MyStruct struct
+{
+  // A person:
+  "name":   "$name",   // The name of this person
+  "age":    $1,        /* The age of this person:
+                          - placeholder unquoted, but could be without
+                            any change
+                          - to demonstrate a multi-lines comment */
+  "gender": $^NotEmpty // Shortcut to operator NotEmpty
+}`,
 			testdeep.Tag("age", testdeep.Between(40, 45)),
 			testdeep.Tag("name", testdeep.Re(`^Bob`))))
 
 	//
 	// []byte
-	checkOK(t, MyStruct{Name: "Bob", Age: 42},
-		testdeep.JSON([]byte(`{"name":"$name","age":$1}`),
+	checkOK(t, got,
+		testdeep.JSON([]byte(`{"name":"$name","age":$1,"gender":"male"}`),
 			testdeep.Tag("age", testdeep.Between(40, 45)),
 			testdeep.Tag("name", testdeep.Re(`^Bob`))))
 
@@ -86,10 +108,12 @@ func TestJSON(t *testing.T) {
 	defer os.RemoveAll(tmpDir) // clean up
 
 	filename := tmpDir + "/test.json"
-	if err = ioutil.WriteFile(filename, []byte(`{"name":$name,"age":$1}`), 0644); err != nil {
+	err = ioutil.WriteFile(
+		filename, []byte(`{"name":$name,"age":$1,"gender":$^NotEmpty}`), 0644)
+	if err != nil {
 		t.Fatal(err)
 	}
-	checkOK(t, MyStruct{Name: "Bob", Age: 42},
+	checkOK(t, got,
 		testdeep.JSON(filename,
 			testdeep.Tag("age", testdeep.Between(40, 45)),
 			testdeep.Tag("name", testdeep.Re(`^Bob`))))
@@ -100,7 +124,7 @@ func TestJSON(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkOK(t, MyStruct{Name: "Bob", Age: 42},
+	checkOK(t, got,
 		testdeep.JSON(tmpfile,
 			testdeep.Tag("age", testdeep.Between(40, 45)),
 			testdeep.Tag("name", testdeep.Re(`^Bob`))))
@@ -150,6 +174,9 @@ func TestJSON(t *testing.T) {
 	test.CheckPanic(t, func() { testdeep.JSON(`[1, 2, $3]`, testdeep.Ignore()) },
 		`JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
 
+	// operator shortcut
+	test.CheckPanic(t, func() { testdeep.JSON(`[1, "$^bad%"]`) },
+		`JSON obj[1] contains a bad operator shortcut "$^bad%"`)
 	// named placeholders
 	test.CheckPanic(t, func() { testdeep.JSON(`[1, "$bad%"]`) },
 		`JSON obj[1] contains a bad placeholder "$bad%"`)
@@ -172,7 +199,7 @@ JSON([
 	test.EqualStr(t, testdeep.JSON(` null `).String(), `JSON(null)`)
 
 	test.EqualStr(t,
-		testdeep.JSON(`[ $1, $name, $2 ]`,
+		testdeep.JSON(`[ $1, $name, $2, $^Nil ]`,
 			testdeep.Between(12, 20),
 			"test",
 			testdeep.Tag("name", testdeep.Code(
@@ -182,11 +209,12 @@ JSON([
 JSON([
        "$1" /* 12 ≤ got ≤ 20 */,
        "$name" /* Code(func(string) bool) */,
-       "test"
+       "test",
+       "$^Nil"
      ])`[1:])
 
 	test.EqualStr(t,
-		testdeep.JSON(`{"label": $value, "zip": 666}`,
+		testdeep.JSON(`{"label": $value, "zip": $^NotZero}`,
 			testdeep.Tag("value", testdeep.Bag(
 				testdeep.JSON(`{"name": $1,"age":$2}`,
 					testdeep.HasPrefix("Bob"),
@@ -204,7 +232,7 @@ JSON({
                                 JSON({
                                        "name": "$1" /* HasPrefix("Alice") */
                                      })) */,
-       "zip": 666
+       "zip": "$^NotZero"
      })`[1:])
 
 	// Improbable edge-case
@@ -224,4 +252,267 @@ func TestJSONTypeBehind(t *testing.T) {
 	if nullType != reflect.TypeOf((*interface{})(nil)).Elem() {
 		t.Errorf("Failed test: got %s intead of interface {}", nullType)
 	}
+}
+
+func TestSubJSONOf(t *testing.T) {
+	type MyStruct struct {
+		Name   string `json:"name"`
+		Age    uint   `json:"age"`
+		Gender string `json:"gender"`
+	}
+
+	//
+	// struct
+	//
+	got := MyStruct{Name: "Bob", Age: 42, Gender: "male"}
+
+	// No placeholder
+	checkOK(t, got,
+		testdeep.SubJSONOf(`
+{
+  "name":    "Bob",
+  "age":     42,
+  "gender":  "male",
+  "details": {  // ← we don't want to test this field
+    "city": "Test City",
+    "zip":  666
+  }
+}`))
+
+	// Numeric placeholders
+	checkOK(t, got,
+		testdeep.SubJSONOf(`{"name":"$1","age":$2,"gender":$3,"details":{}}`,
+			"Bob", 42, "male")) // raw values
+
+	// Tag placeholders
+	checkOK(t, got,
+		testdeep.SubJSONOf(
+			`{"name":"$name","age":$age,"gender":"$gender","details":{}}`,
+			testdeep.Tag("name", testdeep.Re(`^Bob`)),
+			testdeep.Tag("age", testdeep.Between(40, 45)),
+			testdeep.Tag("gender", testdeep.NotEmpty())))
+
+	// Mixed placeholders + operator shortcut
+	checkOK(t, got,
+		testdeep.SubJSONOf(
+			`{"name":"$name","age":$1,"gender":$^NotEmpty,"details":{}}`,
+			testdeep.Tag("age", testdeep.Between(40, 45)),
+			testdeep.Tag("name", testdeep.Re(`^Bob`))))
+
+	//
+	// Errors
+	checkError(t, func() {}, testdeep.SubJSONOf(`{}`),
+		expectedError{
+			Message: mustBe("json.Marshal failed"),
+			Summary: mustContain("json: unsupported type"),
+		})
+
+	for i, n := range []interface{}{
+		nil,
+		(map[string]interface{})(nil),
+		(map[string]bool)(nil),
+		([]int)(nil),
+	} {
+		checkError(t, n, testdeep.SubJSONOf(`{}`),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Got:      mustBe("null"),
+				Expected: mustBe("non-null"),
+			},
+			"nil test #%d", i)
+	}
+
+	//
+	// Panics
+	test.CheckPanic(t, func() { testdeep.SubJSONOf(`[1, "$123bad"]`) },
+		`JSON obj[1] contains a bad numeric placeholder "$123bad"`)
+	test.CheckPanic(t, func() { testdeep.SubJSONOf(`[1, $000]`) },
+		`JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
+	test.CheckPanic(t, func() { testdeep.SubJSONOf(`[1, $1]`) },
+		`JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
+	test.CheckPanic(t, func() { testdeep.SubJSONOf(`[1, 2, $3]`, testdeep.Ignore()) },
+		`JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
+
+	// operator shortcut
+	test.CheckPanic(t, func() { testdeep.SubJSONOf(`[1, "$^bad%"]`) },
+		`JSON obj[1] contains a bad operator shortcut "$^bad%"`)
+	// named placeholders
+	test.CheckPanic(t, func() { testdeep.SubJSONOf(`[1, "$bad%"]`) },
+		`JSON obj[1] contains a bad placeholder "$bad%"`)
+	test.CheckPanic(t, func() { testdeep.SubJSONOf(`[1, $unknown]`) },
+		`JSON obj[1] contains a unknown placeholder "$unknown"`)
+
+	test.CheckPanic(t, func() { testdeep.SubJSONOf("null") },
+		"SubJSONOf only accepts JSON objects {…}")
+
+	//
+	// Stringification
+	test.EqualStr(t, testdeep.SubJSONOf(`{}`).String(), `SubJSONOf({})`)
+
+	test.EqualStr(t, testdeep.SubJSONOf(`{"foo":1, "bar":2}`).String(),
+		`
+SubJSONOf({
+            "bar": 2,
+            "foo": 1
+          })`[1:])
+
+	test.EqualStr(t,
+		testdeep.SubJSONOf(`{"label": $value, "zip": $^NotZero}`,
+			testdeep.Tag("value", testdeep.Bag(
+				testdeep.SubJSONOf(`{"name": $1,"age":$2}`,
+					testdeep.HasPrefix("Bob"),
+					testdeep.Between(12, 24),
+				),
+				testdeep.SubJSONOf(`{"name": $1}`, testdeep.HasPrefix("Alice")),
+			)),
+		).String(),
+		`
+SubJSONOf({
+            "label": "$value" /* Bag(SubJSONOf({
+                                                 "age": "$2" /* 12 ≤ got ≤ 24 */,
+                                                 "name": "$1" /* HasPrefix("Bob") */
+                                               }),
+                                     SubJSONOf({
+                                                 "name": "$1" /* HasPrefix("Alice") */
+                                               })) */,
+            "zip": "$^NotZero"
+          })`[1:])
+}
+
+func TestSubJSONOfTypeBehind(t *testing.T) {
+	equalTypes(t, testdeep.SubJSONOf(`{"a":12}`), (map[string]interface{})(nil))
+}
+
+func TestSuperJSONOf(t *testing.T) {
+	type MyStruct struct {
+		Name    string `json:"name"`
+		Age     uint   `json:"age"`
+		Gender  string `json:"gender"`
+		Details string `json:"details"`
+	}
+
+	//
+	// struct
+	//
+	got := MyStruct{Name: "Bob", Age: 42, Gender: "male", Details: "Nice"}
+
+	// No placeholder
+	checkOK(t, got, testdeep.SuperJSONOf(`{"name": "Bob"}`))
+
+	// Numeric placeholders
+	checkOK(t, got,
+		testdeep.SuperJSONOf(`{"name":"$1","age":$2}`,
+			"Bob", 42)) // raw values
+
+	// Tag placeholders
+	checkOK(t, got,
+		testdeep.SuperJSONOf(`{"name":"$name","gender":"$gender"}`,
+			testdeep.Tag("name", testdeep.Re(`^Bob`)),
+			testdeep.Tag("gender", testdeep.NotEmpty())))
+
+	// Mixed placeholders + operator shortcut
+	checkOK(t, got,
+		testdeep.SuperJSONOf(
+			`{"name":"$name","age":$1,"gender":$^NotEmpty}`,
+			testdeep.Tag("age", testdeep.Between(40, 45)),
+			testdeep.Tag("name", testdeep.Re(`^Bob`))))
+
+	// …with comments…
+	checkOK(t, got,
+		testdeep.SuperJSONOf(`
+// This should be the JSON representation of MyStruct struct
+{
+  // A person:
+  "name":   "$name",   // The name of this person
+  "age":    $1,        /* The age of this person:
+                          - placeholder unquoted, but could be without
+                            any change
+                          - to demonstrate a multi-lines comment */
+  "gender": $^NotEmpty // Shortcut to operator NotEmpty
+}`,
+			testdeep.Tag("age", testdeep.Between(40, 45)),
+			testdeep.Tag("name", testdeep.Re(`^Bob`))))
+
+	//
+	// Errors
+	checkError(t, func() {}, testdeep.SuperJSONOf(`{}`),
+		expectedError{
+			Message: mustBe("json.Marshal failed"),
+			Summary: mustContain("json: unsupported type"),
+		})
+
+	for i, n := range []interface{}{
+		nil,
+		(map[string]interface{})(nil),
+		(map[string]bool)(nil),
+		([]int)(nil),
+	} {
+		checkError(t, n, testdeep.SuperJSONOf(`{}`),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Got:      mustBe("null"),
+				Expected: mustBe("non-null"),
+			},
+			"nil test #%d", i)
+	}
+
+	//
+	// Panics
+	test.CheckPanic(t, func() { testdeep.SuperJSONOf(`[1, "$123bad"]`) },
+		`JSON obj[1] contains a bad numeric placeholder "$123bad"`)
+	test.CheckPanic(t, func() { testdeep.SuperJSONOf(`[1, $000]`) },
+		`JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
+	test.CheckPanic(t, func() { testdeep.SuperJSONOf(`[1, $1]`) },
+		`JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
+	test.CheckPanic(t, func() { testdeep.SuperJSONOf(`[1, 2, $3]`, testdeep.Ignore()) },
+		`JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
+
+	// operator shortcut
+	test.CheckPanic(t, func() { testdeep.SuperJSONOf(`[1, "$^bad%"]`) },
+		`JSON obj[1] contains a bad operator shortcut "$^bad%"`)
+	// named placeholders
+	test.CheckPanic(t, func() { testdeep.SuperJSONOf(`[1, "$bad%"]`) },
+		`JSON obj[1] contains a bad placeholder "$bad%"`)
+	test.CheckPanic(t, func() { testdeep.SuperJSONOf(`[1, $unknown]`) },
+		`JSON obj[1] contains a unknown placeholder "$unknown"`)
+
+	test.CheckPanic(t, func() { testdeep.SuperJSONOf("null") },
+		"SuperJSONOf only accepts JSON objects {…}")
+
+	//
+	// Stringification
+	test.EqualStr(t, testdeep.SuperJSONOf(`{}`).String(), `SuperJSONOf({})`)
+
+	test.EqualStr(t, testdeep.SuperJSONOf(`{"foo":1, "bar":2}`).String(),
+		`
+SuperJSONOf({
+              "bar": 2,
+              "foo": 1
+            })`[1:])
+
+	test.EqualStr(t,
+		testdeep.SuperJSONOf(`{"label": $value, "zip": $^NotZero}`,
+			testdeep.Tag("value", testdeep.Bag(
+				testdeep.SuperJSONOf(`{"name": $1,"age":$2}`,
+					testdeep.HasPrefix("Bob"),
+					testdeep.Between(12, 24),
+				),
+				testdeep.SuperJSONOf(`{"name": $1}`, testdeep.HasPrefix("Alice")),
+			)),
+		).String(),
+		`
+SuperJSONOf({
+              "label": "$value" /* Bag(SuperJSONOf({
+                                                     "age": "$2" /* 12 ≤ got ≤ 24 */,
+                                                     "name": "$1" /* HasPrefix("Bob") */
+                                                   }),
+                                       SuperJSONOf({
+                                                     "name": "$1" /* HasPrefix("Alice") */
+                                                   })) */,
+              "zip": "$^NotZero"
+            })`[1:])
+}
+
+func TestSuperJSONOfTypeBehind(t *testing.T) {
+	equalTypes(t, testdeep.SuperJSONOf(`{"a":12}`), (map[string]interface{})(nil))
 }
