@@ -7,11 +7,11 @@
 package util
 
 import (
+	"errors"
 	"reflect"
 	"strings"
 	"testing"
 
-	"errors"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
