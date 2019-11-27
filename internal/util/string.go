@@ -8,6 +8,7 @@ package util
 
 import (
 	"bytes"
+	"io"
 	"reflect"
 	"strconv"
 	"strings"
@@ -54,6 +55,13 @@ func ToString(val interface{}) string {
 // indented) by indent.
 func IndentString(str string, indent string) string {
 	return strings.Replace(str, "\n", "\n"+indent, -1)
+}
+
+// IndentStringIn indents str lines (from 2nd one = 1st line is not
+// indented) by indent and write it to w.
+func IndentStringIn(w io.Writer, str string, indent string) {
+	repl := strings.NewReplacer("\n", "\n"+indent)
+	repl.WriteString(w, str) //nolint: errcheck
 }
 
 // SliceToBuffer stringifies items slice into buf then returns buf.

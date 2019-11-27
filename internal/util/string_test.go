@@ -63,6 +63,10 @@ func TestIndentString(t *testing.T) {
 		{ParamGot: "pipo\nbingo\nzip", Expected: "pipo\n-bingo\n-zip"},
 	} {
 		test.EqualStr(t, util.IndentString(curTest.ParamGot, "-"), curTest.Expected)
+
+		var buf bytes.Buffer
+		util.IndentStringIn(&buf, curTest.ParamGot, "-")
+		test.EqualStr(t, buf.String(), curTest.Expected)
 	}
 }
 
