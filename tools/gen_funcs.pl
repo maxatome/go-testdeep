@@ -147,7 +147,7 @@ while (readdir $dh)
             die "TAB detected in $func operator documentation" if $doc =~ /\t/;
 
             $operators{$func} = {
-		name      => $func,
+                name      => $func,
                 summary   => delete $ops{$func},
                 input     => delete $inputs{$func},
                 doc       => $doc,
@@ -189,7 +189,9 @@ import (
 )
 EOH
 
-foreach my $func (sort keys %funcs)
+my @sorted_funcs = sort { lc($a) cmp lc($b) } keys %funcs;
+
+foreach my $func (@sorted_funcs)
 {
     my $func_name = "Cmp$func";
     my $method_name = $RENAME_METHOD{$func} // $func;
@@ -285,7 +287,7 @@ EOF
 }
 
 my $examples = do { open(my $efh, '<', 'example_test.go'); local $/; <$efh> };
-my $funcs_reg = join('|', keys %funcs);
+my $funcs_reg = join('|', @sorted_funcs);
 
 my($imports) = ($examples =~ /^(import \(.+?^\))$/ms);
 
@@ -357,7 +359,7 @@ sub extract_params
     }
 }
 
-foreach my $func (sort keys %funcs)
+foreach my $func (@sorted_funcs)
 {
     my $args = $funcs{$func}{args};
     my $method = $RENAME_METHOD{$func} // $func;
@@ -482,14 +484,16 @@ my $common_links = do
         . "\n";
 };
 
+my @sorted_operators = sort { lc($a) cmp lc($b) } keys %operators;
+
 my $md_links = do
 {
     $common_links
-        . join("\n", map qq([`$_`]: {{< ref "$_" >}}), sort keys %operators)
+        . join("\n", map qq([`$_`]: {{< ref "$_" >}}), @sorted_operators)
         . "\n\n"
         # Cmp* functions
         . join("\n", map qq([`Cmp$_`]: {{< ref "$_#cmp\L$_\E-shortcut" >}}),
-                     sort keys %funcs)
+                     @sorted_funcs)
         . "\n\n"
         # T.Cmp* methods
         . join("\n", map
@@ -497,17 +501,17 @@ my $md_links = do
                    my $m = $RENAME_METHOD{$_} // $_;
                    qq([`T.$m`]: {{< ref "$_#t-\L$m\E-shortcut" >}})
                }
-               sort keys %funcs);
+               @sorted_funcs);
 };
 
 my $gh_links = do
 {
     my $td_url = 'https://go-testdeep.zetta.rocks/operators/';
     $common_links
-        . join("\n", map qq([`$_`]: $td_url\L$_/), sort keys %operators)
+        . join("\n", map qq([`$_`]: $td_url\L$_/), @sorted_operators)
         . "\n\n"
         # Cmp* functions
-        . join("\n", map qq([`Cmp$_`]:$td_url\L$_/#cmp$_-shortcut), sort keys %funcs)
+        . join("\n", map qq([`Cmp$_`]: $td_url\L$_/#cmp$_-shortcut), @sorted_funcs)
         . "\n\n"
         # T.Cmp* methods
         . join("\n", map
@@ -515,7 +519,7 @@ my $gh_links = do
                    my $m = $RENAME_METHOD{$_} // $_;
                    qq([`T.$m`]: $td_url\L$_/#t-$m-shortcut)
                }
-               sort keys %funcs);
+               @sorted_funcs);
 };
 
 # README.md
@@ -547,7 +551,7 @@ my $gh_links = do
                           open(my $fh, '<', "$DIR/example_t_test.go");
                           <$fh> };
 
-    foreach my $operator (sort keys %operators)
+    foreach my $operator (@sorted_operators)
     {
         # Rework each operator doc
         my $doc = process_doc($operators{$operator});
@@ -658,9 +662,8 @@ EOE
                      {
                          "$1\n"
                              . join('',
-                                    sort
                                     map qq![`$_`]({{< ref "$_" >}})\n: $operators{$_}{summary}\n\n!,
-                                    keys %operators)
+                                    @sorted_operators)
                              . $2
                      }se or die "operators tags not found in $op_list_file\n";
 
@@ -668,8 +671,8 @@ EOE
                      {
                          "$1\n"
                              . join('',
-                                    sort
                                     map qq![`$_`]({{< ref "$_" >}})\n: $operators{$_}{summary}\n\n!,
+                                    sort { lc($a) cmp lc($b) }
                                     keys %SMUGGLER_OPERATORS)
                              . "$md_links\n$2"
                      }se or die "smugglers tags not found in $op_list_file\n";
@@ -697,7 +700,7 @@ EOH
                     {
                         my $repl = "$1\n";
                         my $num = 0;
-                        foreach my $op (sort keys %operators)
+                        foreach my $op (@sorted_operators)
                         {
                             $repl .= $header if $num++ % 10 == 0;
                             $repl .= "| [`$op`]";
@@ -835,7 +838,7 @@ sub process_doc
     $doc =~ s/^(```go\n.*?^```\n)/push(@codes, $1); "CODE<$#codes>"/gems;
 
     $doc =~ s<
-	(\$\^[A-Za-z]+)                    # $1
+        (\$\^[A-Za-z]+)                    # $1
       | (\b(${\join('|', grep !/^JSON/, keys %operators)}
            |JSON(?!\s+(?:value|data|filename|object|representation|specification)))
         (?:\([^)]*\)|\b))                  # $2 $3
@@ -947,7 +950,7 @@ EOM
     waitpid $pid, 0;
     if ($? != 0)
     {
-	die <<EOD
+        die <<EOD
 gofmt of following example for function $operator->{name} failed:
 $code
 EOD
@@ -957,7 +960,7 @@ EOD
 
     if ($new_code ne $code)
     {
-	die <<EOD;
+        die <<EOD;
 Code example function $operator->{name} is not correctly indented:
 $code
 ------------------ should be ------------------

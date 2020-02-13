@@ -254,6 +254,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`Shallow`]: https://go-testdeep.zetta.rocks/operators/shallow/
 [`Slice`]: https://go-testdeep.zetta.rocks/operators/slice/
 [`Smuggle`]: https://go-testdeep.zetta.rocks/operators/smuggle/
+[`SStruct`]: https://go-testdeep.zetta.rocks/operators/sstruct/
 [`String`]: https://go-testdeep.zetta.rocks/operators/string/
 [`Struct`]: https://go-testdeep.zetta.rocks/operators/struct/
 [`SubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/
@@ -269,61 +270,62 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`Values`]: https://go-testdeep.zetta.rocks/operators/values/
 [`Zero`]: https://go-testdeep.zetta.rocks/operators/zero/
 
-[`CmpAll`]:https://go-testdeep.zetta.rocks/operators/all/#cmpall-shortcut
-[`CmpAny`]:https://go-testdeep.zetta.rocks/operators/any/#cmpany-shortcut
-[`CmpArray`]:https://go-testdeep.zetta.rocks/operators/array/#cmparray-shortcut
-[`CmpArrayEach`]:https://go-testdeep.zetta.rocks/operators/arrayeach/#cmparrayeach-shortcut
-[`CmpBag`]:https://go-testdeep.zetta.rocks/operators/bag/#cmpbag-shortcut
-[`CmpBetween`]:https://go-testdeep.zetta.rocks/operators/between/#cmpbetween-shortcut
-[`CmpCap`]:https://go-testdeep.zetta.rocks/operators/cap/#cmpcap-shortcut
-[`CmpCode`]:https://go-testdeep.zetta.rocks/operators/code/#cmpcode-shortcut
-[`CmpContains`]:https://go-testdeep.zetta.rocks/operators/contains/#cmpcontains-shortcut
-[`CmpContainsKey`]:https://go-testdeep.zetta.rocks/operators/containskey/#cmpcontainskey-shortcut
-[`CmpEmpty`]:https://go-testdeep.zetta.rocks/operators/empty/#cmpempty-shortcut
-[`CmpGt`]:https://go-testdeep.zetta.rocks/operators/gt/#cmpgt-shortcut
-[`CmpGte`]:https://go-testdeep.zetta.rocks/operators/gte/#cmpgte-shortcut
-[`CmpHasPrefix`]:https://go-testdeep.zetta.rocks/operators/hasprefix/#cmphasprefix-shortcut
-[`CmpHasSuffix`]:https://go-testdeep.zetta.rocks/operators/hassuffix/#cmphassuffix-shortcut
-[`CmpIsa`]:https://go-testdeep.zetta.rocks/operators/isa/#cmpisa-shortcut
-[`CmpJSON`]:https://go-testdeep.zetta.rocks/operators/json/#cmpjson-shortcut
-[`CmpKeys`]:https://go-testdeep.zetta.rocks/operators/keys/#cmpkeys-shortcut
-[`CmpLax`]:https://go-testdeep.zetta.rocks/operators/lax/#cmplax-shortcut
-[`CmpLen`]:https://go-testdeep.zetta.rocks/operators/len/#cmplen-shortcut
-[`CmpLt`]:https://go-testdeep.zetta.rocks/operators/lt/#cmplt-shortcut
-[`CmpLte`]:https://go-testdeep.zetta.rocks/operators/lte/#cmplte-shortcut
-[`CmpMap`]:https://go-testdeep.zetta.rocks/operators/map/#cmpmap-shortcut
-[`CmpMapEach`]:https://go-testdeep.zetta.rocks/operators/mapeach/#cmpmapeach-shortcut
-[`CmpN`]:https://go-testdeep.zetta.rocks/operators/n/#cmpn-shortcut
-[`CmpNaN`]:https://go-testdeep.zetta.rocks/operators/nan/#cmpnan-shortcut
-[`CmpNil`]:https://go-testdeep.zetta.rocks/operators/nil/#cmpnil-shortcut
-[`CmpNone`]:https://go-testdeep.zetta.rocks/operators/none/#cmpnone-shortcut
-[`CmpNot`]:https://go-testdeep.zetta.rocks/operators/not/#cmpnot-shortcut
-[`CmpNotAny`]:https://go-testdeep.zetta.rocks/operators/notany/#cmpnotany-shortcut
-[`CmpNotEmpty`]:https://go-testdeep.zetta.rocks/operators/notempty/#cmpnotempty-shortcut
-[`CmpNotNaN`]:https://go-testdeep.zetta.rocks/operators/notnan/#cmpnotnan-shortcut
-[`CmpNotNil`]:https://go-testdeep.zetta.rocks/operators/notnil/#cmpnotnil-shortcut
-[`CmpNotZero`]:https://go-testdeep.zetta.rocks/operators/notzero/#cmpnotzero-shortcut
-[`CmpPPtr`]:https://go-testdeep.zetta.rocks/operators/pptr/#cmppptr-shortcut
-[`CmpPtr`]:https://go-testdeep.zetta.rocks/operators/ptr/#cmpptr-shortcut
-[`CmpRe`]:https://go-testdeep.zetta.rocks/operators/re/#cmpre-shortcut
-[`CmpReAll`]:https://go-testdeep.zetta.rocks/operators/reall/#cmpreall-shortcut
-[`CmpSet`]:https://go-testdeep.zetta.rocks/operators/set/#cmpset-shortcut
-[`CmpShallow`]:https://go-testdeep.zetta.rocks/operators/shallow/#cmpshallow-shortcut
-[`CmpSlice`]:https://go-testdeep.zetta.rocks/operators/slice/#cmpslice-shortcut
-[`CmpSmuggle`]:https://go-testdeep.zetta.rocks/operators/smuggle/#cmpsmuggle-shortcut
-[`CmpString`]:https://go-testdeep.zetta.rocks/operators/string/#cmpstring-shortcut
-[`CmpStruct`]:https://go-testdeep.zetta.rocks/operators/struct/#cmpstruct-shortcut
-[`CmpSubBagOf`]:https://go-testdeep.zetta.rocks/operators/subbagof/#cmpsubbagof-shortcut
-[`CmpSubJSONOf`]:https://go-testdeep.zetta.rocks/operators/subjsonof/#cmpsubjsonof-shortcut
-[`CmpSubMapOf`]:https://go-testdeep.zetta.rocks/operators/submapof/#cmpsubmapof-shortcut
-[`CmpSubSetOf`]:https://go-testdeep.zetta.rocks/operators/subsetof/#cmpsubsetof-shortcut
-[`CmpSuperBagOf`]:https://go-testdeep.zetta.rocks/operators/superbagof/#cmpsuperbagof-shortcut
-[`CmpSuperJSONOf`]:https://go-testdeep.zetta.rocks/operators/superjsonof/#cmpsuperjsonof-shortcut
-[`CmpSuperMapOf`]:https://go-testdeep.zetta.rocks/operators/supermapof/#cmpsupermapof-shortcut
-[`CmpSuperSetOf`]:https://go-testdeep.zetta.rocks/operators/supersetof/#cmpsupersetof-shortcut
-[`CmpTruncTime`]:https://go-testdeep.zetta.rocks/operators/trunctime/#cmptrunctime-shortcut
-[`CmpValues`]:https://go-testdeep.zetta.rocks/operators/values/#cmpvalues-shortcut
-[`CmpZero`]:https://go-testdeep.zetta.rocks/operators/zero/#cmpzero-shortcut
+[`CmpAll`]: https://go-testdeep.zetta.rocks/operators/all/#cmpall-shortcut
+[`CmpAny`]: https://go-testdeep.zetta.rocks/operators/any/#cmpany-shortcut
+[`CmpArray`]: https://go-testdeep.zetta.rocks/operators/array/#cmparray-shortcut
+[`CmpArrayEach`]: https://go-testdeep.zetta.rocks/operators/arrayeach/#cmparrayeach-shortcut
+[`CmpBag`]: https://go-testdeep.zetta.rocks/operators/bag/#cmpbag-shortcut
+[`CmpBetween`]: https://go-testdeep.zetta.rocks/operators/between/#cmpbetween-shortcut
+[`CmpCap`]: https://go-testdeep.zetta.rocks/operators/cap/#cmpcap-shortcut
+[`CmpCode`]: https://go-testdeep.zetta.rocks/operators/code/#cmpcode-shortcut
+[`CmpContains`]: https://go-testdeep.zetta.rocks/operators/contains/#cmpcontains-shortcut
+[`CmpContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/#cmpcontainskey-shortcut
+[`CmpEmpty`]: https://go-testdeep.zetta.rocks/operators/empty/#cmpempty-shortcut
+[`CmpGt`]: https://go-testdeep.zetta.rocks/operators/gt/#cmpgt-shortcut
+[`CmpGte`]: https://go-testdeep.zetta.rocks/operators/gte/#cmpgte-shortcut
+[`CmpHasPrefix`]: https://go-testdeep.zetta.rocks/operators/hasprefix/#cmphasprefix-shortcut
+[`CmpHasSuffix`]: https://go-testdeep.zetta.rocks/operators/hassuffix/#cmphassuffix-shortcut
+[`CmpIsa`]: https://go-testdeep.zetta.rocks/operators/isa/#cmpisa-shortcut
+[`CmpJSON`]: https://go-testdeep.zetta.rocks/operators/json/#cmpjson-shortcut
+[`CmpKeys`]: https://go-testdeep.zetta.rocks/operators/keys/#cmpkeys-shortcut
+[`CmpLax`]: https://go-testdeep.zetta.rocks/operators/lax/#cmplax-shortcut
+[`CmpLen`]: https://go-testdeep.zetta.rocks/operators/len/#cmplen-shortcut
+[`CmpLt`]: https://go-testdeep.zetta.rocks/operators/lt/#cmplt-shortcut
+[`CmpLte`]: https://go-testdeep.zetta.rocks/operators/lte/#cmplte-shortcut
+[`CmpMap`]: https://go-testdeep.zetta.rocks/operators/map/#cmpmap-shortcut
+[`CmpMapEach`]: https://go-testdeep.zetta.rocks/operators/mapeach/#cmpmapeach-shortcut
+[`CmpN`]: https://go-testdeep.zetta.rocks/operators/n/#cmpn-shortcut
+[`CmpNaN`]: https://go-testdeep.zetta.rocks/operators/nan/#cmpnan-shortcut
+[`CmpNil`]: https://go-testdeep.zetta.rocks/operators/nil/#cmpnil-shortcut
+[`CmpNone`]: https://go-testdeep.zetta.rocks/operators/none/#cmpnone-shortcut
+[`CmpNot`]: https://go-testdeep.zetta.rocks/operators/not/#cmpnot-shortcut
+[`CmpNotAny`]: https://go-testdeep.zetta.rocks/operators/notany/#cmpnotany-shortcut
+[`CmpNotEmpty`]: https://go-testdeep.zetta.rocks/operators/notempty/#cmpnotempty-shortcut
+[`CmpNotNaN`]: https://go-testdeep.zetta.rocks/operators/notnan/#cmpnotnan-shortcut
+[`CmpNotNil`]: https://go-testdeep.zetta.rocks/operators/notnil/#cmpnotnil-shortcut
+[`CmpNotZero`]: https://go-testdeep.zetta.rocks/operators/notzero/#cmpnotzero-shortcut
+[`CmpPPtr`]: https://go-testdeep.zetta.rocks/operators/pptr/#cmppptr-shortcut
+[`CmpPtr`]: https://go-testdeep.zetta.rocks/operators/ptr/#cmpptr-shortcut
+[`CmpRe`]: https://go-testdeep.zetta.rocks/operators/re/#cmpre-shortcut
+[`CmpReAll`]: https://go-testdeep.zetta.rocks/operators/reall/#cmpreall-shortcut
+[`CmpSet`]: https://go-testdeep.zetta.rocks/operators/set/#cmpset-shortcut
+[`CmpShallow`]: https://go-testdeep.zetta.rocks/operators/shallow/#cmpshallow-shortcut
+[`CmpSlice`]: https://go-testdeep.zetta.rocks/operators/slice/#cmpslice-shortcut
+[`CmpSmuggle`]: https://go-testdeep.zetta.rocks/operators/smuggle/#cmpsmuggle-shortcut
+[`CmpSStruct`]: https://go-testdeep.zetta.rocks/operators/sstruct/#cmpsstruct-shortcut
+[`CmpString`]: https://go-testdeep.zetta.rocks/operators/string/#cmpstring-shortcut
+[`CmpStruct`]: https://go-testdeep.zetta.rocks/operators/struct/#cmpstruct-shortcut
+[`CmpSubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/#cmpsubbagof-shortcut
+[`CmpSubJSONOf`]: https://go-testdeep.zetta.rocks/operators/subjsonof/#cmpsubjsonof-shortcut
+[`CmpSubMapOf`]: https://go-testdeep.zetta.rocks/operators/submapof/#cmpsubmapof-shortcut
+[`CmpSubSetOf`]: https://go-testdeep.zetta.rocks/operators/subsetof/#cmpsubsetof-shortcut
+[`CmpSuperBagOf`]: https://go-testdeep.zetta.rocks/operators/superbagof/#cmpsuperbagof-shortcut
+[`CmpSuperJSONOf`]: https://go-testdeep.zetta.rocks/operators/superjsonof/#cmpsuperjsonof-shortcut
+[`CmpSuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/#cmpsupermapof-shortcut
+[`CmpSuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/#cmpsupersetof-shortcut
+[`CmpTruncTime`]: https://go-testdeep.zetta.rocks/operators/trunctime/#cmptrunctime-shortcut
+[`CmpValues`]: https://go-testdeep.zetta.rocks/operators/values/#cmpvalues-shortcut
+[`CmpZero`]: https://go-testdeep.zetta.rocks/operators/zero/#cmpzero-shortcut
 
 [`T.All`]: https://go-testdeep.zetta.rocks/operators/all/#t-all-shortcut
 [`T.Any`]: https://go-testdeep.zetta.rocks/operators/any/#t-any-shortcut
@@ -367,6 +369,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.Shallow`]: https://go-testdeep.zetta.rocks/operators/shallow/#t-shallow-shortcut
 [`T.Slice`]: https://go-testdeep.zetta.rocks/operators/slice/#t-slice-shortcut
 [`T.Smuggle`]: https://go-testdeep.zetta.rocks/operators/smuggle/#t-smuggle-shortcut
+[`T.SStruct`]: https://go-testdeep.zetta.rocks/operators/sstruct/#t-sstruct-shortcut
 [`T.String`]: https://go-testdeep.zetta.rocks/operators/string/#t-string-shortcut
 [`T.Struct`]: https://go-testdeep.zetta.rocks/operators/struct/#t-struct-shortcut
 [`T.SubBagOf`]: https://go-testdeep.zetta.rocks/operators/subbagof/#t-subbagof-shortcut

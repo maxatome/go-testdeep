@@ -2199,6 +2199,63 @@ func ExampleT_Smuggle_field_path() {
 	// check Num using an other fields-path: true
 }
 
+func ExampleT_SStruct() {
+	t := NewT(&testing.T{})
+
+	type Person struct {
+		Name        string
+		Age         int
+		NumChildren int
+	}
+
+	got := Person{
+		Name:        "Foobar",
+		Age:         42,
+		NumChildren: 0,
+	}
+
+	// NumChildren is not listed in expected fields so it must be zero
+	ok := t.SStruct(got, Person{Name: "Foobar"}, StructFields{
+		"Age": Between(40, 50),
+	},
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
+	// Model can be empty
+	got.NumChildren = 3
+	ok = t.SStruct(got, Person{}, StructFields{
+		"Name":        "Foobar",
+		"Age":         Between(40, 50),
+		"NumChildren": Not(0),
+	},
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
+	// Works with pointers too
+	ok = t.SStruct(&got, &Person{}, StructFields{
+		"Name":        "Foobar",
+		"Age":         Between(40, 50),
+		"NumChildren": Not(0),
+	},
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
+	// Model does not need to be instanciated
+	ok = t.SStruct(&got, (*Person)(nil), StructFields{
+		"Name":        "Foobar",
+		"Age":         Between(40, 50),
+		"NumChildren": Not(0),
+	},
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// true
+	// true
+}
+
 func ExampleT_String() {
 	t := NewT(&testing.T{})
 

@@ -19,13 +19,8 @@ func TestT(tt *testing.T) {
 	cmp := func(tt *testing.T, got, expected testdeep.ContextConfig) {
 		tt.Helper()
 		testdeep.Cmp(tt, got,
-			// TODO until we get a StrictStruct operator
-			testdeep.Struct(testdeep.ContextConfig{}, testdeep.StructFields{
-				"RootName":       expected.RootName,
-				"MaxErrors":      expected.MaxErrors,
-				"FailureIsFatal": expected.FailureIsFatal,
-				"UseEqual":       expected.UseEqual,
-				"BeLax":          expected.BeLax,
+			testdeep.SStruct(expected, testdeep.StructFields{
+				"anchors": testdeep.Ignore(),
 			}),
 		)
 	}

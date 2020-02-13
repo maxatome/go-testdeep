@@ -13,11 +13,11 @@ weight = 15
 [`Any`]({{< ref "Any" >}})
 : at least one expected value have to match
 
-[`ArrayEach`]({{< ref "ArrayEach" >}})
-: compares each array or slice item
-
 [`Array`]({{< ref "Array" >}})
 : compares the contents of an array or a pointer on an array
+
+[`ArrayEach`]({{< ref "ArrayEach" >}})
+: compares each array or slice item
 
 [`Bag`]({{< ref "Bag" >}})
 : compares the contents of an array or a slice without taking care of the order of items
@@ -34,11 +34,11 @@ weight = 15
 [`Code`]({{< ref "Code" >}})
 : checks using a custom function
 
-[`ContainsKey`]({{< ref "ContainsKey" >}})
-: checks that a map contains a key
-
 [`Contains`]({{< ref "Contains" >}})
 : checks that a string, [`error`] or [`fmt.Stringer`] interfaces contain a sub-string; or an array, slice or map contain a value
+
+[`ContainsKey`]({{< ref "ContainsKey" >}})
+: checks that a map contains a key
 
 [`Empty`]({{< ref "Empty" >}})
 : checks that an array, a channel, a map, a slice or a string is empty
@@ -79,11 +79,11 @@ weight = 15
 [`Lte`]({{< ref "Lte" >}})
 : checks that a number, string or [`time.Time`] is lesser or equal than a value
 
-[`MapEach`]({{< ref "MapEach" >}})
-: compares each map entry
-
 [`Map`]({{< ref "Map" >}})
 : compares the contents of a map
+
+[`MapEach`]({{< ref "MapEach" >}})
+: compares each map entry
 
 [`N`]({{< ref "N" >}})
 : compares a number with a tolerance value
@@ -96,6 +96,9 @@ weight = 15
 
 [`None`]({{< ref "None" >}})
 : no values have to match
+
+[`Not`]({{< ref "Not" >}})
+: value must not match
 
 [`NotAny`]({{< ref "NotAny" >}})
 : compares the contents of an array or a slice, no values have to match
@@ -112,20 +115,17 @@ weight = 15
 [`NotZero`]({{< ref "NotZero" >}})
 : checks that data is not zero regarding its type
 
-[`Not`]({{< ref "Not" >}})
-: value must not match
-
 [`PPtr`]({{< ref "PPtr" >}})
 : allows to easily test a pointer of pointer value
 
 [`Ptr`]({{< ref "Ptr" >}})
 : allows to easily test a pointer value
 
-[`ReAll`]({{< ref "ReAll" >}})
-: allows to successively apply a regexp on a string (or convertible), `[]byte`, [`error`] or [`fmt.Stringer`] interfaces, and even test the captured groups
-
 [`Re`]({{< ref "Re" >}})
 : allows to apply a regexp on a string (or convertible), `[]byte`, [`error`] or [`fmt.Stringer`] interfaces, and even test the captured groups
+
+[`ReAll`]({{< ref "ReAll" >}})
+: allows to successively apply a regexp on a string (or convertible), `[]byte`, [`error`] or [`fmt.Stringer`] interfaces, and even test the captured groups
 
 [`Set`]({{< ref "Set" >}})
 : compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items
@@ -138,6 +138,9 @@ weight = 15
 
 [`Smuggle`]({{< ref "Smuggle" >}})
 : changes data contents or mutates it into another type via a custom function or a struct fields-path before stepping down in favor of generic comparison process
+
+[`SStruct`]({{< ref "SStruct" >}})
+: strictly compares the contents of a struct or a pointer on a struct
 
 [`String`]({{< ref "String" >}})
 : checks a string, [`error`] or [`fmt.Stringer`] interfaces string contents
@@ -198,11 +201,11 @@ The following operators are smuggler ones:
 [`Catch`]({{< ref "Catch" >}})
 : catches data on the fly before comparing it
 
-[`ContainsKey`]({{< ref "ContainsKey" >}})
-: checks that a map contains a key
-
 [`Contains`]({{< ref "Contains" >}})
 : checks that a string, [`error`] or [`fmt.Stringer`] interfaces contain a sub-string; or an array, slice or map contain a value
+
+[`ContainsKey`]({{< ref "ContainsKey" >}})
+: checks that a map contains a key
 
 [`Keys`]({{< ref "Keys" >}})
 : checks keys of a map
@@ -285,6 +288,7 @@ The following operators are smuggler ones:
 [`Shallow`]: {{< ref "Shallow" >}}
 [`Slice`]: {{< ref "Slice" >}}
 [`Smuggle`]: {{< ref "Smuggle" >}}
+[`SStruct`]: {{< ref "SStruct" >}}
 [`String`]: {{< ref "String" >}}
 [`Struct`]: {{< ref "Struct" >}}
 [`SubBagOf`]: {{< ref "SubBagOf" >}}
@@ -342,6 +346,7 @@ The following operators are smuggler ones:
 [`CmpShallow`]: {{< ref "Shallow#cmpshallow-shortcut" >}}
 [`CmpSlice`]: {{< ref "Slice#cmpslice-shortcut" >}}
 [`CmpSmuggle`]: {{< ref "Smuggle#cmpsmuggle-shortcut" >}}
+[`CmpSStruct`]: {{< ref "SStruct#cmpsstruct-shortcut" >}}
 [`CmpString`]: {{< ref "String#cmpstring-shortcut" >}}
 [`CmpStruct`]: {{< ref "Struct#cmpstruct-shortcut" >}}
 [`CmpSubBagOf`]: {{< ref "SubBagOf#cmpsubbagof-shortcut" >}}
@@ -398,6 +403,7 @@ The following operators are smuggler ones:
 [`T.Shallow`]: {{< ref "Shallow#t-shallow-shortcut" >}}
 [`T.Slice`]: {{< ref "Slice#t-slice-shortcut" >}}
 [`T.Smuggle`]: {{< ref "Smuggle#t-smuggle-shortcut" >}}
+[`T.SStruct`]: {{< ref "SStruct#t-sstruct-shortcut" >}}
 [`T.String`]: {{< ref "String#t-string-shortcut" >}}
 [`T.Struct`]: {{< ref "Struct#t-struct-shortcut" >}}
 [`T.SubBagOf`]: {{< ref "SubBagOf#t-subbagof-shortcut" >}}

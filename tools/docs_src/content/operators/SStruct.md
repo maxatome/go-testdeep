@@ -1,29 +1,39 @@
 ---
-title: "Struct"
+title: "SStruct"
 weight: 10
 ---
 
 ```go
-func Struct(model interface{}, expectedFields StructFields) TestDeep
+func SStruct(model interface{}, expectedFields StructFields) TestDeep
 ```
 
-[`Struct`]({{< ref "Struct" >}}) operator compares the contents of a struct or a pointer on a
-struct against the non-zero values of *model* (if any) and the
-values of *expectedFields*. See [`SStruct`]({{< ref "SStruct" >}}) to compares against zero
-fields without specifying them in *expectedFields*.
+[`SStruct`]({{< ref "SStruct" >}}) operator (a.k.a. strict-[`Struct`]({{< ref "Struct" >}})) compares the contents of a
+struct or a pointer on a struct against values of *model* (if any)
+and the values of *expectedFields*. The zero values are compared
+too even if they are omitted from *expectedFields*: that is the
+difference with [`Struct`]({{< ref "Struct" >}}) operator.
+
+To ignore a field, one has to specify it in *expectedFields* and
+use the [`Ignore`]({{< ref "Ignore" >}}) operator.
+
+```go
+td.SStruct(Person{Name: "Bob"},
+  td.StructFields{
+    "Age": td.Ignore(),
+  })
+```
 
 *model* must be the same type as compared data.
 
-*expectedFields* can be `nil`, if no zero entries are expected and
-no [TestDeep operators]({{< ref "operators" >}}) are involved.
+*expectedFields* can be `nil`, if no [TestDeep operators]({{< ref "operators" >}}) are involved.
 
-During a match, all expected fields must be found to
-succeed. Non-expected fields are ignored.
+During a match, all expected and zero fields must be found to
+succeed.
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep#Struct).
+> See also [<i class='fas fa-book'></i> SStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#SStruct).
 
 ### Examples
 
@@ -39,20 +49,21 @@ succeed. Non-expected fields are ignored.
 	got := Person{
 		Name:        "Foobar",
 		Age:         42,
-		NumChildren: 3,
+		NumChildren: 0,
 	}
 
-	// As NumChildren is zero in Struct() call, it is not checked
+	// NumChildren is not listed in expected fields so it must be zero
 	ok := Cmp(t, got,
-		Struct(Person{Name: "Foobar"}, StructFields{
+		SStruct(Person{Name: "Foobar"}, StructFields{
 			"Age": Between(40, 50),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
+	got.NumChildren = 3
 	ok = Cmp(t, got,
-		Struct(Person{}, StructFields{
+		SStruct(Person{}, StructFields{
 			"Name":        "Foobar",
 			"Age":         Between(40, 50),
 			"NumChildren": Not(0),
@@ -62,7 +73,7 @@ succeed. Non-expected fields are ignored.
 
 	// Works with pointers too
 	ok = Cmp(t, &got,
-		Struct(&Person{}, StructFields{
+		SStruct(&Person{}, StructFields{
 			"Name":        "Foobar",
 			"Age":         Between(40, 50),
 			"NumChildren": Not(0),
@@ -72,7 +83,7 @@ succeed. Non-expected fields are ignored.
 
 	// Model does not need to be instanciated
 	ok = Cmp(t, &got,
-		Struct((*Person)(nil), StructFields{
+		SStruct((*Person)(nil), StructFields{
 			"Name":        "Foobar",
 			"Age":         Between(40, 50),
 			"NumChildren": Not(0),
@@ -87,16 +98,16 @@ succeed. Non-expected fields are ignored.
 	// true
 
 ```{{% /expand%}}
-## CmpStruct shortcut
+## CmpSStruct shortcut
 
 ```go
-func CmpStruct(t TestingT, got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool
+func CmpSStruct(t TestingT, got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool
 ```
 
-CmpStruct is a shortcut for:
+CmpSStruct is a shortcut for:
 
 ```go
-Cmp(t, got, Struct(model, expectedFields), args...)
+Cmp(t, got, SStruct(model, expectedFields), args...)
 ```
 
 See above for details.
@@ -111,7 +122,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpStruct).
+> See also [<i class='fas fa-book'></i> CmpSStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSStruct).
 
 ### Examples
 
@@ -127,18 +138,19 @@ reason of a potential failure.
 	got := Person{
 		Name:        "Foobar",
 		Age:         42,
-		NumChildren: 3,
+		NumChildren: 0,
 	}
 
-	// As NumChildren is zero in Struct() call, it is not checked
-	ok := CmpStruct(t, got, Person{Name: "Foobar"}, StructFields{
+	// NumChildren is not listed in expected fields so it must be zero
+	ok := CmpSStruct(t, got, Person{Name: "Foobar"}, StructFields{
 		"Age": Between(40, 50),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
-	ok = CmpStruct(t, got, Person{}, StructFields{
+	got.NumChildren = 3
+	ok = CmpSStruct(t, got, Person{}, StructFields{
 		"Name":        "Foobar",
 		"Age":         Between(40, 50),
 		"NumChildren": Not(0),
@@ -147,7 +159,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = CmpStruct(t, &got, &Person{}, StructFields{
+	ok = CmpSStruct(t, &got, &Person{}, StructFields{
 		"Name":        "Foobar",
 		"Age":         Between(40, 50),
 		"NumChildren": Not(0),
@@ -156,7 +168,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = CmpStruct(t, &got, (*Person)(nil), StructFields{
+	ok = CmpSStruct(t, &got, (*Person)(nil), StructFields{
 		"Name":        "Foobar",
 		"Age":         Between(40, 50),
 		"NumChildren": Not(0),
@@ -171,16 +183,16 @@ reason of a potential failure.
 	// true
 
 ```{{% /expand%}}
-## T.Struct shortcut
+## T.SStruct shortcut
 
 ```go
-func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool
+func (t *T) SStruct(got interface{}, model interface{}, expectedFields StructFields, args ...interface{}) bool
 ```
 
-[`Struct`]({{< ref "Struct" >}}) is a shortcut for:
+[`SStruct`]({{< ref "SStruct" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Struct(model, expectedFields), args...)
+t.Cmp(got, SStruct(model, expectedFields), args...)
 ```
 
 See above for details.
@@ -195,7 +207,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Struct).
+> See also [<i class='fas fa-book'></i> T.SStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SStruct).
 
 ### Examples
 
@@ -211,18 +223,19 @@ reason of a potential failure.
 	got := Person{
 		Name:        "Foobar",
 		Age:         42,
-		NumChildren: 3,
+		NumChildren: 0,
 	}
 
-	// As NumChildren is zero in Struct() call, it is not checked
-	ok := t.Struct(got, Person{Name: "Foobar"}, StructFields{
+	// NumChildren is not listed in expected fields so it must be zero
+	ok := t.SStruct(got, Person{Name: "Foobar"}, StructFields{
 		"Age": Between(40, 50),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
-	ok = t.Struct(got, Person{}, StructFields{
+	got.NumChildren = 3
+	ok = t.SStruct(got, Person{}, StructFields{
 		"Name":        "Foobar",
 		"Age":         Between(40, 50),
 		"NumChildren": Not(0),
@@ -231,7 +244,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = t.Struct(&got, &Person{}, StructFields{
+	ok = t.SStruct(&got, &Person{}, StructFields{
 		"Name":        "Foobar",
 		"Age":         Between(40, 50),
 		"NumChildren": Not(0),
@@ -240,7 +253,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = t.Struct(&got, (*Person)(nil), StructFields{
+	ok = t.SStruct(&got, (*Person)(nil), StructFields{
 		"Name":        "Foobar",
 		"Age":         Between(40, 50),
 		"NumChildren": Not(0),

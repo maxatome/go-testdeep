@@ -65,15 +65,16 @@ weight: 1
 | [`Shallow`] | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | [`Shallow`] |
 | [`Slice`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ptr on slice | ✓ | ✗ | ✗ | [`Slice`] |
 | [`Smuggle`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Smuggle`] |
+| [`SStruct`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ptr on struct | ✓ | ✗ | ✗ | [`SStruct`] |
 | [`String`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`String`] |
 | [`Struct`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ptr on struct | ✓ | ✗ | ✗ | [`Struct`] |
 | [`SubBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubBagOf`] |
 | [`SubJSONOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ptr on map/struct | ✓ | ✗ | ✗ | [`SubJSONOf`] |
 | [`SubMapOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map | ✓ | ✗ | ✗ | [`SubMapOf`] |
-| [`SubSetOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`SubSetOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`] |
 | [`SuperBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`] |
 | [`SuperJSONOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ptr on map/struct | ✓ | ✗ | ✗ | [`SuperJSONOf`] |
 | [`SuperMapOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map | ✓ | ✗ | ✗ | [`SuperMapOf`] |
@@ -139,6 +140,7 @@ weight: 1
 [`Shallow`]: {{< ref "Shallow" >}}
 [`Slice`]: {{< ref "Slice" >}}
 [`Smuggle`]: {{< ref "Smuggle" >}}
+[`SStruct`]: {{< ref "SStruct" >}}
 [`String`]: {{< ref "String" >}}
 [`Struct`]: {{< ref "Struct" >}}
 [`SubBagOf`]: {{< ref "SubBagOf" >}}
@@ -196,6 +198,7 @@ weight: 1
 [`CmpShallow`]: {{< ref "Shallow#cmpshallow-shortcut" >}}
 [`CmpSlice`]: {{< ref "Slice#cmpslice-shortcut" >}}
 [`CmpSmuggle`]: {{< ref "Smuggle#cmpsmuggle-shortcut" >}}
+[`CmpSStruct`]: {{< ref "SStruct#cmpsstruct-shortcut" >}}
 [`CmpString`]: {{< ref "String#cmpstring-shortcut" >}}
 [`CmpStruct`]: {{< ref "Struct#cmpstruct-shortcut" >}}
 [`CmpSubBagOf`]: {{< ref "SubBagOf#cmpsubbagof-shortcut" >}}
@@ -252,6 +255,7 @@ weight: 1
 [`T.Shallow`]: {{< ref "Shallow#t-shallow-shortcut" >}}
 [`T.Slice`]: {{< ref "Slice#t-slice-shortcut" >}}
 [`T.Smuggle`]: {{< ref "Smuggle#t-smuggle-shortcut" >}}
+[`T.SStruct`]: {{< ref "SStruct#t-sstruct-shortcut" >}}
 [`T.String`]: {{< ref "String#t-string-shortcut" >}}
 [`T.Struct`]: {{< ref "Struct#t-struct-shortcut" >}}
 [`T.SubBagOf`]: {{< ref "SubBagOf#t-subbagof-shortcut" >}}
@@ -549,6 +553,7 @@ Operators likely to succeed for each go type:
 - [`None`]
 - [`Not`]
 - [`NotZero`]
+- [`SStruct`]
 - [`Smuggle`]
 - [`Struct`]
 - [`SubJSONOf`]
@@ -597,6 +602,7 @@ listed below:
 - [`NotZero`]
 - [`PPtr`]
 - [`Ptr`]
+- [`SStruct`] only ptr on struct
 - [`Set`] only ptr on array/slice
 - [`Shallow`]
 - [`Slice`] only ptr on slice
