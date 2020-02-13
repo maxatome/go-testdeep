@@ -517,7 +517,7 @@ my $gh_links = do
         . join("\n", map
                {
                    my $m = $RENAME_METHOD{$_} // $_;
-                   qq([`T.$m`]: $td_url\L$_/#t-$m-shortcut)
+                   qq([`T.$m`]: $td_url\L$_/#t$m-shortcut)
                }
                @sorted_funcs);
 };
