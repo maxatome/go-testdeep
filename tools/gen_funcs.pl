@@ -499,7 +499,7 @@ my $md_links = do
         . join("\n", map
                {
                    my $m = $RENAME_METHOD{$_} // $_;
-                   qq([`T.$m`]: {{< ref "$_#t-\L$m\E-shortcut" >}})
+                   qq([`T.$m`]: {{< ref "$_#t\L$m\E-shortcut" >}})
                }
                @sorted_funcs);
 };
