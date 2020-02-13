@@ -46,13 +46,12 @@ func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
 	buf.WriteString(": ")
 
 	buf.WriteString(colorBadOn)
-	buf.WriteString(
-		util.IndentString(s.Value, prefix+strings.Repeat(" ", len(s.Label)+2)))
+	util.IndentStringIn(buf, s.Value, prefix+strings.Repeat(" ", len(s.Label)+2))
 
 	if s.Explanation != "" {
 		buf.WriteByte('\n')
 		buf.WriteString(prefix)
-		buf.WriteString(util.IndentString(s.Explanation, prefix))
+		util.IndentStringIn(buf, s.Explanation, prefix)
 	}
 
 	buf.WriteString(colorBadOff)
@@ -94,7 +93,7 @@ var _ ErrorSummary = errorSummaryString("")
 func (s errorSummaryString) AppendSummary(buf *bytes.Buffer, prefix string) {
 	buf.WriteString(prefix)
 	buf.WriteString(colorBadOn)
-	buf.WriteString(util.IndentString(string(s), prefix))
+	util.IndentStringIn(buf, string(s), prefix)
 	buf.WriteString(colorBadOff)
 }
 

@@ -177,7 +177,7 @@ output type is strict and must match exactly the expected value
 type. The fields-path `string` *fn* shortcut is not available with
 [`Code`]({{< ref "Code" >}}) operator.
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of only parameter of
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of only parameter of
 *fn*. For the case where *fn* is a fields-path, it is always
 `interface{}`, as the type can not be known in advance.
 

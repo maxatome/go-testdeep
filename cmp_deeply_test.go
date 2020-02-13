@@ -17,7 +17,7 @@ import (
 func TestFormatError(t *testing.T) {
 	defer ctxerr.SaveColorState()()
 
-	ttt := &test.TestingT{}
+	ttt := test.NewTestingT()
 
 	err := &ctxerr.Error{
 		Context: newContext(),
@@ -75,21 +75,21 @@ DATA: test error message
 }
 
 func TestCmp(t *testing.T) {
-	tt := &test.TestingFT{}
+	tt := test.NewTestingFT(t.Name())
 	test.IsTrue(t, Cmp(tt, 1, 1))
 	test.IsFalse(t, tt.Failed())
 
-	tt = &test.TestingFT{}
+	tt = test.NewTestingFT(t.Name())
 	test.IsFalse(t, Cmp(tt, 1, 2))
 	test.IsTrue(t, tt.Failed())
 }
 
 func TestCmpDeeply(t *testing.T) {
-	tt := &test.TestingFT{}
+	tt := test.NewTestingFT(t.Name())
 	test.IsTrue(t, CmpDeeply(tt, 1, 1))
 	test.IsFalse(t, tt.Failed())
 
-	tt = &test.TestingFT{}
+	tt = test.NewTestingFT(t.Name())
 	test.IsFalse(t, CmpDeeply(tt, 1, 2))
 	test.IsTrue(t, tt.Failed())
 }

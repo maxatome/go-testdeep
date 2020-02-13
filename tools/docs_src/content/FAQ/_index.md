@@ -23,6 +23,139 @@ func TestAssertionsAndRequirements(t *testing.T) {
 }
 ```
 
+## How does operator anchoring work?
+
+Take this struct, returned by a `GetPerson()` function:
+
+```golang
+type Person struct {
+  ID   int64
+  Name string
+  Age  uint8
+}
+```
+
+For the `Person` returned by `GetPerson()`, we expect that:
+
+- `ID` field should be ≠ 0;
+- `Name` field should always be "Bob";
+- `Age` field should be ≥ 40 and ≤ 45.
+
+Without operator anchoring:
+
+```golang
+func TestPerson(tt *testing.T) {
+  t := td.NewT(tt)
+
+  t.Cmp(GetPerson(),               // ← ①
+    td.Struct(Person{Name: "Bob"}, // ← ②
+      td.StructFields{             // ← ③
+        "ID":  td.NotZero(),       // ← ④
+        "Age": td.Between(uint8(40), uint8(45)), // ← ⑤
+      }))
+}
+```
+
+1. `GetPerson()` returns a `Person`;
+2. as some fields of the returned `Person` are not exactly known in
+   advance, we use the [`Struct`]({{< ref "Struct" >}}) operator as
+   expected parameter. It allows to match exactly some fields, and use
+   [TestDeep operators]({{< ref "operators" >}}) on others. Here we
+   know that `Name` field should always be "Bob";
+3. [`StructFields`](https://godoc.org/github.com/maxatome/go-testdeep#StructFields)
+   is a map allowing to use [TestDeep operators]({{< ref "operators" >}})
+   for any field;
+4. `ID` field should be ≠ 0. See [`NotZero`]({{< ref "NotZero" >}})
+   operator for details;
+5. `Age` field should be ≥ 40 and ≤ 45. See [`Between`]({{< ref "between" >}})
+   operator for details.
+
+With operator anchoring, the use of [`Struct`]({{< ref "Struct" >}})
+operator is no longer needed:
+
+```golang
+func TestPerson(tt *testing.T) {
+  t := td.NewT(tt)
+
+  t.Cmp(GetPerson(), // ← ①
+    Person{          // ← ②
+      Name: "Bob",   // ← ③
+      ID:   t.A(td.NotZero(), int64(0)).(int64), // ← ④
+      Age:  t.A(td.Between(uint8(40), uint8(45))).(uint8), // ← ⑤
+    })
+}
+```
+
+1. `GetPerson()` still returns a `Person`;
+2. expected parameter is directly a `Person`. No operator needed here;
+3. `Name` field should always be "Bob", no change here;
+4. `ID` field should be ≠ 0: anchor the [`NotZero`]({{< ref "NotZero" >}})
+   operator using the [`A`] method. Break this line down:
+   ```golang
+   t.A(            // ← ①
+     td.NotZero(), // ← ②
+     int64(0),     // ← ③
+   ).(int64)       // ← ④
+   ```
+   1. the [`A`] method is the key of the anchoring system. It saves
+      the operator globally, so it can be retrieved during the
+      comparison of the next [`Cmp`] call,
+   2. the operator we want to anchor,
+   3. this optional parameter is needed to tell [`A`] that the returned
+      value must be a `int64`. Sometimes, this type can be deduced
+      from the operator, but as [`NotZero`]({{< ref "NotZero" >}}) can
+      handle any kind of number, it is not the case here. So we have
+      to pass it,
+   4. as [`A`] method returns an `interface{}`, we need to assert the
+      `int64` type to bypass the golang static typing system,
+5. `Age `field should be ≥ 40 and ≤ 45: anchor the
+   [`Between`]({{< ref "between" >}}) operator using the [`A`]
+   method. Break this line down:
+   ```golang
+   t.A(                                // ← ①
+     td.Between(uint8(40), uint8(45)), // ← ②
+   ).(uint8)                           // ← ③
+   ```
+   1. the [`A`] method saves the operator globally, so it can be
+      retrieved during the comparison of the next [`Cmp`] call,
+   2. the operator we want to anchor. As [`Between`]({{< ref "between" >}})
+      knows the type of its operands (here `uint8`), there is no need
+      to tell [`A`] the returned type must be `uint8`. It can be deduced
+      from [`Between`]({{< ref "between" >}}),
+   3. as [`A`] method returns an `interface{}`, we need to assert the
+      `uint8` type to bypass the golang static typing system.
+
+Note the [`A`] method is a shortcut of [`Anchor`] method.
+
+Some rules have to be kept in mind:
+- never cast a value returned by [`A`] or [`Anchor`] methods:
+  ```golang
+  t := td.NewT(tt) // tt is a *testing.T
+  t.A(td.NotZero(), uint(8)).(uint8)         // OK
+  uint16(t.A(td.NotZero(), uint(8)).(uint8)) // Not OK!
+  t.A(td.NotZero(), uint16(0)).(uint16)      // OK
+  ```
+- anchored operators disappear once the next [`Cmp`] call done. To
+  share them between [`Cmp`] calls, use the [`SetAnchorsPersist`]
+  method as in:
+  ```golang
+  t := td.NewT(tt) // tt is a *testing.T
+  age := t.A(td.Between(uint8(40), uint8(45))).(uint8)
+
+  t.SetAnchorsPersist(true) // ← Don't reset anchors after next Cmp() call
+
+  t.Cmp(GetPerson(1), Person{
+    Name: "Bob",
+    Age:  age,
+  })
+
+  t.Cmp(GetPerson(2), Person{
+    Name: "Bob",
+    Age:  age, // ← OK
+  })
+  ```
+
+
 ## How to test `io.Reader` contents, like `net/http.Response.Body` for example?
 
 The [`Smuggle`]({{< ref "Smuggle" >}}) operator is done for that,
@@ -45,6 +178,7 @@ func TestResponseBody(t *testing.T) {
     td.Smuggle(ioutil.ReadAll, []byte("Expected Response!")))
 }
 ```
+
 
 ## OK, but I prefer comparing `string`s instead of `byte`s
 
@@ -76,6 +210,7 @@ func TestResponseBody(t *testing.T) {
 
 ```
 
+
 ## OK, but my response is in fact a JSON marshaled struct of my own
 
 No problem, [JSON decode](https://golang.org/pkg/encoding/json/#Decoder)
@@ -103,8 +238,8 @@ func TestResponseBody(t *testing.T) {
 
   td.Cmp(t, resp.Body, td.Smuggle( // ← transform a io.Reader in *Person
     func(body io.Reader) (*Person, error) {
-	  var s Person
-	  return &s, json.NewDecoder(body).Decode(&s)
+      var s Person
+      return &s, json.NewDecoder(body).Decode(&s)
     },
     &Person{ // ← check Person content
       ID:   42,
@@ -113,6 +248,7 @@ func TestResponseBody(t *testing.T) {
     }))
 }
 ```
+
 
 ## OK, but you are funny, this response sends a new created object, so I don't know the ID in advance!
 
@@ -145,8 +281,8 @@ func TestResponseBody(t *testing.T) {
 
   td.Cmp(t, resp.Body, td.Smuggle( // ← transform a io.Reader in *Person
     func(body io.Reader) (*Person, error) {
-	  var s Person
-	  return &s, json.NewDecoder(body).Decode(&s)
+      var s Person
+      return &s, json.NewDecoder(body).Decode(&s)
     },
     td.Struct(&Person{ // ← check Person content
       Name: "Bob",
@@ -155,8 +291,22 @@ func TestResponseBody(t *testing.T) {
       "ID":        td.NotZero(),  // check ID ≠ 0
       "CreatedAt": td.Gte(y2019), // check CreatedAt ≥ 2019/01/01
     })))
+
+  tt := td.newT(t)
+  tt.Cmp(resp.Body, td.Smuggle( // ← transform a io.Reader in *Person
+    func(body io.Reader) (*Person, error) {
+      var s Person
+      return &s, json.NewDecoder(body).Decode(&s)
+    },
+    &Person{ // ← check Person content
+      Name:      "Bob",
+      Age:       28,
+      ID:        tt.A(td.NotZero(), uint64(0)).(uint64), // check ID ≠ 0
+      CreatedAt: tt.A(td.Gte(y2019)).(time.Time),        // check CreatedAt ≥ 2019/01/01
+    }))
 }
 ```
+
 
 ## What about testing the response using my API?
 
@@ -196,7 +346,7 @@ func MyAPI() *http.ServeMux {
       ID:        42,
       Name:      "Bob",
       Age:       28,
-	  CreatedAt: time.Now().UTC(),
+      CreatedAt: time.Now().UTC(),
     })
     if err != nil {
       http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -217,22 +367,31 @@ func TestMyApi(t *testing.T) {
   y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
 
   tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"), // ← the request
-    myAPI.ServeHTTP,     // ← the API handler
-    tdhttp.Response{ // ← the expected response
+    tdhttp.Get("/json"), // ← ①
+    myAPI.ServeHTTP,     // ← ②
+    tdhttp.Response{     // ← ③
       Status: http.StatusOK,
       // Header can be tested too… See tdhttp doc.
       Body: td.Struct(&Person{
         Name: "Bob",
         Age:  28,
       }, td.StructFields{
-        "ID":        td.NotZero(),  // check ID ≠ 0
-		"CreatedAt": td.Gte(y2019), // check CreatedAt ≥ 2019/01/01
+        "ID":        td.NotZero(),  // ← ④
+        "CreatedAt": td.Gte(y2019), // ← ⑤
       }),
     },
     "Testing GET /json")
 }
 ```
+
+1. the GET request;
+2. the API handler;
+3. the expected response: HTTP status should be `http.StatusOK` and
+   the body should match the [`Struct`]({{< ref "Struct" >}}) operator;
+4. check the `ID` field is [`NotZero`]({{< ref "NotZero" >}});
+5. check the `CreatedAt` field is greater or equal than `y2019` variable
+   (set just before `tdhttp.CmpJSONResponse` call).
+
 
 ## Arf, I use Gin Gonic, and so no `net/http` handlers
 
@@ -270,7 +429,7 @@ func MyGinGonicAPI() *gin.Engine {
       ID:        42,
       Name:      "Bob",
       Age:       28,
-	  CreatedAt: time.Now().UTC(),
+      CreatedAt: time.Now().UTC(),
     })
   })
 
@@ -283,22 +442,31 @@ func TestMyGinGonicApi(t *testing.T) {
   y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
 
   tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"), // ← the request
-    myAPI.ServeHTTP,     // ← the API handler
-    tdhttp.Response{ // ← the expected response
+    tdhttp.Get("/json"), // ← ①
+    myAPI.ServeHTTP,     // ← ②
+    tdhttp.Response{     // ← ③
       Status: http.StatusOK,
       // Header can be tested too… See tdhttp doc.
       Body: td.Struct(&Person{
         Name: "Bob",
         Age:  28,
       }, td.StructFields{
-        "ID":        td.NotZero(),  // check ID ≠ 0
-		"CreatedAt": td.Gte(y2019), // check CreatedAt ≥ 2019/01/01
+        "ID":        td.NotZero(),  // ← ④
+        "CreatedAt": td.Gte(y2019), // ← ⑤
       }),
     },
     "Testing GET /json")
 }
 ```
+
+1. the GET request;
+2. the API handler;
+3. the expected response: HTTP status should be `http.StatusOK` and
+   the body should match the [`Struct`]({{< ref "Struct" >}}) operator;
+4. check the `ID` field is [`NotZero`]({{< ref "NotZero" >}});
+5. check the `CreatedAt` field is greater or equal than `y2019` variable
+   (set just before `tdhttp.CmpJSONResponse` call).
+
 
 ## Fine, the request succeeds and the ID is not 0, but what is the ID real value?
 
@@ -315,17 +483,17 @@ func TestMyGinGonicApi(t *testing.T) {
   y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
 
   if tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"), // ← the request
-    myAPI.ServeHTTP,     // ← the API handler
-    tdhttp.Response{ // ← the expected response
+    tdhttp.Get("/json"), // ← ①
+    myAPI.ServeHTTP,     // ← ②
+    tdhttp.Response{     // ← ③
       Status: http.StatusOK,
       // Header can be tested too… See tdhttp doc.
       Body: td.Struct(&Person{
         Name: "Bob",
         Age:  28,
       }, td.StructFields{
-        "ID":        td.Catch(&id, td.NotZero()),         // ← id set here
-		"CreatedAt": td.Catch(&createdAt, td.Gte(y2019)), // ← createdAt set here
+        "ID":        td.Catch(&id, td.NotZero()),         // ← ④
+        "CreatedAt": td.Catch(&createdAt, td.Gte(y2019)), // ← ⑤
       }),
     },
     "Testing GET /json") {
@@ -333,6 +501,17 @@ func TestMyGinGonicApi(t *testing.T) {
   }
 }
 ```
+
+1. the GET request;
+2. the API handler;
+3. the expected response: HTTP status should be `http.StatusOK` and
+   the body should match the [`Struct`]({{< ref "Struct" >}}) operator;
+4. [`Catch`]({{< ref "Catch" >}}) the `ID` field: put it in `id`
+   variable and check it is [`NotZero`]({{< ref "NotZero" >}});
+5. [`Catch`]({{< ref "Catch" >}}) the `CreatedAt` field: put it in `createdAt`
+   variable and check it is greater or equal than `y2019` variable
+   (set just before `tdhttp.CmpJSONResponse` call).
+
 
 ## OK, but how to be sure the response content is well JSONified?
 
@@ -357,9 +536,9 @@ func TestMyGinGonicApi(t *testing.T) {
   beforeCreate := time.Now().Truncate(0)
 
   if tdhttp.CmpJSONResponse(t,
-    tdhttp.PostJSON("/person", Person{Name: "Bob", Age: 42}), // ← the request
-    myAPI.ServeHTTP, // ← the API handler
-    tdhttp.Response{ // ← the expected response
+    tdhttp.PostJSON("/person", Person{Name: "Bob", Age: 42}), // ← ①
+    myAPI.ServeHTTP,                                      // ← ②
+    tdhttp.Response{                                      // ← ③
       Status: http.StatusCreated,
       Body: td.JSON(`
 {
@@ -368,12 +547,12 @@ func TestMyGinGonicApi(t *testing.T) {
   "age":        42,
   "created_at": "$createdAt",
 }`,
-        td.Tag("id", td.Catch(&id, td.NotZero())), // catch $id and check ≠ 0
-        td.Tag("created_at", td.All( // ← All combines several operators like a AND
-          td.HasSuffix("Z"), // check the RFC3339 $created_at date ends with "Z"
-          td.Smuggle(func(s string) (time.Time, error) { // convert to time.Time
+        td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ④
+        td.Tag("created_at", td.All(                      // ← ⑤
+          td.HasSuffix("Z"),                              // ← ⑥
+          td.Smuggle(func(s string) (time.Time, error) {  // ← ⑦
             return time.Parse(time.RFC3339Nano, s)
-          }, td.Catch(&createdAt, td.Gte(beforeCreate))), // catch it and check ≥ beforeCreate
+          }, td.Catch(&createdAt, td.Gte(beforeCreate))), // ← ⑧
         )),
       ),
       // Header can be tested too… See tdhttp doc.
@@ -384,14 +563,33 @@ func TestMyGinGonicApi(t *testing.T) {
 }
 ```
 
+1. the POST request with automatic JSON marshalling;
+2. the API handler;
+3. the expected response: HTTP status should be `http.StatusCreated`
+   and the body should match the [`JSON`]({{< ref "JSON" >}})
+   operator;
+4. for the `$id` placeholder, [`Catch`]({{< ref "Catch" >}}) its
+   value: put it in `id` variable and check it is
+   [`NotZero`]({{< ref "NotZero" >}});
+5. for the `$created_at` placeholder, use the [`All`]({{< ref "All" >}})
+   operator. It combines several operators like a AND;
+6. check that `$created_at` date ends with "Z" using
+   [`HasSuffix`]({{< ref "HasSuffix" >}}). As we expect a RFC3339
+   date, we require it in UTC time zone;
+7. convert `$created_at` date into a `time.Time` using a custom
+   function thanks to the [`Smuggle`]({{< ref "Smuggle" >}}) operator;
+8. then [`Catch`]({{< ref "Catch" >}}) the resulting value: put it in
+   `createdAt` variable and check it is greater or equal than
+   `beforeCreate` (set just before `tdhttp.CmpJSONResponse` call).
+
+
 ## go-testdeep dumps only 10 errors, how to have more (or less)?
 
 Using the environment variable `TESTDEEP_MAX_ERRORS`.
 
 `TESTDEEP_MAX_ERRORS` contains the maximum number of errors to report
-before stopping during one comparison (one
-[`Cmp`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp)
-execution for example). It defaults to `10`.
+before stopping during one comparison (one [`Cmp`] execution for
+example). It defaults to `10`.
 
 Example:
 ```shell
@@ -475,3 +673,10 @@ Each time you change `example_test.go`, re-run `./tools/gen_funcs.pl .`
 to update corresponding `CmpFooBar` & `T.FooBar` examples.
 
 Test coverage must be 100%.
+
+
+[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep#Cmp
+
+[`A`]: https://godoc.org/github.com/maxatome/go-testdeep#T.A
+[`Anchor`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Anchor
+[`SetAnchorsPersist`]: https://godoc.org/github.com/maxatome/go-testdeep#T.SetAnchorsPersist

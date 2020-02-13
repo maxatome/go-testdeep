@@ -413,6 +413,9 @@ The following operators are smuggler ones:
 [`T.Zero`]: {{< ref "Zero#t-zero-shortcut" >}}
 <!-- smugglers:end -->
 
+[`T.Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp
+[`T.CmpLax`]: https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax
+
 
 ## `TypeBehind` method
 

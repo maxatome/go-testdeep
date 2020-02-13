@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018, 2019, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -6,7 +6,9 @@
 
 package testdeep
 
-import "testing"
+import (
+	"testing"
+)
 
 // T is a type that encapsulates *testing.T (in fact TestingFT
 // interface which is implemented by *testing.T) allowing to easily
@@ -124,7 +126,7 @@ var _ TestingFT = T{}
 func NewT(t TestingFT, config ...ContextConfig) *T {
 	var newT T
 
-	if len(config) > 1 {
+	if len(config) > 1 || t == nil {
 		panic("usage: NewT(TestingFT[, ContextConfig]")
 	}
 
@@ -145,6 +147,8 @@ func NewT(t TestingFT, config ...ContextConfig) *T {
 		}
 	}
 	newT.Config.sanitize()
+
+	newT.initAnchors()
 
 	return &newT
 }
@@ -311,6 +315,7 @@ func (t *T) BeLax(enable ...bool) *T {
 // reason of a potential failure.
 func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
+	defer t.resetNonPersistentAnchors()
 	return cmpDeeply(newContextWithConfig(t.Config),
 		t.TestingFT, got, expected, args...)
 }
@@ -319,6 +324,7 @@ func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
 // compatibility purpose. Use shorter Cmp in new code.
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
+	defer t.resetNonPersistentAnchors()
 	return cmpDeeply(newContextWithConfig(t.Config),
 		t.TestingFT, got, expected, args...)
 }
@@ -406,6 +412,7 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 // reason of a potential failure.
 func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool {
 	t.Helper()
+	defer t.resetNonPersistentAnchors()
 	return cmpPanic(newContextWithConfig(t.Config), t, fn, expected, args...)
 }
 

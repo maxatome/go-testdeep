@@ -20,9 +20,9 @@ as well as an other operator:
 Ptr(Between(3, 4))
 ```
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a pointer on *val*,
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a pointer on *val*,
 except if *val* is a [TestDeep operator]({{< ref "operators" >}}). In this case, it delegates
-[TypeBehind()]({{< ref "operators#typebehind-method" >}}) to the operator and returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a
+[`TypeBehind()`]({{< ref "operators#typebehind-method" >}}) to the operator and returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a
 pointer on the returned value (if non-`nil` of course).
 
 

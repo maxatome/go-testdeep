@@ -19,6 +19,10 @@ type TestingT struct {
 	HasFailed   bool
 }
 
+func NewTestingT() *TestingT {
+	return &TestingT{}
+}
+
 // Fatal mocks testing.T Error method.
 func (t *TestingT) Error(args ...interface{}) {
 	t.LastMessage = fmt.Sprint(args...)
@@ -42,6 +46,11 @@ func (t *TestingT) Helper() {
 // used in tests.
 type TestingFT struct {
 	TestingT
+	name string
+}
+
+func NewTestingFT(name string) *TestingFT {
+	return &TestingFT{name: name}
 }
 
 // Errorf mocks testing.T Errorf method.
@@ -78,7 +87,7 @@ func (t *TestingFT) Logf(format string, args ...interface{}) {}
 
 // Name mocks testing.T Name method.
 func (t *TestingFT) Name() string {
-	return ""
+	return t.name
 }
 
 // Skip mocks testing.T Skip method.

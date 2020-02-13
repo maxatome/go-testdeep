@@ -892,7 +892,7 @@ sub process_doc
            }
            elsif ($7)
            {
-               qq![$7]({{< ref "operators#typebehind-method" >}})!
+               qq![`$7`]({{< ref "operators#typebehind-method" >}})!
            }
            elsif ($8)
            {

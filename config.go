@@ -10,6 +10,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/maxatome/go-testdeep/internal/anchors"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
@@ -35,6 +36,7 @@ type ContextConfig struct {
 	// Setting it to a negative number means no limit: all errors
 	// will be dumped.
 	MaxErrors int
+	anchors   *anchors.Info
 	// FailureIsFatal allows to Fatal() (instead of Error()) when a test
 	// fails. Using *testing.T instance as t.TestingFT value, FailNow()
 	// is called behind the scenes when Fatal() is called. See testing
@@ -56,6 +58,14 @@ type ContextConfig struct {
 	// function/method and Lax operator to set this flag without
 	// providing a specific configuration.
 	BeLax bool
+}
+
+func (c ContextConfig) Equal(o ContextConfig) bool {
+	return c.RootName == o.RootName &&
+		c.MaxErrors == o.MaxErrors &&
+		c.FailureIsFatal == o.FailureIsFatal &&
+		c.UseEqual == o.UseEqual &&
+		c.BeLax == o.BeLax
 }
 
 const (
@@ -110,6 +120,7 @@ func newContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 		Path:           ctxerr.NewPath(config.RootName),
 		Visited:        visited.NewVisited(),
 		MaxErrors:      config.MaxErrors,
+		Anchors:        config.anchors,
 		FailureIsFatal: config.FailureIsFatal,
 		UseEqual:       config.UseEqual,
 		BeLax:          config.BeLax,

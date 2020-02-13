@@ -153,7 +153,7 @@ parameters) have shortcuts. They follow:
 - [`Zero`]({{< ref "Zero" >}})     → `$^Zero`
 
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the `map[string]interface{}` type.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the `map[string]interface{}` type.
 
 
 > See also [<i class='fas fa-book'></i> SuperJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SuperJSONOf).

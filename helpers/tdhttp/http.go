@@ -34,8 +34,6 @@ type Response struct {
 // handler. The response body is unmarshaled using unmarshal. The
 // response is then tested against expectedResp.
 //
-// All the tests are enclosed in a testdeep.Run().
-//
 // It returns true if the tests succeed, false otherwise.
 func CmpMarshaledResponse(tt td.TestingFT,
 	req *http.Request,
@@ -53,6 +51,7 @@ func CmpMarshaledResponse(tt td.TestingFT,
 	var statusMismatch, headerMismatch bool
 
 	t := td.NewT(tt)
+	defer t.AnchorsPersistTemporarily()()
 
 	w := httptest.NewRecorder()
 
@@ -154,8 +153,6 @@ func CmpMarshaledResponse(tt td.TestingFT,
 // depending on the expectedResp.Body type. The response is then
 // tested against expectedResp.
 //
-// All the tests are enclosed in a testdeep.Run().
-//
 // It returns true if the tests succeed, false otherwise.
 func CmpResponse(t td.TestingFT,
 	req *http.Request,
@@ -190,8 +187,6 @@ func CmpResponse(t td.TestingFT,
 // non-nil, the response body is json.Unmarshal'ed. The response is
 // then tested against expectedResp.
 //
-// All the tests are enclosed in a testdeep.Run().
-//
 // It returns true if the tests succeed, false otherwise.
 func CmpJSONResponse(t td.TestingFT,
 	req *http.Request,
@@ -212,8 +207,6 @@ func CmpJSONResponse(t td.TestingFT,
 // *http.Request is launched against handler. If expectedResp.Body is
 // non-nil, the response body is xml.Unmarshal'ed. The response is
 // then tested against expectedResp.
-//
-// All the tests are enclosed in a testdeep.Run().
 //
 // It returns true if the tests succeed, false otherwise.
 func CmpXMLResponse(t td.TestingFT,
@@ -238,7 +231,7 @@ func CmpXMLResponse(t td.TestingFT,
 // omitted.
 //
 //   t.Run("Subtest name", tdhttp.CmpMarshaledResponseFunc(
-//     tdhttp.NewRequest("GET", "/text", nil),
+//     tdhttp.Get("/text"),
 //     mux.ServeHTTP,
 //     tdhttp.Response{
 //       Status: http.StatusOK,
@@ -259,7 +252,7 @@ func CmpMarshaledResponseFunc(req *http.Request,
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //   t.Run("Subtest name", tdhttp.CmpResponseFunc(
-//     tdhttp.NewRequest("GET", "/text", nil),
+//     tdhttp.Get("/text"),
 //     mux.ServeHTTP,
 //     tdhttp.Response{
 //       Status: http.StatusOK,
@@ -279,7 +272,7 @@ func CmpResponseFunc(req *http.Request,
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //   t.Run("Subtest name", tdhttp.CmpJSONResponseFunc(
-//     tdhttp.NewRequest("GET", "/json", nil),
+//     tdhttp.Get("/json"),
 //     mux.ServeHTTP,
 //     tdhttp.Response{
 //       Status: http.StatusOK,
@@ -300,7 +293,7 @@ func CmpJSONResponseFunc(req *http.Request,
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //   t.Run("Subtest name", tdhttp.CmpXMLResponseFunc(
-//     tdhttp.NewRequest("GET", "/xml", nil),
+//     tdhttp.Get("/xml"),
 //     mux.ServeHTTP,
 //     tdhttp.Response{
 //       Status: http.StatusOK,

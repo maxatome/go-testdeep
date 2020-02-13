@@ -14,7 +14,11 @@ import (
 )
 
 func TestT(t *testing.T) {
-	mockT := &tdutil.T{}
+	mockT := tdutil.NewT("hey!")
+
+	if n := mockT.Name(); n != "hey!" {
+		t.Errorf(`Test name is not correct, got: %s, expected: hey!`, n)
+	}
 
 	mockT.Log("Hey this is a log message!")
 

@@ -20,7 +20,7 @@ is the same time instant.
 Whatever the *trunc* value is, the monotonic clock is stripped
 before the comparison against *expectedTime*.
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *expectedTime*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *expectedTime*.
 
 
 > See also [<i class='fas fa-book'></i> TruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep#TruncTime).

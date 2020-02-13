@@ -22,7 +22,7 @@ or not:
 
 If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind).
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *from* (same as the *to* one.)
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *from* (same as the *to* one.)
 
 
 > See also [<i class='fas fa-book'></i> Between godoc](https://godoc.org/github.com/maxatome/go-testdeep#Between).

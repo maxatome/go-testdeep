@@ -15,20 +15,35 @@ import (
 )
 
 func TestT(tt *testing.T) {
+	// We don't want to include "anchors" field in comparison
+	cmp := func(tt *testing.T, got, expected testdeep.ContextConfig) {
+		tt.Helper()
+		testdeep.Cmp(tt, got,
+			// TODO until we get a StrictStruct operator
+			testdeep.Struct(testdeep.ContextConfig{}, testdeep.StructFields{
+				"RootName":       expected.RootName,
+				"MaxErrors":      expected.MaxErrors,
+				"FailureIsFatal": expected.FailureIsFatal,
+				"UseEqual":       expected.UseEqual,
+				"BeLax":          expected.BeLax,
+			}),
+		)
+	}
+
 	tt.Run("without config", func(tt *testing.T) {
 		t := testdeep.NewT(tt)
-		testdeep.Cmp(tt, t.Config, testdeep.DefaultContextConfig)
+		cmp(tt, t.Config, testdeep.DefaultContextConfig)
 
 		tDup := testdeep.NewT(t)
-		testdeep.Cmp(tt, tDup.Config, testdeep.DefaultContextConfig)
+		cmp(tt, tDup.Config, testdeep.DefaultContextConfig)
 	})
 
 	tt.Run("explicit default config", func(tt *testing.T) {
 		t := testdeep.NewT(tt, testdeep.ContextConfig{})
-		testdeep.Cmp(tt, t.Config, testdeep.DefaultContextConfig)
+		cmp(tt, t.Config, testdeep.DefaultContextConfig)
 
 		tDup := testdeep.NewT(t)
-		testdeep.Cmp(tt, tDup.Config, testdeep.DefaultContextConfig)
+		cmp(tt, tDup.Config, testdeep.DefaultContextConfig)
 	})
 
 	tt.Run("specific config", func(tt *testing.T) {
@@ -37,58 +52,60 @@ func TestT(tt *testing.T) {
 			MaxErrors: 33,
 		}
 		t := testdeep.NewT(tt, conf)
-		testdeep.Cmp(tt, t.Config, conf)
+		cmp(tt, t.Config, conf)
 
 		tDup := testdeep.NewT(t)
-		testdeep.Cmp(tt, tDup.Config, conf)
+		cmp(tt, tDup.Config, conf)
 
 		newConf := conf
 		newConf.MaxErrors = 34
 		tDup = testdeep.NewT(t, newConf)
-		testdeep.Cmp(tt, tDup.Config, newConf)
+		cmp(tt, tDup.Config, newConf)
 
 		t2 := t.RootName("T2")
-		testdeep.Cmp(tt, t.Config, conf)
-		testdeep.Cmp(tt, t2.Config, testdeep.ContextConfig{
+		cmp(tt, t.Config, conf)
+		cmp(tt, t2.Config, testdeep.ContextConfig{
 			RootName:  "T2",
 			MaxErrors: 33,
 		})
 
 		t3 := t.RootName("")
-		testdeep.Cmp(tt, t3.Config, testdeep.ContextConfig{
+		cmp(tt, t3.Config, testdeep.ContextConfig{
 			RootName:  "DATA",
 			MaxErrors: 33,
 		})
 	})
 
 	//
-	// Bad usage
+	// Bad usages
 	test.CheckPanic(tt,
 		func() {
 			testdeep.NewT(tt, testdeep.ContextConfig{}, testdeep.ContextConfig{})
 		},
 		"usage: NewT")
+
+	test.CheckPanic(tt, func() { testdeep.NewT(nil) }, "usage: NewT")
 }
 
 func TestTCmp(tt *testing.T) {
-	ttt := &test.TestingFT{}
+	ttt := test.NewTestingFT(tt.Name())
 	t := testdeep.NewT(ttt)
 	testdeep.CmpTrue(tt, t.Cmp(1, 1))
 	testdeep.CmpFalse(tt, ttt.Failed())
 
-	ttt = &test.TestingFT{}
+	ttt = test.NewTestingFT(tt.Name())
 	t = testdeep.NewT(ttt)
 	testdeep.CmpFalse(tt, t.Cmp(1, 2))
 	testdeep.CmpTrue(tt, ttt.Failed())
 }
 
 func TestTCmpDeeply(tt *testing.T) {
-	ttt := &test.TestingFT{}
+	ttt := test.NewTestingFT(tt.Name())
 	t := testdeep.NewT(ttt)
 	testdeep.CmpTrue(tt, t.CmpDeeply(1, 1))
 	testdeep.CmpFalse(tt, ttt.Failed())
 
-	ttt = &test.TestingFT{}
+	ttt = test.NewTestingFT(tt.Name())
 	t = testdeep.NewT(ttt)
 	testdeep.CmpFalse(tt, t.CmpDeeply(1, 2))
 	testdeep.CmpTrue(tt, ttt.Failed())
@@ -114,7 +131,7 @@ func TestRunT(tt *testing.T) {
 }
 
 func TestFailureIsFatal(tt *testing.T) {
-	ttt := &test.TestingFT{}
+	ttt := test.NewTestingFT(tt.Name())
 
 	// All t.True(false) tests of course fail
 
@@ -201,7 +218,7 @@ func TestFailureIsFatal(tt *testing.T) {
 }
 
 func TestUseEqual(tt *testing.T) {
-	ttt := &test.TestingFT{}
+	ttt := test.NewTestingFT(tt.Name())
 
 	var time1, time2 time.Time
 	for {
@@ -231,7 +248,7 @@ func TestUseEqual(tt *testing.T) {
 }
 
 func TestBeLax(tt *testing.T) {
-	ttt := &test.TestingFT{}
+	ttt := test.NewTestingFT(tt.Name())
 
 	// Using default config
 	t := testdeep.NewT(ttt)

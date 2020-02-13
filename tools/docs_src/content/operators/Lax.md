@@ -27,11 +27,11 @@ Note that in the latter case, CmpLax() could be used as well:
 CmpLax(t, floatValue, bw)
 ```
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the greatest convertible or more common
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the greatest convertible or more common
 [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *expectedValue* if it is a base type (`bool`, `int*`,
 `uint*`, `float*`, `complex*`, `string`), the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of
 *expectedValue* otherwise, except if *expectedValue* is a [TestDeep
-operator]({{< ref "operators" >}}). In this case, it delegates [TypeBehind()]({{< ref "operators#typebehind-method" >}}) to the operator.
+operator]({{< ref "operators" >}}). In this case, it delegates [`TypeBehind()`]({{< ref "operators#typebehind-method" >}}) to the operator.
 
 
 > See also [<i class='fas fa-book'></i> Lax godoc](https://godoc.org/github.com/maxatome/go-testdeep#Lax).

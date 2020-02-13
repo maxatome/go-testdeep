@@ -60,13 +60,6 @@ func Keys(val interface{}) TestDeep {
 	panic("usage: Keys(TESTDEEP_OPERATOR|SLICE)")
 }
 
-func (k *tdKeys) String() string {
-	if k.isTestDeeper {
-		return "keys: " + k.expectedValue.Interface().(TestDeep).String()
-	}
-	return "keys=" + util.ToString(k.expectedValue.Interface())
-}
-
 func (k *tdKeys) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Kind() != reflect.Map {
 		if ctx.BooleanError {
@@ -86,6 +79,13 @@ func (k *tdKeys) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		keys.Index(i).Set(k)
 	}
 	return deepValueEqual(ctx.AddFunctionCall("keys"), keys, k.expectedValue)
+}
+
+func (k *tdKeys) String() string {
+	if k.isTestDeeper {
+		return "keys: " + k.expectedValue.Interface().(TestDeep).String()
+	}
+	return "keys=" + util.ToString(k.expectedValue.Interface())
 }
 
 type tdValues struct {
@@ -112,13 +112,6 @@ func Values(val interface{}) TestDeep {
 	panic("usage: Values(TESTDEEP_OPERATOR|SLICE)")
 }
 
-func (v *tdValues) String() string {
-	if v.isTestDeeper {
-		return "values: " + v.expectedValue.Interface().(TestDeep).String()
-	}
-	return "values=" + util.ToString(v.expectedValue.Interface())
-}
-
 func (v *tdValues) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if got.Kind() != reflect.Map {
 		if ctx.BooleanError {
@@ -138,4 +131,11 @@ func (v *tdValues) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		values.Index(i).Set(v)
 	}
 	return deepValueEqual(ctx.AddFunctionCall("values"), values, v.expectedValue)
+}
+
+func (v *tdValues) String() string {
+	if v.isTestDeeper {
+		return "values: " + v.expectedValue.Interface().(TestDeep).String()
+	}
+	return "values=" + util.ToString(v.expectedValue.Interface())
 }

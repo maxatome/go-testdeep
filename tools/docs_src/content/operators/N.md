@@ -11,7 +11,7 @@ func N(num interface{}, tolerance ...interface{}) TestDeep
 *tolerance* is missing, it defaults to 0. *num* and *tolerance*
 must be the same kind as the compared value.
 
-[TypeBehind]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *num*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *num*.
 
 
 > See also [<i class='fas fa-book'></i> N godoc](https://godoc.org/github.com/maxatome/go-testdeep#N).

@@ -16,16 +16,15 @@ type tdIgnore struct {
 	baseOKNil
 }
 
-var ignoreSingleton TestDeep = &tdIgnore{}
-
 // summary(Ignore): allows to ignore a comparison
 // input(Ignore): all
 
 // Ignore operator is always true, whatever data is. It is useful when
 // comparing a slice and wanting to ignore some indexes, for example.
 func Ignore() TestDeep {
-	// newBase() useless
-	return ignoreSingleton
+	return &tdIgnore{
+		baseOKNil: newBaseOKNil(3),
+	}
 }
 
 func (i *tdIgnore) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
