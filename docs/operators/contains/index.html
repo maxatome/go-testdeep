@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Contains :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598213" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598213" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598213" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598213" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598213" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598213" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598213" rel="stylesheet">
+    <link href="/css/theme.css?1581598213" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598213" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598213" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598213"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598213"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598213"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598213"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1561,23 +1580,23 @@
                     <div class="progress">
     <div class="wrapper">
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#examples">Examples</a></li>
-</ul></li>
-<li><a href="#cmpcontains-shortcut">CmpContains shortcut</a>
-<ul>
-<li><a href="#examples-1">Examples</a></li>
-</ul></li>
-<li><a href="#t-contains-shortcut">T.Contains shortcut</a>
-<ul>
-<li><a href="#examples-2">Examples</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#examples">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#cmpcontains-shortcut">CmpContains shortcut</a>
+      <ul>
+        <li><a href="#examples-1">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#tcontains-shortcut">T.Contains shortcut</a>
+      <ul>
+        <li><a href="#examples-2">Examples</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
     </div>
 </div>
@@ -1602,10 +1621,8 @@
 
 
 
-
-
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Contains</span>(expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep</code></pre></div>
-<p><a href="/operators/contains/"><code>Contains</code></a> is a <a href="/operators/#smuggler-operators">smuggler operator</a> with a little convenient exception
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Contains</span>(expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep
+</code></pre></div><p><a href="/operators/contains/"><code>Contains</code></a> is a <a href="/operators/#smuggler-operators">smuggler operator</a> with a little convenient exception
 for strings. <a href="/operators/contains/"><code>Contains</code></a> has to be applied on arrays, slices, maps or
 strings. It compares each item of data array/slice/map/<code>string</code> (<code>rune</code>
 for strings) against <em>expectedValue</em>.</p>
@@ -1622,8 +1639,8 @@ hash := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="col
 got := <span style="color:#ed9d13">&#34;foo bar&#34;</span>
 <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Contains</span>(<span style="color:#ed9d13">&#39;o&#39;</span>))               <span style="color:#999;font-style:italic">// succeeds
 </span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Contains</span>(<span style="color:#24909d">rune</span>(<span style="color:#ed9d13">&#39;o&#39;</span>)))         <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Contains</span>(<span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#39;n&#39;</span>, <span style="color:#ed9d13">&#39;p&#39;</span>))) // succeeds</code></pre></div>
-<p>When <a href="/operators/contains/"><code>Contains(nil)</code></a> is used, <code>nil</code> is automatically converted to a
+</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Contains</span>(<span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#39;n&#39;</span>, <span style="color:#ed9d13">&#39;p&#39;</span>))) <span style="color:#999;font-style:italic">// succeeds
+</span></code></pre></div><p>When <a href="/operators/contains/"><code>Contains(nil)</code></a> is used, <code>nil</code> is automatically converted to a
 typed <code>nil</code> on the fly to avoid confusion (if the array/slice/map
 item type allows it of course.) So all following Cmp calls
 are equivalent (except the <code>(*byte)(nil)</code> one):</p>
@@ -1632,14 +1649,14 @@ list := []*<span style="color:#6ab825;font-weight:bold">int</span>{&amp;num, <sp
 <span style="color:#447fcf">Cmp</span>(t, list, <span style="color:#447fcf">Contains</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))         <span style="color:#999;font-style:italic">// succeeds → (*int)(nil)
 </span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, list, <span style="color:#447fcf">Contains</span>((*<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))) <span style="color:#999;font-style:italic">// succeeds
 </span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, list, <span style="color:#447fcf">Contains</span>(<span style="color:#447fcf">Nil</span>()))       <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic">// But...
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, list, <span style="color:#447fcf">Contains</span>((*<span style="color:#6ab825;font-weight:bold">byte</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))) // fails: (*<span style="color:#6ab825;font-weight:bold">byte</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>) <span style="color:#a61717;background-color:#e3d2d2">≠</span> (*<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)</code></pre></div>
-<p>As well as these ones:</p>
+</span><span style="color:#999;font-style:italic"></span><span style="color:#999;font-style:italic">// But...
+</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, list, <span style="color:#447fcf">Contains</span>((*<span style="color:#6ab825;font-weight:bold">byte</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))) <span style="color:#999;font-style:italic">// fails: (*byte)(nil) ≠ (*int)(nil)
+</span></code></pre></div><p>As well as these ones:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">hash := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]*<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#6ab825;font-weight:bold">nil</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: &amp;num}
 <span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">Contains</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))         <span style="color:#999;font-style:italic">// succeeds → (*int)(nil)
 </span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">Contains</span>((*<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))) <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">Contains</span>(<span style="color:#447fcf">Nil</span>()))       // succeeds</code></pre></div>
-<p>As a special case for <code>string</code> (or convertible), <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or
+</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">Contains</span>(<span style="color:#447fcf">Nil</span>()))       <span style="color:#999;font-style:italic">// succeeds
+</span></code></pre></div><p>As a special case for <code>string</code> (or convertible), <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or
 <a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interface (<a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> interface is tested before
 <a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a>), <em>expectedValue</em> can be a <code>string</code>, a <code>rune</code> or a
 <code>byte</code>. In this case, it tests if the got <code>string</code> contains this
@@ -1651,13 +1668,11 @@ err := errors.<span style="color:#447fcf">New</span>(<span style="color:#ed9d13"
 <span style="color:#447fcf">Cmp</span>(t, err, <span style="color:#447fcf">Contains</span>(<span style="color:#ed9d13">&#34;ror&#34;</span>)) <span style="color:#999;font-style:italic">// succeeds
 </span><span style="color:#999;font-style:italic"></span>
 bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="color:#ed9d13">&#34;fmt.Stringer!&#34;</span>)
-<span style="color:#447fcf">Cmp</span>(t, bstr, <span style="color:#447fcf">Contains</span>(<span style="color:#ed9d13">&#34;String&#34;</span>)) // succeeds</code></pre></div>
-<blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#Contains"><i class='fas fa-book'></i> Contains godoc</a>.</p>
+<span style="color:#447fcf">Cmp</span>(t, bstr, <span style="color:#447fcf">Contains</span>(<span style="color:#ed9d13">&#34;String&#34;</span>)) <span style="color:#999;font-style:italic">// succeeds
+</span></code></pre></div><blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#Contains"><!-- raw HTML omitted --><!-- raw HTML omitted --> Contains godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1688,7 +1703,9 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains 22: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains at least one item in [20 .. 25]: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// slice contains 22: true
-</span><span style="color:#999;font-style:italic"></span>	// slice contains at least one item in [<span style="color:#3677a9">20</span> .. <span style="color:#3677a9">25</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// slice contains at least one item in [20 .. 25]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1724,7 +1741,9 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains untyped nil: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains *int nil: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains Nil(): true
-</span><span style="color:#999;font-style:italic"></span>	// array contains *<span style="color:#6ab825;font-weight:bold">byte</span> <span style="color:#6ab825;font-weight:bold">nil</span>: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains *byte nil: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1752,7 +1771,9 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains value 22: true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains at least one value in [<span style="color:#3677a9">20</span> .. <span style="color:#3677a9">25</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains at least one value in [20 .. 25]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1787,7 +1808,9 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// contains at least one character [<span style="color:#ed9d13">&#39;n&#39;</span> .. <span style="color:#ed9d13">&#39;p&#39;</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains at least one character [&#39;n&#39; .. &#39;p&#39;]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1825,7 +1848,9 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// try TestDeep operator: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// try TestDeep operator: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1862,31 +1887,27 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// try TestDeep operator: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// try TestDeep operator: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
-
 <h2 id="cmpcontains-shortcut">CmpContains shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpContains</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p>CmpContains is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Contains</span>(expectedValue), args...)</code></pre></div>
-<p>See above for details.</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpContains</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p>CmpContains is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Contains</span>(expectedValue), args...)
+</code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
-
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpContains"><i class='fas fa-book'></i> CmpContains godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpContains"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpContains godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples-1">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1917,7 +1938,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains 22: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains at least one item in [20 .. 25]: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// slice contains 22: true
-</span><span style="color:#999;font-style:italic"></span>	// slice contains at least one item in [<span style="color:#3677a9">20</span> .. <span style="color:#3677a9">25</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// slice contains at least one item in [20 .. 25]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1953,7 +1976,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains untyped nil: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains *int nil: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains Nil(): true
-</span><span style="color:#999;font-style:italic"></span>	// array contains *<span style="color:#6ab825;font-weight:bold">byte</span> <span style="color:#6ab825;font-weight:bold">nil</span>: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains *byte nil: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1978,7 +2003,9 @@ reason of a potential failure.</p>
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains value 22: true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains at least one value in [<span style="color:#3677a9">20</span> .. <span style="color:#3677a9">25</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains at least one value in [20 .. 25]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2013,7 +2040,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// contains at least one character [<span style="color:#ed9d13">&#39;n&#39;</span> .. <span style="color:#ed9d13">&#39;p&#39;</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains at least one character [&#39;n&#39; .. &#39;p&#39;]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2051,7 +2080,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// try TestDeep operator: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// try TestDeep operator: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2088,31 +2119,27 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// try TestDeep operator: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// try TestDeep operator: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
-
-<h2 id="t-contains-shortcut">T.Contains shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Contains</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p><a href="/operators/contains/"><code>Contains</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Contains</span>(expectedValue), args...)</code></pre></div>
-<p>See above for details.</p>
-
+<h2 id="tcontains-shortcut">T.Contains shortcut</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Contains</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p><a href="/operators/contains/"><code>Contains</code></a> is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Contains</span>(expectedValue), args...)
+</code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
-
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Contains"><i class='fas fa-book'></i> T.Contains godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Contains"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.Contains godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples-2">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -2143,7 +2170,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains 22: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains at least one item in [20 .. 25]: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// slice contains 22: true
-</span><span style="color:#999;font-style:italic"></span>	// slice contains at least one item in [<span style="color:#3677a9">20</span> .. <span style="color:#3677a9">25</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// slice contains at least one item in [20 .. 25]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2179,7 +2208,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains untyped nil: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains *int nil: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains Nil(): true
-</span><span style="color:#999;font-style:italic"></span>	// array contains *<span style="color:#6ab825;font-weight:bold">byte</span> <span style="color:#6ab825;font-weight:bold">nil</span>: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// array contains *byte nil: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2204,7 +2235,9 @@ reason of a potential failure.</p>
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains value 22: true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">map</span> contains at least one value in [<span style="color:#3677a9">20</span> .. <span style="color:#3677a9">25</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// map contains at least one value in [20 .. 25]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2239,7 +2272,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// contains at least one character [<span style="color:#ed9d13">&#39;n&#39;</span> .. <span style="color:#ed9d13">&#39;p&#39;</span>]: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains at least one character [&#39;n&#39; .. &#39;p&#39;]: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2277,7 +2312,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// try TestDeep operator: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// try TestDeep operator: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2314,7 +2351,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains `oob` string: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;b&#39; rune: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// contains &#39;a&#39; byte: true
-</span><span style="color:#999;font-style:italic"></span>	// try TestDeep operator: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// try TestDeep operator: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
 
@@ -3462,6 +3501,22 @@ reason of a potential failure.</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -3519,19 +3574,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
+    <script src="/js/jquery.sticky.js?1581598214"></script>
+    <script src="/js/featherlight.min.js?1581598214"></script>
+    <script src="/js/highlight.pack.js?1581598214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
+    <script src="/js/learn.js?1581598214"></script>
+    <script src="/js/hugo-learn.js?1581598214"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598214"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

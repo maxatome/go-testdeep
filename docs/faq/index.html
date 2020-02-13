@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>FAQ :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598214" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598214" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598214" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598214" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598214" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598214" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598214" rel="stylesheet">
+    <link href="/css/theme.css?1581598214" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598214" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598214" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598214"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598214"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598214"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1555,26 +1574,25 @@
                     <div class="progress">
     <div class="wrapper">
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#how-to-mix-strict-requirements-and-simple-assertions">How to mix strict requirements and simple assertions?</a></li>
-<li><a href="#how-to-test-io-reader-contents-like-net-http-response-body-for-example">How to test <code>io.Reader</code> contents, like <code>net/http.Response.Body</code> for example?</a></li>
-<li><a href="#ok-but-i-prefer-comparing-string-s-instead-of-byte-s">OK, but I prefer comparing <code>string</code>s instead of <code>byte</code>s</a></li>
-<li><a href="#ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own">OK, but my response is in fact a JSON marshaled struct of my own</a></li>
-<li><a href="#ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-don-t-know-the-id-in-advance">OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</a></li>
-<li><a href="#what-about-testing-the-response-using-my-api">What about testing the response using my API?</a></li>
-<li><a href="#arf-i-use-gin-gonic-and-so-no-net-http-handlers">Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</a></li>
-<li><a href="#fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</a></li>
-<li><a href="#ok-but-how-to-be-sure-the-response-content-is-well-jsonified">OK, but how to be sure the response content is well JSONified?</a></li>
-<li><a href="#go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</a></li>
-<li><a href="#how-do-i-change-these-crappy-colors">How do I change these crappy colors?</a>
-<ul>
-<li><a href="#color-format">Color format</a></li>
-</ul></li>
-<li><a href="#how-to-add-a-new-operator">How to add a new operator?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#how-to-mix-strict-requirements-and-simple-assertions">How to mix strict requirements and simple assertions?</a></li>
+    <li><a href="#how-does-operator-anchoring-work">How does operator anchoring work?</a></li>
+    <li><a href="#how-to-test-ioreader-contents-like-nethttpresponsebody-for-example">How to test io.Reader contents, like net/http.Response.Body for example?</a></li>
+    <li><a href="#ok-but-i-prefer-comparing-strings-instead-of-bytes">OK, but I prefer comparing strings instead of bytes</a></li>
+    <li><a href="#ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own">OK, but my response is in fact a JSON marshaled struct of my own</a></li>
+    <li><a href="#ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-dont-know-the-id-in-advance">OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</a></li>
+    <li><a href="#what-about-testing-the-response-using-my-api">What about testing the response using my API?</a></li>
+    <li><a href="#arf-i-use-gin-gonic-and-so-no-nethttp-handlers">Arf, I use Gin Gonic, and so no net/http handlers</a></li>
+    <li><a href="#fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</a></li>
+    <li><a href="#ok-but-how-to-be-sure-the-response-content-is-well-jsonified">OK, but how to be sure the response content is well JSONified?</a></li>
+    <li><a href="#go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</a></li>
+    <li><a href="#how-do-i-change-these-crappy-colors">How do I change these crappy colors?</a>
+      <ul>
+        <li><a href="#color-format">Color format</a></li>
+      </ul>
+    </li>
+    <li><a href="#how-to-add-a-new-operator">How to add a new operator?</a></li>
+  </ul>
 </nav>
     </div>
 </div>
@@ -1600,9 +1618,7 @@
 
 
 
-	
-
-<h2 id="how-to-mix-strict-requirements-and-simple-assertions">How to mix strict requirements and simple assertions?</h2>
+	<h2 id="how-to-mix-strict-requirements-and-simple-assertions">How to mix strict requirements and simple assertions?</h2>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
 
@@ -1616,9 +1632,129 @@
 
   require.<span style="color:#447fcf">Cmp</span>(got, expected) <span style="color:#999;font-style:italic">// if it fails: report error + abort
 </span><span style="color:#999;font-style:italic"></span>  assert.<span style="color:#447fcf">Cmp</span>(got, expected)  <span style="color:#999;font-style:italic">// if it fails: report error + continue
-</span><span style="color:#999;font-style:italic"></span>}</code></pre></div>
-<h2 id="how-to-test-io-reader-contents-like-net-http-response-body-for-example">How to test <code>io.Reader</code> contents, like <code>net/http.Response.Body</code> for example?</h2>
+</span><span style="color:#999;font-style:italic"></span>}
+</code></pre></div><h2 id="how-does-operator-anchoring-work">How does operator anchoring work?</h2>
+<p>Take this struct, returned by a <code>GetPerson()</code> function:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+  ID   <span style="color:#6ab825;font-weight:bold">int64</span>
+  Name <span style="color:#6ab825;font-weight:bold">string</span>
+  Age  <span style="color:#6ab825;font-weight:bold">uint8</span>
+}
+</code></pre></div><p>For the <code>Person</code> returned by <code>GetPerson()</code>, we expect that:</p>
+<ul>
+<li><code>ID</code> field should be ≠ 0;</li>
+<li><code>Name</code> field should always be &ldquo;Bob&rdquo;;</li>
+<li><code>Age</code> field should be ≥ 40 and ≤ 45.</li>
+</ul>
+<p>Without operator anchoring:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestPerson</span>(tt *testing.T) {
+  t := td.<span style="color:#447fcf">NewT</span>(tt)
 
+  t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">GetPerson</span>(),               <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>    td.<span style="color:#447fcf">Struct</span>(Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>}, <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>      td.StructFields{             <span style="color:#999;font-style:italic">// ← ③
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#ed9d13">&#34;ID&#34;</span>:  td.<span style="color:#447fcf">NotZero</span>(),       <span style="color:#999;font-style:italic">// ← ④
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#ed9d13">&#34;Age&#34;</span>: td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>)), <span style="color:#999;font-style:italic">// ← ⑤
+</span><span style="color:#999;font-style:italic"></span>      }))
+}
+</code></pre></div><ol>
+<li><code>GetPerson()</code> returns a <code>Person</code>;</li>
+<li>as some fields of the returned <code>Person</code> are not exactly known in
+advance, we use the <a href="/operators/struct/"><code>Struct</code></a> operator as
+expected parameter. It allows to match exactly some fields, and use
+<a href="/operators/">TestDeep operators</a> on others. Here we
+know that <code>Name</code> field should always be &ldquo;Bob&rdquo;;</li>
+<li><a href="https://godoc.org/github.com/maxatome/go-testdeep#StructFields"><code>StructFields</code></a>
+is a map allowing to use <a href="/operators/">TestDeep operators</a>
+for any field;</li>
+<li><code>ID</code> field should be ≠ 0. See <a href="/operators/notzero/"><code>NotZero</code></a>
+operator for details;</li>
+<li><code>Age</code> field should be ≥ 40 and ≤ 45. See <a href="/operators/between/"><code>Between</code></a>
+operator for details.</li>
+</ol>
+<p>With operator anchoring, the use of <a href="/operators/struct/"><code>Struct</code></a>
+operator is no longer needed:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestPerson</span>(tt *testing.T) {
+  t := td.<span style="color:#447fcf">NewT</span>(tt)
+
+  t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">GetPerson</span>(), <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>    Person{          <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>      Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,   <span style="color:#999;font-style:italic">// ← ③
+</span><span style="color:#999;font-style:italic"></span>      ID:   t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">int64</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">int64</span>), <span style="color:#999;font-style:italic">// ← ④
+</span><span style="color:#999;font-style:italic"></span>      Age:  t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>))).(<span style="color:#6ab825;font-weight:bold">uint8</span>), <span style="color:#999;font-style:italic">// ← ⑤
+</span><span style="color:#999;font-style:italic"></span>    })
+}
+</code></pre></div><ol>
+<li><code>GetPerson()</code> still returns a <code>Person</code>;</li>
+<li>expected parameter is directly a <code>Person</code>. No operator needed here;</li>
+<li><code>Name</code> field should always be &ldquo;Bob&rdquo;, no change here;</li>
+<li><code>ID</code> field should be ≠ 0: anchor the <a href="/operators/notzero/"><code>NotZero</code></a>
+operator using the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method. Break this line down:
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t.<span style="color:#447fcf">A</span>(            <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>  td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>  <span style="color:#24909d">int64</span>(<span style="color:#3677a9">0</span>),     <span style="color:#999;font-style:italic">// ← ③
+</span><span style="color:#999;font-style:italic"></span>).(<span style="color:#6ab825;font-weight:bold">int64</span>)       <span style="color:#999;font-style:italic">// ← ④
+</span></code></pre></div><ol>
+<li>the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method is the key of the anchoring system. It saves
+the operator globally, so it can be retrieved during the
+comparison of the next <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> call,</li>
+<li>the operator we want to anchor,</li>
+<li>this optional parameter is needed to tell <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> that the returned
+value must be a <code>int64</code>. Sometimes, this type can be deduced
+from the operator, but as <a href="/operators/notzero/"><code>NotZero</code></a> can
+handle any kind of number, it is not the case here. So we have
+to pass it,</li>
+<li>as <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
+<code>int64</code> type to bypass the golang static typing system,</li>
+</ol>
+</li>
+<li><code>Age </code>field should be ≥ 40 and ≤ 45: anchor the
+<a href="/operators/between/"><code>Between</code></a> operator using the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a>
+method. Break this line down:
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t.<span style="color:#447fcf">A</span>(                                <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>  td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>)), <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>).(<span style="color:#6ab825;font-weight:bold">uint8</span>)                           <span style="color:#999;font-style:italic">// ← ③
+</span></code></pre></div><ol>
+<li>the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method saves the operator globally, so it can be
+retrieved during the comparison of the next <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> call,</li>
+<li>the operator we want to anchor. As <a href="/operators/between/"><code>Between</code></a>
+knows the type of its operands (here <code>uint8</code>), there is no need
+to tell <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> the returned type must be <code>uint8</code>. It can be deduced
+from <a href="/operators/between/"><code>Between</code></a>,</li>
+<li>as <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
+<code>uint8</code> type to bypass the golang static typing system.</li>
+</ol>
+</li>
+</ol>
+<p>Note the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method is a shortcut of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Anchor"><code>Anchor</code></a> method.</p>
+<p>Some rules have to be kept in mind:</p>
+<ul>
+<li>never cast a value returned by <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> or <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Anchor"><code>Anchor</code></a> methods:
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t := td.<span style="color:#447fcf">NewT</span>(tt) <span style="color:#999;font-style:italic">// tt is a *testing.T
+</span><span style="color:#999;font-style:italic"></span>t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint</span>(<span style="color:#3677a9">8</span>)).(<span style="color:#6ab825;font-weight:bold">uint8</span>)         <span style="color:#999;font-style:italic">// OK
+</span><span style="color:#999;font-style:italic"></span><span style="color:#24909d">uint16</span>(t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint</span>(<span style="color:#3677a9">8</span>)).(<span style="color:#6ab825;font-weight:bold">uint8</span>)) <span style="color:#999;font-style:italic">// Not OK!
+</span><span style="color:#999;font-style:italic"></span>t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint16</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">uint16</span>)      <span style="color:#999;font-style:italic">// OK
+</span></code></pre></div></li>
+<li>anchored operators disappear once the next <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> call done. To
+share them between <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> calls, use the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.SetAnchorsPersist"><code>SetAnchorsPersist</code></a>
+method as in:
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t := td.<span style="color:#447fcf">NewT</span>(tt) <span style="color:#999;font-style:italic">// tt is a *testing.T
+</span><span style="color:#999;font-style:italic"></span>age := t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>))).(<span style="color:#6ab825;font-weight:bold">uint8</span>)
+
+t.<span style="color:#447fcf">SetAnchorsPersist</span>(<span style="color:#6ab825;font-weight:bold">true</span>) <span style="color:#999;font-style:italic">// ← Don&#39;t reset anchors after next Cmp() call
+</span><span style="color:#999;font-style:italic"></span>
+t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">GetPerson</span>(<span style="color:#3677a9">1</span>), Person{
+  Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+  Age:  age,
+})
+
+t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">GetPerson</span>(<span style="color:#3677a9">2</span>), Person{
+  Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+  Age:  age, <span style="color:#999;font-style:italic">// ← OK
+</span><span style="color:#999;font-style:italic"></span>})
+</code></pre></div></li>
+</ul>
+<h2 id="how-to-test-ioreader-contents-like-nethttpresponsebody-for-example">How to test <code>io.Reader</code> contents, like <code>net/http.Response.Body</code> for example?</h2>
 <p>The <a href="/operators/smuggle/"><code>Smuggle</code></a> operator is done for that,
 here with the help of <a href="https://golang.org/pkg/io/ioutil/#ReadAll"><code>ReadAll</code></a>.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
@@ -1635,9 +1771,8 @@ here with the help of <a href="https://golang.org/pkg/io/ioutil/#ReadAll"><code>
 
   td.<span style="color:#447fcf">Cmp</span>(t, resp.Body,
     td.<span style="color:#447fcf">Smuggle</span>(ioutil.ReadAll, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">&#34;Expected Response!&#34;</span>)))
-}</code></pre></div>
-<h2 id="ok-but-i-prefer-comparing-string-s-instead-of-byte-s">OK, but I prefer comparing <code>string</code>s instead of <code>byte</code>s</h2>
-
+}
+</code></pre></div><h2 id="ok-but-i-prefer-comparing-strings-instead-of-bytes">OK, but I prefer comparing <code>string</code>s instead of <code>byte</code>s</h2>
 <p>No problem, <a href="https://golang.org/pkg/io/ioutil/#ReadAll"><code>ReadAll</code></a> the
 body by yourself and cast returned <code>[]byte</code> contents to <code>string</code>,
 still using <a href="/operators/smuggle/"><code>Smuggle</code></a> operator:</p>
@@ -1660,9 +1795,9 @@ still using <a href="/operators/smuggle/"><code>Smuggle</code></a> operator:</p>
       <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#24909d">string</span>(b), err
     },
     <span style="color:#ed9d13">&#34;Expected Response!&#34;</span>))
-}</code></pre></div>
-<h2 id="ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own">OK, but my response is in fact a JSON marshaled struct of my own</h2>
+}
 
+</code></pre></div><h2 id="ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own">OK, but my response is in fact a JSON marshaled struct of my own</h2>
 <p>No problem, <a href="https://golang.org/pkg/encoding/json/#Decoder">JSON decode</a>
 while reading the body:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
@@ -1686,17 +1821,16 @@ while reading the body:</p>
 
   td.<span style="color:#447fcf">Cmp</span>(t, resp.Body, td.<span style="color:#447fcf">Smuggle</span>( <span style="color:#999;font-style:italic">// ← transform a io.Reader in *Person
 </span><span style="color:#999;font-style:italic"></span>    <span style="color:#6ab825;font-weight:bold">func</span>(body io.Reader) (*Person, <span style="color:#6ab825;font-weight:bold">error</span>) {
-	  <span style="color:#6ab825;font-weight:bold">var</span> s Person
-	  <span style="color:#6ab825;font-weight:bold">return</span> &amp;s, json.<span style="color:#447fcf">NewDecoder</span>(body).<span style="color:#447fcf">Decode</span>(&amp;s)
+      <span style="color:#6ab825;font-weight:bold">var</span> s Person
+      <span style="color:#6ab825;font-weight:bold">return</span> &amp;s, json.<span style="color:#447fcf">NewDecoder</span>(body).<span style="color:#447fcf">Decode</span>(&amp;s)
     },
     &amp;Person{ <span style="color:#999;font-style:italic">// ← check Person content
 </span><span style="color:#999;font-style:italic"></span>      ID:   <span style="color:#3677a9">42</span>,
       Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
       Age:  <span style="color:#3677a9">28</span>,
     }))
-}</code></pre></div>
-<h2 id="ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-don-t-know-the-id-in-advance">OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</h2>
-
+}
+</code></pre></div><h2 id="ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-dont-know-the-id-in-advance">OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</h2>
 <p>No problem, use <a href="/operators/struct/"><code>Struct</code></a> operator to test
 that <code>ID</code> field is non-zero (as a bonus, add a <code>CreatedAt</code> field):</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
@@ -1724,8 +1858,8 @@ that <code>ID</code> field is non-zero (as a bonus, add a <code>CreatedAt</code>
 
   td.<span style="color:#447fcf">Cmp</span>(t, resp.Body, td.<span style="color:#447fcf">Smuggle</span>( <span style="color:#999;font-style:italic">// ← transform a io.Reader in *Person
 </span><span style="color:#999;font-style:italic"></span>    <span style="color:#6ab825;font-weight:bold">func</span>(body io.Reader) (*Person, <span style="color:#6ab825;font-weight:bold">error</span>) {
-	  <span style="color:#6ab825;font-weight:bold">var</span> s Person
-	  <span style="color:#6ab825;font-weight:bold">return</span> &amp;s, json.<span style="color:#447fcf">NewDecoder</span>(body).<span style="color:#447fcf">Decode</span>(&amp;s)
+      <span style="color:#6ab825;font-weight:bold">var</span> s Person
+      <span style="color:#6ab825;font-weight:bold">return</span> &amp;s, json.<span style="color:#447fcf">NewDecoder</span>(body).<span style="color:#447fcf">Decode</span>(&amp;s)
     },
     td.<span style="color:#447fcf">Struct</span>(&amp;Person{ <span style="color:#999;font-style:italic">// ← check Person content
 </span><span style="color:#999;font-style:italic"></span>      Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
@@ -1734,9 +1868,21 @@ that <code>ID</code> field is non-zero (as a bonus, add a <code>CreatedAt</code>
       <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),  <span style="color:#999;font-style:italic">// check ID ≠ 0
 </span><span style="color:#999;font-style:italic"></span>      <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Gte</span>(y2019), <span style="color:#999;font-style:italic">// check CreatedAt ≥ 2019/01/01
 </span><span style="color:#999;font-style:italic"></span>    })))
-}</code></pre></div>
-<h2 id="what-about-testing-the-response-using-my-api">What about testing the response using my API?</h2>
 
+  tt := td.<span style="color:#447fcf">newT</span>(t)
+  tt.<span style="color:#447fcf">Cmp</span>(resp.Body, td.<span style="color:#447fcf">Smuggle</span>( <span style="color:#999;font-style:italic">// ← transform a io.Reader in *Person
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#6ab825;font-weight:bold">func</span>(body io.Reader) (*Person, <span style="color:#6ab825;font-weight:bold">error</span>) {
+      <span style="color:#6ab825;font-weight:bold">var</span> s Person
+      <span style="color:#6ab825;font-weight:bold">return</span> &amp;s, json.<span style="color:#447fcf">NewDecoder</span>(body).<span style="color:#447fcf">Decode</span>(&amp;s)
+    },
+    &amp;Person{ <span style="color:#999;font-style:italic">// ← check Person content
+</span><span style="color:#999;font-style:italic"></span>      Name:      <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+      Age:       <span style="color:#3677a9">28</span>,
+      ID:        tt.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint64</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">uint64</span>), <span style="color:#999;font-style:italic">// check ID ≠ 0
+</span><span style="color:#999;font-style:italic"></span>      CreatedAt: tt.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">Gte</span>(y2019)).(time.Time),        <span style="color:#999;font-style:italic">// check CreatedAt ≥ 2019/01/01
+</span><span style="color:#999;font-style:italic"></span>    }))
+}
+</code></pre></div><h2 id="what-about-testing-the-response-using-my-api">What about testing the response using my API?</h2>
 <p><a href="https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp"><code>tdhttp</code> helper</a>
 is done for that!</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
@@ -1771,7 +1917,7 @@ is done for that!</p>
       ID:        <span style="color:#3677a9">42</span>,
       Name:      <span style="color:#ed9d13">&#34;Bob&#34;</span>,
       Age:       <span style="color:#3677a9">28</span>,
-	  CreatedAt: time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">UTC</span>(),
+      CreatedAt: time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">UTC</span>(),
     })
     <span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
       http.<span style="color:#447fcf">Error</span>(w, <span style="color:#ed9d13">&#34;Internal server error&#34;</span>, http.StatusInternalServerError)
@@ -1792,23 +1938,31 @@ is done for that!</p>
   y2019, _ := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2019-01-01T00:00:00Z&#34;</span>)
 
   tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
-    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>), <span style="color:#999;font-style:italic">// ← the request
-</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,     <span style="color:#999;font-style:italic">// ← the API handler
-</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{ <span style="color:#999;font-style:italic">// ← the expected response
+    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>), <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,     <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{     <span style="color:#999;font-style:italic">// ← ③
 </span><span style="color:#999;font-style:italic"></span>      Status: http.StatusOK,
       <span style="color:#999;font-style:italic">// Header can be tested too… See tdhttp doc.
 </span><span style="color:#999;font-style:italic"></span>      Body: td.<span style="color:#447fcf">Struct</span>(&amp;Person{
         Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
         Age:  <span style="color:#3677a9">28</span>,
       }, td.StructFields{
-        <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),  <span style="color:#999;font-style:italic">// check ID ≠ 0
-</span><span style="color:#999;font-style:italic"></span>		<span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Gte</span>(y2019), <span style="color:#999;font-style:italic">// check CreatedAt ≥ 2019/01/01
+        <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),  <span style="color:#999;font-style:italic">// ← ④
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Gte</span>(y2019), <span style="color:#999;font-style:italic">// ← ⑤
 </span><span style="color:#999;font-style:italic"></span>      }),
     },
     <span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>)
-}</code></pre></div>
-<h2 id="arf-i-use-gin-gonic-and-so-no-net-http-handlers">Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</h2>
-
+}
+</code></pre></div><ol>
+<li>the GET request;</li>
+<li>the API handler;</li>
+<li>the expected response: HTTP status should be <code>http.StatusOK</code> and
+the body should match the <a href="/operators/struct/"><code>Struct</code></a> operator;</li>
+<li>check the <code>ID</code> field is <a href="/operators/notzero/"><code>NotZero</code></a>;</li>
+<li>check the <code>CreatedAt</code> field is greater or equal than <code>y2019</code> variable
+(set just before <code>tdhttp.CmpJSONResponse</code> call).</li>
+</ol>
+<h2 id="arf-i-use-gin-gonic-and-so-no-nethttp-handlers">Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</h2>
 <p>It is exactly the same as for <code>net/http</code> handlers as <a href="https://godoc.org/github.com/gin-gonic/gin#Engine.ServeHTTP"><code>*gin.Engine</code>
 implements <code>http.Handler</code>
 interface</a>!
@@ -1841,7 +1995,7 @@ So keep using
       ID:        <span style="color:#3677a9">42</span>,
       Name:      <span style="color:#ed9d13">&#34;Bob&#34;</span>,
       Age:       <span style="color:#3677a9">28</span>,
-	  CreatedAt: time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">UTC</span>(),
+      CreatedAt: time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">UTC</span>(),
     })
   })
 
@@ -1854,23 +2008,31 @@ So keep using
   y2019, _ := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2019-01-01T00:00:00Z&#34;</span>)
 
   tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
-    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>), <span style="color:#999;font-style:italic">// ← the request
-</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,     <span style="color:#999;font-style:italic">// ← the API handler
-</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{ <span style="color:#999;font-style:italic">// ← the expected response
+    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>), <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,     <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{     <span style="color:#999;font-style:italic">// ← ③
 </span><span style="color:#999;font-style:italic"></span>      Status: http.StatusOK,
       <span style="color:#999;font-style:italic">// Header can be tested too… See tdhttp doc.
 </span><span style="color:#999;font-style:italic"></span>      Body: td.<span style="color:#447fcf">Struct</span>(&amp;Person{
         Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
         Age:  <span style="color:#3677a9">28</span>,
       }, td.StructFields{
-        <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),  <span style="color:#999;font-style:italic">// check ID ≠ 0
-</span><span style="color:#999;font-style:italic"></span>		<span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Gte</span>(y2019), <span style="color:#999;font-style:italic">// check CreatedAt ≥ 2019/01/01
+        <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),  <span style="color:#999;font-style:italic">// ← ④
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Gte</span>(y2019), <span style="color:#999;font-style:italic">// ← ⑤
 </span><span style="color:#999;font-style:italic"></span>      }),
     },
     <span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>)
-}</code></pre></div>
+}
+</code></pre></div><ol>
+<li>the GET request;</li>
+<li>the API handler;</li>
+<li>the expected response: HTTP status should be <code>http.StatusOK</code> and
+the body should match the <a href="/operators/struct/"><code>Struct</code></a> operator;</li>
+<li>check the <code>ID</code> field is <a href="/operators/notzero/"><code>NotZero</code></a>;</li>
+<li>check the <code>CreatedAt</code> field is greater or equal than <code>y2019</code> variable
+(set just before <code>tdhttp.CmpJSONResponse</code> call).</li>
+</ol>
 <h2 id="fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</h2>
-
 <p>In fact you can <a href="/operators/catch/"><code>Catch</code></a> the <code>ID</code> before comparing
 it to 0 (as well as <code>CreatedAt</code> in fact). Try:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyGinGonicApi</span>(t *testing.T) {
@@ -1882,33 +2044,43 @@ it to 0 (as well as <code>CreatedAt</code> in fact). Try:</p>
   y2019, _ := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2019-01-01T00:00:00Z&#34;</span>)
 
   <span style="color:#6ab825;font-weight:bold">if</span> tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
-    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>), <span style="color:#999;font-style:italic">// ← the request
-</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,     <span style="color:#999;font-style:italic">// ← the API handler
-</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{ <span style="color:#999;font-style:italic">// ← the expected response
+    tdhttp.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>), <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,     <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{     <span style="color:#999;font-style:italic">// ← ③
 </span><span style="color:#999;font-style:italic"></span>      Status: http.StatusOK,
       <span style="color:#999;font-style:italic">// Header can be tested too… See tdhttp doc.
 </span><span style="color:#999;font-style:italic"></span>      Body: td.<span style="color:#447fcf">Struct</span>(&amp;Person{
         Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
         Age:  <span style="color:#3677a9">28</span>,
       }, td.StructFields{
-        <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>()),         <span style="color:#999;font-style:italic">// ← id set here
-</span><span style="color:#999;font-style:italic"></span>		<span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(y2019)), <span style="color:#999;font-style:italic">// ← createdAt set here
+        <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>()),         <span style="color:#999;font-style:italic">// ← ④
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(y2019)), <span style="color:#999;font-style:italic">// ← ⑤
 </span><span style="color:#999;font-style:italic"></span>      }),
     },
     <span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>) {
     t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The ID is %d and was created at %s&#34;</span>, id, createdAt)
   }
-}</code></pre></div>
+}
+</code></pre></div><ol>
+<li>the GET request;</li>
+<li>the API handler;</li>
+<li>the expected response: HTTP status should be <code>http.StatusOK</code> and
+the body should match the <a href="/operators/struct/"><code>Struct</code></a> operator;</li>
+<li><a href="/operators/catch/"><code>Catch</code></a> the <code>ID</code> field: put it in <code>id</code>
+variable and check it is <a href="/operators/notzero/"><code>NotZero</code></a>;</li>
+<li><a href="/operators/catch/"><code>Catch</code></a> the <code>CreatedAt</code> field: put it in <code>createdAt</code>
+variable and check it is greater or equal than <code>y2019</code> variable
+(set just before <code>tdhttp.CmpJSONResponse</code> call).</li>
+</ol>
 <h2 id="ok-but-how-to-be-sure-the-response-content-is-well-jsonified">OK, but how to be sure the response content is well JSONified?</h2>
-
 <p>With the help of <a href="/operators/json/"><code>JSON</code></a> operator of course! See
 it below, used with <a href="/operators/catch/"><code>Catch</code></a> (note it can be used
 without), for a <code>POST</code> example:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>    <span style="color:#ed9d13">`json:&#34;id&#34;`</span>
-  Name      <span style="color:#6ab825;font-weight:bold">string</span>    <span style="color:#ed9d13">`json:&#34;name&#34;`</span>
-  Age       <span style="color:#6ab825;font-weight:bold">int</span>       <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
-  CreatedAt time.Time <span style="color:#ed9d13">`json:&#34;created_at&#34;`</span>
+  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;id&#34;</span><span style="color:#ed9d13">`</span>
+  Name      <span style="color:#6ab825;font-weight:bold">string</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;name&#34;</span><span style="color:#ed9d13">`</span>
+  Age       <span style="color:#6ab825;font-weight:bold">int</span>       <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
+  CreatedAt time.Time <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;created_at&#34;</span><span style="color:#ed9d13">`</span>
 }
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyGinGonicApi</span>(t *testing.T) {
@@ -1920,23 +2092,23 @@ without), for a <code>POST</code> example:</p>
   beforeCreate := time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Truncate</span>(<span style="color:#3677a9">0</span>)
 
   <span style="color:#6ab825;font-weight:bold">if</span> tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
-    tdhttp.<span style="color:#447fcf">PostJSON</span>(<span style="color:#ed9d13">&#34;/person&#34;</span>, Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>}), <span style="color:#999;font-style:italic">// ← the request
-</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP, <span style="color:#999;font-style:italic">// ← the API handler
-</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{ <span style="color:#999;font-style:italic">// ← the expected response
+    tdhttp.<span style="color:#447fcf">PostJSON</span>(<span style="color:#ed9d13">&#34;/person&#34;</span>, Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>}), <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,                                      <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{                                      <span style="color:#999;font-style:italic">// ← ③
 </span><span style="color:#999;font-style:italic"></span>      Status: http.StatusCreated,
-      Body: td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`
-</span><span style="color:#ed9d13">{
+      Body: td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">
+</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
 </span><span style="color:#ed9d13">  &#34;id&#34;:         $id,
 </span><span style="color:#ed9d13">  &#34;name&#34;:       &#34;Bob&#34;,
 </span><span style="color:#ed9d13">  &#34;age&#34;:        42,
 </span><span style="color:#ed9d13">  &#34;created_at&#34;: &#34;$createdAt&#34;,
-</span><span style="color:#ed9d13">}`</span>,
-        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;id&#34;</span>, td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>())), <span style="color:#999;font-style:italic">// catch $id and check ≠ 0
-</span><span style="color:#999;font-style:italic"></span>        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;created_at&#34;</span>, td.<span style="color:#447fcf">All</span>( <span style="color:#999;font-style:italic">// ← All combines several operators like a AND
-</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>), <span style="color:#999;font-style:italic">// check the RFC3339 $created_at date ends with &#34;Z&#34;
-</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s <span style="color:#6ab825;font-weight:bold">string</span>) (time.Time, <span style="color:#6ab825;font-weight:bold">error</span>) { <span style="color:#999;font-style:italic">// convert to time.Time
+</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>,
+        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;id&#34;</span>, td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>())),        <span style="color:#999;font-style:italic">// ← ④
+</span><span style="color:#999;font-style:italic"></span>        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;created_at&#34;</span>, td.<span style="color:#447fcf">All</span>(                      <span style="color:#999;font-style:italic">// ← ⑤
+</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>),                              <span style="color:#999;font-style:italic">// ← ⑥
+</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s <span style="color:#6ab825;font-weight:bold">string</span>) (time.Time, <span style="color:#6ab825;font-weight:bold">error</span>) {  <span style="color:#999;font-style:italic">// ← ⑦
 </span><span style="color:#999;font-style:italic"></span>            <span style="color:#6ab825;font-weight:bold">return</span> time.<span style="color:#447fcf">Parse</span>(time.RFC3339Nano, s)
-          }, td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(beforeCreate))), <span style="color:#999;font-style:italic">// catch it and check ≥ beforeCreate
+          }, td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(beforeCreate))), <span style="color:#999;font-style:italic">// ← ⑧
 </span><span style="color:#999;font-style:italic"></span>        )),
       ),
       <span style="color:#999;font-style:italic">// Header can be tested too… See tdhttp doc.
@@ -1944,24 +2116,38 @@ without), for a <code>POST</code> example:</p>
     <span style="color:#ed9d13">&#34;Create a new Person&#34;</span>) {
     t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The new Person ID is %d and was created at %s&#34;</span>, id, createdAt)
   }
-}</code></pre></div>
+}
+</code></pre></div><ol>
+<li>the POST request with automatic JSON marshalling;</li>
+<li>the API handler;</li>
+<li>the expected response: HTTP status should be <code>http.StatusCreated</code>
+and the body should match the <a href="/operators/json/"><code>JSON</code></a>
+operator;</li>
+<li>for the <code>$id</code> placeholder, <a href="/operators/catch/"><code>Catch</code></a> its
+value: put it in <code>id</code> variable and check it is
+<a href="/operators/notzero/"><code>NotZero</code></a>;</li>
+<li>for the <code>$created_at</code> placeholder, use the <a href="/operators/all/"><code>All</code></a>
+operator. It combines several operators like a AND;</li>
+<li>check that <code>$created_at</code> date ends with &ldquo;Z&rdquo; using
+<a href="/operators/hassuffix/"><code>HasSuffix</code></a>. As we expect a RFC3339
+date, we require it in UTC time zone;</li>
+<li>convert <code>$created_at</code> date into a <code>time.Time</code> using a custom
+function thanks to the <a href="/operators/smuggle/"><code>Smuggle</code></a> operator;</li>
+<li>then <a href="/operators/catch/"><code>Catch</code></a> the resulting value: put it in
+<code>createdAt</code> variable and check it is greater or equal than
+<code>beforeCreate</code> (set just before <code>tdhttp.CmpJSONResponse</code> call).</li>
+</ol>
 <h2 id="go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</h2>
-
 <p>Using the environment variable <code>TESTDEEP_MAX_ERRORS</code>.</p>
-
 <p><code>TESTDEEP_MAX_ERRORS</code> contains the maximum number of errors to report
-before stopping during one comparison (one
-<a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a>
-execution for example). It defaults to <code>10</code>.</p>
-
+before stopping during one comparison (one <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> execution for
+example). It defaults to <code>10</code>.</p>
 <p>Example:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_MAX_ERRORS</span>=<span style="color:#3677a9">30</span> go test</code></pre></div>
-<p>Setting it to <code>-1</code> means no limit:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_MAX_ERRORS</span>=-1 go test</code></pre></div>
-<h2 id="how-do-i-change-these-crappy-colors">How do I change these crappy colors?</h2>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_MAX_ERRORS</span>=<span style="color:#3677a9">30</span> go <span style="color:#24909d">test</span>
+</code></pre></div><p>Setting it to <code>-1</code> means no limit:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_MAX_ERRORS</span>=-1 go <span style="color:#24909d">test</span>
+</code></pre></div><h2 id="how-do-i-change-these-crappy-colors">How do I change these crappy colors?</h2>
 <p>Using some environment variables:</p>
-
 <ul>
 <li><code>TESTDEEP_COLOR</code> enable (<code>on</code>) or disable (<code>off</code>) the color
 output. It defaults to <code>on</code>;</li>
@@ -1974,19 +2160,13 @@ for color format, it defaults to <code>green</code>;</li>
 <li><code>TESTDEEP_COLOR_BAD</code> color of the test got value. See below
 for color format, it defaults to <code>red</code>;</li>
 </ul>
-
 <h3 id="color-format">Color format</h3>
-
 <p>A color in <code>TESTDEEP_COLOR_*</code> environment variables has the following
 format:</p>
-
 <pre><code>foreground_color                    # set foreground color, background one untouched
 foreground_color:background_color   # set foreground AND background color
 :background_color                   # set background color, foreground one untouched
-</code></pre>
-
-<p><code>foreground_color</code> and <code>background_color</code> can be:</p>
-
+</code></pre><p><code>foreground_color</code> and <code>background_color</code> can be:</p>
 <ul>
 <li><code>black</code></li>
 <li><code>red</code></li>
@@ -1998,39 +2178,34 @@ foreground_color:background_color   # set foreground AND background color
 <li><code>white</code></li>
 <li><code>gray</code></li>
 </ul>
-
 <p>For example:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_COLOR_OK</span>=black:green <span style="color:#ed9d13">\
 </span><span style="color:#ed9d13"></span>    <span style="color:#40ffff">TESTDEEP_COLOR_BAD</span>=white:red <span style="color:#ed9d13">\
 </span><span style="color:#ed9d13"></span>    <span style="color:#40ffff">TESTDEEP_COLOR_TITLE</span>=yellow <span style="color:#ed9d13">\
-</span><span style="color:#ed9d13"></span>    go test</code></pre></div>
-<h2 id="how-to-add-a-new-operator">How to add a new operator?</h2>
-
+</span><span style="color:#ed9d13"></span>    go <span style="color:#24909d">test</span>
+</code></pre></div><h2 id="how-to-add-a-new-operator">How to add a new operator?</h2>
 <p>You want to add a new <code>FooBar</code> operator.</p>
-
-<ul class="task-list">
-<li><label><input type="checkbox" disabled class="task-list-item"> check that another operator does not exist with the same meaning;</label></li>
-<li><label><input type="checkbox" disabled class="task-list-item"> add the operator definition in <code>td_foo_bar.go</code> file and fully
+<ul>
+<li><input disabled="" type="checkbox">check that another operator does not exist with the same meaning;</li>
+<li><input disabled="" type="checkbox">add the operator definition in <code>td_foo_bar.go</code> file and fully
 document its usage:
-
 <ul>
 <li>add a <code>// summary(FooBar): small description</code> line, before
 operator comment,</li>
 <li>add a <code>// input(FooBar): …</code> line, just after <code>summary(FooBar)</code>
 line. This one lists all inputs accepted by the operator;</li>
-</ul></label></li>
-<li><label><input type="checkbox" disabled class="task-list-item"> add operator tests in <code>td_foo_bar_test.go</code> file;</label></li>
-<li><label><input type="checkbox" disabled class="task-list-item"> in <code>example_test.go</code> file, add examples function(s) <code>ExampleFooBar*</code>
-in alphabetical order;</label></li>
-<li><label><input type="checkbox" disabled class="task-list-item"> automatically generate <code>CmpFooBar</code> &amp; <code>T.FooBar</code> (+ examples) code:
-<code>./tools/gen_funcs.pl .</code></label></li>
-<li><label><input type="checkbox" disabled class="task-list-item"> do not forget to run tests: <code>go test ./...</code></label></li>
-<li><label><input type="checkbox" disabled class="task-list-item"> run <code>golangci-lint</code> as in <a href="https://github.com/maxatome/go-testdeep/blob/master/.travis.yml"><code>.travis.yml</code></a>;</label></li>
 </ul>
-
+</li>
+<li><input disabled="" type="checkbox">add operator tests in <code>td_foo_bar_test.go</code> file;</li>
+<li><input disabled="" type="checkbox">in <code>example_test.go</code> file, add examples function(s) <code>ExampleFooBar*</code>
+in alphabetical order;</li>
+<li><input disabled="" type="checkbox">automatically generate <code>CmpFooBar</code> &amp; <code>T.FooBar</code> (+ examples) code:
+<code>./tools/gen_funcs.pl .</code></li>
+<li><input disabled="" type="checkbox">do not forget to run tests: <code>go test ./...</code></li>
+<li><input disabled="" type="checkbox">run <code>golangci-lint</code> as in <a href="https://github.com/maxatome/go-testdeep/blob/master/.travis.yml"><code>.travis.yml</code></a>;</li>
+</ul>
 <p>Each time you change <code>example_test.go</code>, re-run <code>./tools/gen_funcs.pl .</code>
 to update corresponding <code>CmpFooBar</code> &amp; <code>T.FooBar</code> examples.</p>
-
 <p>Test coverage must be 100%.</p>
 
 
@@ -3171,6 +3346,22 @@ to update corresponding <code>CmpFooBar</code> &amp; <code>T.FooBar</code> examp
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -3229,19 +3420,19 @@ to update corresponding <code>CmpFooBar</code> &amp; <code>T.FooBar</code> examp
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
+    <script src="/js/jquery.sticky.js?1581598214"></script>
+    <script src="/js/featherlight.min.js?1581598214"></script>
+    <script src="/js/highlight.pack.js?1581598214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
+    <script src="/js/learn.js?1581598214"></script>
+    <script src="/js/hugo-learn.js?1581598214"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598214"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

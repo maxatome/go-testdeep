@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Basic testdeep approach :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598214" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598214" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598214" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598214" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598214" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598214" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598214" rel="stylesheet">
+    <link href="/css/theme.css?1581598214" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598214" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598214" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598214"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598214"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598214"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1560,7 +1579,7 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents"></nav>
     </div>
 </div>
 
@@ -1603,14 +1622,13 @@ handles the tests and all the error message boiler plate. Let&rsquo;s do it:</p>
     td.<span style="color:#447fcf">Cmp</span>(t, record.Age, <span style="color:#3677a9">23</span>)
     td.<span style="color:#447fcf">Cmp</span>(t, record.CreatedAt, td.<span style="color:#447fcf">Between</span>(before, time.<span style="color:#447fcf">Now</span>()))
   }
-}</code></pre></div>
-<p>As we cannot guess the <code>Id</code> field value before its creation, we use the
+}
+</code></pre></div><p>As we cannot guess the <code>Id</code> field value before its creation, we use the
 <a href="/operators/notzero/"><code>NotZero</code></a> operator to check it is
 set by  <code>CreateRecord()</code> call. The same is true for the creation date
 field <code>CreatedAt</code>. Thanks to the <a href="/operators/between/"><code>Between</code></a>
 operator we can check it is set with a value included between
 the date before <code>CreateRecord()</code> call and the date just after.</p>
-
 <p>Note that if <code>Id</code> and <code>CreateAt</code> could be known in advance, we could
 simply do:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
@@ -1632,8 +1650,8 @@ simply do:</p>
         CreatedAt: time.<span style="color:#447fcf">Date</span>(<span style="color:#3677a9">2019</span>, time.May, <span style="color:#3677a9">1</span>, <span style="color:#3677a9">12</span>, <span style="color:#3677a9">13</span>, <span style="color:#3677a9">14</span>, <span style="color:#3677a9">0</span>, time.UTC),
       })
   }
-}</code></pre></div>
-<p>But unfortunately, it is common to not know exactly the value of some
+}
+</code></pre></div><p>But unfortunately, it is common to not know exactly the value of some
 fields…</p>
 
 
@@ -2780,6 +2798,22 @@ fields…</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -2837,19 +2871,19 @@ fields…</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
+    <script src="/js/jquery.sticky.js?1581598214"></script>
+    <script src="/js/featherlight.min.js?1581598214"></script>
+    <script src="/js/highlight.pack.js?1581598214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
+    <script src="/js/learn.js?1581598214"></script>
+    <script src="/js/hugo-learn.js?1581598214"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598214"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

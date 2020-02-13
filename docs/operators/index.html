@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Operators :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598214" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598214" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598214" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598214" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598214" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598214" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598214" rel="stylesheet">
+    <link href="/css/theme.css?1581598214" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598214" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598214" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598214"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598214"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598214"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1555,14 +1574,11 @@
                     <div class="progress">
     <div class="wrapper">
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#all-operators">All operators</a></li>
-<li><a href="#smuggler-operators">Smuggler operators</a></li>
-<li><a href="#typebehind-method"><code>TypeBehind</code> method</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#all-operators">All operators</a></li>
+    <li><a href="#smuggler-operators">Smuggler operators</a></li>
+    <li><a href="#typebehind-method">TypeBehind method</a></li>
+  </ul>
 </nav>
     </div>
 </div>
@@ -1588,21 +1604,17 @@
 
 
 
-	
-
-<h2 id="all-operators">All operators</h2>
-
-<!-- operators:begin -->
-
+	<h2 id="all-operators">All operators</h2>
+<!-- raw HTML omitted -->
 <dl>
 <dt><a href="/operators/all/"><code>All</code></a></dt>
 <dd>all expected values have to match</dd>
 <dt><a href="/operators/any/"><code>Any</code></a></dt>
 <dd>at least one expected value have to match</dd>
-<dt><a href="/operators/arrayeach/"><code>ArrayEach</code></a></dt>
-<dd>compares each array or slice item</dd>
 <dt><a href="/operators/array/"><code>Array</code></a></dt>
 <dd>compares the contents of an array or a pointer on an array</dd>
+<dt><a href="/operators/arrayeach/"><code>ArrayEach</code></a></dt>
+<dd>compares each array or slice item</dd>
 <dt><a href="/operators/bag/"><code>Bag</code></a></dt>
 <dd>compares the contents of an array or a slice without taking care of the order of items</dd>
 <dt><a href="/operators/between/"><code>Between</code></a></dt>
@@ -1613,10 +1625,10 @@
 <dd>catches data on the fly before comparing it</dd>
 <dt><a href="/operators/code/"><code>Code</code></a></dt>
 <dd>checks using a custom function</dd>
-<dt><a href="/operators/containskey/"><code>ContainsKey</code></a></dt>
-<dd>checks that a map contains a key</dd>
 <dt><a href="/operators/contains/"><code>Contains</code></a></dt>
 <dd>checks that a string, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces contain a sub-string; or an array, slice or map contain a value</dd>
+<dt><a href="/operators/containskey/"><code>ContainsKey</code></a></dt>
+<dd>checks that a map contains a key</dd>
 <dt><a href="/operators/empty/"><code>Empty</code></a></dt>
 <dd>checks that an array, a channel, a map, a slice or a string is empty</dd>
 <dt><a href="/operators/gt/"><code>Gt</code></a></dt>
@@ -1643,10 +1655,10 @@
 <dd>checks that a number, string or <a href="https://godoc.org/pkg/time/#Time"><code>time.Time</code></a> is lesser than a value</dd>
 <dt><a href="/operators/lte/"><code>Lte</code></a></dt>
 <dd>checks that a number, string or <a href="https://godoc.org/pkg/time/#Time"><code>time.Time</code></a> is lesser or equal than a value</dd>
-<dt><a href="/operators/mapeach/"><code>MapEach</code></a></dt>
-<dd>compares each map entry</dd>
 <dt><a href="/operators/map/"><code>Map</code></a></dt>
 <dd>compares the contents of a map</dd>
+<dt><a href="/operators/mapeach/"><code>MapEach</code></a></dt>
+<dd>compares each map entry</dd>
 <dt><a href="/operators/n/"><code>N</code></a></dt>
 <dd>compares a number with a tolerance value</dd>
 <dt><a href="/operators/nan/"><code>NaN</code></a></dt>
@@ -1655,6 +1667,8 @@
 <dd>compares to <code>nil</code></dd>
 <dt><a href="/operators/none/"><code>None</code></a></dt>
 <dd>no values have to match</dd>
+<dt><a href="/operators/not/"><code>Not</code></a></dt>
+<dd>value must not match</dd>
 <dt><a href="/operators/notany/"><code>NotAny</code></a></dt>
 <dd>compares the contents of an array or a slice, no values have to match</dd>
 <dt><a href="/operators/notempty/"><code>NotEmpty</code></a></dt>
@@ -1665,16 +1679,14 @@
 <dd>checks that data is not <code>nil</code></dd>
 <dt><a href="/operators/notzero/"><code>NotZero</code></a></dt>
 <dd>checks that data is not zero regarding its type</dd>
-<dt><a href="/operators/not/"><code>Not</code></a></dt>
-<dd>value must not match</dd>
 <dt><a href="/operators/pptr/"><code>PPtr</code></a></dt>
 <dd>allows to easily test a pointer of pointer value</dd>
 <dt><a href="/operators/ptr/"><code>Ptr</code></a></dt>
 <dd>allows to easily test a pointer value</dd>
-<dt><a href="/operators/reall/"><code>ReAll</code></a></dt>
-<dd>allows to successively apply a regexp on a string (or convertible), <code>[]byte</code>, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces, and even test the captured groups</dd>
 <dt><a href="/operators/re/"><code>Re</code></a></dt>
 <dd>allows to apply a regexp on a string (or convertible), <code>[]byte</code>, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces, and even test the captured groups</dd>
+<dt><a href="/operators/reall/"><code>ReAll</code></a></dt>
+<dd>allows to successively apply a regexp on a string (or convertible), <code>[]byte</code>, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces, and even test the captured groups</dd>
 <dt><a href="/operators/set/"><code>Set</code></a></dt>
 <dd>compares the contents of an array or a slice ignoring duplicates and without taking care of the order of items</dd>
 <dt><a href="/operators/shallow/"><code>Shallow</code></a></dt>
@@ -1683,6 +1695,8 @@
 <dd>compares the contents of a slice or a pointer on a slice</dd>
 <dt><a href="/operators/smuggle/"><code>Smuggle</code></a></dt>
 <dd>changes data contents or mutates it into another type via a custom function or a struct fields-path before stepping down in favor of generic comparison process</dd>
+<dt><a href="/operators/sstruct/"><code>SStruct</code></a></dt>
+<dd>strictly compares the contents of a struct or a pointer on a struct</dd>
 <dt><a href="/operators/string/"><code>String</code></a></dt>
 <dd>checks a string, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces string contents</dd>
 <dt><a href="/operators/struct/"><code>Struct</code></a></dt>
@@ -1706,33 +1720,27 @@
 <dt><a href="/operators/tag/"><code>Tag</code></a></dt>
 <dd>names an operator or a value. Only useful as a parameter of JSON operator, to name placeholders</dd>
 <dt><a href="/operators/trunctime/"><code>TruncTime</code></a></dt>
-<dd>compares <a href="or assignable"><code>time.Time</code></a> values after truncating them</dd>
+<dd>compares <a href="https://godoc.org/pkg/time/#Time"><code>time.Time</code></a> (or assignable) values after truncating them</dd>
 <dt><a href="/operators/values/"><code>Values</code></a></dt>
 <dd>checks values of a map</dd>
 <dt><a href="/operators/zero/"><code>Zero</code></a></dt>
 <dd>checks data against its zero&rsquo;ed conterpart</dd>
 </dl>
-
-<!-- operators:end -->
-
+<!-- raw HTML omitted -->
 <h2 id="smuggler-operators">Smuggler operators</h2>
-
 <p>A smuggler operator is an operator able to transform the value (by
 changing its value or even its type) before comparing it.</p>
-
 <p>The following operators are smuggler ones:</p>
-
-<!-- smugglers:begin -->
-
+<!-- raw HTML omitted -->
 <dl>
 <dt><a href="/operators/cap/"><code>Cap</code></a></dt>
 <dd>checks an array, slice or channel capacity</dd>
 <dt><a href="/operators/catch/"><code>Catch</code></a></dt>
 <dd>catches data on the fly before comparing it</dd>
-<dt><a href="/operators/containskey/"><code>ContainsKey</code></a></dt>
-<dd>checks that a map contains a key</dd>
 <dt><a href="/operators/contains/"><code>Contains</code></a></dt>
 <dd>checks that a string, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://godoc.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interfaces contain a sub-string; or an array, slice or map contain a value</dd>
+<dt><a href="/operators/containskey/"><code>ContainsKey</code></a></dt>
+<dd>checks that a map contains a key</dd>
 <dt><a href="/operators/keys/"><code>Keys</code></a></dt>
 <dd>checks keys of a map</dd>
 <dt><a href="/operators/lax/"><code>Lax</code></a></dt>
@@ -1750,15 +1758,12 @@ changing its value or even its type) before comparing it.</p>
 <dt><a href="/operators/values/"><code>Values</code></a></dt>
 <dd>checks values of a map</dd>
 </dl>
-
-<!-- smugglers:end -->
-
+<!-- raw HTML omitted -->
 <h2 id="typebehind-method"><code>TypeBehind</code> method</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">TypeBehind</span>() reflect.Type</code></pre></div>
-<p>This method returns the type handled by the operator or <code>nil</code> if it is
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">TypeBehind</span>() reflect.Type
+</code></pre></div><p>This method returns the type handled by the operator or <code>nil</code> if it is
 not known. tdhttp helper uses it to know how to unmarshal HTTP
 responses bodies before comparing them using the operator.</p>
-
 <p>It is usually not used outside the
 <a href="https://github.com/maxatome/go-testdeep">go-testdeep repository</a>.</p>
 
@@ -2904,6 +2909,22 @@ responses bodies before comparing them using the operator.</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -2961,19 +2982,19 @@ responses bodies before comparing them using the operator.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
+    <script src="/js/jquery.sticky.js?1581598214"></script>
+    <script src="/js/featherlight.min.js?1581598214"></script>
+    <script src="/js/highlight.pack.js?1581598214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
+    <script src="/js/learn.js?1581598214"></script>
+    <script src="/js/hugo-learn.js?1581598214"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598214"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

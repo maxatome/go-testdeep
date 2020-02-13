@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Len :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598214" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598214" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598214" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598214" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598214" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598214" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598214" rel="stylesheet">
+    <link href="/css/theme.css?1581598214" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598214" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598214" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598214"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598214"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598214"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1561,23 +1580,23 @@
                     <div class="progress">
     <div class="wrapper">
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#examples">Examples</a></li>
-</ul></li>
-<li><a href="#cmplen-shortcut">CmpLen shortcut</a>
-<ul>
-<li><a href="#examples-1">Examples</a></li>
-</ul></li>
-<li><a href="#t-len-shortcut">T.Len shortcut</a>
-<ul>
-<li><a href="#examples-2">Examples</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#examples">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#cmplen-shortcut">CmpLen shortcut</a>
+      <ul>
+        <li><a href="#examples-1">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#tlen-shortcut">T.Len shortcut</a>
+      <ul>
+        <li><a href="#examples-2">Examples</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
     </div>
 </div>
@@ -1602,24 +1621,19 @@
 
 
 
-
-
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Len</span>(expectedLen <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep</code></pre></div>
-<p><a href="/operators/len/"><code>Len</code></a> is a <a href="/operators/#smuggler-operators">smuggler operator</a>. It takes data, applies <code>len()</code> function
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Len</span>(expectedLen <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep
+</code></pre></div><p><a href="/operators/len/"><code>Len</code></a> is a <a href="/operators/#smuggler-operators">smuggler operator</a>. It takes data, applies <code>len()</code> function
 on it and compares its result to <em>expectedLen</em>. Of course, the
 compared value must be an array, a channel, a map, a slice or a
 <code>string</code>.</p>
-
 <p><em>expectedLen</em> can be an <code>int</code> value:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotSlice, <span style="color:#447fcf">Len</span>(<span style="color:#3677a9">12</span>))</code></pre></div>
-<p>as well as an other operator:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotSlice, <span style="color:#447fcf">Len</span>(<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">3</span>, <span style="color:#3677a9">4</span>)))</code></pre></div>
-<blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#Len"><i class='fas fa-book'></i> Len godoc</a>.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotSlice, <span style="color:#447fcf">Len</span>(<span style="color:#3677a9">12</span>))
+</code></pre></div><p>as well as an other operator:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotSlice, <span style="color:#447fcf">Len</span>(<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">3</span>, <span style="color:#3677a9">4</span>)))
+</code></pre></div><blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#Len"><!-- raw HTML omitted --><!-- raw HTML omitted --> Len godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1650,7 +1664,9 @@ compared value must be an array, a channel, a map, a slice or a
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1683,7 +1699,9 @@ compared value must be an array, a channel, a map, a slice or a
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1711,7 +1729,9 @@ compared value must be an array, a channel, a map, a slice or a
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1739,31 +1759,27 @@ compared value must be an array, a channel, a map, a slice or a
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
-
 <h2 id="cmplen-shortcut">CmpLen shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpLen</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedLen <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p>CmpLen is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Len</span>(expectedLen), args...)</code></pre></div>
-<p>See above for details.</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpLen</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedLen <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p>CmpLen is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Len</span>(expectedLen), args...)
+</code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
-
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpLen"><i class='fas fa-book'></i> CmpLen godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpLen"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpLen godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples-1">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1794,7 +1810,9 @@ reason of a potential failure.</p>
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1827,7 +1845,9 @@ reason of a potential failure.</p>
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1855,7 +1875,9 @@ reason of a potential failure.</p>
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1883,31 +1905,27 @@ reason of a potential failure.</p>
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
-
-<h2 id="t-len-shortcut">T.Len shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Len</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedLen <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p><a href="/operators/len/"><code>Len</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Len</span>(expectedLen), args...)</code></pre></div>
-<p>See above for details.</p>
-
+<h2 id="tlen-shortcut">T.Len shortcut</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Len</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedLen <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p><a href="/operators/len/"><code>Len</code></a> is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Len</span>(expectedLen), args...)
+</code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
-
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Len"><i class='fas fa-book'></i> T.Len godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Len"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.Len godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples-2">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1938,7 +1956,9 @@ reason of a potential failure.</p>
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1971,7 +1991,9 @@ reason of a potential failure.</p>
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// false
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1999,7 +2021,9 @@ reason of a potential failure.</p>
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2027,7 +2051,9 @@ reason of a potential failure.</p>
 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
 
@@ -3175,6 +3201,22 @@ reason of a potential failure.</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -3232,19 +3274,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
+    <script src="/js/jquery.sticky.js?1581598214"></script>
+    <script src="/js/featherlight.min.js?1581598214"></script>
+    <script src="/js/highlight.pack.js?1581598214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
+    <script src="/js/learn.js?1581598214"></script>
+    <script src="/js/hugo-learn.js?1581598214"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598214"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

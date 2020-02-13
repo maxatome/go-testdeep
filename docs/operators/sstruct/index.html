@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Advanced testdeep technique :: go-testdeep</title>
+    <title>SStruct :: go-testdeep</title>
 
     
     <link href="/css/nucleus.css?1581598214" rel="stylesheet">
@@ -44,7 +44,7 @@
 </style>
 
   </head>
-  <body class="" data-url="/example/advanced-testdeep/">
+  <body class="" data-url="/operators/sstruct/">
     <nav id="sidebar" class="">
 
 
@@ -107,7 +107,7 @@
   
     
     <li data-nav-id="/example/" title="Example" class="dd-item 
-        parent
+        
         
         
         ">
@@ -169,7 +169,7 @@
  
   
     
-      <li data-nav-id="/example/advanced-testdeep/" title="Advanced testdeep technique" class="dd-item active">
+      <li data-nav-id="/example/advanced-testdeep/" title="Advanced testdeep technique" class="dd-item ">
         <a href="/example/advanced-testdeep/">
         Advanced testdeep technique
         
@@ -285,7 +285,7 @@
   
     
     <li data-nav-id="/operators/" title="Operators" class="dd-item 
-        
+        parent
         
         
         ">
@@ -1164,7 +1164,7 @@
  
   
     
-      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item active">
         <a href="/operators/sstruct/">
         SStruct
         
@@ -1566,7 +1566,7 @@
             
           
           
-            <a href='/'>go-testdeep</a> > <a href='/example/'>Example</a> > Advanced testdeep technique
+            <a href='/'>go-testdeep</a> > <a href='/operators/'>Operators</a> > SStruct
           
          
           
@@ -1579,7 +1579,25 @@
                 
                     <div class="progress">
     <div class="wrapper">
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#examples">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#cmpsstruct-shortcut">CmpSStruct shortcut</a>
+      <ul>
+        <li><a href="#examples-1">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#tsstruct-shortcut">T.SStruct shortcut</a>
+      <ul>
+        <li><a href="#examples-2">Examples</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -1595,7 +1613,7 @@
           
             <h1>
               
-              Advanced testdeep technique
+              SStruct
             </h1>
           
 
@@ -1603,79 +1621,273 @@
 
 
 
-<p>Of course we can test struct fields one by one, but with testdeep, the
-whole struct can be compared with one
-<a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> call.</p>
-<p>We can choose to ignore the non-guessable fields set by
-<code>CreateRecord()</code>:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
-  <span style="color:#ed9d13">&#34;time&#34;</span>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">SStruct</span>(model <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedFields StructFields) TestDeep
+</code></pre></div><p><a href="/operators/sstruct/"><code>SStruct</code></a> operator (a.k.a. strict-<a href="/operators/struct/"><code>Struct</code></a>) compares the contents of a
+struct or a pointer on a struct against values of <em>model</em> (if any)
+and the values of <em>expectedFields</em>. The zero values are compared
+too even if they are omitted from <em>expectedFields</em>: that is the
+difference with <a href="/operators/struct/"><code>Struct</code></a> operator.</p>
+<p>To ignore a field, one has to specify it in <em>expectedFields</em> and
+use the <a href="/operators/ignore/"><code>Ignore</code></a> operator.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">SStruct</span>(Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>},
+  td.StructFields{
+    <span style="color:#ed9d13">&#34;Age&#34;</span>: td.<span style="color:#447fcf">Ignore</span>(),
+  })
+</code></pre></div><p><em>model</em> must be the same type as compared data.</p>
+<p><em>expectedFields</em> can be <code>nil</code>, if no <a href="/operators/">TestDeep operators</a> are involved.</p>
+<p>During a match, all expected and zero fields must be found to
+succeed.</p>
+<p><a href="/operators/#typebehind-method"><code>TypeBehind</code></a> method returns the <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> of <em>model</em>.</p>
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#SStruct"><!-- raw HTML omitted --><!-- raw HTML omitted --> SStruct godoc</a>.</p>
+</blockquote>
+<h3 id="examples">Examples</h3>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
-)
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	Base example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestCreateRecord</span>(t *testing.T) {
-  before := time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Truncate</span>(time.Second)
-  record, err := <span style="color:#447fcf">CreateRecord</span>()
+	<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name        <span style="color:#6ab825;font-weight:bold">string</span>
+		Age         <span style="color:#6ab825;font-weight:bold">int</span>
+		NumChildren <span style="color:#6ab825;font-weight:bold">int</span>
+	}
 
-  <span style="color:#6ab825;font-weight:bold">if</span> td.<span style="color:#447fcf">CmpNoError</span>(t, err) {
-    td.<span style="color:#447fcf">Cmp</span>(t, record,
-      td.<span style="color:#447fcf">Struct</span>(
-        &amp;Record{
-          Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-          Age:  <span style="color:#3677a9">23</span>,
-        },
-        <span style="color:#6ab825;font-weight:bold">nil</span>),
-      <span style="color:#ed9d13">&#34;Newly created record&#34;</span>)
-  }
-}
-</code></pre></div><p>The <a href="/operators/struct/"><code>Struct</code></a> operator, used here,
-ignores zero fields in its model parameter.</p>
-<p>But it is better to check all fields:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
-  <span style="color:#ed9d13">&#34;time&#34;</span>
+	got := Person{
+		Name:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		Age:         <span style="color:#3677a9">42</span>,
+		NumChildren: <span style="color:#3677a9">0</span>,
+	}
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
-)
+	<span style="color:#999;font-style:italic">// NumChildren is not listed in expected fields so it must be zero
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">SStruct</span>(Person{Name: <span style="color:#ed9d13">&#34;Foobar&#34;</span>}, StructFields{
+			<span style="color:#ed9d13">&#34;Age&#34;</span>: <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		}),
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestCreateRecord</span>(t *testing.T) {
-  before := time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Truncate</span>(time.Second)
-  record, err := <span style="color:#447fcf">CreateRecord</span>()
+	<span style="color:#999;font-style:italic">// Model can be empty
+</span><span style="color:#999;font-style:italic"></span>	got.NumChildren = <span style="color:#3677a9">3</span>
+	ok = <span style="color:#447fcf">Cmp</span>(t, got,
+		<span style="color:#447fcf">SStruct</span>(Person{}, StructFields{
+			<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+			<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+			<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+		}),
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-  <span style="color:#6ab825;font-weight:bold">if</span> td.<span style="color:#447fcf">CmpNoError</span>(t, err) {
-    td.<span style="color:#447fcf">Cmp</span>(t, record,
-      td.<span style="color:#447fcf">Struct</span>(
-        &amp;Record{
-          Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-          Age:  <span style="color:#3677a9">23</span>,
-        },
-        td.StructFields{
-          <span style="color:#ed9d13">&#34;Id&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),
-          <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Between</span>(before, time.<span style="color:#447fcf">Now</span>()),
-        }),
-      <span style="color:#ed9d13">&#34;Newly created record&#34;</span>)
-  }
-}
-</code></pre></div><p>See the use of the <a href="/operators/struct/"><code>Struct</code></a>
-operator. It is needed here to overcome the go static typing system
-and so use other <a href="/operators/">testdeep operators</a>
-for some fields, here <a href="/operators/notzero/"><code>NotZero</code></a> for
-<code>Id</code> and <a href="/operators/between/"><code>Between</code></a> for <code>CreatedAt</code>.</p>
-<p>Not only structs can be compared. A lot of operators can be
-found to cover most (all?) needed tests. See the
-<a href="/operators/">operators list</a>.</p>
-<p>Say <code>CreateRecord()</code> does not set correctly <code>CreatedAt</code> field, then:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">go <span style="color:#24909d">test</span> -run=TestCreateRecord
-</code></pre></div><p>outputs for last <code>td.Cmp</code> call:</p>
-<p><img src="/images/colored-newly1.svg" alt="error output"></p>
-<p>If <code>CreateRecord()</code> had not set correctly <code>Id</code> field, output would have
-been:</p>
-<p><img src="/images/colored-newly2.svg" alt="error output"></p>
-<p>If <code>CreateRecord()</code> had set <code>Name</code> field to &ldquo;Alice&rdquo; value instead of
-expected &ldquo;Bob&rdquo;, output would have been:</p>
-<p><img src="/images/colored-newly3.svg" alt="error output"></p>
+	<span style="color:#999;font-style:italic">// Works with pointers too
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;got,
+		<span style="color:#447fcf">SStruct</span>(&amp;Person{}, StructFields{
+			<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+			<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+			<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+		}),
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Model does not need to be instanciated
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;got,
+		<span style="color:#447fcf">SStruct</span>((*Person)(<span style="color:#6ab825;font-weight:bold">nil</span>), StructFields{
+			<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+			<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+			<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+		}),
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
+    </div>
+</div>
+<h2 id="cmpsstruct-shortcut">CmpSStruct shortcut</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpSStruct</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, model <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedFields StructFields, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p>CmpSStruct is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">SStruct</span>(model, expectedFields), args...)
+</code></pre></div><p>See above for details.</p>
+<p>Returns true if the test is OK, false if it fails.</p>
+<p><em>args&hellip;</em> are optional and allow to name the test. This name is
+used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
+the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
+<a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
+<a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
+reason of a potential failure.</p>
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpSStruct"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpSStruct godoc</a>.</p>
+</blockquote>
+<h3 id="examples-1">Examples</h3>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	Base example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
+
+	<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name        <span style="color:#6ab825;font-weight:bold">string</span>
+		Age         <span style="color:#6ab825;font-weight:bold">int</span>
+		NumChildren <span style="color:#6ab825;font-weight:bold">int</span>
+	}
+
+	got := Person{
+		Name:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		Age:         <span style="color:#3677a9">42</span>,
+		NumChildren: <span style="color:#3677a9">0</span>,
+	}
+
+	<span style="color:#999;font-style:italic">// NumChildren is not listed in expected fields so it must be zero
+</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">CmpSStruct</span>(t, got, Person{Name: <span style="color:#ed9d13">&#34;Foobar&#34;</span>}, StructFields{
+		<span style="color:#ed9d13">&#34;Age&#34;</span>: <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Model can be empty
+</span><span style="color:#999;font-style:italic"></span>	got.NumChildren = <span style="color:#3677a9">3</span>
+	ok = <span style="color:#447fcf">CmpSStruct</span>(t, got, Person{}, StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Works with pointers too
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpSStruct</span>(t, &amp;got, &amp;Person{}, StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Model does not need to be instanciated
+</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpSStruct</span>(t, &amp;got, (*Person)(<span style="color:#6ab825;font-weight:bold">nil</span>), StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
+    </div>
+</div>
+<h2 id="tsstruct-shortcut">T.SStruct shortcut</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">SStruct</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, model <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedFields StructFields, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p><a href="/operators/sstruct/"><code>SStruct</code></a> is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">SStruct</span>(model, expectedFields), args...)
+</code></pre></div><p>See above for details.</p>
+<p>Returns true if the test is OK, false if it fails.</p>
+<p><em>args&hellip;</em> are optional and allow to name the test. This name is
+used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
+the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
+<a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
+<a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
+reason of a potential failure.</p>
+<blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.SStruct"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.SStruct godoc</a>.</p>
+</blockquote>
+<h3 id="examples-2">Examples</h3>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+        <span>
+        
+    	
+    	Base example
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
+
+	<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
+		Name        <span style="color:#6ab825;font-weight:bold">string</span>
+		Age         <span style="color:#6ab825;font-weight:bold">int</span>
+		NumChildren <span style="color:#6ab825;font-weight:bold">int</span>
+	}
+
+	got := Person{
+		Name:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		Age:         <span style="color:#3677a9">42</span>,
+		NumChildren: <span style="color:#3677a9">0</span>,
+	}
+
+	<span style="color:#999;font-style:italic">// NumChildren is not listed in expected fields so it must be zero
+</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">SStruct</span>(got, Person{Name: <span style="color:#ed9d13">&#34;Foobar&#34;</span>}, StructFields{
+		<span style="color:#ed9d13">&#34;Age&#34;</span>: <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Model can be empty
+</span><span style="color:#999;font-style:italic"></span>	got.NumChildren = <span style="color:#3677a9">3</span>
+	ok = t.<span style="color:#447fcf">SStruct</span>(got, Person{}, StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Works with pointers too
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">SStruct</span>(&amp;got, &amp;Person{}, StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Model does not need to be instanciated
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">SStruct</span>(&amp;got, (*Person)(<span style="color:#6ab825;font-weight:bold">nil</span>), StructFields{
+		<span style="color:#ed9d13">&#34;Name&#34;</span>:        <span style="color:#ed9d13">&#34;Foobar&#34;</span>,
+		<span style="color:#ed9d13">&#34;Age&#34;</span>:         <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>),
+		<span style="color:#ed9d13">&#34;NumChildren&#34;</span>: <span style="color:#447fcf">Not</span>(<span style="color:#3677a9">0</span>),
+	},
+		<span style="color:#ed9d13">&#34;checks %v is the right Person&#34;</span>)
+	fmt.<span style="color:#447fcf">Println</span>(ok)
+
+	<span style="color:#999;font-style:italic">// Output:
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
+    </div>
+</div>
 
 
 <footer class=" footline" >
@@ -1733,7 +1945,6 @@ expected &ldquo;Bob&rdquo;, output would have been:</p>
             
                 
                     
-                    
                 
                 
 
@@ -1747,8 +1958,21 @@ expected &ldquo;Bob&rdquo;, output would have been:</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
-                        
+            
+            
+                
                     
                 
                 
@@ -1781,26 +2005,6 @@ expected &ldquo;Bob&rdquo;, output would have been:</p>
             
             
                 
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
                     
                 
                 
@@ -1869,6 +2073,7 @@ expected &ldquo;Bob&rdquo;, output would have been:</p>
             
                 
                     
+                    
                 
                 
 
@@ -1882,21 +2087,8 @@ expected &ldquo;Bob&rdquo;, output would have been:</p>
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
+                        
                     
                 
                 
@@ -2617,6 +2809,26 @@ expected &ldquo;Bob&rdquo;, output would have been:</p>
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -2881,10 +3093,10 @@ expected &ldquo;Bob&rdquo;, output would have been:</p>
 	 
 	 
 		
-			<a class="nav nav-prev" href="/example/basic-testdeep/" title="Basic testdeep approach"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/operators/smuggle/" title="Smuggle"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/example/testdeep-cmp-shortcuts/" title="testdeep Cmp shortcuts" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/operators/string/" title="String" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

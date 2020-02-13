@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>HasSuffix :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598214" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598214" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598214" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598214" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598214" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598214" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598214" rel="stylesheet">
+    <link href="/css/theme.css?1581598214" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598214" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598214" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598214"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598214"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598214"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1561,23 +1580,23 @@
                     <div class="progress">
     <div class="wrapper">
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#examples">Examples</a></li>
-</ul></li>
-<li><a href="#cmphassuffix-shortcut">CmpHasSuffix shortcut</a>
-<ul>
-<li><a href="#examples-1">Examples</a></li>
-</ul></li>
-<li><a href="#t-hassuffix-shortcut">T.HasSuffix shortcut</a>
-<ul>
-<li><a href="#examples-2">Examples</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#examples">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#cmphassuffix-shortcut">CmpHasSuffix shortcut</a>
+      <ul>
+        <li><a href="#examples-1">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#thassuffix-shortcut">T.HasSuffix shortcut</a>
+      <ul>
+        <li><a href="#examples-2">Examples</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
     </div>
 </div>
@@ -1602,10 +1621,8 @@
 
 
 
-
-
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">HasSuffix</span>(expected <span style="color:#6ab825;font-weight:bold">string</span>) TestDeep</code></pre></div>
-<p><a href="/operators/hassuffix/"><code>HasSuffix</code></a> operator allows to compare the suffix of a <code>string</code> (or
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">HasSuffix</span>(expected <span style="color:#6ab825;font-weight:bold">string</span>) TestDeep
+</code></pre></div><p><a href="/operators/hassuffix/"><code>HasSuffix</code></a> operator allows to compare the suffix of a <code>string</code> (or
 convertible), <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interface (<a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> interface is
 tested before <a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a>.)</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">type</span> Foobar <span style="color:#6ab825;font-weight:bold">string</span>
@@ -1615,13 +1632,11 @@ err := errors.<span style="color:#447fcf">New</span>(<span style="color:#ed9d13"
 <span style="color:#447fcf">Cmp</span>(t, err, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;!&#34;</span>)) <span style="color:#999;font-style:italic">// succeeds
 </span><span style="color:#999;font-style:italic"></span>
 bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="color:#ed9d13">&#34;fmt.Stringer!&#34;</span>)
-<span style="color:#447fcf">Cmp</span>(t, bstr, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;!&#34;</span>)) // succeeds</code></pre></div>
-<blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix"><i class='fas fa-book'></i> HasSuffix godoc</a>.</p>
+<span style="color:#447fcf">Cmp</span>(t, bstr, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;!&#34;</span>)) <span style="color:#999;font-style:italic">// succeeds
+</span></code></pre></div><blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix"><!-- raw HTML omitted --><!-- raw HTML omitted --> HasSuffix godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1642,7 +1657,9 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1666,7 +1683,9 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1689,31 +1708,27 @@ bstr := bytes.<span style="color:#447fcf">NewBufferString</span>(<span style="co
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
-
 <h2 id="cmphassuffix-shortcut">CmpHasSuffix shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpHasSuffix</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expected <span style="color:#6ab825;font-weight:bold">string</span>, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p>CmpHasSuffix is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">HasSuffix</span>(expected), args...)</code></pre></div>
-<p>See above for details.</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpHasSuffix</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expected <span style="color:#6ab825;font-weight:bold">string</span>, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p>CmpHasSuffix is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">HasSuffix</span>(expected), args...)
+</code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
-
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpHasSuffix"><i class='fas fa-book'></i> CmpHasSuffix godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpHasSuffix"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpHasSuffix godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples-1">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1734,7 +1749,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1758,7 +1775,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1781,31 +1800,27 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
-
-<h2 id="t-hassuffix-shortcut">T.HasSuffix shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">HasSuffix</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expected <span style="color:#6ab825;font-weight:bold">string</span>, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p><a href="/operators/hassuffix/"><code>HasSuffix</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">HasSuffix</span>(expected), args...)</code></pre></div>
-<p>See above for details.</p>
-
+<h2 id="thassuffix-shortcut">T.HasSuffix shortcut</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">HasSuffix</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expected <span style="color:#6ab825;font-weight:bold">string</span>, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p><a href="/operators/hassuffix/"><code>HasSuffix</code></a> is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">HasSuffix</span>(expected), args...)
+</code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
-
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.HasSuffix"><i class='fas fa-book'></i> T.HasSuffix godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.HasSuffix"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.HasSuffix godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples-2">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1826,7 +1841,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1850,7 +1867,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1873,7 +1892,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
 
@@ -3021,6 +3042,22 @@ reason of a potential failure.</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -3078,19 +3115,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
+    <script src="/js/jquery.sticky.js?1581598214"></script>
+    <script src="/js/featherlight.min.js?1581598214"></script>
+    <script src="/js/highlight.pack.js?1581598214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
+    <script src="/js/learn.js?1581598214"></script>
+    <script src="/js/hugo-learn.js?1581598214"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598214"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

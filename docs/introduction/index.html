@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Introduction :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598213" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598213" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598213" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598213" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598213" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598213" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598213" rel="stylesheet">
+    <link href="/css/theme.css?1581598213" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598213" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598213" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598213"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598213"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598213"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598213"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1555,13 +1574,10 @@
                     <div class="progress">
     <div class="wrapper">
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#synopsis">Synopsis</a></li>
-<li><a href="#description">Description</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#synopsis">Synopsis</a></li>
+    <li><a href="#description">Description</a></li>
+  </ul>
 </nav>
     </div>
 </div>
@@ -1587,10 +1603,7 @@
 
 
 
-	
-
-<h2 id="synopsis">Synopsis</h2>
-
+	<h2 id="synopsis">Synopsis</h2>
 <p>Make golang tests easy, from simplest usage:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
@@ -1600,8 +1613,39 @@
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
   td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">MyFunc</span>(), &amp;Info{Name: <span style="color:#ed9d13">&#34;Alice&#34;</span>, Age: <span style="color:#3677a9">42</span>})
-}</code></pre></div>
-<p>To most complex one, allowing to easily test golang API routes, using
+}
+</code></pre></div><p>To a bit more complex one, allowing flexible comparisons using
+<a href="/operators/">TestDeep operators</a>:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
+  <span style="color:#ed9d13">&#34;testing&#34;</span>
+
+  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+)
+
+<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
+  td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">MyFunc</span>(), td.<span style="color:#447fcf">Struct</span>(
+    &amp;Info{Name: <span style="color:#ed9d13">&#34;Alice&#34;</span>},
+    td.StructFields{
+      <span style="color:#ed9d13">&#34;Age&#34;</span>: td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>),
+    },
+  ))
+}
+</code></pre></div><p>Or anchoring operators directly in literals, as in:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
+  <span style="color:#ed9d13">&#34;testing&#34;</span>
+
+  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+)
+
+<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(tt *testing.T) {
+  t := td.<span style="color:#447fcf">NewT</span>(tt)
+
+  t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">MyFunc</span>(), &amp;Info{
+    Name: <span style="color:#ed9d13">&#34;Alice&#34;</span>,
+    Age:  t.<span style="color:#447fcf">Anchor</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)).(<span style="color:#6ab825;font-weight:bold">int</span>),
+  })
+}
+</code></pre></div><p>To most complex one, allowing to easily test golang API routes, using
 flexible <a href="/operators/">operators</a>:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
@@ -1612,10 +1656,10 @@ flexible <a href="/operators/">operators</a>:</p>
 )
 
 <span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>    <span style="color:#ed9d13">`json:&#34;id&#34;`</span>
-  Name      <span style="color:#6ab825;font-weight:bold">string</span>    <span style="color:#ed9d13">`json:&#34;name&#34;`</span>
-  Age       <span style="color:#6ab825;font-weight:bold">int</span>       <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
-  CreatedAt time.Time <span style="color:#ed9d13">`json:&#34;created_at&#34;`</span>
+  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;id&#34;</span><span style="color:#ed9d13">`</span>
+  Name      <span style="color:#6ab825;font-weight:bold">string</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;name&#34;</span><span style="color:#ed9d13">`</span>
+  Age       <span style="color:#6ab825;font-weight:bold">int</span>       <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
+  CreatedAt time.Time <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;created_at&#34;</span><span style="color:#ed9d13">`</span>
 }
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyApi</span>(t *testing.T) {
@@ -1624,51 +1668,66 @@ flexible <a href="/operators/">operators</a>:</p>
 
   beforeCreate := time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Truncate</span>(<span style="color:#3677a9">0</span>)
 
-  tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(td.<span style="color:#447fcf">NewT</span>(t).<span style="color:#447fcf">FailureIsFatal</span>(), <span style="color:#999;font-style:italic">// ← t.Fatal() if test fails
-</span><span style="color:#999;font-style:italic"></span>    tdhttp.<span style="color:#447fcf">PostJSON</span>(<span style="color:#ed9d13">&#34;/person&#34;</span>, Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>}), <span style="color:#999;font-style:italic">// ← the request
-</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP, <span style="color:#999;font-style:italic">// ← the API handler
-</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{ <span style="color:#999;font-style:italic">// ← the expected response
+  ok := tdhttp.<span style="color:#447fcf">CmpJSONResponse</span>(t,
+    tdhttp.<span style="color:#447fcf">PostJSON</span>(<span style="color:#ed9d13">&#34;/person&#34;</span>, Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>}), <span style="color:#999;font-style:italic">// ← ①
+</span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,                                      <span style="color:#999;font-style:italic">// ← ②
+</span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{                                      <span style="color:#999;font-style:italic">// ← ③
 </span><span style="color:#999;font-style:italic"></span>      Status: http.StatusCreated,
       <span style="color:#999;font-style:italic">// Header can be tested too… See tdhttp doc.
-</span><span style="color:#999;font-style:italic"></span>      Body: td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`
+</span><span style="color:#999;font-style:italic"></span>      Body: td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">
 </span><span style="color:#ed9d13">// Note that comments are allowed
-</span><span style="color:#ed9d13">{
+</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
 </span><span style="color:#ed9d13">  &#34;id&#34;:         $id,          // set by the API/DB
 </span><span style="color:#ed9d13">  &#34;name&#34;:       &#34;Bob&#34;,
 </span><span style="color:#ed9d13">  &#34;age&#34;:        42,
 </span><span style="color:#ed9d13">  &#34;created_at&#34;: &#34;$createdAt&#34;, // set by the API/DB
-</span><span style="color:#ed9d13">}`</span>,
-        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;id&#34;</span>, td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>())), <span style="color:#999;font-style:italic">// catch $id and check ≠ 0
-</span><span style="color:#999;font-style:italic"></span>        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;created_at&#34;</span>, td.<span style="color:#447fcf">All</span>( <span style="color:#999;font-style:italic">// ← All combines several operators like a AND
-</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>), <span style="color:#999;font-style:italic">// check the RFC3339 $created_at date ends with &#34;Z&#34;
-</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s <span style="color:#6ab825;font-weight:bold">string</span>) (time.Time, <span style="color:#6ab825;font-weight:bold">error</span>) { <span style="color:#999;font-style:italic">// convert to time.Time
+</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>,
+        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;id&#34;</span>, td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>())),        <span style="color:#999;font-style:italic">// ← ④
+</span><span style="color:#999;font-style:italic"></span>        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;created_at&#34;</span>, td.<span style="color:#447fcf">All</span>(                      <span style="color:#999;font-style:italic">// ← ⑤
+</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>),                              <span style="color:#999;font-style:italic">// ← ⑥
+</span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s <span style="color:#6ab825;font-weight:bold">string</span>) (time.Time, <span style="color:#6ab825;font-weight:bold">error</span>) {  <span style="color:#999;font-style:italic">// ← ⑦
 </span><span style="color:#999;font-style:italic"></span>            <span style="color:#6ab825;font-weight:bold">return</span> time.<span style="color:#447fcf">Parse</span>(time.RFC3339Nano, s)
-          }, td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(beforeCreate))), <span style="color:#999;font-style:italic">// catch it and check ≥ beforeCreate
+          }, td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(beforeCreate))), <span style="color:#999;font-style:italic">// ← ⑧
 </span><span style="color:#999;font-style:italic"></span>        )),
       ),
     },
     <span style="color:#ed9d13">&#34;Create a new Person&#34;</span>)
-
-  t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The new Person ID is %d and was created at %s&#34;</span>, id, createdAt)
-}</code></pre></div>
+  <span style="color:#6ab825;font-weight:bold">if</span> ok {
+    t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The new Person ID is %d and was created at %s&#34;</span>, id, createdAt)
+  }
+}
+</code></pre></div><ol>
+<li>the POST request with automatic JSON marshalling;</li>
+<li>the API handler;</li>
+<li>the expected response: HTTP status should be <code>http.StatusCreated</code>
+and the body should match the <a href="/operators/json/"><code>JSON</code></a>
+operator;</li>
+<li>for the <code>$id</code> placeholder, <a href="/operators/catch/"><code>Catch</code></a> its
+value: put it in <code>id</code> variable and check it is
+<a href="/operators/notzero/"><code>NotZero</code></a>;</li>
+<li>for the <code>$created_at</code> placeholder, use the <a href="/operators/all/"><code>All</code></a>
+operator. It combines several operators like a AND;</li>
+<li>check that <code>$created_at</code> date ends with &ldquo;Z&rdquo; using
+<a href="/operators/hassuffix/"><code>HasSuffix</code></a>. As we expect a RFC3339
+date, we require it in UTC time zone;</li>
+<li>convert <code>$created_at</code> date into a <code>time.Time</code> using a custom
+function thanks to the <a href="/operators/smuggle/"><code>Smuggle</code></a> operator;</li>
+<li>then <a href="/operators/catch/"><code>Catch</code></a> the resulting value: put it in
+<code>createdAt</code> variable and check it is greater or equal than
+<code>beforeCreate</code> (set just before <code>tdhttp.CmpJSONResponse</code> call).</li>
+</ol>
 <p>Example of produced error in case of mismatch:</p>
-
-<p><img src="/images/colored-output.svg" alt="error output" /></p>
-
+<p><img src="/images/colored-output.svg" alt="error output"></p>
 <h2 id="description">Description</h2>
-
 <p>go-testdeep is a go rewrite and adaptation of wonderful
 <a href="https://metacpan.org/pod/Test::Deep">Test::Deep perl</a>.</p>
-
 <p>In golang, comparing data structure is usually done using
 <a href="https://golang.org/pkg/reflect/#DeepEqual">reflect.DeepEqual</a> or
 using a package that uses this function behind the scene.</p>
-
 <p>This function works very well, but it is not flexible. Both compared
 structures must match exactly and when a difference is returned, it is
 up to the caller to display it. Not easy when comparing big data
 structures.</p>
-
 <p>The purpose of testdeep package is to do its best to introduce this
 missing flexibility using <a href="/operators/">&ldquo;operators&rdquo;</a>, when
 the expected value (or one of its component) cannot be matched
@@ -2814,6 +2873,22 @@ exactly, mixed with some useful
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -2871,19 +2946,19 @@ exactly, mixed with some useful
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598213"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598213"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598213"></script>
+    <script src="/js/jquery.sticky.js?1581598213"></script>
+    <script src="/js/featherlight.min.js?1581598213"></script>
+    <script src="/js/highlight.pack.js?1581598213"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598213"></script>
+    <script src="/js/learn.js?1581598213"></script>
+    <script src="/js/hugo-learn.js?1581598213"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598213" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598213"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

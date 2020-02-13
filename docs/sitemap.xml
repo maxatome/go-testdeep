@@ -191,6 +191,10 @@
   </url>
   
   <url>
+    <loc>https://go-testdeep.zetta.rocks/operators/sstruct/</loc>
+  </url>
+  
+  <url>
     <loc>https://go-testdeep.zetta.rocks/operators/string/</loc>
   </url>
   

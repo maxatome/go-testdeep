@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Smuggle :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598214" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598214" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598214" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598214" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598214" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598214" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598214" rel="stylesheet">
+    <link href="/css/theme.css?1581598214" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598214" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598214" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598214"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598214"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598214"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1561,23 +1580,23 @@
                     <div class="progress">
     <div class="wrapper">
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#examples">Examples</a></li>
-</ul></li>
-<li><a href="#cmpsmuggle-shortcut">CmpSmuggle shortcut</a>
-<ul>
-<li><a href="#examples-1">Examples</a></li>
-</ul></li>
-<li><a href="#t-smuggle-shortcut">T.Smuggle shortcut</a>
-<ul>
-<li><a href="#examples-2">Examples</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#examples">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#cmpsmuggle-shortcut">CmpSmuggle shortcut</a>
+      <ul>
+        <li><a href="#examples-1">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="#tsmuggle-shortcut">T.Smuggle shortcut</a>
+      <ul>
+        <li><a href="#examples-2">Examples</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
     </div>
 </div>
@@ -1602,35 +1621,32 @@
 
 
 
-
-
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Smuggle</span>(fn <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep</code></pre></div>
-<p><a href="/operators/smuggle/"><code>Smuggle</code></a> operator allows to change data contents or mutate it into
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Smuggle</span>(fn <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep
+</code></pre></div><p><a href="/operators/smuggle/"><code>Smuggle</code></a> operator allows to change data contents or mutate it into
 another type before stepping down in favor of generic comparison
 process. Of course it is a <a href="/operators/#smuggler-operators">smuggler operator</a>. So <em>fn</em> is a function
 that must take one parameter whose type must be convertible to the
 type of the compared value (as a convenient shortcut, <em>fn</em> can be a
 <code>string</code> specifying a fields-path through structs, see below for
 details).</p>
-
 <p><em>fn</em> must return at least one value. These value will be compared as is
 to <em>expectedValue</em>, here integer 28:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(value <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">int</span> {
   num, _ := strconv.<span style="color:#447fcf">Atoi</span>(value)
   <span style="color:#6ab825;font-weight:bold">return</span> num
-}, <span style="color:#3677a9">28</span>)</code></pre></div>
-<p>or using an other <a href="/operators/">TestDeep operator</a>, here <a href="/operators/between/"><code>Between(28, 30)</code></a>:</p>
+}, <span style="color:#3677a9">28</span>)
+</code></pre></div><p>or using an other <a href="/operators/">TestDeep operator</a>, here <a href="/operators/between/"><code>Between(28, 30)</code></a>:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(value <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">int</span> {
   num, _ := strconv.<span style="color:#447fcf">Atoi</span>(value)
   <span style="color:#6ab825;font-weight:bold">return</span> num
-}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))</code></pre></div>
-<p><em>fn</em> can return a second boolean value, used to tell that a problem
+}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))
+</code></pre></div><p><em>fn</em> can return a second boolean value, used to tell that a problem
 occurred and so stop the comparison:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(value <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">bool</span>) {
   num, err := strconv.<span style="color:#447fcf">Atoi</span>(value)
   <span style="color:#6ab825;font-weight:bold">return</span> num, err == <span style="color:#6ab825;font-weight:bold">nil</span>
-}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))</code></pre></div>
-<p><em>fn</em> can return a third <code>string</code> value which is used to describe the
+}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))
+</code></pre></div><p><em>fn</em> can return a third <code>string</code> value which is used to describe the
 test when a problem occurred (false second boolean value):</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(value <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">bool</span>, <span style="color:#6ab825;font-weight:bold">string</span>) {
   num, err := strconv.<span style="color:#447fcf">Atoi</span>(value)
@@ -1638,54 +1654,52 @@ test when a problem occurred (false second boolean value):</p>
     <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>, <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">&#34;string must contain a number&#34;</span>
   }
   <span style="color:#6ab825;font-weight:bold">return</span> num, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">&#34;&#34;</span>
-}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))</code></pre></div>
-<p>Instead of returning (X, <code>bool</code>) or (X, <code>bool</code>, <code>string</code>), <em>fn</em> can
+}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))
+</code></pre></div><p>Instead of returning (X, <code>bool</code>) or (X, <code>bool</code>, <code>string</code>), <em>fn</em> can
 return (X, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a>). When a problem occurs, the returned <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> is
 non-<code>nil</code>, as in:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(value <span style="color:#6ab825;font-weight:bold">string</span>) (<span style="color:#6ab825;font-weight:bold">int</span>, <span style="color:#6ab825;font-weight:bold">error</span>) {
   num, err := strconv.<span style="color:#447fcf">Atoi</span>(value)
   <span style="color:#6ab825;font-weight:bold">return</span> num, err
-}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))</code></pre></div>
-<p>Which can be simplified to:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(strconv.Atoi, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))</code></pre></div>
-<p>Imagine you want to compare that the Year of a date is between 2010
+}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))
+</code></pre></div><p>Which can be simplified to:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(strconv.Atoi, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">28</span>, <span style="color:#3677a9">30</span>))
+</code></pre></div><p>Imagine you want to compare that the Year of a date is between 2010
 and 2020:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(date time.Time) <span style="color:#6ab825;font-weight:bold">int</span> { <span style="color:#6ab825;font-weight:bold">return</span> date.<span style="color:#447fcf">Year</span>() },
-  <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">2010</span>, <span style="color:#3677a9">2020</span>))</code></pre></div>
-<p>In this case the data location forwarded to next test will be
-something like &ldquo;DATA.MyTimeField<smuggled>&rdquo;, but you can act on it
+  <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">2010</span>, <span style="color:#3677a9">2020</span>))
+</code></pre></div><p>In this case the data location forwarded to next test will be
+something like &ldquo;DATA.MyTimeField<!-- raw HTML omitted -->&rdquo;, but you can act on it
 too by returning a <a href="https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot">SmuggledGot</a> struct (by value or by address):</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(date time.Time) SmuggledGot {
   <span style="color:#6ab825;font-weight:bold">return</span> SmuggledGot{
     Name: <span style="color:#ed9d13">&#34;Year&#34;</span>,
     Got:  date.<span style="color:#447fcf">Year</span>(),
   }
-}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">2010</span>, <span style="color:#3677a9">2020</span>))</code></pre></div>
-<p>then the data location forwarded to next test will be something like
+}, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">2010</span>, <span style="color:#3677a9">2020</span>))
+</code></pre></div><p>then the data location forwarded to next test will be something like
 &ldquo;DATA.MyTimeField.Year&rdquo;. The &ldquo;.&rdquo;  between the current path (here
 &ldquo;DATA.MyTimeField&rdquo;) and the returned Name &ldquo;Year&rdquo; is automatically
 added when Name starts with a Letter.</p>
-
 <p>Note that <a href="https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot">SmuggledGot</a> and <a href="https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot">*SmuggledGot</a> returns are treated equally,
 and they are only used when <em>fn</em> has only one returned value or
 when the second boolean returned value is true.</p>
-
 <p>Of course, all cases can go together:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#999;font-style:italic">// Accepts a &#34;YYYY/mm/DD HH:MM:SS&#34; string to produce a time.Time and tests
-</span><span style="color:#999;font-style:italic">// whether this date is contained between 2 hours before now and now.
+</span><span style="color:#999;font-style:italic"></span><span style="color:#999;font-style:italic">// whether this date is contained between 2 hours before now and now.
 </span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(date <span style="color:#6ab825;font-weight:bold">string</span>) (*SmuggledGot, <span style="color:#6ab825;font-weight:bold">bool</span>, <span style="color:#6ab825;font-weight:bold">string</span>) {
   date, err := time.<span style="color:#447fcf">Parse</span>(<span style="color:#ed9d13">&#34;2006/01/02 15:04:05&#34;</span>, date)
   <span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
-    <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">nil</span>, <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">`date must conform to &#34;YYYY/mm/DD HH:MM:SS&#34; format`</span>
+    <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#6ab825;font-weight:bold">nil</span>, <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">date must conform to &#34;YYYY/mm/DD HH:MM:SS&#34; format</span><span style="color:#ed9d13">`</span>
   }
   <span style="color:#6ab825;font-weight:bold">return</span> &amp;SmuggledGot{
     Name: <span style="color:#ed9d13">&#34;Date&#34;</span>,
     Got:  date,
   }, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">&#34;&#34;</span>
-}, <span style="color:#447fcf">Between</span>(time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Add</span>(-<span style="color:#3677a9">2</span>*time.Hour), time.<span style="color:#447fcf">Now</span>()))</code></pre></div>
-<p>or:</p>
+}, <span style="color:#447fcf">Between</span>(time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Add</span>(-<span style="color:#3677a9">2</span>*time.Hour), time.<span style="color:#447fcf">Now</span>()))
+</code></pre></div><p>or:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#999;font-style:italic">// Accepts a &#34;YYYY/mm/DD HH:MM:SS&#34; string to produce a time.Time and tests
-</span><span style="color:#999;font-style:italic">// whether this date is contained between 2 hours before now and now.
+</span><span style="color:#999;font-style:italic"></span><span style="color:#999;font-style:italic">// whether this date is contained between 2 hours before now and now.
 </span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(date <span style="color:#6ab825;font-weight:bold">string</span>) (*SmuggledGot, <span style="color:#6ab825;font-weight:bold">error</span>) {
   date, err := time.<span style="color:#447fcf">Parse</span>(<span style="color:#ed9d13">&#34;2006/01/02 15:04:05&#34;</span>, date)
   <span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
@@ -1695,8 +1709,8 @@ when the second boolean returned value is true.</p>
     Name: <span style="color:#ed9d13">&#34;Date&#34;</span>,
     Got:  date,
   }, <span style="color:#6ab825;font-weight:bold">nil</span>
-}, <span style="color:#447fcf">Between</span>(time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Add</span>(-<span style="color:#3677a9">2</span>*time.Hour), time.<span style="color:#447fcf">Now</span>()))</code></pre></div>
-<p><a href="/operators/smuggle/"><code>Smuggle</code></a> can also be used to access a struct field embedded in
+}, <span style="color:#447fcf">Between</span>(time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Add</span>(-<span style="color:#3677a9">2</span>*time.Hour), time.<span style="color:#447fcf">Now</span>()))
+</code></pre></div><p><a href="/operators/smuggle/"><code>Smuggle</code></a> can also be used to access a struct field embedded in
 several struct layers.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">type</span> A <span style="color:#6ab825;font-weight:bold">struct</span>{ Num <span style="color:#6ab825;font-weight:bold">int</span> }
 <span style="color:#6ab825;font-weight:bold">type</span> B <span style="color:#6ab825;font-weight:bold">struct</span>{ A *A }
@@ -1707,16 +1721,15 @@ got := C{B: B{A: &amp;A{Num: <span style="color:#3677a9">12</span>}}}
 </span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, got,
   <span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(c C) <span style="color:#6ab825;font-weight:bold">int</span> {
     <span style="color:#6ab825;font-weight:bold">return</span> c.B.A.Num
-  }, <span style="color:#3677a9">12</span>))</code></pre></div>
-<p>As brought up above, a field-path can be passed as <em>fn</em> value
+  }, <span style="color:#3677a9">12</span>))
+</code></pre></div><p>As brought up above, a field-path can be passed as <em>fn</em> value
 instead of a function pointer. Using this feature, the Cmp
 call in the above example can be rewritten as follows:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#999;font-style:italic">// Tests that got.B.A.Num is 12
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Smuggle</span>(<span style="color:#ed9d13">&#34;B.A.Num&#34;</span>, <span style="color:#3677a9">12</span>))</code></pre></div>
-<p>Behind the scenes, a temporary function is automatically created to
+</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Smuggle</span>(<span style="color:#ed9d13">&#34;B.A.Num&#34;</span>, <span style="color:#3677a9">12</span>))
+</code></pre></div><p>Behind the scenes, a temporary function is automatically created to
 achieve the same goal, but add some checks against <code>nil</code> values and
 auto-dereference interfaces and pointers.</p>
-
 <p>The difference between <a href="/operators/smuggle/"><code>Smuggle</code></a> and <a href="/operators/code/"><code>Code</code></a> operators is that <a href="/operators/code/"><code>Code</code></a> is
 used to do a final comparison while <a href="/operators/smuggle/"><code>Smuggle</code></a> transforms the data and
 then steps down in favor of generic comparison process. Moreover,
@@ -1726,17 +1739,13 @@ and the got value be an <code>int</code>). See examples. On the other hand, the
 output type is strict and must match exactly the expected value
 type. The fields-path <code>string</code> <em>fn</em> shortcut is not available with
 <a href="/operators/code/"><code>Code</code></a> operator.</p>
-
-<p><a href="/operators/#typebehind-method">TypeBehind</a> method returns the <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> of only parameter of
+<p><a href="/operators/#typebehind-method"><code>TypeBehind</code></a> method returns the <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> of only parameter of
 <em>fn</em>. For the case where <em>fn</em> is a fields-path, it is always
 <code>interface{}</code>, as the type can not be known in advance.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#Smuggle"><i class='fas fa-book'></i> Smuggle godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#Smuggle"><!-- raw HTML omitted --><!-- raw HTML omitted --> Smuggle godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -1801,7 +1810,9 @@ type. The fields-path <code>string</code> <em>fn</em> shortcut is not available 
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1826,7 +1837,9 @@ type. The fields-path <code>string</code> <em>fn</em> shortcut is not available 
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;got int16(123) → smuggle via int64 → uint32(123):&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// got <span style="color:#24909d">int16</span>(<span style="color:#3677a9">123</span>) <span style="color:#a61717;background-color:#e3d2d2">→</span> smuggle via <span style="color:#6ab825;font-weight:bold">int64</span> <span style="color:#a61717;background-color:#e3d2d2">→</span> <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>): <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// got int16(123) → smuggle via int64 → uint32(123): true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1844,7 +1857,7 @@ type. The fields-path <code>string</code> <em>fn</em> shortcut is not available 
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	<span style="color:#999;font-style:italic">// Automatically json.Unmarshal to compare
-</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`{&#34;a&#34;:1,&#34;b&#34;:2}`</span>)
+</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;a&#34;:1,&#34;b&#34;:2}</span><span style="color:#ed9d13">`</span>)
 
 	ok := <span style="color:#447fcf">Cmp</span>(t, got,
 		<span style="color:#447fcf">Smuggle</span>(
@@ -1859,7 +1872,9 @@ type. The fields-path <code>string</code> <em>fn</em> shortcut is not available 
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;JSON contents is OK:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// JSON contents is OK: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// JSON contents is OK: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1925,7 +1940,9 @@ type. The fields-path <code>string</code> <em>fn</em> shortcut is not available 
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -1968,7 +1985,9 @@ type. The fields-path <code>string</code> <em>fn</em> shortcut is not available 
 
 	<span style="color:#999;font-style:italic">// Output
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified time.Time OK: true
-</span><span style="color:#999;font-style:italic"></span>	// stringified MyTime OK: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified MyTime OK: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2036,31 +2055,27 @@ type. The fields-path <code>string</code> <em>fn</em> shortcut is not available 
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num by hand: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using a fields-path: true
-</span><span style="color:#999;font-style:italic"></span>	// check Num using an other fields-path: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using an other fields-path: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
-
 <h2 id="cmpsmuggle-shortcut">CmpSmuggle shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpSmuggle</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, fn <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p>CmpSmuggle is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Smuggle</span>(fn, expectedValue), args...)</code></pre></div>
-<p>See above for details.</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpSmuggle</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, fn <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p>CmpSmuggle is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">Smuggle</span>(fn, expectedValue), args...)
+</code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
-
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle"><i class='fas fa-book'></i> CmpSmuggle godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpSmuggle godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples-1">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -2114,7 +2129,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2138,7 +2155,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;got int16(123) → smuggle via int64 → uint32(123):&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// got <span style="color:#24909d">int16</span>(<span style="color:#3677a9">123</span>) <span style="color:#a61717;background-color:#e3d2d2">→</span> smuggle via <span style="color:#6ab825;font-weight:bold">int64</span> <span style="color:#a61717;background-color:#e3d2d2">→</span> <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>): <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// got int16(123) → smuggle via int64 → uint32(123): true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2156,7 +2175,7 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	<span style="color:#999;font-style:italic">// Automatically json.Unmarshal to compare
-</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`{&#34;a&#34;:1,&#34;b&#34;:2}`</span>)
+</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;a&#34;:1,&#34;b&#34;:2}</span><span style="color:#ed9d13">`</span>)
 
 	ok := <span style="color:#447fcf">CmpSmuggle</span>(t, got, <span style="color:#6ab825;font-weight:bold">func</span>(b json.RawMessage) (r <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>, err <span style="color:#6ab825;font-weight:bold">error</span>) {
 		err = json.<span style="color:#447fcf">Unmarshal</span>(b, &amp;r)
@@ -2168,7 +2187,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;JSON contents is OK:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// JSON contents is OK: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// JSON contents is OK: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2228,7 +2249,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2267,7 +2290,9 @@ reason of a potential failure.</p>
 
 	<span style="color:#999;font-style:italic">// Output
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified time.Time OK: true
-</span><span style="color:#999;font-style:italic"></span>	// stringified MyTime OK: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified MyTime OK: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2332,31 +2357,27 @@ reason of a potential failure.</p>
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num by hand: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using a fields-path: true
-</span><span style="color:#999;font-style:italic"></span>	// check Num using an other fields-path: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using an other fields-path: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
-
-<h2 id="t-smuggle-shortcut">T.Smuggle shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Smuggle</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, fn <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span></code></pre></div>
-<p><a href="/operators/smuggle/"><code>Smuggle</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Smuggle</span>(fn, expectedValue), args...)</code></pre></div>
-<p>See above for details.</p>
-
+<h2 id="tsmuggle-shortcut">T.Smuggle shortcut</h2>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">Smuggle</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, fn <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
+</code></pre></div><p><a href="/operators/smuggle/"><code>Smuggle</code></a> is a shortcut for:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">Smuggle</span>(fn, expectedValue), args...)
+</code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
-
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
 <a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
-
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle"><i class='fas fa-book'></i> T.Smuggle godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.Smuggle godoc</a>.</p>
 </blockquote>
-
 <h3 id="examples-2">Examples</h3>
-
 <p>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
@@ -2410,7 +2431,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2434,7 +2457,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;got int16(123) → smuggle via int64 → uint32(123):&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// got <span style="color:#24909d">int16</span>(<span style="color:#3677a9">123</span>) <span style="color:#a61717;background-color:#e3d2d2">→</span> smuggle via <span style="color:#6ab825;font-weight:bold">int64</span> <span style="color:#a61717;background-color:#e3d2d2">→</span> <span style="color:#24909d">uint32</span>(<span style="color:#3677a9">123</span>): <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// got int16(123) → smuggle via int64 → uint32(123): true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2452,7 +2477,7 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	<span style="color:#999;font-style:italic">// Automatically json.Unmarshal to compare
-</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`{&#34;a&#34;:1,&#34;b&#34;:2}`</span>)
+</span><span style="color:#999;font-style:italic"></span>	got := []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;a&#34;:1,&#34;b&#34;:2}</span><span style="color:#ed9d13">`</span>)
 
 	ok := t.<span style="color:#447fcf">Smuggle</span>(got, <span style="color:#6ab825;font-weight:bold">func</span>(b json.RawMessage) (r <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>, err <span style="color:#6ab825;font-weight:bold">error</span>) {
 		err = json.<span style="color:#447fcf">Unmarshal</span>(b, &amp;r)
@@ -2464,7 +2489,9 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;JSON contents is OK:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	// JSON contents is OK: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// JSON contents is OK: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2524,7 +2551,9 @@ reason of a potential failure.</p>
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	// <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2563,7 +2592,9 @@ reason of a potential failure.</p>
 
 	<span style="color:#999;font-style:italic">// Output
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified time.Time OK: true
-</span><span style="color:#999;font-style:italic"></span>	// stringified MyTime OK: <span style="color:#6ab825;font-weight:bold">false</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// stringified MyTime OK: false
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div>
 
@@ -2628,7 +2659,9 @@ reason of a potential failure.</p>
 	<span style="color:#999;font-style:italic">// Output:
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num by hand: true
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using a fields-path: true
-</span><span style="color:#999;font-style:italic"></span>	// check Num using an other fields-path: <span style="color:#6ab825;font-weight:bold">true</span></code></pre></div>
+</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// check Num using an other fields-path: true
+</span><span style="color:#999;font-style:italic"></span>
+</code></pre></div>
     </div>
 </div></p>
 
@@ -3776,6 +3809,22 @@ reason of a potential failure.</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -3823,7 +3872,7 @@ reason of a potential failure.</p>
 			<a class="nav nav-prev" href="/operators/slice/" title="Slice"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/operators/string/" title="String" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/operators/sstruct/" title="SStruct" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -3833,19 +3882,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
+    <script src="/js/jquery.sticky.js?1581598214"></script>
+    <script src="/js/featherlight.min.js?1581598214"></script>
+    <script src="/js/highlight.pack.js?1581598214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
+    <script src="/js/learn.js?1581598214"></script>
+    <script src="/js/hugo-learn.js?1581598214"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598214"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.59.1" />
+    <meta name="generator" content="Hugo 0.63.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>testdeep.T :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1574117058" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1574117058" rel="stylesheet">
-    <link href="/css/hybrid.css?1574117058" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1574117058" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1574117058" rel="stylesheet">
-    <link href="/css/auto-complete.css?1574117058" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1574117058" rel="stylesheet">
-    <link href="/css/theme.css?1574117058" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1574117058" rel="stylesheet">
+    <link href="/css/nucleus.css?1581598214" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581598214" rel="stylesheet">
+    <link href="/css/hybrid.css?1581598214" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581598214" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581598214" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581598214" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581598214" rel="stylesheet">
+    <link href="/css/theme.css?1581598214" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581598214" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1574117058" rel="stylesheet">
+      <link href="/css/theme-green.css?1581598214" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1574117058"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581598214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1574117058"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1574117058"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581598214"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581598214"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1574117058"></script>
+<script type="text/javascript" src="/js/search.js?1581598214"></script>
 
     
   </div>
@@ -1164,6 +1164,25 @@
  
   
     
+      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
+        <a href="/operators/sstruct/">
+        SStruct
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/operators/string/" title="String" class="dd-item ">
         <a href="/operators/string/">
         String
@@ -1561,18 +1580,16 @@
                     <div class="progress">
     <div class="wrapper">
 <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#constructing-testdeep-t">Constructing <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></a></li>
-<li><a href="#configuring-testdeep-t">Configuring <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></a></li>
-<li><a href="#main-methods-of-testdeep-t">Main methods of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></a></li>
-<li><a href="#shortcut-methods-of-testdeep-t">Shortcut methods of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#constructing-testdeept">Constructing *testdeep.T</a></li>
+        <li><a href="#configuring-testdeept">Configuring *testdeep.T</a></li>
+        <li><a href="#main-methods-of-testdeept">Main methods of *testdeep.T</a></li>
+        <li><a href="#shortcut-methods-of-testdeept">Shortcut methods of *testdeep.T</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
     </div>
 </div>
@@ -1597,9 +1614,7 @@
 
 
 
-
-
-<h3 id="constructing-testdeep-t">Constructing <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
+<h3 id="constructing-testdeept">Constructing <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
   <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
@@ -1608,27 +1623,25 @@
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(tt *testing.T) {
   t := testdeep.<span style="color:#447fcf">NewT</span>(tt)
   t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">MyFunc</span>(), <span style="color:#3677a9">12</span>)
-}</code></pre></div>
-<ul>
+}
+</code></pre></div><ul>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#NewT"><code>func NewT(t TestingFT, config ...ContextConfig) *T</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#Assert"><code>func Assert(t TestingFT, config ...ContextConfig) *T</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#Require"><code>func Require(t TestingFT, config ...ContextConfig) *T</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#AssertRequire"><code>func AssertRequire(t TestingFT, config ...ContextConfig) (*T, *T)</code></a></li>
 </ul>
-
-<h3 id="configuring-testdeep-t">Configuring <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
+<h3 id="configuring-testdeept">Configuring <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(tt *testing.T) {
   t := testdeep.<span style="color:#447fcf">NewT</span>(tt).<span style="color:#447fcf">UseEqual</span>().<span style="color:#447fcf">RootName</span>(<span style="color:#ed9d13">&#34;RECORD&#34;</span>)
   ...
-}</code></pre></div>
-<ul>
+}
+</code></pre></div><ul>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.BeLax"><code>func (t *T) BeLax(enable ...bool) *T</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.FailureIsFatal"><code>func (t *T) FailureIsFatal(enable ...bool) *T</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.RootName"><code>func (t *T) RootName(rootName string) *T</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.UseEqual"><code>func (t *T) UseEqual(enable ...bool) *T</code></a></li>
 </ul>
-
-<h3 id="main-methods-of-testdeep-t">Main methods of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
+<h3 id="main-methods-of-testdeept">Main methods of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
   <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
@@ -1643,8 +1656,8 @@
   <span style="color:#999;font-style:italic">// Compares MyFunc() result using the Between Testdeep operator
 </span><span style="color:#999;font-style:italic"></span>  t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">MyFunc</span>(), testdeep.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">100</span>, <span style="color:#3677a9">199</span>),
     <span style="color:#ed9d13">&#34;MyFunc() result is between 100 and 199&#34;</span>)
-}</code></pre></div>
-<ul>
+}
+</code></pre></div><ul>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp"><code>func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.CmpError"><code>func (t *T) CmpError(got error, args ...interface{}) bool</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax"><code>func (t *T) CmpLax(got interface{}, expected interface{}, args ...interface{}) bool</code></a>
@@ -1658,13 +1671,11 @@
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.RunT"><code>func (t *T) RunT(name string, f func(t *T)) bool</code></a></li>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.True"><code>func (t *T) True(got interface{}, args ...interface{}) bool</code></a></li>
 </ul>
-
 <p><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.CmpDeeply"><code>CmpDeeply()</code></a>
 method is now replaced by
 <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp"><code>Cmp()</code></a>,
 but it is still available for backward compatibility purpose.</p>
-
-<h3 id="shortcut-methods-of-testdeep-t">Shortcut methods of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
+<h3 id="shortcut-methods-of-testdeept">Shortcut methods of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
   <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
@@ -1674,19 +1685,15 @@ but it is still available for backward compatibility purpose.</p>
   t := testdeep.<span style="color:#447fcf">NewT</span>(tt).<span style="color:#447fcf">UseEqual</span>()
   t.<span style="color:#447fcf">Between</span>(<span style="color:#447fcf">MyFunc</span>(), <span style="color:#3677a9">100</span>, <span style="color:#3677a9">199</span>, testdeep.BoundsInIn,
     <span style="color:#ed9d13">&#34;MyFunc() result is between 100 and 199&#34;</span>)
-}</code></pre></div>
-<p>For each of these methods, it is always a shortcut on
+}
+</code></pre></div><p>For each of these methods, it is always a shortcut on
 <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp"><code>T.Cmp()</code></a> and
 the correponding <a href="/operators/">Testdeep operator</a>:</p>
-
 <pre><code>T.HasPrefix(got, expected, …) ⇒ T.Cmp(t, got, HasPrefix(expected), …)
   ^-------^                                   ^-------^
       +-------------------------------------------+
-</code></pre>
-
-<p>Excluding <a href="/operators/lax/"><code>Lax</code> operator</a> for which the
+</code></pre><p>Excluding <a href="/operators/lax/"><code>Lax</code> operator</a> for which the
 shortcut method stays <a href="/operators/lax/#cmplax-shortcut"><code>CmpLax</code></a>.</p>
-
 <p>Each shortcut method is described in the corresponding operator
 page. See <a href="/operators/">operators list</a>.</p>
 
@@ -2831,6 +2838,22 @@ page. See <a href="/operators/">operators list</a>.</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -2888,19 +2911,19 @@ page. See <a href="/operators/">operators list</a>.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.min.js?1574117058"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1574117058"></script>
-    <script src="/js/jquery.sticky.js?1574117058"></script>
-    <script src="/js/featherlight.min.js?1574117058"></script>
-    <script src="/js/highlight.pack.js?1574117058"></script>
+    <script src="/js/clipboard.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
+    <script src="/js/jquery.sticky.js?1581598214"></script>
+    <script src="/js/featherlight.min.js?1581598214"></script>
+    <script src="/js/highlight.pack.js?1581598214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1574117058"></script>
-    <script src="/js/learn.js?1574117058"></script>
-    <script src="/js/hugo-learn.js?1574117058"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
+    <script src="/js/learn.js?1581598214"></script>
+    <script src="/js/hugo-learn.js?1581598214"></script>
 
-    <link href="/mermaid/mermaid.css?1574117058" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1574117058"></script>
+    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581598214"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
