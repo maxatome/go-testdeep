@@ -2511,6 +2511,67 @@ func ExampleStruct() {
 	// true
 }
 
+func ExampleSStruct() {
+	t := &testing.T{}
+
+	type Person struct {
+		Name        string
+		Age         int
+		NumChildren int
+	}
+
+	got := Person{
+		Name:        "Foobar",
+		Age:         42,
+		NumChildren: 0,
+	}
+
+	// NumChildren is not listed in expected fields so it must be zero
+	ok := Cmp(t, got,
+		SStruct(Person{Name: "Foobar"}, StructFields{
+			"Age": Between(40, 50),
+		}),
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
+	// Model can be empty
+	got.NumChildren = 3
+	ok = Cmp(t, got,
+		SStruct(Person{}, StructFields{
+			"Name":        "Foobar",
+			"Age":         Between(40, 50),
+			"NumChildren": Not(0),
+		}),
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
+	// Works with pointers too
+	ok = Cmp(t, &got,
+		SStruct(&Person{}, StructFields{
+			"Name":        "Foobar",
+			"Age":         Between(40, 50),
+			"NumChildren": Not(0),
+		}),
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
+	// Model does not need to be instanciated
+	ok = Cmp(t, &got,
+		SStruct((*Person)(nil), StructFields{
+			"Name":        "Foobar",
+			"Age":         Between(40, 50),
+			"NumChildren": Not(0),
+		}),
+		"checks %v is the right Person")
+	fmt.Println(ok)
+
+	// Output:
+	// true
+	// true
+	// true
+	// true
+}
+
 func ExampleSubBagOf() {
 	t := &testing.T{}
 

@@ -43,12 +43,12 @@ func (e fieldInfoSlice) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
 // TestDeep operator as well as a zero value.)
 type StructFields map[string]interface{}
 
-func newStruct(model interface{}) (*tdStruct, reflect.Value) {
+func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 	vmodel := reflect.ValueOf(model)
 
 	st := tdStruct{
 		tdExpectedType: tdExpectedType{
-			base: newBase(4),
+			base: newBase(5),
 		},
 	}
 
@@ -73,28 +73,15 @@ func newStruct(model interface{}) (*tdStruct, reflect.Value) {
 		return &st, vmodel
 	}
 
-	panic("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)")
+	var s string
+	if strict {
+		s = "S"
+	}
+	panic("usage: " + s + "Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)")
 }
 
-// summary(Struct): compares the contents of a struct or a pointer on
-// a struct
-// input(Struct): struct,ptr(ptr on struct)
-
-// Struct operator compares the contents of a struct or a pointer on a
-// struct against the non-zero values of "model" (if any) and the
-// values of "expectedFields".
-//
-// "model" must be the same type as compared data.
-//
-// "expectedFields" can be nil, if no zero entries are expected and
-// no TestDeep operator are involved.
-//
-// During a match, all expected fields must be found to
-// succeed. Non-expected fields are ignored.
-//
-// TypeBehind method returns the reflect.Type of "model".
-func Struct(model interface{}, expectedFields StructFields) TestDeep {
-	st, vmodel := newStruct(model)
+func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdStruct {
+	st, vmodel := newStruct(model, strict)
 
 	st.expectedFields = make([]fieldInfo, 0, len(expectedFields))
 	checkedFields := make(map[string]bool, len(expectedFields))
@@ -142,15 +129,15 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 	}
 
 	// Get all field names
-	var allFields []string
+	allFields := map[string]struct{}{}
 	stType.FieldByNameFunc(func(fieldName string) bool {
-		allFields = append(allFields, fieldName)
+		allFields[fieldName] = struct{}{}
 		return false
 	})
 
 	// Check initialized fields in model
 	if vmodel.IsValid() {
-		for _, fieldName := range allFields {
+		for fieldName := range allFields {
 			field, _ := stType.FieldByName(fieldName)
 			if field.Anonymous {
 				continue
@@ -181,13 +168,86 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 					expected: vfield,
 					index:    field.Index,
 				})
+				checkedFields[fieldName] = true
 			}
+		}
+	}
+
+	// If strict, fill non explicitly expected fields to zero
+	if strict {
+		for fieldName := range allFields {
+			if checkedFields[fieldName] {
+				continue
+			}
+
+			field, _ := stType.FieldByName(fieldName)
+			if field.Anonymous {
+				continue
+			}
+
+			st.expectedFields = append(st.expectedFields, fieldInfo{
+				name:     fieldName,
+				expected: reflect.New(field.Type).Elem(), // zero
+				index:    field.Index,
+			})
 		}
 	}
 
 	sort.Sort(st.expectedFields)
 
 	return st
+}
+
+// summary(Struct): compares the contents of a struct or a pointer on
+// a struct
+// input(Struct): struct,ptr(ptr on struct)
+
+// Struct operator compares the contents of a struct or a pointer on a
+// struct against the non-zero values of "model" (if any) and the
+// values of "expectedFields". See SStruct to compares against zero
+// fields without specifying them in "expectedFields".
+//
+// "model" must be the same type as compared data.
+//
+// "expectedFields" can be nil, if no zero entries are expected and
+// no TestDeep operators are involved.
+//
+// During a match, all expected fields must be found to
+// succeed. Non-expected fields are ignored.
+//
+// TypeBehind method returns the reflect.Type of "model".
+func Struct(model interface{}, expectedFields StructFields) TestDeep {
+	return anyStruct(model, expectedFields, false)
+}
+
+// summary(SStruct): strictly compares the contents of a struct or a
+// pointer on a struct
+// input(SStruct): struct,ptr(ptr on struct)
+
+// SStruct operator (a.k.a. strict-Struct) compares the contents of a
+// struct or a pointer on a struct against values of "model" (if any)
+// and the values of "expectedFields". The zero values are compared
+// too even if they are omitted from "expectedFields": that is the
+// difference with Struct operator.
+//
+// To ignore a field, one has to specify it in "expectedFields" and
+// use the Ignore operator.
+//
+//   td.SStruct(Person{Name: "Bob"},
+//     td.StructFields{
+//       "Age": td.Ignore(),
+//     })
+//
+// "model" must be the same type as compared data.
+//
+// "expectedFields" can be nil, if no TestDeep operators are involved.
+//
+// During a match, all expected and zero fields must be found to
+// succeed.
+//
+// TypeBehind method returns the reflect.Type of "model".
+func SStruct(model interface{}, expectedFields StructFields) TestDeep {
+	return anyStruct(model, expectedFields, true)
 }
 
 func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
@@ -212,7 +272,8 @@ func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Err
 }
 
 func (s *tdStruct) String() string {
-	buf := bytes.NewBufferString("Struct(")
+	buf := bytes.NewBufferString(s.location.Func)
+	buf.WriteByte('(')
 
 	if s.isPtr {
 		buf.WriteByte('*')

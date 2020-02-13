@@ -478,3 +478,297 @@ func TestStructTypeBehind(t *testing.T) {
 	equalTypes(t, testdeep.Struct(MyStruct{}, nil), MyStruct{})
 	equalTypes(t, testdeep.Struct(&MyStruct{}, nil), &MyStruct{})
 }
+
+func TestSStruct(t *testing.T) {
+	var gotStruct = MyStruct{
+		MyStructMid: MyStructMid{
+			MyStructBase: MyStructBase{
+				ValBool: true,
+			},
+			ValStr: "foobar",
+		},
+		ValInt: 123,
+	}
+
+	//
+	// Using pointer
+	checkOK(t, &gotStruct,
+		testdeep.SStruct(&MyStruct{}, testdeep.StructFields{
+			"ValBool": true,
+			"ValStr":  "foobar",
+			"ValInt":  123,
+			// nil Ptr
+		}))
+
+	checkOK(t, &gotStruct,
+		testdeep.SStruct((*MyStruct)(nil), testdeep.StructFields{
+			"ValBool": true,
+			"ValStr":  "foobar",
+			"ValInt":  123,
+			// nil Ptr
+		}))
+
+	checkError(t, 123,
+		testdeep.SStruct(&MyStruct{}, testdeep.StructFields{}),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("int"),
+			Expected: mustContain("*testdeep_test.MyStruct"),
+		})
+
+	checkError(t, &MyStructBase{},
+		testdeep.SStruct(&MyStruct{}, testdeep.StructFields{}),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("*testdeep_test.MyStructBase"),
+			Expected: mustContain("*testdeep_test.MyStruct"),
+		})
+
+	checkError(t, &gotStruct,
+		testdeep.SStruct(&MyStruct{}, testdeep.StructFields{
+			// ValBool false ← does not match
+			"ValStr": "foobar",
+			"ValInt": 123,
+		}),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.ValBool"),
+			Got:      mustContain("true"),
+			Expected: mustContain("false"),
+		})
+
+	checkOK(t, &gotStruct,
+		testdeep.SStruct(&MyStruct{
+			MyStructMid: MyStructMid{
+				MyStructBase: MyStructBase{
+					ValBool: true,
+				},
+				ValStr: "foobar",
+			},
+			ValInt: 123,
+		}, nil))
+
+	checkError(t, &gotStruct,
+		testdeep.SStruct(&MyStruct{
+			MyStructMid: MyStructMid{
+				MyStructBase: MyStructBase{
+					ValBool: true,
+				},
+				ValStr: "foobax", // ← does not match
+			},
+			ValInt: 123,
+		}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.ValStr"),
+			Got:      mustContain("foobar"),
+			Expected: mustContain("foobax"),
+		})
+
+	// Zero values
+	checkOK(t, &MyStruct{}, testdeep.SStruct(&MyStruct{}, nil))
+	checkOK(t, &MyStruct{}, testdeep.SStruct(&MyStruct{}, testdeep.StructFields{}))
+
+	// nil cases
+	checkError(t, nil, testdeep.SStruct(&MyStruct{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("nil"),
+			Expected: mustContain("*testdeep_test.MyStruct"),
+		})
+
+	checkError(t, (*MyStruct)(nil), testdeep.SStruct(&MyStruct{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("nil"),
+			Expected: mustBe("non-nil"),
+		})
+
+	//
+	// Without pointer
+	checkOK(t, gotStruct,
+		testdeep.SStruct(MyStruct{}, testdeep.StructFields{
+			"ValBool": true,
+			"ValStr":  "foobar",
+			"ValInt":  123,
+		}))
+
+	checkError(t, 123, testdeep.SStruct(MyStruct{}, testdeep.StructFields{}),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("int"),
+			Expected: mustContain("testdeep_test.MyStruct"),
+		})
+
+	checkError(t, gotStruct,
+		testdeep.SStruct(MyStruct{}, testdeep.StructFields{
+			// "ValBool" false ← does not match
+			"ValStr": "foobar",
+			"ValInt": 123,
+		}),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.ValBool"),
+			Got:      mustContain("true"),
+			Expected: mustContain("false"),
+		})
+
+	checkOK(t, gotStruct,
+		testdeep.SStruct(MyStruct{
+			MyStructMid: MyStructMid{
+				MyStructBase: MyStructBase{
+					ValBool: true,
+				},
+				ValStr: "foobar",
+			},
+			ValInt: 123,
+		}, nil))
+
+	checkError(t, gotStruct,
+		testdeep.SStruct(MyStruct{
+			MyStructMid: MyStructMid{
+				MyStructBase: MyStructBase{
+					ValBool: true,
+				},
+				ValStr: "foobax", // ← does not match
+			},
+			ValInt: 123,
+		}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.ValStr"),
+			Got:      mustContain("foobar"),
+			Expected: mustContain("foobax"),
+		})
+
+	// Zero values
+	checkOK(t, MyStruct{}, testdeep.Struct(MyStruct{}, testdeep.StructFields{}))
+	checkOK(t, MyStruct{}, testdeep.Struct(MyStruct{}, nil))
+
+	// nil cases
+	checkError(t, nil, testdeep.SStruct(MyStruct{}, nil),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain("nil"),
+			Expected: mustContain("testdeep_test.MyStruct"),
+		})
+
+	checkError(t, (*MyStruct)(nil), testdeep.SStruct(MyStruct{}, nil),
+		expectedError{
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("*testdeep_test.MyStruct"),
+			Expected: mustBe("testdeep_test.MyStruct"),
+		})
+
+	//
+	// Be lax...
+	type Struct1 struct {
+		name string
+		age  int
+	}
+	type Struct2 struct {
+		name string
+		age  int
+	}
+
+	// Without Lax → error
+	checkError(t,
+		Struct1{name: "Bob", age: 42},
+		testdeep.SStruct(Struct2{name: "Bob", age: 42}, nil),
+		expectedError{
+			Message: mustBe("type mismatch"),
+		})
+	// With Lax → OK
+	checkOK(t,
+		Struct1{name: "Bob", age: 42},
+		testdeep.Lax(testdeep.SStruct(Struct2{name: "Bob", age: 42}, nil)))
+
+	//
+	// Bad usage
+	test.CheckPanic(t, func() { testdeep.SStruct("test", nil) }, "usage: SStruct")
+
+	i := 12
+	test.CheckPanic(t, func() { testdeep.SStruct(&i, nil) }, "usage: SStruct")
+
+	test.CheckPanic(t,
+		func() { testdeep.SStruct(&MyStruct{}, testdeep.StructFields{"UnknownField": 123}) },
+		"struct testdeep_test.MyStruct has no field `UnknownField'")
+
+	test.CheckPanic(t,
+		func() { testdeep.SStruct(&MyStruct{}, testdeep.StructFields{"ValBool": 123}) },
+		"type int of field expected value ValBool differs from struct one (bool)")
+
+	test.CheckPanic(t,
+		func() { testdeep.SStruct(&MyStruct{}, testdeep.StructFields{"ValBool": nil}) },
+		"expected value of field ValBool cannot be nil as it is a bool")
+
+	test.CheckPanic(t,
+		func() {
+			testdeep.SStruct(&MyStruct{
+				MyStructMid: MyStructMid{
+					MyStructBase: MyStructBase{
+						ValBool: true,
+					},
+				},
+			},
+				testdeep.StructFields{"ValBool": false})
+		},
+		"non zero field ValBool in model already exists in expectedFields")
+
+	//
+	// String
+	test.EqualStr(t,
+		testdeep.SStruct(MyStruct{
+			MyStructMid: MyStructMid{
+				ValStr: "foobar",
+			},
+			ValInt: 123,
+		},
+			testdeep.StructFields{
+				"ValBool": false,
+			}).String(),
+		`SStruct(testdeep_test.MyStruct{
+  Ptr: (*int)(<nil>)
+  ValBool: (bool) false
+  ValInt: 123
+  ValStr: "foobar"
+})`)
+
+	test.EqualStr(t,
+		testdeep.SStruct(&MyStruct{
+			MyStructMid: MyStructMid{
+				ValStr: "foobar",
+			},
+			ValInt: 123,
+		},
+			testdeep.StructFields{
+				"ValBool": false,
+			}).String(),
+		`SStruct(*testdeep_test.MyStruct{
+  Ptr: (*int)(<nil>)
+  ValBool: (bool) false
+  ValInt: 123
+  ValStr: "foobar"
+})`)
+
+	test.EqualStr(t,
+		testdeep.SStruct(&MyStruct{}, testdeep.StructFields{}).String(),
+		`SStruct(*testdeep_test.MyStruct{
+  Ptr: (*int)(<nil>)
+  ValBool: (bool) false
+  ValInt: 0
+  ValStr: ""
+})`)
+}
+
+func TestSStructTypeBehind(t *testing.T) {
+	equalTypes(t, testdeep.SStruct(MyStruct{}, nil), MyStruct{})
+	equalTypes(t, testdeep.SStruct(&MyStruct{}, nil), &MyStruct{})
+}
