@@ -28,16 +28,17 @@ go-testdeep
 
 ## Latest news
 
+- 2020/02/13:
+  - new operator anchoring feature, see the [corresponding FAQ
+    section](https://go-testdeep.zetta.rocks/faq/#how-does-operator-anchoring-work)
+    and the [new anchoring methods](https://go-testdeep.zetta.rocks/functions/testdeep-t/#anchoring-methods-of-testdeept);
+  - new [`SStruct`] operator (and its friends [`CmpSStruct`] & [`T.SStruct`]),
 - 2019/11/18:
   - new [`SubJSONOf`] & [`SuperJSONOf`] operators (and their
     friends [`CmpSubJSONOf`], [`CmpSuperJSONOf`], [`T.SubJSONOf`] &
     [`T.SuperJSONOf`]),
   - JSON data can now contain comments and some operator shortcuts;
 - 2019/11/01: new [`Catch`] operator;
-- 2019/10/31: new [`JSON`] operator (and its friends [`CmpJSON`]
-  & [`T.JSON`] along with new fully dedicated [`Tag`] operator;
-- 2019/10/29: new web site
-  [go-testdeep.zetta.rocks](https://go-testdeep.zetta.rocks/)
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 

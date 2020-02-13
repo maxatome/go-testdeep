@@ -12,20 +12,20 @@
     <title>testdeep.T :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1581598214" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1581598214" rel="stylesheet">
-    <link href="/css/hybrid.css?1581598214" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1581598214" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1581598214" rel="stylesheet">
-    <link href="/css/auto-complete.css?1581598214" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1581598214" rel="stylesheet">
-    <link href="/css/theme.css?1581598214" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1581598214" rel="stylesheet">
+    <link href="/css/nucleus.css?1581626278" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1581626278" rel="stylesheet">
+    <link href="/css/hybrid.css?1581626278" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1581626278" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1581626278" rel="stylesheet">
+    <link href="/css/auto-complete.css?1581626278" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1581626278" rel="stylesheet">
+    <link href="/css/theme.css?1581626278" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1581626278" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1581598214" rel="stylesheet">
+      <link href="/css/theme-green.css?1581626278" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1581598214"></script>
+    <script src="/js/jquery-3.3.1.min.js?1581626278"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1581598214"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1581598214"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1581626278"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1581626278"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1581598214"></script>
+<script type="text/javascript" src="/js/search.js?1581626278"></script>
 
     
   </div>
@@ -1586,6 +1586,7 @@
         <li><a href="#constructing-testdeept">Constructing *testdeep.T</a></li>
         <li><a href="#configuring-testdeept">Configuring *testdeep.T</a></li>
         <li><a href="#main-methods-of-testdeept">Main methods of *testdeep.T</a></li>
+        <li><a href="#anchoring-methods-of-testdeept">Anchoring methods of *testdeep.T</a></li>
         <li><a href="#shortcut-methods-of-testdeept">Shortcut methods of *testdeep.T</a></li>
       </ul>
     </li>
@@ -1675,6 +1676,15 @@
 method is now replaced by
 <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp"><code>Cmp()</code></a>,
 but it is still available for backward compatibility purpose.</p>
+<h3 id="anchoring-methods-of-testdeept">Anchoring methods of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
+<ul>
+<li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>func (t *T) A(operator TestDeep, model ...interface{}) interface{}</code></a></li>
+<li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Anchor"><code>func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{}</code></a></li>
+<li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.AnchorsPersistTemporarily"><code>func (t *T) AnchorsPersistTemporarily() func()</code></a></li>
+<li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.DoAnchorsPersist"><code>func (t *T) DoAnchorsPersist() bool</code></a></li>
+<li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.ResetAnchors"><code>func (t *T) ResetAnchors()</code></a></li>
+<li><a href="https://godoc.org/github.com/maxatome/go-testdeep#T.SetAnchorsPersist"><code>func (t *T) SetAnchorsPersist(persist bool)</code></a></li>
+</ul>
 <h3 id="shortcut-methods-of-testdeept">Shortcut methods of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T"><code>*testdeep.T</code></a></h3>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
@@ -2911,19 +2921,19 @@ page. See <a href="/operators/">operators list</a>.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1581598214"></script>
-    <script src="/js/perfect-scrollbar.min.js?1581598214"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1581598214"></script>
-    <script src="/js/jquery.sticky.js?1581598214"></script>
-    <script src="/js/featherlight.min.js?1581598214"></script>
-    <script src="/js/highlight.pack.js?1581598214"></script>
+    <script src="/js/clipboard.min.js?1581626278"></script>
+    <script src="/js/perfect-scrollbar.min.js?1581626278"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1581626278"></script>
+    <script src="/js/jquery.sticky.js?1581626278"></script>
+    <script src="/js/featherlight.min.js?1581626278"></script>
+    <script src="/js/highlight.pack.js?1581626278"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1581598214"></script>
-    <script src="/js/learn.js?1581598214"></script>
-    <script src="/js/hugo-learn.js?1581598214"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1581626278"></script>
+    <script src="/js/learn.js?1581626278"></script>
+    <script src="/js/hugo-learn.js?1581626278"></script>
 
-    <link href="/mermaid/mermaid.css?1581598214" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1581598214"></script>
+    <link href="/mermaid/mermaid.css?1581626278" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1581626278"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

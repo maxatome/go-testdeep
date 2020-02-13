@@ -76,6 +76,16 @@ method is now replaced by
 but it is still available for backward compatibility purpose.
 
 
+### Anchoring methods of [`*testdeep.T`]
+
+- [`func (t *T) A(operator TestDeep, model ...interface{}) interface{}`](https://godoc.org/github.com/maxatome/go-testdeep#T.A)
+- [`func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{}`](https://godoc.org/github.com/maxatome/go-testdeep#T.Anchor)
+- [`func (t *T) AnchorsPersistTemporarily() func()`](https://godoc.org/github.com/maxatome/go-testdeep#T.AnchorsPersistTemporarily)
+- [`func (t *T) DoAnchorsPersist() bool`](https://godoc.org/github.com/maxatome/go-testdeep#T.DoAnchorsPersist)
+- [`func (t *T) ResetAnchors()`](https://godoc.org/github.com/maxatome/go-testdeep#T.ResetAnchors)
+- [`func (t *T) SetAnchorsPersist(persist bool)`](https://godoc.org/github.com/maxatome/go-testdeep#T.SetAnchorsPersist)
+
+
 ### Shortcut methods of [`*testdeep.T`]
 
 ```go
