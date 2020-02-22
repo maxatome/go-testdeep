@@ -20,7 +20,7 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> String godoc](https://godoc.org/github.com/maxatome/go-testdeep#String).
+> See also [<i class='fas fa-book'></i> String godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#String).
 
 ### Examples
 
@@ -29,7 +29,7 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 
 	got := "foobar"
 
-	ok := Cmp(t, got, String("foobar"), "checks %s", got)
+	ok := td.Cmp(t, got, td.String("foobar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -42,7 +42,7 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := Cmp(t, got, String("foobar"), "checks %s", got)
+	ok := td.Cmp(t, got, td.String("foobar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -54,7 +54,7 @@ Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
 
 	got := errors.New("foobar")
 
-	ok := Cmp(t, got, String("foobar"), "checks %s", got)
+	ok := td.Cmp(t, got, td.String("foobar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -70,7 +70,7 @@ func CmpString(t TestingT, got interface{}, expected string, args ...interface{}
 CmpString is a shortcut for:
 
 ```go
-Cmp(t, got, String(expected), args...)
+td.Cmp(t, got, td.String(expected), args...)
 ```
 
 See above for details.
@@ -85,7 +85,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpString godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpString).
+> See also [<i class='fas fa-book'></i> CmpString godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpString).
 
 ### Examples
 
@@ -94,7 +94,7 @@ reason of a potential failure.
 
 	got := "foobar"
 
-	ok := CmpString(t, got, "foobar", "checks %s", got)
+	ok := td.CmpString(t, got, "foobar", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -107,7 +107,7 @@ reason of a potential failure.
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpString(t, got, "foobar", "checks %s", got)
+	ok := td.CmpString(t, got, "foobar", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -119,7 +119,7 @@ reason of a potential failure.
 
 	got := errors.New("foobar")
 
-	ok := CmpString(t, got, "foobar", "checks %s", got)
+	ok := td.CmpString(t, got, "foobar", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -135,7 +135,7 @@ func (t *T) String(got interface{}, expected string, args ...interface{}) bool
 [`String`]({{< ref "String" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, String(expected), args...)
+t.Cmp(got, td.String(expected), args...)
 ```
 
 See above for details.
@@ -150,12 +150,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.String godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.String).
+> See also [<i class='fas fa-book'></i> T.String godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.String).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "foobar"
 
@@ -167,7 +167,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -180,7 +180,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Error example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := errors.New("foobar")
 

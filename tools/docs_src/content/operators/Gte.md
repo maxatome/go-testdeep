@@ -16,7 +16,7 @@ same kind as the compared value if numeric, and the same type if
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *minExpectedValue*.
 
 
-> See also [<i class='fas fa-book'></i> Gte godoc](https://godoc.org/github.com/maxatome/go-testdeep#Gte).
+> See also [<i class='fas fa-book'></i> Gte godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Gte).
 
 ### Examples
 
@@ -25,13 +25,13 @@ same kind as the compared value if numeric, and the same type if
 
 	got := 156
 
-	ok := Cmp(t, got, Gte(156), "checks %v is ≥ 156", got)
+	ok := td.Cmp(t, got, td.Gte(156), "checks %v is ≥ 156", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Gte(155), "checks %v is ≥ 155", got)
+	ok = td.Cmp(t, got, td.Gte(155), "checks %v is ≥ 155", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Gte(157), "checks %v is ≥ 157", got)
+	ok = td.Cmp(t, got, td.Gte(157), "checks %v is ≥ 157", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -45,13 +45,13 @@ same kind as the compared value if numeric, and the same type if
 
 	got := "abc"
 
-	ok := Cmp(t, got, Gte("abc"), `checks "%v" is ≥ "abc"`, got)
+	ok := td.Cmp(t, got, td.Gte("abc"), `checks "%v" is ≥ "abc"`, got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Gte("abb"), `checks "%v" is ≥ "abb"`, got)
+	ok = td.Cmp(t, got, td.Gte("abb"), `checks "%v" is ≥ "abb"`, got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Gte("abd"), `checks "%v" is ≥ "abd"`, got)
+	ok = td.Cmp(t, got, td.Gte("abd"), `checks "%v" is ≥ "abd"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -69,7 +69,7 @@ func CmpGte(t TestingT, got interface{}, minExpectedValue interface{}, args ...i
 CmpGte is a shortcut for:
 
 ```go
-Cmp(t, got, Gte(minExpectedValue), args...)
+td.Cmp(t, got, td.Gte(minExpectedValue), args...)
 ```
 
 See above for details.
@@ -84,7 +84,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpGte godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpGte).
+> See also [<i class='fas fa-book'></i> CmpGte godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpGte).
 
 ### Examples
 
@@ -93,13 +93,13 @@ reason of a potential failure.
 
 	got := 156
 
-	ok := CmpGte(t, got, 156, "checks %v is ≥ 156", got)
+	ok := td.CmpGte(t, got, 156, "checks %v is ≥ 156", got)
 	fmt.Println(ok)
 
-	ok = CmpGte(t, got, 155, "checks %v is ≥ 155", got)
+	ok = td.CmpGte(t, got, 155, "checks %v is ≥ 155", got)
 	fmt.Println(ok)
 
-	ok = CmpGte(t, got, 157, "checks %v is ≥ 157", got)
+	ok = td.CmpGte(t, got, 157, "checks %v is ≥ 157", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -113,13 +113,13 @@ reason of a potential failure.
 
 	got := "abc"
 
-	ok := CmpGte(t, got, "abc", `checks "%v" is ≥ "abc"`, got)
+	ok := td.CmpGte(t, got, "abc", `checks "%v" is ≥ "abc"`, got)
 	fmt.Println(ok)
 
-	ok = CmpGte(t, got, "abb", `checks "%v" is ≥ "abb"`, got)
+	ok = td.CmpGte(t, got, "abb", `checks "%v" is ≥ "abb"`, got)
 	fmt.Println(ok)
 
-	ok = CmpGte(t, got, "abd", `checks "%v" is ≥ "abd"`, got)
+	ok = td.CmpGte(t, got, "abd", `checks "%v" is ≥ "abd"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -137,7 +137,7 @@ func (t *T) Gte(got interface{}, minExpectedValue interface{}, args ...interface
 [`Gte`]({{< ref "Gte" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Gte(minExpectedValue), args...)
+t.Cmp(got, td.Gte(minExpectedValue), args...)
 ```
 
 See above for details.
@@ -152,12 +152,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Gte godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Gte).
+> See also [<i class='fas fa-book'></i> T.Gte godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Gte).
 
 ### Examples
 
 {{%expand "Int example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := 156
 
@@ -177,7 +177,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "String example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "abc"
 

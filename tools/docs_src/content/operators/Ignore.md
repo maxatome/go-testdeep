@@ -11,17 +11,17 @@ func Ignore() TestDeep
 comparing a slice and wanting to ignore some indexes, for example.
 
 
-> See also [<i class='fas fa-book'></i> Ignore godoc](https://godoc.org/github.com/maxatome/go-testdeep#Ignore).
+> See also [<i class='fas fa-book'></i> Ignore godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Ignore).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := Cmp(t, []int{1, 2, 3},
-		Slice([]int{}, ArrayEntries{
+	ok := td.Cmp(t, []int{1, 2, 3},
+		td.Slice([]int{}, td.ArrayEntries{
 			0: 1,
-			1: Ignore(), // do not care about this entry
+			1: td.Ignore(), // do not care about this entry
 			2: 3,
 		}))
 	fmt.Println(ok)

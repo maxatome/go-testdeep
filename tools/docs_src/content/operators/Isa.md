@@ -35,7 +35,7 @@ will match too (in fact before checking whether it implements
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> Isa godoc](https://godoc.org/github.com/maxatome/go-testdeep#Isa).
+> See also [<i class='fas fa-book'></i> Isa godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Isa).
 
 ### Examples
 
@@ -48,14 +48,14 @@ will match too (in fact before checking whether it implements
 
 	got := TstStruct{Field: 1}
 
-	ok := Cmp(t, got, Isa(TstStruct{}), "checks got is a TstStruct")
+	ok := td.Cmp(t, got, td.Isa(TstStruct{}), "checks got is a TstStruct")
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Isa(&TstStruct{}),
+	ok = td.Cmp(t, got, td.Isa(&TstStruct{}),
 		"checks got is a pointer on a TstStruct")
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got, Isa(&TstStruct{}),
+	ok = td.Cmp(t, &got, td.Isa(&TstStruct{}),
 		"checks &got is a pointer on a TstStruct")
 	fmt.Println(ok)
 
@@ -70,13 +70,13 @@ will match too (in fact before checking whether it implements
 
 	got := bytes.NewBufferString("foobar")
 
-	ok := Cmp(t, got, Isa((*fmt.Stringer)(nil)),
+	ok := td.Cmp(t, got, td.Isa((*fmt.Stringer)(nil)),
 		"checks got implements fmt.Stringer interface")
 	fmt.Println(ok)
 
 	errGot := fmt.Errorf("An error #%d occurred", 123)
 
-	ok = Cmp(t, errGot, Isa((*error)(nil)),
+	ok = td.Cmp(t, errGot, td.Isa((*error)(nil)),
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
@@ -84,12 +84,12 @@ will match too (in fact before checking whether it implements
 	// does not match
 	errGot = nil
 
-	ok = Cmp(t, errGot, Isa((*error)(nil)),
+	ok = td.Cmp(t, errGot, td.Isa((*error)(nil)),
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
 	// BUT if its address is passed, now it is OK as the types match
-	ok = Cmp(t, &errGot, Isa((*error)(nil)),
+	ok = td.Cmp(t, &errGot, td.Isa((*error)(nil)),
 		"checks &errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
@@ -109,7 +109,7 @@ func CmpIsa(t TestingT, got interface{}, model interface{}, args ...interface{})
 CmpIsa is a shortcut for:
 
 ```go
-Cmp(t, got, Isa(model), args...)
+td.Cmp(t, got, td.Isa(model), args...)
 ```
 
 See above for details.
@@ -124,7 +124,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpIsa godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpIsa).
+> See also [<i class='fas fa-book'></i> CmpIsa godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpIsa).
 
 ### Examples
 
@@ -137,14 +137,14 @@ reason of a potential failure.
 
 	got := TstStruct{Field: 1}
 
-	ok := CmpIsa(t, got, TstStruct{}, "checks got is a TstStruct")
+	ok := td.CmpIsa(t, got, TstStruct{}, "checks got is a TstStruct")
 	fmt.Println(ok)
 
-	ok = CmpIsa(t, got, &TstStruct{},
+	ok = td.CmpIsa(t, got, &TstStruct{},
 		"checks got is a pointer on a TstStruct")
 	fmt.Println(ok)
 
-	ok = CmpIsa(t, &got, &TstStruct{},
+	ok = td.CmpIsa(t, &got, &TstStruct{},
 		"checks &got is a pointer on a TstStruct")
 	fmt.Println(ok)
 
@@ -159,13 +159,13 @@ reason of a potential failure.
 
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpIsa(t, got, (*fmt.Stringer)(nil),
+	ok := td.CmpIsa(t, got, (*fmt.Stringer)(nil),
 		"checks got implements fmt.Stringer interface")
 	fmt.Println(ok)
 
 	errGot := fmt.Errorf("An error #%d occurred", 123)
 
-	ok = CmpIsa(t, errGot, (*error)(nil),
+	ok = td.CmpIsa(t, errGot, (*error)(nil),
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
@@ -173,12 +173,12 @@ reason of a potential failure.
 	// does not match
 	errGot = nil
 
-	ok = CmpIsa(t, errGot, (*error)(nil),
+	ok = td.CmpIsa(t, errGot, (*error)(nil),
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
 	// BUT if its address is passed, now it is OK as the types match
-	ok = CmpIsa(t, &errGot, (*error)(nil),
+	ok = td.CmpIsa(t, &errGot, (*error)(nil),
 		"checks &errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
@@ -198,7 +198,7 @@ func (t *T) Isa(got interface{}, model interface{}, args ...interface{}) bool
 [`Isa`]({{< ref "Isa" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Isa(model), args...)
+t.Cmp(got, td.Isa(model), args...)
 ```
 
 See above for details.
@@ -213,12 +213,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Isa godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Isa).
+> See also [<i class='fas fa-book'></i> T.Isa godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Isa).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type TstStruct struct {
 		Field int
@@ -244,7 +244,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Interface example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := bytes.NewBufferString("foobar")
 

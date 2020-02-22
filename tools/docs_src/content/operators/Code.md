@@ -62,7 +62,7 @@ operator should be used instead.
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of only parameter of *fn*.
 
 
-> See also [<i class='fas fa-book'></i> Code godoc](https://godoc.org/github.com/maxatome/go-testdeep#Code).
+> See also [<i class='fas fa-book'></i> Code godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Code).
 
 ### Examples
 
@@ -71,8 +71,8 @@ operator should be used instead.
 
 	got := "12"
 
-	ok := Cmp(t, got,
-		Code(func(num string) bool {
+	ok := td.Cmp(t, got,
+		td.Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 10 && n < 100
 		}),
@@ -81,8 +81,8 @@ operator should be used instead.
 	fmt.Println(ok)
 
 	// Same with failure reason
-	ok = Cmp(t, got,
-		Code(func(num string) (bool, string) {
+	ok = td.Cmp(t, got,
+		td.Code(func(num string) (bool, string) {
 			n, err := strconv.Atoi(num)
 			if err != nil {
 				return false, "not a number"
@@ -97,8 +97,8 @@ operator should be used instead.
 	fmt.Println(ok)
 
 	// Same with failure reason thanks to error
-	ok = Cmp(t, got,
-		Code(func(num string) error {
+	ok = td.Cmp(t, got,
+		td.Code(func(num string) error {
 			n, err := strconv.Atoi(num)
 			if err != nil {
 				return err
@@ -127,7 +127,7 @@ func CmpCode(t TestingT, got interface{}, fn interface{}, args ...interface{}) b
 CmpCode is a shortcut for:
 
 ```go
-Cmp(t, got, Code(fn), args...)
+td.Cmp(t, got, td.Code(fn), args...)
 ```
 
 See above for details.
@@ -142,7 +142,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpCode godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpCode).
+> See also [<i class='fas fa-book'></i> CmpCode godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpCode).
 
 ### Examples
 
@@ -151,7 +151,7 @@ reason of a potential failure.
 
 	got := "12"
 
-	ok := CmpCode(t, got, func(num string) bool {
+	ok := td.CmpCode(t, got, func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 10 && n < 100
 	},
@@ -160,7 +160,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Same with failure reason
-	ok = CmpCode(t, got, func(num string) (bool, string) {
+	ok = td.CmpCode(t, got, func(num string) (bool, string) {
 		n, err := strconv.Atoi(num)
 		if err != nil {
 			return false, "not a number"
@@ -175,7 +175,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Same with failure reason thanks to error
-	ok = CmpCode(t, got, func(num string) error {
+	ok = td.CmpCode(t, got, func(num string) error {
 		n, err := strconv.Atoi(num)
 		if err != nil {
 			return err
@@ -204,7 +204,7 @@ func (t *T) Code(got interface{}, fn interface{}, args ...interface{}) bool
 [`Code`]({{< ref "Code" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Code(fn), args...)
+t.Cmp(got, td.Code(fn), args...)
 ```
 
 See above for details.
@@ -219,12 +219,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Code godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Code).
+> See also [<i class='fas fa-book'></i> T.Code godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Code).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "12"
 

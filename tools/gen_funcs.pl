@@ -13,7 +13,13 @@ use 5.010;
 
 use IPC::Open2;
 
-die "usage $0 [-h] DIR" if @ARGV == 0 or $ARGV[0] =~ /^--?h/;
+die "usage $0 [-h]\n" if @ARGV != 0;
+
+(my $REPO_DIR = $0) =~ s,/[^/]+\z,/..,;
+-d $REPO_DIR or die "Cannot find repository directory ($REPO_DIR)\n";
+
+my $DIR = "$REPO_DIR/td";
+-d $DIR or die "Cannot find td/ directory ($DIR)\n";
 
 my $HEADER = <<'EOH';
 // Copyright (c) 2018, 2019, Maxime Soulé
@@ -42,7 +48,7 @@ my $ARGS_COMMENT_MD = doc2md($args_comment_src);
 # These functions are variadics, but only with one possible param. In
 # this case, discard the variadic property and use a default value for
 # this optional parameter.
-my %IGNORE_VARIADIC = (Between   => 'BoundsInIn',
+my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        N         => 0,
                        Re        => 'nil',
                        TruncTime => 0);
@@ -57,8 +63,6 @@ my @INPUT_LABELS = qw(nil bool str int float cplx
                       array slice map struct ptr if chan func);
 my %INPUTS;
 @INPUTS{@INPUT_LABELS} = ();
-
-my $DIR = shift;
 
 opendir(my $dh, $DIR);
 
@@ -182,7 +186,7 @@ closedir($dh);
 
 my $funcs_contents = my $t_contents = <<EOH;
 $HEADER
-package testdeep
+package td
 
 import (
 \t"time"
@@ -220,12 +224,12 @@ foreach my $func (@sorted_funcs)
     my $cmp_doc = <<EOF;
 Cmp$func is a shortcut for:
 
-  Cmp(t, got, $func($call_args), args...)
+  td.Cmp(t, got, td.$func($call_args), args...)
 
 EOF
 
     $funcs_contents .= "\n" . go_comment($cmp_doc) . <<EOF;
-// See https://godoc.org/github.com/maxatome/go-testdeep#$func for details.
+// See https://godoc.org/github.com/maxatome/go-testdeep/td#$func for details.
 EOF
     $cmp_doc .= <<EOF; # operator doc
 See above for details.
@@ -234,11 +238,11 @@ EOF
     my $t_doc = <<EOF;
 $method_name is a shortcut for:
 
-  t.Cmp(got, $func($call_args), args...)
+  t.Cmp(got, td.$func($call_args), args...)
 
 EOF
     $t_contents .= "\n" . go_comment($t_doc) . <<EOF;
-// See https://godoc.org/github.com/maxatome/go-testdeep#$func for details.
+// See https://godoc.org/github.com/maxatome/go-testdeep/td#$func for details.
 EOF
     $t_doc .= <<EOF; # operator doc
 See above for details.
@@ -286,7 +290,7 @@ $t_sig {
 EOF
 }
 
-my $examples = do { open(my $efh, '<', 'example_test.go'); local $/; <$efh> };
+my $examples = do { open(my $efh, '<', "$DIR/example_test.go"); local $/; <$efh> };
 my $funcs_reg = join('|', @sorted_funcs);
 
 my($imports) = ($examples =~ /^(import \(.+?^\))$/ms);
@@ -313,7 +317,7 @@ while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}$/gms)
 
 my $funcs_test_contents = <<EOH;
 $HEADER
-package testdeep
+package td_test
 
 $imports
 EOH
@@ -368,11 +372,11 @@ foreach my $func (@sorted_funcs)
     {
         my $name = $example->{name};
 
-        foreach my $info ([ "Cmp$func(t, ", "Cmp$func", \$funcs_test_contents ],
+        foreach my $info ([ "td.Cmp$func(t, ", "Cmp$func", \$funcs_test_contents ],
                           [ "t.$method(",   "T_$method",\$t_test_contents ])
         {
             (my $code = $example->{code}) =~
-                s%Cmp\(t,\s+($rparam),\s+$func($rep)%
+                s%td\.Cmp\(t,\s+($rparam),\s+td\.$func($rep)%
                   my @params = extract_params("$func$name", $2);
                   my $repl = $info->[0] . $1;
                   for (my $i = 0; $i < @$args; $i++)
@@ -419,8 +423,8 @@ EOF
 
 {
     # T.* examples
-    $t_test_contents =~ s/t := &testing\.T\{\}/t := NewT(&testing\.T\{\})/g;
-    $t_test_contents =~ s/Cmp\(t,/t.Cmp(/g;
+    $t_test_contents =~ s/t := &testing\.T\{\}/t := td.NewT(&testing\.T\{\})/g;
+    $t_test_contents =~ s/td\.Cmp\(t,/t.Cmp(/g;
 
     open(my $fh, "| gofmt -s > '$DIR/example_t_test.go'");
     print $fh $t_test_contents;
@@ -463,7 +467,7 @@ if (@args_errors)
 
 my $common_links = do
 {
-    my $td_url = 'https://godoc.org/github.com/maxatome/go-testdeep';
+    my $td_url = 'https://godoc.org/github.com/maxatome/go-testdeep/td';
 
     # Specific types and functions
     join("\n", map "[`$_`]: $td_url#$_", qw(T TestDeep Cmp))
@@ -524,17 +528,17 @@ my $gh_links = do
 
 # README.md
 {
-    my $readme = do { local $/; open(my $fh, '<', "$DIR/README.md"); <$fh> };
+    my $readme = do { local $/; open(my $fh, '<', "$REPO_DIR/README.md"); <$fh> };
 
     # Links
     $readme =~ s{(<!-- links:begin -->).*(<!-- links:end -->)}
                 {$1\n$gh_links\n$2}s;
 
-    open(my $fh, '>', 'README.md.new');
+    open(my $fh, '>', "$REPO_DIR/README.md.new");
     print $fh $readme;
     close $fh;
-    rename 'README.md.new', 'README.md';
-    say 'README.md modified';
+    rename "$REPO_DIR/README.md.new", "$REPO_DIR/README.md";
+    say "$REPO_DIR/README.md modified";
 }
 
 # Hugo
@@ -556,7 +560,7 @@ my $gh_links = do
         # Rework each operator doc
         my $doc = process_doc($operators{$operator});
 
-        open(my $fh, '>', "$DIR/tools/docs_src/content/operators/$operator.md");
+        open(my $fh, '>', "$REPO_DIR/tools/docs_src/content/operators/$operator.md");
         print $fh <<EOM;
 ---
 title: "$operator"
@@ -569,7 +573,7 @@ $operators{$operator}{signature}
 
 $doc
 
-> See also [<i class='fas fa-book'></i> $operator godoc](https://godoc.org/github.com/maxatome/go-testdeep#$operator).
+> See also [<i class='fas fa-book'></i> $operator godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#$operator).
 
 ### Examples
 
@@ -599,7 +603,7 @@ $cmp->{signature}
 
 $doc
 
-> See also [<i class='fas fa-book'></i> $cmp->{name} godoc](https://godoc.org/github.com/maxatome/go-testdeep#$cmp->{name}).
+> See also [<i class='fas fa-book'></i> $cmp->{name} godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#$cmp->{name}).
 
 ### Examples
 
@@ -630,7 +634,7 @@ $t->{signature}
 
 $doc
 
-> See also [<i class='fas fa-book'></i> T.$t->{name} godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.$t->{name}).
+> See also [<i class='fas fa-book'></i> T.$t->{name} godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.$t->{name}).
 
 ### Examples
 
@@ -655,7 +659,7 @@ EOE
     {
         my $op_list_file = 'tools/docs_src/content/operators/_index.md';
         my $op_list = do { local $/;
-                           open(my $fh, '<', "$DIR/$op_list_file");
+                           open(my $fh, '<', "$REPO_DIR/$op_list_file");
                            <$fh> };
 
         $op_list =~ s{(<!-- operators:begin -->).*(<!-- operators:end -->)}
@@ -677,17 +681,17 @@ EOE
                              . "$md_links\n$2"
                      }se or die "smugglers tags not found in $op_list_file\n";
 
-        open(my $fh, '>', "$DIR/$op_list_file.new");
+        open(my $fh, '>', "$REPO_DIR/$op_list_file.new");
         print $fh $op_list;
         close $fh;
-        rename "$DIR/$op_list_file.new", "$DIR/$op_list_file";
+        rename "$REPO_DIR/$op_list_file.new", "$REPO_DIR/$op_list_file";
     }
 
     # Dump matrices
     {
         my $matrix_file = 'tools/docs_src/content/operators/matrix.md';
         my $matrix = do { local $/;
-                          open(my $fh, '<', "$DIR/$matrix_file");
+                          open(my $fh, '<', "$REPO_DIR/$matrix_file");
                           <$fh> };
 
         my $header = <<'EOH';
@@ -747,17 +751,17 @@ EOH
                         $repl . $3
                     }gse or die "go-op-matrix tags not found in $matrix_file\n";
 
-        open(my $fh, '>', "$DIR/$matrix_file.new");
+        open(my $fh, '>', "$REPO_DIR/$matrix_file.new");
         print $fh $matrix;
         close $fh;
-        rename "$DIR/$matrix_file.new", "$DIR/$matrix_file";
+        rename "$REPO_DIR/$matrix_file.new", "$REPO_DIR/$matrix_file";
     }
 }
 
 # Final publish
 if ($ENV{PROD_SITE})
 {
-    chdir "$DIR/tools/docs_src";
+    chdir "$REPO_DIR/tools/docs_src";
     exec qw(hugo -d ../../docs);
 }
 
@@ -899,7 +903,7 @@ sub process_doc
            }
            elsif ($8)
            {
-               "[`$8`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind)"
+               "[`$8`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind)"
            }
            elsif ($9)
            {
@@ -911,7 +915,7 @@ sub process_doc
            }
            elsif ($11)
            {
-               qq![$11](https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot)!
+               qq![`$11`](https://godoc.org/github.com/maxatome/go-testdeep/td#SmuggledGot)!
            }
        }geox;
 

@@ -11,7 +11,7 @@ func NotNil() TestDeep
 interface, containing a non-`nil` pointer.)
 
 
-> See also [<i class='fas fa-book'></i> NotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep#NotNil).
+> See also [<i class='fas fa-book'></i> NotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#NotNil).
 
 ### Examples
 
@@ -21,22 +21,22 @@ interface, containing a non-`nil` pointer.)
 	var got fmt.Stringer = &bytes.Buffer{}
 
 	// nil value can be compared directly with Not(nil), no need of NotNil() here
-	ok := Cmp(t, got, Not(nil))
+	ok := td.Cmp(t, got, td.Not(nil))
 	fmt.Println(ok)
 
 	// But it works with NotNil() anyway
-	ok = Cmp(t, got, NotNil())
+	ok = td.Cmp(t, got, td.NotNil())
 	fmt.Println(ok)
 
 	got = (*bytes.Buffer)(nil)
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with Not(nil) succeeds, as the interface is not nil
-	ok = Cmp(t, got, Not(nil))
+	ok = td.Cmp(t, got, td.Not(nil))
 	fmt.Println(ok)
 
 	// In this case NotNil() fails
-	ok = Cmp(t, got, NotNil())
+	ok = td.Cmp(t, got, td.NotNil())
 	fmt.Println(ok)
 
 	// Output:
@@ -55,7 +55,7 @@ func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool
 CmpNotNil is a shortcut for:
 
 ```go
-Cmp(t, got, NotNil(), args...)
+td.Cmp(t, got, td.NotNil(), args...)
 ```
 
 See above for details.
@@ -70,7 +70,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpNotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNil).
+> See also [<i class='fas fa-book'></i> CmpNotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNotNil).
 
 ### Examples
 
@@ -80,22 +80,22 @@ reason of a potential failure.
 	var got fmt.Stringer = &bytes.Buffer{}
 
 	// nil value can be compared directly with Not(nil), no need of NotNil() here
-	ok := Cmp(t, got, Not(nil))
+	ok := td.Cmp(t, got, td.Not(nil))
 	fmt.Println(ok)
 
 	// But it works with NotNil() anyway
-	ok = CmpNotNil(t, got)
+	ok = td.CmpNotNil(t, got)
 	fmt.Println(ok)
 
 	got = (*bytes.Buffer)(nil)
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with Not(nil) succeeds, as the interface is not nil
-	ok = Cmp(t, got, Not(nil))
+	ok = td.Cmp(t, got, td.Not(nil))
 	fmt.Println(ok)
 
 	// In this case NotNil() fails
-	ok = CmpNotNil(t, got)
+	ok = td.CmpNotNil(t, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -114,7 +114,7 @@ func (t *T) NotNil(got interface{}, args ...interface{}) bool
 [`NotNil`]({{< ref "NotNil" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, NotNil(), args...)
+t.Cmp(got, td.NotNil(), args...)
 ```
 
 See above for details.
@@ -129,17 +129,17 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.NotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.NotNil).
+> See also [<i class='fas fa-book'></i> T.NotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.NotNil).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	var got fmt.Stringer = &bytes.Buffer{}
 
 	// nil value can be compared directly with Not(nil), no need of NotNil() here
-	ok := t.Cmp(got, Not(nil))
+	ok := t.Cmp(got, td.Not(nil))
 	fmt.Println(ok)
 
 	// But it works with NotNil() anyway
@@ -150,7 +150,7 @@ reason of a potential failure.
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with Not(nil) succeeds, as the interface is not nil
-	ok = t.Cmp(got, Not(nil))
+	ok = t.Cmp(got, td.Not(nil))
 	fmt.Println(ok)
 
 	// In this case NotNil() fails

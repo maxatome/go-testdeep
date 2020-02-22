@@ -5,11 +5,11 @@ go-testdeep
 [![Coverage Status](https://coveralls.io/repos/github/maxatome/go-testdeep/badge.svg?branch=master)](https://coveralls.io/github/maxatome/go-testdeep?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/maxatome/go-testdeep)](https://goreportcard.com/report/github.com/maxatome/go-testdeep)
 [![GolangCI](https://golangci.com/badges/github.com/maxatome/go-testdeep.svg)](https://golangci.com/r/github.com/maxatome/go-testdeep)
-[![GoDoc](https://godoc.org/github.com/maxatome/go-testdeep?status.svg)](https://godoc.org/github.com/maxatome/go-testdeep)
+[![GoDoc](https://godoc.org/github.com/maxatome/go-testdeep/td?status.svg)](https://godoc.org/github.com/maxatome/go-testdeep/td)
 [![Version](https://img.shields.io/github/tag/maxatome/go-testdeep.svg)](https://github.com/maxatome/go-testdeep/releases)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go/#testing)
 
-![testdeep](tools/docs_src/static/images/logo.png)
+![go-testdeep](tools/docs_src/static/images/logo.png)
 
 **Extremely flexible golang deep comparison, extends the go testing package.**
 
@@ -21,6 +21,7 @@ go-testdeep
 - [Available operators](https://go-testdeep.zetta.rocks/operators/)
 - [Helpers](#helpers)
   - [`tdhttp` or HTTP API testing helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
+  - [`tdutil` a.k.a. the helper of helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil)
 - [See also](#see-also)
 - [License](#license)
 - [FAQ](https://go-testdeep.zetta.rocks/faq/)
@@ -31,7 +32,7 @@ go-testdeep
 - 2020/02/13:
   - new operator anchoring feature, see the [corresponding FAQ
     section](https://go-testdeep.zetta.rocks/faq/#how-does-operator-anchoring-work)
-    and the [new anchoring methods](https://go-testdeep.zetta.rocks/functions/testdeep-t/#anchoring-methods-of-testdeept);
+    and the [new anchoring methods](https://go-testdeep.zetta.rocks/functions/td-t/#anchoring-methods-of-tdt);
   - new [`SStruct`] operator (and its friends [`CmpSStruct`] & [`T.SStruct`]),
 - 2019/11/18:
   - new [`SubJSONOf`] & [`SuperJSONOf`] operators (and their
@@ -51,11 +52,50 @@ Make golang tests easy, from simplest usage:
 import (
   "testing"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestMyFunc(t *testing.T) {
   td.Cmp(t, MyFunc(), &Info{Name: "Alice", Age: 42})
+}
+```
+
+To a bit more complex one, allowing flexible comparisons using
+[TestDeep operators](https://go-testdeep.zetta.rocks/operators/):
+
+```go
+import (
+  "testing"
+
+  "github.com/maxatome/go-testdeep/td"
+)
+
+func TestMyFunc(t *testing.T) {
+  td.Cmp(t, MyFunc(), td.Struct(
+    &Info{Name: "Alice"},
+    td.StructFields{
+      "Age": td.Between(40, 45),
+    },
+  ))
+}
+```
+
+Or anchoring operators directly in literals, as in:
+
+```go
+import (
+  "testing"
+
+  "github.com/maxatome/go-testdeep/td"
+)
+
+func TestMyFunc(tt *testing.T) {
+  t := td.NewT(tt)
+
+  t.Cmp(MyFunc(), &Info{
+    Name: "Alice",
+    Age:  t.Anchor(td.Between(40, 45)).(int),
+  })
 }
 ```
 
@@ -67,8 +107,8 @@ import (
   "testing"
   "time"
 
-  td "github.com/maxatome/go-testdeep"
   "github.com/maxatome/go-testdeep/helpers/tdhttp"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 type Person struct {
@@ -132,8 +172,11 @@ structures must match exactly and when a difference is returned, it is
 up to the caller to display it. Not easy when comparing big data
 structures.
 
-The purpose of testdeep package is to do its best to introduce this
-missing flexibility using
+The purpose of go-testdeep, via the
+[`td` package](https://godoc.org/github.com/maxatome/go-testdeep/td)
+and its
+[helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers),
+is to do its best to introduce this missing flexibility using
 ["operators"](https://go-testdeep.zetta.rocks/operators/), when the
 expected value (or one of its component) cannot be matched exactly,
 mixed with some useful
@@ -198,13 +241,13 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 
 
 <!-- links:begin -->
-[`T`]: https://godoc.org/github.com/maxatome/go-testdeep#T
-[`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep#TestDeep
-[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep#Cmp
+[`T`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T
+[`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep/td#TestDeep
+[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp
 
-[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp
+[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/td/helpers/tdhttp
 
-[`BeLax` config flag]: https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig
+[`BeLax` config flag]: https://godoc.org/github.com/maxatome/go-testdeep/td#ContextConfig
 [`error`]: https://golang.org/pkg/builtin/#error
 
 

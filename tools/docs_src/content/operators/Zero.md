@@ -25,47 +25,47 @@ Cmp(t, &AnyStruct{}, Ptr(Zero())) // is true
 ```
 
 
-> See also [<i class='fas fa-book'></i> Zero godoc](https://godoc.org/github.com/maxatome/go-testdeep#Zero).
+> See also [<i class='fas fa-book'></i> Zero godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Zero).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := Cmp(t, 0, Zero())
+	ok := td.Cmp(t, 0, td.Zero())
 	fmt.Println(ok)
 
-	ok = Cmp(t, float64(0), Zero())
+	ok = td.Cmp(t, float64(0), td.Zero())
 	fmt.Println(ok)
 
-	ok = Cmp(t, 12, Zero()) // fails, as 12 is not 0 :)
+	ok = td.Cmp(t, 12, td.Zero()) // fails, as 12 is not 0 :)
 	fmt.Println(ok)
 
-	ok = Cmp(t, (map[string]int)(nil), Zero())
+	ok = td.Cmp(t, (map[string]int)(nil), td.Zero())
 	fmt.Println(ok)
 
-	ok = Cmp(t, map[string]int{}, Zero()) // fails, as not nil
+	ok = td.Cmp(t, map[string]int{}, td.Zero()) // fails, as not nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, ([]int)(nil), Zero())
+	ok = td.Cmp(t, ([]int)(nil), td.Zero())
 	fmt.Println(ok)
 
-	ok = Cmp(t, []int{}, Zero()) // fails, as not nil
+	ok = td.Cmp(t, []int{}, td.Zero()) // fails, as not nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, [3]int{}, Zero())
+	ok = td.Cmp(t, [3]int{}, td.Zero())
 	fmt.Println(ok)
 
-	ok = Cmp(t, [3]int{0, 1}, Zero()) // fails, DATA[1] is not 0
+	ok = td.Cmp(t, [3]int{0, 1}, td.Zero()) // fails, DATA[1] is not 0
 	fmt.Println(ok)
 
-	ok = Cmp(t, bytes.Buffer{}, Zero())
+	ok = td.Cmp(t, bytes.Buffer{}, td.Zero())
 	fmt.Println(ok)
 
-	ok = Cmp(t, &bytes.Buffer{}, Zero()) // fails, as pointer not nil
+	ok = td.Cmp(t, &bytes.Buffer{}, td.Zero()) // fails, as pointer not nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
+	ok = td.Cmp(t, &bytes.Buffer{}, td.Ptr(td.Zero())) // OK with the help of Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -92,7 +92,7 @@ func CmpZero(t TestingT, got interface{}, args ...interface{}) bool
 CmpZero is a shortcut for:
 
 ```go
-Cmp(t, got, Zero(), args...)
+td.Cmp(t, got, td.Zero(), args...)
 ```
 
 See above for details.
@@ -107,47 +107,47 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpZero godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpZero).
+> See also [<i class='fas fa-book'></i> CmpZero godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpZero).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := CmpZero(t, 0)
+	ok := td.CmpZero(t, 0)
 	fmt.Println(ok)
 
-	ok = CmpZero(t, float64(0))
+	ok = td.CmpZero(t, float64(0))
 	fmt.Println(ok)
 
-	ok = CmpZero(t, 12) // fails, as 12 is not 0 :)
+	ok = td.CmpZero(t, 12) // fails, as 12 is not 0 :)
 	fmt.Println(ok)
 
-	ok = CmpZero(t, (map[string]int)(nil))
+	ok = td.CmpZero(t, (map[string]int)(nil))
 	fmt.Println(ok)
 
-	ok = CmpZero(t, map[string]int{}) // fails, as not nil
+	ok = td.CmpZero(t, map[string]int{}) // fails, as not nil
 	fmt.Println(ok)
 
-	ok = CmpZero(t, ([]int)(nil))
+	ok = td.CmpZero(t, ([]int)(nil))
 	fmt.Println(ok)
 
-	ok = CmpZero(t, []int{}) // fails, as not nil
+	ok = td.CmpZero(t, []int{}) // fails, as not nil
 	fmt.Println(ok)
 
-	ok = CmpZero(t, [3]int{})
+	ok = td.CmpZero(t, [3]int{})
 	fmt.Println(ok)
 
-	ok = CmpZero(t, [3]int{0, 1}) // fails, DATA[1] is not 0
+	ok = td.CmpZero(t, [3]int{0, 1}) // fails, DATA[1] is not 0
 	fmt.Println(ok)
 
-	ok = CmpZero(t, bytes.Buffer{})
+	ok = td.CmpZero(t, bytes.Buffer{})
 	fmt.Println(ok)
 
-	ok = CmpZero(t, &bytes.Buffer{}) // fails, as pointer not nil
+	ok = td.CmpZero(t, &bytes.Buffer{}) // fails, as pointer not nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, &bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
+	ok = td.Cmp(t, &bytes.Buffer{}, td.Ptr(td.Zero())) // OK with the help of Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -174,7 +174,7 @@ func (t *T) Zero(got interface{}, args ...interface{}) bool
 [`Zero`]({{< ref "Zero" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Zero(), args...)
+t.Cmp(got, td.Zero(), args...)
 ```
 
 See above for details.
@@ -189,12 +189,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Zero godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Zero).
+> See also [<i class='fas fa-book'></i> T.Zero godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Zero).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	ok := t.Zero(0)
 	fmt.Println(ok)
@@ -229,7 +229,7 @@ reason of a potential failure.
 	ok = t.Zero(&bytes.Buffer{}) // fails, as pointer not nil
 	fmt.Println(ok)
 
-	ok = t.Cmp(&bytes.Buffer{}, Ptr(Zero())) // OK with the help of Ptr()
+	ok = t.Cmp(&bytes.Buffer{}, td.Ptr(td.Zero())) // OK with the help of Ptr()
 	fmt.Println(ok)
 
 	// Output:

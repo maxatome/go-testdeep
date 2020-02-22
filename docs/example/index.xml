@@ -21,44 +21,44 @@ import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; ) func TestCreateRecor
     </item>
     
     <item>
-      <title>Basic testdeep approach</title>
+      <title>Basic go-testdeep approach</title>
       <link>https://go-testdeep.zetta.rocks/example/basic-testdeep/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/example/basic-testdeep/</guid>
-      <description>testdeep package, via its Cmp* functions, handles the tests and all the error message boiler plate. Let&amp;rsquo;s do it:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record.Id, td.NotZero(), &amp;#34;Id initialized&amp;#34;) td.Cmp(t, record.Name, &amp;#34;Bob&amp;#34;) td.Cmp(t, record.Age, 23) td.Cmp(t, record.CreatedAt, td.Between(before, time.Now())) } } As we cannot guess the Id field value before its creation, we use the NotZero operator to check it is set by CreateRecord() call.</description>
+      <description>td package, via its Cmp* functions, handles the tests and all the error message boiler plate. Let&amp;rsquo;s do it:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record.Id, td.NotZero(), &amp;#34;Id initialized&amp;#34;) td.Cmp(t, record.Name, &amp;#34;Bob&amp;#34;) td.Cmp(t, record.Age, 23) td.Cmp(t, record.CreatedAt, td.Between(before, time.Now())) } } As we cannot guess the Id field value before its creation, we use the NotZero operator to check it is set by CreateRecord() call.</description>
     </item>
     
     <item>
-      <title>Advanced testdeep technique</title>
+      <title>Advanced go-testdeep technique</title>
       <link>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</guid>
-      <description>Of course we can test struct fields one by one, but with testdeep, the whole struct can be compared with one Cmp call.
+      <description>Of course we can test struct fields one by one, but with go-testdeep and the [td package], the whole struct can be compared with one Cmp call.
 We can choose to ignore the non-guessable fields set by CreateRecord():
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record, td.Struct( &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, nil), &amp;#34;Newly created record&amp;#34;) } } The Struct operator, used here, ignores zero fields in its model parameter.</description>
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record, td.Struct( &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, nil), &amp;#34;Newly created record&amp;#34;) } } The Struct operator, used here, ignores zero fields in its model parameter.</description>
     </item>
     
     <item>
-      <title>testdeep Cmp shortcuts</title>
-      <link>https://go-testdeep.zetta.rocks/example/testdeep-cmp-shortcuts/</link>
+      <title>go-testdeep Cmp shortcuts</title>
+      <link>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://go-testdeep.zetta.rocks/example/testdeep-cmp-shortcuts/</guid>
+      <guid>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</guid>
       <description>The Cmp function is the keystone of this package, but to make the writing of tests even easier, the family of Cmp* functions are provided and act as shortcuts. Using CmpStruct function, the previous example can be written as:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.CmpStruct(t, record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.</description>
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.CmpStruct(t, record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.</description>
     </item>
     
     <item>
-      <title>testdeep.T type</title>
-      <link>https://go-testdeep.zetta.rocks/example/testdeep-t/</link>
+      <title>td.T type</title>
+      <link>https://go-testdeep.zetta.rocks/example/td-t/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://go-testdeep.zetta.rocks/example/testdeep-t/</guid>
-      <description>Last, testing.T can be encapsulated in testdeep T type, simplifying again the test:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t := t.RootName(&amp;#34;RECORD&amp;#34;) // Use RECORD instead of DATA in failure reports  // Using Struct shortcut method  t.Struct(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.NotZero(), &amp;#34;CreatedAt&amp;#34;: td.Between(before, time.Now()), }, &amp;#34;Newly created record&amp;#34;) // Or using Cmp method, it&amp;#39;s a matter of taste  t.</description>
+      <guid>https://go-testdeep.zetta.rocks/example/td-t/</guid>
+      <description>Last, testing.T can be encapsulated in td.T type, simplifying again the test:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t := t.RootName(&amp;#34;RECORD&amp;#34;) // Use RECORD instead of DATA in failure reports  // Using Struct shortcut method  t.Struct(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.NotZero(), &amp;#34;CreatedAt&amp;#34;: td.Between(before, time.Now()), }, &amp;#34;Newly created record&amp;#34;) // Or using Cmp method, it&amp;#39;s a matter of taste  t.</description>
     </item>
     
   </channel>

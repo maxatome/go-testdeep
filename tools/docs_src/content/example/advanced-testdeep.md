@@ -1,11 +1,11 @@
 +++
-title = "Advanced testdeep technique"
+title = "Advanced go-testdeep technique"
 weight = 30
 +++
 
-Of course we can test struct fields one by one, but with testdeep, the
-whole struct can be compared with one
-[`Cmp`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp) call.
+Of course we can test struct fields one by one, but with go-testdeep
+and the [`td` package], the whole struct can be compared with one
+[`Cmp`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp) call.
 
 We can choose to ignore the non-guessable fields set by
 `CreateRecord()`:
@@ -15,7 +15,7 @@ import (
   "testing"
   "time"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestCreateRecord(t *testing.T) {
@@ -45,7 +45,7 @@ import (
   "testing"
   "time"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestCreateRecord(t *testing.T) {
@@ -70,7 +70,7 @@ func TestCreateRecord(t *testing.T) {
 
 See the use of the [`Struct`]({{< ref "operators/Struct" >}})
 operator. It is needed here to overcome the go static typing system
-and so use other [testdeep operators]({{< ref "operators" >}})
+and so use other [go-testdeep operators]({{< ref "operators" >}})
 for some fields, here [`NotZero`]({{< ref "operators/NotZero" >}}) for
 `Id` and [`Between`]({{< ref "operators/Between" >}}) for `CreatedAt`.
 

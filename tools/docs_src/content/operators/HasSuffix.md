@@ -23,7 +23,7 @@ Cmp(t, bstr, HasSuffix("!")) // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> HasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep#HasSuffix).
+> See also [<i class='fas fa-book'></i> HasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#HasSuffix).
 
 ### Examples
 
@@ -32,7 +32,7 @@ Cmp(t, bstr, HasSuffix("!")) // succeeds
 
 	got := "foobar"
 
-	ok := Cmp(t, got, HasSuffix("bar"), "checks %s", got)
+	ok := td.Cmp(t, got, td.HasSuffix("bar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -45,7 +45,7 @@ Cmp(t, bstr, HasSuffix("!")) // succeeds
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := Cmp(t, got, HasSuffix("bar"), "checks %s", got)
+	ok := td.Cmp(t, got, td.HasSuffix("bar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -57,7 +57,7 @@ Cmp(t, bstr, HasSuffix("!")) // succeeds
 
 	got := errors.New("foobar")
 
-	ok := Cmp(t, got, HasSuffix("bar"), "checks %s", got)
+	ok := td.Cmp(t, got, td.HasSuffix("bar"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -73,7 +73,7 @@ func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interfac
 CmpHasSuffix is a shortcut for:
 
 ```go
-Cmp(t, got, HasSuffix(expected), args...)
+td.Cmp(t, got, td.HasSuffix(expected), args...)
 ```
 
 See above for details.
@@ -88,7 +88,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpHasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpHasSuffix).
+> See also [<i class='fas fa-book'></i> CmpHasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpHasSuffix).
 
 ### Examples
 
@@ -97,7 +97,7 @@ reason of a potential failure.
 
 	got := "foobar"
 
-	ok := CmpHasSuffix(t, got, "bar", "checks %s", got)
+	ok := td.CmpHasSuffix(t, got, "bar", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -110,7 +110,7 @@ reason of a potential failure.
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpHasSuffix(t, got, "bar", "checks %s", got)
+	ok := td.CmpHasSuffix(t, got, "bar", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -122,7 +122,7 @@ reason of a potential failure.
 
 	got := errors.New("foobar")
 
-	ok := CmpHasSuffix(t, got, "bar", "checks %s", got)
+	ok := td.CmpHasSuffix(t, got, "bar", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -138,7 +138,7 @@ func (t *T) HasSuffix(got interface{}, expected string, args ...interface{}) boo
 [`HasSuffix`]({{< ref "HasSuffix" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, HasSuffix(expected), args...)
+t.Cmp(got, td.HasSuffix(expected), args...)
 ```
 
 See above for details.
@@ -153,12 +153,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.HasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.HasSuffix).
+> See also [<i class='fas fa-book'></i> T.HasSuffix godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.HasSuffix).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "foobar"
 
@@ -170,7 +170,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -183,7 +183,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Error example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := errors.New("foobar")
 

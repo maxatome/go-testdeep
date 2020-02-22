@@ -11,8 +11,8 @@ import (
 	"testing"
 )
 
-// TestingT is a type implementing testdeep.TestingT intended to be
-// used in tests.
+// TestingT is a type implementing td.TestingT intended to be used in
+// tests.
 type TestingT struct {
 	LastMessage string
 	IsFatal     bool
@@ -42,8 +42,8 @@ func (t *TestingT) Helper() {
 	// Do nothing
 }
 
-// TestingFT is a type implementing testdeep.TestingFT intended to be
-// used in tests.
+// TestingFT is a type implementing td.TestingFT intended to be used
+// in tests.
 type TestingFT struct {
 	TestingT
 	name string

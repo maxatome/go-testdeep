@@ -6,36 +6,36 @@ weight = 13
 ```go
 import (
   "testing"
-  "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestMyFunc(t *testing.T) {
   // Compares MyFunc() result against a fixed value
-  testdeep.Cmp(t, MyFunc(), 128, "MyFunc() result is 128")
+  td.Cmp(t, MyFunc(), 128, "MyFunc() result is 128")
 
   // Compares MyFunc() result using the Between Testdeep operator
-  testdeep.Cmp(t, MyFunc(), testdeep.Between(100, 199),
+  td.Cmp(t, MyFunc(), td.Between(100, 199),
     "MyFunc() result is between 100 and 199")
 }
 ```
 
-- [`func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp)
-- [`func CmpError(t TestingT, got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpError)
-- [`func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpFalse)
-- [`func CmpLax(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpLax)
+- [`func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp)
+- [`func CmpError(t TestingT, got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpError)
+- [`func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpFalse)
+- [`func CmpLax(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpLax)
   (in fact the shortcut of [`Lax` operator]({{< ref "operators/Lax" >}}))
-- [`func CmpNoError(t TestingT, got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNoError)
-- [`func CmpNot(t TestingT, got interface{}, notExpected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNot)
+- [`func CmpNoError(t TestingT, got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNoError)
+- [`func CmpNot(t TestingT, got interface{}, notExpected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNot)
   (in fact the shortcut of [`Not` operator]({{< ref "operators/Not" >}}))
-- [`func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotPanic)
-- [`func CmpPanic(t TestingT, fn func(), expectedPanic interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpPanic)
-- [`func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#CmpTrue)
-- [`func EqDeeply(got, expected interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep#EqDeeply)
-- [`func EqDeeplyError(got, expected interface{}) error`](https://godoc.org/github.com/maxatome/go-testdeep#EqDeeplyError)
+- [`func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNotPanic)
+- [`func CmpPanic(t TestingT, fn func(), expectedPanic interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpPanic)
+- [`func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpTrue)
+- [`func EqDeeply(got, expected interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#EqDeeply)
+- [`func EqDeeplyError(got, expected interface{}) error`](https://godoc.org/github.com/maxatome/go-testdeep/td#EqDeeplyError)
 
-[`CmpDeeply()`](https://godoc.org/github.com/maxatome/go-testdeep#CmpDeeply)
+[`CmpDeeply()`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpDeeply)
 is now replaced by
-[`Cmp()`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp), but it
+[`Cmp()`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp), but it
 is still available for backward compatibility purpose.
 
 
@@ -44,17 +44,17 @@ is still available for backward compatibility purpose.
 ```go
 import (
   "testing"
-  "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestMyFunc(t *testing.T) {
-  testdeep.CmpBetween(t, MyFunc(), 100, 199, testdeep.BoundsInIn,
+  td.CmpBetween(t, MyFunc(), 100, 199, td.BoundsInIn,
     "MyFunc() result is between 100 and 199")
 }
 ```
 
 For each of these functions, it is always a shortcut on
-[`Cmp()`](https://godoc.org/github.com/maxatome/go-testdeep#Cmp) and
+[`Cmp()`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp) and
 the correponding [Testdeep operator]({{< ref "operators" >}}):
 
 ```

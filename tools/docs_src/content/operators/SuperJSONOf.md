@@ -156,7 +156,7 @@ parameters) have shortcuts. They follow:
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the `map[string]interface{}` type.
 
 
-> See also [<i class='fas fa-book'></i> SuperJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SuperJSONOf).
+> See also [<i class='fas fa-book'></i> SuperJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SuperJSONOf).
 
 ### Examples
 
@@ -177,13 +177,13 @@ parameters) have shortcuts. They follow:
 		Zip:      666,
 	}
 
-	ok := Cmp(t, got, SuperJSONOf(`{"age":42,"fullname":"Bob","gender":"male"}`))
+	ok := td.Cmp(t, got, td.SuperJSONOf(`{"age":42,"fullname":"Bob","gender":"male"}`))
 	fmt.Println("check got with age then fullname:", ok)
 
-	ok = Cmp(t, got, SuperJSONOf(`{"fullname":"Bob","age":42,"gender":"male"}`))
+	ok = td.Cmp(t, got, td.SuperJSONOf(`{"fullname":"Bob","age":42,"gender":"male"}`))
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = Cmp(t, got, SuperJSONOf(`
+	ok = td.Cmp(t, got, td.SuperJSONOf(`
 // This should be the JSON representation of a struct
 {
   // A person:
@@ -195,8 +195,8 @@ parameters) have shortcuts. They follow:
 }`))
 	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
-	ok = Cmp(t, got,
-		SuperJSONOf(`{"fullname":"Bob","gender":"male","details":{}}`))
+	ok = td.Cmp(t, got,
+		td.SuperJSONOf(`{"fullname":"Bob","gender":"male","details":{}}`))
 	fmt.Println("check got with details field:", ok)
 
 	// Output:
@@ -223,34 +223,34 @@ parameters) have shortcuts. They follow:
 		Zip:      666,
 	}
 
-	ok := Cmp(t, got,
-		SuperJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
+	ok := td.Cmp(t, got,
+		td.SuperJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
 			42, "Bob Foobar", "male"))
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = Cmp(t, got,
-		SuperJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
-			Between(40, 45),
-			HasSuffix("Foobar"),
-			NotEmpty()))
+	ok = td.Cmp(t, got,
+		td.SuperJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
+			td.Between(40, 45),
+			td.HasSuffix("Foobar"),
+			td.NotEmpty()))
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = Cmp(t, got,
-		SuperJSONOf(`{"age": "$1", "fullname": "$2", "gender": "$3"}`,
-			Between(40, 45),
-			HasSuffix("Foobar"),
-			NotEmpty()))
+	ok = td.Cmp(t, got,
+		td.SuperJSONOf(`{"age": "$1", "fullname": "$2", "gender": "$3"}`,
+			td.Between(40, 45),
+			td.HasSuffix("Foobar"),
+			td.NotEmpty()))
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = Cmp(t, got,
-		SuperJSONOf(`{"age": $age, "fullname": $name, "gender": $gender}`,
-			Tag("age", Between(40, 45)),
-			Tag("name", HasSuffix("Foobar")),
-			Tag("gender", NotEmpty())))
+	ok = td.Cmp(t, got,
+		td.SuperJSONOf(`{"age": $age, "fullname": $name, "gender": $gender}`,
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("name", td.HasSuffix("Foobar")),
+			td.Tag("gender", td.NotEmpty())))
 	fmt.Println("check got with named placeholders:", ok)
 
-	ok = Cmp(t, got,
-		SuperJSONOf(`{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`))
+	ok = td.Cmp(t, got,
+		td.SuperJSONOf(`{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`))
 	fmt.Println("check got with operator shortcuts:", ok)
 
 	// Output:
@@ -295,11 +295,11 @@ parameters) have shortcuts. They follow:
 	}
 
 	// OK let's test with this file
-	ok := Cmp(t, got,
-		SuperJSONOf(filename,
-			Tag("name", HasPrefix("Bob")),
-			Tag("age", Between(40, 45)),
-			Tag("gender", Re(`^(male|female)\z`))))
+	ok := td.Cmp(t, got,
+		td.SuperJSONOf(filename,
+			td.Tag("name", td.HasPrefix("Bob")),
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("gender", td.Re(`^(male|female)\z`))))
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -307,11 +307,11 @@ parameters) have shortcuts. They follow:
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = Cmp(t, got,
-		SuperJSONOf(file,
-			Tag("name", HasPrefix("Bob")),
-			Tag("age", Between(40, 45)),
-			Tag("gender", Re(`^(male|female)\z`))))
+	ok = td.Cmp(t, got,
+		td.SuperJSONOf(file,
+			td.Tag("name", td.HasPrefix("Bob")),
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("gender", td.Re(`^(male|female)\z`))))
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -328,7 +328,7 @@ func CmpSuperJSONOf(t TestingT, got interface{}, expectedJSON interface{}, param
 CmpSuperJSONOf is a shortcut for:
 
 ```go
-Cmp(t, got, SuperJSONOf(expectedJSON, params...), args...)
+td.Cmp(t, got, td.SuperJSONOf(expectedJSON, params...), args...)
 ```
 
 See above for details.
@@ -343,7 +343,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSuperJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperJSONOf).
+> See also [<i class='fas fa-book'></i> CmpSuperJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSuperJSONOf).
 
 ### Examples
 
@@ -364,13 +364,13 @@ reason of a potential failure.
 		Zip:      666,
 	}
 
-	ok := CmpSuperJSONOf(t, got, `{"age":42,"fullname":"Bob","gender":"male"}`, nil)
+	ok := td.CmpSuperJSONOf(t, got, `{"age":42,"fullname":"Bob","gender":"male"}`, nil)
 	fmt.Println("check got with age then fullname:", ok)
 
-	ok = CmpSuperJSONOf(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
+	ok = td.CmpSuperJSONOf(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = CmpSuperJSONOf(t, got, `
+	ok = td.CmpSuperJSONOf(t, got, `
 // This should be the JSON representation of a struct
 {
   // A person:
@@ -382,7 +382,7 @@ reason of a potential failure.
 }`, nil)
 	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
-	ok = CmpSuperJSONOf(t, got, `{"fullname":"Bob","gender":"male","details":{}}`, nil)
+	ok = td.CmpSuperJSONOf(t, got, `{"fullname":"Bob","gender":"male","details":{}}`, nil)
 	fmt.Println("check got with details field:", ok)
 
 	// Output:
@@ -409,19 +409,19 @@ reason of a potential failure.
 		Zip:      666,
 	}
 
-	ok := CmpSuperJSONOf(t, got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
+	ok := td.CmpSuperJSONOf(t, got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = CmpSuperJSONOf(t, got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	ok = td.CmpSuperJSONOf(t, got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = CmpSuperJSONOf(t, got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	ok = td.CmpSuperJSONOf(t, got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = CmpSuperJSONOf(t, got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar")), Tag("gender", NotEmpty())})
+	ok = td.CmpSuperJSONOf(t, got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("gender", td.NotEmpty())})
 	fmt.Println("check got with named placeholders:", ok)
 
-	ok = CmpSuperJSONOf(t, got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
+	ok = td.CmpSuperJSONOf(t, got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
 	fmt.Println("check got with operator shortcuts:", ok)
 
 	// Output:
@@ -466,7 +466,7 @@ reason of a potential failure.
 	}
 
 	// OK let's test with this file
-	ok := CmpSuperJSONOf(t, got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok := td.CmpSuperJSONOf(t, got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -474,7 +474,7 @@ reason of a potential failure.
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = CmpSuperJSONOf(t, got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok = td.CmpSuperJSONOf(t, got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -491,7 +491,7 @@ func (t *T) SuperJSONOf(got interface{}, expectedJSON interface{}, params []inte
 [`SuperJSONOf`]({{< ref "SuperJSONOf" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SuperJSONOf(expectedJSON, params...), args...)
+t.Cmp(got, td.SuperJSONOf(expectedJSON, params...), args...)
 ```
 
 See above for details.
@@ -506,12 +506,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SuperJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SuperJSONOf).
+> See also [<i class='fas fa-book'></i> T.SuperJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SuperJSONOf).
 
 ### Examples
 
 {{%expand "Basic example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -556,7 +556,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Placeholders example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -575,13 +575,13 @@ reason of a potential failure.
 	ok := t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	ok = t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = t.SuperJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	ok = t.SuperJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = t.SuperJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar")), Tag("gender", NotEmpty())})
+	ok = t.SuperJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("gender", td.NotEmpty())})
 	fmt.Println("check got with named placeholders:", ok)
 
 	ok = t.SuperJSONOf(got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
@@ -596,7 +596,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "File example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -629,7 +629,7 @@ reason of a potential failure.
 	}
 
 	// OK let's test with this file
-	ok := t.SuperJSONOf(got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok := t.SuperJSONOf(got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -637,7 +637,7 @@ reason of a potential failure.
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = t.SuperJSONOf(got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok = t.SuperJSONOf(got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:

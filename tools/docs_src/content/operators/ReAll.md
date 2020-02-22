@@ -27,7 +27,7 @@ Cmp(t, "John Doe",
 ```
 
 
-> See also [<i class='fas fa-book'></i> ReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep#ReAll).
+> See also [<i class='fas fa-book'></i> ReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#ReAll).
 
 ### Examples
 
@@ -35,13 +35,13 @@ Cmp(t, "John Doe",
 	t := &testing.T{}
 
 	got := "foo bar biz"
-	ok := Cmp(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
+	ok := td.Cmp(t, got, td.ReAll(`(\w+)`, td.Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = Cmp(t, got, ReAll(`(\w+)`, Set("biz", "foo", "bar")),
+	ok = td.Cmp(t, got, td.ReAll(`(\w+)`, td.Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -54,8 +54,8 @@ Cmp(t, "John Doe",
 	t := &testing.T{}
 
 	got := "11 45 23 56 85 96"
-	ok := Cmp(t, got,
-		ReAll(`(\d+)`, ArrayEach(Code(func(num string) bool {
+	ok := td.Cmp(t, got,
+		td.ReAll(`(\d+)`, td.ArrayEach(td.Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 10 && n < 100
 		}))),
@@ -63,8 +63,8 @@ Cmp(t, "John Doe",
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = Cmp(t, got,
-		ReAll(`(\d+)`, ArrayEach(Code(func(num string) bool {
+	ok = td.Cmp(t, got,
+		td.ReAll(`(\d+)`, td.ArrayEach(td.Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 20 && n < 100
 		}))),
@@ -82,13 +82,13 @@ Cmp(t, "John Doe",
 	expected := regexp.MustCompile(`(\w+)`)
 
 	got := "foo bar biz"
-	ok := Cmp(t, got, ReAll(expected, Set("biz", "foo", "bar")),
+	ok := td.Cmp(t, got, td.ReAll(expected, td.Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = Cmp(t, got, ReAll(expected, Set("biz", "foo", "bar")),
+	ok = td.Cmp(t, got, td.ReAll(expected, td.Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -103,8 +103,8 @@ Cmp(t, "John Doe",
 	expected := regexp.MustCompile(`(\d+)`)
 
 	got := "11 45 23 56 85 96"
-	ok := Cmp(t, got,
-		ReAll(expected, ArrayEach(Code(func(num string) bool {
+	ok := td.Cmp(t, got,
+		td.ReAll(expected, td.ArrayEach(td.Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 10 && n < 100
 		}))),
@@ -112,8 +112,8 @@ Cmp(t, "John Doe",
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = Cmp(t, got,
-		ReAll(expected, ArrayEach(Code(func(num string) bool {
+	ok = td.Cmp(t, got,
+		td.ReAll(expected, td.ArrayEach(td.Code(func(num string) bool {
 			n, err := strconv.Atoi(num)
 			return err == nil && n > 20 && n < 100
 		}))),
@@ -134,7 +134,7 @@ func CmpReAll(t TestingT, got interface{}, reg interface{}, capture interface{},
 CmpReAll is a shortcut for:
 
 ```go
-Cmp(t, got, ReAll(reg, capture), args...)
+td.Cmp(t, got, td.ReAll(reg, capture), args...)
 ```
 
 See above for details.
@@ -149,7 +149,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpReAll).
+> See also [<i class='fas fa-book'></i> CmpReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpReAll).
 
 ### Examples
 
@@ -157,13 +157,13 @@ reason of a potential failure.
 	t := &testing.T{}
 
 	got := "foo bar biz"
-	ok := CmpReAll(t, got, `(\w+)`, Set("biz", "foo", "bar"),
+	ok := td.CmpReAll(t, got, `(\w+)`, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = CmpReAll(t, got, `(\w+)`, Set("biz", "foo", "bar"),
+	ok = td.CmpReAll(t, got, `(\w+)`, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -176,7 +176,7 @@ reason of a potential failure.
 	t := &testing.T{}
 
 	got := "11 45 23 56 85 96"
-	ok := CmpReAll(t, got, `(\d+)`, ArrayEach(Code(func(num string) bool {
+	ok := td.CmpReAll(t, got, `(\d+)`, td.ArrayEach(td.Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 10 && n < 100
 	})),
@@ -184,7 +184,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = CmpReAll(t, got, `(\d+)`, ArrayEach(Code(func(num string) bool {
+	ok = td.CmpReAll(t, got, `(\d+)`, td.ArrayEach(td.Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 20 && n < 100
 	})),
@@ -202,13 +202,13 @@ reason of a potential failure.
 	expected := regexp.MustCompile(`(\w+)`)
 
 	got := "foo bar biz"
-	ok := CmpReAll(t, got, expected, Set("biz", "foo", "bar"),
+	ok := td.CmpReAll(t, got, expected, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = CmpReAll(t, got, expected, Set("biz", "foo", "bar"),
+	ok = td.CmpReAll(t, got, expected, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -223,7 +223,7 @@ reason of a potential failure.
 	expected := regexp.MustCompile(`(\d+)`)
 
 	got := "11 45 23 56 85 96"
-	ok := CmpReAll(t, got, expected, ArrayEach(Code(func(num string) bool {
+	ok := td.CmpReAll(t, got, expected, td.ArrayEach(td.Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 10 && n < 100
 	})),
@@ -231,7 +231,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = CmpReAll(t, got, expected, ArrayEach(Code(func(num string) bool {
+	ok = td.CmpReAll(t, got, expected, td.ArrayEach(td.Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 20 && n < 100
 	})),
@@ -252,7 +252,7 @@ func (t *T) ReAll(got interface{}, reg interface{}, capture interface{}, args ..
 [`ReAll`]({{< ref "ReAll" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, ReAll(reg, capture), args...)
+t.Cmp(got, td.ReAll(reg, capture), args...)
 ```
 
 See above for details.
@@ -267,21 +267,21 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.ReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.ReAll).
+> See also [<i class='fas fa-book'></i> T.ReAll godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.ReAll).
 
 ### Examples
 
 {{%expand "Capture example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "foo bar biz"
-	ok := t.ReAll(got, `(\w+)`, Set("biz", "foo", "bar"),
+	ok := t.ReAll(got, `(\w+)`, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = t.ReAll(got, `(\w+)`, Set("biz", "foo", "bar"),
+	ok = t.ReAll(got, `(\w+)`, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -291,10 +291,10 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "CaptureComplex example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "11 45 23 56 85 96"
-	ok := t.ReAll(got, `(\d+)`, ArrayEach(Code(func(num string) bool {
+	ok := t.ReAll(got, `(\d+)`, td.ArrayEach(td.Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 10 && n < 100
 	})),
@@ -302,7 +302,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = t.ReAll(got, `(\d+)`, ArrayEach(Code(func(num string) bool {
+	ok = t.ReAll(got, `(\d+)`, td.ArrayEach(td.Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 20 && n < 100
 	})),
@@ -315,18 +315,18 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "CompiledCapture example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	expected := regexp.MustCompile(`(\w+)`)
 
 	got := "foo bar biz"
-	ok := t.ReAll(got, expected, Set("biz", "foo", "bar"),
+	ok := t.ReAll(got, expected, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Matches, but all catured groups do not match Set
 	got = "foo BAR biz"
-	ok = t.ReAll(got, expected, Set("biz", "foo", "bar"),
+	ok = t.ReAll(got, expected, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -336,12 +336,12 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "CompiledCaptureComplex example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	expected := regexp.MustCompile(`(\d+)`)
 
 	got := "11 45 23 56 85 96"
-	ok := t.ReAll(got, expected, ArrayEach(Code(func(num string) bool {
+	ok := t.ReAll(got, expected, td.ArrayEach(td.Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 10 && n < 100
 	})),
@@ -349,7 +349,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Matches, but 11 is not greater than 20
-	ok = t.ReAll(got, expected, ArrayEach(Code(func(num string) bool {
+	ok = t.ReAll(got, expected, td.ArrayEach(td.Code(func(num string) bool {
 		n, err := strconv.Atoi(num)
 		return err == nil && n > 20 && n < 100
 	})),

@@ -84,7 +84,7 @@ Smuggle(func(date time.Time) int { return date.Year() },
 
 In this case the data location forwarded to next test will be
 something like "DATA.MyTimeField<smuggled>", but you can act on it
-too by returning a [SmuggledGot](https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot) struct (by value or by address):
+too by returning a [`SmuggledGot`](https://godoc.org/github.com/maxatome/go-testdeep/td#SmuggledGot) struct (by value or by address):
 
 ```go
 Smuggle(func(date time.Time) SmuggledGot {
@@ -100,7 +100,7 @@ then the data location forwarded to next test will be something like
 "DATA.MyTimeField") and the returned Name "Year" is automatically
 added when Name starts with a Letter.
 
-Note that [SmuggledGot](https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot) and [*SmuggledGot](https://godoc.org/github.com/maxatome/go-testdeep#SmuggledGot) returns are treated equally,
+Note that [`SmuggledGot`](https://godoc.org/github.com/maxatome/go-testdeep/td#SmuggledGot) and [`*SmuggledGot`](https://godoc.org/github.com/maxatome/go-testdeep/td#SmuggledGot) returns are treated equally,
 and they are only used when *fn* has only one returned value or
 when the second boolean returned value is true.
 
@@ -182,7 +182,7 @@ type. The fields-path `string` *fn* shortcut is not available with
 `interface{}`, as the type can not be known in advance.
 
 
-> See also [<i class='fas fa-book'></i> Smuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep#Smuggle).
+> See also [<i class='fas fa-book'></i> Smuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Smuggle).
 
 ### Examples
 
@@ -191,23 +191,23 @@ type. The fields-path `string` *fn* shortcut is not available with
 
 	got := int64(123)
 
-	ok := Cmp(t, got,
-		Smuggle(func(n int64) int { return int(n) }, 123),
+	ok := td.Cmp(t, got,
+		td.Smuggle(func(n int64) int { return int(n) }, 123),
 		"checks int64 got against an int value")
 	fmt.Println(ok)
 
-	ok = Cmp(t, "123",
-		Smuggle(
+	ok = td.Cmp(t, "123",
+		td.Smuggle(
 			func(numStr string) (int, bool) {
 				n, err := strconv.Atoi(numStr)
 				return n, err == nil
 			},
-			Between(120, 130)),
+			td.Between(120, 130)),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
-	ok = Cmp(t, "123",
-		Smuggle(
+	ok = td.Cmp(t, "123",
+		td.Smuggle(
 			func(numStr string) (int, bool, string) {
 				n, err := strconv.Atoi(numStr)
 				if err != nil {
@@ -215,22 +215,22 @@ type. The fields-path `string` *fn* shortcut is not available with
 				}
 				return n, true, ""
 			},
-			Between(120, 130)),
+			td.Between(120, 130)),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
-	ok = Cmp(t, "123",
-		Smuggle(
+	ok = td.Cmp(t, "123",
+		td.Smuggle(
 			func(numStr string) (int, error) {
 				return strconv.Atoi(numStr)
 			},
-			Between(120, 130)),
+			td.Between(120, 130)),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
 	// Short version :)
-	ok = Cmp(t, "123",
-		Smuggle(strconv.Atoi, Between(120, 130)),
+	ok = td.Cmp(t, "123",
+		td.Smuggle(strconv.Atoi, td.Between(120, 130)),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
@@ -248,8 +248,8 @@ type. The fields-path `string` *fn* shortcut is not available with
 	// got is an int16 and Smuggle func input is an int64: it is OK
 	got := int(123)
 
-	ok := Cmp(t, got,
-		Smuggle(func(n int64) uint32 { return uint32(n) }, uint32(123)))
+	ok := td.Cmp(t, got,
+		td.Smuggle(func(n int64) uint32 { return uint32(n) }, uint32(123)))
 	fmt.Println("got int16(123) → smuggle via int64 → uint32(123):", ok)
 
 	// Output:
@@ -262,8 +262,8 @@ type. The fields-path `string` *fn* shortcut is not available with
 	// Automatically json.Unmarshal to compare
 	got := []byte(`{"a":1,"b":2}`)
 
-	ok := Cmp(t, got,
-		Smuggle(
+	ok := td.Cmp(t, got,
+		td.Smuggle(
 			func(b json.RawMessage) (r map[string]int, err error) {
 				err = json.Unmarshal(b, &r)
 				return
@@ -298,27 +298,27 @@ type. The fields-path `string` *fn* shortcut is not available with
 
 		// Simplest way, but in case of Between() failure, error will be bound
 		// to DATA<smuggled>, not very clear...
-		ok := Cmp(t, got,
-			Smuggle(
+		ok := td.Cmp(t, got,
+			td.Smuggle(
 				func(sd StartDuration) time.Time {
 					return sd.StartDate.Add(sd.Duration)
 				},
-				Between(
+				td.Between(
 					time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
 					time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC))))
 		fmt.Println(ok)
 
 		// Name the computed value "ComputedEndDate" to render a Between() failure
 		// more understandable, so error will be bound to DATA.ComputedEndDate
-		ok = Cmp(t, got,
-			Smuggle(
-				func(sd StartDuration) SmuggledGot {
-					return SmuggledGot{
+		ok = td.Cmp(t, got,
+			td.Smuggle(
+				func(sd StartDuration) td.SmuggledGot {
+					return td.SmuggledGot{
 						Name: "ComputedEndDate",
 						Got:  sd.StartDate.Add(sd.Duration),
 					}
 				},
-				Between(
+				td.Between(
 					time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
 					time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC))))
 		fmt.Println(ok)
@@ -342,8 +342,8 @@ type. The fields-path `string` *fn* shortcut is not available with
 	}
 
 	// Do not check the struct itself, but its stringified form
-	ok := Cmp(t, gotTime,
-		Smuggle(func(s fmt.Stringer) string {
+	ok := td.Cmp(t, gotTime,
+		td.Smuggle(func(s fmt.Stringer) string {
 			return s.String()
 		},
 			"2018-05-23 12:13:14 +0000 UTC"))
@@ -352,8 +352,8 @@ type. The fields-path `string` *fn* shortcut is not available with
 	// If got does not implement the fmt.Stringer interface, it fails
 	// without calling the Smuggle func
 	type MyTime time.Time
-	ok = Cmp(t, MyTime(gotTime),
-		Smuggle(func(s fmt.Stringer) string {
+	ok = td.Cmp(t, MyTime(gotTime),
+		td.Smuggle(func(s fmt.Stringer) string {
 			fmt.Println("Smuggle func called!")
 			return s.String()
 		},
@@ -392,8 +392,8 @@ type. The fields-path `string` *fn* shortcut is not available with
 	}
 
 	// Want to check whether Num is between 100 and 200?
-	ok := Cmp(t, got,
-		Smuggle(
+	ok := td.Cmp(t, got,
+		td.Smuggle(
 			func(t *Transaction) (int, error) {
 				if t.Request.Body == nil ||
 					t.Request.Body.Value == nil {
@@ -404,16 +404,16 @@ type. The fields-path `string` *fn* shortcut is not available with
 				}
 				return 0, errors.New("Request.Body.Value isn't *ValueNum or nil")
 			},
-			Between(100, 200)))
+			td.Between(100, 200)))
 	fmt.Println("check Num by hand:", ok)
 
 	// Same, but automagically generated...
-	ok = Cmp(t, got, Smuggle("Request.Body.Value.Num", Between(100, 200)))
+	ok = td.Cmp(t, got, td.Smuggle("Request.Body.Value.Num", td.Between(100, 200)))
 	fmt.Println("check Num using a fields-path:", ok)
 
 	// And as Request is an anonymous field, can be simplified further
 	// as it can be omitted
-	ok = Cmp(t, got, Smuggle("Body.Value.Num", Between(100, 200)))
+	ok = td.Cmp(t, got, td.Smuggle("Body.Value.Num", td.Between(100, 200)))
 	fmt.Println("check Num using an other fields-path:", ok)
 
 	// Output:
@@ -431,7 +431,7 @@ func CmpSmuggle(t TestingT, got interface{}, fn interface{}, expectedValue inter
 CmpSmuggle is a shortcut for:
 
 ```go
-Cmp(t, got, Smuggle(fn, expectedValue), args...)
+td.Cmp(t, got, td.Smuggle(fn, expectedValue), args...)
 ```
 
 See above for details.
@@ -446,7 +446,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSmuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSmuggle).
+> See also [<i class='fas fa-book'></i> CmpSmuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSmuggle).
 
 ### Examples
 
@@ -455,35 +455,35 @@ reason of a potential failure.
 
 	got := int64(123)
 
-	ok := CmpSmuggle(t, got, func(n int64) int { return int(n) }, 123,
+	ok := td.CmpSmuggle(t, got, func(n int64) int { return int(n) }, 123,
 		"checks int64 got against an int value")
 	fmt.Println(ok)
 
-	ok = CmpSmuggle(t, "123", func(numStr string) (int, bool) {
+	ok = td.CmpSmuggle(t, "123", func(numStr string) (int, bool) {
 		n, err := strconv.Atoi(numStr)
 		return n, err == nil
-	}, Between(120, 130),
+	}, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
-	ok = CmpSmuggle(t, "123", func(numStr string) (int, bool, string) {
+	ok = td.CmpSmuggle(t, "123", func(numStr string) (int, bool, string) {
 		n, err := strconv.Atoi(numStr)
 		if err != nil {
 			return 0, false, "string must contain a number"
 		}
 		return n, true, ""
-	}, Between(120, 130),
+	}, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
-	ok = CmpSmuggle(t, "123", func(numStr string) (int, error) {
+	ok = td.CmpSmuggle(t, "123", func(numStr string) (int, error) {
 		return strconv.Atoi(numStr)
-	}, Between(120, 130),
+	}, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
 	// Short version :)
-	ok = CmpSmuggle(t, "123", strconv.Atoi, Between(120, 130),
+	ok = td.CmpSmuggle(t, "123", strconv.Atoi, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
@@ -501,7 +501,7 @@ reason of a potential failure.
 	// got is an int16 and Smuggle func input is an int64: it is OK
 	got := int(123)
 
-	ok := CmpSmuggle(t, got, func(n int64) uint32 { return uint32(n) }, uint32(123))
+	ok := td.CmpSmuggle(t, got, func(n int64) uint32 { return uint32(n) }, uint32(123))
 	fmt.Println("got int16(123) → smuggle via int64 → uint32(123):", ok)
 
 	// Output:
@@ -514,7 +514,7 @@ reason of a potential failure.
 	// Automatically json.Unmarshal to compare
 	got := []byte(`{"a":1,"b":2}`)
 
-	ok := CmpSmuggle(t, got, func(b json.RawMessage) (r map[string]int, err error) {
+	ok := td.CmpSmuggle(t, got, func(b json.RawMessage) (r map[string]int, err error) {
 		err = json.Unmarshal(b, &r)
 		return
 	}, map[string]int{
@@ -547,21 +547,21 @@ reason of a potential failure.
 
 		// Simplest way, but in case of Between() failure, error will be bound
 		// to DATA<smuggled>, not very clear...
-		ok := CmpSmuggle(t, got, func(sd StartDuration) time.Time {
+		ok := td.CmpSmuggle(t, got, func(sd StartDuration) time.Time {
 			return sd.StartDate.Add(sd.Duration)
-		}, Between(
+		}, td.Between(
 			time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
 			time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
 		fmt.Println(ok)
 
 		// Name the computed value "ComputedEndDate" to render a Between() failure
 		// more understandable, so error will be bound to DATA.ComputedEndDate
-		ok = CmpSmuggle(t, got, func(sd StartDuration) SmuggledGot {
-			return SmuggledGot{
+		ok = td.CmpSmuggle(t, got, func(sd StartDuration) td.SmuggledGot {
+			return td.SmuggledGot{
 				Name: "ComputedEndDate",
 				Got:  sd.StartDate.Add(sd.Duration),
 			}
-		}, Between(
+		}, td.Between(
 			time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
 			time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
 		fmt.Println(ok)
@@ -585,7 +585,7 @@ reason of a potential failure.
 	}
 
 	// Do not check the struct itself, but its stringified form
-	ok := CmpSmuggle(t, gotTime, func(s fmt.Stringer) string {
+	ok := td.CmpSmuggle(t, gotTime, func(s fmt.Stringer) string {
 		return s.String()
 	}, "2018-05-23 12:13:14 +0000 UTC")
 	fmt.Println("stringified time.Time OK:", ok)
@@ -593,7 +593,7 @@ reason of a potential failure.
 	// If got does not implement the fmt.Stringer interface, it fails
 	// without calling the Smuggle func
 	type MyTime time.Time
-	ok = CmpSmuggle(t, MyTime(gotTime), func(s fmt.Stringer) string {
+	ok = td.CmpSmuggle(t, MyTime(gotTime), func(s fmt.Stringer) string {
 		fmt.Println("Smuggle func called!")
 		return s.String()
 	}, "2018-05-23 12:13:14 +0000 UTC")
@@ -631,7 +631,7 @@ reason of a potential failure.
 	}
 
 	// Want to check whether Num is between 100 and 200?
-	ok := CmpSmuggle(t, got, func(t *Transaction) (int, error) {
+	ok := td.CmpSmuggle(t, got, func(t *Transaction) (int, error) {
 		if t.Request.Body == nil ||
 			t.Request.Body.Value == nil {
 			return 0, errors.New("Request.Body or Request.Body.Value is nil")
@@ -640,16 +640,16 @@ reason of a potential failure.
 			return v.Num, nil
 		}
 		return 0, errors.New("Request.Body.Value isn't *ValueNum or nil")
-	}, Between(100, 200))
+	}, td.Between(100, 200))
 	fmt.Println("check Num by hand:", ok)
 
 	// Same, but automagically generated...
-	ok = CmpSmuggle(t, got, "Request.Body.Value.Num", Between(100, 200))
+	ok = td.CmpSmuggle(t, got, "Request.Body.Value.Num", td.Between(100, 200))
 	fmt.Println("check Num using a fields-path:", ok)
 
 	// And as Request is an anonymous field, can be simplified further
 	// as it can be omitted
-	ok = CmpSmuggle(t, got, "Body.Value.Num", Between(100, 200))
+	ok = td.CmpSmuggle(t, got, "Body.Value.Num", td.Between(100, 200))
 	fmt.Println("check Num using an other fields-path:", ok)
 
 	// Output:
@@ -667,7 +667,7 @@ func (t *T) Smuggle(got interface{}, fn interface{}, expectedValue interface{}, 
 [`Smuggle`]({{< ref "Smuggle" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Smuggle(fn, expectedValue), args...)
+t.Cmp(got, td.Smuggle(fn, expectedValue), args...)
 ```
 
 See above for details.
@@ -682,12 +682,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Smuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Smuggle).
+> See also [<i class='fas fa-book'></i> T.Smuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Smuggle).
 
 ### Examples
 
 {{%expand "Convert example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := int64(123)
 
@@ -698,7 +698,7 @@ reason of a potential failure.
 	ok = t.Smuggle("123", func(numStr string) (int, bool) {
 		n, err := strconv.Atoi(numStr)
 		return n, err == nil
-	}, Between(120, 130),
+	}, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
@@ -708,18 +708,18 @@ reason of a potential failure.
 			return 0, false, "string must contain a number"
 		}
 		return n, true, ""
-	}, Between(120, 130),
+	}, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
 	ok = t.Smuggle("123", func(numStr string) (int, error) {
 		return strconv.Atoi(numStr)
-	}, Between(120, 130),
+	}, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
 	// Short version :)
-	ok = t.Smuggle("123", strconv.Atoi, Between(120, 130),
+	ok = t.Smuggle("123", strconv.Atoi, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
@@ -732,7 +732,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Lax example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	// got is an int16 and Smuggle func input is an int64: it is OK
 	got := int(123)
@@ -745,7 +745,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Auto_unmarshal example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	// Automatically json.Unmarshal to compare
 	got := []byte(`{"a":1,"b":2}`)
@@ -764,7 +764,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Complex example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	// No end date but a start date and a duration
 	type StartDuration struct {
@@ -785,19 +785,19 @@ reason of a potential failure.
 		// to DATA<smuggled>, not very clear...
 		ok := t.Smuggle(got, func(sd StartDuration) time.Time {
 			return sd.StartDate.Add(sd.Duration)
-		}, Between(
+		}, td.Between(
 			time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
 			time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
 		fmt.Println(ok)
 
 		// Name the computed value "ComputedEndDate" to render a Between() failure
 		// more understandable, so error will be bound to DATA.ComputedEndDate
-		ok = t.Smuggle(got, func(sd StartDuration) SmuggledGot {
-			return SmuggledGot{
+		ok = t.Smuggle(got, func(sd StartDuration) td.SmuggledGot {
+			return td.SmuggledGot{
 				Name: "ComputedEndDate",
 				Got:  sd.StartDate.Add(sd.Duration),
 			}
-		}, Between(
+		}, td.Between(
 			time.Date(2018, time.February, 17, 0, 0, 0, 0, time.UTC),
 			time.Date(2018, time.February, 19, 0, 0, 0, 0, time.UTC)))
 		fmt.Println(ok)
@@ -813,7 +813,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Interface example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	gotTime, err := time.Parse(time.RFC3339, "2018-05-23T12:13:14Z")
 	if err != nil {
@@ -841,7 +841,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Field_path example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type Body struct {
 		Name  string
@@ -876,16 +876,16 @@ reason of a potential failure.
 			return v.Num, nil
 		}
 		return 0, errors.New("Request.Body.Value isn't *ValueNum or nil")
-	}, Between(100, 200))
+	}, td.Between(100, 200))
 	fmt.Println("check Num by hand:", ok)
 
 	// Same, but automagically generated...
-	ok = t.Smuggle(got, "Request.Body.Value.Num", Between(100, 200))
+	ok = t.Smuggle(got, "Request.Body.Value.Num", td.Between(100, 200))
 	fmt.Println("check Num using a fields-path:", ok)
 
 	// And as Request is an anonymous field, can be simplified further
 	// as it can be omitted
-	ok = t.Smuggle(got, "Body.Value.Num", Between(100, 200))
+	ok = t.Smuggle(got, "Body.Value.Num", td.Between(100, 200))
 	fmt.Println("check Num using an other fields-path:", ok)
 
 	// Output:

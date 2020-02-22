@@ -19,7 +19,7 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> Array godoc](https://godoc.org/github.com/maxatome/go-testdeep#Array).
+> See also [<i class='fas fa-book'></i> Array godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Array).
 
 ### Examples
 
@@ -28,7 +28,8 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
 	got := [3]int{42, 58, 26}
 
-	ok := Cmp(t, got, Array([3]int{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok := td.Cmp(t, got,
+		td.Array([3]int{42}, td.ArrayEntries{1: 58, 2: td.Ignore()}),
 		"checks array %v", got)
 	fmt.Println(ok)
 
@@ -43,21 +44,23 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
 	got := MyArray{42, 58, 26}
 
-	ok := Cmp(t, got, Array(MyArray{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok := td.Cmp(t, got,
+		td.Array(MyArray{42}, td.ArrayEntries{1: 58, 2: td.Ignore()}),
 		"checks typed array %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got, Array(&MyArray{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok = td.Cmp(t, &got,
+		td.Array(&MyArray{42}, td.ArrayEntries{1: 58, 2: td.Ignore()}),
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		Array(&MyArray{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+	ok = td.Cmp(t, &got,
+		td.Array(&MyArray{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()}),
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		Array((*MyArray)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+	ok = td.Cmp(t, &got,
+		td.Array((*MyArray)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()}),
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
@@ -77,7 +80,7 @@ func CmpArray(t TestingT, got interface{}, model interface{}, expectedEntries Ar
 CmpArray is a shortcut for:
 
 ```go
-Cmp(t, got, Array(model, expectedEntries), args...)
+td.Cmp(t, got, td.Array(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -92,7 +95,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpArray godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpArray).
+> See also [<i class='fas fa-book'></i> CmpArray godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpArray).
 
 ### Examples
 
@@ -101,7 +104,7 @@ reason of a potential failure.
 
 	got := [3]int{42, 58, 26}
 
-	ok := CmpArray(t, got, [3]int{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok := td.CmpArray(t, got, [3]int{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks array %v", got)
 	fmt.Println(ok)
 
@@ -116,19 +119,19 @@ reason of a potential failure.
 
 	got := MyArray{42, 58, 26}
 
-	ok := CmpArray(t, got, MyArray{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok := td.CmpArray(t, got, MyArray{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks typed array %v", got)
 	fmt.Println(ok)
 
-	ok = CmpArray(t, &got, &MyArray{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok = td.CmpArray(t, &got, &MyArray{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
-	ok = CmpArray(t, &got, &MyArray{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = td.CmpArray(t, &got, &MyArray{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
-	ok = CmpArray(t, &got, (*MyArray)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = td.CmpArray(t, &got, (*MyArray)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
@@ -148,7 +151,7 @@ func (t *T) Array(got interface{}, model interface{}, expectedEntries ArrayEntri
 [`Array`]({{< ref "Array" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Array(model, expectedEntries), args...)
+t.Cmp(got, td.Array(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -163,16 +166,16 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Array godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Array).
+> See also [<i class='fas fa-book'></i> T.Array godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Array).
 
 ### Examples
 
 {{%expand "Array example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := [3]int{42, 58, 26}
 
-	ok := t.Array(got, [3]int{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok := t.Array(got, [3]int{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks array %v", got)
 	fmt.Println(ok)
 
@@ -181,25 +184,25 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "TypedArray example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MyArray [3]int
 
 	got := MyArray{42, 58, 26}
 
-	ok := t.Array(got, MyArray{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok := t.Array(got, MyArray{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks typed array %v", got)
 	fmt.Println(ok)
 
-	ok = t.Array(&got, &MyArray{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok = t.Array(&got, &MyArray{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
-	ok = t.Array(&got, &MyArray{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = t.Array(&got, &MyArray{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 
-	ok = t.Array(&got, (*MyArray)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = t.Array(&got, (*MyArray)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
 	fmt.Println(ok)
 

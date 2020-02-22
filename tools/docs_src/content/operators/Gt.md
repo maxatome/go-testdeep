@@ -16,7 +16,7 @@ same kind as the compared value if numeric, and the same type if
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *minExpectedValue*.
 
 
-> See also [<i class='fas fa-book'></i> Gt godoc](https://godoc.org/github.com/maxatome/go-testdeep#Gt).
+> See also [<i class='fas fa-book'></i> Gt godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Gt).
 
 ### Examples
 
@@ -25,10 +25,10 @@ same kind as the compared value if numeric, and the same type if
 
 	got := 156
 
-	ok := Cmp(t, got, Gt(155), "checks %v is > 155", got)
+	ok := td.Cmp(t, got, td.Gt(155), "checks %v is > 155", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Gt(156), "checks %v is > 156", got)
+	ok = td.Cmp(t, got, td.Gt(156), "checks %v is > 156", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -41,10 +41,10 @@ same kind as the compared value if numeric, and the same type if
 
 	got := "abc"
 
-	ok := Cmp(t, got, Gt("abb"), `checks "%v" is > "abb"`, got)
+	ok := td.Cmp(t, got, td.Gt("abb"), `checks "%v" is > "abb"`, got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Gt("abc"), `checks "%v" is > "abc"`, got)
+	ok = td.Cmp(t, got, td.Gt("abc"), `checks "%v" is > "abc"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -61,7 +61,7 @@ func CmpGt(t TestingT, got interface{}, minExpectedValue interface{}, args ...in
 CmpGt is a shortcut for:
 
 ```go
-Cmp(t, got, Gt(minExpectedValue), args...)
+td.Cmp(t, got, td.Gt(minExpectedValue), args...)
 ```
 
 See above for details.
@@ -76,7 +76,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpGt godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpGt).
+> See also [<i class='fas fa-book'></i> CmpGt godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpGt).
 
 ### Examples
 
@@ -85,10 +85,10 @@ reason of a potential failure.
 
 	got := 156
 
-	ok := CmpGt(t, got, 155, "checks %v is > 155", got)
+	ok := td.CmpGt(t, got, 155, "checks %v is > 155", got)
 	fmt.Println(ok)
 
-	ok = CmpGt(t, got, 156, "checks %v is > 156", got)
+	ok = td.CmpGt(t, got, 156, "checks %v is > 156", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -101,10 +101,10 @@ reason of a potential failure.
 
 	got := "abc"
 
-	ok := CmpGt(t, got, "abb", `checks "%v" is > "abb"`, got)
+	ok := td.CmpGt(t, got, "abb", `checks "%v" is > "abb"`, got)
 	fmt.Println(ok)
 
-	ok = CmpGt(t, got, "abc", `checks "%v" is > "abc"`, got)
+	ok = td.CmpGt(t, got, "abc", `checks "%v" is > "abc"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -121,7 +121,7 @@ func (t *T) Gt(got interface{}, minExpectedValue interface{}, args ...interface{
 [`Gt`]({{< ref "Gt" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Gt(minExpectedValue), args...)
+t.Cmp(got, td.Gt(minExpectedValue), args...)
 ```
 
 See above for details.
@@ -136,12 +136,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Gt godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Gt).
+> See also [<i class='fas fa-book'></i> T.Gt godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Gt).
 
 ### Examples
 
 {{%expand "Int example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := 156
 
@@ -157,7 +157,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "String example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "abc"
 

@@ -231,13 +231,13 @@ The following operators are smuggler ones:
 [`Values`]({{< ref "Values" >}})
 : checks values of a map
 
-[`T`]: https://godoc.org/github.com/maxatome/go-testdeep#T
-[`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep#TestDeep
-[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep#Cmp
+[`T`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T
+[`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep/td#TestDeep
+[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp
 
-[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp
+[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/td/helpers/tdhttp
 
-[`BeLax` config flag]: https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig
+[`BeLax` config flag]: https://godoc.org/github.com/maxatome/go-testdeep/td#ContextConfig
 [`error`]: https://golang.org/pkg/builtin/#error
 
 
@@ -419,8 +419,8 @@ The following operators are smuggler ones:
 [`T.Zero`]: {{< ref "Zero#tzero-shortcut" >}}
 <!-- smugglers:end -->
 
-[`T.Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Cmp
-[`T.CmpLax`]: https://godoc.org/github.com/maxatome/go-testdeep#T.CmpLax
+[`T.Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.Cmp
+[`T.CmpLax`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.CmpLax
 
 
 ## `TypeBehind` method

@@ -11,7 +11,7 @@ func None(notExpectedValues ...interface{}) TestDeep
 values. During a match, none of them have to match to succeed.
 
 
-> See also [<i class='fas fa-book'></i> None godoc](https://godoc.org/github.com/maxatome/go-testdeep#None).
+> See also [<i class='fas fa-book'></i> None godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#None).
 
 ### Examples
 
@@ -20,19 +20,19 @@ values. During a match, none of them have to match to succeed.
 
 	got := 18
 
-	ok := Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)),
+	ok := td.Cmp(t, got, td.None(0, 10, 20, 30, td.Between(100, 199)),
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 20
 
-	ok = Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)),
+	ok = td.Cmp(t, got, td.None(0, 10, 20, 30, td.Between(100, 199)),
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 142
 
-	ok = Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)),
+	ok = td.Cmp(t, got, td.None(0, 10, 20, 30, td.Between(100, 199)),
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
@@ -51,7 +51,7 @@ func CmpNone(t TestingT, got interface{}, notExpectedValues []interface{}, args 
 CmpNone is a shortcut for:
 
 ```go
-Cmp(t, got, None(notExpectedValues...), args...)
+td.Cmp(t, got, td.None(notExpectedValues...), args...)
 ```
 
 See above for details.
@@ -66,7 +66,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpNone godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNone).
+> See also [<i class='fas fa-book'></i> CmpNone godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNone).
 
 ### Examples
 
@@ -75,19 +75,19 @@ reason of a potential failure.
 
 	got := 18
 
-	ok := CmpNone(t, got, []interface{}{0, 10, 20, 30, Between(100, 199)},
+	ok := td.CmpNone(t, got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 20
 
-	ok = CmpNone(t, got, []interface{}{0, 10, 20, 30, Between(100, 199)},
+	ok = td.CmpNone(t, got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 142
 
-	ok = CmpNone(t, got, []interface{}{0, 10, 20, 30, Between(100, 199)},
+	ok = td.CmpNone(t, got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
@@ -106,7 +106,7 @@ func (t *T) None(got interface{}, notExpectedValues []interface{}, args ...inter
 [`None`]({{< ref "None" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, None(notExpectedValues...), args...)
+t.Cmp(got, td.None(notExpectedValues...), args...)
 ```
 
 See above for details.
@@ -121,28 +121,28 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.None godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.None).
+> See also [<i class='fas fa-book'></i> T.None godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.None).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := 18
 
-	ok := t.None(got, []interface{}{0, 10, 20, 30, Between(100, 199)},
+	ok := t.None(got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 20
 
-	ok = t.None(got, []interface{}{0, 10, 20, 30, Between(100, 199)},
+	ok = t.None(got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 142
 
-	ok = t.None(got, []interface{}{0, 10, 20, 30, Between(100, 199)},
+	ok = t.None(got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 

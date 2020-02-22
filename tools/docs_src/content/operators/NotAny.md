@@ -15,8 +15,10 @@ Cmp(t, []int{1}, NotAny(1, 2, 3)) // fails
 Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds
 ```
 
+Beware that [`NotAny(…)`]({{< ref "NotAny" >}}) is not equivalent to [`Not(Any(…)`]({{< ref "Not" >}})).
 
-> See also [<i class='fas fa-book'></i> NotAny godoc](https://godoc.org/github.com/maxatome/go-testdeep#NotAny).
+
+> See also [<i class='fas fa-book'></i> NotAny godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#NotAny).
 
 ### Examples
 
@@ -25,11 +27,11 @@ Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds
 
 	got := []int{4, 5, 9, 42}
 
-	ok := Cmp(t, got, NotAny(3, 6, 8, 41, 43),
+	ok := td.Cmp(t, got, td.NotAny(3, 6, 8, 41, 43),
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, NotAny(3, 6, 8, 42, 43),
+	ok = td.Cmp(t, got, td.NotAny(3, 6, 8, 42, 43),
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
@@ -47,7 +49,7 @@ func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ..
 CmpNotAny is a shortcut for:
 
 ```go
-Cmp(t, got, NotAny(expectedItems...), args...)
+td.Cmp(t, got, td.NotAny(expectedItems...), args...)
 ```
 
 See above for details.
@@ -62,7 +64,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpNotAny godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotAny).
+> See also [<i class='fas fa-book'></i> CmpNotAny godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNotAny).
 
 ### Examples
 
@@ -71,11 +73,11 @@ reason of a potential failure.
 
 	got := []int{4, 5, 9, 42}
 
-	ok := CmpNotAny(t, got, []interface{}{3, 6, 8, 41, 43},
+	ok := td.CmpNotAny(t, got, []interface{}{3, 6, 8, 41, 43},
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
-	ok = CmpNotAny(t, got, []interface{}{3, 6, 8, 42, 43},
+	ok = td.CmpNotAny(t, got, []interface{}{3, 6, 8, 42, 43},
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
@@ -93,7 +95,7 @@ func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interfa
 [`NotAny`]({{< ref "NotAny" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, NotAny(expectedItems...), args...)
+t.Cmp(got, td.NotAny(expectedItems...), args...)
 ```
 
 See above for details.
@@ -108,12 +110,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.NotAny godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.NotAny).
+> See also [<i class='fas fa-book'></i> T.NotAny godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.NotAny).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{4, 5, 9, 42}
 

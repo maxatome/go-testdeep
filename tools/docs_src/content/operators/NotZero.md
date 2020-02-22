@@ -25,47 +25,47 @@ Cmp(t, &AnyStruct{}, Ptr(NotZero())) // is false
 ```
 
 
-> See also [<i class='fas fa-book'></i> NotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep#NotZero).
+> See also [<i class='fas fa-book'></i> NotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#NotZero).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := Cmp(t, 0, NotZero()) // fails
+	ok := td.Cmp(t, 0, td.NotZero()) // fails
 	fmt.Println(ok)
 
-	ok = Cmp(t, float64(0), NotZero()) // fails
+	ok = td.Cmp(t, float64(0), td.NotZero()) // fails
 	fmt.Println(ok)
 
-	ok = Cmp(t, 12, NotZero())
+	ok = td.Cmp(t, 12, td.NotZero())
 	fmt.Println(ok)
 
-	ok = Cmp(t, (map[string]int)(nil), NotZero()) // fails, as nil
+	ok = td.Cmp(t, (map[string]int)(nil), td.NotZero()) // fails, as nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, map[string]int{}, NotZero()) // succeeds, as not nil
+	ok = td.Cmp(t, map[string]int{}, td.NotZero()) // succeeds, as not nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, ([]int)(nil), NotZero()) // fails, as nil
+	ok = td.Cmp(t, ([]int)(nil), td.NotZero()) // fails, as nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, []int{}, NotZero()) // succeeds, as not nil
+	ok = td.Cmp(t, []int{}, td.NotZero()) // succeeds, as not nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, [3]int{}, NotZero()) // fails
+	ok = td.Cmp(t, [3]int{}, td.NotZero()) // fails
 	fmt.Println(ok)
 
-	ok = Cmp(t, [3]int{0, 1}, NotZero()) // succeeds, DATA[1] is not 0
+	ok = td.Cmp(t, [3]int{0, 1}, td.NotZero()) // succeeds, DATA[1] is not 0
 	fmt.Println(ok)
 
-	ok = Cmp(t, bytes.Buffer{}, NotZero()) // fails
+	ok = td.Cmp(t, bytes.Buffer{}, td.NotZero()) // fails
 	fmt.Println(ok)
 
-	ok = Cmp(t, &bytes.Buffer{}, NotZero()) // succeeds, as pointer not nil
+	ok = td.Cmp(t, &bytes.Buffer{}, td.NotZero()) // succeeds, as pointer not nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	ok = td.Cmp(t, &bytes.Buffer{}, td.Ptr(td.NotZero())) // fails as deref by Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -92,7 +92,7 @@ func CmpNotZero(t TestingT, got interface{}, args ...interface{}) bool
 CmpNotZero is a shortcut for:
 
 ```go
-Cmp(t, got, NotZero(), args...)
+td.Cmp(t, got, td.NotZero(), args...)
 ```
 
 See above for details.
@@ -107,47 +107,47 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpNotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotZero).
+> See also [<i class='fas fa-book'></i> CmpNotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNotZero).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := CmpNotZero(t, 0) // fails
+	ok := td.CmpNotZero(t, 0) // fails
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, float64(0)) // fails
+	ok = td.CmpNotZero(t, float64(0)) // fails
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, 12)
+	ok = td.CmpNotZero(t, 12)
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, (map[string]int)(nil)) // fails, as nil
+	ok = td.CmpNotZero(t, (map[string]int)(nil)) // fails, as nil
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, map[string]int{}) // succeeds, as not nil
+	ok = td.CmpNotZero(t, map[string]int{}) // succeeds, as not nil
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, ([]int)(nil)) // fails, as nil
+	ok = td.CmpNotZero(t, ([]int)(nil)) // fails, as nil
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, []int{}) // succeeds, as not nil
+	ok = td.CmpNotZero(t, []int{}) // succeeds, as not nil
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, [3]int{}) // fails
+	ok = td.CmpNotZero(t, [3]int{}) // fails
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, [3]int{0, 1}) // succeeds, DATA[1] is not 0
+	ok = td.CmpNotZero(t, [3]int{0, 1}) // succeeds, DATA[1] is not 0
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, bytes.Buffer{}) // fails
+	ok = td.CmpNotZero(t, bytes.Buffer{}) // fails
 	fmt.Println(ok)
 
-	ok = CmpNotZero(t, &bytes.Buffer{}) // succeeds, as pointer not nil
+	ok = td.CmpNotZero(t, &bytes.Buffer{}) // succeeds, as pointer not nil
 	fmt.Println(ok)
 
-	ok = Cmp(t, &bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	ok = td.Cmp(t, &bytes.Buffer{}, td.Ptr(td.NotZero())) // fails as deref by Ptr()
 	fmt.Println(ok)
 
 	// Output:
@@ -174,7 +174,7 @@ func (t *T) NotZero(got interface{}, args ...interface{}) bool
 [`NotZero`]({{< ref "NotZero" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, NotZero(), args...)
+t.Cmp(got, td.NotZero(), args...)
 ```
 
 See above for details.
@@ -189,12 +189,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.NotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.NotZero).
+> See also [<i class='fas fa-book'></i> T.NotZero godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.NotZero).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	ok := t.NotZero(0) // fails
 	fmt.Println(ok)
@@ -229,7 +229,7 @@ reason of a potential failure.
 	ok = t.NotZero(&bytes.Buffer{}) // succeeds, as pointer not nil
 	fmt.Println(ok)
 
-	ok = t.Cmp(&bytes.Buffer{}, Ptr(NotZero())) // fails as deref by Ptr()
+	ok = t.Cmp(&bytes.Buffer{}, td.Ptr(td.NotZero())) // fails as deref by Ptr()
 	fmt.Println(ok)
 
 	// Output:

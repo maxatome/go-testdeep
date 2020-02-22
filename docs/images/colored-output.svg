@@ -14,8 +14,8 @@
    viewBox="0 0 205.53027 56.126606"
    version="1.1"
    id="svg102"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="colored-newly1.svg">
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="colored-output.svg">
   <defs
      id="defs96" />
   <sodipodi:namedview
@@ -38,7 +38,7 @@
      inkscape:window-width="1364"
      inkscape:window-height="740"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="1080"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata99">
@@ -48,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -114,7 +114,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#00ff00;stroke-width:0.26458332px"
          id="tspan901"><tspan
    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:monospace;-inkscape-font-specification:'monospace Bold';fill:#00ff00;stroke-width:0.26458332px"
-   id="tspan106">     expected: </tspan>42</tspan><tspan
+   id="tspan106">     expected: </tspan>40 ≤ got ≤ 45</tspan><tspan
          sodipodi:role="line"
          x="-30.864933"
          y="118.93869"

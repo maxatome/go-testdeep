@@ -28,7 +28,7 @@
       <description>func All(expectedValues ...interface{}) TestDeep All operator compares data against several expected values. During a match, all of them have to match to succeed.
 TypeBehind method can return a non-nil reflect.Type if all items known non-interface types are equal, or if only interface types are found (mostly issued from Isa()) and they are equal.
  See also All godoc.
- Examples   Base example   t := &amp;amp;testing.T{} got := &amp;#34;foo/bar&amp;#34; // Checks got string against: 	// &amp;#34;o/b&amp;#34; regexp *AND* &amp;#34;bar&amp;#34; suffix *AND* exact &amp;#34;foo/bar&amp;#34; string 	ok := Cmp(t, got, All(Re(&amp;#34;o/b&amp;#34;), HasSuffix(&amp;#34;bar&amp;#34;), &amp;#34;foo/bar&amp;#34;), &amp;#34;checks value %s&amp;#34;, got) fmt.</description>
+ Examples   Base example   t := &amp;amp;testing.T{} got := &amp;#34;foo/bar&amp;#34; // Checks got string against: 	// &amp;#34;o/b&amp;#34; regexp *AND* &amp;#34;bar&amp;#34; suffix *AND* exact &amp;#34;foo/bar&amp;#34; string 	ok := td.</description>
     </item>
     
     <item>
@@ -64,7 +64,7 @@ TypeBehind method returns the reflect.Type of model.
       <guid>https://go-testdeep.zetta.rocks/operators/arrayeach/</guid>
       <description>func ArrayEach(expectedValue interface{}) TestDeep ArrayEach operator has to be applied on arrays or slices or on pointers on array/slice. It compares each item of data array/slice against expectedValue. During a match, all items have to match to succeed.
  See also ArrayEach godoc.
- Examples    Array example   t := &amp;amp;testing.T{} got := [3]int{42, 58, 26} ok := Cmp(t, got, ArrayEach(Between(25, 60)), &amp;#34;checks each item of array %v is in [25 .</description>
+ Examples    Array example   t := &amp;amp;testing.T{} got := [3]int{42, 58, 26} ok := td.Cmp(t, got, td.ArrayEach(td.Between(25, 60)), &amp;#34;checks each item of array %v is in [25 .</description>
     </item>
     
     <item>
@@ -164,7 +164,7 @@ Note that the compared data can be a pointer (of pointer of pointer etc.) on an 
       <description>func Gt(minExpectedValue interface{}) TestDeep Gt operator checks that data is greater than minExpectedValue. minExpectedValue can be any numeric or time.Time (or assignable) value. minExpectedValue must be the same kind as the compared value if numeric, and the same type if time.Time (or assignable).
 TypeBehind method returns the reflect.Type of minExpectedValue.
  See also Gt godoc.
- Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := Cmp(t, got, Gt(155), &amp;#34;checks %v is &amp;gt; 155&amp;#34;, got) fmt.</description>
+ Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := td.</description>
     </item>
     
     <item>
@@ -176,7 +176,7 @@ TypeBehind method returns the reflect.Type of minExpectedValue.
       <description>func Gte(minExpectedValue interface{}) TestDeep Gte operator checks that data is greater or equal than minExpectedValue. minExpectedValue can be any numeric or time.Time (or assignable) value. minExpectedValue must be the same kind as the compared value if numeric, and the same type if time.Time (or assignable).
 TypeBehind method returns the reflect.Type of minExpectedValue.
  See also Gte godoc.
- Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := Cmp(t, got, Gte(156), &amp;#34;checks %v is ≥ 156&amp;#34;, got) fmt.</description>
+ Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := td.</description>
     </item>
     
     <item>
@@ -187,7 +187,7 @@ TypeBehind method returns the reflect.Type of minExpectedValue.
       <guid>https://go-testdeep.zetta.rocks/operators/hasprefix/</guid>
       <description>func HasPrefix(expected string) TestDeep HasPrefix operator allows to compare the prefix of a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
 type Foobar string Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), HasPrefix(&amp;#34;foo&amp;#34;)) // succeeds  err := errors.New(&amp;#34;error!&amp;#34;) Cmp(t, err, HasPrefix(&amp;#34;err&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) Cmp(t, bstr, HasPrefix(&amp;#34;fmt&amp;#34;)) // succeeds  See also HasPrefix godoc.
- Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := Cmp(t, got, HasPrefix(&amp;#34;foo&amp;#34;), &amp;#34;checks %s&amp;#34;, got) fmt.</description>
+ Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := td.</description>
     </item>
     
     <item>
@@ -198,7 +198,7 @@ type Foobar string Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), HasPrefix(&amp;#34;f
       <guid>https://go-testdeep.zetta.rocks/operators/hassuffix/</guid>
       <description>func HasSuffix(expected string) TestDeep HasSuffix operator allows to compare the suffix of a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
 type Foobar string Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), HasSuffix(&amp;#34;bar&amp;#34;)) // succeeds  err := errors.New(&amp;#34;error!&amp;#34;) Cmp(t, err, HasSuffix(&amp;#34;!&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) Cmp(t, bstr, HasSuffix(&amp;#34;!&amp;#34;)) // succeeds  See also HasSuffix godoc.
- Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := Cmp(t, got, HasSuffix(&amp;#34;bar&amp;#34;), &amp;#34;checks %s&amp;#34;, got) fmt.</description>
+ Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := td.</description>
     </item>
     
     <item>
@@ -209,7 +209,7 @@ type Foobar string Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), HasSuffix(&amp;#34;b
       <guid>https://go-testdeep.zetta.rocks/operators/ignore/</guid>
       <description>func Ignore() TestDeep Ignore operator is always true, whatever data is. It is useful when comparing a slice and wanting to ignore some indexes, for example.
  See also Ignore godoc.
- Examples   Base example   t := &amp;amp;testing.T{} ok := Cmp(t, []int{1, 2, 3}, Slice([]int{}, ArrayEntries{ 0: 1, 1: Ignore(), // do not care about this entry 	2: 3, })) fmt.Println(ok) // Output: 	// true     </description>
+ Examples   Base example   t := &amp;amp;testing.T{} ok := td.Cmp(t, []int{1, 2, 3}, td.Slice([]int{}, td.ArrayEntries{ 0: 1, 1: td.Ignore(), // do not care about this entry 	2: 3, })) fmt.Println(ok) // Output: 	// true     </description>
     </item>
     
     <item>
@@ -245,7 +245,7 @@ Isa((*fmt.Stringer)(nil)) Of course, in the latter case, if data type is *fmt.</
 val can be a slice of items of the same type as the map keys:
 Keys([]string{&amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;, &amp;#34;c&amp;#34;}) as well as an other operator:
 Keys(Bag(&amp;#34;c&amp;#34;, &amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;))  See also Keys godoc.
- Examples   Base example   t := &amp;amp;testing.T{} got := map[string]int{&amp;#34;foo&amp;#34;: 1, &amp;#34;bar&amp;#34;: 2, &amp;#34;zip&amp;#34;: 3} // Keys tests keys in an ordered manner 	ok := Cmp(t, got, Keys([]string{&amp;#34;bar&amp;#34;, &amp;#34;foo&amp;#34;, &amp;#34;zip&amp;#34;})) fmt.</description>
+ Examples   Base example   t := &amp;amp;testing.T{} got := map[string]int{&amp;#34;foo&amp;#34;: 1, &amp;#34;bar&amp;#34;: 2, &amp;#34;zip&amp;#34;: 3} // Keys tests keys in an ordered manner 	ok := td.</description>
     </item>
     
     <item>
@@ -281,7 +281,7 @@ Cmp(t, gotSlice, Len(Between(3, 4)))  See also Len godoc.
       <description>func Lt(maxExpectedValue interface{}) TestDeep Lt operator checks that data is lesser than maxExpectedValue. maxExpectedValue can be any numeric or time.Time (or assignable) value. maxExpectedValue must be the same kind as the compared value if numeric, and the same type if time.Time (or assignable).
 TypeBehind method returns the reflect.Type of maxExpectedValue.
  See also Lt godoc.
- Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := Cmp(t, got, Lt(157), &amp;#34;checks %v is &amp;lt; 157&amp;#34;, got) fmt.</description>
+ Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := td.</description>
     </item>
     
     <item>
@@ -293,7 +293,7 @@ TypeBehind method returns the reflect.Type of maxExpectedValue.
       <description>func Lte(maxExpectedValue interface{}) TestDeep Lte operator checks that data is lesser or equal than maxExpectedValue. maxExpectedValue can be any numeric or time.Time (or assignable) value. maxExpectedValue must be the same kind as the compared value if numeric, and the same type if time.Time (or assignable).
 TypeBehind method returns the reflect.Type of maxExpectedValue.
  See also Lte godoc.
- Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := Cmp(t, got, Lte(156), &amp;#34;checks %v is ≤ 156&amp;#34;, got) fmt.</description>
+ Examples    Int example   t := &amp;amp;testing.T{} got := 156 ok := td.</description>
     </item>
     
     <item>
@@ -316,7 +316,7 @@ During a match, all expected entries must be found and all data entries must be 
       <guid>https://go-testdeep.zetta.rocks/operators/mapeach/</guid>
       <description>func MapEach(expectedValue interface{}) TestDeep MapEach operator has to be applied on maps. It compares each value of data map against expected value. During a match, all values have to match to succeed.
  See also MapEach godoc.
- Examples    Map example   t := &amp;amp;testing.T{} got := map[string]int{&amp;#34;foo&amp;#34;: 12, &amp;#34;bar&amp;#34;: 42, &amp;#34;zip&amp;#34;: 89} ok := Cmp(t, got, MapEach(Between(10, 90)), &amp;#34;checks each value of map %v is in [10 .</description>
+ Examples    Map example   t := &amp;amp;testing.T{} got := map[string]int{&amp;#34;foo&amp;#34;: 12, &amp;#34;bar&amp;#34;: 42, &amp;#34;zip&amp;#34;: 89} ok := td.Cmp(t, got, td.MapEach(td.Between(10, 90)), &amp;#34;checks each value of map %v is in [10 .</description>
     </item>
     
     <item>
@@ -328,7 +328,7 @@ During a match, all expected entries must be found and all data entries must be 
       <description>func N(num interface{}, tolerance ...interface{}) TestDeep N operator compares a numeric data against num ± tolerance. If tolerance is missing, it defaults to 0. num and tolerance must be the same kind as the compared value.
 TypeBehind method returns the reflect.Type of num.
  See also N godoc.
- Examples   Base example   t := &amp;amp;testing.T{} got := 1.12345 ok := Cmp(t, got, N(1.1234, 0.00006), &amp;#34;checks %v = 1.</description>
+ Examples   Base example   t := &amp;amp;testing.T{} got := 1.12345 ok := td.Cmp(t, got, td.N(1.1234, 0.00006), &amp;#34;checks %v = 1.</description>
     </item>
     
     <item>
@@ -339,7 +339,7 @@ TypeBehind method returns the reflect.Type of num.
       <guid>https://go-testdeep.zetta.rocks/operators/nan/</guid>
       <description>func NaN() TestDeep NaN operator checks that data is a float and is not-a-number.
  See also NaN godoc.
- Examples    Float32 example   t := &amp;amp;testing.T{} got := float32(math.NaN()) ok := Cmp(t, got, NaN(), &amp;#34;checks %v is not-a-number&amp;#34;, got) fmt.Println(&amp;#34;float32(math.NaN()) is float32 not-a-number:&amp;#34;, ok) got = 12 ok = Cmp(t, got, NaN(), &amp;#34;checks %v is not-a-number&amp;#34;, got) fmt.Println(&amp;#34;float32(12) is float32 not-a-number:&amp;#34;, ok) // Output: 	// float32(math.</description>
+ Examples    Float32 example   t := &amp;amp;testing.T{} got := float32(math.NaN()) ok := td.Cmp(t, got, td.NaN(), &amp;#34;checks %v is not-a-number&amp;#34;, got) fmt.Println(&amp;#34;float32(math.NaN()) is float32 not-a-number:&amp;#34;, ok) got = 12 ok = td.Cmp(t, got, td.NaN(), &amp;#34;checks %v is not-a-number&amp;#34;, got) fmt.Println(&amp;#34;float32(12) is float32 not-a-number:&amp;#34;, ok) // Output: 	// float32(math.</description>
     </item>
     
     <item>
@@ -350,7 +350,7 @@ TypeBehind method returns the reflect.Type of num.
       <guid>https://go-testdeep.zetta.rocks/operators/nil/</guid>
       <description>func Nil() TestDeep Nil operator checks that data is nil (or is a non-nil interface, but containing a nil pointer.)
  See also Nil godoc.
- Examples   Base example   t := &amp;amp;testing.T{} var got fmt.Stringer // interface  // nil value can be compared directly with nil, no need of Nil() here 	ok := Cmp(t, got, nil) fmt.Println(ok) // But it works with Nil() anyway 	ok = Cmp(t, got, Nil()) fmt.</description>
+ Examples   Base example   t := &amp;amp;testing.T{} var got fmt.Stringer // interface  // nil value can be compared directly with nil, no need of Nil() here 	ok := td.Cmp(t, got, nil) fmt.Println(ok) // But it works with Nil() anyway 	ok = td.</description>
     </item>
     
     <item>
@@ -361,7 +361,7 @@ TypeBehind method returns the reflect.Type of num.
       <guid>https://go-testdeep.zetta.rocks/operators/none/</guid>
       <description>func None(notExpectedValues ...interface{}) TestDeep None operator compares data against several not expected values. During a match, none of them have to match to succeed.
  See also None godoc.
- Examples   Base example   t := &amp;amp;testing.T{} got := 18 ok := Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)), &amp;#34;checks %v is non-null, and ≠ 10, 20 &amp;amp; 30, and not in [100-199]&amp;#34;, got) fmt.Println(ok) got = 20 ok = Cmp(t, got, None(0, 10, 20, 30, Between(100, 199)), &amp;#34;checks %v is non-null, and ≠ 10, 20 &amp;amp; 30, and not in [100-199]&amp;#34;, got) fmt.</description>
+ Examples   Base example   t := &amp;amp;testing.T{} got := 18 ok := td.Cmp(t, got, td.None(0, 10, 20, 30, td.Between(100, 199)), &amp;#34;checks %v is non-null, and ≠ 10, 20 &amp;amp; 30, and not in [100-199]&amp;#34;, got) fmt.Println(ok) got = 20 ok = td.</description>
     </item>
     
     <item>
@@ -373,7 +373,7 @@ TypeBehind method returns the reflect.Type of num.
       <description>func Not(notExpected interface{}) TestDeep Not operator compares data against the not expected value. During a match, it must not match to succeed.
 Not is the same operator as None() with only one argument. It is provided as a more readable function when only one argument is needed.
  See also Not godoc.
- Examples   Base example   t := &amp;amp;testing.T{} got := 42 ok := Cmp(t, got, Not(0), &amp;#34;checks %v is non-null&amp;#34;, got) fmt.</description>
+ Examples   Base example   t := &amp;amp;testing.T{} got := 42 ok := td.Cmp(t, got, td.</description>
     </item>
     
     <item>
@@ -383,8 +383,9 @@ Not is the same operator as None() with only one argument. It is provided as a m
       
       <guid>https://go-testdeep.zetta.rocks/operators/notany/</guid>
       <description>func NotAny(expectedItems ...interface{}) TestDeep NotAny operator checks that the contents of an array or a slice (or a pointer on array/slice) does not contain any of expectedItems.
-Cmp(t, []int{1}, NotAny(1, 2, 3)) // fails Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds  See also NotAny godoc.
- Examples   Base example   t := &amp;amp;testing.T{} got := []int{4, 5, 9, 42} ok := Cmp(t, got, NotAny(3, 6, 8, 41, 43), &amp;#34;checks %v contains no item listed in NotAny()&amp;#34;, got) fmt.</description>
+Cmp(t, []int{1}, NotAny(1, 2, 3)) // fails Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds Beware that NotAny(…) is not equivalent to Not(Any(…)).
+ See also NotAny godoc.
+ Examples   Base example   t := &amp;amp;testing.T{} got := []int{4, 5, 9, 42} ok := td.</description>
     </item>
     
     <item>
@@ -407,7 +408,7 @@ Note that the compared data can be a pointer (of pointer of pointer etc.) on an 
       <guid>https://go-testdeep.zetta.rocks/operators/notnan/</guid>
       <description>func NotNaN() TestDeep NotNaN operator checks that data is a float and is not not-a-number.
  See also NotNaN godoc.
- Examples    Float32 example   t := &amp;amp;testing.T{} got := float32(math.NaN()) ok := Cmp(t, got, NotNaN(), &amp;#34;checks %v is not-a-number&amp;#34;, got) fmt.Println(&amp;#34;float32(math.NaN()) is NOT float32 not-a-number:&amp;#34;, ok) got = 12 ok = Cmp(t, got, NotNaN(), &amp;#34;checks %v is not-a-number&amp;#34;, got) fmt.Println(&amp;#34;float32(12) is NOT float32 not-a-number:&amp;#34;, ok) // Output: 	// float32(math.</description>
+ Examples    Float32 example   t := &amp;amp;testing.T{} got := float32(math.NaN()) ok := td.Cmp(t, got, td.NotNaN(), &amp;#34;checks %v is not-a-number&amp;#34;, got) fmt.Println(&amp;#34;float32(math.NaN()) is NOT float32 not-a-number:&amp;#34;, ok) got = 12 ok = td.Cmp(t, got, td.NotNaN(), &amp;#34;checks %v is not-a-number&amp;#34;, got) fmt.Println(&amp;#34;float32(12) is NOT float32 not-a-number:&amp;#34;, ok) // Output: 	// float32(math.</description>
     </item>
     
     <item>
@@ -418,7 +419,7 @@ Note that the compared data can be a pointer (of pointer of pointer etc.) on an 
       <guid>https://go-testdeep.zetta.rocks/operators/notnil/</guid>
       <description>func NotNil() TestDeep NotNil operator checks that data is not nil (or is a non-nil interface, containing a non-nil pointer.)
  See also NotNil godoc.
- Examples   Base example   t := &amp;amp;testing.T{} var got fmt.Stringer = &amp;amp;bytes.Buffer{} // nil value can be compared directly with Not(nil), no need of NotNil() here 	ok := Cmp(t, got, Not(nil)) fmt.Println(ok) // But it works with NotNil() anyway 	ok = Cmp(t, got, NotNil()) fmt.</description>
+ Examples   Base example   t := &amp;amp;testing.T{} var got fmt.Stringer = &amp;amp;bytes.Buffer{} // nil value can be compared directly with Not(nil), no need of NotNil() here 	ok := td.Cmp(t, got, td.Not(nil)) fmt.Println(ok) // But it works with NotNil() anyway 	ok = td.</description>
     </item>
     
     <item>
@@ -542,7 +543,7 @@ td.SStruct(Person{Name: &amp;#34;Bob&amp;#34;}, td.</description>
       <guid>https://go-testdeep.zetta.rocks/operators/string/</guid>
       <description>func String(expected string) TestDeep String operator allows to compare a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
 err := errors.New(&amp;#34;error!&amp;#34;) Cmp(t, err, String(&amp;#34;error!&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) Cmp(t, bstr, String(&amp;#34;fmt.Stringer!&amp;#34;)) // succeeds  See also String godoc.
- Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := Cmp(t, got, String(&amp;#34;foobar&amp;#34;), &amp;#34;checks %s&amp;#34;, got) fmt.Println(ok) // Output: 	// true       Stringer example   t := &amp;amp;testing.</description>
+ Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := td.Cmp(t, got, td.String(&amp;#34;foobar&amp;#34;), &amp;#34;checks %s&amp;#34;, got) fmt.Println(ok) // Output: 	// true       Stringer example   t := &amp;amp;testing.</description>
     </item>
     
     <item>
@@ -686,7 +687,7 @@ import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; ) func TestCreateRecor
 val can be a slice of items of the same type as the map values:
 Values([]string{&amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;, &amp;#34;c&amp;#34;}) as well as an other operator:
 Values(Bag(&amp;#34;c&amp;#34;, &amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;))  See also Values godoc.
- Examples   Base example   t := &amp;amp;testing.T{} got := map[string]int{&amp;#34;foo&amp;#34;: 1, &amp;#34;bar&amp;#34;: 2, &amp;#34;zip&amp;#34;: 3} // Values tests values in an ordered manner 	ok := Cmp(t, got, Values([]int{1, 2, 3})) fmt.</description>
+ Examples   Base example   t := &amp;amp;testing.T{} got := map[string]int{&amp;#34;foo&amp;#34;: 1, &amp;#34;bar&amp;#34;: 2, &amp;#34;zip&amp;#34;: 3} // Values tests values in an ordered manner 	ok := td.</description>
     </item>
     
     <item>
@@ -701,53 +702,53 @@ Cmp(t, AnyStruct{}, Zero()) // is true Cmp(t, &amp;amp;AnyStruct{}, Zero()) // i
     </item>
     
     <item>
-      <title>Basic testdeep approach</title>
+      <title>Basic go-testdeep approach</title>
       <link>https://go-testdeep.zetta.rocks/example/basic-testdeep/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/example/basic-testdeep/</guid>
-      <description>testdeep package, via its Cmp* functions, handles the tests and all the error message boiler plate. Let&amp;rsquo;s do it:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record.Id, td.NotZero(), &amp;#34;Id initialized&amp;#34;) td.Cmp(t, record.Name, &amp;#34;Bob&amp;#34;) td.Cmp(t, record.Age, 23) td.Cmp(t, record.CreatedAt, td.Between(before, time.Now())) } } As we cannot guess the Id field value before its creation, we use the NotZero operator to check it is set by CreateRecord() call.</description>
+      <description>td package, via its Cmp* functions, handles the tests and all the error message boiler plate. Let&amp;rsquo;s do it:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record.Id, td.NotZero(), &amp;#34;Id initialized&amp;#34;) td.Cmp(t, record.Name, &amp;#34;Bob&amp;#34;) td.Cmp(t, record.Age, 23) td.Cmp(t, record.CreatedAt, td.Between(before, time.Now())) } } As we cannot guess the Id field value before its creation, we use the NotZero operator to check it is set by CreateRecord() call.</description>
     </item>
     
     <item>
-      <title>Advanced testdeep technique</title>
+      <title>Advanced go-testdeep technique</title>
       <link>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</guid>
-      <description>Of course we can test struct fields one by one, but with testdeep, the whole struct can be compared with one Cmp call.
+      <description>Of course we can test struct fields one by one, but with go-testdeep and the [td package], the whole struct can be compared with one Cmp call.
 We can choose to ignore the non-guessable fields set by CreateRecord():
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record, td.Struct( &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, nil), &amp;#34;Newly created record&amp;#34;) } } The Struct operator, used here, ignores zero fields in its model parameter.</description>
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record, td.Struct( &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, nil), &amp;#34;Newly created record&amp;#34;) } } The Struct operator, used here, ignores zero fields in its model parameter.</description>
     </item>
     
     <item>
-      <title>testdeep Cmp shortcuts</title>
-      <link>https://go-testdeep.zetta.rocks/example/testdeep-cmp-shortcuts/</link>
+      <title>go-testdeep Cmp shortcuts</title>
+      <link>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://go-testdeep.zetta.rocks/example/testdeep-cmp-shortcuts/</guid>
+      <guid>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</guid>
       <description>The Cmp function is the keystone of this package, but to make the writing of tests even easier, the family of Cmp* functions are provided and act as shortcuts. Using CmpStruct function, the previous example can be written as:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.CmpStruct(t, record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.</description>
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.CmpStruct(t, record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.</description>
     </item>
     
     <item>
-      <title>testdeep.T type</title>
-      <link>https://go-testdeep.zetta.rocks/example/testdeep-t/</link>
+      <title>td.T type</title>
+      <link>https://go-testdeep.zetta.rocks/example/td-t/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://go-testdeep.zetta.rocks/example/testdeep-t/</guid>
-      <description>Last, testing.T can be encapsulated in testdeep T type, simplifying again the test:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; td &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t := t.RootName(&amp;#34;RECORD&amp;#34;) // Use RECORD instead of DATA in failure reports  // Using Struct shortcut method  t.Struct(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.NotZero(), &amp;#34;CreatedAt&amp;#34;: td.Between(before, time.Now()), }, &amp;#34;Newly created record&amp;#34;) // Or using Cmp method, it&amp;#39;s a matter of taste  t.</description>
+      <guid>https://go-testdeep.zetta.rocks/example/td-t/</guid>
+      <description>Last, testing.T can be encapsulated in td.T type, simplifying again the test:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t := t.RootName(&amp;#34;RECORD&amp;#34;) // Use RECORD instead of DATA in failure reports  // Using Struct shortcut method  t.Struct(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.NotZero(), &amp;#34;CreatedAt&amp;#34;: td.Between(before, time.Now()), }, &amp;#34;Newly created record&amp;#34;) // Or using Cmp method, it&amp;#39;s a matter of taste  t.</description>
     </item>
     
     <item>
-      <title>testdeep.T</title>
-      <link>https://go-testdeep.zetta.rocks/functions/testdeep-t/</link>
+      <title>td.T</title>
+      <link>https://go-testdeep.zetta.rocks/functions/td-t/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://go-testdeep.zetta.rocks/functions/testdeep-t/</guid>
-      <description>Constructing *testdeep.T import ( &amp;#34;testing&amp;#34; &amp;#34;github.com/maxatome/go-testdeep&amp;#34; ) func TestMyFunc(tt *testing.T) { t := testdeep.NewT(tt) t.Cmp(MyFunc(), 12) }  func NewT(t TestingFT, config ...ContextConfig) *T func Assert(t TestingFT, config ...ContextConfig) *T func Require(t TestingFT, config ...ContextConfig) *T func AssertRequire(t TestingFT, config ...ContextConfig) (*T, *T)  Configuring *testdeep.T func TestMyFunc(tt *testing.T) { t := testdeep.NewT(tt).UseEqual().RootName(&amp;#34;RECORD&amp;#34;) ... }  func (t *T) BeLax(enable ...bool) *T func (t *T) FailureIsFatal(enable ...bool) *T func (t *T) RootName(rootName string) *T func (t *T) UseEqual(enable .</description>
+      <guid>https://go-testdeep.zetta.rocks/functions/td-t/</guid>
+      <description>Constructing *td.T import ( &amp;#34;testing&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestMyFunc(tt *testing.T) { t := td.NewT(tt) t.Cmp(MyFunc(), 12) }  func NewT(t TestingFT, config ...ContextConfig) *T func Assert(t TestingFT, config ...ContextConfig) *T func Require(t TestingFT, config ...ContextConfig) *T func AssertRequire(t TestingFT, config ...ContextConfig) (*T, *T)  Configuring *td.T func TestMyFunc(tt *testing.T) { t := td.NewT(tt).UseEqual().RootName(&amp;#34;RECORD&amp;#34;) ... }  func (t *T) BeLax(enable ...bool) *T func (t *T) FailureIsFatal(enable ...bool) *T func (t *T) RootName(rootName string) *T func (t *T) UseEqual(enable .</description>
     </item>
     
   </channel>

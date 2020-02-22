@@ -10,7 +10,7 @@ func NotNaN() TestDeep
 [`NotNaN`]({{< ref "NotNaN" >}}) operator checks that data is a float and is not not-a-number.
 
 
-> See also [<i class='fas fa-book'></i> NotNaN godoc](https://godoc.org/github.com/maxatome/go-testdeep#NotNaN).
+> See also [<i class='fas fa-book'></i> NotNaN godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#NotNaN).
 
 ### Examples
 
@@ -19,14 +19,14 @@ func NotNaN() TestDeep
 
 	got := float32(math.NaN())
 
-	ok := Cmp(t, got, NotNaN(),
+	ok := td.Cmp(t, got, td.NotNaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float32(math.NaN()) is NOT float32 not-a-number:", ok)
 
 	got = 12
 
-	ok = Cmp(t, got, NotNaN(),
+	ok = td.Cmp(t, got, td.NotNaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float32(12) is NOT float32 not-a-number:", ok)
@@ -41,14 +41,14 @@ func NotNaN() TestDeep
 
 	got := math.NaN()
 
-	ok := Cmp(t, got, NotNaN(),
+	ok := td.Cmp(t, got, td.NotNaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("math.NaN() is not-a-number:", ok)
 
 	got = 12
 
-	ok = Cmp(t, got, NotNaN(),
+	ok = td.Cmp(t, got, td.NotNaN(),
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float64(12) is not-a-number:", ok)
@@ -66,7 +66,7 @@ func CmpNotNaN(t TestingT, got interface{}, args ...interface{}) bool
 CmpNotNaN is a shortcut for:
 
 ```go
-Cmp(t, got, NotNaN(), args...)
+td.Cmp(t, got, td.NotNaN(), args...)
 ```
 
 See above for details.
@@ -81,7 +81,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpNotNaN godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNotNaN).
+> See also [<i class='fas fa-book'></i> CmpNotNaN godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNotNaN).
 
 ### Examples
 
@@ -90,14 +90,14 @@ reason of a potential failure.
 
 	got := float32(math.NaN())
 
-	ok := CmpNotNaN(t, got,
+	ok := td.CmpNotNaN(t, got,
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float32(math.NaN()) is NOT float32 not-a-number:", ok)
 
 	got = 12
 
-	ok = CmpNotNaN(t, got,
+	ok = td.CmpNotNaN(t, got,
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float32(12) is NOT float32 not-a-number:", ok)
@@ -112,14 +112,14 @@ reason of a potential failure.
 
 	got := math.NaN()
 
-	ok := CmpNotNaN(t, got,
+	ok := td.CmpNotNaN(t, got,
 		"checks %v is not-a-number", got)
 
 	fmt.Println("math.NaN() is not-a-number:", ok)
 
 	got = 12
 
-	ok = CmpNotNaN(t, got,
+	ok = td.CmpNotNaN(t, got,
 		"checks %v is not-a-number", got)
 
 	fmt.Println("float64(12) is not-a-number:", ok)
@@ -137,7 +137,7 @@ func (t *T) NotNaN(got interface{}, args ...interface{}) bool
 [`NotNaN`]({{< ref "NotNaN" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, NotNaN(), args...)
+t.Cmp(got, td.NotNaN(), args...)
 ```
 
 See above for details.
@@ -152,12 +152,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.NotNaN godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.NotNaN).
+> See also [<i class='fas fa-book'></i> T.NotNaN godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.NotNaN).
 
 ### Examples
 
 {{%expand "Float32 example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := float32(math.NaN())
 
@@ -179,7 +179,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Float64 example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := math.NaN()
 

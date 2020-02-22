@@ -14,18 +14,18 @@ compared value if numeric, and the same type if `string` or [`time.Time`](https:
 assignable). *bounds* allows to specify whether bounds are included
 or not:
 
-- [`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind) (default): between *from* and *to* both included
-- [`BoundsInOut`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind): between *from* included and *to* excluded
-- [`BoundsOutIn`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind): between *from* excluded and *to* included
-- [`BoundsOutOut`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind): between *from* and *to* both excluded
+- [`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind) (default): between *from* and *to* both included
+- [`BoundsInOut`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind): between *from* included and *to* excluded
+- [`BoundsOutIn`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind): between *from* excluded and *to* included
+- [`BoundsOutOut`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind): between *from* and *to* both excluded
 
 
-If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind).
+If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind).
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *from* (same as the *to* one.)
 
 
-> See also [<i class='fas fa-book'></i> Between godoc](https://godoc.org/github.com/maxatome/go-testdeep#Between).
+> See also [<i class='fas fa-book'></i> Between godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Between).
 
 ### Examples
 
@@ -34,24 +34,24 @@ If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.c
 
 	got := 156
 
-	ok := Cmp(t, got, Between(154, 156),
+	ok := td.Cmp(t, got, td.Between(154, 156),
 		"checks %v is in [154 .. 156]", got)
 	fmt.Println(ok)
 
 	// BoundsInIn is implicit
-	ok = Cmp(t, got, Between(154, 156, BoundsInIn),
+	ok = td.Cmp(t, got, td.Between(154, 156, td.BoundsInIn),
 		"checks %v is in [154 .. 156]", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Between(154, 156, BoundsInOut),
+	ok = td.Cmp(t, got, td.Between(154, 156, td.BoundsInOut),
 		"checks %v is in [154 .. 156[", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Between(154, 156, BoundsOutIn),
+	ok = td.Cmp(t, got, td.Between(154, 156, td.BoundsOutIn),
 		"checks %v is in ]154 .. 156]", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Between(154, 156, BoundsOutOut),
+	ok = td.Cmp(t, got, td.Between(154, 156, td.BoundsOutOut),
 		"checks %v is in ]154 .. 156[", got)
 	fmt.Println(ok)
 
@@ -68,24 +68,24 @@ If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.c
 
 	got := "abc"
 
-	ok := Cmp(t, got, Between("aaa", "abc"),
+	ok := td.Cmp(t, got, td.Between("aaa", "abc"),
 		`checks "%v" is in ["aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
 	// BoundsInIn is implicit
-	ok = Cmp(t, got, Between("aaa", "abc", BoundsInIn),
+	ok = td.Cmp(t, got, td.Between("aaa", "abc", td.BoundsInIn),
 		`checks "%v" is in ["aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Between("aaa", "abc", BoundsInOut),
+	ok = td.Cmp(t, got, td.Between("aaa", "abc", td.BoundsInOut),
 		`checks "%v" is in ["aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Between("aaa", "abc", BoundsOutIn),
+	ok = td.Cmp(t, got, td.Between("aaa", "abc", td.BoundsOutIn),
 		`checks "%v" is in ]"aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Between("aaa", "abc", BoundsOutOut),
+	ok = td.Cmp(t, got, td.Between("aaa", "abc", td.BoundsOutOut),
 		`checks "%v" is in ]"aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
@@ -106,13 +106,13 @@ func CmpBetween(t TestingT, got interface{}, from interface{}, to interface{}, b
 CmpBetween is a shortcut for:
 
 ```go
-Cmp(t, got, Between(from, to, bounds), args...)
+td.Cmp(t, got, td.Between(from, to, bounds), args...)
 ```
 
 See above for details.
 
 [`Between()`]({{< ref "Between" >}}) optional parameter *bounds* is here mandatory.
-[`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind) value should be passed to mimic its absence in
+td.[`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind) value should be passed to mimic its absence in
 original [`Between()`]({{< ref "Between" >}}) call.
 
 Returns true if the test is OK, false if it fails.
@@ -125,7 +125,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpBetween godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpBetween).
+> See also [<i class='fas fa-book'></i> CmpBetween godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpBetween).
 
 ### Examples
 
@@ -134,24 +134,24 @@ reason of a potential failure.
 
 	got := 156
 
-	ok := CmpBetween(t, got, 154, 156, BoundsInIn,
+	ok := td.CmpBetween(t, got, 154, 156, td.BoundsInIn,
 		"checks %v is in [154 .. 156]", got)
 	fmt.Println(ok)
 
 	// BoundsInIn is implicit
-	ok = CmpBetween(t, got, 154, 156, BoundsInIn,
+	ok = td.CmpBetween(t, got, 154, 156, td.BoundsInIn,
 		"checks %v is in [154 .. 156]", got)
 	fmt.Println(ok)
 
-	ok = CmpBetween(t, got, 154, 156, BoundsInOut,
+	ok = td.CmpBetween(t, got, 154, 156, td.BoundsInOut,
 		"checks %v is in [154 .. 156[", got)
 	fmt.Println(ok)
 
-	ok = CmpBetween(t, got, 154, 156, BoundsOutIn,
+	ok = td.CmpBetween(t, got, 154, 156, td.BoundsOutIn,
 		"checks %v is in ]154 .. 156]", got)
 	fmt.Println(ok)
 
-	ok = CmpBetween(t, got, 154, 156, BoundsOutOut,
+	ok = td.CmpBetween(t, got, 154, 156, td.BoundsOutOut,
 		"checks %v is in ]154 .. 156[", got)
 	fmt.Println(ok)
 
@@ -168,24 +168,24 @@ reason of a potential failure.
 
 	got := "abc"
 
-	ok := CmpBetween(t, got, "aaa", "abc", BoundsInIn,
+	ok := td.CmpBetween(t, got, "aaa", "abc", td.BoundsInIn,
 		`checks "%v" is in ["aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
 	// BoundsInIn is implicit
-	ok = CmpBetween(t, got, "aaa", "abc", BoundsInIn,
+	ok = td.CmpBetween(t, got, "aaa", "abc", td.BoundsInIn,
 		`checks "%v" is in ["aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
-	ok = CmpBetween(t, got, "aaa", "abc", BoundsInOut,
+	ok = td.CmpBetween(t, got, "aaa", "abc", td.BoundsInOut,
 		`checks "%v" is in ["aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
-	ok = CmpBetween(t, got, "aaa", "abc", BoundsOutIn,
+	ok = td.CmpBetween(t, got, "aaa", "abc", td.BoundsOutIn,
 		`checks "%v" is in ]"aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
-	ok = CmpBetween(t, got, "aaa", "abc", BoundsOutOut,
+	ok = td.CmpBetween(t, got, "aaa", "abc", td.BoundsOutOut,
 		`checks "%v" is in ]"aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
@@ -206,13 +206,13 @@ func (t *T) Between(got interface{}, from interface{}, to interface{}, bounds Bo
 [`Between`]({{< ref "Between" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Between(from, to, bounds), args...)
+t.Cmp(got, td.Between(from, to, bounds), args...)
 ```
 
 See above for details.
 
 [`Between()`]({{< ref "Between" >}}) optional parameter *bounds* is here mandatory.
-[`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep#BoundsKind) value should be passed to mimic its absence in
+td.[`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind) value should be passed to mimic its absence in
 original [`Between()`]({{< ref "Between" >}}) call.
 
 Returns true if the test is OK, false if it fails.
@@ -225,33 +225,33 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Between godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Between).
+> See also [<i class='fas fa-book'></i> T.Between godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Between).
 
 ### Examples
 
 {{%expand "Int example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := 156
 
-	ok := t.Between(got, 154, 156, BoundsInIn,
+	ok := t.Between(got, 154, 156, td.BoundsInIn,
 		"checks %v is in [154 .. 156]", got)
 	fmt.Println(ok)
 
 	// BoundsInIn is implicit
-	ok = t.Between(got, 154, 156, BoundsInIn,
+	ok = t.Between(got, 154, 156, td.BoundsInIn,
 		"checks %v is in [154 .. 156]", got)
 	fmt.Println(ok)
 
-	ok = t.Between(got, 154, 156, BoundsInOut,
+	ok = t.Between(got, 154, 156, td.BoundsInOut,
 		"checks %v is in [154 .. 156[", got)
 	fmt.Println(ok)
 
-	ok = t.Between(got, 154, 156, BoundsOutIn,
+	ok = t.Between(got, 154, 156, td.BoundsOutIn,
 		"checks %v is in ]154 .. 156]", got)
 	fmt.Println(ok)
 
-	ok = t.Between(got, 154, 156, BoundsOutOut,
+	ok = t.Between(got, 154, 156, td.BoundsOutOut,
 		"checks %v is in ]154 .. 156[", got)
 	fmt.Println(ok)
 
@@ -264,28 +264,28 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "String example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "abc"
 
-	ok := t.Between(got, "aaa", "abc", BoundsInIn,
+	ok := t.Between(got, "aaa", "abc", td.BoundsInIn,
 		`checks "%v" is in ["aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
 	// BoundsInIn is implicit
-	ok = t.Between(got, "aaa", "abc", BoundsInIn,
+	ok = t.Between(got, "aaa", "abc", td.BoundsInIn,
 		`checks "%v" is in ["aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
-	ok = t.Between(got, "aaa", "abc", BoundsInOut,
+	ok = t.Between(got, "aaa", "abc", td.BoundsInOut,
 		`checks "%v" is in ["aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 
-	ok = t.Between(got, "aaa", "abc", BoundsOutIn,
+	ok = t.Between(got, "aaa", "abc", td.BoundsOutIn,
 		`checks "%v" is in ]"aaa" .. "abc"]`, got)
 	fmt.Println(ok)
 
-	ok = t.Between(got, "aaa", "abc", BoundsOutOut,
+	ok = t.Between(got, "aaa", "abc", td.BoundsOutOut,
 		`checks "%v" is in ]"aaa" .. "abc"[`, got)
 	fmt.Println(ok)
 

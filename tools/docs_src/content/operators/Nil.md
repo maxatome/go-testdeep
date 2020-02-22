@@ -11,7 +11,7 @@ func Nil() TestDeep
 but containing a `nil` pointer.)
 
 
-> See also [<i class='fas fa-book'></i> Nil godoc](https://godoc.org/github.com/maxatome/go-testdeep#Nil).
+> See also [<i class='fas fa-book'></i> Nil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Nil).
 
 ### Examples
 
@@ -21,22 +21,22 @@ but containing a `nil` pointer.)
 	var got fmt.Stringer // interface
 
 	// nil value can be compared directly with nil, no need of Nil() here
-	ok := Cmp(t, got, nil)
+	ok := td.Cmp(t, got, nil)
 	fmt.Println(ok)
 
 	// But it works with Nil() anyway
-	ok = Cmp(t, got, Nil())
+	ok = td.Cmp(t, got, td.Nil())
 	fmt.Println(ok)
 
 	got = (*bytes.Buffer)(nil)
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with nil fails, as the interface is not nil
-	ok = Cmp(t, got, nil)
+	ok = td.Cmp(t, got, nil)
 	fmt.Println(ok)
 
 	// In this case Nil() succeed
-	ok = Cmp(t, got, Nil())
+	ok = td.Cmp(t, got, td.Nil())
 	fmt.Println(ok)
 
 	// Output:
@@ -55,7 +55,7 @@ func CmpNil(t TestingT, got interface{}, args ...interface{}) bool
 CmpNil is a shortcut for:
 
 ```go
-Cmp(t, got, Nil(), args...)
+td.Cmp(t, got, td.Nil(), args...)
 ```
 
 See above for details.
@@ -70,7 +70,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpNil godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNil).
+> See also [<i class='fas fa-book'></i> CmpNil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNil).
 
 ### Examples
 
@@ -80,22 +80,22 @@ reason of a potential failure.
 	var got fmt.Stringer // interface
 
 	// nil value can be compared directly with nil, no need of Nil() here
-	ok := Cmp(t, got, nil)
+	ok := td.Cmp(t, got, nil)
 	fmt.Println(ok)
 
 	// But it works with Nil() anyway
-	ok = CmpNil(t, got)
+	ok = td.CmpNil(t, got)
 	fmt.Println(ok)
 
 	got = (*bytes.Buffer)(nil)
 
 	// In the case of an interface containing a nil pointer, comparing
 	// with nil fails, as the interface is not nil
-	ok = Cmp(t, got, nil)
+	ok = td.Cmp(t, got, nil)
 	fmt.Println(ok)
 
 	// In this case Nil() succeed
-	ok = CmpNil(t, got)
+	ok = td.CmpNil(t, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -114,7 +114,7 @@ func (t *T) Nil(got interface{}, args ...interface{}) bool
 [`Nil`]({{< ref "Nil" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Nil(), args...)
+t.Cmp(got, td.Nil(), args...)
 ```
 
 See above for details.
@@ -129,12 +129,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Nil godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Nil).
+> See also [<i class='fas fa-book'></i> T.Nil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Nil).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	var got fmt.Stringer // interface
 

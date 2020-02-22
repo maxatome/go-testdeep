@@ -26,7 +26,7 @@ except if *val* is a [TestDeep operator]({{< ref "operators" >}}). In this case,
 pointer on the returned value (if non-`nil` of course).
 
 
-> See also [<i class='fas fa-book'></i> Ptr godoc](https://godoc.org/github.com/maxatome/go-testdeep#Ptr).
+> See also [<i class='fas fa-book'></i> Ptr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Ptr).
 
 ### Examples
 
@@ -35,10 +35,10 @@ pointer on the returned value (if non-`nil` of course).
 
 	got := 12
 
-	ok := Cmp(t, &got, Ptr(12))
+	ok := td.Cmp(t, &got, td.Ptr(12))
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got, Ptr(Between(4, 15)))
+	ok = td.Cmp(t, &got, td.Ptr(td.Between(4, 15)))
 	fmt.Println(ok)
 
 	// Output:
@@ -55,7 +55,7 @@ func CmpPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 CmpPtr is a shortcut for:
 
 ```go
-Cmp(t, got, Ptr(val), args...)
+td.Cmp(t, got, td.Ptr(val), args...)
 ```
 
 See above for details.
@@ -70,7 +70,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpPtr).
+> See also [<i class='fas fa-book'></i> CmpPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpPtr).
 
 ### Examples
 
@@ -79,10 +79,10 @@ reason of a potential failure.
 
 	got := 12
 
-	ok := CmpPtr(t, &got, 12)
+	ok := td.CmpPtr(t, &got, 12)
 	fmt.Println(ok)
 
-	ok = CmpPtr(t, &got, Between(4, 15))
+	ok = td.CmpPtr(t, &got, td.Between(4, 15))
 	fmt.Println(ok)
 
 	// Output:
@@ -99,7 +99,7 @@ func (t *T) Ptr(got interface{}, val interface{}, args ...interface{}) bool
 [`Ptr`]({{< ref "Ptr" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Ptr(val), args...)
+t.Cmp(got, td.Ptr(val), args...)
 ```
 
 See above for details.
@@ -114,19 +114,19 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Ptr godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Ptr).
+> See also [<i class='fas fa-book'></i> T.Ptr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Ptr).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := 12
 
 	ok := t.Ptr(&got, 12)
 	fmt.Println(ok)
 
-	ok = t.Ptr(&got, Between(4, 15))
+	ok = t.Ptr(&got, td.Between(4, 15))
 	fmt.Println(ok)
 
 	// Output:

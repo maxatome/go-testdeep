@@ -15,7 +15,7 @@ known non-interface types are equal, or if only interface types
 are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 
 
-> See also [<i class='fas fa-book'></i> Any godoc](https://godoc.org/github.com/maxatome/go-testdeep#Any).
+> See also [<i class='fas fa-book'></i> Any godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Any).
 
 ### Examples
 
@@ -26,13 +26,13 @@ are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "bar" suffix
-	ok := Cmp(t, got, Any(Re("zip"), HasSuffix("bar")),
+	ok := td.Cmp(t, got, td.Any(td.Re("zip"), td.HasSuffix("bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "foo" suffix
-	ok = Cmp(t, got, Any(Re("zip"), HasSuffix("foo")),
+	ok = td.Cmp(t, got, td.Any(td.Re("zip"), td.HasSuffix("foo")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -50,7 +50,7 @@ func CmpAny(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 CmpAny is a shortcut for:
 
 ```go
-Cmp(t, got, Any(expectedValues...), args...)
+td.Cmp(t, got, td.Any(expectedValues...), args...)
 ```
 
 See above for details.
@@ -65,7 +65,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpAny godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpAny).
+> See also [<i class='fas fa-book'></i> CmpAny godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpAny).
 
 ### Examples
 
@@ -76,13 +76,13 @@ reason of a potential failure.
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "bar" suffix
-	ok := CmpAny(t, got, []interface{}{Re("zip"), HasSuffix("bar")},
+	ok := td.CmpAny(t, got, []interface{}{td.Re("zip"), td.HasSuffix("bar")},
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "foo" suffix
-	ok = CmpAny(t, got, []interface{}{Re("zip"), HasSuffix("foo")},
+	ok = td.CmpAny(t, got, []interface{}{td.Re("zip"), td.HasSuffix("foo")},
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -100,7 +100,7 @@ func (t *T) Any(got interface{}, expectedValues []interface{}, args ...interface
 [`Any`]({{< ref "Any" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Any(expectedValues...), args...)
+t.Cmp(got, td.Any(expectedValues...), args...)
 ```
 
 See above for details.
@@ -115,24 +115,24 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Any godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Any).
+> See also [<i class='fas fa-book'></i> T.Any godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Any).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "foo/bar"
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "bar" suffix
-	ok := t.Any(got, []interface{}{Re("zip"), HasSuffix("bar")},
+	ok := t.Any(got, []interface{}{td.Re("zip"), td.HasSuffix("bar")},
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "foo" suffix
-	ok = t.Any(got, []interface{}{Re("zip"), HasSuffix("foo")},
+	ok = t.Any(got, []interface{}{td.Re("zip"), td.HasSuffix("foo")},
 		"checks value %s", got)
 	fmt.Println(ok)
 

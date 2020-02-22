@@ -13,9 +13,9 @@ import (
 	"strings"
 	"testing"
 
-	td "github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/td"
 )
 
 type CmpResponseTest struct {

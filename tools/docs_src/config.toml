@@ -3,6 +3,8 @@ languageCode = "en-us"
 title = "go-testdeep"
 theme = "hugo-theme-learn-2.4.0"
 
+enableGitInfo = true
+
 PygmentsCodeFences = true
 PygmentsStyle = "native"
 
@@ -23,7 +25,7 @@ weight = 10
 [[menu.shortcuts]]
 name = "<i class='fas fa-book'></i> godoc"
 identifier = "godoc"
-url = "https://godoc.org/github.com/maxatome/go-testdeep"
+url = "https://godoc.org/github.com/maxatome/go-testdeep/td"
 weight = 15
 
 [[menu.shortcuts]]

@@ -26,7 +26,7 @@ Cmp(t, gotValue,
 type of *expectedValue* (or `nil` if it is originally untyped `nil`).
 
 
-> See also [<i class='fas fa-book'></i> Tag godoc](https://godoc.org/github.com/maxatome/go-testdeep#Tag).
+> See also [<i class='fas fa-book'></i> Tag godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Tag).
 
 ### Examples
 

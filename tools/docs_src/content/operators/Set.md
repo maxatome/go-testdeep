@@ -22,7 +22,7 @@ Cmp(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing
 ```
 
 
-> See also [<i class='fas fa-book'></i> Set godoc](https://godoc.org/github.com/maxatome/go-testdeep#Set).
+> See also [<i class='fas fa-book'></i> Set godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Set).
 
 ### Examples
 
@@ -32,18 +32,18 @@ Cmp(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are present, ignoring duplicates
-	ok := Cmp(t, got, Set(1, 2, 3, 5, 8),
+	ok := td.Cmp(t, got, td.Set(1, 2, 3, 5, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Duplicates are ignored in a Set
-	ok = Cmp(t, got, Set(1, 2, 2, 2, 2, 2, 3, 5, 8),
+	ok = td.Cmp(t, got, td.Set(1, 2, 2, 2, 2, 2, 3, 5, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several Set entries
-	ok = Cmp(t, got, Set(Between(1, 4), 3, Between(2, 10)),
+	ok = td.Cmp(t, got, td.Set(td.Between(1, 4), 3, td.Between(2, 10)),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
@@ -62,7 +62,7 @@ func CmpSet(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 CmpSet is a shortcut for:
 
 ```go
-Cmp(t, got, Set(expectedItems...), args...)
+td.Cmp(t, got, td.Set(expectedItems...), args...)
 ```
 
 See above for details.
@@ -77,7 +77,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSet godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSet).
+> See also [<i class='fas fa-book'></i> CmpSet godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSet).
 
 ### Examples
 
@@ -87,18 +87,18 @@ reason of a potential failure.
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are present, ignoring duplicates
-	ok := CmpSet(t, got, []interface{}{1, 2, 3, 5, 8},
+	ok := td.CmpSet(t, got, []interface{}{1, 2, 3, 5, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Duplicates are ignored in a Set
-	ok = CmpSet(t, got, []interface{}{1, 2, 2, 2, 2, 2, 3, 5, 8},
+	ok = td.CmpSet(t, got, []interface{}{1, 2, 2, 2, 2, 2, 3, 5, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several Set entries
-	ok = CmpSet(t, got, []interface{}{Between(1, 4), 3, Between(2, 10)},
+	ok = td.CmpSet(t, got, []interface{}{td.Between(1, 4), 3, td.Between(2, 10)},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
@@ -117,7 +117,7 @@ func (t *T) Set(got interface{}, expectedItems []interface{}, args ...interface{
 [`Set`]({{< ref "Set" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Set(expectedItems...), args...)
+t.Cmp(got, td.Set(expectedItems...), args...)
 ```
 
 See above for details.
@@ -132,12 +132,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Set godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Set).
+> See also [<i class='fas fa-book'></i> T.Set godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Set).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -153,7 +153,7 @@ reason of a potential failure.
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several Set entries
-	ok = t.Set(got, []interface{}{Between(1, 4), 3, Between(2, 10)},
+	ok = t.Set(got, []interface{}{td.Between(1, 4), 3, td.Between(2, 10)},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 

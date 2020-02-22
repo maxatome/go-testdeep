@@ -11,8 +11,8 @@ import (
 	"net/http"
 	"testing"
 
-	td "github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
+	"github.com/maxatome/go-testdeep/td"
 )
 
 func TestNewRequest(tt *testing.T) {

@@ -32,8 +32,8 @@ if tdhttp.CmpJSONResponse(t,
   api.Handler,
   tdhttp.Response{
     Status: http.StatusCreated,
-    Body: testdeep.JSON(`{"id": $id, "name": "foo"}`,
-      testdeep.Tag("id", testdeep.Catch(&id, testdeep.Gt(0)))),
+    Body: td.JSON(`{"id": $id, "name": "foo"}`,
+      td.Tag("id", td.Catch(&id, td.Gt(0)))),
   }) {
   t.Logf("Created record ID is %d", id)
 }
@@ -51,7 +51,7 @@ if Cmp(t, CreateRecord("test"),
 ```
 
 
-> See also [<i class='fas fa-book'></i> Catch godoc](https://godoc.org/github.com/maxatome/go-testdeep#Catch).
+> See also [<i class='fas fa-book'></i> Catch godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Catch).
 
 ### Examples
 
@@ -67,9 +67,9 @@ if Cmp(t, CreateRecord("test"),
 	}
 
 	var age int
-	ok := Cmp(t, got,
-		JSON(`{"age":$1,"fullname":"Bob"}`,
-			Catch(&age, Between(40, 45))))
+	ok := td.Cmp(t, got,
+		td.JSON(`{"age":$1,"fullname":"Bob"}`,
+			td.Catch(&age, td.Between(40, 45))))
 	fmt.Println("check got age+fullname:", ok)
 	fmt.Println("caught age:", age)
 
