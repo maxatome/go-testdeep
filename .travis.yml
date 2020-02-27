@@ -10,6 +10,7 @@ matrix:
     - go: 1.11.x
     - go: 1.12.x
     - go: 1.13.x
+    - go: 1.14.x
       env:
         - GO_TEST_SAFE_FLAGS="-covermode=atomic -coverprofile=coverage-safe.out ./..."
         - GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out ./..."
