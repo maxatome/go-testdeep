@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.64.1" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Between :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1582477288" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1582477288" rel="stylesheet">
-    <link href="/css/hybrid.css?1582477288" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1582477288" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1582477288" rel="stylesheet">
-    <link href="/css/auto-complete.css?1582477288" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1582477288" rel="stylesheet">
-    <link href="/css/theme.css?1582477288" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1582477288" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1582477288" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1582477288"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1582477288"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1582477288"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1582477288"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -1635,7 +1635,11 @@ or not:</p>
 <li><a href="https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind"><code>BoundsOutOut</code></a>: between <em>from</em> and <em>to</em> both excluded</li>
 </ul>
 <p>If <em>bounds</em> is missing, it defaults to <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind"><code>BoundsInIn</code></a>.</p>
-<p><a href="/operators/#typebehind-method"><code>TypeBehind</code></a> method returns the <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> of <em>from</em> (same as the <em>to</em> one.)</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">tc.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">17</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">17</span>, <span style="color:#3677a9">20</span>))               <span style="color:#999;font-style:italic">// succeeds, BoundsInIn by default
+</span><span style="color:#999;font-style:italic"></span>tc.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">17</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">17</span>, BoundsInOut))  <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>tc.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">17</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">17</span>, BoundsOutIn))  <span style="color:#999;font-style:italic">// succeeds
+</span><span style="color:#999;font-style:italic"></span>tc.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">17</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">17</span>, <span style="color:#3677a9">20</span>, BoundsOutOut)) <span style="color:#999;font-style:italic">// fails
+</span></code></pre></div><p><a href="/operators/#typebehind-method"><code>TypeBehind</code></a> method returns the <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> of <em>from</em> (same as the <em>to</em> one.)</p>
 <blockquote>
 <p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Between"><!-- raw HTML omitted --><!-- raw HTML omitted --> Between godoc</a>.</p>
 </blockquote>
@@ -1704,24 +1708,24 @@ or not:</p>
 	got := <span style="color:#ed9d13">&#34;abc&#34;</span>
 
 	ok := td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>),
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
 </span><span style="color:#999;font-style:italic"></span>	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsInIn),
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsInOut),
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsOutIn),
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">Between</span>(<span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsOutOut),
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1817,24 +1821,24 @@ reason of a potential failure.</p>
 	got := <span style="color:#ed9d13">&#34;abc&#34;</span>
 
 	ok := td.<span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsInIn,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
 </span><span style="color:#999;font-style:italic"></span>	ok = td.<span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsInIn,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = td.<span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsInOut,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = td.<span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsOutIn,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = td.<span style="color:#447fcf">CmpBetween</span>(t, got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsOutOut,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1930,24 +1934,24 @@ reason of a potential failure.</p>
 	got := <span style="color:#ed9d13">&#34;abc&#34;</span>
 
 	ok := t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsInIn,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// BoundsInIn is implicit
 </span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsInIn,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsInOut,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in [&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsOutIn,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;]`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	ok = t.<span style="color:#447fcf">Between</span>(got, <span style="color:#ed9d13">&#34;aaa&#34;</span>, <span style="color:#ed9d13">&#34;abc&#34;</span>, td.BoundsOutOut,
-		<span style="color:#ed9d13">`</span><span style="color:#ed9d13">checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[</span><span style="color:#ed9d13">`</span>, got)
+		<span style="color:#ed9d13">`checks &#34;%v&#34; is in ]&#34;aaa&#34; .. &#34;abc&#34;[`</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -3178,19 +3182,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1582477288"></script>
-    <script src="/js/jquery.sticky.js?1582477288"></script>
-    <script src="/js/featherlight.min.js?1582477288"></script>
-    <script src="/js/highlight.pack.js?1582477288"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1582477288"></script>
-    <script src="/js/learn.js?1582477288"></script>
-    <script src="/js/hugo-learn.js?1582477288"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1582477288" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1582477288"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

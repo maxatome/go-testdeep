@@ -7,7 +7,7 @@ weight: 10
 func SStruct(model interface{}, expectedFields StructFields) TestDeep
 ```
 
-[`SStruct`]({{< ref "SStruct" >}}) operator (a.k.a. strict-[`Struct`]({{< ref "Struct" >}})) compares the contents of a
+[`SStruct`]({{< ref "SStruct" >}}) operator (aka strict-[`Struct`]({{< ref "Struct" >}})) compares the contents of a
 struct or a pointer on a struct against values of *model* (if any)
 and the values of *expectedFields*. The zero values are compared
 too even if they are omitted from *expectedFields*: that is the
@@ -21,7 +21,7 @@ To ignore a field, one has to specify it in *expectedFields* and
 use the [`Ignore`]({{< ref "Ignore" >}}) operator.
 
 ```go
-td.Cmp(t, td.Struct(
+td.Cmp(t, td.SStruct(
   Person{
     Name: "John Doe",
   },

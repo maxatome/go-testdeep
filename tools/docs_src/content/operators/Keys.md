@@ -23,7 +23,7 @@ an unsorted manner:
 
 ```go
 got := map[string]bool{"c": true, "a": false, "b": true}
-td.Cmp(t, got, td.Keys(Bag("c", "a", "b"))) // succeeds
+td.Cmp(t, got, td.Keys(td.Bag("c", "a", "b"))) // succeeds
 ```
 
 

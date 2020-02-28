@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.64.1" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Tag :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1582477288" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1582477288" rel="stylesheet">
-    <link href="/css/hybrid.css?1582477288" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1582477288" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1582477288" rel="stylesheet">
-    <link href="/css/auto-complete.css?1582477288" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1582477288" rel="stylesheet">
-    <link href="/css/theme.css?1582477288" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1582477288" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1582477288" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1582477288"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1582477288"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1582477288"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1582477288"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -1617,11 +1617,11 @@ which can be an operator or a value. The data is then compared
 against <em>expectedValue</em> as if <a href="/operators/tag/"><code>Tag</code></a> was never called. It is only
 useful as <a href="/operators/json/"><code>JSON</code></a> operator parameter, to name placeholders. See <a href="/operators/json/"><code>JSON</code></a>
 operator for more details.</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
-  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;: $name, &#34;age&#34;: $age, &#34;gender&#34;: $gender}</span><span style="color:#ed9d13">`</span>,
-    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $name
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)),   <span style="color:#999;font-style:italic">// matches $age
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#ed9d13">&#34;male&#34;</span>)))        <span style="color:#999;font-style:italic">// matches $gender
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, gotValue,
+  td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: $name, &#34;age&#34;: $age, &#34;gender&#34;: $gender}`</span>,
+    td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $name
+</span><span style="color:#999;font-style:italic"></span>    td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)),   <span style="color:#999;font-style:italic">// matches $age
+</span><span style="color:#999;font-style:italic"></span>    td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#ed9d13">&#34;male&#34;</span>)))           <span style="color:#999;font-style:italic">// matches $gender
 </span></code></pre></div><p><a href="/operators/#typebehind-method"><code>TypeBehind</code></a> method is delegated to <em>expectedValue</em> one if
 <em>expectedValue</em> is a <a href="/operators/">TestDeep operator</a>, otherwise it returns the
 type of <em>expectedValue</em> (or <code>nil</code> if it is originally untyped <code>nil</code>).</p>
@@ -2847,19 +2847,19 @@ type of <em>expectedValue</em> (or <code>nil</code> if it is originally untyped 
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1582477288"></script>
-    <script src="/js/jquery.sticky.js?1582477288"></script>
-    <script src="/js/featherlight.min.js?1582477288"></script>
-    <script src="/js/highlight.pack.js?1582477288"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1582477288"></script>
-    <script src="/js/learn.js?1582477288"></script>
-    <script src="/js/hugo-learn.js?1582477288"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1582477288" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1582477288"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

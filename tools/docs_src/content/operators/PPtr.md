@@ -16,7 +16,7 @@ data and compares it to *val*.
 ```go
 num := 12
 pnum = &num
-td.Cmp(t, &pnum, PPtr(12)) // succeeds
+td.Cmp(t, &pnum, td.PPtr(12)) // succeeds
 ```
 
 as well as an other operator:
@@ -24,13 +24,13 @@ as well as an other operator:
 ```go
 num := 3
 pnum = &num
-td.Cmp(t, &pnum, PPtr(Between(3, 4))) // succeeds
+td.Cmp(t, &pnum, td.PPtr(td.Between(3, 4))) // succeeds
 ```
 
 It is more efficient and shorter to write than:
 
 ```go
-td.Cmp(t, &pnum, Ptr(Ptr(val))) // succeeds too
+td.Cmp(t, &pnum, td.Ptr(td.Ptr(val))) // succeeds too
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a pointer on a

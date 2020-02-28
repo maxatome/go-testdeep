@@ -16,7 +16,7 @@ the custom test is successful:
 
 ```go
 td.Cmp(t, gotTime,
-  Code(func(date time.Time) bool {
+  td.Code(func(date time.Time) bool {
     return date.Year() == 2018
   }))
 ```
@@ -27,7 +27,7 @@ test when it fails:
 
 ```go
 td.Cmp(t, gotTime,
-  Code(func(date time.Time) (bool, string) {
+  td.Code(func(date time.Time) (bool, string) {
     if date.Year() == 2018 {
       return true, ""
     }
@@ -40,7 +40,7 @@ succeeded, else the [`error`](https://golang.org/pkg/builtin/#error) contains th
 
 ```go
 td.Cmp(t, gotJsonRawMesg,
-  Code(func(b json.RawMessage) error {
+  td.Code(func(b json.RawMessage) error {
     var c map[string]int
     err := json.Unmarshal(b, &c)
     if err != nil {

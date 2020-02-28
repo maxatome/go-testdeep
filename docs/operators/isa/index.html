@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.64.1" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Isa :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1582477288" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1582477288" rel="stylesheet">
-    <link href="/css/hybrid.css?1582477288" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1582477288" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1582477288" rel="stylesheet">
-    <link href="/css/auto-complete.css?1582477288" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1582477288" rel="stylesheet">
-    <link href="/css/theme.css?1582477288" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1582477288" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1582477288" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1582477288"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1582477288"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1582477288"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1582477288"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -1624,19 +1624,19 @@
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Isa</span>(model <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep
 </code></pre></div><p><a href="/operators/isa/"><code>Isa</code></a> operator checks the data type or whether data implements an
 interface or not.</p>
-<p>Typically type checks:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Isa</span>(time.Time{})
-<span style="color:#447fcf">Isa</span>(&amp;time.Time{})
-<span style="color:#447fcf">Isa</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]time.Time{})
-</code></pre></div><p>For interfaces it is a bit more complicated, as:</p>
+<p>Typical type checks:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, time.<span style="color:#447fcf">Now</span>(), td.<span style="color:#447fcf">Isa</span>(time.Time{}))  <span style="color:#999;font-style:italic">// succeeds
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, time.<span style="color:#447fcf">Now</span>(), td.<span style="color:#447fcf">Isa</span>(&amp;time.Time{})) <span style="color:#999;font-style:italic">// fails, as not a *time.Time
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">Isa</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]time.Time{}))
+</code></pre></div><p>For interfaces, it is a bit more complicated, as:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">fmt.<span style="color:#447fcf">Stringer</span>(<span style="color:#6ab825;font-weight:bold">nil</span>)
-</code></pre></div><p>is not an interface, but just <code>nil</code>&hellip; To bypass this golang
+</code></pre></div><p>is not an interface, but just <code>nil</code>… To bypass this golang
 limitation, <a href="/operators/isa/"><code>Isa</code></a> accepts pointers on interfaces. So checking that
 data implements <a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interface should be written as:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Isa</span>((*fmt.Stringer)(<span style="color:#6ab825;font-weight:bold">nil</span>))
-</code></pre></div><p>Of course, in the latter case, if data type is <a href="https://golang.org/pkg/fmt/#Stringer"><code>*fmt.Stringer</code></a>, <a href="/operators/isa/"><code>Isa</code></a>
-will match too (in fact before checking whether it implements
-<a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> or not.)</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, bytes.Buffer{}, td.<span style="color:#447fcf">Isa</span>((*fmt.Stringer)(<span style="color:#6ab825;font-weight:bold">nil</span>))) <span style="color:#999;font-style:italic">// succeeds
+</span></code></pre></div><p>Of course, in the latter case, if checked data type is
+<a href="https://golang.org/pkg/fmt/#Stringer"><code>*fmt.Stringer</code></a>, <a href="/operators/isa/"><code>Isa</code></a> will match too (in fact before checking whether
+it implements <a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> or not).</p>
 <p><a href="/operators/#typebehind-method"><code>TypeBehind</code></a> method returns the <a href="https://golang.org/pkg/reflect/#Type"><code>reflect.Type</code></a> of <em>model</em>.</p>
 <blockquote>
 <p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Isa"><!-- raw HTML omitted --><!-- raw HTML omitted --> Isa godoc</a>.</p>
@@ -1707,7 +1707,7 @@ will match too (in fact before checking whether it implements
 		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil... So it
+	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil… So it
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// does not match
 </span><span style="color:#999;font-style:italic"></span>	errGot = <span style="color:#6ab825;font-weight:bold">nil</span>
 
@@ -1810,7 +1810,7 @@ reason of a potential failure.</p>
 		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil... So it
+	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil… So it
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// does not match
 </span><span style="color:#999;font-style:italic"></span>	errGot = <span style="color:#6ab825;font-weight:bold">nil</span>
 
@@ -1913,7 +1913,7 @@ reason of a potential failure.</p>
 		<span style="color:#ed9d13">&#34;checks errGot is a *error or implements error interface&#34;</span>)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil... So it
+	<span style="color:#999;font-style:italic">// As nil, is passed below, it is not an interface but nil… So it
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// does not match
 </span><span style="color:#999;font-style:italic"></span>	errGot = <span style="color:#6ab825;font-weight:bold">nil</span>
 
@@ -3153,19 +3153,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1582477288"></script>
-    <script src="/js/jquery.sticky.js?1582477288"></script>
-    <script src="/js/featherlight.min.js?1582477288"></script>
-    <script src="/js/highlight.pack.js?1582477288"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1582477288"></script>
-    <script src="/js/learn.js?1582477288"></script>
-    <script src="/js/hugo-learn.js?1582477288"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1582477288" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1582477288"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

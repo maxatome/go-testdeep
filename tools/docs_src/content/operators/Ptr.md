@@ -15,14 +15,14 @@ compares it to *val*.
 
 ```go
 num := 12
-td.Cmp(t, &num, Ptr(12)) // succeeds
+td.Cmp(t, &num, td.Ptr(12)) // succeeds
 ```
 
 as well as an other operator:
 
 ```go
 num := 3
-td.Cmp(t, &num, Ptr(Between(3, 4)))
+td.Cmp(t, &num, td.Ptr(td.Between(3, 4)))
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a pointer on *val*,

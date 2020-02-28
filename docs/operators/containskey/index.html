@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.64.1" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>ContainsKey :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1582477288" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1582477288" rel="stylesheet">
-    <link href="/css/hybrid.css?1582477288" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1582477288" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1582477288" rel="stylesheet">
-    <link href="/css/auto-complete.css?1582477288" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1582477288" rel="stylesheet">
-    <link href="/css/theme.css?1582477288" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1582477288" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1582477288" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1582477288"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1582477288"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1582477288"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1582477288"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -1625,24 +1625,24 @@
 </code></pre></div><p><a href="/operators/containskey/"><code>ContainsKey</code></a> is a <a href="/operators/#smuggler-operators">smuggler operator</a> and works on maps only. It
 compares each key of map against <em>expectedValue</em>.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">hash := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">34</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">28</span>}
-<span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#ed9d13">&#34;foo&#34;</span>))          <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;z&#34;</span>))) <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;x&#34;</span>))) <span style="color:#999;font-style:italic">// fails
+td.<span style="color:#447fcf">Cmp</span>(t, hash, td.<span style="color:#447fcf">ContainsKey</span>(<span style="color:#ed9d13">&#34;foo&#34;</span>))             <span style="color:#999;font-style:italic">// succeeds
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, hash, td.<span style="color:#447fcf">ContainsKey</span>(td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;z&#34;</span>))) <span style="color:#999;font-style:italic">// succeeds
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, hash, td.<span style="color:#447fcf">ContainsKey</span>(td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;x&#34;</span>))) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>
 hnum := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">string</span>{<span style="color:#3677a9">1</span>: <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#3677a9">42</span>: <span style="color:#ed9d13">&#34;bar&#34;</span>}
-<span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#3677a9">42</span>))              <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hash, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>))) <span style="color:#999;font-style:italic">// succeeds
+td.<span style="color:#447fcf">Cmp</span>(t, hash, td.<span style="color:#447fcf">ContainsKey</span>(<span style="color:#3677a9">42</span>))                 <span style="color:#999;font-style:italic">// succeeds
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, hash, td.<span style="color:#447fcf">ContainsKey</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>))) <span style="color:#999;font-style:italic">// succeeds
 </span></code></pre></div><p>When <a href="/operators/containskey/"><code>ContainsKey(nil)</code></a> is used, <code>nil</code> is automatically converted to a
 typed <code>nil</code> on the fly to avoid confusion (if the map key type allows
 it of course.) So all following Cmp calls are equivalent
 (except the <code>(*byte)(nil)</code> one):</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">num := <span style="color:#3677a9">123</span>
 hnum := <span style="color:#6ab825;font-weight:bold">map</span>[*<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{&amp;num: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#6ab825;font-weight:bold">nil</span>: <span style="color:#6ab825;font-weight:bold">true</span>}
-<span style="color:#447fcf">Cmp</span>(t, hnum, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))         <span style="color:#999;font-style:italic">// succeeds → (*int)(nil)
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hnum, <span style="color:#447fcf">ContainsKey</span>((*<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))) <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hnum, <span style="color:#447fcf">ContainsKey</span>(<span style="color:#447fcf">Nil</span>()))       <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic"></span><span style="color:#999;font-style:italic">// But...
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, hnum, <span style="color:#447fcf">ContainsKey</span>((*<span style="color:#6ab825;font-weight:bold">byte</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))) <span style="color:#999;font-style:italic">// fails: (*byte)(nil) ≠ (*int)(nil)
+td.<span style="color:#447fcf">Cmp</span>(t, hnum, td.<span style="color:#447fcf">ContainsKey</span>(<span style="color:#6ab825;font-weight:bold">nil</span>))         <span style="color:#999;font-style:italic">// succeeds → (*int)(nil)
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, hnum, td.<span style="color:#447fcf">ContainsKey</span>((*<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))) <span style="color:#999;font-style:italic">// succeeds
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, hnum, td.<span style="color:#447fcf">ContainsKey</span>(td.<span style="color:#447fcf">Nil</span>()))    <span style="color:#999;font-style:italic">// succeeds
+</span><span style="color:#999;font-style:italic">// But...
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, hnum, td.<span style="color:#447fcf">ContainsKey</span>((*<span style="color:#6ab825;font-weight:bold">byte</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>))) <span style="color:#999;font-style:italic">// fails: (*byte)(nil) ≠ (*int)(nil)
 </span></code></pre></div><blockquote>
 <p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#ContainsKey"><!-- raw HTML omitted --><!-- raw HTML omitted --> ContainsKey godoc</a>.</p>
 </blockquote>
@@ -1663,7 +1663,7 @@ hnum := <span style="color:#6ab825;font-weight:bold">map</span>[*<span style="co
 
 	ok := td.<span style="color:#447fcf">Cmp</span>(t,
 		<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">11</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">22</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">33</span>}, td.<span style="color:#447fcf">ContainsKey</span>(<span style="color:#ed9d13">&#34;foo&#34;</span>))
-	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">map contains key &#34;foo&#34;:</span><span style="color:#ed9d13">`</span>, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`map contains key &#34;foo&#34;:`</span>, ok)
 
 	ok = td.<span style="color:#447fcf">Cmp</span>(t,
 		<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{<span style="color:#3677a9">12</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">24</span>: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#3677a9">42</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">51</span>: <span style="color:#6ab825;font-weight:bold">false</span>},
@@ -1746,7 +1746,7 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	ok := td.<span style="color:#447fcf">CmpContainsKey</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">11</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">22</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">33</span>}, <span style="color:#ed9d13">&#34;foo&#34;</span>)
-	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">map contains key &#34;foo&#34;:</span><span style="color:#ed9d13">`</span>, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`map contains key &#34;foo&#34;:`</span>, ok)
 
 	ok = td.<span style="color:#447fcf">CmpContainsKey</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{<span style="color:#3677a9">12</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">24</span>: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#3677a9">42</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">51</span>: <span style="color:#6ab825;font-weight:bold">false</span>}, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains at least a key in [40 .. 50]:&#34;</span>, ok)
@@ -1827,7 +1827,7 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	ok := t.<span style="color:#447fcf">ContainsKey</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">11</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">22</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">33</span>}, <span style="color:#ed9d13">&#34;foo&#34;</span>)
-	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">map contains key &#34;foo&#34;:</span><span style="color:#ed9d13">`</span>, ok)
+	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">`map contains key &#34;foo&#34;:`</span>, ok)
 
 	ok = t.<span style="color:#447fcf">ContainsKey</span>(<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">int</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{<span style="color:#3677a9">12</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">24</span>: <span style="color:#6ab825;font-weight:bold">false</span>, <span style="color:#3677a9">42</span>: <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#3677a9">51</span>: <span style="color:#6ab825;font-weight:bold">false</span>}, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">50</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;map contains at least a key in [40 .. 50]:&#34;</span>, ok)
@@ -3095,19 +3095,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1582477288"></script>
-    <script src="/js/jquery.sticky.js?1582477288"></script>
-    <script src="/js/featherlight.min.js?1582477288"></script>
-    <script src="/js/highlight.pack.js?1582477288"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1582477288"></script>
-    <script src="/js/learn.js?1582477288"></script>
-    <script src="/js/hugo-learn.js?1582477288"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1582477288" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1582477288"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

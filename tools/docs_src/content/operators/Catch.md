@@ -18,7 +18,7 @@ type.
 ```go
 var id int64
 if td.Cmp(t, CreateRecord("test"),
-  td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, NotZero()))) {
+  td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.NotZero()))) {
   t.Logf("Created record ID is %d", id)
 }
 ```

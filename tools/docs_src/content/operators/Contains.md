@@ -39,7 +39,7 @@ num := 123
 list := []*int{&num, nil}
 td.Cmp(t, list, td.Contains(nil))         // succeeds → (*int)(nil)
 td.Cmp(t, list, td.Contains((*int)(nil))) // succeeds
-td.Cmp(t, list, td.Contains(Nil()))       // succeeds
+td.Cmp(t, list, td.Contains(td.Nil()))    // succeeds
 // But...
 td.Cmp(t, list, td.Contains((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 ```
@@ -50,7 +50,7 @@ As well as these ones:
 hash := map[string]*int{"foo": nil, "bar": &num}
 td.Cmp(t, hash, td.Contains(nil))         // succeeds → (*int)(nil)
 td.Cmp(t, hash, td.Contains((*int)(nil))) // succeeds
-td.Cmp(t, hash, td.Contains(Nil()))       // succeeds
+td.Cmp(t, hash, td.Contains(td.Nil()))    // succeeds
 ```
 
 As a special case for `string` (or convertible), [`error`](https://golang.org/pkg/builtin/#error) or

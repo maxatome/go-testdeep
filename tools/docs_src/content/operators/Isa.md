@@ -14,7 +14,7 @@ Typical type checks:
 
 ```go
 td.Cmp(t, time.Now(), td.Isa(time.Time{}))  // succeeds
-td.Cmp(t, time.Now(), td.Isa(&time.Time{})) // fails, as not a pointer
+td.Cmp(t, time.Now(), td.Isa(&time.Time{})) // fails, as not a *time.Time
 td.Cmp(t, got, td.Isa(map[string]time.Time{}))
 ```
 
@@ -84,7 +84,7 @@ it implements [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) or not).
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
-	// As nil, is passed below, it is not an interface but nil... So it
+	// As nil, is passed below, it is not an interface but nil… So it
 	// does not match
 	errGot = nil
 
@@ -173,7 +173,7 @@ reason of a potential failure.
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
-	// As nil, is passed below, it is not an interface but nil... So it
+	// As nil, is passed below, it is not an interface but nil… So it
 	// does not match
 	errGot = nil
 
@@ -262,7 +262,7 @@ reason of a potential failure.
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
-	// As nil, is passed below, it is not an interface but nil... So it
+	// As nil, is passed below, it is not an interface but nil… So it
 	// does not match
 	errGot = nil
 

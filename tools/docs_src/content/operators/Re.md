@@ -20,11 +20,11 @@ depending the original matched data. Note that an other operator
 can be used here.
 
 ```go
-td.Cmp(t, "foobar zip!", Re(`^foobar`)) // succeeds
+td.Cmp(t, "foobar zip!", td.Re(`^foobar`)) // succeeds
 td.Cmp(t, "John Doe",
-  Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
+  td.Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
 td.Cmp(t, "John Doe",
-  Re(`^(\w+) (\w+)`, Bag("Doe", "John"))) // succeeds
+  td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
 ```
 
 

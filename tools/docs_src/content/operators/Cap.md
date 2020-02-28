@@ -12,12 +12,15 @@ on it and compares its result to *expectedCap*. Of course, the
 compared value must be an array, a channel or a slice.
 
 *expectedCap* can be an `int` value:
+
 ```go
 td.Cmp(t, gotSlice, td.Cap(12))
 ```
+
 as well as an other operator:
+
 ```go
-td.Cmp(t, gotSlice, td.Cap(Between(3, 4)))
+td.Cmp(t, gotSlice, td.Cap(td.Between(3, 4)))
 ```
 
 

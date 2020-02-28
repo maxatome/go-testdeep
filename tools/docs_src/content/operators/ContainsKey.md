@@ -31,7 +31,7 @@ num := 123
 hnum := map[*int]bool{&num: true, nil: true}
 td.Cmp(t, hnum, td.ContainsKey(nil))         // succeeds → (*int)(nil)
 td.Cmp(t, hnum, td.ContainsKey((*int)(nil))) // succeeds
-td.Cmp(t, hnum, td.ContainsKey(Nil()))       // succeeds
+td.Cmp(t, hnum, td.ContainsKey(td.Nil()))    // succeeds
 // But...
 td.Cmp(t, hnum, td.ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 ```

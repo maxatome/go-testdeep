@@ -21,9 +21,9 @@ matched data. Note that an other operator can be used here.
 
 ```go
 td.Cmp(t, "John Doe",
-  ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
+  td.ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
 td.Cmp(t, "John Doe",
-  ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))) // succeeds
+  td.ReAll(`(\w+)(?: |\z)`, td.Bag("Doe", "John"))) // succeeds
 ```
 
 

@@ -16,6 +16,13 @@ values of *expectedEntries*.
 *expectedEntries* can be `nil`, if no zero entries are expected and
 no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
+```go
+got := [3]int{12, 14, 17}
+td.Cmp(t, got, td.Array([3]int{0, 14}, td.ArrayEntries{0: 12, 2: 17})) // succeeds
+td.Cmp(t, got,
+  td.Array([3]int{0, 14}, td.ArrayEntries{0: td.Gt(10), 2: td.Gt(15)})) // succeeds
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 

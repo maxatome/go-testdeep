@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.64.1" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>ReAll :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1582477288" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1582477288" rel="stylesheet">
-    <link href="/css/hybrid.css?1582477288" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1582477288" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1582477288" rel="stylesheet">
-    <link href="/css/auto-complete.css?1582477288" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1582477288" rel="stylesheet">
-    <link href="/css/theme.css?1582477288" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1582477288" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1582477288" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1582477288"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1582477288"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1582477288"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1582477288"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -1631,10 +1631,10 @@ compiled using <a href="https://golang.org/pkg/regexp/#MustCompile"><code>regexp
 <p><em>capture</em> is used to match the contents of regexp groups. Groups
 are presented as a <code>[]string</code> or <code>[][]byte</code> depending the original
 matched data. Note that an other operator can be used here.</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;John Doe&#34;</span>,
-  <span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)(?: |\z)</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">string</span>{<span style="color:#ed9d13">&#34;John&#34;</span>, <span style="color:#ed9d13">&#34;Doe&#34;</span>})) <span style="color:#999;font-style:italic">// succeeds
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;John Doe&#34;</span>,
-  <span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)(?: |\z)</span><span style="color:#ed9d13">`</span>, <span style="color:#447fcf">Bag</span>(<span style="color:#ed9d13">&#34;Doe&#34;</span>, <span style="color:#ed9d13">&#34;John&#34;</span>))) <span style="color:#999;font-style:italic">// succeeds
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;John Doe&#34;</span>,
+  td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`(\w+)(?: |\z)`</span>, []<span style="color:#6ab825;font-weight:bold">string</span>{<span style="color:#ed9d13">&#34;John&#34;</span>, <span style="color:#ed9d13">&#34;Doe&#34;</span>})) <span style="color:#999;font-style:italic">// succeeds
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;John Doe&#34;</span>,
+  td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`(\w+)(?: |\z)`</span>, td.<span style="color:#447fcf">Bag</span>(<span style="color:#ed9d13">&#34;Doe&#34;</span>, <span style="color:#ed9d13">&#34;John&#34;</span>))) <span style="color:#999;font-style:italic">// succeeds
 </span></code></pre></div><blockquote>
 <p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#ReAll"><!-- raw HTML omitted --><!-- raw HTML omitted --> ReAll godoc</a>.</p>
 </blockquote>
@@ -1654,13 +1654,13 @@ matched data. Note that an other operator can be used here.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := <span style="color:#ed9d13">&#34;foo bar biz&#34;</span>
-	ok := td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>)),
+	ok := td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`(\w+)`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>)),
 		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Matches, but all catured groups do not match Set
 </span><span style="color:#999;font-style:italic"></span>	got = <span style="color:#ed9d13">&#34;foo BAR biz&#34;</span>
-	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>)),
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`(\w+)`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>)),
 		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
@@ -1687,7 +1687,7 @@ matched data. Note that an other operator can be used here.</p>
 
 	got := <span style="color:#ed9d13">&#34;11 45 23 56 85 96&#34;</span>
 	ok := td.<span style="color:#447fcf">Cmp</span>(t, got,
-		td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+		td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`(\d+)`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
 			n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
 			<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
 		}))),
@@ -1696,7 +1696,7 @@ matched data. Note that an other operator can be used here.</p>
 
 	<span style="color:#999;font-style:italic">// Matches, but 11 is not greater than 20
 </span><span style="color:#999;font-style:italic"></span>	ok = td.<span style="color:#447fcf">Cmp</span>(t, got,
-		td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+		td.<span style="color:#447fcf">ReAll</span>(<span style="color:#ed9d13">`(\d+)`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
 			n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
 			<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">20</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
 		}))),
@@ -1724,7 +1724,7 @@ matched data. Note that an other operator can be used here.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>)
+	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`(\w+)`</span>)
 
 	got := <span style="color:#ed9d13">&#34;foo bar biz&#34;</span>
 	ok := td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">ReAll</span>(expected, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>)),
@@ -1758,7 +1758,7 @@ matched data. Note that an other operator can be used here.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>)
+	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`(\d+)`</span>)
 
 	got := <span style="color:#ed9d13">&#34;11 45 23 56 85 96&#34;</span>
 	ok := td.<span style="color:#447fcf">Cmp</span>(t, got,
@@ -1816,13 +1816,13 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := <span style="color:#ed9d13">&#34;foo bar biz&#34;</span>
-	ok := td.<span style="color:#447fcf">CmpReAll</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
+	ok := td.<span style="color:#447fcf">CmpReAll</span>(t, got, <span style="color:#ed9d13">`(\w+)`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
 		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Matches, but all catured groups do not match Set
 </span><span style="color:#999;font-style:italic"></span>	got = <span style="color:#ed9d13">&#34;foo BAR biz&#34;</span>
-	ok = td.<span style="color:#447fcf">CmpReAll</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
+	ok = td.<span style="color:#447fcf">CmpReAll</span>(t, got, <span style="color:#ed9d13">`(\w+)`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
 		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
@@ -1848,7 +1848,7 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := <span style="color:#ed9d13">&#34;11 45 23 56 85 96&#34;</span>
-	ok := td.<span style="color:#447fcf">CmpReAll</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+	ok := td.<span style="color:#447fcf">CmpReAll</span>(t, got, <span style="color:#ed9d13">`(\d+)`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
 		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
 		<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
 	})),
@@ -1856,7 +1856,7 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Matches, but 11 is not greater than 20
-</span><span style="color:#999;font-style:italic"></span>	ok = td.<span style="color:#447fcf">CmpReAll</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+</span><span style="color:#999;font-style:italic"></span>	ok = td.<span style="color:#447fcf">CmpReAll</span>(t, got, <span style="color:#ed9d13">`(\d+)`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
 		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
 		<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">20</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
 	})),
@@ -1884,7 +1884,7 @@ reason of a potential failure.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>)
+	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`(\w+)`</span>)
 
 	got := <span style="color:#ed9d13">&#34;foo bar biz&#34;</span>
 	ok := td.<span style="color:#447fcf">CmpReAll</span>(t, got, expected, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
@@ -1918,7 +1918,7 @@ reason of a potential failure.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>)
+	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`(\d+)`</span>)
 
 	got := <span style="color:#ed9d13">&#34;11 45 23 56 85 96&#34;</span>
 	ok := td.<span style="color:#447fcf">CmpReAll</span>(t, got, expected, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
@@ -1974,13 +1974,13 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	got := <span style="color:#ed9d13">&#34;foo bar biz&#34;</span>
-	ok := t.<span style="color:#447fcf">ReAll</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
+	ok := t.<span style="color:#447fcf">ReAll</span>(got, <span style="color:#ed9d13">`(\w+)`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
 		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Matches, but all catured groups do not match Set
 </span><span style="color:#999;font-style:italic"></span>	got = <span style="color:#ed9d13">&#34;foo BAR biz&#34;</span>
-	ok = t.<span style="color:#447fcf">ReAll</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
+	ok = t.<span style="color:#447fcf">ReAll</span>(got, <span style="color:#ed9d13">`(\w+)`</span>, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
 		<span style="color:#ed9d13">&#34;checks value %s&#34;</span>, got)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
@@ -2006,7 +2006,7 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	got := <span style="color:#ed9d13">&#34;11 45 23 56 85 96&#34;</span>
-	ok := t.<span style="color:#447fcf">ReAll</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+	ok := t.<span style="color:#447fcf">ReAll</span>(got, <span style="color:#ed9d13">`(\d+)`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
 		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
 		<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">10</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
 	})),
@@ -2014,7 +2014,7 @@ reason of a potential failure.</p>
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Matches, but 11 is not greater than 20
-</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">ReAll</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
+</span><span style="color:#999;font-style:italic"></span>	ok = t.<span style="color:#447fcf">ReAll</span>(got, <span style="color:#ed9d13">`(\d+)`</span>, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
 		n, err := strconv.<span style="color:#447fcf">Atoi</span>(num)
 		<span style="color:#6ab825;font-weight:bold">return</span> err == <span style="color:#6ab825;font-weight:bold">nil</span> &amp;&amp; n &gt; <span style="color:#3677a9">20</span> &amp;&amp; n &lt; <span style="color:#3677a9">100</span>
 	})),
@@ -2042,7 +2042,7 @@ reason of a potential failure.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\w+)</span><span style="color:#ed9d13">`</span>)
+	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`(\w+)`</span>)
 
 	got := <span style="color:#ed9d13">&#34;foo bar biz&#34;</span>
 	ok := t.<span style="color:#447fcf">ReAll</span>(got, expected, td.<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;biz&#34;</span>, <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>),
@@ -2076,7 +2076,7 @@ reason of a potential failure.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
-	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">(\d+)</span><span style="color:#ed9d13">`</span>)
+	expected := regexp.<span style="color:#447fcf">MustCompile</span>(<span style="color:#ed9d13">`(\d+)`</span>)
 
 	got := <span style="color:#ed9d13">&#34;11 45 23 56 85 96&#34;</span>
 	ok := t.<span style="color:#447fcf">ReAll</span>(got, expected, td.<span style="color:#447fcf">ArrayEach</span>(td.<span style="color:#447fcf">Code</span>(<span style="color:#6ab825;font-weight:bold">func</span>(num <span style="color:#6ab825;font-weight:bold">string</span>) <span style="color:#6ab825;font-weight:bold">bool</span> {
@@ -3319,19 +3319,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.min.js?1582477288"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1582477288"></script>
-    <script src="/js/jquery.sticky.js?1582477288"></script>
-    <script src="/js/featherlight.min.js?1582477288"></script>
-    <script src="/js/highlight.pack.js?1582477288"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1582477288"></script>
-    <script src="/js/learn.js?1582477288"></script>
-    <script src="/js/hugo-learn.js?1582477288"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1582477288" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1582477288"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

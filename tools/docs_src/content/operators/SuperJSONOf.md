@@ -9,7 +9,7 @@ func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep
 
 [`SuperJSONOf`]({{< ref "SuperJSONOf" >}}) operator allows to compare the JSON representation of
 data against *expectedJSON*. Unlike [`JSON`]({{< ref "JSON" >}}) operator, marshalled data
-must be a JSON object/map (aka. {…}). *expectedJSON* can be a:
+must be a JSON object/map (aka {…}). *expectedJSON* can be a:
 
 - `string` containing JSON data like `{"fullname":"Bob","age":42}`
 - `string` containing a JSON filename, ending with ".json" (its
@@ -20,7 +20,7 @@ must be a JSON object/map (aka. {…}). *expectedJSON* can be a:
 
 
 JSON data contained in *expectedJSON* must be a JSON object/map
-(aka. {…}) too. During a match, each expected entry should match in
+(aka {…}) too. During a match, each expected entry should match in
 the compared map. But some entries in the compared map may not be
 expected.
 
