@@ -38,7 +38,7 @@ type TestingT interface {
 	Helper()
 }
 
-// TestingFT (aka. TestingF<ull>T) is the interface used by T to
+// TestingFT (aka TestingF<ull>T) is the interface used by T to
 // delegate common *testing.T functions to it. Of course, *testing.T
 // implements it.
 type TestingFT interface {

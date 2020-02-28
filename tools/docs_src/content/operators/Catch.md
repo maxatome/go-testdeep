@@ -17,8 +17,8 @@ type.
 
 ```go
 var id int64
-if Cmp(t, CreateRecord("test"),
-  JSON(`{"id": $1, "name": "test"}`, Catch(&id, NotZero()))) {
+if td.Cmp(t, CreateRecord("test"),
+  td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, NotZero()))) {
   t.Logf("Created record ID is %d", id)
 }
 ```
@@ -28,7 +28,7 @@ It is really useful when used with [`JSON`]({{< ref "JSON" >}}) operator and/or 
 ```go
 var id int64
 if tdhttp.CmpJSONResponse(t,
-  tdhttp.NewRequest("POST", "/item", `{"name":"foo"}`),
+  tdhttp.Post("/item", `{"name":"foo"}`),
   api.Handler,
   tdhttp.Response{
     Status: http.StatusCreated,
@@ -44,8 +44,8 @@ operator as *expectedValue* as in:
 
 ```go
 var id int64
-if Cmp(t, CreateRecord("test"),
-  JSON(`{"id": $1, "name": "test"}`, Catch(&id, Ignore()))) {
+if td.Cmp(t, CreateRecord("test"),
+  td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.Ignore()))) {
   t.Logf("Created record ID is %d", id)
 }
 ```

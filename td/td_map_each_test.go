@@ -27,6 +27,13 @@ func TestMapEach(t *testing.T) {
 
 	checkOKForEach(t,
 		[]interface{}{
+			map[int]string{1: "foo", 2: "bar"},
+			&map[int]string{1: "foo", 2: "bar"},
+		},
+		td.MapEach(td.Len(3)))
+
+	checkOKForEach(t,
+		[]interface{}{
 			map[string]int{},
 			&map[string]int{},
 			MyMap{},

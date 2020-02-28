@@ -27,9 +27,14 @@ var _ TestDeep = &tdPtr{}
 //
 // "val" depends on data type. For example, if the compared data is an
 // *int, one can have:
-//   Ptr(12)
+//
+//   num := 12
+//   td.Cmp(t, &num, td.Ptr(12)) // succeeds
+//
 // as well as an other operator:
-//   Ptr(Between(3, 4))
+//
+//   num := 3
+//   td.Cmp(t, &num, td.Ptr(td.Between(3, 4)))
 //
 // TypeBehind method returns the reflect.Type of a pointer on "val",
 // except if "val" is a TestDeep operator. In this case, it delegates
@@ -103,12 +108,20 @@ var _ TestDeep = &tdPPtr{}
 //
 // "val" depends on data type. For example, if the compared data is an
 // **int, one can have:
-//   PPtr(12)
+//
+//   num := 12
+//   pnum = &num
+//   td.Cmp(t, &pnum, td.PPtr(12)) // succeeds
+//
 // as well as an other operator:
-//   PPtr(Between(3, 4))
+//
+//   num := 3
+//   pnum = &num
+//   td.Cmp(t, &pnum, td.PPtr(td.Between(3, 4))) // succeeds
 //
 // It is more efficient and shorter to write than:
-//   Ptr(Ptr(val))
+//
+//   td.Cmp(t, &pnum, td.Ptr(td.Ptr(val))) // succeeds too
 //
 // TypeBehind method returns the reflect.Type of a pointer on a
 // pointer on "val", except if "val" is a TestDeep operator. In this

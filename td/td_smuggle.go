@@ -133,66 +133,80 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 // "fn" must return at least one value. These value will be compared as is
 // to "expectedValue", here integer 28:
 //
-//   Smuggle(func(value string) int {
-//     num, _ := strconv.Atoi(value)
-//     return num
-//   }, 28)
+//   td.Cmp(t, "0028",
+//     td.Smuggle(func(value string) int {
+//       num, _ := strconv.Atoi(value)
+//       return num
+//     }, 28),
+//   )
 //
 // or using an other TestDeep operator, here Between(28, 30):
 //
-//   Smuggle(func(value string) int {
-//     num, _ := strconv.Atoi(value)
-//     return num
-//   }, Between(28, 30))
+//   td.Cmp(t, "0029",
+//     td.Smuggle(func(value string) int {
+//       num, _ := strconv.Atoi(value)
+//       return num
+//     }, td.Between(28, 30)),
+//   )
 //
 // "fn" can return a second boolean value, used to tell that a problem
 // occurred and so stop the comparison:
 //
-//   Smuggle(func(value string) (int, bool) {
-//     num, err := strconv.Atoi(value)
-//     return num, err == nil
-//   }, Between(28, 30))
+//   td.Cmp(t, "0029",
+//     td.Smuggle(func(value string) (int, bool) {
+//       num, err := strconv.Atoi(value)
+//       return num, err == nil
+//     }, td.Between(28, 30)),
+//   )
 //
 // "fn" can return a third string value which is used to describe the
 // test when a problem occurred (false second boolean value):
 //
-//   Smuggle(func(value string) (int, bool, string) {
-//     num, err := strconv.Atoi(value)
-//     if err != nil {
-//       return 0, false, "string must contain a number"
-//     }
-//     return num, true, ""
-//   }, Between(28, 30))
+//   td.Cmp(t, "0029",
+//     td.Smuggle(func(value string) (int, bool, string) {
+//       num, err := strconv.Atoi(value)
+//       if err != nil {
+//         return 0, false, "string must contain a number"
+//       }
+//       return num, true, ""
+//     }, td.Between(28, 30)),
+//   )
 //
 // Instead of returning (X, bool) or (X, bool, string), "fn" can
 // return (X, error). When a problem occurs, the returned error is
 // non-nil, as in:
 //
-//   Smuggle(func(value string) (int, error) {
-//     num, err := strconv.Atoi(value)
-//     return num, err
-//   }, Between(28, 30))
+//   td.Cmp(t, "0029",
+//     td.Smuggle(func(value string) (int, error) {
+//       num, err := strconv.Atoi(value)
+//       return num, err
+//     }, td.Between(28, 30)),
+//   )
 //
 // Which can be simplified to:
 //
-//   Smuggle(strconv.Atoi, Between(28, 30))
+//   td.Cmp(t, "0029", td.Smuggle(strconv.Atoi, td.Between(28, 30)))
 //
 // Imagine you want to compare that the Year of a date is between 2010
 // and 2020:
 //
-//   Smuggle(func(date time.Time) int { return date.Year() },
-//     Between(2010, 2020))
+//   td.Cmp(t, time.Date(2015, time.May, 1, 1, 2, 3, 0, time.UTC),
+//     td.Smuggle(func(date time.Time) int { return date.Year() },
+//       td.Between(2010, 2020)),
+//   )
 //
 // In this case the data location forwarded to next test will be
 // something like "DATA.MyTimeField<smuggled>", but you can act on it
 // too by returning a SmuggledGot struct (by value or by address):
 //
-//   Smuggle(func(date time.Time) SmuggledGot {
-//     return SmuggledGot{
-//       Name: "Year",
-//       Got:  date.Year(),
-//     }
-//   }, Between(2010, 2020))
+//   td.Cmp(t, time.Date(2015, time.May, 1, 1, 2, 3, 0, time.UTC),
+//     td.Smuggle(func(date time.Time) SmuggledGot {
+//       return SmuggledGot{
+//         Name: "Year",
+//         Got:  date.Year(),
+//       }
+//     }, td.Between(2010, 2020)),
+//   )
 //
 // then the data location forwarded to next test will be something like
 // "DATA.MyTimeField.Year". The "."  between the current path (here
@@ -207,31 +221,35 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 //
 //   // Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
 //   // whether this date is contained between 2 hours before now and now.
-//   Smuggle(func(date string) (*SmuggledGot, bool, string) {
-//     date, err := time.Parse("2006/01/02 15:04:05", date)
-//     if err != nil {
-//       return nil, false, `date must conform to "YYYY/mm/DD HH:MM:SS" format`
-//     }
-//     return &SmuggledGot{
-//       Name: "Date",
-//       Got:  date,
-//     }, true, ""
-//   }, Between(time.Now().Add(-2*time.Hour), time.Now()))
+//   td.Cmp(t, "2020-01-25 12:13:14",
+//     td.Smuggle(func(date string) (*SmuggledGot, bool, string) {
+//       date, err := time.Parse("2006/01/02 15:04:05", date)
+//       if err != nil {
+//         return nil, false, `date must conform to "YYYY/mm/DD HH:MM:SS" format`
+//       }
+//       return &SmuggledGot{
+//         Name: "Date",
+//         Got:  date,
+//       }, true, ""
+//     }, td.Between(time.Now().Add(-2*time.Hour), time.Now())),
+//   )
 //
 // or:
 //
 //   // Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
 //   // whether this date is contained between 2 hours before now and now.
-//   Smuggle(func(date string) (*SmuggledGot, error) {
-//     date, err := time.Parse("2006/01/02 15:04:05", date)
-//     if err != nil {
-//       return nil, err
-//     }
-//     return &SmuggledGot{
-//       Name: "Date",
-//       Got:  date,
-//     }, nil
-//   }, Between(time.Now().Add(-2*time.Hour), time.Now()))
+//   td.Cmp(t, "2020-01-25 12:13:14",
+//     td.Smuggle(func(date string) (*SmuggledGot, error) {
+//       date, err := time.Parse("2006/01/02 15:04:05", date)
+//       if err != nil {
+//         return nil, err
+//       }
+//       return &SmuggledGot{
+//         Name: "Date",
+//         Got:  date,
+//       }, nil
+//     }, td.Between(time.Now().Add(-2*time.Hour), time.Now())),
+//   )
 //
 // Smuggle can also be used to access a struct field embedded in
 // several struct layers.
@@ -242,8 +260,8 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 //   got := C{B: B{A: &A{Num: 12}}}
 //
 //   // Tests that got.B.A.Num is 12
-//   Cmp(t, got,
-//     Smuggle(func(c C) int {
+//   td.Cmp(t, got,
+//     td.Smuggle(func(c C) int {
 //       return c.B.A.Num
 //     }, 12))
 //
@@ -252,7 +270,7 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 // call in the above example can be rewritten as follows:
 //
 //   // Tests that got.B.A.Num is 12
-//   Cmp(t, got, Smuggle("B.A.Num", 12))
+//   td.Cmp(t, got, td.Smuggle("B.A.Num", 12))
 //
 // Behind the scenes, a temporary function is automatically created to
 // achieve the same goal, but add some checks against nil values and
@@ -419,7 +437,7 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (s *tdSmuggle) HandleInvalid() bool {
-	return true // Knows how to handle untyped nil values (aka. invalid values)
+	return true // Knows how to handle untyped nil values (aka invalid values)
 }
 
 func (s *tdSmuggle) String() string {

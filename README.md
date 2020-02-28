@@ -21,7 +21,7 @@ go-testdeep
 - [Available operators](https://go-testdeep.zetta.rocks/operators/)
 - [Helpers](#helpers)
   - [`tdhttp` or HTTP API testing helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
-  - [`tdutil` a.k.a. the helper of helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil)
+  - [`tdutil` aka the helper of helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil)
 - [See also](#see-also)
 - [License](#license)
 - [FAQ](https://go-testdeep.zetta.rocks/faq/)
@@ -208,6 +208,16 @@ some functions to easily test HTTP handlers.
 See [`tdhttp`] documentation for details or
 [FAQ](https://go-testdeep.zetta.rocks/faq/#what-about-testing-the-response-using-my-api) for an
 example of use.
+
+### `tdutil` aka the helper of helpers
+
+The package `github.com/maxatome/go-testdeep/helpers/tdutil` allows to
+write unit tests for go-testdeep helpers and so provides some helpful
+functions.
+
+See
+[`tdutil`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil)
+for details.
 
 
 ## See also

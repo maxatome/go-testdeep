@@ -16,9 +16,9 @@ array/slice, and each array/slice item should be matched by an
 expected item to succeed.
 
 ```go
-Cmp(t, []int{1, 1, 2}, Set(1, 2))    // succeeds
-Cmp(t, []int{1, 1, 2}, Set(2, 1))    // succeeds
-Cmp(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing
+td.Cmp(t, []int{1, 1, 2}, td.Set(1, 2))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.Set(2, 1))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.Set(1, 2, 3)) // fails, 3 is missing
 ```
 
 

@@ -14,11 +14,11 @@ compared value must be an array, a channel, a map, a slice or a
 
 *expectedLen* can be an `int` value:
 ```go
-Cmp(t, gotSlice, Len(12))
+td.Cmp(t, gotSlice, td.Len(12))
 ```
 as well as an other operator:
 ```go
-Cmp(t, gotSlice, Len(Between(3, 4)))
+td.Cmp(t, gotSlice, td.Len(Between(3, 4)))
 ```
 
 

@@ -16,9 +16,11 @@ import (
 
 // CmpTrue is a shortcut for:
 //
-//   Cmp(t, got, true, args...)
+//   td.Cmp(t, got, true, args...)
 //
 // Returns true if the test is OK, false if it fails.
+//
+//   td.CmpTrue(t, IsAvailable(x), "x should be available")
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -26,16 +28,18 @@ import (
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpTrue(t TestingT, got bool, args ...interface{}) bool {
 	t.Helper()
 	return Cmp(t, got, true, args...)
 }
 
 // CmpFalse is a shortcut for:
 //
-//   Cmp(t, got, false, args...)
+//   td.Cmp(t, got, false, args...)
 //
 // Returns true if the test is OK, false if it fails.
+//
+//   td.CmpFalse(t, IsAvailable(x), "x should not be available")
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -43,7 +47,7 @@ func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpFalse(t TestingT, got bool, args ...interface{}) bool {
 	t.Helper()
 	return Cmp(t, got, false, args...)
 }
@@ -91,7 +95,7 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) 
 // CmpError checks that "got" is non-nil error.
 //
 //   _, err := MyFunction(1, 2, 3)
-//   CmpError(t, err, "MyFunction(1, 2, 3) should return an error")
+//   td.CmpError(t, err, "MyFunction(1, 2, 3) should return an error")
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -107,7 +111,7 @@ func CmpError(t TestingT, got error, args ...interface{}) bool {
 // CmpNoError checks that "got" is nil error.
 //
 //   value, err := MyFunction(1, 2, 3)
-//   if CmpNoError(t, err) {
+//   if td.CmpNoError(t, err) {
 //     // one can now check value...
 //   }
 //
@@ -208,7 +212,19 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 // are fulfilled.
 //
 // Note that calling panic(nil) in "fn" body is detected as a panic
-// (in this case "expectedPanic" has to be nil.)
+// (in this case "expectedPanic" has to be nil).
+//
+//   td.CmpPanic(t,
+//     func() { panic("I am panicking!") },
+//     "I am panicking!",
+//     "The function should panic with the right string") // succeeds
+//
+//   td.CmpPanic(t,
+//     func() { panic("I am panicking!") },
+//     Contains("panicking!"),
+//     "The function should panic with a string containing `panicking!`") // succeeds
+//
+//   td.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)") // succeeds
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -227,6 +243,11 @@ func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 // trace appear in the test report.
 //
 // Note that calling panic(nil) in "fn" body is detected as a panic.
+//
+//   td.CmpNotPanic(t, func() {}) // succeeds as function does not panic
+//
+//   td.CmpNotPanic(t, func() { panic("I am panicking!") }) // fails
+//   td.CmpNotPanic(t, func() { panic(nil) })               // fails too
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and

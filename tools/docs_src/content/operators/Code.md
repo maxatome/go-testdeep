@@ -13,8 +13,9 @@ the same as the type of the compared value.
 
 *fn* can return a single `bool` kind value, telling that yes or no
 the custom test is successful:
+
 ```go
-Cmp(t, gotTime,
+td.Cmp(t, gotTime,
   Code(func(date time.Time) bool {
     return date.Year() == 2018
   }))
@@ -23,8 +24,9 @@ Cmp(t, gotTime,
 or two values (`bool`, `string`) kinds. The `bool` value has the same
 meaning as above, and the `string` value is used to describe the
 test when it fails:
+
 ```go
-Cmp(t, gotTime,
+td.Cmp(t, gotTime,
   Code(func(date time.Time) (bool, string) {
     if date.Year() == 2018 {
       return true, ""
@@ -35,8 +37,9 @@ Cmp(t, gotTime,
 
 or a single [`error`](https://golang.org/pkg/builtin/#error) value. If the returned [`error`](https://golang.org/pkg/builtin/#error) is `nil`, the test
 succeeded, else the [`error`](https://golang.org/pkg/builtin/#error) contains the reason of failure:
+
 ```go
-Cmp(t, gotJsonRawMesg,
+td.Cmp(t, gotJsonRawMesg,
   Code(func(b json.RawMessage) error {
     var c map[string]int
     err := json.Unmarshal(b, &c)

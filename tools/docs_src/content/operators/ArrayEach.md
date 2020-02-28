@@ -12,6 +12,26 @@ pointers on array/slice. It compares each item of data array/slice
 against *expectedValue*. During a match, all items have to match to
 succeed.
 
+```go
+got := [3]string{"foo", "bar", "biz"}
+td.Cmp(t, got, td.ArrayEach(td.Len(3)))         // succeeds
+td.Cmp(t, got, td.ArrayEach(td.HasPrefix("b"))) // fails coz "foo"
+```
+
+Works on slices as well:
+
+```go
+got := []Person{
+  {Name: "Bob", Age: 42},
+  {Name: "Alice", Age: 24},
+}
+td.Cmp(t, got, td.ArrayEach(
+  td.Struct(Person{}, td.StructFields{
+    Age: td.Between(20, 45),
+  })),
+) // succeeds, each Person has Age field between 20 and 45
+```
+
 
 > See also [<i class='fas fa-book'></i> ArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#ArrayEach).
 

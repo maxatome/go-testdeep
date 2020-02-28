@@ -24,6 +24,10 @@ var _ TestDeep = &tdNaN{}
 // input(NaN): float
 
 // NaN operator checks that data is a float and is not-a-number.
+//
+//   got := math.NaN()
+//   td.Cmp(t, got, td.NaN()) // succeeds
+//   td.Cmp(t, 4.2, td.NaN()) // fails
 func NaN() TestDeep {
 	return &tdNaN{
 		base: newBase(3),
@@ -65,6 +69,11 @@ var _ TestDeep = &tdNotNaN{}
 // input(NotNaN): float
 
 // NotNaN operator checks that data is a float and is not not-a-number.
+//
+//   got := math.NaN()
+//   td.Cmp(t, got, td.NotNaN()) // fails
+//   td.Cmp(t, 4.2, td.NotNaN()) // succeeds
+//   td.Cmp(t, 4, td.NotNaN())   // fails, as 4 is not a float
 func NotNaN() TestDeep {
 	return &tdNotNaN{
 		base: newBase(3),

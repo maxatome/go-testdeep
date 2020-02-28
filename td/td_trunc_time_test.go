@@ -48,6 +48,9 @@ func TestTruncTime(t *testing.T) {
 	checkOK(t, gotDate, td.TruncTime(gotDate.In(UTCp2)))
 	checkOK(t, gotDate, td.TruncTime(gotDate.In(UTCm2)))
 
+	checkOK(t, gotDate.In(UTCm2), td.TruncTime(gotDate.In(UTCp2)))
+	checkOK(t, gotDate.In(UTCp2), td.TruncTime(gotDate.In(UTCm2)))
+
 	expDate := gotDate
 
 	checkOK(t, gotDate, td.TruncTime(expDate))

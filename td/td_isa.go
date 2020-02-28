@@ -27,21 +27,25 @@ var _ TestDeep = &tdIsa{}
 // Isa operator checks the data type or whether data implements an
 // interface or not.
 //
-// Typically type checks:
-//   Isa(time.Time{})
-//   Isa(&time.Time{})
-//   Isa(map[string]time.Time{})
+// Typical type checks:
 //
-// For interfaces it is a bit more complicated, as:
+//   td.Cmp(t, time.Now(), td.Isa(time.Time{}))  // succeeds
+//   td.Cmp(t, time.Now(), td.Isa(&time.Time{})) // fails, as not a *time.Time
+//   td.Cmp(t, got, td.Isa(map[string]time.Time{}))
+//
+// For interfaces, it is a bit more complicated, as:
+//
 //   fmt.Stringer(nil)
-// is not an interface, but just nil... To bypass this golang
+//
+// is not an interface, but just nil… To bypass this golang
 // limitation, Isa accepts pointers on interfaces. So checking that
 // data implements fmt.Stringer interface should be written as:
-//   Isa((*fmt.Stringer)(nil))
 //
-// Of course, in the latter case, if data type is *fmt.Stringer, Isa
-// will match too (in fact before checking whether it implements
-// fmt.Stringer or not.)
+//   td.Cmp(t, bytes.Buffer{}, td.Isa((*fmt.Stringer)(nil))) // succeeds
+//
+// Of course, in the latter case, if checked data type is
+// *fmt.Stringer, Isa will match too (in fact before checking whether
+// it implements fmt.Stringer or not).
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Isa(model interface{}) TestDeep {

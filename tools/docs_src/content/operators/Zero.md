@@ -19,9 +19,9 @@ func Zero() TestDeep
 Beware that:
 
 ```go
-Cmp(t, AnyStruct{}, Zero())       // is true
-Cmp(t, &AnyStruct{}, Zero())      // is false, coz pointer ≠ nil
-Cmp(t, &AnyStruct{}, Ptr(Zero())) // is true
+td.Cmp(t, AnyStruct{}, td.Zero())          // is true
+td.Cmp(t, &AnyStruct{}, td.Zero())         // is false, coz pointer ≠ nil
+td.Cmp(t, &AnyStruct{}, td.Ptr(td.Zero())) // is true
 ```
 
 

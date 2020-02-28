@@ -21,6 +21,8 @@
 // missing flexibility using "operators" when the expected value (or
 // one of its component) cannot be matched exactly.
 //
+// See https://go-testdeep.zetta.rocks/ for details.
+//
 // Example of use
 //
 // Imagine a function returning a struct containing a newly created

@@ -19,11 +19,28 @@ During a match, each expected entry should match in the compared
 map. But some entries in the compared map may not be expected.
 
 ```go
-Cmp(t, map[string]int{"a": 1, "b": 2},
-  SuperMapOf(map[string]int{"a": 1}, nil)) // succeeds
+got := map[string]string{
+  "foo": "test",
+  "bar": "wizz",
+  "zip": "buzz",
+}
+td.Cmp(t, got, td.SuperMapOf(
+  map[string]string{
+    "foo": "test",
+  },
+  td.MapEntries{
+    "zip": td.HasSuffix("zz"),
+  }),
+) // succeeds
 
-Cmp(t, map[string]int{"a": 1, "c": 3},
-  SuperMapOf(map[string]int{"a": 1, "b": 2}, nil)) // fails, missing {"b": 2}
+td.Cmp(t, got, td.SuperMapOf(
+  map[string]string{
+    "foo": "test",
+  },
+  td.MapEntries{
+    "biz": td.HasSuffix("zz"),
+  }),
+) // fails, missing {"biz": …} in got
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.

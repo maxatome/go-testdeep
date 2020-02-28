@@ -20,9 +20,9 @@ are presented as a `[]string` or `[][]byte` depending the original
 matched data. Note that an other operator can be used here.
 
 ```go
-Cmp(t, "John Doe",
+td.Cmp(t, "John Doe",
   ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
-Cmp(t, "John Doe",
+td.Cmp(t, "John Doe",
   ReAll(`(\w+)(?: |\z)`, Bag("Doe", "John"))) // succeeds
 ```
 

@@ -11,6 +11,11 @@ func N(num interface{}, tolerance ...interface{}) TestDeep
 *tolerance* is missing, it defaults to 0. *num* and *tolerance*
 must be the same kind as the compared value.
 
+```go
+td.Cmp(t, 12.2, td.N(12., 0.3)) // succeeds
+td.Cmp(t, 12.2, td.N(12., 0.1)) // fails
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *num*.
 
 

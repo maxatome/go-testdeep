@@ -22,7 +22,15 @@ var _ TestDeep = &tdAny{}
 // input(Any): all
 
 // Any operator compares data against several expected values. During
-// a match, at least one of them has to match to succeed.
+// a match, at least one of them has to match to succeed. Consider it
+// as a "OR" logical operator.
+//
+//   td.Cmp(t, "foo", td.Any("bar", "foo", "zip")) // succeeds
+//   td.Cmp(t, "foo", td.Any(
+//     td.Len(4),
+//     td.HasPrefix("f"),
+//     td.HasSuffix("z"),
+//   )) // succeeds coz "f" prefix
 //
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types

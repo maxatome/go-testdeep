@@ -16,8 +16,8 @@ array/slice. But some items in the compared array/slice may not be
 expected.
 
 ```go
-Cmp(t, []int{1, 1, 2}, SuperSetOf(1))    // succeeds
-Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
+td.Cmp(t, []int{1, 1, 2}, td.SuperSetOf(1))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.SuperSetOf(1, 3)) // fails, 3 is missing
 ```
 
 

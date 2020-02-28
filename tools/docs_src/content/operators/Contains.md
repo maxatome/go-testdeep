@@ -14,19 +14,19 @@ for strings) against *expectedValue*.
 
 ```go
 list := []int{12, 34, 28}
-Cmp(t, list, Contains(34))              // succeeds
-Cmp(t, list, Contains(Between(30, 35))) // succeeds too
-Cmp(t, list, Contains(35))              // fails
+td.Cmp(t, list, td.Contains(34))                 // succeeds
+td.Cmp(t, list, td.Contains(td.Between(30, 35))) // succeeds too
+td.Cmp(t, list, td.Contains(35))                 // fails
 
 hash := map[string]int{"foo": 12, "bar": 34, "zip": 28}
-Cmp(t, hash, Contains(34))              // succeeds
-Cmp(t, hash, Contains(Between(30, 35))) // succeeds too
-Cmp(t, hash, Contains(35))              // fails
+td.Cmp(t, hash, td.Contains(34))                 // succeeds
+td.Cmp(t, hash, td.Contains(td.Between(30, 35))) // succeeds too
+td.Cmp(t, hash, td.Contains(35))                 // fails
 
 got := "foo bar"
-Cmp(t, got, Contains('o'))               // succeeds
-Cmp(t, got, Contains(rune('o')))         // succeeds
-Cmp(t, got, Contains(Between('n', 'p'))) // succeeds
+td.Cmp(t, got, td.Contains('o'))                  // succeeds
+td.Cmp(t, got, td.Contains(rune('o')))            // succeeds
+td.Cmp(t, got, td.Contains(td.Between('n', 'p'))) // succeeds
 ```
 
 When [`Contains(nil)`]({{< ref "Contains" >}}) is used, `nil` is automatically converted to a
@@ -37,20 +37,20 @@ are equivalent (except the `(*byte)(nil)` one):
 ```go
 num := 123
 list := []*int{&num, nil}
-Cmp(t, list, Contains(nil))         // succeeds → (*int)(nil)
-Cmp(t, list, Contains((*int)(nil))) // succeeds
-Cmp(t, list, Contains(Nil()))       // succeeds
+td.Cmp(t, list, td.Contains(nil))         // succeeds → (*int)(nil)
+td.Cmp(t, list, td.Contains((*int)(nil))) // succeeds
+td.Cmp(t, list, td.Contains(Nil()))       // succeeds
 // But...
-Cmp(t, list, Contains((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
+td.Cmp(t, list, td.Contains((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 ```
 
 As well as these ones:
 
 ```go
 hash := map[string]*int{"foo": nil, "bar": &num}
-Cmp(t, hash, Contains(nil))         // succeeds → (*int)(nil)
-Cmp(t, hash, Contains((*int)(nil))) // succeeds
-Cmp(t, hash, Contains(Nil()))       // succeeds
+td.Cmp(t, hash, td.Contains(nil))         // succeeds → (*int)(nil)
+td.Cmp(t, hash, td.Contains((*int)(nil))) // succeeds
+td.Cmp(t, hash, td.Contains(Nil()))       // succeeds
 ```
 
 As a special case for `string` (or convertible), [`error`](https://golang.org/pkg/builtin/#error) or
@@ -61,13 +61,13 @@ expected `string`, `rune` or `byte`.
 
 ```go
 type Foobar string
-Cmp(t, Foobar("foobar"), Contains("ooba")) // succeeds
+td.Cmp(t, Foobar("foobar"), td.Contains("ooba")) // succeeds
 
 err := errors.New("error!")
-Cmp(t, err, Contains("ror")) // succeeds
+td.Cmp(t, err, td.Contains("ror")) // succeeds
 
 bstr := bytes.NewBufferString("fmt.Stringer!")
-Cmp(t, bstr, Contains("String")) // succeeds
+td.Cmp(t, bstr, td.Contains("String")) // succeeds
 ```
 
 

@@ -40,6 +40,14 @@ var _ TestDeep = &tdTruncTime{}
 // Whatever the "trunc" value is, the monotonic clock is stripped
 // before the comparison against "expectedTime".
 //
+//   gotDate := time.Date(2018, time.March, 9, 1, 2, 3, 999999999, time.UTC).
+//     In(time.FixedZone("UTC+2", 2))
+//
+//   expected := time.Date(2018, time.March, 9, 1, 2, 3, 0, time.UTC)
+//
+//   td.Cmp(t, gotDate, td.TruncTime(expected))              // fails, ns differ
+//   td.Cmp(t, gotDate, td.TruncTime(expected, time.Second)) // succeeds
+//
 // TypeBehind method returns the reflect.Type of "expectedTime".
 func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	if len(trunc) <= 1 {

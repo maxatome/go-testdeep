@@ -9,6 +9,13 @@ func NotNaN() TestDeep
 
 [`NotNaN`]({{< ref "NotNaN" >}}) operator checks that data is a float and is not not-a-number.
 
+```go
+got := math.NaN()
+td.Cmp(t, got, td.NotNaN()) // fails
+td.Cmp(t, 4.2, td.NotNaN()) // succeeds
+td.Cmp(t, 4, td.NotNaN())   // fails, as 4 is not a float
+```
+
 
 > See also [<i class='fas fa-book'></i> NotNaN godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#NotNaN).
 

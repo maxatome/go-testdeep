@@ -26,7 +26,7 @@ var _ TestDeep = &tdArray{}
 // ArrayEntries allows to pass array or slice entries to check in
 // functions Array and Slice. It is a map whose each key is the item
 // index and the corresponding value the expected item value (which
-// can be a TestDeep operator as well as a zero value.)
+// can be a TestDeep operator as well as a zero value).
 type ArrayEntries map[int]interface{}
 
 func newArray(kind reflect.Kind, model interface{}, expectedEntries ArrayEntries) *tdArray {
@@ -76,6 +76,11 @@ func newArray(kind reflect.Kind, model interface{}, expectedEntries ArrayEntries
 // "expectedEntries" can be nil, if no zero entries are expected and
 // no TestDeep operator are involved.
 //
+//   got := [3]int{12, 14, 17}
+//   td.Cmp(t, got, td.Array([3]int{0, 14}, td.ArrayEntries{0: 12, 2: 17})) // succeeds
+//   td.Cmp(t, got,
+//     td.Array([3]int{0, 14}, td.ArrayEntries{0: td.Gt(10), 2: td.Gt(15)})) // succeeds
+//
 // TypeBehind method returns the reflect.Type of "model".
 func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	a := newArray(reflect.Array, model, expectedEntries)
@@ -96,6 +101,11 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 //
 // "expectedEntries" can be nil, if no zero entries are expected and
 // no TestDeep operator are involved.
+//
+//   got := []int{12, 14, 17}
+//   td.Cmp(t, got, td.Slice([]int{0, 14}, td.ArrayEntries{0: 12, 2: 17})) // succeeds
+//   td.Cmp(t, got,
+//     td.Slice([]int{0, 14}, td.ArrayEntries{0: td.Gt(10), 2: td.Gt(15)})) // succeeds
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {

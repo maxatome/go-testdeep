@@ -18,6 +18,23 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 During a match, all expected entries must be found and all data
 entries must be expected to succeed.
 
+```go
+got := map[string]string{
+  "foo": "test",
+  "bar": "wizz",
+  "zip": "buzz",
+}
+td.Cmp(t, got, td.Map(
+  map[string]string{
+    "foo": "test",
+    "bar": "wizz",
+  },
+  td.MapEntries{
+    "zip": td.HasSuffix("zz"),
+  }),
+) // succeeds
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 

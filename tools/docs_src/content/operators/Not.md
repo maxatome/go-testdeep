@@ -14,6 +14,11 @@ match, it must not match to succeed.
 provided as a more readable function when only one argument is
 needed.
 
+```go
+td.Cmp(t, 12, td.Not(10)) // succeeds
+td.Cmp(t, 12, td.Not(12)) // fails
+```
+
 
 > See also [<i class='fas fa-book'></i> Not godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Not).
 

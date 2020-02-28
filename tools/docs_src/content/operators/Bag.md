@@ -15,11 +15,11 @@ array/slice, and each array/slice item should be matched by an
 expected item to succeed.
 
 ```go
-Cmp(t, []int{1, 1, 2}, Bag(1, 1, 2))    // succeeds
-Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1))    // succeeds
-Cmp(t, []int{1, 1, 2}, Bag(2, 1, 1))    // succeeds
-Cmp(t, []int{1, 1, 2}, Bag(1, 2))       // fails, one 1 is missing
-Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing
+td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 1, 2))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.Bag(2, 1, 1))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2))       // fails, one 1 is missing
+td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1, 3)) // fails, 3 is missing
 ```
 
 

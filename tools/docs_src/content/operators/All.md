@@ -8,7 +8,16 @@ func All(expectedValues ...interface{}) TestDeep
 ```
 
 [`All`]({{< ref "All" >}}) operator compares data against several expected values. During
-a match, all of them have to match to succeed.
+a match, all of them have to match to succeed. Consider it
+as a "AND" logical operator.
+
+```go
+td.Cmp(t, "foobar", td.All(
+  td.Len(6),
+  td.HasPrefix("fo"),
+  td.HasSuffix("ar"),
+)) // succeeds
+```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method can return a non-`nil` [`reflect.Type`](https://golang.org/pkg/reflect/#Type) if all items
 known non-interface types are equal, or if only interface types

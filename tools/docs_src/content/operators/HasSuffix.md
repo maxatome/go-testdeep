@@ -13,13 +13,13 @@ tested before [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer).)
 
 ```go
 type Foobar string
-Cmp(t, Foobar("foobar"), HasSuffix("bar")) // succeeds
+td.Cmp(t, Foobar("foobar"), td.HasSuffix("bar")) // succeeds
 
 err := errors.New("error!")
-Cmp(t, err, HasSuffix("!")) // succeeds
+td.Cmp(t, err, td.HasSuffix("!")) // succeeds
 
 bstr := bytes.NewBufferString("fmt.Stringer!")
-Cmp(t, bstr, HasSuffix("!")) // succeeds
+td.Cmp(t, bstr, td.HasSuffix("!")) // succeeds
 ```
 
 

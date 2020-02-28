@@ -14,6 +14,12 @@ channel, map or slice are considered empty.
 Note that the compared data can be a pointer (of pointer of pointer
 etc.) on an array, a channel, a map, a slice or a `string`.
 
+```go
+td.Cmp(t, "", td.Empty())                // succeeds
+td.Cmp(t, map[string]bool{}, td.Empty()) // succeeds
+td.Cmp(t, []string{"foo"}, td.Empty())   // fails
+```
+
 
 > See also [<i class='fas fa-book'></i> Empty godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Empty).
 

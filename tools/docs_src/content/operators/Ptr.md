@@ -12,12 +12,17 @@ compares it to *val*.
 
 *val* depends on data type. For example, if the compared data is an
 `*int`, one can have:
+
 ```go
-Ptr(12)
+num := 12
+td.Cmp(t, &num, Ptr(12)) // succeeds
 ```
+
 as well as an other operator:
+
 ```go
-Ptr(Between(3, 4))
+num := 3
+td.Cmp(t, &num, Ptr(Between(3, 4)))
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a pointer on *val*,

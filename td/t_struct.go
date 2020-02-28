@@ -334,6 +334,10 @@ func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 //
 //   t.Cmp(got, true, args...)
 //
+// Returns true if the test is OK, false if it fails.
+//
+//   t.True(IsAvailable(x), "x should be available")
+//
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of "args" is a string and contains a '%' rune then
@@ -348,6 +352,10 @@ func (t *T) True(got interface{}, args ...interface{}) bool {
 // False is shortcut for:
 //
 //   t.Cmp(got, false, args...)
+//
+// Returns true if the test is OK, false if it fails.
+//
+//   t.False(IsAvailable(x), "x should not be available")
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -403,7 +411,17 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 // are fulfilled.
 //
 // Note that calling panic(nil) in "fn" body is detected as a panic
-// (in this case "expectedPanic" has to be nil.)
+// (in this case "expectedPanic" has to be nil).
+//
+//   t.CmpPanic(func() { panic("I am panicking!") },
+//     "I am panicking!",
+//     "The function should panic with the right string")
+//
+//   t.CmpPanic(func() { panic("I am panicking!") },
+//     Contains("panicking!"),
+//     "The function should panic with a string containing `panicking!`")
+//
+//   t.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)")
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -422,6 +440,11 @@ func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool 
 // trace appear in the test report.
 //
 // Note that calling panic(nil) in "fn" body is detected as a panic.
+//
+//   t.CmpNotPanic(func() {}) // succeeds as function does not panic
+//
+//   t.CmpNotPanic(func() { panic("I am panicking!") }) // fails
+//   t.CmpNotPanic(func() { panic(nil) })               // fails too
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and

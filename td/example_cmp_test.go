@@ -816,7 +816,7 @@ func ExampleCmpIsa_interface() {
 		"checks errGot is a *error or implements error interface")
 	fmt.Println(ok)
 
-	// As nil, is passed below, it is not an interface but nil... So it
+	// As nil, is passed below, it is not an interface but nil… So it
 	// does not match
 	errGot = nil
 

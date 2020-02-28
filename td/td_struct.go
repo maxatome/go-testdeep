@@ -37,10 +37,10 @@ func (e fieldInfoSlice) Len() int           { return len(e) }
 func (e fieldInfoSlice) Less(i, j int) bool { return e[i].name < e[j].name }
 func (e fieldInfoSlice) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
 
-// StructFields allows to pass struct fields to check in function
-// Struct. It is a map whose each key is the expected field name and
-// the corresponding value the expected field value (which can be a
-// TestDeep operator as well as a zero value.)
+// StructFields allows to pass struct fields to check in functions
+// Struct and SStruct. It is a map whose each key is the expected
+// field name and the corresponding value the expected field value
+// (which can be a TestDeep operator as well as a zero value.)
 type StructFields map[string]interface{}
 
 func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
@@ -148,7 +148,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 			// Try to force access to unexported fields
 			fieldIf, ok := dark.GetInterface(vfield, true)
 			if !ok {
-				// Probably in an environment where "unsafe" package is forbidden... :(
+				// Probably in an environment where "unsafe" package is forbidden… :(
 				fmt.Fprintf(os.Stderr, // nolint: errcheck
 					"field %s is unexported and cannot be overridden, skip it from model.\n",
 					fieldName)
@@ -212,6 +212,16 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 // "expectedFields" can be nil, if no zero entries are expected and
 // no TestDeep operators are involved.
 //
+//   td.Cmp(t, td.Struct(
+//     Person{
+//       Name: "John Doe",
+//     },
+//     td.StructFields{
+//       Age:      td.Between(40, 45),
+//       Children: 0,
+//     }),
+//   )
+//
 // During a match, all expected fields must be found to
 // succeed. Non-expected fields are ignored.
 //
@@ -224,23 +234,28 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 // pointer on a struct
 // input(SStruct): struct,ptr(ptr on struct)
 
-// SStruct operator (a.k.a. strict-Struct) compares the contents of a
+// SStruct operator (aka strict-Struct) compares the contents of a
 // struct or a pointer on a struct against values of "model" (if any)
 // and the values of "expectedFields". The zero values are compared
 // too even if they are omitted from "expectedFields": that is the
 // difference with Struct operator.
 //
-// To ignore a field, one has to specify it in "expectedFields" and
-// use the Ignore operator.
-//
-//   td.SStruct(Person{Name: "Bob"},
-//     td.StructFields{
-//       "Age": td.Ignore(),
-//     })
-//
 // "model" must be the same type as compared data.
 //
 // "expectedFields" can be nil, if no TestDeep operators are involved.
+//
+// To ignore a field, one has to specify it in "expectedFields" and
+// use the Ignore operator.
+//
+//   td.Cmp(t, td.SStruct(
+//     Person{
+//       Name: "John Doe",
+//     },
+//     td.StructFields{
+//       Age:      td.Between(40, 45),
+//       Children: td.Ignore(),
+//     }),
+//   )
 //
 // During a match, all expected and zero fields must be found to
 // succeed.

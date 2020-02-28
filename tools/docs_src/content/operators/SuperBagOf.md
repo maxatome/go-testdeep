@@ -15,8 +15,8 @@ array/slice. But some items in the compared array/slice may not be
 expected.
 
 ```go
-Cmp(t, []int{1, 1, 2}, SuperBagOf(1))       // succeeds
-Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing
+td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1))       // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 ```
 
 

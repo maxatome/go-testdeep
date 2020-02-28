@@ -10,6 +10,23 @@ func Nil() TestDeep
 [`Nil`]({{< ref "Nil" >}}) operator checks that data is `nil` (or is a non-`nil` interface,
 but containing a `nil` pointer.)
 
+```go
+var got *int
+td.Cmp(t, got, td.Nil())    // succeeds
+td.Cmp(t, got, nil)         // fails as (*int)(nil) ≠ untyped nil
+td.Cmp(t, got, (*int)(nil)) // succeeds
+```
+
+but:
+
+```go
+var got fmt.Stringer = (*bytes.Buffer)(nil)
+td.Cmp(t, got, td.Nil()) // succeeds
+td.Cmp(t, got, nil)      // fails, as the interface is not nil
+got = nil
+td.Cmp(t, got, nil) // succeeds
+```
+
 
 > See also [<i class='fas fa-book'></i> Nil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Nil).
 

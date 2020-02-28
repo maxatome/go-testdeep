@@ -10,6 +10,21 @@ func NotNil() TestDeep
 [`NotNil`]({{< ref "NotNil" >}}) operator checks that data is not `nil` (or is a non-`nil`
 interface, containing a non-`nil` pointer.)
 
+```go
+got := &Person{}
+td.Cmp(t, got, td.NotNil()) // succeeds
+td.Cmp(t, got, td.Not(nil)) // succeeds too, but be careful it is first
+// because of got type *Person ≠ untyped nil so prefer NotNil()
+```
+
+but:
+
+```go
+var got fmt.Stringer = (*bytes.Buffer)(nil)
+td.Cmp(t, got, td.NotNil()) // fails
+td.Cmp(t, got, td.Not(nil)) // succeeds, as the interface is not nil
+```
+
 
 > See also [<i class='fas fa-book'></i> NotNil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#NotNil).
 

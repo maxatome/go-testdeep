@@ -13,11 +13,11 @@ compared value must be an array, a channel or a slice.
 
 *expectedCap* can be an `int` value:
 ```go
-Cmp(t, gotSlice, Cap(12))
+td.Cmp(t, gotSlice, td.Cap(12))
 ```
 as well as an other operator:
 ```go
-Cmp(t, gotSlice, Cap(Between(3, 4)))
+td.Cmp(t, gotSlice, td.Cap(Between(3, 4)))
 ```
 
 

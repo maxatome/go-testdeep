@@ -17,11 +17,11 @@ package td
 // array/slice, and each array/slice item should be matched by an
 // expected item to succeed.
 //
-//   Cmp(t, []int{1, 1, 2}, Bag(1, 1, 2))    // succeeds
-//   Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1))    // succeeds
-//   Cmp(t, []int{1, 1, 2}, Bag(2, 1, 1))    // succeeds
-//   Cmp(t, []int{1, 1, 2}, Bag(1, 2))       // fails, one 1 is missing
-//   Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing
+//   td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 1, 2))    // succeeds
+//   td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1))    // succeeds
+//   td.Cmp(t, []int{1, 1, 2}, td.Bag(2, 1, 1))    // succeeds
+//   td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2))       // fails, one 1 is missing
+//   td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1, 3)) // fails, 3 is missing
 func Bag(expectedItems ...interface{}) TestDeep {
 	bag := newSetBase(allSet, false)
 	bag.Add(expectedItems...)
@@ -40,8 +40,8 @@ func Bag(expectedItems ...interface{}) TestDeep {
 // expected item to succeed. But some expected items can be missing
 // from the compared array/slice.
 //
-//   Cmp(t, []int{1}, SubBagOf(1, 1, 2))       // succeeds
-//   Cmp(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
+//   td.Cmp(t, []int{1}, td.SubBagOf(1, 1, 2))       // succeeds
+//   td.Cmp(t, []int{1, 1, 1}, td.SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
 func SubBagOf(expectedItems ...interface{}) TestDeep {
 	bag := newSetBase(subSet, false)
 	bag.Add(expectedItems...)
@@ -60,8 +60,8 @@ func SubBagOf(expectedItems ...interface{}) TestDeep {
 // array/slice. But some items in the compared array/slice may not be
 // expected.
 //
-//   Cmp(t, []int{1, 1, 2}, SuperBagOf(1))       // succeeds
-//   Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing
+//   td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1))       // succeeds
+//   td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 func SuperBagOf(expectedItems ...interface{}) TestDeep {
 	bag := newSetBase(superSet, false)
 	bag.Add(expectedItems...)

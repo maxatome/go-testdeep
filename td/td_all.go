@@ -23,7 +23,14 @@ var _ TestDeep = &tdAll{}
 // input(All): all
 
 // All operator compares data against several expected values. During
-// a match, all of them have to match to succeed.
+// a match, all of them have to match to succeed. Consider it
+// as a "AND" logical operator.
+//
+//   td.Cmp(t, "foobar", td.All(
+//     td.Len(6),
+//     td.HasPrefix("fo"),
+//     td.HasSuffix("ar"),
+//   )) // succeeds
 //
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types

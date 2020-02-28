@@ -10,27 +10,31 @@ func Isa(model interface{}) TestDeep
 [`Isa`]({{< ref "Isa" >}}) operator checks the data type or whether data implements an
 interface or not.
 
-Typically type checks:
+Typical type checks:
+
 ```go
-Isa(time.Time{})
-Isa(&time.Time{})
-Isa(map[string]time.Time{})
+td.Cmp(t, time.Now(), td.Isa(time.Time{}))  // succeeds
+td.Cmp(t, time.Now(), td.Isa(&time.Time{})) // fails, as not a pointer
+td.Cmp(t, got, td.Isa(map[string]time.Time{}))
 ```
 
-For interfaces it is a bit more complicated, as:
+For interfaces, it is a bit more complicated, as:
+
 ```go
 fmt.Stringer(nil)
 ```
-is not an interface, but just `nil`... To bypass this golang
+
+is not an interface, but just `nil`… To bypass this golang
 limitation, [`Isa`]({{< ref "Isa" >}}) accepts pointers on interfaces. So checking that
 data implements [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface should be written as:
+
 ```go
-Isa((*fmt.Stringer)(nil))
+td.Cmp(t, bytes.Buffer{}, td.Isa((*fmt.Stringer)(nil))) // succeeds
 ```
 
-Of course, in the latter case, if data type is [`*fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer), [`Isa`]({{< ref "Isa" >}})
-will match too (in fact before checking whether it implements
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) or not.)
+Of course, in the latter case, if checked data type is
+[`*fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer), [`Isa`]({{< ref "Isa" >}}) will match too (in fact before checking whether
+it implements [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) or not).
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 

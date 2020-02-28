@@ -11,8 +11,8 @@ func NotAny(expectedItems ...interface{}) TestDeep
 a pointer on array/slice) does not contain any of *expectedItems*.
 
 ```go
-Cmp(t, []int{1}, NotAny(1, 2, 3)) // fails
-Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds
+td.Cmp(t, []int{1}, td.NotAny(1, 2, 3)) // fails
+td.Cmp(t, []int{5}, td.NotAny(1, 2, 3)) // succeeds
 ```
 
 Beware that [`NotAny(…)`]({{< ref "NotAny" >}}) is not equivalent to [`Not(Any(…)`]({{< ref "Not" >}})).

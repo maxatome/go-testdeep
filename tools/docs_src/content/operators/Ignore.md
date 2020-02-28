@@ -8,7 +8,21 @@ func Ignore() TestDeep
 ```
 
 [`Ignore`]({{< ref "Ignore" >}}) operator is always true, whatever data is. It is useful when
-comparing a slice and wanting to ignore some indexes, for example.
+comparing a slice with [`Slice`]({{< ref "Slice" >}}) and wanting to ignore some indexes,
+for example. Or comparing a struct with [`SStruct`]({{< ref "SStruct" >}}) and wanting to
+ignore some fields:
+
+```go
+td.Cmp(t, td.SStruct(
+  Person{
+    Name: "John Doe",
+  },
+  td.StructFields{
+    Age:      td.Between(40, 45),
+    Children: td.Ignore(),
+  }),
+)
+```
 
 
 > See also [<i class='fas fa-book'></i> Ignore godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Ignore).

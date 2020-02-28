@@ -16,8 +16,8 @@ expected item to succeed. But some expected items can be missing
 from the compared array/slice.
 
 ```go
-Cmp(t, []int{1, 1}, SubSetOf(1, 2))    // succeeds
-Cmp(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item
+td.Cmp(t, []int{1, 1}, td.SubSetOf(1, 2))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.SubSetOf(1, 3)) // fails, 2 is an extra item
 ```
 
 

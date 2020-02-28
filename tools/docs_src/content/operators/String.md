@@ -13,10 +13,10 @@ or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface ([`error`](h
 
 ```go
 err := errors.New("error!")
-Cmp(t, err, String("error!")) // succeeds
+td.Cmp(t, err, td.String("error!")) // succeeds
 
 bstr := bytes.NewBufferString("fmt.Stringer!")
-Cmp(t, bstr, String("fmt.Stringer!")) // succeeds
+td.Cmp(t, bstr, td.String("fmt.Stringer!")) // succeeds
 ```
 
 

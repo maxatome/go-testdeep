@@ -11,6 +11,12 @@ func MapEach(expectedValue interface{}) TestDeep
 of data map against expected value. During a match, all values have
 to match to succeed.
 
+```go
+got := map[string]string{"test": "foo", "buzz": "bar"}
+td.Cmp(t, got, td.MapEach("bar"))     // fails, coz "foo" ≠ "bar"
+td.Cmp(t, got, td.MapEach(td.Len(3))) // succeeds as values are 3 chars long
+```
+
 
 > See also [<i class='fas fa-book'></i> MapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#MapEach).
 

@@ -58,6 +58,10 @@ func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected interface{},
 // the reason of failure is logged with the help of "t" Error()
 // method.
 //
+//   got := "foobar"
+//   td.Cmp(t, got, "foobar")            // succeeds
+//   td.Cmp(t, got, td.HasPrefix("foo")) // succeeds
+//
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of "args" is a string and contains a '%' rune then
@@ -71,6 +75,10 @@ func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool {
 
 // CmpDeeply works the same as Cmp and is still available for
 // compatibility purpose. Use shorter Cmp in new code.
+//
+//   got := "foobar"
+//   td.CmpDeeply(t, got, "foobar")            // succeeds
+//   td.CmpDeeply(t, got, td.HasPrefix("foo")) // succeeds
 func CmpDeeply(t TestingT, got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	return cmpDeeply(newContext(), t, got, expected, args...)

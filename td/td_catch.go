@@ -33,8 +33,8 @@ var _ TestDeep = &tdCatch{}
 // type.
 //
 //   var id int64
-//   if Cmp(t, CreateRecord("test"),
-//     JSON(`{"id": $1, "name": "test"}`, Catch(&id, NotZero()))) {
+//   if td.Cmp(t, CreateRecord("test"),
+//     td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.NotZero()))) {
 //     t.Logf("Created record ID is %d", id)
 //   }
 //
@@ -42,7 +42,7 @@ var _ TestDeep = &tdCatch{}
 //
 //   var id int64
 //   if tdhttp.CmpJSONResponse(t,
-//     tdhttp.NewRequest("POST", "/item", `{"name":"foo"}`),
+//     tdhttp.Post("/item", `{"name":"foo"}`),
 //     api.Handler,
 //     tdhttp.Response{
 //       Status: http.StatusCreated,
@@ -56,8 +56,8 @@ var _ TestDeep = &tdCatch{}
 // operator as "expectedValue" as in:
 //
 //   var id int64
-//   if Cmp(t, CreateRecord("test"),
-//     JSON(`{"id": $1, "name": "test"}`, Catch(&id, Ignore()))) {
+//   if td.Cmp(t, CreateRecord("test"),
+//     td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.Ignore()))) {
 //     t.Logf("Created record ID is %d", id)
 //   }
 func Catch(target interface{}, expectedValue interface{}) TestDeep {

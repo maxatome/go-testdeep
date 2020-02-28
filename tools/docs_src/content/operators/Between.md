@@ -22,6 +22,13 @@ or not:
 
 If *bounds* is missing, it defaults to [`BoundsInIn`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind).
 
+```go
+tc.Cmp(t, 17, td.Between(17, 20))               // succeeds, BoundsInIn by default
+tc.Cmp(t, 17, td.Between(10, 17, BoundsInOut))  // fails
+tc.Cmp(t, 17, td.Between(10, 17, BoundsOutIn))  // succeeds
+tc.Cmp(t, 17, td.Between(17, 20, BoundsOutOut)) // fails
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *from* (same as the *to* one.)
 
 

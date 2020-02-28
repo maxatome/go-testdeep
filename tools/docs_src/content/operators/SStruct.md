@@ -13,19 +13,24 @@ and the values of *expectedFields*. The zero values are compared
 too even if they are omitted from *expectedFields*: that is the
 difference with [`Struct`]({{< ref "Struct" >}}) operator.
 
+*model* must be the same type as compared data.
+
+*expectedFields* can be `nil`, if no [TestDeep operators]({{< ref "operators" >}}) are involved.
+
 To ignore a field, one has to specify it in *expectedFields* and
 use the [`Ignore`]({{< ref "Ignore" >}}) operator.
 
 ```go
-td.SStruct(Person{Name: "Bob"},
+td.Cmp(t, td.Struct(
+  Person{
+    Name: "John Doe",
+  },
   td.StructFields{
-    "Age": td.Ignore(),
-  })
+    Age:      td.Between(40, 45),
+    Children: td.Ignore(),
+  }),
+)
 ```
-
-*model* must be the same type as compared data.
-
-*expectedFields* can be `nil`, if no [TestDeep operators]({{< ref "operators" >}}) are involved.
 
 During a match, all expected and zero fields must be found to
 succeed.

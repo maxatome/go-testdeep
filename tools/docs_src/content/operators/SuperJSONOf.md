@@ -35,8 +35,8 @@ got := MyStruct{
   Age:  42,
   City: "TestCity",
 }
-Cmp(t, got, SuperJSONOf(`{"name": "Bob", "age": 42}`))  // succeeds
-Cmp(t, got, SuperJSONOf(`{"name": "Bob", "zip": 666}`)) // fails, miss "zip"
+td.Cmp(t, got, td.SuperJSONOf(`{"name": "Bob", "age": 42}`))  // succeeds
+td.Cmp(t, got, td.SuperJSONOf(`{"name": "Bob", "zip": 666}`)) // fails, miss "zip"
 ```
 
 *expectedJSON* JSON value can contain placeholders. The *params*
@@ -49,21 +49,21 @@ Numeric placeholders reference the n'th "operators" item (starting
 at 1). Named placeholders are used with [`Tag`]({{< ref "Tag" >}}) operator as follows:
 
 ```go
-Cmp(t, gotValue,
+td.Cmp(t, gotValue,
   SuperJSONOf(`{"fullname": $name, "age": $2, "gender": $3}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43),               // matches only $2
-    "male"))                       // matches only $3
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43),                  // matches only $2
+    "male"))                             // matches only $3
 ```
 
 Note that placeholders can be double-quoted as in:
 
 ```go
-Cmp(t, gotValue,
-  SuperJSONOf(`{"fullname": "$name", "age": "$2", "gender": "$3"}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43),               // matches only $2
-    "male"))                       // matches only $3
+td.Cmp(t, gotValue,
+  td.SuperJSONOf(`{"fullname": "$name", "age": "$2", "gender": "$3"}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43),                  // matches only $2
+    "male"))                             // matches only $3
 ```
 
 It makes no difference whatever the underlying type of the replaced
@@ -75,9 +75,9 @@ specification, like when used in a ".json" file.
 Note *expectedJSON* can be a `[]byte`, JSON filename or [`io.Reader`](https://golang.org/pkg/io/#Reader):
 
 ```go
-Cmp(t, gotValue, SuperJSONOf("file.json", Between(12, 34)))
-Cmp(t, gotValue, SuperJSONOf([]byte(`[1, $1, 3]`), Between(12, 34)))
-Cmp(t, gotValue, SuperJSONOf(osFile, Between(12, 34)))
+td.Cmp(t, gotValue, td.SuperJSONOf("file.json", td.Between(12, 34)))
+td.Cmp(t, gotValue, td.SuperJSONOf([]byte(`[1, $1, 3]`), td.Between(12, 34)))
+td.Cmp(t, gotValue, td.SuperJSONOf(osFile, td.Between(12, 34)))
 ```
 
 A JSON filename ends with ".json".
@@ -87,10 +87,10 @@ just double it to escape it. Note it is only needed when the "$" is
 the first character of a `string`:
 
 ```go
-Cmp(t, gotValue,
-  SuperJSONOf(`{"fullname": "$name", "details": "$$info", "age": $2}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43)))              // matches only $2
+td.Cmp(t, gotValue,
+  td.SuperJSONOf(`{"fullname": "$name", "details": "$$info", "age": $2}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43)))                 // matches only $2
 ```
 
 For the "details" key, the raw value "`$info`" is expected, no
@@ -102,8 +102,8 @@ simplify numeric tests.
 Comments can be embedded in JSON data:
 
 ```go
-Cmp(t, gotValue,
-  SuperJSONOf(`
+td.Cmp(t, gotValue,
+  td.SuperJSONOf(`
 {
   // A guy properties:
   "fullname": "$name",  // The full name of the guy
@@ -113,8 +113,8 @@ Cmp(t, gotValue,
                              any change
                            - to demonstrate a multi-lines comment */
 }`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43)))              // matches only $2
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43)))                 // matches only $2
 ```
 
 Comments, like in go, have 2 forms. To quote the Go language specification:
@@ -130,13 +130,13 @@ JSON data without requiring any placeholder but using directly
 `$^OperatorName`. They are operator shortcuts:
 
 ```go
-Cmp(t, gotValue, SuperJSONOf(`{"id": $1}`, NotZero()))
+td.Cmp(t, gotValue, td.SuperJSONOf(`{"id": $1}`, td.NotZero()))
 ```
 
 can be written as:
 
 ```go
-Cmp(t, gotValue, SuperJSONOf(`{"id": $^NotZero}`))
+td.Cmp(t, gotValue, td.SuperJSONOf(`{"id": $^NotZero}`))
 ```
 
 Unfortunately, only simple operators (in fact those which take no

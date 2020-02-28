@@ -94,7 +94,7 @@ func TestEqualArray(t *testing.T) {
 				})
 		})
 
-	t.Run("DefaultContextConfig.MaxErrors = -1 (aka. all errors)",
+	t.Run("DefaultContextConfig.MaxErrors = -1 (aka all errors)",
 		func(t *testing.T) {
 			td.DefaultContextConfig.MaxErrors = -1
 			err := td.EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})

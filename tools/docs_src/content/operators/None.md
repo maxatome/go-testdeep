@@ -10,6 +10,11 @@ func None(notExpectedValues ...interface{}) TestDeep
 [`None`]({{< ref "None" >}}) operator compares data against several not expected
 values. During a match, none of them have to match to succeed.
 
+```go
+td.Cmp(t, 12, td.None(8, 10, 14))     // succeeds
+td.Cmp(t, 12, td.None(8, 10, 12, 14)) // fails
+```
+
 
 > See also [<i class='fas fa-book'></i> None godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#None).
 

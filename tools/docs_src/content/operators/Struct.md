@@ -17,6 +17,18 @@ fields without specifying them in *expectedFields*.
 *expectedFields* can be `nil`, if no zero entries are expected and
 no [TestDeep operators]({{< ref "operators" >}}) are involved.
 
+```go
+td.Cmp(t, td.Struct(
+  Person{
+    Name: "John Doe",
+  },
+  td.StructFields{
+    Age:      td.Between(40, 45),
+    Children: 0,
+  }),
+)
+```
+
 During a match, all expected fields must be found to
 succeed. Non-expected fields are ignored.
 

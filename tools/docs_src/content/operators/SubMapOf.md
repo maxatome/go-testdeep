@@ -20,11 +20,28 @@ entry to succeed. But some expected entries can be missing from the
 compared map.
 
 ```go
-Cmp(t, map[string]int{"a": 1},
-  SubMapOf(map[string]int{"a": 1, "b": 2}, nil)) // succeeds
+got := map[string]string{
+  "foo": "test",
+  "zip": "buzz",
+}
+td.Cmp(t, got, td.SubMapOf(
+  map[string]string{
+    "foo": "test",
+    "bar": "wizz",
+  },
+  td.MapEntries{
+    "zip": td.HasSuffix("zz"),
+  }),
+) // succeeds
 
-Cmp(t, map[string]int{"a": 1, "c": 3},
-  SubMapOf(map[string]int{"a": 1, "b": 2}, nil)) // fails, extra {"c": 3}
+td.Cmp(t, got, td.SubMapOf(
+  map[string]string{
+    "bar": "wizz",
+  },
+  td.MapEntries{
+    "zip": td.HasSuffix("zz"),
+  }),
+) // fails, extra {"foo": "test"} in got
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.

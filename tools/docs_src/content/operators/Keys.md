@@ -11,12 +11,19 @@ func Keys(val interface{}) TestDeep
 ordered keys to *val*.
 
 *val* can be a slice of items of the same type as the map keys:
+
 ```go
-Keys([]string{"a", "b", "c"})
+got := map[string]bool{"c": true, "a": false, "b": true}
+td.Cmp(t, got, td.Keys([]string{"a", "b", "c"})) // succeeds, keys sorted
+td.Cmp(t, got, td.Keys([]string{"c", "a", "b"})) // fails as not sorted
 ```
-as well as an other operator:
+
+as well as an other operator as [`Bag`]({{< ref "Bag" >}}), for example, to test keys in
+an unsorted manner:
+
 ```go
-Keys(Bag("c", "a", "b"))
+got := map[string]bool{"c": true, "a": false, "b": true}
+td.Cmp(t, got, td.Keys(Bag("c", "a", "b"))) // succeeds
 ```
 
 

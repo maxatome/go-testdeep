@@ -18,9 +18,9 @@ package td
 // array/slice, and each array/slice item should be matched by an
 // expected item to succeed.
 //
-//   Cmp(t, []int{1, 1, 2}, Set(1, 2))    // succeeds
-//   Cmp(t, []int{1, 1, 2}, Set(2, 1))    // succeeds
-//   Cmp(t, []int{1, 1, 2}, Set(1, 2, 3)) // fails, 3 is missing
+//   td.Cmp(t, []int{1, 1, 2}, td.Set(1, 2))    // succeeds
+//   td.Cmp(t, []int{1, 1, 2}, td.Set(2, 1))    // succeeds
+//   td.Cmp(t, []int{1, 1, 2}, td.Set(1, 2, 3)) // fails, 3 is missing
 func Set(expectedItems ...interface{}) TestDeep {
 	set := newSetBase(allSet, true)
 	set.Add(expectedItems...)
@@ -40,8 +40,8 @@ func Set(expectedItems ...interface{}) TestDeep {
 // expected item to succeed. But some expected items can be missing
 // from the compared array/slice.
 //
-//   Cmp(t, []int{1, 1}, SubSetOf(1, 2))    // succeeds
-//   Cmp(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item
+//   td.Cmp(t, []int{1, 1}, td.SubSetOf(1, 2))    // succeeds
+//   td.Cmp(t, []int{1, 1, 2}, td.SubSetOf(1, 3)) // fails, 2 is an extra item
 func SubSetOf(expectedItems ...interface{}) TestDeep {
 	set := newSetBase(subSet, true)
 	set.Add(expectedItems...)
@@ -61,8 +61,8 @@ func SubSetOf(expectedItems ...interface{}) TestDeep {
 // array/slice. But some items in the compared array/slice may not be
 // expected.
 //
-//   Cmp(t, []int{1, 1, 2}, SuperSetOf(1))    // succeeds
-//   Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
+//   td.Cmp(t, []int{1, 1, 2}, td.SuperSetOf(1))    // succeeds
+//   td.Cmp(t, []int{1, 1, 2}, td.SuperSetOf(1, 3)) // fails, 3 is missing
 func SuperSetOf(expectedItems ...interface{}) TestDeep {
 	set := newSetBase(superSet, true)
 	set.Add(expectedItems...)
@@ -76,8 +76,8 @@ func SuperSetOf(expectedItems ...interface{}) TestDeep {
 // NotAny operator checks that the contents of an array or a slice (or
 // a pointer on array/slice) does not contain any of "expectedItems".
 //
-//   Cmp(t, []int{1}, NotAny(1, 2, 3)) // fails
-//   Cmp(t, []int{5}, NotAny(1, 2, 3)) // succeeds
+//   td.Cmp(t, []int{1}, td.NotAny(1, 2, 3)) // fails
+//   td.Cmp(t, []int{5}, td.NotAny(1, 2, 3)) // succeeds
 //
 // Beware that NotAny(…) is not equivalent to Not(Any(…)).
 func NotAny(expectedItems ...interface{}) TestDeep {

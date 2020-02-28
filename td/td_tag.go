@@ -30,11 +30,11 @@ var _ TestDeep = &tdTag{}
 // useful as JSON operator parameter, to name placeholders. See JSON
 // operator for more details.
 //
-//   Cmp(t, gotValue,
-//     JSON(`{"fullname": $name, "age": $age, "gender": $gender}`,
-//       Tag("name", HasPrefix("Foo")), // matches $name
-//       Tag("age", Between(41, 43)),   // matches $age
-//       Tag("gender", "male")))        // matches $gender
+//   td.Cmp(t, gotValue,
+//     td.JSON(`{"fullname": $name, "age": $age, "gender": $gender}`,
+//       td.Tag("name", td.HasPrefix("Foo")), // matches $name
+//       td.Tag("age", td.Between(41, 43)),   // matches $age
+//       td.Tag("gender", "male")))           // matches $gender
 //
 // TypeBehind method is delegated to "expectedValue" one if
 // "expectedValue" is a TestDeep operator, otherwise it returns the
@@ -58,7 +58,7 @@ func (t *tdTag) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (t *tdTag) HandleInvalid() bool {
-	return true // Knows how to handle untyped nil values (aka. invalid values)
+	return true // Knows how to handle untyped nil values (aka invalid values)
 }
 
 func (t *tdTag) String() string {

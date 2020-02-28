@@ -8,7 +8,17 @@ func Any(expectedValues ...interface{}) TestDeep
 ```
 
 [`Any`]({{< ref "Any" >}}) operator compares data against several expected values. During
-a match, at least one of them has to match to succeed.
+a match, at least one of them has to match to succeed. Consider it
+as a "OR" logical operator.
+
+```go
+td.Cmp(t, "foo", td.Any("bar", "foo", "zip")) // succeeds
+td.Cmp(t, "foo", td.Any(
+  td.Len(4),
+  td.HasPrefix("f"),
+  td.HasSuffix("z"),
+)) // succeeds coz "f" prefix
+```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method can return a non-`nil` [`reflect.Type`](https://golang.org/pkg/reflect/#Type) if all items
 known non-interface types are equal, or if only interface types

@@ -14,6 +14,12 @@ well as `nil` channel, map or slice are considered empty.
 Note that the compared data can be a pointer (of pointer of pointer
 etc.) on an array, a channel, a map, a slice or a `string`.
 
+```go
+td.Cmp(t, "", td.NotEmpty())                // fails
+td.Cmp(t, map[string]bool{}, td.NotEmpty()) // fails
+td.Cmp(t, []string{"foo"}, td.NotEmpty())   // succeeds
+```
+
 
 > See also [<i class='fas fa-book'></i> NotEmpty godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#NotEmpty).
 

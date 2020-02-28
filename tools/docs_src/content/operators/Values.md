@@ -11,12 +11,19 @@ func Values(val interface{}) TestDeep
 ordered values to *val*.
 
 *val* can be a slice of items of the same type as the map values:
+
 ```go
-Values([]string{"a", "b", "c"})
+got := map[int]string{3: "c", 1: "a", 2: "b"}
+td.Cmp(t, got, td.Values([]string{"a", "b", "c"})) // succeeds, values sorted
+td.Cmp(t, got, td.Values([]string{"c", "a", "b"})) // fails as not sorted
 ```
-as well as an other operator:
+
+as well as an other operator as [`Bag`]({{< ref "Bag" >}}), for example, to test values in
+an unsorted manner:
+
 ```go
-Values(Bag("c", "a", "b"))
+got := map[int]string{3: "c", 1: "a", 2: "b"}
+td.Cmp(t, got, td.Values(Bag("c", "a", "b"))) // succeeds
 ```
 
 

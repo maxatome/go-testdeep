@@ -16,13 +16,13 @@ to succeed.
 
 ```go
 a, b := 123, 123
-Cmp(t, &a, Shallow(&a)) // succeeds
-Cmp(t, &a, Shallow(&b)) // fails even if a == b as &a != &b
+td.Cmp(t, &a, Shallow(&a)) // succeeds
+td.Cmp(t, &a, Shallow(&b)) // fails even if a == b as &a != &b
 
 back := "foobarfoobar"
 a, b := back[:6], back[6:]
 // a == b but...
-Cmp(t, &a, Shallow(&b)) // fails
+td.Cmp(t, &a, Shallow(&b)) // fails
 ```
 
 Be careful for slices and strings! [`Shallow`]({{< ref "Shallow" >}}) can succeed but the
@@ -31,16 +31,16 @@ lengths. For example:
 
 ```go
 a := "foobar yes!"
-b := a[:1]              // aka. "f"
-Cmp(t, &a, Shallow(&b)) // succeeds as both strings point to the same area, even if len() differ
+b := a[:1]                 // aka. "f"
+td.Cmp(t, &a, Shallow(&b)) // succeeds as both strings point to the same area, even if len() differ
 ```
 
 The same behavior occurs for slices:
 
 ```go
 a := []int{1, 2, 3, 4, 5, 6}
-b := a[:2]              // aka. []int{1, 2}
-Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
+b := a[:2]                 // aka. []int{1, 2}
+td.Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
 ```
 
 

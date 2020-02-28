@@ -75,6 +75,11 @@ var _ TestDeep = &tdBetweenTime{}
 //
 // If "bounds" is missing, it defaults to BoundsInIn.
 //
+//   tc.Cmp(t, 17, td.Between(17, 20))               // succeeds, BoundsInIn by default
+//   tc.Cmp(t, 17, td.Between(10, 17, BoundsInOut))  // fails
+//   tc.Cmp(t, 17, td.Between(10, 17, BoundsOutIn))  // succeeds
+//   tc.Cmp(t, 17, td.Between(17, 20, BoundsOutOut)) // fails
+//
 // TypeBehind method returns the reflect.Type of "from" (same as the "to" one.)
 func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 	b := tdBetween{
@@ -236,6 +241,9 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 // "tolerance" is missing, it defaults to 0. "num" and "tolerance"
 // must be the same kind as the compared value.
 //
+//   td.Cmp(t, 12.2, td.N(12., 0.3)) // succeeds
+//   td.Cmp(t, 12.2, td.N(12., 0.1)) // fails
+//
 // TypeBehind method returns the reflect.Type of "num".
 func N(num interface{}, tolerance ...interface{}) TestDeep {
 	n := tdBetween{
@@ -293,6 +301,10 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 // same kind as the compared value if numeric, and the same type if
 // time.Time (or assignable).
 //
+//   td.Cmp(t, 17, td.Gt(15))
+//   before := time.Now()
+//   td.Cmp(t, time.Now(), td.Gt(before))
+//
 // TypeBehind method returns the reflect.Type of "minExpectedValue".
 func Gt(minExpectedValue interface{}) TestDeep {
 	b := &tdBetween{
@@ -311,6 +323,10 @@ func Gt(minExpectedValue interface{}) TestDeep {
 // time.Time (or assignable) value. "minExpectedValue" must be the
 // same kind as the compared value if numeric, and the same type if
 // time.Time (or assignable).
+//
+//   td.Cmp(t, 17, td.Gte(17))
+//   before := time.Now()
+//   td.Cmp(t, time.Now(), td.Gte(before))
 //
 // TypeBehind method returns the reflect.Type of "minExpectedValue".
 func Gte(minExpectedValue interface{}) TestDeep {
@@ -331,6 +347,10 @@ func Gte(minExpectedValue interface{}) TestDeep {
 // same kind as the compared value if numeric, and the same type if
 // time.Time (or assignable).
 //
+//   td.Cmp(t, 17, td.Lt(19))
+//   before := time.Now()
+//   td.Cmp(t, before, td.Lt(time.Now()))
+//
 // TypeBehind method returns the reflect.Type of "maxExpectedValue".
 func Lt(maxExpectedValue interface{}) TestDeep {
 	b := &tdBetween{
@@ -349,6 +369,10 @@ func Lt(maxExpectedValue interface{}) TestDeep {
 // time.Time (or assignable) value. "maxExpectedValue" must be the
 // same kind as the compared value if numeric, and the same type if
 // time.Time (or assignable).
+//
+//   td.Cmp(t, 17, td.Lte(17))
+//   before := time.Now()
+//   td.Cmp(t, before, td.Lt(time.Now()))
 //
 // TypeBehind method returns the reflect.Type of "maxExpectedValue".
 func Lte(maxExpectedValue interface{}) TestDeep {

@@ -24,6 +24,9 @@ var _ TestDeep = &tdNone{}
 
 // None operator compares data against several not expected
 // values. During a match, none of them have to match to succeed.
+//
+//   td.Cmp(t, 12, td.None(8, 10, 14))     // succeeds
+//   td.Cmp(t, 12, td.None(8, 10, 12, 14)) // fails
 func None(notExpectedValues ...interface{}) TestDeep {
 	return &tdNone{
 		tdList: newList(notExpectedValues...),
@@ -39,6 +42,9 @@ func None(notExpectedValues ...interface{}) TestDeep {
 // Not is the same operator as None() with only one argument. It is
 // provided as a more readable function when only one argument is
 // needed.
+//
+//   td.Cmp(t, 12, td.Not(10)) // succeeds
+//   td.Cmp(t, 12, td.Not(12)) // fails
 func Not(notExpected interface{}) TestDeep {
 	return &tdNone{
 		tdList: newList(notExpected),

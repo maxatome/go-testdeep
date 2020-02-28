@@ -15,16 +15,16 @@ could be used when, for example, an operator is constructed once
 but applied to different, but compatible types as in:
 
 ```go
-bw := Between(20, 30)
+bw := td.Between(20, 30)
 intValue := 21
 floatValue := 21.89
-Cmp(t, intValue, bw)        // no need to be lax here: same int types
-Cmp(t, floatValue, Lax(bw)) // be lax please, as float64 ≠ int
+td.Cmp(t, intValue, bw)           // no need to be lax here: same int types
+td.Cmp(t, floatValue, td.Lax(bw)) // be lax please, as float64 ≠ int
 ```
 
 Note that in the latter case, CmpLax() could be used as well:
 ```go
-CmpLax(t, floatValue, bw)
+td.CmpLax(t, floatValue, bw)
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the greatest convertible or more common

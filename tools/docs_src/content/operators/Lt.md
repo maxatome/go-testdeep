@@ -13,6 +13,12 @@ func Lt(maxExpectedValue interface{}) TestDeep
 same kind as the compared value if numeric, and the same type if
 [`time.Time`](https://golang.org/pkg/time/#Time) (or assignable).
 
+```go
+td.Cmp(t, 17, td.Lt(19))
+before := time.Now()
+td.Cmp(t, before, td.Lt(time.Now()))
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *maxExpectedValue*.
 
 
