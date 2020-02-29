@@ -18,10 +18,27 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 During a match, all expected entries must be found and all data
 entries must be expected to succeed.
 
+```go
+got := map[string]string{
+  "foo": "test",
+  "bar": "wizz",
+  "zip": "buzz",
+}
+td.Cmp(t, got, td.Map(
+  map[string]string{
+    "foo": "test",
+    "bar": "wizz",
+  },
+  td.MapEntries{
+    "zip": td.HasSuffix("zz"),
+  }),
+) // succeeds
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> Map godoc](https://godoc.org/github.com/maxatome/go-testdeep#Map).
+> See also [<i class='fas fa-book'></i> Map godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Map).
 
 ### Examples
 
@@ -30,20 +47,21 @@ entries must be expected to succeed.
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := Cmp(t, got,
-		Map(map[string]int{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()}),
+	ok := td.Cmp(t, got,
+		td.Map(map[string]int{"bar": 42},
+			td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()}),
 		"checks map %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got,
-		Map(map[string]int{},
-			MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
+	ok = td.Cmp(t, got,
+		td.Map(map[string]int{},
+			td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()}),
 		"checks map %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got,
-		Map((map[string]int)(nil),
-			MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
+	ok = td.Cmp(t, got,
+		td.Map((map[string]int)(nil),
+			td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()}),
 		"checks map %v", got)
 	fmt.Println(ok)
 
@@ -60,23 +78,23 @@ entries must be expected to succeed.
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := Cmp(t, got,
-		Map(MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()}),
+	ok := td.Cmp(t, got,
+		td.Map(MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()}),
 		"checks typed map %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		Map(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()}),
+	ok = td.Cmp(t, &got,
+		td.Map(&MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()}),
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		Map(&MyMap{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
+	ok = td.Cmp(t, &got,
+		td.Map(&MyMap{}, td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()}),
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		Map((*MyMap)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()}),
+	ok = td.Cmp(t, &got,
+		td.Map((*MyMap)(nil), td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()}),
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
@@ -96,7 +114,7 @@ func CmpMap(t TestingT, got interface{}, model interface{}, expectedEntries MapE
 CmpMap is a shortcut for:
 
 ```go
-Cmp(t, got, Map(model, expectedEntries), args...)
+td.Cmp(t, got, td.Map(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -111,7 +129,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpMap godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpMap).
+> See also [<i class='fas fa-book'></i> CmpMap godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpMap).
 
 ### Examples
 
@@ -120,15 +138,15 @@ reason of a potential failure.
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpMap(t, got, map[string]int{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()},
+	ok := td.CmpMap(t, got, map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()},
 		"checks map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpMap(t, got, map[string]int{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+	ok = td.CmpMap(t, got, map[string]int{}, td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()},
 		"checks map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpMap(t, got, (map[string]int)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+	ok = td.CmpMap(t, got, (map[string]int)(nil), td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()},
 		"checks map %v", got)
 	fmt.Println(ok)
 
@@ -145,19 +163,19 @@ reason of a potential failure.
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpMap(t, got, MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()},
+	ok := td.CmpMap(t, got, MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()},
 		"checks typed map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpMap(t, &got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()},
+	ok = td.CmpMap(t, &got, &MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()},
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpMap(t, &got, &MyMap{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+	ok = td.CmpMap(t, &got, &MyMap{}, td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()},
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
-	ok = CmpMap(t, &got, (*MyMap)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+	ok = td.CmpMap(t, &got, (*MyMap)(nil), td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()},
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
@@ -177,7 +195,7 @@ func (t *T) Map(got interface{}, model interface{}, expectedEntries MapEntries, 
 [`Map`]({{< ref "Map" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Map(model, expectedEntries), args...)
+t.Cmp(got, td.Map(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -192,24 +210,24 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Map godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Map).
+> See also [<i class='fas fa-book'></i> T.Map godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Map).
 
 ### Examples
 
 {{%expand "Map example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := t.Map(got, map[string]int{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()},
+	ok := t.Map(got, map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()},
 		"checks map %v", got)
 	fmt.Println(ok)
 
-	ok = t.Map(got, map[string]int{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+	ok = t.Map(got, map[string]int{}, td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()},
 		"checks map %v", got)
 	fmt.Println(ok)
 
-	ok = t.Map(got, (map[string]int)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+	ok = t.Map(got, (map[string]int)(nil), td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()},
 		"checks map %v", got)
 	fmt.Println(ok)
 
@@ -220,25 +238,25 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "TypedMap example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MyMap map[string]int
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := t.Map(got, MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()},
+	ok := t.Map(got, MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()},
 		"checks typed map %v", got)
 	fmt.Println(ok)
 
-	ok = t.Map(&got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": Ignore()},
+	ok = t.Map(&got, &MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": td.Ignore()},
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
-	ok = t.Map(&got, &MyMap{}, MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+	ok = t.Map(&got, &MyMap{}, td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()},
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 
-	ok = t.Map(&got, (*MyMap)(nil), MapEntries{"bar": 42, "foo": Lt(15), "zip": Ignore()},
+	ok = t.Map(&got, (*MyMap)(nil), td.MapEntries{"bar": 42, "foo": td.Lt(15), "zip": td.Ignore()},
 		"checks pointer on typed map %v", got)
 	fmt.Println(ok)
 

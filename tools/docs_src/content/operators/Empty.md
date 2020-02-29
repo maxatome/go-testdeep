@@ -14,45 +14,51 @@ channel, map or slice are considered empty.
 Note that the compared data can be a pointer (of pointer of pointer
 etc.) on an array, a channel, a map, a slice or a `string`.
 
+```go
+td.Cmp(t, "", td.Empty())                // succeeds
+td.Cmp(t, map[string]bool{}, td.Empty()) // succeeds
+td.Cmp(t, []string{"foo"}, td.Empty())   // fails
+```
 
-> See also [<i class='fas fa-book'></i> Empty godoc](https://godoc.org/github.com/maxatome/go-testdeep#Empty).
+
+> See also [<i class='fas fa-book'></i> Empty godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Empty).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := Cmp(t, nil, Empty()) // special case: nil is considered empty
+	ok := td.Cmp(t, nil, td.Empty()) // special case: nil is considered empty
 	fmt.Println(ok)
 
 	// fails, typed nil is not empty (expect for channel, map, slice or
 	// pointers on array, channel, map slice and strings)
-	ok = Cmp(t, (*int)(nil), Empty())
+	ok = td.Cmp(t, (*int)(nil), td.Empty())
 	fmt.Println(ok)
 
-	ok = Cmp(t, "", Empty())
+	ok = td.Cmp(t, "", td.Empty())
 	fmt.Println(ok)
 
 	// Fails as 0 is a number, so not empty. Use Zero() instead
-	ok = Cmp(t, 0, Empty())
+	ok = td.Cmp(t, 0, td.Empty())
 	fmt.Println(ok)
 
-	ok = Cmp(t, (map[string]int)(nil), Empty())
+	ok = td.Cmp(t, (map[string]int)(nil), td.Empty())
 	fmt.Println(ok)
 
-	ok = Cmp(t, map[string]int{}, Empty())
+	ok = td.Cmp(t, map[string]int{}, td.Empty())
 	fmt.Println(ok)
 
-	ok = Cmp(t, ([]int)(nil), Empty())
+	ok = td.Cmp(t, ([]int)(nil), td.Empty())
 	fmt.Println(ok)
 
-	ok = Cmp(t, []int{}, Empty())
+	ok = td.Cmp(t, []int{}, td.Empty())
 	fmt.Println(ok)
 
-	ok = Cmp(t, []int{3}, Empty()) // fails, as not empty
+	ok = td.Cmp(t, []int{3}, td.Empty()) // fails, as not empty
 	fmt.Println(ok)
 
-	ok = Cmp(t, [3]int{}, Empty()) // fails, Empty() is not Zero()!
+	ok = td.Cmp(t, [3]int{}, td.Empty()) // fails, Empty() is not Zero()!
 	fmt.Println(ok)
 
 	// Output:
@@ -73,16 +79,16 @@ etc.) on an array, a channel, a map, a slice or a `string`.
 
 	type MySlice []int
 
-	ok := Cmp(t, MySlice{}, Empty()) // Ptr() not needed
+	ok := td.Cmp(t, MySlice{}, td.Empty()) // Ptr() not needed
 	fmt.Println(ok)
 
-	ok = Cmp(t, &MySlice{}, Empty())
+	ok = td.Cmp(t, &MySlice{}, td.Empty())
 	fmt.Println(ok)
 
 	l1 := &MySlice{}
 	l2 := &l1
 	l3 := &l2
-	ok = Cmp(t, &l3, Empty())
+	ok = td.Cmp(t, &l3, td.Empty())
 	fmt.Println(ok)
 
 	// Works the same for array, map, channel and string
@@ -92,7 +98,7 @@ etc.) on an array, a channel, a map, a slice or a `string`.
 		Value int
 	}
 
-	ok = Cmp(t, &MyStruct{}, Empty()) // fails, use Zero() instead
+	ok = td.Cmp(t, &MyStruct{}, td.Empty()) // fails, use Zero() instead
 	fmt.Println(ok)
 
 	// Output:
@@ -111,7 +117,7 @@ func CmpEmpty(t TestingT, got interface{}, args ...interface{}) bool
 CmpEmpty is a shortcut for:
 
 ```go
-Cmp(t, got, Empty(), args...)
+td.Cmp(t, got, td.Empty(), args...)
 ```
 
 See above for details.
@@ -126,44 +132,44 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpEmpty godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpEmpty).
+> See also [<i class='fas fa-book'></i> CmpEmpty godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpEmpty).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := CmpEmpty(t, nil) // special case: nil is considered empty
+	ok := td.CmpEmpty(t, nil) // special case: nil is considered empty
 	fmt.Println(ok)
 
 	// fails, typed nil is not empty (expect for channel, map, slice or
 	// pointers on array, channel, map slice and strings)
-	ok = CmpEmpty(t, (*int)(nil))
+	ok = td.CmpEmpty(t, (*int)(nil))
 	fmt.Println(ok)
 
-	ok = CmpEmpty(t, "")
+	ok = td.CmpEmpty(t, "")
 	fmt.Println(ok)
 
 	// Fails as 0 is a number, so not empty. Use Zero() instead
-	ok = CmpEmpty(t, 0)
+	ok = td.CmpEmpty(t, 0)
 	fmt.Println(ok)
 
-	ok = CmpEmpty(t, (map[string]int)(nil))
+	ok = td.CmpEmpty(t, (map[string]int)(nil))
 	fmt.Println(ok)
 
-	ok = CmpEmpty(t, map[string]int{})
+	ok = td.CmpEmpty(t, map[string]int{})
 	fmt.Println(ok)
 
-	ok = CmpEmpty(t, ([]int)(nil))
+	ok = td.CmpEmpty(t, ([]int)(nil))
 	fmt.Println(ok)
 
-	ok = CmpEmpty(t, []int{})
+	ok = td.CmpEmpty(t, []int{})
 	fmt.Println(ok)
 
-	ok = CmpEmpty(t, []int{3}) // fails, as not empty
+	ok = td.CmpEmpty(t, []int{3}) // fails, as not empty
 	fmt.Println(ok)
 
-	ok = CmpEmpty(t, [3]int{}) // fails, Empty() is not Zero()!
+	ok = td.CmpEmpty(t, [3]int{}) // fails, Empty() is not Zero()!
 	fmt.Println(ok)
 
 	// Output:
@@ -184,16 +190,16 @@ reason of a potential failure.
 
 	type MySlice []int
 
-	ok := CmpEmpty(t, MySlice{}) // Ptr() not needed
+	ok := td.CmpEmpty(t, MySlice{}) // Ptr() not needed
 	fmt.Println(ok)
 
-	ok = CmpEmpty(t, &MySlice{})
+	ok = td.CmpEmpty(t, &MySlice{})
 	fmt.Println(ok)
 
 	l1 := &MySlice{}
 	l2 := &l1
 	l3 := &l2
-	ok = CmpEmpty(t, &l3)
+	ok = td.CmpEmpty(t, &l3)
 	fmt.Println(ok)
 
 	// Works the same for array, map, channel and string
@@ -203,7 +209,7 @@ reason of a potential failure.
 		Value int
 	}
 
-	ok = CmpEmpty(t, &MyStruct{}) // fails, use Zero() instead
+	ok = td.CmpEmpty(t, &MyStruct{}) // fails, use Zero() instead
 	fmt.Println(ok)
 
 	// Output:
@@ -222,7 +228,7 @@ func (t *T) Empty(got interface{}, args ...interface{}) bool
 [`Empty`]({{< ref "Empty" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Empty(), args...)
+t.Cmp(got, td.Empty(), args...)
 ```
 
 See above for details.
@@ -237,12 +243,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Empty godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Empty).
+> See also [<i class='fas fa-book'></i> T.Empty godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Empty).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	ok := t.Empty(nil) // special case: nil is considered empty
 	fmt.Println(ok)
@@ -291,7 +297,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Pointers example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MySlice []int
 

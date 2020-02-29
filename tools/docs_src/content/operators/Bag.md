@@ -15,15 +15,15 @@ array/slice, and each array/slice item should be matched by an
 expected item to succeed.
 
 ```go
-Cmp(t, []int{1, 1, 2}, Bag(1, 1, 2))    // succeeds
-Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1))    // succeeds
-Cmp(t, []int{1, 1, 2}, Bag(2, 1, 1))    // succeeds
-Cmp(t, []int{1, 1, 2}, Bag(1, 2))       // fails, one 1 is missing
-Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing
+td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 1, 2))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.Bag(2, 1, 1))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2))       // fails, one 1 is missing
+td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1, 3)) // fails, 3 is missing
 ```
 
 
-> See also [<i class='fas fa-book'></i> Bag godoc](https://godoc.org/github.com/maxatome/go-testdeep#Bag).
+> See also [<i class='fas fa-book'></i> Bag godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Bag).
 
 ### Examples
 
@@ -33,25 +33,25 @@ Cmp(t, []int{1, 1, 2}, Bag(1, 2, 1, 3)) // fails, 3 is missing
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are present
-	ok := Cmp(t, got, Bag(1, 1, 2, 3, 5, 8, 8),
+	ok := td.Cmp(t, got, td.Bag(1, 1, 2, 3, 5, 8, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Does not match as got contains 2 times 1 and 8, and these
 	// duplicates are not expected
-	ok = Cmp(t, got, Bag(1, 2, 3, 5, 8),
+	ok = td.Cmp(t, got, td.Bag(1, 2, 3, 5, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	got = []int{1, 3, 5, 8, 2}
 
 	// Duplicates of 1 and 8 are expected but not present in got
-	ok = Cmp(t, got, Bag(1, 1, 2, 3, 5, 8, 8),
+	ok = td.Cmp(t, got, td.Bag(1, 1, 2, 3, 5, 8, 8),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Matches as all items are present
-	ok = Cmp(t, got, Bag(1, 2, 3, 5, Gt(7)),
+	ok = td.Cmp(t, got, td.Bag(1, 2, 3, 5, td.Gt(7)),
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
@@ -71,7 +71,7 @@ func CmpBag(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 CmpBag is a shortcut for:
 
 ```go
-Cmp(t, got, Bag(expectedItems...), args...)
+td.Cmp(t, got, td.Bag(expectedItems...), args...)
 ```
 
 See above for details.
@@ -86,7 +86,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpBag godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpBag).
+> See also [<i class='fas fa-book'></i> CmpBag godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpBag).
 
 ### Examples
 
@@ -96,25 +96,25 @@ reason of a potential failure.
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are present
-	ok := CmpBag(t, got, []interface{}{1, 1, 2, 3, 5, 8, 8},
+	ok := td.CmpBag(t, got, []interface{}{1, 1, 2, 3, 5, 8, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Does not match as got contains 2 times 1 and 8, and these
 	// duplicates are not expected
-	ok = CmpBag(t, got, []interface{}{1, 2, 3, 5, 8},
+	ok = td.CmpBag(t, got, []interface{}{1, 2, 3, 5, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	got = []int{1, 3, 5, 8, 2}
 
 	// Duplicates of 1 and 8 are expected but not present in got
-	ok = CmpBag(t, got, []interface{}{1, 1, 2, 3, 5, 8, 8},
+	ok = td.CmpBag(t, got, []interface{}{1, 1, 2, 3, 5, 8, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Matches as all items are present
-	ok = CmpBag(t, got, []interface{}{1, 2, 3, 5, Gt(7)},
+	ok = td.CmpBag(t, got, []interface{}{1, 2, 3, 5, td.Gt(7)},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
@@ -134,7 +134,7 @@ func (t *T) Bag(got interface{}, expectedItems []interface{}, args ...interface{
 [`Bag`]({{< ref "Bag" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Bag(expectedItems...), args...)
+t.Cmp(got, td.Bag(expectedItems...), args...)
 ```
 
 See above for details.
@@ -149,12 +149,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Bag godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Bag).
+> See also [<i class='fas fa-book'></i> T.Bag godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Bag).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -177,7 +177,7 @@ reason of a potential failure.
 	fmt.Println(ok)
 
 	// Matches as all items are present
-	ok = t.Bag(got, []interface{}{1, 2, 3, 5, Gt(7)},
+	ok = t.Bag(got, []interface{}{1, 2, 3, 5, td.Gt(7)},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 

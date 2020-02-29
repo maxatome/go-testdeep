@@ -1,21 +1,20 @@
-// Copyright (c) 2019, Maxime Soulé
+// Copyright (c) 2019, 2020, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
+// Package tdutil allows to write unit tests for go-testdeep helpers
+// and so provides some helpful functions.
+//
+// It is not intended to be used in tests outside go-testdeep and its
+// helpers perimeter.
 package tdutil
 
 import (
 	"reflect"
 	"testing"
 )
-
-// Package tdutil allows to write unit tests for testdeep helpers and
-// so provides some helpful functions.
-//
-// It is not intended to be used in tests outside go-testdeep and its
-// helpers perimeter.
 
 // T can be used in tests, to test testing.T behavior as it overrides
 // Run() method.
@@ -24,6 +23,8 @@ type T struct {
 	name string
 }
 
+// NewT returns a new *T instance. "name" is the string returned by
+// method Name.
 func NewT(name string) *T {
 	return &T{name: name}
 }

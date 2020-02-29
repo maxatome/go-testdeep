@@ -9,7 +9,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep
 
 [`SubJSONOf`]({{< ref "SubJSONOf" >}}) operator allows to compare the JSON representation of
 data against *expectedJSON*. Unlike [`JSON`]({{< ref "JSON" >}}) operator, marshalled data
-must be a JSON object/map (aka. {…}). *expectedJSON* can be a:
+must be a JSON object/map (aka {…}). *expectedJSON* can be a:
 
 - `string` containing JSON data like `{"fullname":"Bob","age":42}`
 - `string` containing a JSON filename, ending with ".json" (its
@@ -20,7 +20,7 @@ must be a JSON object/map (aka. {…}). *expectedJSON* can be a:
 
 
 JSON data contained in *expectedJSON* must be a JSON object/map
-(aka. {…}) too. During a match, each expected entry should match in
+(aka {…}) too. During a match, each expected entry should match in
 the compared map. But some expected entries can be missing from the
 compared map.
 
@@ -33,8 +33,8 @@ got := MyStruct{
   Name: "Bob",
   Age:  42,
 }
-Cmp(t, got, SubJSONOf(`{"name": "Bob", "age": 42, "city": "NY"}`)) // succeeds
-Cmp(t, got, SubJSONOf(`{"name": "Bob", "zip": 666}`))              // fails, extra "age"
+td.Cmp(t, got, td.SubJSONOf(`{"name": "Bob", "age": 42, "city": "NY"}`)) // succeeds
+td.Cmp(t, got, td.SubJSONOf(`{"name": "Bob", "zip": 666}`))              // fails, extra "age"
 ```
 
 *expectedJSON* JSON value can contain placeholders. The *params*
@@ -47,21 +47,21 @@ Numeric placeholders reference the n'th "operators" item (starting
 at 1). Named placeholders are used with [`Tag`]({{< ref "Tag" >}}) operator as follows:
 
 ```go
-Cmp(t, gotValue,
-  SubJSONOf(`{"fullname": $name, "age": $2, "gender": $3}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43),               // matches only $2
-    "male"))                       // matches only $3
+td.Cmp(t, gotValue,
+  td.SubJSONOf(`{"fullname": $name, "age": $2, "gender": $3}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43),                  // matches only $2
+    "male"))                             // matches only $3
 ```
 
 Note that placeholders can be double-quoted as in:
 
 ```go
-Cmp(t, gotValue,
-  SubJSONOf(`{"fullname": "$name", "age": "$2", "gender": "$3"}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43),               // matches only $2
-    "male"))                       // matches only $3
+td.Cmp(t, gotValue,
+  td.SubJSONOf(`{"fullname": "$name", "age": "$2", "gender": "$3"}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43),                  // matches only $2
+    "male"))                             // matches only $3
 ```
 
 It makes no difference whatever the underlying type of the replaced
@@ -73,9 +73,9 @@ specification, like when used in a ".json" file.
 Note *expectedJSON* can be a `[]byte`, JSON filename or [`io.Reader`](https://golang.org/pkg/io/#Reader):
 
 ```go
-Cmp(t, gotValue, SubJSONOf("file.json", Between(12, 34)))
-Cmp(t, gotValue, SubJSONOf([]byte(`[1, $1, 3]`), Between(12, 34)))
-Cmp(t, gotValue, SubJSONOf(osFile, Between(12, 34)))
+td.Cmp(t, gotValue, td.SubJSONOf("file.json", td.Between(12, 34)))
+td.Cmp(t, gotValue, td.SubJSONOf([]byte(`[1, $1, 3]`), td.Between(12, 34)))
+td.Cmp(t, gotValue, td.SubJSONOf(osFile, td.Between(12, 34)))
 ```
 
 A JSON filename ends with ".json".
@@ -85,10 +85,10 @@ just double it to escape it. Note it is only needed when the "$" is
 the first character of a `string`:
 
 ```go
-Cmp(t, gotValue,
-  SubJSONOf(`{"fullname": "$name", "details": "$$info", "age": $2}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43)))              // matches only $2
+td.Cmp(t, gotValue,
+  td.SubJSONOf(`{"fullname": "$name", "details": "$$info", "age": $2}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43)))                 // matches only $2
 ```
 
 For the "details" key, the raw value "`$info`" is expected, no
@@ -100,7 +100,7 @@ simplify numeric tests.
 Comments can be embedded in JSON data:
 
 ```go
-Cmp(t, gotValue,
+td.Cmp(t, gotValue,
   SubJSONOf(`
 {
   // A guy properties:
@@ -111,8 +111,8 @@ Cmp(t, gotValue,
                              any change
                            - to demonstrate a multi-lines comment */
 }`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43)))              // matches only $2
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43)))                 // matches only $2
 ```
 
 Comments, like in go, have 2 forms. To quote the Go language specification:
@@ -128,13 +128,13 @@ JSON data without requiring any placeholder but using directly
 `$^OperatorName`. They are operator shortcuts:
 
 ```go
-Cmp(t, gotValue, SubJSONOf(`{"id": $1}`, NotZero()))
+td.Cmp(t, gotValue, td.SubJSONOf(`{"id": $1}`, td.NotZero()))
 ```
 
 can be written as:
 
 ```go
-Cmp(t, gotValue, SubJSONOf(`{"id": $^NotZero}`))
+td.Cmp(t, gotValue, td.SubJSONOf(`{"id": $^NotZero}`))
 ```
 
 Unfortunately, only simple operators (in fact those which take no
@@ -154,7 +154,7 @@ parameters) have shortcuts. They follow:
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the `map[string]interface{}` type.
 
 
-> See also [<i class='fas fa-book'></i> SubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SubJSONOf).
+> See also [<i class='fas fa-book'></i> SubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SubJSONOf).
 
 ### Examples
 
@@ -169,13 +169,13 @@ parameters) have shortcuts. They follow:
 		Age:      42,
 	}
 
-	ok := Cmp(t, got, SubJSONOf(`{"age":42,"fullname":"Bob","gender":"male"}`))
+	ok := td.Cmp(t, got, td.SubJSONOf(`{"age":42,"fullname":"Bob","gender":"male"}`))
 	fmt.Println("check got with age then fullname:", ok)
 
-	ok = Cmp(t, got, SubJSONOf(`{"fullname":"Bob","age":42,"gender":"male"}`))
+	ok = td.Cmp(t, got, td.SubJSONOf(`{"fullname":"Bob","age":42,"gender":"male"}`))
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = Cmp(t, got, SubJSONOf(`
+	ok = td.Cmp(t, got, td.SubJSONOf(`
 // This should be the JSON representation of a struct
 {
   // A person:
@@ -187,7 +187,7 @@ parameters) have shortcuts. They follow:
 }`))
 	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
-	ok = Cmp(t, got, SubJSONOf(`{"fullname":"Bob","gender":"male"}`))
+	ok = td.Cmp(t, got, td.SubJSONOf(`{"fullname":"Bob","gender":"male"}`))
 	fmt.Println("check got without age field:", ok)
 
 	// Output:
@@ -208,34 +208,34 @@ parameters) have shortcuts. They follow:
 		Age:      42,
 	}
 
-	ok := Cmp(t, got,
-		SubJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
+	ok := td.Cmp(t, got,
+		td.SubJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
 			42, "Bob Foobar", "male"))
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = Cmp(t, got,
-		SubJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
-			Between(40, 45),
-			HasSuffix("Foobar"),
-			NotEmpty()))
+	ok = td.Cmp(t, got,
+		td.SubJSONOf(`{"age": $1, "fullname": $2, "gender": $3}`,
+			td.Between(40, 45),
+			td.HasSuffix("Foobar"),
+			td.NotEmpty()))
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = Cmp(t, got,
-		SubJSONOf(`{"age": "$1", "fullname": "$2", "gender": "$3"}`,
-			Between(40, 45),
-			HasSuffix("Foobar"),
-			NotEmpty()))
+	ok = td.Cmp(t, got,
+		td.SubJSONOf(`{"age": "$1", "fullname": "$2", "gender": "$3"}`,
+			td.Between(40, 45),
+			td.HasSuffix("Foobar"),
+			td.NotEmpty()))
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = Cmp(t, got,
-		SubJSONOf(`{"age": $age, "fullname": $name, "gender": $gender}`,
-			Tag("age", Between(40, 45)),
-			Tag("name", HasSuffix("Foobar")),
-			Tag("gender", NotEmpty())))
+	ok = td.Cmp(t, got,
+		td.SubJSONOf(`{"age": $age, "fullname": $name, "gender": $gender}`,
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("name", td.HasSuffix("Foobar")),
+			td.Tag("gender", td.NotEmpty())))
 	fmt.Println("check got with named placeholders:", ok)
 
-	ok = Cmp(t, got,
-		SubJSONOf(`{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`))
+	ok = td.Cmp(t, got,
+		td.SubJSONOf(`{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`))
 	fmt.Println("check got with operator shortcuts:", ok)
 
 	// Output:
@@ -280,11 +280,11 @@ parameters) have shortcuts. They follow:
 	}
 
 	// OK let's test with this file
-	ok := Cmp(t, got,
-		SubJSONOf(filename,
-			Tag("name", HasPrefix("Bob")),
-			Tag("age", Between(40, 45)),
-			Tag("gender", Re(`^(male|female)\z`))))
+	ok := td.Cmp(t, got,
+		td.SubJSONOf(filename,
+			td.Tag("name", td.HasPrefix("Bob")),
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("gender", td.Re(`^(male|female)\z`))))
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -292,11 +292,11 @@ parameters) have shortcuts. They follow:
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = Cmp(t, got,
-		SubJSONOf(file,
-			Tag("name", HasPrefix("Bob")),
-			Tag("age", Between(40, 45)),
-			Tag("gender", Re(`^(male|female)\z`))))
+	ok = td.Cmp(t, got,
+		td.SubJSONOf(file,
+			td.Tag("name", td.HasPrefix("Bob")),
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("gender", td.Re(`^(male|female)\z`))))
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -313,7 +313,7 @@ func CmpSubJSONOf(t TestingT, got interface{}, expectedJSON interface{}, params 
 CmpSubJSONOf is a shortcut for:
 
 ```go
-Cmp(t, got, SubJSONOf(expectedJSON, params...), args...)
+td.Cmp(t, got, td.SubJSONOf(expectedJSON, params...), args...)
 ```
 
 See above for details.
@@ -328,7 +328,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSubJSONOf).
+> See also [<i class='fas fa-book'></i> CmpSubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSubJSONOf).
 
 ### Examples
 
@@ -343,13 +343,13 @@ reason of a potential failure.
 		Age:      42,
 	}
 
-	ok := CmpSubJSONOf(t, got, `{"age":42,"fullname":"Bob","gender":"male"}`, nil)
+	ok := td.CmpSubJSONOf(t, got, `{"age":42,"fullname":"Bob","gender":"male"}`, nil)
 	fmt.Println("check got with age then fullname:", ok)
 
-	ok = CmpSubJSONOf(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
+	ok = td.CmpSubJSONOf(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = CmpSubJSONOf(t, got, `
+	ok = td.CmpSubJSONOf(t, got, `
 // This should be the JSON representation of a struct
 {
   // A person:
@@ -361,7 +361,7 @@ reason of a potential failure.
 }`, nil)
 	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
-	ok = CmpSubJSONOf(t, got, `{"fullname":"Bob","gender":"male"}`, nil)
+	ok = td.CmpSubJSONOf(t, got, `{"fullname":"Bob","gender":"male"}`, nil)
 	fmt.Println("check got without age field:", ok)
 
 	// Output:
@@ -382,19 +382,19 @@ reason of a potential failure.
 		Age:      42,
 	}
 
-	ok := CmpSubJSONOf(t, got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
+	ok := td.CmpSubJSONOf(t, got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = CmpSubJSONOf(t, got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	ok = td.CmpSubJSONOf(t, got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = CmpSubJSONOf(t, got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	ok = td.CmpSubJSONOf(t, got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = CmpSubJSONOf(t, got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar")), Tag("gender", NotEmpty())})
+	ok = td.CmpSubJSONOf(t, got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("gender", td.NotEmpty())})
 	fmt.Println("check got with named placeholders:", ok)
 
-	ok = CmpSubJSONOf(t, got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
+	ok = td.CmpSubJSONOf(t, got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
 	fmt.Println("check got with operator shortcuts:", ok)
 
 	// Output:
@@ -439,7 +439,7 @@ reason of a potential failure.
 	}
 
 	// OK let's test with this file
-	ok := CmpSubJSONOf(t, got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok := td.CmpSubJSONOf(t, got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -447,7 +447,7 @@ reason of a potential failure.
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = CmpSubJSONOf(t, got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok = td.CmpSubJSONOf(t, got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -464,7 +464,7 @@ func (t *T) SubJSONOf(got interface{}, expectedJSON interface{}, params []interf
 [`SubJSONOf`]({{< ref "SubJSONOf" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SubJSONOf(expectedJSON, params...), args...)
+t.Cmp(got, td.SubJSONOf(expectedJSON, params...), args...)
 ```
 
 See above for details.
@@ -479,12 +479,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SubJSONOf).
+> See also [<i class='fas fa-book'></i> T.SubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SubJSONOf).
 
 ### Examples
 
 {{%expand "Basic example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -523,7 +523,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Placeholders example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -536,13 +536,13 @@ reason of a potential failure.
 	ok := t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	ok = t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = t.SubJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{Between(40, 45), HasSuffix("Foobar"), NotEmpty()})
+	ok = t.SubJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = t.SubJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar")), Tag("gender", NotEmpty())})
+	ok = t.SubJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("gender", td.NotEmpty())})
 	fmt.Println("check got with named placeholders:", ok)
 
 	ok = t.SubJSONOf(got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
@@ -557,7 +557,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "File example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -590,7 +590,7 @@ reason of a potential failure.
 	}
 
 	// OK let's test with this file
-	ok := t.SubJSONOf(got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok := t.SubJSONOf(got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -598,7 +598,7 @@ reason of a potential failure.
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = t.SubJSONOf(got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok = t.SubJSONOf(got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:

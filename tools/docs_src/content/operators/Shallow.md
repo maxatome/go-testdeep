@@ -16,13 +16,13 @@ to succeed.
 
 ```go
 a, b := 123, 123
-Cmp(t, &a, Shallow(&a)) // succeeds
-Cmp(t, &a, Shallow(&b)) // fails even if a == b as &a != &b
+td.Cmp(t, &a, td.Shallow(&a)) // succeeds
+td.Cmp(t, &a, td.Shallow(&b)) // fails even if a == b as &a != &b
 
 back := "foobarfoobar"
 a, b := back[:6], back[6:]
 // a == b but...
-Cmp(t, &a, Shallow(&b)) // fails
+td.Cmp(t, &a, td.Shallow(&b)) // fails
 ```
 
 Be careful for slices and strings! [`Shallow`]({{< ref "Shallow" >}}) can succeed but the
@@ -31,20 +31,20 @@ lengths. For example:
 
 ```go
 a := "foobar yes!"
-b := a[:1]              // aka. "f"
-Cmp(t, &a, Shallow(&b)) // succeeds as both strings point to the same area, even if len() differ
+b := a[:1]                    // aka "f"
+td.Cmp(t, &a, td.Shallow(&b)) // succeeds as both strings point to the same area, even if len() differ
 ```
 
 The same behavior occurs for slices:
 
 ```go
 a := []int{1, 2, 3, 4, 5, 6}
-b := a[:2]              // aka. []int{1, 2}
-Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
+b := a[:2]                    // aka []int{1, 2}
+td.Cmp(t, &a, td.Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
 ```
 
 
-> See also [<i class='fas fa-book'></i> Shallow godoc](https://godoc.org/github.com/maxatome/go-testdeep#Shallow).
+> See also [<i class='fas fa-book'></i> Shallow godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Shallow).
 
 ### Examples
 
@@ -57,12 +57,12 @@ Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even 
 	data := MyStruct{Value: 12}
 	got := &data
 
-	ok := Cmp(t, got, Shallow(&data),
+	ok := td.Cmp(t, got, td.Shallow(&data),
 		"checks pointers only, not contents")
 	fmt.Println(ok)
 
 	// Same contents, but not same pointer
-	ok = Cmp(t, got, Shallow(&MyStruct{Value: 12}),
+	ok = td.Cmp(t, got, td.Shallow(&MyStruct{Value: 12}),
 		"checks pointers only, not contents")
 	fmt.Println(ok)
 
@@ -78,10 +78,10 @@ Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even 
 	a := back[:3]
 	b := back[3:]
 
-	ok := Cmp(t, a, Shallow(back))
+	ok := td.Cmp(t, a, td.Shallow(back))
 	fmt.Println("are ≠ but share the same area:", ok)
 
-	ok = Cmp(t, b, Shallow(back))
+	ok = td.Cmp(t, b, td.Shallow(back))
 	fmt.Println("are = but do not point to same area:", ok)
 
 	// Output:
@@ -96,10 +96,10 @@ Cmp(t, &a, Shallow(&b)) // succeeds as both slices point to the same area, even 
 	a := back[:6]
 	b := back[6:]
 
-	ok := Cmp(t, a, Shallow(back))
+	ok := td.Cmp(t, a, td.Shallow(back))
 	fmt.Println("are ≠ but share the same area:", ok)
 
-	ok = Cmp(t, b, Shallow(a))
+	ok = td.Cmp(t, b, td.Shallow(a))
 	fmt.Println("are = but do not point to same area:", ok)
 
 	// Output:
@@ -116,7 +116,7 @@ func CmpShallow(t TestingT, got interface{}, expectedPtr interface{}, args ...in
 CmpShallow is a shortcut for:
 
 ```go
-Cmp(t, got, Shallow(expectedPtr), args...)
+td.Cmp(t, got, td.Shallow(expectedPtr), args...)
 ```
 
 See above for details.
@@ -131,7 +131,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpShallow godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpShallow).
+> See also [<i class='fas fa-book'></i> CmpShallow godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpShallow).
 
 ### Examples
 
@@ -144,12 +144,12 @@ reason of a potential failure.
 	data := MyStruct{Value: 12}
 	got := &data
 
-	ok := CmpShallow(t, got, &data,
+	ok := td.CmpShallow(t, got, &data,
 		"checks pointers only, not contents")
 	fmt.Println(ok)
 
 	// Same contents, but not same pointer
-	ok = CmpShallow(t, got, &MyStruct{Value: 12},
+	ok = td.CmpShallow(t, got, &MyStruct{Value: 12},
 		"checks pointers only, not contents")
 	fmt.Println(ok)
 
@@ -165,10 +165,10 @@ reason of a potential failure.
 	a := back[:3]
 	b := back[3:]
 
-	ok := CmpShallow(t, a, back)
+	ok := td.CmpShallow(t, a, back)
 	fmt.Println("are ≠ but share the same area:", ok)
 
-	ok = CmpShallow(t, b, back)
+	ok = td.CmpShallow(t, b, back)
 	fmt.Println("are = but do not point to same area:", ok)
 
 	// Output:
@@ -183,10 +183,10 @@ reason of a potential failure.
 	a := back[:6]
 	b := back[6:]
 
-	ok := CmpShallow(t, a, back)
+	ok := td.CmpShallow(t, a, back)
 	fmt.Println("are ≠ but share the same area:", ok)
 
-	ok = CmpShallow(t, b, a)
+	ok = td.CmpShallow(t, b, a)
 	fmt.Println("are = but do not point to same area:", ok)
 
 	// Output:
@@ -203,7 +203,7 @@ func (t *T) Shallow(got interface{}, expectedPtr interface{}, args ...interface{
 [`Shallow`]({{< ref "Shallow" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Shallow(expectedPtr), args...)
+t.Cmp(got, td.Shallow(expectedPtr), args...)
 ```
 
 See above for details.
@@ -218,12 +218,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Shallow godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Shallow).
+> See also [<i class='fas fa-book'></i> T.Shallow godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Shallow).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MyStruct struct {
 		Value int
@@ -246,7 +246,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Slice example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	back := []int{1, 2, 3, 1, 2, 3}
 	a := back[:3]
@@ -264,7 +264,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "String example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	back := "foobarfoobar"
 	a := back[:6]

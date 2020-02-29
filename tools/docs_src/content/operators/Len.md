@@ -13,16 +13,19 @@ compared value must be an array, a channel, a map, a slice or a
 `string`.
 
 *expectedLen* can be an `int` value:
+
 ```go
-Cmp(t, gotSlice, Len(12))
+td.Cmp(t, gotSlice, td.Len(12))
 ```
+
 as well as an other operator:
+
 ```go
-Cmp(t, gotSlice, Len(Between(3, 4)))
+td.Cmp(t, gotSlice, td.Len(td.Between(3, 4)))
 ```
 
 
-> See also [<i class='fas fa-book'></i> Len godoc](https://godoc.org/github.com/maxatome/go-testdeep#Len).
+> See also [<i class='fas fa-book'></i> Len godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Len).
 
 ### Examples
 
@@ -31,15 +34,15 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 
 	got := []int{11, 22, 33}
 
-	ok := Cmp(t, got, Len(3), "checks %v len is 3", got)
+	ok := td.Cmp(t, got, td.Len(3), "checks %v len is 3", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Len(0), "checks %v len is 0", got)
+	ok = td.Cmp(t, got, td.Len(0), "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	got = nil
 
-	ok = Cmp(t, got, Len(0), "checks %v len is 0", got)
+	ok = td.Cmp(t, got, td.Len(0), "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -53,15 +56,15 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := Cmp(t, got, Len(3), "checks %v len is 3", got)
+	ok := td.Cmp(t, got, td.Len(3), "checks %v len is 3", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Len(0), "checks %v len is 0", got)
+	ok = td.Cmp(t, got, td.Len(0), "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	got = nil
 
-	ok = Cmp(t, got, Len(0), "checks %v len is 0", got)
+	ok = td.Cmp(t, got, td.Len(0), "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -75,11 +78,11 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 
 	got := []int{11, 22, 33}
 
-	ok := Cmp(t, got, Len(Between(3, 8)),
+	ok := td.Cmp(t, got, td.Len(td.Between(3, 8)),
 		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Len(Lt(5)), "checks %v len is < 5", got)
+	ok = td.Cmp(t, got, td.Len(td.Lt(5)), "checks %v len is < 5", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -92,11 +95,11 @@ Cmp(t, gotSlice, Len(Between(3, 4)))
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := Cmp(t, got, Len(Between(3, 8)),
+	ok := td.Cmp(t, got, td.Len(td.Between(3, 8)),
 		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Len(Gte(3)), "checks %v len is ≥ 3", got)
+	ok = td.Cmp(t, got, td.Len(td.Gte(3)), "checks %v len is ≥ 3", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -113,7 +116,7 @@ func CmpLen(t TestingT, got interface{}, expectedLen interface{}, args ...interf
 CmpLen is a shortcut for:
 
 ```go
-Cmp(t, got, Len(expectedLen), args...)
+td.Cmp(t, got, td.Len(expectedLen), args...)
 ```
 
 See above for details.
@@ -128,7 +131,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpLen godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpLen).
+> See also [<i class='fas fa-book'></i> CmpLen godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpLen).
 
 ### Examples
 
@@ -137,15 +140,15 @@ reason of a potential failure.
 
 	got := []int{11, 22, 33}
 
-	ok := CmpLen(t, got, 3, "checks %v len is 3", got)
+	ok := td.CmpLen(t, got, 3, "checks %v len is 3", got)
 	fmt.Println(ok)
 
-	ok = CmpLen(t, got, 0, "checks %v len is 0", got)
+	ok = td.CmpLen(t, got, 0, "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	got = nil
 
-	ok = CmpLen(t, got, 0, "checks %v len is 0", got)
+	ok = td.CmpLen(t, got, 0, "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -159,15 +162,15 @@ reason of a potential failure.
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := CmpLen(t, got, 3, "checks %v len is 3", got)
+	ok := td.CmpLen(t, got, 3, "checks %v len is 3", got)
 	fmt.Println(ok)
 
-	ok = CmpLen(t, got, 0, "checks %v len is 0", got)
+	ok = td.CmpLen(t, got, 0, "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	got = nil
 
-	ok = CmpLen(t, got, 0, "checks %v len is 0", got)
+	ok = td.CmpLen(t, got, 0, "checks %v len is 0", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -181,11 +184,11 @@ reason of a potential failure.
 
 	got := []int{11, 22, 33}
 
-	ok := CmpLen(t, got, Between(3, 8),
+	ok := td.CmpLen(t, got, td.Between(3, 8),
 		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = CmpLen(t, got, Lt(5), "checks %v len is < 5", got)
+	ok = td.CmpLen(t, got, td.Lt(5), "checks %v len is < 5", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -198,11 +201,11 @@ reason of a potential failure.
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := CmpLen(t, got, Between(3, 8),
+	ok := td.CmpLen(t, got, td.Between(3, 8),
 		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = CmpLen(t, got, Gte(3), "checks %v len is ≥ 3", got)
+	ok = td.CmpLen(t, got, td.Gte(3), "checks %v len is ≥ 3", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -219,7 +222,7 @@ func (t *T) Len(got interface{}, expectedLen interface{}, args ...interface{}) b
 [`Len`]({{< ref "Len" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Len(expectedLen), args...)
+t.Cmp(got, td.Len(expectedLen), args...)
 ```
 
 See above for details.
@@ -234,12 +237,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Len godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Len).
+> See also [<i class='fas fa-book'></i> T.Len godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Len).
 
 ### Examples
 
 {{%expand "Slice example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{11, 22, 33}
 
@@ -261,7 +264,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Map example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
@@ -283,15 +286,15 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "OperatorSlice example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{11, 22, 33}
 
-	ok := t.Len(got, Between(3, 8),
+	ok := t.Len(got, td.Between(3, 8),
 		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = t.Len(got, Lt(5), "checks %v len is < 5", got)
+	ok = t.Len(got, td.Lt(5), "checks %v len is < 5", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -300,15 +303,15 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "OperatorMap example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := map[int]bool{11: true, 22: false, 33: false}
 
-	ok := t.Len(got, Between(3, 8),
+	ok := t.Len(got, td.Between(3, 8),
 		"checks %v len is in [3 .. 8]", got)
 	fmt.Println(ok)
 
-	ok = t.Len(got, Gte(3), "checks %v len is ≥ 3", got)
+	ok = t.Len(got, td.Gte(3), "checks %v len is ≥ 3", got)
 	fmt.Println(ok)
 
 	// Output:

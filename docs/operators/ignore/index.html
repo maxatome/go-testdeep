@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.63.2" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Ignore :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1581627452" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1581627452" rel="stylesheet">
-    <link href="/css/hybrid.css?1581627452" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1581627452" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1581627452" rel="stylesheet">
-    <link href="/css/auto-complete.css?1581627452" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1581627452" rel="stylesheet">
-    <link href="/css/theme.css?1581627452" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1581627452" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1581627452" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1581627452"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1581627452"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1581627452"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1581627452"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -150,9 +150,9 @@
  
   
     
-      <li data-nav-id="/example/basic-testdeep/" title="Basic testdeep approach" class="dd-item ">
+      <li data-nav-id="/example/basic-testdeep/" title="Basic go-testdeep approach" class="dd-item ">
         <a href="/example/basic-testdeep/">
-        Basic testdeep approach
+        Basic go-testdeep approach
         
         </a>
     </li>
@@ -169,9 +169,9 @@
  
   
     
-      <li data-nav-id="/example/advanced-testdeep/" title="Advanced testdeep technique" class="dd-item ">
+      <li data-nav-id="/example/advanced-testdeep/" title="Advanced go-testdeep technique" class="dd-item ">
         <a href="/example/advanced-testdeep/">
-        Advanced testdeep technique
+        Advanced go-testdeep technique
         
         </a>
     </li>
@@ -188,9 +188,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-cmp-shortcuts/" title="testdeep Cmp shortcuts" class="dd-item ">
-        <a href="/example/testdeep-cmp-shortcuts/">
-        testdeep Cmp shortcuts
+      <li data-nav-id="/example/td-cmp-shortcuts/" title="go-testdeep Cmp shortcuts" class="dd-item ">
+        <a href="/example/td-cmp-shortcuts/">
+        go-testdeep Cmp shortcuts
         
         </a>
     </li>
@@ -207,9 +207,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-t/" title="testdeep.T type" class="dd-item ">
-        <a href="/example/testdeep-t/">
-        testdeep.T type
+      <li data-nav-id="/example/td-t/" title="td.T type" class="dd-item ">
+        <a href="/example/td-t/">
+        td.T type
         
         </a>
     </li>
@@ -258,9 +258,9 @@
  
   
     
-      <li data-nav-id="/functions/testdeep-t/" title="testdeep.T" class="dd-item ">
-        <a href="/functions/testdeep-t/">
-        testdeep.T
+      <li data-nav-id="/functions/td-t/" title="td.T" class="dd-item ">
+        <a href="/functions/td-t/">
+        td.T
         
         </a>
     </li>
@@ -1508,7 +1508,7 @@
               </li>
           
               <li> 
-                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep"><i class='fas fa-book'></i> godoc</a>
+                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep/td"><i class='fas fa-book'></i> godoc</a>
               </li>
           
               <li> 
@@ -1613,9 +1613,20 @@
 
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Ignore</span>() TestDeep
 </code></pre></div><p><a href="/operators/ignore/"><code>Ignore</code></a> operator is always true, whatever data is. It is useful when
-comparing a slice and wanting to ignore some indexes, for example.</p>
-<blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#Ignore"><!-- raw HTML omitted --><!-- raw HTML omitted --> Ignore godoc</a>.</p>
+comparing a slice with <a href="/operators/slice/"><code>Slice</code></a> and wanting to ignore some indexes,
+for example. Or comparing a struct with <a href="/operators/sstruct/"><code>SStruct</code></a> and wanting to
+ignore some fields:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, td.<span style="color:#447fcf">SStruct</span>(
+  Person{
+    Name: <span style="color:#ed9d13">&#34;John Doe&#34;</span>,
+  },
+  td.StructFields{
+    Age:      td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>),
+    Children: td.<span style="color:#447fcf">Ignore</span>(),
+  }),
+)
+</code></pre></div><blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Ignore"><!-- raw HTML omitted --><!-- raw HTML omitted --> Ignore godoc</a>.</p>
 </blockquote>
 <h3 id="examples">Examples</h3>
 
@@ -1632,10 +1643,10 @@ comparing a slice and wanting to ignore some indexes, for example.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	ok := <span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>, <span style="color:#3677a9">3</span>},
-		<span style="color:#447fcf">Slice</span>([]<span style="color:#6ab825;font-weight:bold">int</span>{}, ArrayEntries{
+	ok := td.<span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>, <span style="color:#3677a9">2</span>, <span style="color:#3677a9">3</span>},
+		td.<span style="color:#447fcf">Slice</span>([]<span style="color:#6ab825;font-weight:bold">int</span>{}, td.ArrayEntries{
 			<span style="color:#3677a9">0</span>: <span style="color:#3677a9">1</span>,
-			<span style="color:#3677a9">1</span>: <span style="color:#447fcf">Ignore</span>(), <span style="color:#999;font-style:italic">// do not care about this entry
+			<span style="color:#3677a9">1</span>: td.<span style="color:#447fcf">Ignore</span>(), <span style="color:#999;font-style:italic">// do not care about this entry
 </span><span style="color:#999;font-style:italic"></span>			<span style="color:#3677a9">2</span>: <span style="color:#3677a9">3</span>,
 		}))
 	fmt.<span style="color:#447fcf">Println</span>(ok)
@@ -2864,19 +2875,19 @@ comparing a slice and wanting to ignore some indexes, for example.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1581627452"></script>
-    <script src="/js/perfect-scrollbar.min.js?1581627452"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1581627452"></script>
-    <script src="/js/jquery.sticky.js?1581627452"></script>
-    <script src="/js/featherlight.min.js?1581627452"></script>
-    <script src="/js/highlight.pack.js?1581627452"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1581627452"></script>
-    <script src="/js/learn.js?1581627452"></script>
-    <script src="/js/hugo-learn.js?1581627452"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1581627452" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1581627452"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

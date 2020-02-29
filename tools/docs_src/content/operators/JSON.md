@@ -28,21 +28,21 @@ Numeric placeholders reference the n'th "operators" item (starting
 at 1). Named placeholders are used with [`Tag`]({{< ref "Tag" >}}) operator as follows:
 
 ```go
-Cmp(t, gotValue,
-  JSON(`{"fullname": $name, "age": $2, "gender": $3}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43),               // matches only $2
-    "male"))                       // matches only $3
+td.Cmp(t, gotValue,
+  td.JSON(`{"fullname": $name, "age": $2, "gender": $3}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43),                  // matches only $2
+    "male"))                             // matches only $3
 ```
 
 Note that placeholders can be double-quoted as in:
 
 ```go
-Cmp(t, gotValue,
-  JSON(`{"fullname": "$name", "age": "$2", "gender": "$3"}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43),               // matches only $2
-    "male"))                       // matches only $3
+td.Cmp(t, gotValue,
+  td.JSON(`{"fullname": "$name", "age": "$2", "gender": "$3"}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43),                  // matches only $2
+    "male"))                             // matches only $3
 ```
 
 It makes no difference whatever the underlying type of the replaced
@@ -54,9 +54,9 @@ specification, like when used in a ".json" file.
 Note *expectedJSON* can be a `[]byte`, JSON filename or [`io.Reader`](https://golang.org/pkg/io/#Reader):
 
 ```go
-Cmp(t, gotValue, JSON("file.json", Between(12, 34)))
-Cmp(t, gotValue, JSON([]byte(`[1, $1, 3]`), Between(12, 34)))
-Cmp(t, gotValue, JSON(osFile, Between(12, 34)))
+td.Cmp(t, gotValue, td.JSON("file.json", td.Between(12, 34)))
+td.Cmp(t, gotValue, td.JSON([]byte(`[1, $1, 3]`), td.Between(12, 34)))
+td.Cmp(t, gotValue, td.JSON(osFile, td.Between(12, 34)))
 ```
 
 A JSON filename ends with ".json".
@@ -66,10 +66,10 @@ just double it to escape it. Note it is only needed when the "$" is
 the first character of a `string`:
 
 ```go
-Cmp(t, gotValue,
-  JSON(`{"fullname": "$name", "details": "$$info", "age": $2}`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43)))              // matches only $2
+td.Cmp(t, gotValue,
+  td.JSON(`{"fullname": "$name", "details": "$$info", "age": $2}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43)))                 // matches only $2
 ```
 
 For the "details" key, the raw value "`$info`" is expected, no
@@ -81,8 +81,8 @@ simplify numeric tests.
 Comments can be embedded in JSON data:
 
 ```go
-Cmp(t, gotValue,
-  JSON(`
+td.Cmp(t, gotValue,
+  td.JSON(`
 {
   // A guy properties:
   "fullname": "$name",  // The full name of the guy
@@ -92,8 +92,8 @@ Cmp(t, gotValue,
                              any change
                            - to demonstrate a multi-lines comment */
 }`,
-    Tag("name", HasPrefix("Foo")), // matches $1 and $name
-    Between(41, 43)))              // matches only $2
+    td.Tag("name", td.HasPrefix("Foo")), // matches $1 and $name
+    td.Between(41, 43)))                 // matches only $2
 ```
 
 Comments, like in go, have 2 forms. To quote the Go language specification:
@@ -109,13 +109,13 @@ JSON data without requiring any placeholder but using directly
 `$^OperatorName`. They are operator shortcuts:
 
 ```go
-Cmp(t, gotValue, JSON(`{"id": $1}`, NotZero()))
+td.Cmp(t, gotValue, td.JSON(`{"id": $1}`, td.NotZero()))
 ```
 
 can be written as:
 
 ```go
-Cmp(t, gotValue, JSON(`{"id": $^NotZero}`))
+td.Cmp(t, gotValue, td.JSON(`{"id": $^NotZero}`))
 ```
 
 Unfortunately, only simple operators (in fact those which take no
@@ -138,7 +138,7 @@ parameters) have shortcuts. They follow:
 *expectedJSON* is "null".
 
 
-> See also [<i class='fas fa-book'></i> JSON godoc](https://godoc.org/github.com/maxatome/go-testdeep#JSON).
+> See also [<i class='fas fa-book'></i> JSON godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#JSON).
 
 ### Examples
 
@@ -153,13 +153,13 @@ parameters) have shortcuts. They follow:
 		Age:      42,
 	}
 
-	ok := Cmp(t, got, JSON(`{"age":42,"fullname":"Bob"}`))
+	ok := td.Cmp(t, got, td.JSON(`{"age":42,"fullname":"Bob"}`))
 	fmt.Println("check got with age then fullname:", ok)
 
-	ok = Cmp(t, got, JSON(`{"fullname":"Bob","age":42}`))
+	ok = td.Cmp(t, got, td.JSON(`{"fullname":"Bob","age":42}`))
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = Cmp(t, got, JSON(`
+	ok = td.Cmp(t, got, td.JSON(`
 // This should be the JSON representation of a struct
 {
   // A person:
@@ -170,20 +170,20 @@ parameters) have shortcuts. They follow:
 }`))
 	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
-	ok = Cmp(t, got, JSON(`{"fullname":"Bob","age":42,"gender":"male"}`))
+	ok = td.Cmp(t, got, td.JSON(`{"fullname":"Bob","age":42,"gender":"male"}`))
 	fmt.Println("check got with gender field:", ok)
 
-	ok = Cmp(t, got, JSON(`{"fullname":"Bob"}`))
+	ok = td.Cmp(t, got, td.JSON(`{"fullname":"Bob"}`))
 	fmt.Println("check got with fullname only:", ok)
 
-	ok = Cmp(t, true, JSON(`true`))
+	ok = td.Cmp(t, true, td.JSON(`true`))
 	fmt.Println("check boolean got is true:", ok)
 
-	ok = Cmp(t, 42, JSON(`42`))
+	ok = td.Cmp(t, 42, td.JSON(`42`))
 	fmt.Println("check numeric got is 42:", ok)
 
 	got = nil
-	ok = Cmp(t, got, JSON(`null`))
+	ok = td.Cmp(t, got, td.JSON(`null`))
 	fmt.Println("check nil got is null:", ok)
 
 	// Output:
@@ -208,28 +208,28 @@ parameters) have shortcuts. They follow:
 		Age:      42,
 	}
 
-	ok := Cmp(t, got, JSON(`{"age": $1, "fullname": $2}`, 42, "Bob Foobar"))
+	ok := td.Cmp(t, got, td.JSON(`{"age": $1, "fullname": $2}`, 42, "Bob Foobar"))
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = Cmp(t, got,
-		JSON(`{"age": $1, "fullname": $2}`,
-			Between(40, 45),
-			HasSuffix("Foobar")))
+	ok = td.Cmp(t, got,
+		td.JSON(`{"age": $1, "fullname": $2}`,
+			td.Between(40, 45),
+			td.HasSuffix("Foobar")))
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = Cmp(t, got,
-		JSON(`{"age": "$1", "fullname": "$2"}`,
-			Between(40, 45),
-			HasSuffix("Foobar")))
+	ok = td.Cmp(t, got,
+		td.JSON(`{"age": "$1", "fullname": "$2"}`,
+			td.Between(40, 45),
+			td.HasSuffix("Foobar")))
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = Cmp(t, got,
-		JSON(`{"age": $age, "fullname": $name}`,
-			Tag("age", Between(40, 45)),
-			Tag("name", HasSuffix("Foobar"))))
+	ok = td.Cmp(t, got,
+		td.JSON(`{"age": $age, "fullname": $name}`,
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("name", td.HasSuffix("Foobar"))))
 	fmt.Println("check got with named placeholders:", ok)
 
-	ok = Cmp(t, got, JSON(`{"age": $^NotZero, "fullname": $^NotEmpty}`))
+	ok = td.Cmp(t, got, td.JSON(`{"age": $^NotZero, "fullname": $^NotEmpty}`))
 	fmt.Println("check got with operator shortcuts:", ok)
 
 	// Output:
@@ -270,11 +270,11 @@ parameters) have shortcuts. They follow:
 	}
 
 	// OK let's test with this file
-	ok := Cmp(t, got,
-		JSON(filename,
-			Tag("name", HasPrefix("Bob")),
-			Tag("age", Between(40, 45)),
-			Tag("gender", Re(`^(male|female)\z`))))
+	ok := td.Cmp(t, got,
+		td.JSON(filename,
+			td.Tag("name", td.HasPrefix("Bob")),
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("gender", td.Re(`^(male|female)\z`))))
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -282,11 +282,11 @@ parameters) have shortcuts. They follow:
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = Cmp(t, got,
-		JSON(file,
-			Tag("name", HasPrefix("Bob")),
-			Tag("age", Between(40, 45)),
-			Tag("gender", Re(`^(male|female)\z`))))
+	ok = td.Cmp(t, got,
+		td.JSON(file,
+			td.Tag("name", td.HasPrefix("Bob")),
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("gender", td.Re(`^(male|female)\z`))))
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -303,7 +303,7 @@ func CmpJSON(t TestingT, got interface{}, expectedJSON interface{}, params []int
 CmpJSON is a shortcut for:
 
 ```go
-Cmp(t, got, JSON(expectedJSON, params...), args...)
+td.Cmp(t, got, td.JSON(expectedJSON, params...), args...)
 ```
 
 See above for details.
@@ -318,7 +318,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpJSON godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpJSON).
+> See also [<i class='fas fa-book'></i> CmpJSON godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpJSON).
 
 ### Examples
 
@@ -333,13 +333,13 @@ reason of a potential failure.
 		Age:      42,
 	}
 
-	ok := CmpJSON(t, got, `{"age":42,"fullname":"Bob"}`, nil)
+	ok := td.CmpJSON(t, got, `{"age":42,"fullname":"Bob"}`, nil)
 	fmt.Println("check got with age then fullname:", ok)
 
-	ok = CmpJSON(t, got, `{"fullname":"Bob","age":42}`, nil)
+	ok = td.CmpJSON(t, got, `{"fullname":"Bob","age":42}`, nil)
 	fmt.Println("check got with fullname then age:", ok)
 
-	ok = CmpJSON(t, got, `
+	ok = td.CmpJSON(t, got, `
 // This should be the JSON representation of a struct
 {
   // A person:
@@ -350,20 +350,20 @@ reason of a potential failure.
 }`, nil)
 	fmt.Println("check got with nicely formatted and commented JSON:", ok)
 
-	ok = CmpJSON(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
+	ok = td.CmpJSON(t, got, `{"fullname":"Bob","age":42,"gender":"male"}`, nil)
 	fmt.Println("check got with gender field:", ok)
 
-	ok = CmpJSON(t, got, `{"fullname":"Bob"}`, nil)
+	ok = td.CmpJSON(t, got, `{"fullname":"Bob"}`, nil)
 	fmt.Println("check got with fullname only:", ok)
 
-	ok = CmpJSON(t, true, `true`, nil)
+	ok = td.CmpJSON(t, true, `true`, nil)
 	fmt.Println("check boolean got is true:", ok)
 
-	ok = CmpJSON(t, 42, `42`, nil)
+	ok = td.CmpJSON(t, 42, `42`, nil)
 	fmt.Println("check numeric got is 42:", ok)
 
 	got = nil
-	ok = CmpJSON(t, got, `null`, nil)
+	ok = td.CmpJSON(t, got, `null`, nil)
 	fmt.Println("check nil got is null:", ok)
 
 	// Output:
@@ -388,19 +388,19 @@ reason of a potential failure.
 		Age:      42,
 	}
 
-	ok := CmpJSON(t, got, `{"age": $1, "fullname": $2}`, []interface{}{42, "Bob Foobar"})
+	ok := td.CmpJSON(t, got, `{"age": $1, "fullname": $2}`, []interface{}{42, "Bob Foobar"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = CmpJSON(t, got, `{"age": $1, "fullname": $2}`, []interface{}{Between(40, 45), HasSuffix("Foobar")})
+	ok = td.CmpJSON(t, got, `{"age": $1, "fullname": $2}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar")})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = CmpJSON(t, got, `{"age": "$1", "fullname": "$2"}`, []interface{}{Between(40, 45), HasSuffix("Foobar")})
+	ok = td.CmpJSON(t, got, `{"age": "$1", "fullname": "$2"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar")})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = CmpJSON(t, got, `{"age": $age, "fullname": $name}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar"))})
+	ok = td.CmpJSON(t, got, `{"age": $age, "fullname": $name}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar"))})
 	fmt.Println("check got with named placeholders:", ok)
 
-	ok = CmpJSON(t, got, `{"age": $^NotZero, "fullname": $^NotEmpty}`, nil)
+	ok = td.CmpJSON(t, got, `{"age": $^NotZero, "fullname": $^NotEmpty}`, nil)
 	fmt.Println("check got with operator shortcuts:", ok)
 
 	// Output:
@@ -441,7 +441,7 @@ reason of a potential failure.
 	}
 
 	// OK let's test with this file
-	ok := CmpJSON(t, got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok := td.CmpJSON(t, got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -449,7 +449,7 @@ reason of a potential failure.
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = CmpJSON(t, got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok = td.CmpJSON(t, got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -466,7 +466,7 @@ func (t *T) JSON(got interface{}, expectedJSON interface{}, params []interface{}
 [`JSON`]({{< ref "JSON" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, JSON(expectedJSON, params...), args...)
+t.Cmp(got, td.JSON(expectedJSON, params...), args...)
 ```
 
 See above for details.
@@ -481,12 +481,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.JSON godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.JSON).
+> See also [<i class='fas fa-book'></i> T.JSON godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.JSON).
 
 ### Examples
 
 {{%expand "Basic example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -541,7 +541,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Placeholders example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -554,13 +554,13 @@ reason of a potential failure.
 	ok := t.JSON(got, `{"age": $1, "fullname": $2}`, []interface{}{42, "Bob Foobar"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = t.JSON(got, `{"age": $1, "fullname": $2}`, []interface{}{Between(40, 45), HasSuffix("Foobar")})
+	ok = t.JSON(got, `{"age": $1, "fullname": $2}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar")})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = t.JSON(got, `{"age": "$1", "fullname": "$2"}`, []interface{}{Between(40, 45), HasSuffix("Foobar")})
+	ok = t.JSON(got, `{"age": "$1", "fullname": "$2"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar")})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = t.JSON(got, `{"age": $age, "fullname": $name}`, []interface{}{Tag("age", Between(40, 45)), Tag("name", HasSuffix("Foobar"))})
+	ok = t.JSON(got, `{"age": $age, "fullname": $name}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar"))})
 	fmt.Println("check got with named placeholders:", ok)
 
 	ok = t.JSON(got, `{"age": $^NotZero, "fullname": $^NotEmpty}`, nil)
@@ -575,7 +575,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "File example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := &struct {
 		Fullname string `json:"fullname"`
@@ -604,7 +604,7 @@ reason of a potential failure.
 	}
 
 	// OK let's test with this file
-	ok := t.JSON(got, filename, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok := t.JSON(got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -612,7 +612,7 @@ reason of a potential failure.
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = t.JSON(got, file, []interface{}{Tag("name", HasPrefix("Bob")), Tag("age", Between(40, 45)), Tag("gender", Re(`^(male|female)\z`))})
+	ok = t.JSON(got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:

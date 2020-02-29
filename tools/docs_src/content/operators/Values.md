@@ -11,16 +11,23 @@ func Values(val interface{}) TestDeep
 ordered values to *val*.
 
 *val* can be a slice of items of the same type as the map values:
+
 ```go
-Values([]string{"a", "b", "c"})
+got := map[int]string{3: "c", 1: "a", 2: "b"}
+td.Cmp(t, got, td.Values([]string{"a", "b", "c"})) // succeeds, values sorted
+td.Cmp(t, got, td.Values([]string{"c", "a", "b"})) // fails as not sorted
 ```
-as well as an other operator:
+
+as well as an other operator as [`Bag`]({{< ref "Bag" >}}), for example, to test values in
+an unsorted manner:
+
 ```go
-Values(Bag("c", "a", "b"))
+got := map[int]string{3: "c", 1: "a", 2: "b"}
+td.Cmp(t, got, td.Values(td.Bag("c", "a", "b"))) // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> Values godoc](https://godoc.org/github.com/maxatome/go-testdeep#Values).
+> See also [<i class='fas fa-book'></i> Values godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Values).
 
 ### Examples
 
@@ -30,19 +37,19 @@ Values(Bag("c", "a", "b"))
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
 	// Values tests values in an ordered manner
-	ok := Cmp(t, got, Values([]int{1, 2, 3}))
+	ok := td.Cmp(t, got, td.Values([]int{1, 2, 3}))
 	fmt.Println("All sorted values are found:", ok)
 
 	// If the expected values are not ordered, it fails
-	ok = Cmp(t, got, Values([]int{3, 1, 2}))
+	ok = td.Cmp(t, got, td.Values([]int{3, 1, 2}))
 	fmt.Println("All unsorted values are found:", ok)
 
 	// To circumvent that, one can use Bag operator
-	ok = Cmp(t, got, Values(Bag(3, 1, 2)))
+	ok = td.Cmp(t, got, td.Values(td.Bag(3, 1, 2)))
 	fmt.Println("All unsorted values are found, with the help of Bag operator:", ok)
 
 	// Check that each value is between 1 and 3
-	ok = Cmp(t, got, Values(ArrayEach(Between(1, 3))))
+	ok = td.Cmp(t, got, td.Values(td.ArrayEach(td.Between(1, 3))))
 	fmt.Println("Each value is between 1 and 3:", ok)
 
 	// Output:
@@ -61,7 +68,7 @@ func CmpValues(t TestingT, got interface{}, val interface{}, args ...interface{}
 CmpValues is a shortcut for:
 
 ```go
-Cmp(t, got, Values(val), args...)
+td.Cmp(t, got, td.Values(val), args...)
 ```
 
 See above for details.
@@ -76,7 +83,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpValues godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpValues).
+> See also [<i class='fas fa-book'></i> CmpValues godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpValues).
 
 ### Examples
 
@@ -86,19 +93,19 @@ reason of a potential failure.
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
 	// Values tests values in an ordered manner
-	ok := CmpValues(t, got, []int{1, 2, 3})
+	ok := td.CmpValues(t, got, []int{1, 2, 3})
 	fmt.Println("All sorted values are found:", ok)
 
 	// If the expected values are not ordered, it fails
-	ok = CmpValues(t, got, []int{3, 1, 2})
+	ok = td.CmpValues(t, got, []int{3, 1, 2})
 	fmt.Println("All unsorted values are found:", ok)
 
 	// To circumvent that, one can use Bag operator
-	ok = CmpValues(t, got, Bag(3, 1, 2))
+	ok = td.CmpValues(t, got, td.Bag(3, 1, 2))
 	fmt.Println("All unsorted values are found, with the help of Bag operator:", ok)
 
 	// Check that each value is between 1 and 3
-	ok = CmpValues(t, got, ArrayEach(Between(1, 3)))
+	ok = td.CmpValues(t, got, td.ArrayEach(td.Between(1, 3)))
 	fmt.Println("Each value is between 1 and 3:", ok)
 
 	// Output:
@@ -117,7 +124,7 @@ func (t *T) Values(got interface{}, val interface{}, args ...interface{}) bool
 [`Values`]({{< ref "Values" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Values(val), args...)
+t.Cmp(got, td.Values(val), args...)
 ```
 
 See above for details.
@@ -132,12 +139,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Values godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Values).
+> See also [<i class='fas fa-book'></i> T.Values godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Values).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
@@ -150,11 +157,11 @@ reason of a potential failure.
 	fmt.Println("All unsorted values are found:", ok)
 
 	// To circumvent that, one can use Bag operator
-	ok = t.Values(got, Bag(3, 1, 2))
+	ok = t.Values(got, td.Bag(3, 1, 2))
 	fmt.Println("All unsorted values are found, with the help of Bag operator:", ok)
 
 	// Check that each value is between 1 and 3
-	ok = t.Values(got, ArrayEach(Between(1, 3)))
+	ok = t.Values(got, td.ArrayEach(td.Between(1, 3)))
 	fmt.Println("Each value is between 1 and 3:", ok)
 
 	// Output:

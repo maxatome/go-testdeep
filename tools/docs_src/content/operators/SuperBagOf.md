@@ -15,12 +15,12 @@ array/slice. But some items in the compared array/slice may not be
 expected.
 
 ```go
-Cmp(t, []int{1, 1, 2}, SuperBagOf(1))       // succeeds
-Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing
+td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1))       // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 ```
 
 
-> See also [<i class='fas fa-book'></i> SuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SuperBagOf).
+> See also [<i class='fas fa-book'></i> SuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SuperBagOf).
 
 ### Examples
 
@@ -29,11 +29,11 @@ Cmp(t, []int{1, 1, 2}, SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := Cmp(t, got, SuperBagOf(8, 5, 8),
+	ok := td.Cmp(t, got, td.SuperBagOf(8, 5, 8),
 		"checks the items are present, in any order")
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, SuperBagOf(Gt(5), Lte(2)),
+	ok = td.Cmp(t, got, td.SuperBagOf(td.Gt(5), td.Lte(2)),
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
@@ -51,7 +51,7 @@ func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 CmpSuperBagOf is a shortcut for:
 
 ```go
-Cmp(t, got, SuperBagOf(expectedItems...), args...)
+td.Cmp(t, got, td.SuperBagOf(expectedItems...), args...)
 ```
 
 See above for details.
@@ -66,7 +66,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperBagOf).
+> See also [<i class='fas fa-book'></i> CmpSuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSuperBagOf).
 
 ### Examples
 
@@ -75,11 +75,11 @@ reason of a potential failure.
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := CmpSuperBagOf(t, got, []interface{}{8, 5, 8},
+	ok := td.CmpSuperBagOf(t, got, []interface{}{8, 5, 8},
 		"checks the items are present, in any order")
 	fmt.Println(ok)
 
-	ok = CmpSuperBagOf(t, got, []interface{}{Gt(5), Lte(2)},
+	ok = td.CmpSuperBagOf(t, got, []interface{}{td.Gt(5), td.Lte(2)},
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
@@ -97,7 +97,7 @@ func (t *T) SuperBagOf(got interface{}, expectedItems []interface{}, args ...int
 [`SuperBagOf`]({{< ref "SuperBagOf" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SuperBagOf(expectedItems...), args...)
+t.Cmp(got, td.SuperBagOf(expectedItems...), args...)
 ```
 
 See above for details.
@@ -112,12 +112,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SuperBagOf).
+> See also [<i class='fas fa-book'></i> T.SuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SuperBagOf).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -125,7 +125,7 @@ reason of a potential failure.
 		"checks the items are present, in any order")
 	fmt.Println(ok)
 
-	ok = t.SuperBagOf(got, []interface{}{Gt(5), Lte(2)},
+	ok = t.SuperBagOf(got, []interface{}{td.Gt(5), td.Lte(2)},
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 

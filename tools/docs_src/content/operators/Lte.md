@@ -13,10 +13,16 @@ func Lte(maxExpectedValue interface{}) TestDeep
 same kind as the compared value if numeric, and the same type if
 [`time.Time`](https://golang.org/pkg/time/#Time) (or assignable).
 
+```go
+td.Cmp(t, 17, td.Lte(17))
+before := time.Now()
+td.Cmp(t, before, td.Lt(time.Now()))
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *maxExpectedValue*.
 
 
-> See also [<i class='fas fa-book'></i> Lte godoc](https://godoc.org/github.com/maxatome/go-testdeep#Lte).
+> See also [<i class='fas fa-book'></i> Lte godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Lte).
 
 ### Examples
 
@@ -25,13 +31,13 @@ same kind as the compared value if numeric, and the same type if
 
 	got := 156
 
-	ok := Cmp(t, got, Lte(156), "checks %v is ≤ 156", got)
+	ok := td.Cmp(t, got, td.Lte(156), "checks %v is ≤ 156", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Lte(157), "checks %v is ≤ 157", got)
+	ok = td.Cmp(t, got, td.Lte(157), "checks %v is ≤ 157", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Lte(155), "checks %v is ≤ 155", got)
+	ok = td.Cmp(t, got, td.Lte(155), "checks %v is ≤ 155", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -45,13 +51,13 @@ same kind as the compared value if numeric, and the same type if
 
 	got := "abc"
 
-	ok := Cmp(t, got, Lte("abc"), `checks "%v" is ≤ "abc"`, got)
+	ok := td.Cmp(t, got, td.Lte("abc"), `checks "%v" is ≤ "abc"`, got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Lte("abd"), `checks "%v" is ≤ "abd"`, got)
+	ok = td.Cmp(t, got, td.Lte("abd"), `checks "%v" is ≤ "abd"`, got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Lte("abb"), `checks "%v" is ≤ "abb"`, got)
+	ok = td.Cmp(t, got, td.Lte("abb"), `checks "%v" is ≤ "abb"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -69,7 +75,7 @@ func CmpLte(t TestingT, got interface{}, maxExpectedValue interface{}, args ...i
 CmpLte is a shortcut for:
 
 ```go
-Cmp(t, got, Lte(maxExpectedValue), args...)
+td.Cmp(t, got, td.Lte(maxExpectedValue), args...)
 ```
 
 See above for details.
@@ -84,7 +90,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpLte godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpLte).
+> See also [<i class='fas fa-book'></i> CmpLte godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpLte).
 
 ### Examples
 
@@ -93,13 +99,13 @@ reason of a potential failure.
 
 	got := 156
 
-	ok := CmpLte(t, got, 156, "checks %v is ≤ 156", got)
+	ok := td.CmpLte(t, got, 156, "checks %v is ≤ 156", got)
 	fmt.Println(ok)
 
-	ok = CmpLte(t, got, 157, "checks %v is ≤ 157", got)
+	ok = td.CmpLte(t, got, 157, "checks %v is ≤ 157", got)
 	fmt.Println(ok)
 
-	ok = CmpLte(t, got, 155, "checks %v is ≤ 155", got)
+	ok = td.CmpLte(t, got, 155, "checks %v is ≤ 155", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -113,13 +119,13 @@ reason of a potential failure.
 
 	got := "abc"
 
-	ok := CmpLte(t, got, "abc", `checks "%v" is ≤ "abc"`, got)
+	ok := td.CmpLte(t, got, "abc", `checks "%v" is ≤ "abc"`, got)
 	fmt.Println(ok)
 
-	ok = CmpLte(t, got, "abd", `checks "%v" is ≤ "abd"`, got)
+	ok = td.CmpLte(t, got, "abd", `checks "%v" is ≤ "abd"`, got)
 	fmt.Println(ok)
 
-	ok = CmpLte(t, got, "abb", `checks "%v" is ≤ "abb"`, got)
+	ok = td.CmpLte(t, got, "abb", `checks "%v" is ≤ "abb"`, got)
 	fmt.Println(ok)
 
 	// Output:
@@ -137,7 +143,7 @@ func (t *T) Lte(got interface{}, maxExpectedValue interface{}, args ...interface
 [`Lte`]({{< ref "Lte" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Lte(maxExpectedValue), args...)
+t.Cmp(got, td.Lte(maxExpectedValue), args...)
 ```
 
 See above for details.
@@ -152,12 +158,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Lte godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Lte).
+> See also [<i class='fas fa-book'></i> T.Lte godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Lte).
 
 ### Examples
 
 {{%expand "Int example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := 156
 
@@ -177,7 +183,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "String example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "abc"
 

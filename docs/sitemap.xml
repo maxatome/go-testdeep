@@ -4,292 +4,362 @@
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/matrix/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/introduction/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/all/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/any/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/array/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/arrayeach/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/bag/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/between/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/cap/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/catch/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/code/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/contains/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/containskey/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/empty/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/gt/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/gte/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/hasprefix/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/hassuffix/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/ignore/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/isa/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/json/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/keys/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/lax/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/len/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/lt/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/lte/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/map/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/mapeach/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/n/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/nan/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/nil/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/none/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/not/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/notany/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/notempty/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/notnan/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/notnil/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/notzero/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/pptr/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/ptr/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/re/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/reall/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/set/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/shallow/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/slice/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/smuggle/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/sstruct/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/string/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/struct/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/subbagof/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/subjsonof/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/submapof/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/subsetof/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/superbagof/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/superjsonof/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/supermapof/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/supersetof/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/tag/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/trunctime/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/example/using-testing/</loc>
+    <lastmod>2019-10-29T21:58:29+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/values/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/zero/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/example/</loc>
+    <lastmod>2019-10-29T21:58:29+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/functions/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/operators/</loc>
-    <lastmod>2019-10-03T22:20:09+02:00</lastmod>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/example/basic-testdeep/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/helpers/</loc>
+    <lastmod>2020-02-28T23:23:15+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/faq/</loc>
-    <lastmod>2019-10-08T21:28:21+02:00</lastmod>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://go-testdeep.zetta.rocks/example/testdeep-cmp-shortcuts/</loc>
+    <loc>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://go-testdeep.zetta.rocks/example/testdeep-t/</loc>
+    <loc>https://go-testdeep.zetta.rocks/example/td-t/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
   <url>
@@ -301,7 +371,8 @@
   </url>
   
   <url>
-    <loc>https://go-testdeep.zetta.rocks/functions/testdeep-t/</loc>
+    <loc>https://go-testdeep.zetta.rocks/functions/td-t/</loc>
+    <lastmod>2020-02-22T15:49:19+01:00</lastmod>
   </url>
   
 </urlset>

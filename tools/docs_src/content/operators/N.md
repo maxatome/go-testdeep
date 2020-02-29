@@ -11,10 +11,15 @@ func N(num interface{}, tolerance ...interface{}) TestDeep
 *tolerance* is missing, it defaults to 0. *num* and *tolerance*
 must be the same kind as the compared value.
 
+```go
+td.Cmp(t, 12.2, td.N(12., 0.3)) // succeeds
+td.Cmp(t, 12.2, td.N(12., 0.1)) // fails
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *num*.
 
 
-> See also [<i class='fas fa-book'></i> N godoc](https://godoc.org/github.com/maxatome/go-testdeep#N).
+> See also [<i class='fas fa-book'></i> N godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#N).
 
 ### Examples
 
@@ -23,7 +28,7 @@ must be the same kind as the compared value.
 
 	got := 1.12345
 
-	ok := Cmp(t, got, N(1.1234, 0.00006),
+	ok := td.Cmp(t, got, td.N(1.1234, 0.00006),
 		"checks %v = 1.1234 ± 0.00006", got)
 	fmt.Println(ok)
 
@@ -40,7 +45,7 @@ func CmpN(t TestingT, got interface{}, num interface{}, tolerance interface{}, a
 CmpN is a shortcut for:
 
 ```go
-Cmp(t, got, N(num, tolerance), args...)
+td.Cmp(t, got, td.N(num, tolerance), args...)
 ```
 
 See above for details.
@@ -59,7 +64,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpN godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpN).
+> See also [<i class='fas fa-book'></i> CmpN godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpN).
 
 ### Examples
 
@@ -68,7 +73,7 @@ reason of a potential failure.
 
 	got := 1.12345
 
-	ok := CmpN(t, got, 1.1234, 0.00006,
+	ok := td.CmpN(t, got, 1.1234, 0.00006,
 		"checks %v = 1.1234 ± 0.00006", got)
 	fmt.Println(ok)
 
@@ -85,7 +90,7 @@ func (t *T) N(got interface{}, num interface{}, tolerance interface{}, args ...i
 [`N`]({{< ref "N" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, N(num, tolerance), args...)
+t.Cmp(got, td.N(num, tolerance), args...)
 ```
 
 See above for details.
@@ -104,12 +109,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.N godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.N).
+> See also [<i class='fas fa-book'></i> T.N godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.N).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := 1.12345
 

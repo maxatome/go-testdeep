@@ -12,13 +12,13 @@ compares each key of map against *expectedValue*.
 
 ```go
 hash := map[string]int{"foo": 12, "bar": 34, "zip": 28}
-Cmp(t, hash, ContainsKey("foo"))          // succeeds
-Cmp(t, hash, ContainsKey(HasPrefix("z"))) // succeeds
-Cmp(t, hash, ContainsKey(HasPrefix("x"))) // fails
+td.Cmp(t, hash, td.ContainsKey("foo"))             // succeeds
+td.Cmp(t, hash, td.ContainsKey(td.HasPrefix("z"))) // succeeds
+td.Cmp(t, hash, td.ContainsKey(td.HasPrefix("x"))) // fails
 
 hnum := map[int]string{1: "foo", 42: "bar"}
-Cmp(t, hash, ContainsKey(42))              // succeeds
-Cmp(t, hash, ContainsKey(Between(40, 45))) // succeeds
+td.Cmp(t, hash, td.ContainsKey(42))                 // succeeds
+td.Cmp(t, hash, td.ContainsKey(td.Between(40, 45))) // succeeds
 ```
 
 When [`ContainsKey(nil)`]({{< ref "ContainsKey" >}}) is used, `nil` is automatically converted to a
@@ -29,28 +29,28 @@ it of course.) So all following Cmp calls are equivalent
 ```go
 num := 123
 hnum := map[*int]bool{&num: true, nil: true}
-Cmp(t, hnum, ContainsKey(nil))         // succeeds → (*int)(nil)
-Cmp(t, hnum, ContainsKey((*int)(nil))) // succeeds
-Cmp(t, hnum, ContainsKey(Nil()))       // succeeds
+td.Cmp(t, hnum, td.ContainsKey(nil))         // succeeds → (*int)(nil)
+td.Cmp(t, hnum, td.ContainsKey((*int)(nil))) // succeeds
+td.Cmp(t, hnum, td.ContainsKey(td.Nil()))    // succeeds
 // But...
-Cmp(t, hnum, ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
+td.Cmp(t, hnum, td.ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 ```
 
 
-> See also [<i class='fas fa-book'></i> ContainsKey godoc](https://godoc.org/github.com/maxatome/go-testdeep#ContainsKey).
+> See also [<i class='fas fa-book'></i> ContainsKey godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#ContainsKey).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := Cmp(t,
-		map[string]int{"foo": 11, "bar": 22, "zip": 33}, ContainsKey("foo"))
+	ok := td.Cmp(t,
+		map[string]int{"foo": 11, "bar": 22, "zip": 33}, td.ContainsKey("foo"))
 	fmt.Println(`map contains key "foo":`, ok)
 
-	ok = Cmp(t,
+	ok = td.Cmp(t,
 		map[int]bool{12: true, 24: false, 42: true, 51: false},
-		ContainsKey(Between(40, 50)))
+		td.ContainsKey(td.Between(40, 50)))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
 
 	// Output:
@@ -64,16 +64,16 @@ Cmp(t, hnum, ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
 	num := 1234
 	got := map[*int]bool{&num: false, nil: true}
 
-	ok := Cmp(t, got, ContainsKey(nil))
+	ok := td.Cmp(t, got, td.ContainsKey(nil))
 	fmt.Println("map contains untyped nil key:", ok)
 
-	ok = Cmp(t, got, ContainsKey((*int)(nil)))
+	ok = td.Cmp(t, got, td.ContainsKey((*int)(nil)))
 	fmt.Println("map contains *int nil key:", ok)
 
-	ok = Cmp(t, got, ContainsKey(Nil()))
+	ok = td.Cmp(t, got, td.ContainsKey(td.Nil()))
 	fmt.Println("map contains Nil() key:", ok)
 
-	ok = Cmp(t, got, ContainsKey((*byte)(nil)))
+	ok = td.Cmp(t, got, td.ContainsKey((*byte)(nil)))
 	fmt.Println("map contains *byte nil key:", ok) // types differ: *byte ≠ *int
 
 	// Output:
@@ -92,7 +92,7 @@ func CmpContainsKey(t TestingT, got interface{}, expectedValue interface{}, args
 CmpContainsKey is a shortcut for:
 
 ```go
-Cmp(t, got, ContainsKey(expectedValue), args...)
+td.Cmp(t, got, td.ContainsKey(expectedValue), args...)
 ```
 
 See above for details.
@@ -107,17 +107,17 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpContainsKey godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpContainsKey).
+> See also [<i class='fas fa-book'></i> CmpContainsKey godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpContainsKey).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
 
-	ok := CmpContainsKey(t, map[string]int{"foo": 11, "bar": 22, "zip": 33}, "foo")
+	ok := td.CmpContainsKey(t, map[string]int{"foo": 11, "bar": 22, "zip": 33}, "foo")
 	fmt.Println(`map contains key "foo":`, ok)
 
-	ok = CmpContainsKey(t, map[int]bool{12: true, 24: false, 42: true, 51: false}, Between(40, 50))
+	ok = td.CmpContainsKey(t, map[int]bool{12: true, 24: false, 42: true, 51: false}, td.Between(40, 50))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
 
 	// Output:
@@ -131,16 +131,16 @@ reason of a potential failure.
 	num := 1234
 	got := map[*int]bool{&num: false, nil: true}
 
-	ok := CmpContainsKey(t, got, nil)
+	ok := td.CmpContainsKey(t, got, nil)
 	fmt.Println("map contains untyped nil key:", ok)
 
-	ok = CmpContainsKey(t, got, (*int)(nil))
+	ok = td.CmpContainsKey(t, got, (*int)(nil))
 	fmt.Println("map contains *int nil key:", ok)
 
-	ok = CmpContainsKey(t, got, Nil())
+	ok = td.CmpContainsKey(t, got, td.Nil())
 	fmt.Println("map contains Nil() key:", ok)
 
-	ok = CmpContainsKey(t, got, (*byte)(nil))
+	ok = td.CmpContainsKey(t, got, (*byte)(nil))
 	fmt.Println("map contains *byte nil key:", ok) // types differ: *byte ≠ *int
 
 	// Output:
@@ -159,7 +159,7 @@ func (t *T) ContainsKey(got interface{}, expectedValue interface{}, args ...inte
 [`ContainsKey`]({{< ref "ContainsKey" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, ContainsKey(expectedValue), args...)
+t.Cmp(got, td.ContainsKey(expectedValue), args...)
 ```
 
 See above for details.
@@ -174,17 +174,17 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.ContainsKey godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.ContainsKey).
+> See also [<i class='fas fa-book'></i> T.ContainsKey godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.ContainsKey).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	ok := t.ContainsKey(map[string]int{"foo": 11, "bar": 22, "zip": 33}, "foo")
 	fmt.Println(`map contains key "foo":`, ok)
 
-	ok = t.ContainsKey(map[int]bool{12: true, 24: false, 42: true, 51: false}, Between(40, 50))
+	ok = t.ContainsKey(map[int]bool{12: true, 24: false, 42: true, 51: false}, td.Between(40, 50))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
 
 	// Output:
@@ -193,7 +193,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Nil example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	num := 1234
 	got := map[*int]bool{&num: false, nil: true}
@@ -204,7 +204,7 @@ reason of a potential failure.
 	ok = t.ContainsKey(got, (*int)(nil))
 	fmt.Println("map contains *int nil key:", ok)
 
-	ok = t.ContainsKey(got, Nil())
+	ok = t.ContainsKey(got, td.Nil())
 	fmt.Println("map contains Nil() key:", ok)
 
 	ok = t.ContainsKey(got, (*byte)(nil))

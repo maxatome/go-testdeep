@@ -16,10 +16,17 @@ values of *expectedEntries*.
 *expectedEntries* can be `nil`, if no zero entries are expected and
 no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
+```go
+got := []int{12, 14, 17}
+td.Cmp(t, got, td.Slice([]int{0, 14}, td.ArrayEntries{0: 12, 2: 17})) // succeeds
+td.Cmp(t, got,
+  td.Slice([]int{0, 14}, td.ArrayEntries{0: td.Gt(10), 2: td.Gt(15)})) // succeeds
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> Slice godoc](https://godoc.org/github.com/maxatome/go-testdeep#Slice).
+> See also [<i class='fas fa-book'></i> Slice godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Slice).
 
 ### Examples
 
@@ -28,17 +35,17 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
 	got := []int{42, 58, 26}
 
-	ok := Cmp(t, got, Slice([]int{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok := td.Cmp(t, got, td.Slice([]int{42}, td.ArrayEntries{1: 58, 2: td.Ignore()}),
 		"checks slice %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got,
-		Slice([]int{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+	ok = td.Cmp(t, got,
+		td.Slice([]int{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()}),
 		"checks slice %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got,
-		Slice(([]int)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+	ok = td.Cmp(t, got,
+		td.Slice(([]int)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()}),
 		"checks slice %v", got)
 	fmt.Println(ok)
 
@@ -55,21 +62,21 @@ no [TestDeep operator]({{< ref "operators" >}}) are involved.
 
 	got := MySlice{42, 58, 26}
 
-	ok := Cmp(t, got, Slice(MySlice{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok := td.Cmp(t, got, td.Slice(MySlice{42}, td.ArrayEntries{1: 58, 2: td.Ignore()}),
 		"checks typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got, Slice(&MySlice{42}, ArrayEntries{1: 58, 2: Ignore()}),
+	ok = td.Cmp(t, &got, td.Slice(&MySlice{42}, td.ArrayEntries{1: 58, 2: td.Ignore()}),
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		Slice(&MySlice{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+	ok = td.Cmp(t, &got,
+		td.Slice(&MySlice{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()}),
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		Slice((*MySlice)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()}),
+	ok = td.Cmp(t, &got,
+		td.Slice((*MySlice)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()}),
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
@@ -89,7 +96,7 @@ func CmpSlice(t TestingT, got interface{}, model interface{}, expectedEntries Ar
 CmpSlice is a shortcut for:
 
 ```go
-Cmp(t, got, Slice(model, expectedEntries), args...)
+td.Cmp(t, got, td.Slice(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -104,7 +111,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSlice godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSlice).
+> See also [<i class='fas fa-book'></i> CmpSlice godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSlice).
 
 ### Examples
 
@@ -113,15 +120,15 @@ reason of a potential failure.
 
 	got := []int{42, 58, 26}
 
-	ok := CmpSlice(t, got, []int{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok := td.CmpSlice(t, got, []int{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpSlice(t, got, []int{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = td.CmpSlice(t, got, []int{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpSlice(t, got, ([]int)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = td.CmpSlice(t, got, ([]int)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks slice %v", got)
 	fmt.Println(ok)
 
@@ -138,19 +145,19 @@ reason of a potential failure.
 
 	got := MySlice{42, 58, 26}
 
-	ok := CmpSlice(t, got, MySlice{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok := td.CmpSlice(t, got, MySlice{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpSlice(t, &got, &MySlice{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok = td.CmpSlice(t, &got, &MySlice{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpSlice(t, &got, &MySlice{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = td.CmpSlice(t, &got, &MySlice{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = CmpSlice(t, &got, (*MySlice)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = td.CmpSlice(t, &got, (*MySlice)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
@@ -170,7 +177,7 @@ func (t *T) Slice(got interface{}, model interface{}, expectedEntries ArrayEntri
 [`Slice`]({{< ref "Slice" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Slice(model, expectedEntries), args...)
+t.Cmp(got, td.Slice(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -185,24 +192,24 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Slice godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Slice).
+> See also [<i class='fas fa-book'></i> T.Slice godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Slice).
 
 ### Examples
 
 {{%expand "Slice example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{42, 58, 26}
 
-	ok := t.Slice(got, []int{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok := t.Slice(got, []int{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks slice %v", got)
 	fmt.Println(ok)
 
-	ok = t.Slice(got, []int{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = t.Slice(got, []int{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks slice %v", got)
 	fmt.Println(ok)
 
-	ok = t.Slice(got, ([]int)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = t.Slice(got, ([]int)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks slice %v", got)
 	fmt.Println(ok)
 
@@ -213,25 +220,25 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "TypedSlice example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MySlice []int
 
 	got := MySlice{42, 58, 26}
 
-	ok := t.Slice(got, MySlice{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok := t.Slice(got, MySlice{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = t.Slice(&got, &MySlice{42}, ArrayEntries{1: 58, 2: Ignore()},
+	ok = t.Slice(&got, &MySlice{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = t.Slice(&got, &MySlice{}, ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = t.Slice(&got, &MySlice{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 
-	ok = t.Slice(&got, (*MySlice)(nil), ArrayEntries{0: 42, 1: 58, 2: Ignore()},
+	ok = t.Slice(&got, (*MySlice)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed slice %v", got)
 	fmt.Println(ok)
 

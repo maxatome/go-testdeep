@@ -14,11 +14,11 @@ useful as [`JSON`]({{< ref "JSON" >}}) operator parameter, to name placeholders.
 operator for more details.
 
 ```go
-Cmp(t, gotValue,
-  JSON(`{"fullname": $name, "age": $age, "gender": $gender}`,
-    Tag("name", HasPrefix("Foo")), // matches $name
-    Tag("age", Between(41, 43)),   // matches $age
-    Tag("gender", "male")))        // matches $gender
+td.Cmp(t, gotValue,
+  td.JSON(`{"fullname": $name, "age": $age, "gender": $gender}`,
+    td.Tag("name", td.HasPrefix("Foo")), // matches $name
+    td.Tag("age", td.Between(41, 43)),   // matches $age
+    td.Tag("gender", "male")))           // matches $gender
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method is delegated to *expectedValue* one if
@@ -26,7 +26,7 @@ Cmp(t, gotValue,
 type of *expectedValue* (or `nil` if it is originally untyped `nil`).
 
 
-> See also [<i class='fas fa-book'></i> Tag godoc](https://godoc.org/github.com/maxatome/go-testdeep#Tag).
+> See also [<i class='fas fa-book'></i> Tag godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Tag).
 
 ### Examples
 

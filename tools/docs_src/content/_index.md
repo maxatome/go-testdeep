@@ -5,8 +5,12 @@ weight = 5
 
 # go-testdeep
 
-The testdeep package allows [golang](https://golang.org/) extremely
-flexible deep comparison. It is built for testing.
+go-testdeep, via the
+[`td` package](https://godoc.org/github.com/maxatome/go-testdeep/td)
+and its
+[helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers),
+allows [golang](https://golang.org/) extremely flexible deep
+comparison. It is built for testing.
 
 ![logo](images/logo.png)
 

@@ -20,15 +20,15 @@ depending the original matched data. Note that an other operator
 can be used here.
 
 ```go
-Cmp(t, "foobar zip!", Re(`^foobar`)) // succeeds
-Cmp(t, "John Doe",
-  Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
-Cmp(t, "John Doe",
-  Re(`^(\w+) (\w+)`, Bag("Doe", "John"))) // succeeds
+td.Cmp(t, "foobar zip!", td.Re(`^foobar`)) // succeeds
+td.Cmp(t, "John Doe",
+  td.Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
+td.Cmp(t, "John Doe",
+  td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> Re godoc](https://godoc.org/github.com/maxatome/go-testdeep#Re).
+> See also [<i class='fas fa-book'></i> Re godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Re).
 
 ### Examples
 
@@ -36,11 +36,11 @@ Cmp(t, "John Doe",
 	t := &testing.T{}
 
 	got := "foo bar"
-	ok := Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
+	ok := td.Cmp(t, got, td.Re("(zip|bar)$"), "checks value %s", got)
 	fmt.Println(ok)
 
 	got = "bar foo"
-	ok = Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
+	ok = td.Cmp(t, got, td.Re("(zip|bar)$"), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -53,7 +53,7 @@ Cmp(t, "John Doe",
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
-	ok := Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
+	ok := td.Cmp(t, got, td.Re("(zip|bar)$"), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -64,7 +64,7 @@ Cmp(t, "John Doe",
 	t := &testing.T{}
 
 	got := errors.New("foo bar")
-	ok := Cmp(t, got, Re("(zip|bar)$"), "checks value %s", got)
+	ok := td.Cmp(t, got, td.Re("(zip|bar)$"), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -75,12 +75,12 @@ Cmp(t, "John Doe",
 	t := &testing.T{}
 
 	got := "foo bar biz"
-	ok := Cmp(t, got, Re(`^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar")),
+	ok := td.Cmp(t, got, td.Re(`^(\w+) (\w+) (\w+)$`, td.Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = Cmp(t, got, Re(`^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar")),
+	ok = td.Cmp(t, got, td.Re(`^(\w+) (\w+) (\w+)$`, td.Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -95,11 +95,11 @@ Cmp(t, "John Doe",
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := "foo bar"
-	ok := Cmp(t, got, Re(expected), "checks value %s", got)
+	ok := td.Cmp(t, got, td.Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	got = "bar foo"
-	ok = Cmp(t, got, Re(expected), "checks value %s", got)
+	ok = td.Cmp(t, got, td.Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -114,7 +114,7 @@ Cmp(t, "John Doe",
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
-	ok := Cmp(t, got, Re(expected), "checks value %s", got)
+	ok := td.Cmp(t, got, td.Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -127,7 +127,7 @@ Cmp(t, "John Doe",
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := errors.New("foo bar")
-	ok := Cmp(t, got, Re(expected), "checks value %s", got)
+	ok := td.Cmp(t, got, td.Re(expected), "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -140,12 +140,12 @@ Cmp(t, "John Doe",
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
 	got := "foo bar biz"
-	ok := Cmp(t, got, Re(expected, Set("biz", "foo", "bar")),
+	ok := td.Cmp(t, got, td.Re(expected, td.Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = Cmp(t, got, Re(expected, Set("biz", "foo", "bar")),
+	ok = td.Cmp(t, got, td.Re(expected, td.Set("biz", "foo", "bar")),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -163,7 +163,7 @@ func CmpRe(t TestingT, got interface{}, reg interface{}, capture interface{}, ar
 CmpRe is a shortcut for:
 
 ```go
-Cmp(t, got, Re(reg, capture), args...)
+td.Cmp(t, got, td.Re(reg, capture), args...)
 ```
 
 See above for details.
@@ -182,7 +182,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpRe godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpRe).
+> See also [<i class='fas fa-book'></i> CmpRe godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpRe).
 
 ### Examples
 
@@ -190,11 +190,11 @@ reason of a potential failure.
 	t := &testing.T{}
 
 	got := "foo bar"
-	ok := CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
+	ok := td.CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	got = "bar foo"
-	ok = CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
+	ok = td.CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -207,7 +207,7 @@ reason of a potential failure.
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
-	ok := CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
+	ok := td.CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -218,7 +218,7 @@ reason of a potential failure.
 	t := &testing.T{}
 
 	got := errors.New("foo bar")
-	ok := CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
+	ok := td.CmpRe(t, got, "(zip|bar)$", nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -229,12 +229,12 @@ reason of a potential failure.
 	t := &testing.T{}
 
 	got := "foo bar biz"
-	ok := CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar"),
+	ok := td.CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar"),
+	ok = td.CmpRe(t, got, `^(\w+) (\w+) (\w+)$`, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -249,11 +249,11 @@ reason of a potential failure.
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := "foo bar"
-	ok := CmpRe(t, got, expected, nil, "checks value %s", got)
+	ok := td.CmpRe(t, got, expected, nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	got = "bar foo"
-	ok = CmpRe(t, got, expected, nil, "checks value %s", got)
+	ok = td.CmpRe(t, got, expected, nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -268,7 +268,7 @@ reason of a potential failure.
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
-	ok := CmpRe(t, got, expected, nil, "checks value %s", got)
+	ok := td.CmpRe(t, got, expected, nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -281,7 +281,7 @@ reason of a potential failure.
 	expected := regexp.MustCompile("(zip|bar)$")
 
 	got := errors.New("foo bar")
-	ok := CmpRe(t, got, expected, nil, "checks value %s", got)
+	ok := td.CmpRe(t, got, expected, nil, "checks value %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -294,12 +294,12 @@ reason of a potential failure.
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
 	got := "foo bar biz"
-	ok := CmpRe(t, got, expected, Set("biz", "foo", "bar"),
+	ok := td.CmpRe(t, got, expected, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = CmpRe(t, got, expected, Set("biz", "foo", "bar"),
+	ok = td.CmpRe(t, got, expected, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -317,7 +317,7 @@ func (t *T) Re(got interface{}, reg interface{}, capture interface{}, args ...in
 [`Re`]({{< ref "Re" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Re(reg, capture), args...)
+t.Cmp(got, td.Re(reg, capture), args...)
 ```
 
 See above for details.
@@ -336,12 +336,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Re godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Re).
+> See also [<i class='fas fa-book'></i> T.Re godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Re).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "foo bar"
 	ok := t.Re(got, "(zip|bar)$", nil, "checks value %s", got)
@@ -357,7 +357,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foo bar")
@@ -369,7 +369,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Error example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := errors.New("foo bar")
 	ok := t.Re(got, "(zip|bar)$", nil, "checks value %s", got)
@@ -380,15 +380,15 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Capture example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "foo bar biz"
-	ok := t.Re(got, `^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar"),
+	ok := t.Re(got, `^(\w+) (\w+) (\w+)$`, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = t.Re(got, `^(\w+) (\w+) (\w+)$`, Set("biz", "foo", "bar"),
+	ok = t.Re(got, `^(\w+) (\w+) (\w+)$`, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -398,7 +398,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Compiled example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -416,7 +416,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "CompiledStringer example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -430,7 +430,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "CompiledError example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	expected := regexp.MustCompile("(zip|bar)$")
 
@@ -443,17 +443,17 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "CompiledCapture example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	expected := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 
 	got := "foo bar biz"
-	ok := t.Re(got, expected, Set("biz", "foo", "bar"),
+	ok := t.Re(got, expected, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	got = "foo bar! biz"
-	ok = t.Re(got, expected, Set("biz", "foo", "bar"),
+	ok = t.Re(got, expected, td.Set("biz", "foo", "bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 

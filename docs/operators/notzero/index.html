@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.63.2" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>NotZero :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1581627453" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1581627453" rel="stylesheet">
-    <link href="/css/hybrid.css?1581627453" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1581627453" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1581627453" rel="stylesheet">
-    <link href="/css/auto-complete.css?1581627453" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1581627453" rel="stylesheet">
-    <link href="/css/theme.css?1581627453" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1581627453" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1581627453" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1581627453"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1581627453"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1581627453"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1581627453"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -150,9 +150,9 @@
  
   
     
-      <li data-nav-id="/example/basic-testdeep/" title="Basic testdeep approach" class="dd-item ">
+      <li data-nav-id="/example/basic-testdeep/" title="Basic go-testdeep approach" class="dd-item ">
         <a href="/example/basic-testdeep/">
-        Basic testdeep approach
+        Basic go-testdeep approach
         
         </a>
     </li>
@@ -169,9 +169,9 @@
  
   
     
-      <li data-nav-id="/example/advanced-testdeep/" title="Advanced testdeep technique" class="dd-item ">
+      <li data-nav-id="/example/advanced-testdeep/" title="Advanced go-testdeep technique" class="dd-item ">
         <a href="/example/advanced-testdeep/">
-        Advanced testdeep technique
+        Advanced go-testdeep technique
         
         </a>
     </li>
@@ -188,9 +188,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-cmp-shortcuts/" title="testdeep Cmp shortcuts" class="dd-item ">
-        <a href="/example/testdeep-cmp-shortcuts/">
-        testdeep Cmp shortcuts
+      <li data-nav-id="/example/td-cmp-shortcuts/" title="go-testdeep Cmp shortcuts" class="dd-item ">
+        <a href="/example/td-cmp-shortcuts/">
+        go-testdeep Cmp shortcuts
         
         </a>
     </li>
@@ -207,9 +207,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-t/" title="testdeep.T type" class="dd-item ">
-        <a href="/example/testdeep-t/">
-        testdeep.T type
+      <li data-nav-id="/example/td-t/" title="td.T type" class="dd-item ">
+        <a href="/example/td-t/">
+        td.T type
         
         </a>
     </li>
@@ -258,9 +258,9 @@
  
   
     
-      <li data-nav-id="/functions/testdeep-t/" title="testdeep.T" class="dd-item ">
-        <a href="/functions/testdeep-t/">
-        testdeep.T
+      <li data-nav-id="/functions/td-t/" title="td.T" class="dd-item ">
+        <a href="/functions/td-t/">
+        td.T
         
         </a>
     </li>
@@ -1508,7 +1508,7 @@
               </li>
           
               <li> 
-                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep"><i class='fas fa-book'></i> godoc</a>
+                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep/td"><i class='fas fa-book'></i> godoc</a>
               </li>
           
               <li> 
@@ -1631,11 +1631,11 @@
 <li>zero value of structs is the struct with no fields initialized.</li>
 </ul>
 <p>Beware that:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, AnyStruct{}, <span style="color:#447fcf">NotZero</span>())       <span style="color:#999;font-style:italic">// is false
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, &amp;AnyStruct{}, <span style="color:#447fcf">NotZero</span>())      <span style="color:#999;font-style:italic">// is true, coz pointer ≠ nil
-</span><span style="color:#999;font-style:italic"></span><span style="color:#447fcf">Cmp</span>(t, &amp;AnyStruct{}, <span style="color:#447fcf">Ptr</span>(<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// is false
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, AnyStruct{}, td.<span style="color:#447fcf">NotZero</span>())          <span style="color:#999;font-style:italic">// is false
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, &amp;AnyStruct{}, td.<span style="color:#447fcf">NotZero</span>())         <span style="color:#999;font-style:italic">// is true, coz pointer ≠ nil
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, &amp;AnyStruct{}, td.<span style="color:#447fcf">Ptr</span>(td.<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// is false
 </span></code></pre></div><blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#NotZero"><!-- raw HTML omitted --><!-- raw HTML omitted --> NotZero godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#NotZero"><!-- raw HTML omitted --><!-- raw HTML omitted --> NotZero godoc</a>.</p>
 </blockquote>
 <h3 id="examples">Examples</h3>
 
@@ -1652,40 +1652,40 @@
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	ok := <span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">0</span>, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
+	ok := td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">0</span>, td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#24909d">float64</span>(<span style="color:#3677a9">0</span>), <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#24909d">float64</span>(<span style="color:#3677a9">0</span>), td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">12</span>, <span style="color:#447fcf">NotZero</span>())
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">12</span>, td.<span style="color:#447fcf">NotZero</span>())
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, (<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>), <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails, as nil
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, (<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>), td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails, as nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as not nil
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as not nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, ([]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>), <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails, as nil
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, ([]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>), td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails, as nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as not nil
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{}, td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as not nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">0</span>, <span style="color:#3677a9">1</span>}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, DATA[1] is not 0
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">0</span>, <span style="color:#3677a9">1</span>}, td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, DATA[1] is not 0
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, bytes.Buffer{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, bytes.Buffer{}, td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, <span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as pointer not nil
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, td.<span style="color:#447fcf">NotZero</span>()) <span style="color:#999;font-style:italic">// succeeds, as pointer not nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, <span style="color:#447fcf">Ptr</span>(<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, td.<span style="color:#447fcf">Ptr</span>(td.<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1708,7 +1708,7 @@
 <h2 id="cmpnotzero-shortcut">CmpNotZero shortcut</h2>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpNotZero</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
 </code></pre></div><p>CmpNotZero is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">NotZero</span>(), args...)
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">NotZero</span>(), args...)
 </code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
@@ -1718,7 +1718,7 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpNotZero"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpNotZero godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNotZero"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpNotZero godoc</a>.</p>
 </blockquote>
 <h3 id="examples-1">Examples</h3>
 
@@ -1735,40 +1735,40 @@ reason of a potential failure.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	ok := <span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#3677a9">0</span>) <span style="color:#999;font-style:italic">// fails
+	ok := td.<span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#3677a9">0</span>) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#24909d">float64</span>(<span style="color:#3677a9">0</span>)) <span style="color:#999;font-style:italic">// fails
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#24909d">float64</span>(<span style="color:#3677a9">0</span>)) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#3677a9">12</span>)
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#3677a9">12</span>)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, (<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)) <span style="color:#999;font-style:italic">// fails, as nil
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, (<span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)) <span style="color:#999;font-style:italic">// fails, as nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, as not nil
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, as not nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, ([]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)) <span style="color:#999;font-style:italic">// fails, as nil
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, ([]<span style="color:#6ab825;font-weight:bold">int</span>)(<span style="color:#6ab825;font-weight:bold">nil</span>)) <span style="color:#999;font-style:italic">// fails, as nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, as not nil
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, as not nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// fails
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">0</span>, <span style="color:#3677a9">1</span>}) <span style="color:#999;font-style:italic">// succeeds, DATA[1] is not 0
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">0</span>, <span style="color:#3677a9">1</span>}) <span style="color:#999;font-style:italic">// succeeds, DATA[1] is not 0
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, bytes.Buffer{}) <span style="color:#999;font-style:italic">// fails
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, bytes.Buffer{}) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotZero</span>(t, &amp;bytes.Buffer{}) <span style="color:#999;font-style:italic">// succeeds, as pointer not nil
+	ok = td.<span style="color:#447fcf">CmpNotZero</span>(t, &amp;bytes.Buffer{}) <span style="color:#999;font-style:italic">// succeeds, as pointer not nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, <span style="color:#447fcf">Ptr</span>(<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, &amp;bytes.Buffer{}, td.<span style="color:#447fcf">Ptr</span>(td.<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1791,7 +1791,7 @@ reason of a potential failure.</p>
 <h2 id="tnotzero-shortcut">T.NotZero shortcut</h2>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">NotZero</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
 </code></pre></div><p><a href="/operators/notzero/"><code>NotZero</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">NotZero</span>(), args...)
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, td.<span style="color:#447fcf">NotZero</span>(), args...)
 </code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
@@ -1801,7 +1801,7 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.NotZero"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.NotZero godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.NotZero"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.NotZero godoc</a>.</p>
 </blockquote>
 <h3 id="examples-2">Examples</h3>
 
@@ -1816,7 +1816,7 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	ok := t.<span style="color:#447fcf">NotZero</span>(<span style="color:#3677a9">0</span>) <span style="color:#999;font-style:italic">// fails
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
@@ -1851,7 +1851,7 @@ reason of a potential failure.</p>
 	ok = t.<span style="color:#447fcf">NotZero</span>(&amp;bytes.Buffer{}) <span style="color:#999;font-style:italic">// succeeds, as pointer not nil
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = t.<span style="color:#447fcf">Cmp</span>(&amp;bytes.Buffer{}, <span style="color:#447fcf">Ptr</span>(<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
+	ok = t.<span style="color:#447fcf">Cmp</span>(&amp;bytes.Buffer{}, td.<span style="color:#447fcf">Ptr</span>(td.<span style="color:#447fcf">NotZero</span>())) <span style="color:#999;font-style:italic">// fails as deref by Ptr()
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -3089,19 +3089,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1581627453"></script>
-    <script src="/js/perfect-scrollbar.min.js?1581627453"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1581627453"></script>
-    <script src="/js/jquery.sticky.js?1581627453"></script>
-    <script src="/js/featherlight.min.js?1581627453"></script>
-    <script src="/js/highlight.pack.js?1581627453"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1581627453"></script>
-    <script src="/js/learn.js?1581627453"></script>
-    <script src="/js/hugo-learn.js?1581627453"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1581627453" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1581627453"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

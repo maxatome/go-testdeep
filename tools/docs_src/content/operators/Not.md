@@ -14,8 +14,13 @@ match, it must not match to succeed.
 provided as a more readable function when only one argument is
 needed.
 
+```go
+td.Cmp(t, 12, td.Not(10)) // succeeds
+td.Cmp(t, 12, td.Not(12)) // fails
+```
 
-> See also [<i class='fas fa-book'></i> Not godoc](https://godoc.org/github.com/maxatome/go-testdeep#Not).
+
+> See also [<i class='fas fa-book'></i> Not godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Not).
 
 ### Examples
 
@@ -24,16 +29,16 @@ needed.
 
 	got := 42
 
-	ok := Cmp(t, got, Not(0), "checks %v is non-null", got)
+	ok := td.Cmp(t, got, td.Not(0), "checks %v is non-null", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, Not(Between(10, 30)),
+	ok = td.Cmp(t, got, td.Not(td.Between(10, 30)),
 		"checks %v is not in [10 .. 30]", got)
 	fmt.Println(ok)
 
 	got = 0
 
-	ok = Cmp(t, got, Not(0), "checks %v is non-null", got)
+	ok = td.Cmp(t, got, td.Not(0), "checks %v is non-null", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -51,7 +56,7 @@ func CmpNot(t TestingT, got interface{}, notExpected interface{}, args ...interf
 CmpNot is a shortcut for:
 
 ```go
-Cmp(t, got, Not(notExpected), args...)
+td.Cmp(t, got, td.Not(notExpected), args...)
 ```
 
 See above for details.
@@ -66,7 +71,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpNot godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpNot).
+> See also [<i class='fas fa-book'></i> CmpNot godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNot).
 
 ### Examples
 
@@ -75,16 +80,16 @@ reason of a potential failure.
 
 	got := 42
 
-	ok := CmpNot(t, got, 0, "checks %v is non-null", got)
+	ok := td.CmpNot(t, got, 0, "checks %v is non-null", got)
 	fmt.Println(ok)
 
-	ok = CmpNot(t, got, Between(10, 30),
+	ok = td.CmpNot(t, got, td.Between(10, 30),
 		"checks %v is not in [10 .. 30]", got)
 	fmt.Println(ok)
 
 	got = 0
 
-	ok = CmpNot(t, got, 0, "checks %v is non-null", got)
+	ok = td.CmpNot(t, got, 0, "checks %v is non-null", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -102,7 +107,7 @@ func (t *T) Not(got interface{}, notExpected interface{}, args ...interface{}) b
 [`Not`]({{< ref "Not" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Not(notExpected), args...)
+t.Cmp(got, td.Not(notExpected), args...)
 ```
 
 See above for details.
@@ -117,19 +122,19 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Not godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Not).
+> See also [<i class='fas fa-book'></i> T.Not godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Not).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := 42
 
 	ok := t.Not(got, 0, "checks %v is non-null", got)
 	fmt.Println(ok)
 
-	ok = t.Not(got, Between(10, 30),
+	ok = t.Not(got, td.Between(10, 30),
 		"checks %v is not in [10 .. 30]", got)
 	fmt.Println(ok)
 

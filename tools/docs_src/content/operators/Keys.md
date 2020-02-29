@@ -11,16 +11,23 @@ func Keys(val interface{}) TestDeep
 ordered keys to *val*.
 
 *val* can be a slice of items of the same type as the map keys:
+
 ```go
-Keys([]string{"a", "b", "c"})
+got := map[string]bool{"c": true, "a": false, "b": true}
+td.Cmp(t, got, td.Keys([]string{"a", "b", "c"})) // succeeds, keys sorted
+td.Cmp(t, got, td.Keys([]string{"c", "a", "b"})) // fails as not sorted
 ```
-as well as an other operator:
+
+as well as an other operator as [`Bag`]({{< ref "Bag" >}}), for example, to test keys in
+an unsorted manner:
+
 ```go
-Keys(Bag("c", "a", "b"))
+got := map[string]bool{"c": true, "a": false, "b": true}
+td.Cmp(t, got, td.Keys(td.Bag("c", "a", "b"))) // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> Keys godoc](https://godoc.org/github.com/maxatome/go-testdeep#Keys).
+> See also [<i class='fas fa-book'></i> Keys godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Keys).
 
 ### Examples
 
@@ -30,19 +37,19 @@ Keys(Bag("c", "a", "b"))
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
 	// Keys tests keys in an ordered manner
-	ok := Cmp(t, got, Keys([]string{"bar", "foo", "zip"}))
+	ok := td.Cmp(t, got, td.Keys([]string{"bar", "foo", "zip"}))
 	fmt.Println("All sorted keys are found:", ok)
 
 	// If the expected keys are not ordered, it fails
-	ok = Cmp(t, got, Keys([]string{"zip", "bar", "foo"}))
+	ok = td.Cmp(t, got, td.Keys([]string{"zip", "bar", "foo"}))
 	fmt.Println("All unsorted keys are found:", ok)
 
 	// To circumvent that, one can use Bag operator
-	ok = Cmp(t, got, Keys(Bag("zip", "bar", "foo")))
+	ok = td.Cmp(t, got, td.Keys(td.Bag("zip", "bar", "foo")))
 	fmt.Println("All unsorted keys are found, with the help of Bag operator:", ok)
 
 	// Check that each key is 3 bytes long
-	ok = Cmp(t, got, Keys(ArrayEach(Len(3))))
+	ok = td.Cmp(t, got, td.Keys(td.ArrayEach(td.Len(3))))
 	fmt.Println("Each key is 3 bytes long:", ok)
 
 	// Output:
@@ -61,7 +68,7 @@ func CmpKeys(t TestingT, got interface{}, val interface{}, args ...interface{}) 
 CmpKeys is a shortcut for:
 
 ```go
-Cmp(t, got, Keys(val), args...)
+td.Cmp(t, got, td.Keys(val), args...)
 ```
 
 See above for details.
@@ -76,7 +83,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpKeys godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpKeys).
+> See also [<i class='fas fa-book'></i> CmpKeys godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpKeys).
 
 ### Examples
 
@@ -86,19 +93,19 @@ reason of a potential failure.
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
 	// Keys tests keys in an ordered manner
-	ok := CmpKeys(t, got, []string{"bar", "foo", "zip"})
+	ok := td.CmpKeys(t, got, []string{"bar", "foo", "zip"})
 	fmt.Println("All sorted keys are found:", ok)
 
 	// If the expected keys are not ordered, it fails
-	ok = CmpKeys(t, got, []string{"zip", "bar", "foo"})
+	ok = td.CmpKeys(t, got, []string{"zip", "bar", "foo"})
 	fmt.Println("All unsorted keys are found:", ok)
 
 	// To circumvent that, one can use Bag operator
-	ok = CmpKeys(t, got, Bag("zip", "bar", "foo"))
+	ok = td.CmpKeys(t, got, td.Bag("zip", "bar", "foo"))
 	fmt.Println("All unsorted keys are found, with the help of Bag operator:", ok)
 
 	// Check that each key is 3 bytes long
-	ok = CmpKeys(t, got, ArrayEach(Len(3)))
+	ok = td.CmpKeys(t, got, td.ArrayEach(td.Len(3)))
 	fmt.Println("Each key is 3 bytes long:", ok)
 
 	// Output:
@@ -117,7 +124,7 @@ func (t *T) Keys(got interface{}, val interface{}, args ...interface{}) bool
 [`Keys`]({{< ref "Keys" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Keys(val), args...)
+t.Cmp(got, td.Keys(val), args...)
 ```
 
 See above for details.
@@ -132,12 +139,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Keys godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Keys).
+> See also [<i class='fas fa-book'></i> T.Keys godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Keys).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := map[string]int{"foo": 1, "bar": 2, "zip": 3}
 
@@ -150,11 +157,11 @@ reason of a potential failure.
 	fmt.Println("All unsorted keys are found:", ok)
 
 	// To circumvent that, one can use Bag operator
-	ok = t.Keys(got, Bag("zip", "bar", "foo"))
+	ok = t.Keys(got, td.Bag("zip", "bar", "foo"))
 	fmt.Println("All unsorted keys are found, with the help of Bag operator:", ok)
 
 	// Check that each key is 3 bytes long
-	ok = t.Keys(got, ArrayEach(Len(3)))
+	ok = t.Keys(got, td.ArrayEach(td.Len(3)))
 	fmt.Println("Each key is 3 bytes long:", ok)
 
 	// Output:

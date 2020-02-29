@@ -10,7 +10,7 @@ weight = 30
 import (
   "testing"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestAssertionsAndRequirements(t *testing.T) {
@@ -62,7 +62,7 @@ func TestPerson(tt *testing.T) {
    expected parameter. It allows to match exactly some fields, and use
    [TestDeep operators]({{< ref "operators" >}}) on others. Here we
    know that `Name` field should always be "Bob";
-3. [`StructFields`](https://godoc.org/github.com/maxatome/go-testdeep#StructFields)
+3. [`StructFields`](https://godoc.org/github.com/maxatome/go-testdeep/td#StructFields)
    is a map allowing to use [TestDeep operators]({{< ref "operators" >}})
    for any field;
 4. `ID` field should be ≠ 0. See [`NotZero`]({{< ref "NotZero" >}})
@@ -167,7 +167,7 @@ import (
   "testing"
   "io/ioutil"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestResponseBody(t *testing.T) {
@@ -193,7 +193,7 @@ import (
   "net/http"
   "testing"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestResponseBody(t *testing.T) {
@@ -223,7 +223,7 @@ import (
   "net/http"
   "testing"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestResponseBody(t *testing.T) {
@@ -262,7 +262,7 @@ import (
   "net/http"
   "testing"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestResponseBody(t *testing.T) {
@@ -320,8 +320,8 @@ import (
   "testing"
   "time"
 
-  td "github.com/maxatome/go-testdeep"
   "github.com/maxatome/go-testdeep/helpers/tdhttp"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 type Person struct {
@@ -409,8 +409,8 @@ import (
 
   "github.com/gin-gonic/gin"
 
-  td "github.com/maxatome/go-testdeep"
   "github.com/maxatome/go-testdeep/helpers/tdhttp"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 type Person struct {
@@ -583,6 +583,95 @@ func TestMyGinGonicApi(t *testing.T) {
    `beforeCreate` (set just before `tdhttp.CmpJSONResponse` call).
 
 
+## Should I import `github.com/maxatome/go-testdeep` or `github.com/maxatome/go-testdeep/td`?
+
+Historically the main package of go-testdeep was `testdeep` as in:
+
+```go
+import (
+  "testing"
+
+  "github.com/maxatome/go-testdeep"
+)
+
+func TestMyFunc(t *testing.T) {
+  testdeep.Cmp(t, GetPerson(), Person{Name: "Bob", Age: 42})
+}
+```
+
+As `testdeep` was boring to type, renaming it to `td` became a habit as in:
+
+```go
+import (
+  "testing"
+
+  td "github.com/maxatome/go-testdeep"
+)
+
+func TestMyFunc(t *testing.T) {
+  td.Cmp(t, GetPerson(), Person{Name: "Bob", Age: 42})
+}
+```
+
+Forcing the developer to systematically rename `testdeep` package to
+`td` in all its tests is not very friendly. That is why a decision was
+taken to create a new package `github.com/maxatome/go-testdeep/td`
+while keeping `github.com/maxatome/go-testdeep` working thanks to go
+type aliases.
+
+So the previous examples (that are still working) can now be written as:
+
+```go
+import (
+  "testing"
+
+  "github.com/maxatome/go-testdeep/td"
+)
+
+func TestMyFunc(t *testing.T) {
+  td.Cmp(t, GetPerson(), Person{Name: "Bob", Age: 42})
+}
+```
+
+There is no package renaming anymore. Switching to import
+`github.com/maxatome/go-testdeep/td` is advised for new code.
+
+
+## What does the error `undefined: testdeep.DefaultContextConfig` mean?
+
+Since release `v1.3.0`, this variable moved to the new
+`github.com/maxatome/go-testdeep/td` package.
+
+* If you rename the `testdeep` package to `td` as in:
+  ```
+  import td "github.com/maxatome/go-testdeep"
+  …
+    td.DefaultContextConfig = td.ContextConfig{…}
+  ```
+  then just change the import line to:
+  ```
+  import "github.com/maxatome/go-testdeep/td"
+  ```
+
+* Otherwise, you have two choices:
+  1. either add a new import line:
+     ```
+     import "github.com/maxatome/go-testdeep/td"
+     ```
+     then use `td.DefaultContextConfig` instead of
+     `testdeep.DefaultContextConfig`, and continue to use `testdeep`
+     package elsewhere.
+  2. or replace the import line:
+     ```
+     import "github.com/maxatome/go-testdeep"
+     ```
+     by
+     ```
+     import "github.com/maxatome/go-testdeep/td"
+     ```
+     then rename all occurrences of `testdeep` package to `td`.
+
+
 ## go-testdeep dumps only 10 errors, how to have more (or less)?
 
 Using the environment variable `TESTDEEP_MAX_ERRORS`.
@@ -650,6 +739,52 @@ TESTDEEP_COLOR_OK=black:green \
 ```
 
 
+## The `X` testing framework allows to test/do `Y` while go-testdeep not
+
+The [`Code`]({{< ref "Code" >}}) and [`Smuggle`]({{< ref "Smuggle" >}})
+operators should allow to cover all cases not handled by [other
+operators]({{< ref "operators" >}}).
+
+If you think this missing feature deserves a specific operator,
+because it is frequently or widely used, file an issue and let's
+discuss about it.
+
+We plan to add a new `github.com/maxatome/go-testdeep/helpers/tdcombo`
+helper package, bringing together all what we can call
+combo-operators. Combo-operators are operators using any number of
+[already existing operators]({{< ref "operators" >}}).
+
+As an example of such combo-operators, the following one. It allows to
+check that a string contains a RFC3339 formatted time, in UTC time
+zone ("Z" suffix) and then to compare it as a `time.Time` against
+`expectedValue` (which can be another [operator]({{< ref "operators" >}})
+or, of course, a `time.Time` value).
+
+```go
+func RFC3339ZToTime(expectedValue interface{}) td.TestDeep {
+  return td.All(
+    td.HasSuffix("Z"),
+    td.Smuggle(func(s string) (time.Time, error) {
+      return time.Parse(time.RFC3339Nano, s)
+    }, expectedValue),
+  )
+}
+```
+
+It could be used as:
+
+```go
+before := time.Now()
+record := NewRecord()
+td.Cmp(t, record,
+  td.SuperJSONOf(`{"created_at": $1}`,
+    tdcombo.RFC3339ZToTime(td.Between(before, time.Now()),
+  )),
+  "The JSONified record.created_at is UTC-RFC3339",
+)
+```
+
+
 ## How to add a new operator?
 
 You want to add a new `FooBar` operator.
@@ -665,18 +800,18 @@ You want to add a new `FooBar` operator.
 - [ ] in `example_test.go` file, add examples function(s) `ExampleFooBar*`
   in alphabetical order;
 - [ ] automatically generate `CmpFooBar` & `T.FooBar` (+ examples) code:
-  `./tools/gen_funcs.pl .`
+  `./tools/gen_funcs.pl`
 - [ ] do not forget to run tests: `go test ./...`
 - [ ] run `golangci-lint` as in [`.travis.yml`](https://github.com/maxatome/go-testdeep/blob/master/.travis.yml);
 
-Each time you change `example_test.go`, re-run `./tools/gen_funcs.pl .`
+Each time you change `example_test.go`, re-run `./tools/gen_funcs.pl`
 to update corresponding `CmpFooBar` & `T.FooBar` examples.
 
 Test coverage must be 100%.
 
 
-[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep#Cmp
+[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp
 
-[`A`]: https://godoc.org/github.com/maxatome/go-testdeep#T.A
-[`Anchor`]: https://godoc.org/github.com/maxatome/go-testdeep#T.Anchor
-[`SetAnchorsPersist`]: https://godoc.org/github.com/maxatome/go-testdeep#T.SetAnchorsPersist
+[`A`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.A
+[`Anchor`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.Anchor
+[`SetAnchorsPersist`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.SetAnchorsPersist

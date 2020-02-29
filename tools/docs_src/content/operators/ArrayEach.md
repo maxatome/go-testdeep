@@ -12,8 +12,28 @@ pointers on array/slice. It compares each item of data array/slice
 against *expectedValue*. During a match, all items have to match to
 succeed.
 
+```go
+got := [3]string{"foo", "bar", "biz"}
+td.Cmp(t, got, td.ArrayEach(td.Len(3)))         // succeeds
+td.Cmp(t, got, td.ArrayEach(td.HasPrefix("b"))) // fails coz "foo"
+```
 
-> See also [<i class='fas fa-book'></i> ArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#ArrayEach).
+Works on slices as well:
+
+```go
+got := []Person{
+  {Name: "Bob", Age: 42},
+  {Name: "Alice", Age: 24},
+}
+td.Cmp(t, got, td.ArrayEach(
+  td.Struct(Person{}, td.StructFields{
+    Age: td.Between(20, 45),
+  })),
+) // succeeds, each Person has Age field between 20 and 45
+```
+
+
+> See also [<i class='fas fa-book'></i> ArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#ArrayEach).
 
 ### Examples
 
@@ -22,7 +42,7 @@ succeed.
 
 	got := [3]int{42, 58, 26}
 
-	ok := Cmp(t, got, ArrayEach(Between(25, 60)),
+	ok := td.Cmp(t, got, td.ArrayEach(td.Between(25, 60)),
 		"checks each item of array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -37,11 +57,11 @@ succeed.
 
 	got := MyArray{42, 58, 26}
 
-	ok := Cmp(t, got, ArrayEach(Between(25, 60)),
+	ok := td.Cmp(t, got, td.ArrayEach(td.Between(25, 60)),
 		"checks each item of typed array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got, ArrayEach(Between(25, 60)),
+	ok = td.Cmp(t, &got, td.ArrayEach(td.Between(25, 60)),
 		"checks each item of typed array pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -55,7 +75,7 @@ succeed.
 
 	got := []int{42, 58, 26}
 
-	ok := Cmp(t, got, ArrayEach(Between(25, 60)),
+	ok := td.Cmp(t, got, td.ArrayEach(td.Between(25, 60)),
 		"checks each item of slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -70,11 +90,11 @@ succeed.
 
 	got := MySlice{42, 58, 26}
 
-	ok := Cmp(t, got, ArrayEach(Between(25, 60)),
+	ok := td.Cmp(t, got, td.ArrayEach(td.Between(25, 60)),
 		"checks each item of typed slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got, ArrayEach(Between(25, 60)),
+	ok = td.Cmp(t, &got, td.ArrayEach(td.Between(25, 60)),
 		"checks each item of typed slice pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -92,7 +112,7 @@ func CmpArrayEach(t TestingT, got interface{}, expectedValue interface{}, args .
 CmpArrayEach is a shortcut for:
 
 ```go
-Cmp(t, got, ArrayEach(expectedValue), args...)
+td.Cmp(t, got, td.ArrayEach(expectedValue), args...)
 ```
 
 See above for details.
@@ -107,7 +127,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpArrayEach).
+> See also [<i class='fas fa-book'></i> CmpArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpArrayEach).
 
 ### Examples
 
@@ -116,7 +136,7 @@ reason of a potential failure.
 
 	got := [3]int{42, 58, 26}
 
-	ok := CmpArrayEach(t, got, Between(25, 60),
+	ok := td.CmpArrayEach(t, got, td.Between(25, 60),
 		"checks each item of array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -131,11 +151,11 @@ reason of a potential failure.
 
 	got := MyArray{42, 58, 26}
 
-	ok := CmpArrayEach(t, got, Between(25, 60),
+	ok := td.CmpArrayEach(t, got, td.Between(25, 60),
 		"checks each item of typed array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = CmpArrayEach(t, &got, Between(25, 60),
+	ok = td.CmpArrayEach(t, &got, td.Between(25, 60),
 		"checks each item of typed array pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -149,7 +169,7 @@ reason of a potential failure.
 
 	got := []int{42, 58, 26}
 
-	ok := CmpArrayEach(t, got, Between(25, 60),
+	ok := td.CmpArrayEach(t, got, td.Between(25, 60),
 		"checks each item of slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -164,11 +184,11 @@ reason of a potential failure.
 
 	got := MySlice{42, 58, 26}
 
-	ok := CmpArrayEach(t, got, Between(25, 60),
+	ok := td.CmpArrayEach(t, got, td.Between(25, 60),
 		"checks each item of typed slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = CmpArrayEach(t, &got, Between(25, 60),
+	ok = td.CmpArrayEach(t, &got, td.Between(25, 60),
 		"checks each item of typed slice pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -186,7 +206,7 @@ func (t *T) ArrayEach(got interface{}, expectedValue interface{}, args ...interf
 [`ArrayEach`]({{< ref "ArrayEach" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, ArrayEach(expectedValue), args...)
+t.Cmp(got, td.ArrayEach(expectedValue), args...)
 ```
 
 See above for details.
@@ -201,16 +221,16 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.ArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.ArrayEach).
+> See also [<i class='fas fa-book'></i> T.ArrayEach godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.ArrayEach).
 
 ### Examples
 
 {{%expand "Array example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := [3]int{42, 58, 26}
 
-	ok := t.ArrayEach(got, Between(25, 60),
+	ok := t.ArrayEach(got, td.Between(25, 60),
 		"checks each item of array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -219,17 +239,17 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "TypedArray example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MyArray [3]int
 
 	got := MyArray{42, 58, 26}
 
-	ok := t.ArrayEach(got, Between(25, 60),
+	ok := t.ArrayEach(got, td.Between(25, 60),
 		"checks each item of typed array %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = t.ArrayEach(&got, Between(25, 60),
+	ok = t.ArrayEach(&got, td.Between(25, 60),
 		"checks each item of typed array pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -239,11 +259,11 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Slice example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{42, 58, 26}
 
-	ok := t.ArrayEach(got, Between(25, 60),
+	ok := t.ArrayEach(got, td.Between(25, 60),
 		"checks each item of slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
@@ -252,17 +272,17 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "TypedSlice example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MySlice []int
 
 	got := MySlice{42, 58, 26}
 
-	ok := t.ArrayEach(got, Between(25, 60),
+	ok := t.ArrayEach(got, td.Between(25, 60),
 		"checks each item of typed slice %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 
-	ok = t.ArrayEach(&got, Between(25, 60),
+	ok = t.ArrayEach(&got, td.Between(25, 60),
 		"checks each item of typed slice pointer %v is in [25 .. 60]", got)
 	fmt.Println(ok)
 

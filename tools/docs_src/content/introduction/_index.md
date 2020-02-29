@@ -11,7 +11,7 @@ Make golang tests easy, from simplest usage:
 import (
   "testing"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestMyFunc(t *testing.T) {
@@ -26,7 +26,7 @@ To a bit more complex one, allowing flexible comparisons using
 import (
   "testing"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestMyFunc(t *testing.T) {
@@ -45,7 +45,7 @@ Or anchoring operators directly in literals, as in:
 import (
   "testing"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestMyFunc(tt *testing.T) {
@@ -66,8 +66,8 @@ import (
   "testing"
   "time"
 
-  td "github.com/maxatome/go-testdeep"
   "github.com/maxatome/go-testdeep/helpers/tdhttp"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 type Person struct {
@@ -152,8 +152,11 @@ structures must match exactly and when a difference is returned, it is
 up to the caller to display it. Not easy when comparing big data
 structures.
 
-The purpose of testdeep package is to do its best to introduce this
-missing flexibility using ["operators"]({{< ref "operators" >}}), when
-the expected value (or one of its component) cannot be matched
-exactly, mixed with some useful
-[comparison functions]({{< ref "functions" >}}).
+The purpose of go-testdeep, via
+[`td` package](https://godoc.org/github.com/maxatome/go-testdeep/td)
+and its
+[helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers),
+is to do its best to introduce this missing flexibility using
+["operators"]({{< ref "operators" >}}), when the expected value (or
+one of its component) cannot be matched exactly, mixed with some
+useful [comparison functions]({{< ref "functions" >}}).

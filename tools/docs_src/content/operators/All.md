@@ -8,14 +8,23 @@ func All(expectedValues ...interface{}) TestDeep
 ```
 
 [`All`]({{< ref "All" >}}) operator compares data against several expected values. During
-a match, all of them have to match to succeed.
+a match, all of them have to match to succeed. Consider it
+as a "AND" logical operator.
+
+```go
+td.Cmp(t, "foobar", td.All(
+  td.Len(6),
+  td.HasPrefix("fo"),
+  td.HasSuffix("ar"),
+)) // succeeds
+```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method can return a non-`nil` [`reflect.Type`](https://golang.org/pkg/reflect/#Type) if all items
 known non-interface types are equal, or if only interface types
 are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 
 
-> See also [<i class='fas fa-book'></i> All godoc](https://godoc.org/github.com/maxatome/go-testdeep#All).
+> See also [<i class='fas fa-book'></i> All godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#All).
 
 ### Examples
 
@@ -26,17 +35,17 @@ are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "foo/bar" string
-	ok := Cmp(t,
+	ok := td.Cmp(t,
 		got,
-		All(Re("o/b"), HasSuffix("bar"), "foo/bar"),
+		td.All(td.Re("o/b"), td.HasSuffix("bar"), "foo/bar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "fooX/Ybar" string
-	ok = Cmp(t,
+	ok = td.Cmp(t,
 		got,
-		All(Re("o/b"), HasSuffix("bar"), "fooX/Ybar"),
+		td.All(td.Re("o/b"), td.HasSuffix("bar"), "fooX/Ybar"),
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -54,7 +63,7 @@ func CmpAll(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 CmpAll is a shortcut for:
 
 ```go
-Cmp(t, got, All(expectedValues...), args...)
+td.Cmp(t, got, td.All(expectedValues...), args...)
 ```
 
 See above for details.
@@ -69,7 +78,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpAll godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpAll).
+> See also [<i class='fas fa-book'></i> CmpAll godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpAll).
 
 ### Examples
 
@@ -80,13 +89,13 @@ reason of a potential failure.
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "foo/bar" string
-	ok := CmpAll(t, got, []interface{}{Re("o/b"), HasSuffix("bar"), "foo/bar"},
+	ok := td.CmpAll(t, got, []interface{}{td.Re("o/b"), td.HasSuffix("bar"), "foo/bar"},
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "fooX/Ybar" string
-	ok = CmpAll(t, got, []interface{}{Re("o/b"), HasSuffix("bar"), "fooX/Ybar"},
+	ok = td.CmpAll(t, got, []interface{}{td.Re("o/b"), td.HasSuffix("bar"), "fooX/Ybar"},
 		"checks value %s", got)
 	fmt.Println(ok)
 
@@ -104,7 +113,7 @@ func (t *T) All(got interface{}, expectedValues []interface{}, args ...interface
 [`All`]({{< ref "All" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, All(expectedValues...), args...)
+t.Cmp(got, td.All(expectedValues...), args...)
 ```
 
 See above for details.
@@ -119,24 +128,24 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.All godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.All).
+> See also [<i class='fas fa-book'></i> T.All godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.All).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "foo/bar"
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "foo/bar" string
-	ok := t.All(got, []interface{}{Re("o/b"), HasSuffix("bar"), "foo/bar"},
+	ok := t.All(got, []interface{}{td.Re("o/b"), td.HasSuffix("bar"), "foo/bar"},
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "fooX/Ybar" string
-	ok = t.All(got, []interface{}{Re("o/b"), HasSuffix("bar"), "fooX/Ybar"},
+	ok = t.All(got, []interface{}{td.Re("o/b"), td.HasSuffix("bar"), "fooX/Ybar"},
 		"checks value %s", got)
 	fmt.Println(ok)
 

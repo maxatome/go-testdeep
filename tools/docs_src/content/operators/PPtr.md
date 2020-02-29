@@ -12,17 +12,25 @@ data and compares it to *val*.
 
 *val* depends on data type. For example, if the compared data is an
 `**int`, one can have:
+
 ```go
-PPtr(12)
+num := 12
+pnum = &num
+td.Cmp(t, &pnum, td.PPtr(12)) // succeeds
 ```
+
 as well as an other operator:
+
 ```go
-PPtr(Between(3, 4))
+num := 3
+pnum = &num
+td.Cmp(t, &pnum, td.PPtr(td.Between(3, 4))) // succeeds
 ```
 
 It is more efficient and shorter to write than:
+
 ```go
-Ptr(Ptr(val))
+td.Cmp(t, &pnum, td.Ptr(td.Ptr(val))) // succeeds too
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a pointer on a
@@ -32,7 +40,7 @@ case, it delegates [`TypeBehind()`]({{< ref "operators#typebehind-method" >}}) t
 non-`nil` of course).
 
 
-> See also [<i class='fas fa-book'></i> PPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep#PPtr).
+> See also [<i class='fas fa-book'></i> PPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#PPtr).
 
 ### Examples
 
@@ -42,10 +50,10 @@ non-`nil` of course).
 	num := 12
 	got := &num
 
-	ok := Cmp(t, &got, PPtr(12))
+	ok := td.Cmp(t, &got, td.PPtr(12))
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got, PPtr(Between(4, 15)))
+	ok = td.Cmp(t, &got, td.PPtr(td.Between(4, 15)))
 	fmt.Println(ok)
 
 	// Output:
@@ -62,7 +70,7 @@ func CmpPPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) 
 CmpPPtr is a shortcut for:
 
 ```go
-Cmp(t, got, PPtr(val), args...)
+td.Cmp(t, got, td.PPtr(val), args...)
 ```
 
 See above for details.
@@ -77,7 +85,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpPPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpPPtr).
+> See also [<i class='fas fa-book'></i> CmpPPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpPPtr).
 
 ### Examples
 
@@ -87,10 +95,10 @@ reason of a potential failure.
 	num := 12
 	got := &num
 
-	ok := CmpPPtr(t, &got, 12)
+	ok := td.CmpPPtr(t, &got, 12)
 	fmt.Println(ok)
 
-	ok = CmpPPtr(t, &got, Between(4, 15))
+	ok = td.CmpPPtr(t, &got, td.Between(4, 15))
 	fmt.Println(ok)
 
 	// Output:
@@ -107,7 +115,7 @@ func (t *T) PPtr(got interface{}, val interface{}, args ...interface{}) bool
 [`PPtr`]({{< ref "PPtr" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, PPtr(val), args...)
+t.Cmp(got, td.PPtr(val), args...)
 ```
 
 See above for details.
@@ -122,12 +130,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.PPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.PPtr).
+> See also [<i class='fas fa-book'></i> T.PPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.PPtr).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	num := 12
 	got := &num
@@ -135,7 +143,7 @@ reason of a potential failure.
 	ok := t.PPtr(&got, 12)
 	fmt.Println(ok)
 
-	ok = t.PPtr(&got, Between(4, 15))
+	ok = t.PPtr(&got, td.Between(4, 15))
 	fmt.Println(ok)
 
 	// Output:

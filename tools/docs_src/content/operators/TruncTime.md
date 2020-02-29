@@ -20,10 +20,20 @@ is the same time instant.
 Whatever the *trunc* value is, the monotonic clock is stripped
 before the comparison against *expectedTime*.
 
+```go
+gotDate := time.Date(2018, time.March, 9, 1, 2, 3, 999999999, time.UTC).
+  In(time.FixedZone("UTC+2", 2))
+
+expected := time.Date(2018, time.March, 9, 1, 2, 3, 0, time.UTC)
+
+td.Cmp(t, gotDate, td.TruncTime(expected))              // fails, ns differ
+td.Cmp(t, gotDate, td.TruncTime(expected, time.Second)) // succeeds
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *expectedTime*.
 
 
-> See also [<i class='fas fa-book'></i> TruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep#TruncTime).
+> See also [<i class='fas fa-book'></i> TruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#TruncTime).
 
 ### Examples
 
@@ -42,19 +52,19 @@ before the comparison against *expectedTime*.
 
 	// Compare dates ignoring nanoseconds and monotonic parts
 	expected := dateToTime("2018-05-01T12:45:53Z")
-	ok := Cmp(t, got, TruncTime(expected, time.Second),
+	ok := td.Cmp(t, got, td.TruncTime(expected, time.Second),
 		"checks date %v, truncated to the second", got)
 	fmt.Println(ok)
 
 	// Compare dates ignoring time and so monotonic parts
 	expected = dateToTime("2018-05-01T11:22:33.444444444Z")
-	ok = Cmp(t, got, TruncTime(expected, 24*time.Hour),
+	ok = td.Cmp(t, got, td.TruncTime(expected, 24*time.Hour),
 		"checks date %v, truncated to the day", got)
 	fmt.Println(ok)
 
 	// Compare dates exactly but ignoring monotonic part
 	expected = dateToTime("2018-05-01T12:45:53.123456789Z")
-	ok = Cmp(t, got, TruncTime(expected),
+	ok = td.Cmp(t, got, td.TruncTime(expected),
 		"checks date %v ignoring monotonic part", got)
 	fmt.Println(ok)
 
@@ -73,7 +83,7 @@ func CmpTruncTime(t TestingT, got interface{}, expectedTime interface{}, trunc t
 CmpTruncTime is a shortcut for:
 
 ```go
-Cmp(t, got, TruncTime(expectedTime, trunc), args...)
+td.Cmp(t, got, td.TruncTime(expectedTime, trunc), args...)
 ```
 
 See above for details.
@@ -92,7 +102,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpTruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpTruncTime).
+> See also [<i class='fas fa-book'></i> CmpTruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpTruncTime).
 
 ### Examples
 
@@ -111,19 +121,19 @@ reason of a potential failure.
 
 	// Compare dates ignoring nanoseconds and monotonic parts
 	expected := dateToTime("2018-05-01T12:45:53Z")
-	ok := CmpTruncTime(t, got, expected, time.Second,
+	ok := td.CmpTruncTime(t, got, expected, time.Second,
 		"checks date %v, truncated to the second", got)
 	fmt.Println(ok)
 
 	// Compare dates ignoring time and so monotonic parts
 	expected = dateToTime("2018-05-01T11:22:33.444444444Z")
-	ok = CmpTruncTime(t, got, expected, 24*time.Hour,
+	ok = td.CmpTruncTime(t, got, expected, 24*time.Hour,
 		"checks date %v, truncated to the day", got)
 	fmt.Println(ok)
 
 	// Compare dates exactly but ignoring monotonic part
 	expected = dateToTime("2018-05-01T12:45:53.123456789Z")
-	ok = CmpTruncTime(t, got, expected, 0,
+	ok = td.CmpTruncTime(t, got, expected, 0,
 		"checks date %v ignoring monotonic part", got)
 	fmt.Println(ok)
 
@@ -142,7 +152,7 @@ func (t *T) TruncTime(got interface{}, expectedTime interface{}, trunc time.Dura
 [`TruncTime`]({{< ref "TruncTime" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, TruncTime(expectedTime, trunc), args...)
+t.Cmp(got, td.TruncTime(expectedTime, trunc), args...)
 ```
 
 See above for details.
@@ -161,12 +171,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.TruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.TruncTime).
+> See also [<i class='fas fa-book'></i> T.TruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.TruncTime).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	dateToTime := func(str string) time.Time {
 		t, err := time.Parse(time.RFC3339Nano, str)

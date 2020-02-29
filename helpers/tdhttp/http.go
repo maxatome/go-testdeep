@@ -16,8 +16,8 @@ import (
 	"reflect"
 	"testing"
 
-	td "github.com/maxatome/go-testdeep"
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/td"
 )
 
 // Response is used by Cmp*Response functions to make the HTTP

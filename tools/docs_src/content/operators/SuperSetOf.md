@@ -16,12 +16,12 @@ array/slice. But some items in the compared array/slice may not be
 expected.
 
 ```go
-Cmp(t, []int{1, 1, 2}, SuperSetOf(1))    // succeeds
-Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
+td.Cmp(t, []int{1, 1, 2}, td.SuperSetOf(1))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.SuperSetOf(1, 3)) // fails, 3 is missing
 ```
 
 
-> See also [<i class='fas fa-book'></i> SuperSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SuperSetOf).
+> See also [<i class='fas fa-book'></i> SuperSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SuperSetOf).
 
 ### Examples
 
@@ -30,11 +30,11 @@ Cmp(t, []int{1, 1, 2}, SuperSetOf(1, 3)) // fails, 3 is missing
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := Cmp(t, got, SuperSetOf(1, 2, 3),
+	ok := td.Cmp(t, got, td.SuperSetOf(1, 2, 3),
 		"checks the items are present, in any order and ignoring duplicates")
 	fmt.Println(ok)
 
-	ok = Cmp(t, got, SuperSetOf(Gt(5), Lte(2)),
+	ok = td.Cmp(t, got, td.SuperSetOf(td.Gt(5), td.Lte(2)),
 		"checks at least 2 items of %v match ignoring duplicates", got)
 	fmt.Println(ok)
 
@@ -52,7 +52,7 @@ func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 CmpSuperSetOf is a shortcut for:
 
 ```go
-Cmp(t, got, SuperSetOf(expectedItems...), args...)
+td.Cmp(t, got, td.SuperSetOf(expectedItems...), args...)
 ```
 
 See above for details.
@@ -67,7 +67,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSuperSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperSetOf).
+> See also [<i class='fas fa-book'></i> CmpSuperSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSuperSetOf).
 
 ### Examples
 
@@ -76,11 +76,11 @@ reason of a potential failure.
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := CmpSuperSetOf(t, got, []interface{}{1, 2, 3},
+	ok := td.CmpSuperSetOf(t, got, []interface{}{1, 2, 3},
 		"checks the items are present, in any order and ignoring duplicates")
 	fmt.Println(ok)
 
-	ok = CmpSuperSetOf(t, got, []interface{}{Gt(5), Lte(2)},
+	ok = td.CmpSuperSetOf(t, got, []interface{}{td.Gt(5), td.Lte(2)},
 		"checks at least 2 items of %v match ignoring duplicates", got)
 	fmt.Println(ok)
 
@@ -98,7 +98,7 @@ func (t *T) SuperSetOf(got interface{}, expectedItems []interface{}, args ...int
 [`SuperSetOf`]({{< ref "SuperSetOf" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SuperSetOf(expectedItems...), args...)
+t.Cmp(got, td.SuperSetOf(expectedItems...), args...)
 ```
 
 See above for details.
@@ -113,12 +113,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SuperSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SuperSetOf).
+> See also [<i class='fas fa-book'></i> T.SuperSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SuperSetOf).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -126,7 +126,7 @@ reason of a potential failure.
 		"checks the items are present, in any order and ignoring duplicates")
 	fmt.Println(ok)
 
-	ok = t.SuperSetOf(got, []interface{}{Gt(5), Lte(2)},
+	ok = t.SuperSetOf(got, []interface{}{td.Gt(5), td.Lte(2)},
 		"checks at least 2 items of %v match ignoring duplicates", got)
 	fmt.Println(ok)
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.63.2" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>NotEmpty :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1581627453" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1581627453" rel="stylesheet">
-    <link href="/css/hybrid.css?1581627453" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1581627453" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1581627453" rel="stylesheet">
-    <link href="/css/auto-complete.css?1581627453" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1581627453" rel="stylesheet">
-    <link href="/css/theme.css?1581627453" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1581627453" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1581627453" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1581627453"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1581627453"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1581627453"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1581627453"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -150,9 +150,9 @@
  
   
     
-      <li data-nav-id="/example/basic-testdeep/" title="Basic testdeep approach" class="dd-item ">
+      <li data-nav-id="/example/basic-testdeep/" title="Basic go-testdeep approach" class="dd-item ">
         <a href="/example/basic-testdeep/">
-        Basic testdeep approach
+        Basic go-testdeep approach
         
         </a>
     </li>
@@ -169,9 +169,9 @@
  
   
     
-      <li data-nav-id="/example/advanced-testdeep/" title="Advanced testdeep technique" class="dd-item ">
+      <li data-nav-id="/example/advanced-testdeep/" title="Advanced go-testdeep technique" class="dd-item ">
         <a href="/example/advanced-testdeep/">
-        Advanced testdeep technique
+        Advanced go-testdeep technique
         
         </a>
     </li>
@@ -188,9 +188,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-cmp-shortcuts/" title="testdeep Cmp shortcuts" class="dd-item ">
-        <a href="/example/testdeep-cmp-shortcuts/">
-        testdeep Cmp shortcuts
+      <li data-nav-id="/example/td-cmp-shortcuts/" title="go-testdeep Cmp shortcuts" class="dd-item ">
+        <a href="/example/td-cmp-shortcuts/">
+        go-testdeep Cmp shortcuts
         
         </a>
     </li>
@@ -207,9 +207,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-t/" title="testdeep.T type" class="dd-item ">
-        <a href="/example/testdeep-t/">
-        testdeep.T type
+      <li data-nav-id="/example/td-t/" title="td.T type" class="dd-item ">
+        <a href="/example/td-t/">
+        td.T type
         
         </a>
     </li>
@@ -258,9 +258,9 @@
  
   
     
-      <li data-nav-id="/functions/testdeep-t/" title="testdeep.T" class="dd-item ">
-        <a href="/functions/testdeep-t/">
-        testdeep.T
+      <li data-nav-id="/functions/td-t/" title="td.T" class="dd-item ">
+        <a href="/functions/td-t/">
+        td.T
         
         </a>
     </li>
@@ -1508,7 +1508,7 @@
               </li>
           
               <li> 
-                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep"><i class='fas fa-book'></i> godoc</a>
+                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep/td"><i class='fas fa-book'></i> godoc</a>
               </li>
           
               <li> 
@@ -1627,8 +1627,11 @@ or a <code>string</code> is not empty. As a special case (non-typed) <code>nil</
 well as <code>nil</code> channel, map or slice are considered empty.</p>
 <p>Note that the compared data can be a pointer (of pointer of pointer
 etc.) on an array, a channel, a map, a slice or a <code>string</code>.</p>
-<blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#NotEmpty"><!-- raw HTML omitted --><!-- raw HTML omitted --> NotEmpty godoc</a>.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;&#34;</span>, td.<span style="color:#447fcf">NotEmpty</span>())                <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">bool</span>{}, td.<span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// fails
+</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">string</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>}, td.<span style="color:#447fcf">NotEmpty</span>())   <span style="color:#999;font-style:italic">// succeeds
+</span></code></pre></div><blockquote>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#NotEmpty"><!-- raw HTML omitted --><!-- raw HTML omitted --> NotEmpty godoc</a>.</p>
 </blockquote>
 <h3 id="examples">Examples</h3>
 <p>
@@ -1645,23 +1648,23 @@ etc.) on an array, a channel, a map, a slice or a <code>string</code>.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	ok := <span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">nil</span>, <span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// fails, as nil is considered empty
+	ok := td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">nil</span>, td.<span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// fails, as nil is considered empty
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;foobar&#34;</span>, <span style="color:#447fcf">NotEmpty</span>())
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;foobar&#34;</span>, td.<span style="color:#447fcf">NotEmpty</span>())
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Fails as 0 is a number, so not empty. Use NotZero() instead
-</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">0</span>, <span style="color:#447fcf">NotEmpty</span>())
+</span><span style="color:#999;font-style:italic"></span>	ok = td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">0</span>, td.<span style="color:#447fcf">NotEmpty</span>())
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foobar&#34;</span>: <span style="color:#3677a9">42</span>}, <span style="color:#447fcf">NotEmpty</span>())
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foobar&#34;</span>: <span style="color:#3677a9">42</span>}, td.<span style="color:#447fcf">NotEmpty</span>())
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>}, <span style="color:#447fcf">NotEmpty</span>())
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>}, td.<span style="color:#447fcf">NotEmpty</span>())
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, <span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// succeeds, NotEmpty() is not NotZero()!
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}, td.<span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// succeeds, NotEmpty() is not NotZero()!
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1691,16 +1694,16 @@ etc.) on an array, a channel, a map, a slice or a <code>string</code>.</p>
 
 	<span style="color:#6ab825;font-weight:bold">type</span> MySlice []<span style="color:#6ab825;font-weight:bold">int</span>
 
-	ok := <span style="color:#447fcf">Cmp</span>(t, MySlice{<span style="color:#3677a9">12</span>}, <span style="color:#447fcf">NotEmpty</span>())
+	ok := td.<span style="color:#447fcf">Cmp</span>(t, MySlice{<span style="color:#3677a9">12</span>}, td.<span style="color:#447fcf">NotEmpty</span>())
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;MySlice{<span style="color:#3677a9">12</span>}, <span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// Ptr() not needed
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, &amp;MySlice{<span style="color:#3677a9">12</span>}, td.<span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// Ptr() not needed
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	l1 := &amp;MySlice{<span style="color:#3677a9">12</span>}
 	l2 := &amp;l1
 	l3 := &amp;l2
-	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;l3, <span style="color:#447fcf">NotEmpty</span>())
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, &amp;l3, td.<span style="color:#447fcf">NotEmpty</span>())
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Works the same for array, map, channel and string
@@ -1710,7 +1713,7 @@ etc.) on an array, a channel, a map, a slice or a <code>string</code>.</p>
 		Value <span style="color:#6ab825;font-weight:bold">int</span>
 	}
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, &amp;MyStruct{}, <span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// fails, use NotZero() instead
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, &amp;MyStruct{}, td.<span style="color:#447fcf">NotEmpty</span>()) <span style="color:#999;font-style:italic">// fails, use NotZero() instead
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1725,7 +1728,7 @@ etc.) on an array, a channel, a map, a slice or a <code>string</code>.</p>
 <h2 id="cmpnotempty-shortcut">CmpNotEmpty shortcut</h2>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpNotEmpty</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
 </code></pre></div><p>CmpNotEmpty is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">NotEmpty</span>(), args...)
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">NotEmpty</span>(), args...)
 </code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
@@ -1735,7 +1738,7 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpNotEmpty"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpNotEmpty godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNotEmpty"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpNotEmpty godoc</a>.</p>
 </blockquote>
 <h3 id="examples-1">Examples</h3>
 <p>
@@ -1752,23 +1755,23 @@ reason of a potential failure.</p>
     <div class="expand-content" style="display: none;">
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
-	ok := <span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#6ab825;font-weight:bold">nil</span>) <span style="color:#999;font-style:italic">// fails, as nil is considered empty
+	ok := td.<span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#6ab825;font-weight:bold">nil</span>) <span style="color:#999;font-style:italic">// fails, as nil is considered empty
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#ed9d13">&#34;foobar&#34;</span>)
+	ok = td.<span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#ed9d13">&#34;foobar&#34;</span>)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Fails as 0 is a number, so not empty. Use NotZero() instead
-</span><span style="color:#999;font-style:italic"></span>	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#3677a9">0</span>)
+</span><span style="color:#999;font-style:italic"></span>	ok = td.<span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#3677a9">0</span>)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foobar&#34;</span>: <span style="color:#3677a9">42</span>})
+	ok = td.<span style="color:#447fcf">CmpNotEmpty</span>(t, <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foobar&#34;</span>: <span style="color:#3677a9">42</span>})
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>})
+	ok = td.<span style="color:#447fcf">CmpNotEmpty</span>(t, []<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#3677a9">1</span>})
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, NotEmpty() is not NotZero()!
+	ok = td.<span style="color:#447fcf">CmpNotEmpty</span>(t, [<span style="color:#3677a9">3</span>]<span style="color:#6ab825;font-weight:bold">int</span>{}) <span style="color:#999;font-style:italic">// succeeds, NotEmpty() is not NotZero()!
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1798,16 +1801,16 @@ reason of a potential failure.</p>
 
 	<span style="color:#6ab825;font-weight:bold">type</span> MySlice []<span style="color:#6ab825;font-weight:bold">int</span>
 
-	ok := <span style="color:#447fcf">CmpNotEmpty</span>(t, MySlice{<span style="color:#3677a9">12</span>})
+	ok := td.<span style="color:#447fcf">CmpNotEmpty</span>(t, MySlice{<span style="color:#3677a9">12</span>})
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
-	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;MySlice{<span style="color:#3677a9">12</span>}) <span style="color:#999;font-style:italic">// Ptr() not needed
+	ok = td.<span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;MySlice{<span style="color:#3677a9">12</span>}) <span style="color:#999;font-style:italic">// Ptr() not needed
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	l1 := &amp;MySlice{<span style="color:#3677a9">12</span>}
 	l2 := &amp;l1
 	l3 := &amp;l2
-	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;l3)
+	ok = td.<span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;l3)
 	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Works the same for array, map, channel and string
@@ -1817,7 +1820,7 @@ reason of a potential failure.</p>
 		Value <span style="color:#6ab825;font-weight:bold">int</span>
 	}
 
-	ok = <span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;MyStruct{}) <span style="color:#999;font-style:italic">// fails, use NotZero() instead
+	ok = td.<span style="color:#447fcf">CmpNotEmpty</span>(t, &amp;MyStruct{}) <span style="color:#999;font-style:italic">// fails, use NotZero() instead
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1832,7 +1835,7 @@ reason of a potential failure.</p>
 <h2 id="tnotempty-shortcut">T.NotEmpty shortcut</h2>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">NotEmpty</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
 </code></pre></div><p><a href="/operators/notempty/"><code>NotEmpty</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">NotEmpty</span>(), args...)
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, td.<span style="color:#447fcf">NotEmpty</span>(), args...)
 </code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
@@ -1842,7 +1845,7 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.NotEmpty"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.NotEmpty godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.NotEmpty"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.NotEmpty godoc</a>.</p>
 </blockquote>
 <h3 id="examples-2">Examples</h3>
 <p>
@@ -1857,7 +1860,7 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	ok := t.<span style="color:#447fcf">NotEmpty</span>(<span style="color:#6ab825;font-weight:bold">nil</span>) <span style="color:#999;font-style:italic">// fails, as nil is considered empty
 </span><span style="color:#999;font-style:italic"></span>	fmt.<span style="color:#447fcf">Println</span>(ok)
@@ -1901,7 +1904,7 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	<span style="color:#6ab825;font-weight:bold">type</span> MySlice []<span style="color:#6ab825;font-weight:bold">int</span>
 
@@ -3154,19 +3157,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1581627453"></script>
-    <script src="/js/perfect-scrollbar.min.js?1581627453"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1581627453"></script>
-    <script src="/js/jquery.sticky.js?1581627453"></script>
-    <script src="/js/featherlight.min.js?1581627453"></script>
-    <script src="/js/highlight.pack.js?1581627453"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1581627453"></script>
-    <script src="/js/learn.js?1581627453"></script>
-    <script src="/js/hugo-learn.js?1581627453"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1581627453" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1581627453"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

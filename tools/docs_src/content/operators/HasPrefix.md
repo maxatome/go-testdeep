@@ -13,17 +13,17 @@ tested before [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer).)
 
 ```go
 type Foobar string
-Cmp(t, Foobar("foobar"), HasPrefix("foo")) // succeeds
+td.Cmp(t, Foobar("foobar"), td.HasPrefix("foo")) // succeeds
 
 err := errors.New("error!")
-Cmp(t, err, HasPrefix("err")) // succeeds
+td.Cmp(t, err, td.HasPrefix("err")) // succeeds
 
 bstr := bytes.NewBufferString("fmt.Stringer!")
-Cmp(t, bstr, HasPrefix("fmt")) // succeeds
+td.Cmp(t, bstr, td.HasPrefix("fmt")) // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> HasPrefix godoc](https://godoc.org/github.com/maxatome/go-testdeep#HasPrefix).
+> See also [<i class='fas fa-book'></i> HasPrefix godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#HasPrefix).
 
 ### Examples
 
@@ -32,7 +32,7 @@ Cmp(t, bstr, HasPrefix("fmt")) // succeeds
 
 	got := "foobar"
 
-	ok := Cmp(t, got, HasPrefix("foo"), "checks %s", got)
+	ok := td.Cmp(t, got, td.HasPrefix("foo"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -45,7 +45,7 @@ Cmp(t, bstr, HasPrefix("fmt")) // succeeds
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := Cmp(t, got, HasPrefix("foo"), "checks %s", got)
+	ok := td.Cmp(t, got, td.HasPrefix("foo"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -57,7 +57,7 @@ Cmp(t, bstr, HasPrefix("fmt")) // succeeds
 
 	got := errors.New("foobar")
 
-	ok := Cmp(t, got, HasPrefix("foo"), "checks %s", got)
+	ok := td.Cmp(t, got, td.HasPrefix("foo"), "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -73,7 +73,7 @@ func CmpHasPrefix(t TestingT, got interface{}, expected string, args ...interfac
 CmpHasPrefix is a shortcut for:
 
 ```go
-Cmp(t, got, HasPrefix(expected), args...)
+td.Cmp(t, got, td.HasPrefix(expected), args...)
 ```
 
 See above for details.
@@ -88,7 +88,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpHasPrefix godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpHasPrefix).
+> See also [<i class='fas fa-book'></i> CmpHasPrefix godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpHasPrefix).
 
 ### Examples
 
@@ -97,7 +97,7 @@ reason of a potential failure.
 
 	got := "foobar"
 
-	ok := CmpHasPrefix(t, got, "foo", "checks %s", got)
+	ok := td.CmpHasPrefix(t, got, "foo", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -110,7 +110,7 @@ reason of a potential failure.
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
 
-	ok := CmpHasPrefix(t, got, "foo", "checks %s", got)
+	ok := td.CmpHasPrefix(t, got, "foo", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -122,7 +122,7 @@ reason of a potential failure.
 
 	got := errors.New("foobar")
 
-	ok := CmpHasPrefix(t, got, "foo", "checks %s", got)
+	ok := td.CmpHasPrefix(t, got, "foo", "checks %s", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -138,7 +138,7 @@ func (t *T) HasPrefix(got interface{}, expected string, args ...interface{}) boo
 [`HasPrefix`]({{< ref "HasPrefix" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, HasPrefix(expected), args...)
+t.Cmp(got, td.HasPrefix(expected), args...)
 ```
 
 See above for details.
@@ -153,12 +153,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.HasPrefix godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.HasPrefix).
+> See also [<i class='fas fa-book'></i> T.HasPrefix godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.HasPrefix).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := "foobar"
 
@@ -170,7 +170,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	// bytes.Buffer implements fmt.Stringer
 	got := bytes.NewBufferString("foobar")
@@ -183,7 +183,7 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "Error example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := errors.New("foobar")
 

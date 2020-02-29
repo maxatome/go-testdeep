@@ -7,25 +7,30 @@ weight: 10
 func SStruct(model interface{}, expectedFields StructFields) TestDeep
 ```
 
-[`SStruct`]({{< ref "SStruct" >}}) operator (a.k.a. strict-[`Struct`]({{< ref "Struct" >}})) compares the contents of a
+[`SStruct`]({{< ref "SStruct" >}}) operator (aka strict-[`Struct`]({{< ref "Struct" >}})) compares the contents of a
 struct or a pointer on a struct against values of *model* (if any)
 and the values of *expectedFields*. The zero values are compared
 too even if they are omitted from *expectedFields*: that is the
 difference with [`Struct`]({{< ref "Struct" >}}) operator.
 
+*model* must be the same type as compared data.
+
+*expectedFields* can be `nil`, if no [TestDeep operators]({{< ref "operators" >}}) are involved.
+
 To ignore a field, one has to specify it in *expectedFields* and
 use the [`Ignore`]({{< ref "Ignore" >}}) operator.
 
 ```go
-td.SStruct(Person{Name: "Bob"},
+td.Cmp(t, td.SStruct(
+  Person{
+    Name: "John Doe",
+  },
   td.StructFields{
-    "Age": td.Ignore(),
-  })
+    Age:      td.Between(40, 45),
+    Children: td.Ignore(),
+  }),
+)
 ```
-
-*model* must be the same type as compared data.
-
-*expectedFields* can be `nil`, if no [TestDeep operators]({{< ref "operators" >}}) are involved.
 
 During a match, all expected and zero fields must be found to
 succeed.
@@ -33,7 +38,7 @@ succeed.
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> SStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#SStruct).
+> See also [<i class='fas fa-book'></i> SStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SStruct).
 
 ### Examples
 
@@ -53,40 +58,40 @@ succeed.
 	}
 
 	// NumChildren is not listed in expected fields so it must be zero
-	ok := Cmp(t, got,
-		SStruct(Person{Name: "Foobar"}, StructFields{
-			"Age": Between(40, 50),
+	ok := td.Cmp(t, got,
+		td.SStruct(Person{Name: "Foobar"}, td.StructFields{
+			"Age": td.Between(40, 50),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
 	got.NumChildren = 3
-	ok = Cmp(t, got,
-		SStruct(Person{}, StructFields{
+	ok = td.Cmp(t, got,
+		td.SStruct(Person{}, td.StructFields{
 			"Name":        "Foobar",
-			"Age":         Between(40, 50),
-			"NumChildren": Not(0),
+			"Age":         td.Between(40, 50),
+			"NumChildren": td.Not(0),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = Cmp(t, &got,
-		SStruct(&Person{}, StructFields{
+	ok = td.Cmp(t, &got,
+		td.SStruct(&Person{}, td.StructFields{
 			"Name":        "Foobar",
-			"Age":         Between(40, 50),
-			"NumChildren": Not(0),
+			"Age":         td.Between(40, 50),
+			"NumChildren": td.Not(0),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = Cmp(t, &got,
-		SStruct((*Person)(nil), StructFields{
+	ok = td.Cmp(t, &got,
+		td.SStruct((*Person)(nil), td.StructFields{
 			"Name":        "Foobar",
-			"Age":         Between(40, 50),
-			"NumChildren": Not(0),
+			"Age":         td.Between(40, 50),
+			"NumChildren": td.Not(0),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
@@ -107,7 +112,7 @@ func CmpSStruct(t TestingT, got interface{}, model interface{}, expectedFields S
 CmpSStruct is a shortcut for:
 
 ```go
-Cmp(t, got, SStruct(model, expectedFields), args...)
+td.Cmp(t, got, td.SStruct(model, expectedFields), args...)
 ```
 
 See above for details.
@@ -122,7 +127,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSStruct).
+> See also [<i class='fas fa-book'></i> CmpSStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSStruct).
 
 ### Examples
 
@@ -142,36 +147,36 @@ reason of a potential failure.
 	}
 
 	// NumChildren is not listed in expected fields so it must be zero
-	ok := CmpSStruct(t, got, Person{Name: "Foobar"}, StructFields{
-		"Age": Between(40, 50),
+	ok := td.CmpSStruct(t, got, Person{Name: "Foobar"}, td.StructFields{
+		"Age": td.Between(40, 50),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
 	got.NumChildren = 3
-	ok = CmpSStruct(t, got, Person{}, StructFields{
+	ok = td.CmpSStruct(t, got, Person{}, td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = CmpSStruct(t, &got, &Person{}, StructFields{
+	ok = td.CmpSStruct(t, &got, &Person{}, td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = CmpSStruct(t, &got, (*Person)(nil), StructFields{
+	ok = td.CmpSStruct(t, &got, (*Person)(nil), td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
@@ -192,7 +197,7 @@ func (t *T) SStruct(got interface{}, model interface{}, expectedFields StructFie
 [`SStruct`]({{< ref "SStruct" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SStruct(model, expectedFields), args...)
+t.Cmp(got, td.SStruct(model, expectedFields), args...)
 ```
 
 See above for details.
@@ -207,12 +212,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SStruct).
+> See also [<i class='fas fa-book'></i> T.SStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SStruct).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type Person struct {
 		Name        string
@@ -227,36 +232,36 @@ reason of a potential failure.
 	}
 
 	// NumChildren is not listed in expected fields so it must be zero
-	ok := t.SStruct(got, Person{Name: "Foobar"}, StructFields{
-		"Age": Between(40, 50),
+	ok := t.SStruct(got, Person{Name: "Foobar"}, td.StructFields{
+		"Age": td.Between(40, 50),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
 	got.NumChildren = 3
-	ok = t.SStruct(got, Person{}, StructFields{
+	ok = t.SStruct(got, Person{}, td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = t.SStruct(&got, &Person{}, StructFields{
+	ok = t.SStruct(&got, &Person{}, td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = t.SStruct(&got, (*Person)(nil), StructFields{
+	ok = t.SStruct(&got, (*Person)(nil), td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)

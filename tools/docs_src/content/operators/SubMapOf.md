@@ -20,17 +20,34 @@ entry to succeed. But some expected entries can be missing from the
 compared map.
 
 ```go
-Cmp(t, map[string]int{"a": 1},
-  SubMapOf(map[string]int{"a": 1, "b": 2}, nil)) // succeeds
+got := map[string]string{
+  "foo": "test",
+  "zip": "buzz",
+}
+td.Cmp(t, got, td.SubMapOf(
+  map[string]string{
+    "foo": "test",
+    "bar": "wizz",
+  },
+  td.MapEntries{
+    "zip": td.HasSuffix("zz"),
+  }),
+) // succeeds
 
-Cmp(t, map[string]int{"a": 1, "c": 3},
-  SubMapOf(map[string]int{"a": 1, "b": 2}, nil)) // fails, extra {"c": 3}
+td.Cmp(t, got, td.SubMapOf(
+  map[string]string{
+    "bar": "wizz",
+  },
+  td.MapEntries{
+    "zip": td.HasSuffix("zz"),
+  }),
+) // fails, extra {"foo": "test"} in got
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> SubMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SubMapOf).
+> See also [<i class='fas fa-book'></i> SubMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SubMapOf).
 
 ### Examples
 
@@ -39,8 +56,8 @@ Cmp(t, map[string]int{"a": 1, "c": 3},
 
 	got := map[string]int{"foo": 12, "bar": 42}
 
-	ok := Cmp(t, got,
-		SubMapOf(map[string]int{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666}),
+	ok := td.Cmp(t, got,
+		td.SubMapOf(map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666}),
 		"checks map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
@@ -55,13 +72,13 @@ Cmp(t, map[string]int{"a": 1, "c": 3},
 
 	got := MyMap{"foo": 12, "bar": 42}
 
-	ok := Cmp(t, got,
-		SubMapOf(MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666}),
+	ok := td.Cmp(t, got,
+		td.SubMapOf(MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666}),
 		"checks typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		SubMapOf(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666}),
+	ok = td.Cmp(t, &got,
+		td.SubMapOf(&MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666}),
 		"checks pointed typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
@@ -79,7 +96,7 @@ func CmpSubMapOf(t TestingT, got interface{}, model interface{}, expectedEntries
 CmpSubMapOf is a shortcut for:
 
 ```go
-Cmp(t, got, SubMapOf(model, expectedEntries), args...)
+td.Cmp(t, got, td.SubMapOf(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -94,7 +111,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSubMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSubMapOf).
+> See also [<i class='fas fa-book'></i> CmpSubMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSubMapOf).
 
 ### Examples
 
@@ -103,7 +120,7 @@ reason of a potential failure.
 
 	got := map[string]int{"foo": 12, "bar": 42}
 
-	ok := CmpSubMapOf(t, got, map[string]int{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666},
+	ok := td.CmpSubMapOf(t, got, map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666},
 		"checks map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
@@ -118,11 +135,11 @@ reason of a potential failure.
 
 	got := MyMap{"foo": 12, "bar": 42}
 
-	ok := CmpSubMapOf(t, got, MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666},
+	ok := td.CmpSubMapOf(t, got, MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666},
 		"checks typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = CmpSubMapOf(t, &got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666},
+	ok = td.CmpSubMapOf(t, &got, &MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666},
 		"checks pointed typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
@@ -140,7 +157,7 @@ func (t *T) SubMapOf(got interface{}, model interface{}, expectedEntries MapEntr
 [`SubMapOf`]({{< ref "SubMapOf" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SubMapOf(model, expectedEntries), args...)
+t.Cmp(got, td.SubMapOf(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -155,16 +172,16 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SubMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SubMapOf).
+> See also [<i class='fas fa-book'></i> T.SubMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SubMapOf).
 
 ### Examples
 
 {{%expand "Map example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := map[string]int{"foo": 12, "bar": 42}
 
-	ok := t.SubMapOf(got, map[string]int{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666},
+	ok := t.SubMapOf(got, map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666},
 		"checks map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
@@ -173,17 +190,17 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "TypedMap example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MyMap map[string]int
 
 	got := MyMap{"foo": 12, "bar": 42}
 
-	ok := t.SubMapOf(got, MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666},
+	ok := t.SubMapOf(got, MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666},
 		"checks typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = t.SubMapOf(&got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15), "zip": 666},
+	ok = t.SubMapOf(&got, &MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15), "zip": 666},
 		"checks pointed typed map %v is included in expected keys/values", got)
 	fmt.Println(ok)
 

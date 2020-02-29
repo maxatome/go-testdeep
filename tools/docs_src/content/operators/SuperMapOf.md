@@ -19,17 +19,34 @@ During a match, each expected entry should match in the compared
 map. But some entries in the compared map may not be expected.
 
 ```go
-Cmp(t, map[string]int{"a": 1, "b": 2},
-  SuperMapOf(map[string]int{"a": 1}, nil)) // succeeds
+got := map[string]string{
+  "foo": "test",
+  "bar": "wizz",
+  "zip": "buzz",
+}
+td.Cmp(t, got, td.SuperMapOf(
+  map[string]string{
+    "foo": "test",
+  },
+  td.MapEntries{
+    "zip": td.HasSuffix("zz"),
+  }),
+) // succeeds
 
-Cmp(t, map[string]int{"a": 1, "c": 3},
-  SuperMapOf(map[string]int{"a": 1, "b": 2}, nil)) // fails, missing {"b": 2}
+td.Cmp(t, got, td.SuperMapOf(
+  map[string]string{
+    "foo": "test",
+  },
+  td.MapEntries{
+    "biz": td.HasSuffix("zz"),
+  }),
+) // fails, missing {"biz": …} in got
 ```
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> SuperMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SuperMapOf).
+> See also [<i class='fas fa-book'></i> SuperMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SuperMapOf).
 
 ### Examples
 
@@ -38,8 +55,8 @@ Cmp(t, map[string]int{"a": 1, "c": 3},
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := Cmp(t, got,
-		SuperMapOf(map[string]int{"bar": 42}, MapEntries{"foo": Lt(15)}),
+	ok := td.Cmp(t, got,
+		td.SuperMapOf(map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15)}),
 		"checks map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
 
@@ -54,13 +71,13 @@ Cmp(t, map[string]int{"a": 1, "c": 3},
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := Cmp(t, got,
-		SuperMapOf(MyMap{"bar": 42}, MapEntries{"foo": Lt(15)}),
+	ok := td.Cmp(t, got,
+		td.SuperMapOf(MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15)}),
 		"checks typed map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got,
-		SuperMapOf(&MyMap{"bar": 42}, MapEntries{"foo": Lt(15)}),
+	ok = td.Cmp(t, &got,
+		td.SuperMapOf(&MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15)}),
 		"checks pointed typed map %v contains at leat all expected keys/values",
 		got)
 	fmt.Println(ok)
@@ -79,7 +96,7 @@ func CmpSuperMapOf(t TestingT, got interface{}, model interface{}, expectedEntri
 CmpSuperMapOf is a shortcut for:
 
 ```go
-Cmp(t, got, SuperMapOf(model, expectedEntries), args...)
+td.Cmp(t, got, td.SuperMapOf(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -94,7 +111,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSuperMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSuperMapOf).
+> See also [<i class='fas fa-book'></i> CmpSuperMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSuperMapOf).
 
 ### Examples
 
@@ -103,7 +120,7 @@ reason of a potential failure.
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpSuperMapOf(t, got, map[string]int{"bar": 42}, MapEntries{"foo": Lt(15)},
+	ok := td.CmpSuperMapOf(t, got, map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15)},
 		"checks map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
 
@@ -118,11 +135,11 @@ reason of a potential failure.
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpSuperMapOf(t, got, MyMap{"bar": 42}, MapEntries{"foo": Lt(15)},
+	ok := td.CmpSuperMapOf(t, got, MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15)},
 		"checks typed map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = CmpSuperMapOf(t, &got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15)},
+	ok = td.CmpSuperMapOf(t, &got, &MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15)},
 		"checks pointed typed map %v contains at leat all expected keys/values",
 		got)
 	fmt.Println(ok)
@@ -141,7 +158,7 @@ func (t *T) SuperMapOf(got interface{}, model interface{}, expectedEntries MapEn
 [`SuperMapOf`]({{< ref "SuperMapOf" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SuperMapOf(model, expectedEntries), args...)
+t.Cmp(got, td.SuperMapOf(model, expectedEntries), args...)
 ```
 
 See above for details.
@@ -156,16 +173,16 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SuperMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SuperMapOf).
+> See also [<i class='fas fa-book'></i> T.SuperMapOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SuperMapOf).
 
 ### Examples
 
 {{%expand "Map example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := t.SuperMapOf(got, map[string]int{"bar": 42}, MapEntries{"foo": Lt(15)},
+	ok := t.SuperMapOf(got, map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15)},
 		"checks map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
 
@@ -174,17 +191,17 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "TypedMap example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MyMap map[string]int
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := t.SuperMapOf(got, MyMap{"bar": 42}, MapEntries{"foo": Lt(15)},
+	ok := t.SuperMapOf(got, MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15)},
 		"checks typed map %v contains at leat all expected keys/values", got)
 	fmt.Println(ok)
 
-	ok = t.SuperMapOf(&got, &MyMap{"bar": 42}, MapEntries{"foo": Lt(15)},
+	ok = t.SuperMapOf(&got, &MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15)},
 		"checks pointed typed map %v contains at leat all expected keys/values",
 		got)
 	fmt.Println(ok)

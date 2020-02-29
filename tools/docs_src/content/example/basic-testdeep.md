@@ -1,17 +1,18 @@
 +++
-title = "Basic testdeep approach"
+title = "Basic go-testdeep approach"
 weight = 20
 +++
 
-testdeep package, via its [`Cmp*`]({{< ref "functions" >}}) functions,
-handles the tests and all the error message boiler plate. Let's do it:
+[`td` package](https://godoc.org/github.com/maxatome/go-testdeep/td),
+via its [`Cmp*`]({{< ref "functions" >}}) functions, handles the tests
+and all the error message boiler plate. Let's do it:
 
 ```go
 import (
   "testing"
   "time"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestCreateRecord(t *testing.T) {
@@ -42,7 +43,7 @@ import (
   "testing"
   "time"
 
-  td "github.com/maxatome/go-testdeep"
+  "github.com/maxatome/go-testdeep/td"
 )
 
 func TestCreateRecord(t *testing.T) {

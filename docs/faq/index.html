@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.63.2" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>FAQ :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1581627453" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1581627453" rel="stylesheet">
-    <link href="/css/hybrid.css?1581627453" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1581627453" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1581627453" rel="stylesheet">
-    <link href="/css/auto-complete.css?1581627453" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1581627453" rel="stylesheet">
-    <link href="/css/theme.css?1581627453" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1581627453" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1581627453" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1581627453"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1581627453"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1581627453"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1581627453"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -150,9 +150,9 @@
  
   
     
-      <li data-nav-id="/example/basic-testdeep/" title="Basic testdeep approach" class="dd-item ">
+      <li data-nav-id="/example/basic-testdeep/" title="Basic go-testdeep approach" class="dd-item ">
         <a href="/example/basic-testdeep/">
-        Basic testdeep approach
+        Basic go-testdeep approach
         
         </a>
     </li>
@@ -169,9 +169,9 @@
  
   
     
-      <li data-nav-id="/example/advanced-testdeep/" title="Advanced testdeep technique" class="dd-item ">
+      <li data-nav-id="/example/advanced-testdeep/" title="Advanced go-testdeep technique" class="dd-item ">
         <a href="/example/advanced-testdeep/">
-        Advanced testdeep technique
+        Advanced go-testdeep technique
         
         </a>
     </li>
@@ -188,9 +188,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-cmp-shortcuts/" title="testdeep Cmp shortcuts" class="dd-item ">
-        <a href="/example/testdeep-cmp-shortcuts/">
-        testdeep Cmp shortcuts
+      <li data-nav-id="/example/td-cmp-shortcuts/" title="go-testdeep Cmp shortcuts" class="dd-item ">
+        <a href="/example/td-cmp-shortcuts/">
+        go-testdeep Cmp shortcuts
         
         </a>
     </li>
@@ -207,9 +207,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-t/" title="testdeep.T type" class="dd-item ">
-        <a href="/example/testdeep-t/">
-        testdeep.T type
+      <li data-nav-id="/example/td-t/" title="td.T type" class="dd-item ">
+        <a href="/example/td-t/">
+        td.T type
         
         </a>
     </li>
@@ -258,9 +258,9 @@
  
   
     
-      <li data-nav-id="/functions/testdeep-t/" title="testdeep.T" class="dd-item ">
-        <a href="/functions/testdeep-t/">
-        testdeep.T
+      <li data-nav-id="/functions/td-t/" title="td.T" class="dd-item ">
+        <a href="/functions/td-t/">
+        td.T
         
         </a>
     </li>
@@ -1508,7 +1508,7 @@
               </li>
           
               <li> 
-                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep"><i class='fas fa-book'></i> godoc</a>
+                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep/td"><i class='fas fa-book'></i> godoc</a>
               </li>
           
               <li> 
@@ -1585,12 +1585,15 @@
     <li><a href="#arf-i-use-gin-gonic-and-so-no-nethttp-handlers">Arf, I use Gin Gonic, and so no net/http handlers</a></li>
     <li><a href="#fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</a></li>
     <li><a href="#ok-but-how-to-be-sure-the-response-content-is-well-jsonified">OK, but how to be sure the response content is well JSONified?</a></li>
+    <li><a href="#should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd">Should I import github.com/maxatome/go-testdeep or github.com/maxatome/go-testdeep/td?</a></li>
+    <li><a href="#what-does-the-error-undefined-testdeepdefaultcontextconfig-mean">What does the error undefined: testdeep.DefaultContextConfig mean?</a></li>
     <li><a href="#go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</a></li>
     <li><a href="#how-do-i-change-these-crappy-colors">How do I change these crappy colors?</a>
       <ul>
         <li><a href="#color-format">Color format</a></li>
       </ul>
     </li>
+    <li><a href="#the-x-testing-framework-allows-to-testdo-y-while-go-testdeep-not">The X testing framework allows to test/do Y while go-testdeep not</a></li>
     <li><a href="#how-to-add-a-new-operator">How to add a new operator?</a></li>
   </ul>
 </nav>
@@ -1622,7 +1625,7 @@
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
   <span style="color:#ed9d13">&#34;testing&#34;</span>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestAssertionsAndRequirements</span>(t *testing.T) {
@@ -1664,7 +1667,7 @@ advance, we use the <a href="/operators/struct/"><code>Struct</code></a> operato
 expected parameter. It allows to match exactly some fields, and use
 <a href="/operators/">TestDeep operators</a> on others. Here we
 know that <code>Name</code> field should always be &ldquo;Bob&rdquo;;</li>
-<li><a href="https://godoc.org/github.com/maxatome/go-testdeep#StructFields"><code>StructFields</code></a>
+<li><a href="https://godoc.org/github.com/maxatome/go-testdeep/td#StructFields"><code>StructFields</code></a>
 is a map allowing to use <a href="/operators/">TestDeep operators</a>
 for any field;</li>
 <li><code>ID</code> field should be ≠ 0. See <a href="/operators/notzero/"><code>NotZero</code></a>
@@ -1689,54 +1692,54 @@ operator is no longer needed:</p>
 <li>expected parameter is directly a <code>Person</code>. No operator needed here;</li>
 <li><code>Name</code> field should always be &ldquo;Bob&rdquo;, no change here;</li>
 <li><code>ID</code> field should be ≠ 0: anchor the <a href="/operators/notzero/"><code>NotZero</code></a>
-operator using the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method. Break this line down:
+operator using the <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method. Break this line down:
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t.<span style="color:#447fcf">A</span>(            <span style="color:#999;font-style:italic">// ← ①
 </span><span style="color:#999;font-style:italic"></span>  td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#999;font-style:italic">// ← ②
 </span><span style="color:#999;font-style:italic"></span>  <span style="color:#24909d">int64</span>(<span style="color:#3677a9">0</span>),     <span style="color:#999;font-style:italic">// ← ③
 </span><span style="color:#999;font-style:italic"></span>).(<span style="color:#6ab825;font-weight:bold">int64</span>)       <span style="color:#999;font-style:italic">// ← ④
 </span></code></pre></div><ol>
-<li>the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method is the key of the anchoring system. It saves
+<li>the <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method is the key of the anchoring system. It saves
 the operator globally, so it can be retrieved during the
-comparison of the next <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> call,</li>
+comparison of the next <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> call,</li>
 <li>the operator we want to anchor,</li>
-<li>this optional parameter is needed to tell <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> that the returned
+<li>this optional parameter is needed to tell <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> that the returned
 value must be a <code>int64</code>. Sometimes, this type can be deduced
 from the operator, but as <a href="/operators/notzero/"><code>NotZero</code></a> can
 handle any kind of number, it is not the case here. So we have
 to pass it,</li>
-<li>as <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
+<li>as <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
 <code>int64</code> type to bypass the golang static typing system,</li>
 </ol>
 </li>
 <li><code>Age </code>field should be ≥ 40 and ≤ 45: anchor the
-<a href="/operators/between/"><code>Between</code></a> operator using the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a>
+<a href="/operators/between/"><code>Between</code></a> operator using the <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a>
 method. Break this line down:
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t.<span style="color:#447fcf">A</span>(                                <span style="color:#999;font-style:italic">// ← ①
 </span><span style="color:#999;font-style:italic"></span>  td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>)), <span style="color:#999;font-style:italic">// ← ②
 </span><span style="color:#999;font-style:italic"></span>).(<span style="color:#6ab825;font-weight:bold">uint8</span>)                           <span style="color:#999;font-style:italic">// ← ③
 </span></code></pre></div><ol>
-<li>the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method saves the operator globally, so it can be
-retrieved during the comparison of the next <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> call,</li>
+<li>the <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method saves the operator globally, so it can be
+retrieved during the comparison of the next <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> call,</li>
 <li>the operator we want to anchor. As <a href="/operators/between/"><code>Between</code></a>
 knows the type of its operands (here <code>uint8</code>), there is no need
-to tell <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> the returned type must be <code>uint8</code>. It can be deduced
+to tell <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> the returned type must be <code>uint8</code>. It can be deduced
 from <a href="/operators/between/"><code>Between</code></a>,</li>
-<li>as <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
+<li>as <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
 <code>uint8</code> type to bypass the golang static typing system.</li>
 </ol>
 </li>
 </ol>
-<p>Note the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> method is a shortcut of <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Anchor"><code>Anchor</code></a> method.</p>
+<p>Note the <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method is a shortcut of <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.Anchor"><code>Anchor</code></a> method.</p>
 <p>Some rules have to be kept in mind:</p>
 <ul>
-<li>never cast a value returned by <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.A"><code>A</code></a> or <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.Anchor"><code>Anchor</code></a> methods:
+<li>never cast a value returned by <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> or <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.Anchor"><code>Anchor</code></a> methods:
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t := td.<span style="color:#447fcf">NewT</span>(tt) <span style="color:#999;font-style:italic">// tt is a *testing.T
 </span><span style="color:#999;font-style:italic"></span>t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint</span>(<span style="color:#3677a9">8</span>)).(<span style="color:#6ab825;font-weight:bold">uint8</span>)         <span style="color:#999;font-style:italic">// OK
 </span><span style="color:#999;font-style:italic"></span><span style="color:#24909d">uint16</span>(t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint</span>(<span style="color:#3677a9">8</span>)).(<span style="color:#6ab825;font-weight:bold">uint8</span>)) <span style="color:#999;font-style:italic">// Not OK!
 </span><span style="color:#999;font-style:italic"></span>t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint16</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">uint16</span>)      <span style="color:#999;font-style:italic">// OK
 </span></code></pre></div></li>
-<li>anchored operators disappear once the next <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> call done. To
-share them between <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> calls, use the <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.SetAnchorsPersist"><code>SetAnchorsPersist</code></a>
+<li>anchored operators disappear once the next <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> call done. To
+share them between <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> calls, use the <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.SetAnchorsPersist"><code>SetAnchorsPersist</code></a>
 method as in:
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t := td.<span style="color:#447fcf">NewT</span>(tt) <span style="color:#999;font-style:italic">// tt is a *testing.T
 </span><span style="color:#999;font-style:italic"></span>age := t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>))).(<span style="color:#6ab825;font-weight:bold">uint8</span>)
@@ -1762,7 +1765,7 @@ here with the help of <a href="https://golang.org/pkg/io/ioutil/#ReadAll"><code>
   <span style="color:#ed9d13">&#34;testing&#34;</span>
   <span style="color:#ed9d13">&#34;io/ioutil&#34;</span>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestResponseBody</span>(t *testing.T) {
@@ -1782,7 +1785,7 @@ still using <a href="/operators/smuggle/"><code>Smuggle</code></a> operator:</p>
   <span style="color:#ed9d13">&#34;net/http&#34;</span>
   <span style="color:#ed9d13">&#34;testing&#34;</span>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestResponseBody</span>(t *testing.T) {
@@ -1806,7 +1809,7 @@ while reading the body:</p>
   <span style="color:#ed9d13">&#34;net/http&#34;</span>
   <span style="color:#ed9d13">&#34;testing&#34;</span>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestResponseBody</span>(t *testing.T) {
@@ -1839,7 +1842,7 @@ that <code>ID</code> field is non-zero (as a bonus, add a <code>CreatedAt</code>
   <span style="color:#ed9d13">&#34;net/http&#34;</span>
   <span style="color:#ed9d13">&#34;testing&#34;</span>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestResponseBody</span>(t *testing.T) {
@@ -1891,8 +1894,8 @@ is done for that!</p>
   <span style="color:#ed9d13">&#34;testing&#34;</span>
   <span style="color:#ed9d13">&#34;time&#34;</span>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
   <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/helpers/tdhttp&#34;</span>
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
 <span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
@@ -1975,8 +1978,8 @@ So keep using
 
   <span style="color:#ed9d13">&#34;github.com/gin-gonic/gin&#34;</span>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
   <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/helpers/tdhttp&#34;</span>
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
 <span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
@@ -2077,10 +2080,10 @@ variable and check it is greater or equal than <code>y2019</code> variable
 it below, used with <a href="/operators/catch/"><code>Catch</code></a> (note it can be used
 without), for a <code>POST</code> example:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;id&#34;</span><span style="color:#ed9d13">`</span>
-  Name      <span style="color:#6ab825;font-weight:bold">string</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;name&#34;</span><span style="color:#ed9d13">`</span>
-  Age       <span style="color:#6ab825;font-weight:bold">int</span>       <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
-  CreatedAt time.Time <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;created_at&#34;</span><span style="color:#ed9d13">`</span>
+  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>    <span style="color:#ed9d13">`json:&#34;id&#34;`</span>
+  Name      <span style="color:#6ab825;font-weight:bold">string</span>    <span style="color:#ed9d13">`json:&#34;name&#34;`</span>
+  Age       <span style="color:#6ab825;font-weight:bold">int</span>       <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+  CreatedAt time.Time <span style="color:#ed9d13">`json:&#34;created_at&#34;`</span>
 }
 
 <span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyGinGonicApi</span>(t *testing.T) {
@@ -2096,13 +2099,13 @@ without), for a <code>POST</code> example:</p>
 </span><span style="color:#999;font-style:italic"></span>    myAPI.ServeHTTP,                                      <span style="color:#999;font-style:italic">// ← ②
 </span><span style="color:#999;font-style:italic"></span>    tdhttp.Response{                                      <span style="color:#999;font-style:italic">// ← ③
 </span><span style="color:#999;font-style:italic"></span>      Status: http.StatusCreated,
-      Body: td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">
-</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
+      Body: td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
 </span><span style="color:#ed9d13">  &#34;id&#34;:         $id,
 </span><span style="color:#ed9d13">  &#34;name&#34;:       &#34;Bob&#34;,
 </span><span style="color:#ed9d13">  &#34;age&#34;:        42,
 </span><span style="color:#ed9d13">  &#34;created_at&#34;: &#34;$createdAt&#34;,
-</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>,
+</span><span style="color:#ed9d13">}`</span>,
         td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;id&#34;</span>, td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>())),        <span style="color:#999;font-style:italic">// ← ④
 </span><span style="color:#999;font-style:italic"></span>        td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;created_at&#34;</span>, td.<span style="color:#447fcf">All</span>(                      <span style="color:#999;font-style:italic">// ← ⑤
 </span><span style="color:#999;font-style:italic"></span>          td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>),                              <span style="color:#999;font-style:italic">// ← ⑥
@@ -2137,10 +2140,78 @@ function thanks to the <a href="/operators/smuggle/"><code>Smuggle</code></a> op
 <code>createdAt</code> variable and check it is greater or equal than
 <code>beforeCreate</code> (set just before <code>tdhttp.CmpJSONResponse</code> call).</li>
 </ol>
+<h2 id="should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd">Should I import <code>github.com/maxatome/go-testdeep</code> or <code>github.com/maxatome/go-testdeep/td</code>?</h2>
+<p>Historically the main package of go-testdeep was <code>testdeep</code> as in:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
+  <span style="color:#ed9d13">&#34;testing&#34;</span>
+
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+)
+
+<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
+  testdeep.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">GetPerson</span>(), Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>})
+}
+</code></pre></div><p>As <code>testdeep</code> was boring to type, renaming it to <code>td</code> became a habit as in:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
+  <span style="color:#ed9d13">&#34;testing&#34;</span>
+
+  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+)
+
+<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
+  td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">GetPerson</span>(), Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>})
+}
+</code></pre></div><p>Forcing the developer to systematically rename <code>testdeep</code> package to
+<code>td</code> in all its tests is not very friendly. That is why a decision was
+taken to create a new package <code>github.com/maxatome/go-testdeep/td</code>
+while keeping <code>github.com/maxatome/go-testdeep</code> working thanks to go
+type aliases.</p>
+<p>So the previous examples (that are still working) can now be written as:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
+  <span style="color:#ed9d13">&#34;testing&#34;</span>
+
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+)
+
+<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
+  td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">GetPerson</span>(), Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>})
+}
+</code></pre></div><p>There is no package renaming anymore. Switching to import
+<code>github.com/maxatome/go-testdeep/td</code> is advised for new code.</p>
+<h2 id="what-does-the-error-undefined-testdeepdefaultcontextconfig-mean">What does the error <code>undefined: testdeep.DefaultContextConfig</code> mean?</h2>
+<p>Since release <code>v1.3.0</code>, this variable moved to the new
+<code>github.com/maxatome/go-testdeep/td</code> package.</p>
+<ul>
+<li>
+<p>If you rename the <code>testdeep</code> package to <code>td</code> as in:</p>
+<pre><code>import td &quot;github.com/maxatome/go-testdeep&quot;
+…
+  td.DefaultContextConfig = td.ContextConfig{…}
+</code></pre><p>then just change the import line to:</p>
+<pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
+</code></pre></li>
+<li>
+<p>Otherwise, you have two choices:</p>
+<ol>
+<li>either add a new import line:
+<pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
+</code></pre><p>then use <code>td.DefaultContextConfig</code> instead of
+<code>testdeep.DefaultContextConfig</code>, and continue to use <code>testdeep</code>
+package elsewhere.</p>
+</li>
+<li>or replace the import line:
+<pre><code>import &quot;github.com/maxatome/go-testdeep&quot;
+</code></pre><p>by</p>
+<pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
+</code></pre><p>then rename all occurrences of <code>testdeep</code> package to <code>td</code>.</p>
+</li>
+</ol>
+</li>
+</ul>
 <h2 id="go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</h2>
 <p>Using the environment variable <code>TESTDEEP_MAX_ERRORS</code>.</p>
 <p><code>TESTDEEP_MAX_ERRORS</code> contains the maximum number of errors to report
-before stopping during one comparison (one <a href="https://godoc.org/github.com/maxatome/go-testdeep#Cmp"><code>Cmp</code></a> execution for
+before stopping during one comparison (one <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> execution for
 example). It defaults to <code>10</code>.</p>
 <p>Example:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_MAX_ERRORS</span>=<span style="color:#3677a9">30</span> go <span style="color:#24909d">test</span>
@@ -2183,6 +2254,39 @@ foreground_color:background_color   # set foreground AND background color
 </span><span style="color:#ed9d13"></span>    <span style="color:#40ffff">TESTDEEP_COLOR_BAD</span>=white:red <span style="color:#ed9d13">\
 </span><span style="color:#ed9d13"></span>    <span style="color:#40ffff">TESTDEEP_COLOR_TITLE</span>=yellow <span style="color:#ed9d13">\
 </span><span style="color:#ed9d13"></span>    go <span style="color:#24909d">test</span>
+</code></pre></div><h2 id="the-x-testing-framework-allows-to-testdo-y-while-go-testdeep-not">The <code>X</code> testing framework allows to test/do <code>Y</code> while go-testdeep not</h2>
+<p>The <a href="/operators/code/"><code>Code</code></a> and <a href="/operators/smuggle/"><code>Smuggle</code></a>
+operators should allow to cover all cases not handled by <a href="/operators/">other
+operators</a>.</p>
+<p>If you think this missing feature deserves a specific operator,
+because it is frequently or widely used, file an issue and let&rsquo;s
+discuss about it.</p>
+<p>We plan to add a new <code>github.com/maxatome/go-testdeep/helpers/tdcombo</code>
+helper package, bringing together all what we can call
+combo-operators. Combo-operators are operators using any number of
+<a href="/operators/">already existing operators</a>.</p>
+<p>As an example of such combo-operators, the following one. It allows to
+check that a string contains a RFC3339 formatted time, in UTC time
+zone (&ldquo;Z&rdquo; suffix) and then to compare it as a <code>time.Time</code> against
+<code>expectedValue</code> (which can be another <a href="/operators/">operator</a>
+or, of course, a <code>time.Time</code> value).</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">RFC3339ZToTime</span>(expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}) td.TestDeep {
+  <span style="color:#6ab825;font-weight:bold">return</span> td.<span style="color:#447fcf">All</span>(
+    td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>),
+    td.<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s <span style="color:#6ab825;font-weight:bold">string</span>) (time.Time, <span style="color:#6ab825;font-weight:bold">error</span>) {
+      <span style="color:#6ab825;font-weight:bold">return</span> time.<span style="color:#447fcf">Parse</span>(time.RFC3339Nano, s)
+    }, expectedValue),
+  )
+}
+</code></pre></div><p>It could be used as:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">before := time.<span style="color:#447fcf">Now</span>()
+record := <span style="color:#447fcf">NewRecord</span>()
+td.<span style="color:#447fcf">Cmp</span>(t, record,
+  td.<span style="color:#447fcf">SuperJSONOf</span>(<span style="color:#ed9d13">`{&#34;created_at&#34;: $1}`</span>,
+    tdcombo.<span style="color:#447fcf">RFC3339ZToTime</span>(td.<span style="color:#447fcf">Between</span>(before, time.<span style="color:#447fcf">Now</span>()),
+  )),
+  <span style="color:#ed9d13">&#34;The JSONified record.created_at is UTC-RFC3339&#34;</span>,
+)
 </code></pre></div><h2 id="how-to-add-a-new-operator">How to add a new operator?</h2>
 <p>You want to add a new <code>FooBar</code> operator.</p>
 <ul>
@@ -2200,11 +2304,11 @@ line. This one lists all inputs accepted by the operator;</li>
 <li><input disabled="" type="checkbox">in <code>example_test.go</code> file, add examples function(s) <code>ExampleFooBar*</code>
 in alphabetical order;</li>
 <li><input disabled="" type="checkbox">automatically generate <code>CmpFooBar</code> &amp; <code>T.FooBar</code> (+ examples) code:
-<code>./tools/gen_funcs.pl .</code></li>
+<code>./tools/gen_funcs.pl</code></li>
 <li><input disabled="" type="checkbox">do not forget to run tests: <code>go test ./...</code></li>
 <li><input disabled="" type="checkbox">run <code>golangci-lint</code> as in <a href="https://github.com/maxatome/go-testdeep/blob/master/.travis.yml"><code>.travis.yml</code></a>;</li>
 </ul>
-<p>Each time you change <code>example_test.go</code>, re-run <code>./tools/gen_funcs.pl .</code>
+<p>Each time you change <code>example_test.go</code>, re-run <code>./tools/gen_funcs.pl</code>
 to update corresponding <code>CmpFooBar</code> &amp; <code>T.FooBar</code> examples.</p>
 <p>Test coverage must be 100%.</p>
 
@@ -3420,19 +3524,19 @@ to update corresponding <code>CmpFooBar</code> &amp; <code>T.FooBar</code> examp
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1581627453"></script>
-    <script src="/js/perfect-scrollbar.min.js?1581627453"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1581627453"></script>
-    <script src="/js/jquery.sticky.js?1581627453"></script>
-    <script src="/js/featherlight.min.js?1581627453"></script>
-    <script src="/js/highlight.pack.js?1581627453"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1581627453"></script>
-    <script src="/js/learn.js?1581627453"></script>
-    <script src="/js/hugo-learn.js?1581627453"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1581627453" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1581627453"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

@@ -15,12 +15,12 @@ expected item to succeed. But some expected items can be missing
 from the compared array/slice.
 
 ```go
-Cmp(t, []int{1}, SubBagOf(1, 1, 2))       // succeeds
-Cmp(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
+td.Cmp(t, []int{1}, td.SubBagOf(1, 1, 2))       // succeeds
+td.Cmp(t, []int{1, 1, 1}, td.SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
 ```
 
 
-> See also [<i class='fas fa-book'></i> SubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SubBagOf).
+> See also [<i class='fas fa-book'></i> SubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SubBagOf).
 
 ### Examples
 
@@ -29,24 +29,24 @@ Cmp(t, []int{1, 1, 1}, SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := Cmp(t, got, SubBagOf(0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 9, 9),
+	ok := td.Cmp(t, got, td.SubBagOf(0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 9, 9),
 		"checks at least all items are present, in any order")
 	fmt.Println(ok)
 
 	// got contains one 8 too many
-	ok = Cmp(t, got, SubBagOf(0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 9, 9),
+	ok = td.Cmp(t, got, td.SubBagOf(0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 9, 9),
 		"checks at least all items are present, in any order")
 	fmt.Println(ok)
 
 	got = []int{1, 3, 5, 2}
 
-	ok = Cmp(t, got, SubBagOf(
-		Between(0, 3),
-		Between(0, 3),
-		Between(0, 3),
-		Between(0, 3),
-		Gt(4),
-		Gt(4)),
+	ok = td.Cmp(t, got, td.SubBagOf(
+		td.Between(0, 3),
+		td.Between(0, 3),
+		td.Between(0, 3),
+		td.Between(0, 3),
+		td.Gt(4),
+		td.Gt(4)),
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
@@ -65,7 +65,7 @@ func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 CmpSubBagOf is a shortcut for:
 
 ```go
-Cmp(t, got, SubBagOf(expectedItems...), args...)
+td.Cmp(t, got, td.SubBagOf(expectedItems...), args...)
 ```
 
 See above for details.
@@ -80,7 +80,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSubBagOf).
+> See also [<i class='fas fa-book'></i> CmpSubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSubBagOf).
 
 ### Examples
 
@@ -89,18 +89,18 @@ reason of a potential failure.
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := CmpSubBagOf(t, got, []interface{}{0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 9, 9},
+	ok := td.CmpSubBagOf(t, got, []interface{}{0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 9, 9},
 		"checks at least all items are present, in any order")
 	fmt.Println(ok)
 
 	// got contains one 8 too many
-	ok = CmpSubBagOf(t, got, []interface{}{0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 9, 9},
+	ok = td.CmpSubBagOf(t, got, []interface{}{0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 9, 9},
 		"checks at least all items are present, in any order")
 	fmt.Println(ok)
 
 	got = []int{1, 3, 5, 2}
 
-	ok = CmpSubBagOf(t, got, []interface{}{Between(0, 3), Between(0, 3), Between(0, 3), Between(0, 3), Gt(4), Gt(4)},
+	ok = td.CmpSubBagOf(t, got, []interface{}{td.Between(0, 3), td.Between(0, 3), td.Between(0, 3), td.Between(0, 3), td.Gt(4), td.Gt(4)},
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
@@ -119,7 +119,7 @@ func (t *T) SubBagOf(got interface{}, expectedItems []interface{}, args ...inter
 [`SubBagOf`]({{< ref "SubBagOf" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SubBagOf(expectedItems...), args...)
+t.Cmp(got, td.SubBagOf(expectedItems...), args...)
 ```
 
 See above for details.
@@ -134,12 +134,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SubBagOf).
+> See also [<i class='fas fa-book'></i> T.SubBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SubBagOf).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -154,7 +154,7 @@ reason of a potential failure.
 
 	got = []int{1, 3, 5, 2}
 
-	ok = t.SubBagOf(got, []interface{}{Between(0, 3), Between(0, 3), Between(0, 3), Between(0, 3), Gt(4), Gt(4)},
+	ok = t.SubBagOf(got, []interface{}{td.Between(0, 3), td.Between(0, 3), td.Between(0, 3), td.Between(0, 3), td.Gt(4), td.Gt(4)},
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 

@@ -17,13 +17,25 @@ fields without specifying them in *expectedFields*.
 *expectedFields* can be `nil`, if no zero entries are expected and
 no [TestDeep operators]({{< ref "operators" >}}) are involved.
 
+```go
+td.Cmp(t, td.Struct(
+  Person{
+    Name: "John Doe",
+  },
+  td.StructFields{
+    Age:      td.Between(40, 45),
+    Children: 0,
+  }),
+)
+```
+
 During a match, all expected fields must be found to
 succeed. Non-expected fields are ignored.
 
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep#Struct).
+> See also [<i class='fas fa-book'></i> Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Struct).
 
 ### Examples
 
@@ -43,39 +55,39 @@ succeed. Non-expected fields are ignored.
 	}
 
 	// As NumChildren is zero in Struct() call, it is not checked
-	ok := Cmp(t, got,
-		Struct(Person{Name: "Foobar"}, StructFields{
-			"Age": Between(40, 50),
+	ok := td.Cmp(t, got,
+		td.Struct(Person{Name: "Foobar"}, td.StructFields{
+			"Age": td.Between(40, 50),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
-	ok = Cmp(t, got,
-		Struct(Person{}, StructFields{
+	ok = td.Cmp(t, got,
+		td.Struct(Person{}, td.StructFields{
 			"Name":        "Foobar",
-			"Age":         Between(40, 50),
-			"NumChildren": Not(0),
+			"Age":         td.Between(40, 50),
+			"NumChildren": td.Not(0),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = Cmp(t, &got,
-		Struct(&Person{}, StructFields{
+	ok = td.Cmp(t, &got,
+		td.Struct(&Person{}, td.StructFields{
 			"Name":        "Foobar",
-			"Age":         Between(40, 50),
-			"NumChildren": Not(0),
+			"Age":         td.Between(40, 50),
+			"NumChildren": td.Not(0),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = Cmp(t, &got,
-		Struct((*Person)(nil), StructFields{
+	ok = td.Cmp(t, &got,
+		td.Struct((*Person)(nil), td.StructFields{
 			"Name":        "Foobar",
-			"Age":         Between(40, 50),
-			"NumChildren": Not(0),
+			"Age":         td.Between(40, 50),
+			"NumChildren": td.Not(0),
 		}),
 		"checks %v is the right Person")
 	fmt.Println(ok)
@@ -96,7 +108,7 @@ func CmpStruct(t TestingT, got interface{}, model interface{}, expectedFields St
 CmpStruct is a shortcut for:
 
 ```go
-Cmp(t, got, Struct(model, expectedFields), args...)
+td.Cmp(t, got, td.Struct(model, expectedFields), args...)
 ```
 
 See above for details.
@@ -111,7 +123,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpStruct).
+> See also [<i class='fas fa-book'></i> CmpStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpStruct).
 
 ### Examples
 
@@ -131,35 +143,35 @@ reason of a potential failure.
 	}
 
 	// As NumChildren is zero in Struct() call, it is not checked
-	ok := CmpStruct(t, got, Person{Name: "Foobar"}, StructFields{
-		"Age": Between(40, 50),
+	ok := td.CmpStruct(t, got, Person{Name: "Foobar"}, td.StructFields{
+		"Age": td.Between(40, 50),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
-	ok = CmpStruct(t, got, Person{}, StructFields{
+	ok = td.CmpStruct(t, got, Person{}, td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = CmpStruct(t, &got, &Person{}, StructFields{
+	ok = td.CmpStruct(t, &got, &Person{}, td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = CmpStruct(t, &got, (*Person)(nil), StructFields{
+	ok = td.CmpStruct(t, &got, (*Person)(nil), td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
@@ -180,7 +192,7 @@ func (t *T) Struct(got interface{}, model interface{}, expectedFields StructFiel
 [`Struct`]({{< ref "Struct" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, Struct(model, expectedFields), args...)
+t.Cmp(got, td.Struct(model, expectedFields), args...)
 ```
 
 See above for details.
@@ -195,12 +207,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.Struct).
+> See also [<i class='fas fa-book'></i> T.Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Struct).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type Person struct {
 		Name        string
@@ -215,35 +227,35 @@ reason of a potential failure.
 	}
 
 	// As NumChildren is zero in Struct() call, it is not checked
-	ok := t.Struct(got, Person{Name: "Foobar"}, StructFields{
-		"Age": Between(40, 50),
+	ok := t.Struct(got, Person{Name: "Foobar"}, td.StructFields{
+		"Age": td.Between(40, 50),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model can be empty
-	ok = t.Struct(got, Person{}, StructFields{
+	ok = t.Struct(got, Person{}, td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Works with pointers too
-	ok = t.Struct(&got, &Person{}, StructFields{
+	ok = t.Struct(&got, &Person{}, td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)
 
 	// Model does not need to be instanciated
-	ok = t.Struct(&got, (*Person)(nil), StructFields{
+	ok = t.Struct(&got, (*Person)(nil), td.StructFields{
 		"Name":        "Foobar",
-		"Age":         Between(40, 50),
-		"NumChildren": Not(0),
+		"Age":         td.Between(40, 50),
+		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
 	fmt.Println(ok)

@@ -11,8 +11,14 @@ func MapEach(expectedValue interface{}) TestDeep
 of data map against expected value. During a match, all values have
 to match to succeed.
 
+```go
+got := map[string]string{"test": "foo", "buzz": "bar"}
+td.Cmp(t, got, td.MapEach("bar"))     // fails, coz "foo" ≠ "bar"
+td.Cmp(t, got, td.MapEach(td.Len(3))) // succeeds as values are 3 chars long
+```
 
-> See also [<i class='fas fa-book'></i> MapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#MapEach).
+
+> See also [<i class='fas fa-book'></i> MapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#MapEach).
 
 ### Examples
 
@@ -21,7 +27,7 @@ to match to succeed.
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := Cmp(t, got, MapEach(Between(10, 90)),
+	ok := td.Cmp(t, got, td.MapEach(td.Between(10, 90)),
 		"checks each value of map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
@@ -36,11 +42,11 @@ to match to succeed.
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := Cmp(t, got, MapEach(Between(10, 90)),
+	ok := td.Cmp(t, got, td.MapEach(td.Between(10, 90)),
 		"checks each value of typed map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
-	ok = Cmp(t, &got, MapEach(Between(10, 90)),
+	ok = td.Cmp(t, &got, td.MapEach(td.Between(10, 90)),
 		"checks each value of typed map pointer %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
@@ -58,7 +64,7 @@ func CmpMapEach(t TestingT, got interface{}, expectedValue interface{}, args ...
 CmpMapEach is a shortcut for:
 
 ```go
-Cmp(t, got, MapEach(expectedValue), args...)
+td.Cmp(t, got, td.MapEach(expectedValue), args...)
 ```
 
 See above for details.
@@ -73,7 +79,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpMapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpMapEach).
+> See also [<i class='fas fa-book'></i> CmpMapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpMapEach).
 
 ### Examples
 
@@ -82,7 +88,7 @@ reason of a potential failure.
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpMapEach(t, got, Between(10, 90),
+	ok := td.CmpMapEach(t, got, td.Between(10, 90),
 		"checks each value of map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
@@ -97,11 +103,11 @@ reason of a potential failure.
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := CmpMapEach(t, got, Between(10, 90),
+	ok := td.CmpMapEach(t, got, td.Between(10, 90),
 		"checks each value of typed map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
-	ok = CmpMapEach(t, &got, Between(10, 90),
+	ok = td.CmpMapEach(t, &got, td.Between(10, 90),
 		"checks each value of typed map pointer %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
@@ -119,7 +125,7 @@ func (t *T) MapEach(got interface{}, expectedValue interface{}, args ...interfac
 [`MapEach`]({{< ref "MapEach" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, MapEach(expectedValue), args...)
+t.Cmp(got, td.MapEach(expectedValue), args...)
 ```
 
 See above for details.
@@ -134,16 +140,16 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.MapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.MapEach).
+> See also [<i class='fas fa-book'></i> T.MapEach godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.MapEach).
 
 ### Examples
 
 {{%expand "Map example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := map[string]int{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := t.MapEach(got, Between(10, 90),
+	ok := t.MapEach(got, td.Between(10, 90),
 		"checks each value of map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
@@ -152,17 +158,17 @@ reason of a potential failure.
 
 ```{{% /expand%}}
 {{%expand "TypedMap example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	type MyMap map[string]int
 
 	got := MyMap{"foo": 12, "bar": 42, "zip": 89}
 
-	ok := t.MapEach(got, Between(10, 90),
+	ok := t.MapEach(got, td.Between(10, 90),
 		"checks each value of typed map %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 
-	ok = t.MapEach(&got, Between(10, 90),
+	ok = t.MapEach(&got, td.Between(10, 90),
 		"checks each value of typed map pointer %v is in [10 .. 90]", got)
 	fmt.Println(ok)
 

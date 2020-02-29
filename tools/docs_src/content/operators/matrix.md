@@ -83,13 +83,13 @@ weight: 1
 | [`TruncTime`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | [`time.Time`] | todo | ✓ | ✗ | ✗ | [`TruncTime`] |
 | [`Values`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`Values`] |
 | [`Zero`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Zero`] |
-[`T`]: https://godoc.org/github.com/maxatome/go-testdeep#T
-[`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep#TestDeep
-[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep#Cmp
+[`T`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T
+[`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep/td#TestDeep
+[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp
 
-[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp
+[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/td/helpers/tdhttp
 
-[`BeLax` config flag]: https://godoc.org/github.com/maxatome/go-testdeep#ContextConfig
+[`BeLax` config flag]: https://godoc.org/github.com/maxatome/go-testdeep/td#ContextConfig
 [`error`]: https://golang.org/pkg/builtin/#error
 
 

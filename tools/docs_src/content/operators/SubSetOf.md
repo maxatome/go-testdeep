@@ -16,12 +16,12 @@ expected item to succeed. But some expected items can be missing
 from the compared array/slice.
 
 ```go
-Cmp(t, []int{1, 1}, SubSetOf(1, 2))    // succeeds
-Cmp(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item
+td.Cmp(t, []int{1, 1}, td.SubSetOf(1, 2))    // succeeds
+td.Cmp(t, []int{1, 1, 2}, td.SubSetOf(1, 3)) // fails, 2 is an extra item
 ```
 
 
-> See also [<i class='fas fa-book'></i> SubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#SubSetOf).
+> See also [<i class='fas fa-book'></i> SubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SubSetOf).
 
 ### Examples
 
@@ -31,13 +31,13 @@ Cmp(t, []int{1, 1, 2}, SubSetOf(1, 3)) // fails, 2 is an extra item
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are expected, ignoring duplicates
-	ok := Cmp(t, got, SubSetOf(1, 2, 3, 4, 5, 6, 7, 8),
+	ok := td.Cmp(t, got, td.SubSetOf(1, 2, 3, 4, 5, 6, 7, 8),
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several SubSetOf entries
-	ok = Cmp(t, got, SubSetOf(Between(1, 4), 3, Between(2, 10), Gt(100)),
+	ok = td.Cmp(t, got, td.SubSetOf(td.Between(1, 4), 3, td.Between(2, 10), td.Gt(100)),
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
@@ -55,7 +55,7 @@ func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 CmpSubSetOf is a shortcut for:
 
 ```go
-Cmp(t, got, SubSetOf(expectedItems...), args...)
+td.Cmp(t, got, td.SubSetOf(expectedItems...), args...)
 ```
 
 See above for details.
@@ -70,7 +70,7 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#CmpSubSetOf).
+> See also [<i class='fas fa-book'></i> CmpSubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSubSetOf).
 
 ### Examples
 
@@ -80,13 +80,13 @@ reason of a potential failure.
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are expected, ignoring duplicates
-	ok := CmpSubSetOf(t, got, []interface{}{1, 2, 3, 4, 5, 6, 7, 8},
+	ok := td.CmpSubSetOf(t, got, []interface{}{1, 2, 3, 4, 5, 6, 7, 8},
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several SubSetOf entries
-	ok = CmpSubSetOf(t, got, []interface{}{Between(1, 4), 3, Between(2, 10), Gt(100)},
+	ok = td.CmpSubSetOf(t, got, []interface{}{td.Between(1, 4), 3, td.Between(2, 10), td.Gt(100)},
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
@@ -104,7 +104,7 @@ func (t *T) SubSetOf(got interface{}, expectedItems []interface{}, args ...inter
 [`SubSetOf`]({{< ref "SubSetOf" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, SubSetOf(expectedItems...), args...)
+t.Cmp(got, td.SubSetOf(expectedItems...), args...)
 ```
 
 See above for details.
@@ -119,12 +119,12 @@ the first item of *args* is a `string` and contains a '%' `rune` then
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep#T.SubSetOf).
+> See also [<i class='fas fa-book'></i> T.SubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SubSetOf).
 
 ### Examples
 
 {{%expand "Base example" %}}```go
-	t := NewT(&testing.T{})
+	t := td.NewT(&testing.T{})
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
@@ -135,7 +135,7 @@ reason of a potential failure.
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several SubSetOf entries
-	ok = t.SubSetOf(got, []interface{}{Between(1, 4), 3, Between(2, 10), Gt(100)},
+	ok = t.SubSetOf(got, []interface{}{td.Between(1, 4), 3, td.Between(2, 10), td.Gt(100)},
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 

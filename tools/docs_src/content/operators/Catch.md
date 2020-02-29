@@ -17,8 +17,8 @@ type.
 
 ```go
 var id int64
-if Cmp(t, CreateRecord("test"),
-  JSON(`{"id": $1, "name": "test"}`, Catch(&id, NotZero()))) {
+if td.Cmp(t, CreateRecord("test"),
+  td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.NotZero()))) {
   t.Logf("Created record ID is %d", id)
 }
 ```
@@ -28,12 +28,12 @@ It is really useful when used with [`JSON`]({{< ref "JSON" >}}) operator and/or 
 ```go
 var id int64
 if tdhttp.CmpJSONResponse(t,
-  tdhttp.NewRequest("POST", "/item", `{"name":"foo"}`),
+  tdhttp.Post("/item", `{"name":"foo"}`),
   api.Handler,
   tdhttp.Response{
     Status: http.StatusCreated,
-    Body: testdeep.JSON(`{"id": $id, "name": "foo"}`,
-      testdeep.Tag("id", testdeep.Catch(&id, testdeep.Gt(0)))),
+    Body: td.JSON(`{"id": $id, "name": "foo"}`,
+      td.Tag("id", td.Catch(&id, td.Gt(0)))),
   }) {
   t.Logf("Created record ID is %d", id)
 }
@@ -44,14 +44,14 @@ operator as *expectedValue* as in:
 
 ```go
 var id int64
-if Cmp(t, CreateRecord("test"),
-  JSON(`{"id": $1, "name": "test"}`, Catch(&id, Ignore()))) {
+if td.Cmp(t, CreateRecord("test"),
+  td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.Ignore()))) {
   t.Logf("Created record ID is %d", id)
 }
 ```
 
 
-> See also [<i class='fas fa-book'></i> Catch godoc](https://godoc.org/github.com/maxatome/go-testdeep#Catch).
+> See also [<i class='fas fa-book'></i> Catch godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Catch).
 
 ### Examples
 
@@ -67,9 +67,9 @@ if Cmp(t, CreateRecord("test"),
 	}
 
 	var age int
-	ok := Cmp(t, got,
-		JSON(`{"age":$1,"fullname":"Bob"}`,
-			Catch(&age, Between(40, 45))))
+	ok := td.Cmp(t, got,
+		td.JSON(`{"age":$1,"fullname":"Bob"}`,
+			td.Catch(&age, td.Between(40, 45))))
 	fmt.Println("check got age+fullname:", ok)
 	fmt.Println("caught age:", age)
 

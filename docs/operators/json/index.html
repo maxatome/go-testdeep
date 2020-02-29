@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.63.2" />
+    <meta name="generator" content="Hugo 0.65.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>JSON :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1581627452" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1581627452" rel="stylesheet">
-    <link href="/css/hybrid.css?1581627452" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1581627452" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1581627452" rel="stylesheet">
-    <link href="/css/auto-complete.css?1581627452" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1581627452" rel="stylesheet">
-    <link href="/css/theme.css?1581627452" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1581627452" rel="stylesheet">
+    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
+    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
+    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
+    <link href="/css/theme.css?1582932361" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1581627452" rel="stylesheet">
+      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1581627452"></script>
+    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1581627452"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1581627452"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1581627452"></script>
+<script type="text/javascript" src="/js/search.js?1582932361"></script>
 
     
   </div>
@@ -150,9 +150,9 @@
  
   
     
-      <li data-nav-id="/example/basic-testdeep/" title="Basic testdeep approach" class="dd-item ">
+      <li data-nav-id="/example/basic-testdeep/" title="Basic go-testdeep approach" class="dd-item ">
         <a href="/example/basic-testdeep/">
-        Basic testdeep approach
+        Basic go-testdeep approach
         
         </a>
     </li>
@@ -169,9 +169,9 @@
  
   
     
-      <li data-nav-id="/example/advanced-testdeep/" title="Advanced testdeep technique" class="dd-item ">
+      <li data-nav-id="/example/advanced-testdeep/" title="Advanced go-testdeep technique" class="dd-item ">
         <a href="/example/advanced-testdeep/">
-        Advanced testdeep technique
+        Advanced go-testdeep technique
         
         </a>
     </li>
@@ -188,9 +188,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-cmp-shortcuts/" title="testdeep Cmp shortcuts" class="dd-item ">
-        <a href="/example/testdeep-cmp-shortcuts/">
-        testdeep Cmp shortcuts
+      <li data-nav-id="/example/td-cmp-shortcuts/" title="go-testdeep Cmp shortcuts" class="dd-item ">
+        <a href="/example/td-cmp-shortcuts/">
+        go-testdeep Cmp shortcuts
         
         </a>
     </li>
@@ -207,9 +207,9 @@
  
   
     
-      <li data-nav-id="/example/testdeep-t/" title="testdeep.T type" class="dd-item ">
-        <a href="/example/testdeep-t/">
-        testdeep.T type
+      <li data-nav-id="/example/td-t/" title="td.T type" class="dd-item ">
+        <a href="/example/td-t/">
+        td.T type
         
         </a>
     </li>
@@ -258,9 +258,9 @@
  
   
     
-      <li data-nav-id="/functions/testdeep-t/" title="testdeep.T" class="dd-item ">
-        <a href="/functions/testdeep-t/">
-        testdeep.T
+      <li data-nav-id="/functions/td-t/" title="td.T" class="dd-item ">
+        <a href="/functions/td-t/">
+        td.T
         
         </a>
     </li>
@@ -1508,7 +1508,7 @@
               </li>
           
               <li> 
-                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep"><i class='fas fa-book'></i> godoc</a>
+                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep/td"><i class='fas fa-book'></i> godoc</a>
               </li>
           
               <li> 
@@ -1639,42 +1639,42 @@ be numeric like <code>$2</code> or named like <code>$name</code> and always refe
 item in <em>params</em>.</p>
 <p>Numeric placeholders reference the n&rsquo;th &ldquo;operators&rdquo; item (starting
 at 1). Named placeholders are used with <a href="/operators/tag/"><code>Tag</code></a> operator as follows:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
-  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;: $name, &#34;age&#34;: $2, &#34;gender&#34;: $3}</span><span style="color:#ed9d13">`</span>,
-    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>),               <span style="color:#999;font-style:italic">// matches only $2
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#ed9d13">&#34;male&#34;</span>))                       <span style="color:#999;font-style:italic">// matches only $3
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, gotValue,
+  td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: $name, &#34;age&#34;: $2, &#34;gender&#34;: $3}`</span>,
+    td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
+</span><span style="color:#999;font-style:italic"></span>    td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>),                  <span style="color:#999;font-style:italic">// matches only $2
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#ed9d13">&#34;male&#34;</span>))                             <span style="color:#999;font-style:italic">// matches only $3
 </span></code></pre></div><p>Note that placeholders can be double-quoted as in:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
-  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;: &#34;$name&#34;, &#34;age&#34;: &#34;$2&#34;, &#34;gender&#34;: &#34;$3&#34;}</span><span style="color:#ed9d13">`</span>,
-    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>),               <span style="color:#999;font-style:italic">// matches only $2
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#ed9d13">&#34;male&#34;</span>))                       <span style="color:#999;font-style:italic">// matches only $3
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, gotValue,
+  td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: &#34;$name&#34;, &#34;age&#34;: &#34;$2&#34;, &#34;gender&#34;: &#34;$3&#34;}`</span>,
+    td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
+</span><span style="color:#999;font-style:italic"></span>    td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>),                  <span style="color:#999;font-style:italic">// matches only $2
+</span><span style="color:#999;font-style:italic"></span>    <span style="color:#ed9d13">&#34;male&#34;</span>))                             <span style="color:#999;font-style:italic">// matches only $3
 </span></code></pre></div><p>It makes no difference whatever the underlying type of the replaced
 item is (= double quoting a placeholder matching a number is not a
 problem). It is just a matter of taste, double-quoting placeholders
 can be preferred when the JSON data has to conform to the JSON
 specification, like when used in a &ldquo;.json&rdquo; file.</p>
 <p>Note <em>expectedJSON</em> can be a <code>[]byte</code>, JSON filename or <a href="https://golang.org/pkg/io/#Reader"><code>io.Reader</code></a>:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">&#34;file.json&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))
-<span style="color:#447fcf">Cmp</span>(t, gotValue, <span style="color:#447fcf">JSON</span>([]<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">[1, $1, 3]</span><span style="color:#ed9d13">`</span>), <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))
-<span style="color:#447fcf">Cmp</span>(t, gotValue, <span style="color:#447fcf">JSON</span>(osFile, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, gotValue, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">&#34;file.json&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))
+td.<span style="color:#447fcf">Cmp</span>(t, gotValue, td.<span style="color:#447fcf">JSON</span>([]<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`[1, $1, 3]`</span>), td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))
+td.<span style="color:#447fcf">Cmp</span>(t, gotValue, td.<span style="color:#447fcf">JSON</span>(osFile, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">12</span>, <span style="color:#3677a9">34</span>)))
 </code></pre></div><p>A JSON filename ends with &ldquo;.json&rdquo;.</p>
 <p>To avoid a legit &ldquo;$&rdquo; <code>string</code> prefix causes a bad placeholder <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a>,
 just double it to escape it. Note it is only needed when the &ldquo;$&rdquo; is
 the first character of a <code>string</code>:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
-  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;: &#34;$name&#34;, &#34;details&#34;: &#34;$$info&#34;, &#34;age&#34;: $2}</span><span style="color:#ed9d13">`</span>,
-    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)))              <span style="color:#999;font-style:italic">// matches only $2
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, gotValue,
+  td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;: &#34;$name&#34;, &#34;details&#34;: &#34;$$info&#34;, &#34;age&#34;: $2}`</span>,
+    td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
+</span><span style="color:#999;font-style:italic"></span>    td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)))                 <span style="color:#999;font-style:italic">// matches only $2
 </span></code></pre></div><p>For the &ldquo;details&rdquo; key, the raw value &ldquo;<code>$info</code>&rdquo; is expected, no
 placeholders are involved here.</p>
 <p>Note that <a href="/operators/lax/"><code>Lax</code></a> mode is automatically enabled by <a href="/operators/json/"><code>JSON</code></a> operator to
 simplify numeric tests.</p>
 <p>Comments can be embedded in JSON data:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue,
-  <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">
-</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, gotValue,
+  td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
 </span><span style="color:#ed9d13">  // A guy properties:
 </span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;$name&#34;,  // The full name of the guy
 </span><span style="color:#ed9d13">  &#34;details&#34;:  &#34;$$info&#34;, // Literally &#34;$info&#34;, thanks to &#34;$&#34; escape
@@ -1682,9 +1682,9 @@ simplify numeric tests.</p>
 </span><span style="color:#ed9d13">                           - placeholder unquoted, but could be without
 </span><span style="color:#ed9d13">                             any change
 </span><span style="color:#ed9d13">                           - to demonstrate a multi-lines comment */
-</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>,
-    <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)))              <span style="color:#999;font-style:italic">// matches only $2
+</span><span style="color:#ed9d13">}`</span>,
+    td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Foo&#34;</span>)), <span style="color:#999;font-style:italic">// matches $1 and $name
+</span><span style="color:#999;font-style:italic"></span>    td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">41</span>, <span style="color:#3677a9">43</span>)))                 <span style="color:#999;font-style:italic">// matches only $2
 </span></code></pre></div><p>Comments, like in go, have 2 forms. To quote the Go language specification:</p>
 <ul>
 <li>line comments start with the character sequence // and stop at the
@@ -1695,9 +1695,9 @@ with the first subsequent character sequence */.</li>
 <p>Last but not least, simple operators can be directly embedded in
 JSON data without requiring any placeholder but using directly
 <code>$^OperatorName</code>. They are operator shortcuts:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;id&#34;: $1}</span><span style="color:#ed9d13">`</span>, <span style="color:#447fcf">NotZero</span>()))
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, gotValue, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;id&#34;: $1}`</span>, td.<span style="color:#447fcf">NotZero</span>()))
 </code></pre></div><p>can be written as:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, gotValue, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;id&#34;: $^NotZero}</span><span style="color:#ed9d13">`</span>))
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, gotValue, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;id&#34;: $^NotZero}`</span>))
 </code></pre></div><p>Unfortunately, only simple operators (in fact those which take no
 parameters) have shortcuts. They follow:</p>
 <ul>
@@ -1716,7 +1716,7 @@ parameters) have shortcuts. They follow:</p>
 <code>[]interface{}</code>, <code>map[string]interface{}</code> or <code>interface{}</code> in case
 <em>expectedJSON</em> is &ldquo;null&rdquo;.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#JSON"><!-- raw HTML omitted --><!-- raw HTML omitted --> JSON godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#JSON"><!-- raw HTML omitted --><!-- raw HTML omitted --> JSON godoc</a>.</p>
 </blockquote>
 <h3 id="examples">Examples</h3>
 <p>
@@ -1734,44 +1734,44 @@ parameters) have shortcuts. They follow:</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
 	}
 
-	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}</span><span style="color:#ed9d13">`</span>))
+	ok := td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with age then fullname:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}</span><span style="color:#ed9d13">`</span>))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname then age:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`
 </span><span style="color:#ed9d13">// This should be the JSON representation of a struct
-</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
+</span><span style="color:#ed9d13">{
 </span><span style="color:#ed9d13">  // A person:
 </span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;Bob&#34;, // The name of this person
 </span><span style="color:#ed9d13">  &#34;age&#34;:      42     /* The age of this person:
 </span><span style="color:#ed9d13">                        - 42 of course
 </span><span style="color:#ed9d13">                        - to demonstrate a multi-lines comment */
-</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>))
+</span><span style="color:#ed9d13">}`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with nicely formatted and commented JSON:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}</span><span style="color:#ed9d13">`</span>))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with gender field:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;}</span><span style="color:#ed9d13">`</span>))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;}`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname only:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">true</span><span style="color:#ed9d13">`</span>))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#6ab825;font-weight:bold">true</span>, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`true`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check boolean got is true:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">42</span>, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">42</span><span style="color:#ed9d13">`</span>))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#3677a9">42</span>, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`42`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check numeric got is 42:&#34;</span>, ok)
 
 	got = <span style="color:#6ab825;font-weight:bold">nil</span>
-	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">null</span><span style="color:#ed9d13">`</span>))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`null`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check nil got is null:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1802,35 +1802,35 @@ parameters) have shortcuts. They follow:</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
 	}
 
-	ok := <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $1, &#34;fullname&#34;: $2}</span><span style="color:#ed9d13">`</span>, <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>))
+	ok := td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders without operators:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, got,
-		<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $1, &#34;fullname&#34;: $2}</span><span style="color:#ed9d13">`</span>,
-			<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>),
-			<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got,
+		td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>,
+			td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>),
+			td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, got,
-		<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}</span><span style="color:#ed9d13">`</span>,
-			<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>),
-			<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got,
+		td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}`</span>,
+			td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>),
+			td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with double-quoted numeric placeholders:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, got,
-		<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $age, &#34;fullname&#34;: $name}</span><span style="color:#ed9d13">`</span>,
-			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
-			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got,
+		td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: $age, &#34;fullname&#34;: $name}`</span>,
+			td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
+			td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with named placeholders:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $^NotZero, &#34;fullname&#34;: $^NotEmpty}</span><span style="color:#ed9d13">`</span>))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`{&#34;age&#34;: $^NotZero, &#34;fullname&#34;: $^NotEmpty}`</span>))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with operator shortcuts:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1858,9 +1858,9 @@ parameters) have shortcuts. They follow:</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
-		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;gender&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;gender&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
@@ -1874,21 +1874,21 @@ parameters) have shortcuts. They follow:</p>
 	<span style="color:#6ab825;font-weight:bold">defer</span> os.<span style="color:#447fcf">RemoveAll</span>(tmpDir) <span style="color:#999;font-style:italic">// clean up
 </span><span style="color:#999;font-style:italic"></span>
 	filename := tmpDir + <span style="color:#ed9d13">&#34;/test.json&#34;</span>
-	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">
-</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
+	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
 </span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;$name&#34;,
 </span><span style="color:#ed9d13">  &#34;age&#34;:      &#34;$age&#34;,
 </span><span style="color:#ed9d13">  &#34;gender&#34;:   &#34;$gender&#34;
-</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+</span><span style="color:#ed9d13">}`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
 		t.<span style="color:#447fcf">Fatal</span>(err)
 	}
 
 	<span style="color:#999;font-style:italic">// OK let&#39;s test with this file
-</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">Cmp</span>(t, got,
-		<span style="color:#447fcf">JSON</span>(filename,
-			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)),
-			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
-			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">^(male|female)\z</span><span style="color:#ed9d13">`</span>))))
+</span><span style="color:#999;font-style:italic"></span>	ok := td.<span style="color:#447fcf">Cmp</span>(t, got,
+		td.<span style="color:#447fcf">JSON</span>(filename,
+			td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)),
+			td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
+			td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, td.<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from file name:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// When the file is already open
@@ -1896,11 +1896,11 @@ parameters) have shortcuts. They follow:</p>
 	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
 		t.<span style="color:#447fcf">Fatal</span>(err)
 	}
-	ok = <span style="color:#447fcf">Cmp</span>(t, got,
-		<span style="color:#447fcf">JSON</span>(file,
-			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)),
-			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
-			<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">^(male|female)\z</span><span style="color:#ed9d13">`</span>))))
+	ok = td.<span style="color:#447fcf">Cmp</span>(t, got,
+		td.<span style="color:#447fcf">JSON</span>(file,
+			td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)),
+			td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)),
+			td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, td.<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))))
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from io.Reader:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -1913,7 +1913,7 @@ parameters) have shortcuts. They follow:</p>
 <h2 id="cmpjson-shortcut">CmpJSON shortcut</h2>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpJSON</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedJSON <span style="color:#6ab825;font-weight:bold">interface</span>{}, params []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
 </code></pre></div><p>CmpJSON is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#447fcf">Cmp</span>(t, got, <span style="color:#447fcf">JSON</span>(expectedJSON, params...), args...)
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">JSON</span>(expectedJSON, params...), args...)
 </code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
@@ -1923,7 +1923,7 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#CmpJSON"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpJSON godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#CmpJSON"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpJSON godoc</a>.</p>
 </blockquote>
 <h3 id="examples-1">Examples</h3>
 <p>
@@ -1941,44 +1941,44 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
 	}
 
-	ok := <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok := td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with age then fullname:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname then age:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`
 </span><span style="color:#ed9d13">// This should be the JSON representation of a struct
-</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
+</span><span style="color:#ed9d13">{
 </span><span style="color:#ed9d13">  // A person:
 </span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;Bob&#34;, // The name of this person
 </span><span style="color:#ed9d13">  &#34;age&#34;:      42     /* The age of this person:
 </span><span style="color:#ed9d13">                        - 42 of course
 </span><span style="color:#ed9d13">                        - to demonstrate a multi-lines comment */
-</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+</span><span style="color:#ed9d13">}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with nicely formatted and commented JSON:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with gender field:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname only:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">true</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, <span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">`true`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check boolean got is true:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">42</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">`42`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check numeric got is 42:&#34;</span>, ok)
 
 	got = <span style="color:#6ab825;font-weight:bold">nil</span>
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">null</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`null`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check nil got is null:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -2009,26 +2009,26 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
 	}
 
-	ok := <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $1, &#34;fullname&#34;: $2}</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>})
+	ok := td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders without operators:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $1, &#34;fullname&#34;: $2}</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with double-quoted numeric placeholders:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $age, &#34;fullname&#34;: $name}</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))})
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: $age, &#34;fullname&#34;: $name}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with named placeholders:&#34;</span>, ok)
 
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $^NotZero, &#34;fullname&#34;: $^NotEmpty}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, <span style="color:#ed9d13">`{&#34;age&#34;: $^NotZero, &#34;fullname&#34;: $^NotEmpty}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with operator shortcuts:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -2056,9 +2056,9 @@ reason of a potential failure.</p>
         <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
-		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;gender&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;gender&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
@@ -2072,17 +2072,17 @@ reason of a potential failure.</p>
 	<span style="color:#6ab825;font-weight:bold">defer</span> os.<span style="color:#447fcf">RemoveAll</span>(tmpDir) <span style="color:#999;font-style:italic">// clean up
 </span><span style="color:#999;font-style:italic"></span>
 	filename := tmpDir + <span style="color:#ed9d13">&#34;/test.json&#34;</span>
-	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">
-</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
+	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
 </span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;$name&#34;,
 </span><span style="color:#ed9d13">  &#34;age&#34;:      &#34;$age&#34;,
 </span><span style="color:#ed9d13">  &#34;gender&#34;:   &#34;$gender&#34;
-</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+</span><span style="color:#ed9d13">}`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
 		t.<span style="color:#447fcf">Fatal</span>(err)
 	}
 
 	<span style="color:#999;font-style:italic">// OK let&#39;s test with this file
-</span><span style="color:#999;font-style:italic"></span>	ok := <span style="color:#447fcf">CmpJSON</span>(t, got, filename, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">^(male|female)\z</span><span style="color:#ed9d13">`</span>))})
+</span><span style="color:#999;font-style:italic"></span>	ok := td.<span style="color:#447fcf">CmpJSON</span>(t, got, filename, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, td.<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from file name:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// When the file is already open
@@ -2090,7 +2090,7 @@ reason of a potential failure.</p>
 	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
 		t.<span style="color:#447fcf">Fatal</span>(err)
 	}
-	ok = <span style="color:#447fcf">CmpJSON</span>(t, got, file, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">^(male|female)\z</span><span style="color:#ed9d13">`</span>))})
+	ok = td.<span style="color:#447fcf">CmpJSON</span>(t, got, file, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, td.<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from io.Reader:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -2103,7 +2103,7 @@ reason of a potential failure.</p>
 <h2 id="tjson-shortcut">T.JSON shortcut</h2>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">JSON</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedJSON <span style="color:#6ab825;font-weight:bold">interface</span>{}, params []<span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
 </code></pre></div><p><a href="/operators/json/"><code>JSON</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, <span style="color:#447fcf">JSON</span>(expectedJSON, params...), args...)
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, td.<span style="color:#447fcf">JSON</span>(expectedJSON, params...), args...)
 </code></pre></div><p>See above for details.</p>
 <p>Returns true if the test is OK, false if it fails.</p>
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
@@ -2113,7 +2113,7 @@ the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%
 <a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep#T.JSON"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.JSON godoc</a>.</p>
+<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.JSON"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.JSON godoc</a>.</p>
 </blockquote>
 <h3 id="examples-2">Examples</h3>
 <p>
@@ -2128,47 +2128,47 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
 	}
 
-	ok := t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok := t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;:42,&#34;fullname&#34;:&#34;Bob&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with age then fullname:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname then age:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`
 </span><span style="color:#ed9d13">// This should be the JSON representation of a struct
-</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
+</span><span style="color:#ed9d13">{
 </span><span style="color:#ed9d13">  // A person:
 </span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;Bob&#34;, // The name of this person
 </span><span style="color:#ed9d13">  &#34;age&#34;:      42     /* The age of this person:
 </span><span style="color:#ed9d13">                        - 42 of course
 </span><span style="color:#ed9d13">                        - to demonstrate a multi-lines comment */
-</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+</span><span style="color:#ed9d13">}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with nicely formatted and commented JSON:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;,&#34;age&#34;:42,&#34;gender&#34;:&#34;male&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with gender field:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;fullname&#34;:&#34;Bob&#34;}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;fullname&#34;:&#34;Bob&#34;}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with fullname only:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(<span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">true</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = t.<span style="color:#447fcf">JSON</span>(<span style="color:#6ab825;font-weight:bold">true</span>, <span style="color:#ed9d13">`true`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check boolean got is true:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">42</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = t.<span style="color:#447fcf">JSON</span>(<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">`42`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check numeric got is 42:&#34;</span>, ok)
 
 	got = <span style="color:#6ab825;font-weight:bold">nil</span>
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">null</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`null`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check nil got is null:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -2196,29 +2196,29 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
 	}
 
-	ok := t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $1, &#34;fullname&#34;: $2}</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>})
+	ok := t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders without operators:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $1, &#34;fullname&#34;: $2}</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: $1, &#34;fullname&#34;: $2}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with numeric placeholders:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: &#34;$1&#34;, &#34;fullname&#34;: &#34;$2&#34;}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>), td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>)})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with double-quoted numeric placeholders:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $age, &#34;fullname&#34;: $name}</span><span style="color:#ed9d13">`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))})
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: $age, &#34;fullname&#34;: $name}`</span>, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Foobar&#34;</span>))})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with named placeholders:&#34;</span>, ok)
 
-	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`</span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">&#34;age&#34;: $^NotZero, &#34;fullname&#34;: $^NotEmpty}</span><span style="color:#ed9d13">`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
+	ok = t.<span style="color:#447fcf">JSON</span>(got, <span style="color:#ed9d13">`{&#34;age&#34;: $^NotZero, &#34;fullname&#34;: $^NotEmpty}`</span>, <span style="color:#6ab825;font-weight:bold">nil</span>)
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;check got with operator shortcuts:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -2243,12 +2243,12 @@ reason of a potential failure.</p>
     	</span>
     </div>
     <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := <span style="color:#447fcf">NewT</span>(&amp;testing.T{})
+        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
 
 	got := &amp;<span style="color:#6ab825;font-weight:bold">struct</span> {
-		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;fullname&#34;</span><span style="color:#ed9d13">`</span>
-		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;age&#34;</span><span style="color:#ed9d13">`</span>
-		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`</span><span style="color:#ed9d13">json:&#34;gender&#34;</span><span style="color:#ed9d13">`</span>
+		Fullname <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;fullname&#34;`</span>
+		Age      <span style="color:#6ab825;font-weight:bold">int</span>    <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
+		Gender   <span style="color:#6ab825;font-weight:bold">string</span> <span style="color:#ed9d13">`json:&#34;gender&#34;`</span>
 	}{
 		Fullname: <span style="color:#ed9d13">&#34;Bob Foobar&#34;</span>,
 		Age:      <span style="color:#3677a9">42</span>,
@@ -2262,17 +2262,17 @@ reason of a potential failure.</p>
 	<span style="color:#6ab825;font-weight:bold">defer</span> os.<span style="color:#447fcf">RemoveAll</span>(tmpDir) <span style="color:#999;font-style:italic">// clean up
 </span><span style="color:#999;font-style:italic"></span>
 	filename := tmpDir + <span style="color:#ed9d13">&#34;/test.json&#34;</span>
-	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">
-</span><span style="color:#ed9d13"></span><span style="color:#ed9d13">{</span><span style="color:#ed9d13">
+	<span style="color:#6ab825;font-weight:bold">if</span> err = ioutil.<span style="color:#447fcf">WriteFile</span>(filename, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">`
+</span><span style="color:#ed9d13">{
 </span><span style="color:#ed9d13">  &#34;fullname&#34;: &#34;$name&#34;,
 </span><span style="color:#ed9d13">  &#34;age&#34;:      &#34;$age&#34;,
 </span><span style="color:#ed9d13">  &#34;gender&#34;:   &#34;$gender&#34;
-</span><span style="color:#ed9d13">}</span><span style="color:#ed9d13">`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
+</span><span style="color:#ed9d13">}`</span>), <span style="color:#3677a9">0644</span>); err != <span style="color:#6ab825;font-weight:bold">nil</span> {
 		t.<span style="color:#447fcf">Fatal</span>(err)
 	}
 
 	<span style="color:#999;font-style:italic">// OK let&#39;s test with this file
-</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">JSON</span>(got, filename, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">^(male|female)\z</span><span style="color:#ed9d13">`</span>))})
+</span><span style="color:#999;font-style:italic"></span>	ok := t.<span style="color:#447fcf">JSON</span>(got, filename, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, td.<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from file name:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// When the file is already open
@@ -2280,7 +2280,7 @@ reason of a potential failure.</p>
 	<span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
 		t.<span style="color:#447fcf">Fatal</span>(err)
 	}
-	ok = t.<span style="color:#447fcf">JSON</span>(got, file, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, <span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, <span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), <span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, <span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`</span><span style="color:#ed9d13">^(male|female)\z</span><span style="color:#ed9d13">`</span>))})
+	ok = t.<span style="color:#447fcf">JSON</span>(got, file, []<span style="color:#6ab825;font-weight:bold">interface</span>{}{td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;name&#34;</span>, td.<span style="color:#447fcf">HasPrefix</span>(<span style="color:#ed9d13">&#34;Bob&#34;</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;age&#34;</span>, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">40</span>, <span style="color:#3677a9">45</span>)), td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;gender&#34;</span>, td.<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(male|female)\z`</span>))})
 	fmt.<span style="color:#447fcf">Println</span>(<span style="color:#ed9d13">&#34;Full match from io.Reader:&#34;</span>, ok)
 
 	<span style="color:#999;font-style:italic">// Output:
@@ -3508,19 +3508,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1581627452"></script>
-    <script src="/js/perfect-scrollbar.min.js?1581627452"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1581627452"></script>
-    <script src="/js/jquery.sticky.js?1581627452"></script>
-    <script src="/js/featherlight.min.js?1581627452"></script>
-    <script src="/js/highlight.pack.js?1581627452"></script>
+    <script src="/js/clipboard.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
+    <script src="/js/jquery.sticky.js?1582932361"></script>
+    <script src="/js/featherlight.min.js?1582932361"></script>
+    <script src="/js/highlight.pack.js?1582932361"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1581627452"></script>
-    <script src="/js/learn.js?1581627452"></script>
-    <script src="/js/hugo-learn.js?1581627452"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
+    <script src="/js/learn.js?1582932361"></script>
+    <script src="/js/hugo-learn.js?1582932361"></script>
 
-    <link href="/mermaid/mermaid.css?1581627452" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1581627452"></script>
+    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1582932361"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
