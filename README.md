@@ -29,6 +29,11 @@ go-testdeep
 
 ## Latest news
 
+- 2020/02/29:
+  - `github.com/maxatome/go-testdeep` deprecated (but still usable),
+    use `github.com/maxatome/go-testdeep/td` instead. See the
+    [FAQ point](https://go-testdeep.zetta.rocks/faq/#should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd)
+    for details about migration;
 - 2020/02/13:
   - new operator anchoring feature, see the [corresponding FAQ
     section](https://go-testdeep.zetta.rocks/faq/#how-does-operator-anchoring-work)
@@ -39,7 +44,6 @@ go-testdeep
     friends [`CmpSubJSONOf`], [`CmpSuperJSONOf`], [`T.SubJSONOf`] &
     [`T.SuperJSONOf`]),
   - JSON data can now contain comments and some operator shortcuts;
-- 2019/11/01: new [`Catch`] operator;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
