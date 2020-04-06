@@ -215,6 +215,8 @@ var (
 	Contains = td.Contains
 	// ContainsKey is a deprecated alias of github.com/maxatome/go-testdeep/td.ContainsKey.
 	ContainsKey = td.ContainsKey
+	// Delay is a deprecated alias of github.com/maxatome/go-testdeep/td.ContainsKey.
+	Delay = td.Delay
 	// Empty is a deprecated alias of github.com/maxatome/go-testdeep/td.Empty.
 	Empty = td.Empty
 	// Gt is a deprecated alias of github.com/maxatome/go-testdeep/td.Gt.

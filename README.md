@@ -29,6 +29,8 @@ go-testdeep
 
 ## Latest news
 
+- 2020/04/06:
+  - new [`Delay`] operator;
 - 2020/02/29:
   - `github.com/maxatome/go-testdeep` deprecated (but still usable),
     use `github.com/maxatome/go-testdeep/td` instead. See the
@@ -39,11 +41,6 @@ go-testdeep
     section](https://go-testdeep.zetta.rocks/faq/#how-does-operator-anchoring-work)
     and the [new anchoring methods](https://go-testdeep.zetta.rocks/functions/td-t/#anchoring-methods-of-tdt);
   - new [`SStruct`] operator (and its friends [`CmpSStruct`] & [`T.SStruct`]),
-- 2019/11/18:
-  - new [`SubJSONOf`] & [`SuperJSONOf`] operators (and their
-    friends [`CmpSubJSONOf`], [`CmpSuperJSONOf`], [`T.SubJSONOf`] &
-    [`T.SuperJSONOf`]),
-  - JSON data can now contain comments and some operator shortcuts;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
@@ -279,6 +276,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`Code`]: https://go-testdeep.zetta.rocks/operators/code/
 [`Contains`]: https://go-testdeep.zetta.rocks/operators/contains/
 [`ContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/
+[`Delay`]: https://go-testdeep.zetta.rocks/operators/delay/
 [`Empty`]: https://go-testdeep.zetta.rocks/operators/empty/
 [`Gt`]: https://go-testdeep.zetta.rocks/operators/gt/
 [`Gte`]: https://go-testdeep.zetta.rocks/operators/gte/

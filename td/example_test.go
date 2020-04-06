@@ -709,6 +709,29 @@ func ExampleContainsKey_nil() {
 	// map contains *byte nil key: false
 }
 
+func ExampleDelay() {
+	t := &testing.T{}
+
+	cmpNow := func(expected td.TestDeep) bool {
+		time.Sleep(time.Microsecond) // imagine a DB insert returning a CreatedAt
+		return td.Cmp(t, time.Now(), expected)
+	}
+
+	before := time.Now()
+
+	ok := cmpNow(td.Between(before, time.Now()))
+	fmt.Println("Between called before compare:", ok)
+
+	ok = cmpNow(td.Delay(func() td.TestDeep {
+		return td.Between(before, time.Now())
+	}))
+	fmt.Println("Between delayed until compare:", ok)
+
+	// Output:
+	// Between called before compare: false
+	// Between delayed until compare: true
+}
+
 func ExampleEmpty() {
 	t := &testing.T{}
 

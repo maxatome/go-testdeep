@@ -40,6 +40,9 @@ weight = 15
 [`ContainsKey`]({{< ref "ContainsKey" >}})
 : checks that a map contains a key
 
+[`Delay`]({{< ref "Delay" >}})
+: delays the operator construction till first use
+
 [`Empty`]({{< ref "Empty" >}})
 : checks that an array, a channel, a map, a slice or a string is empty
 
@@ -255,6 +258,7 @@ The following operators are smuggler ones:
 [`Code`]: {{< ref "Code" >}}
 [`Contains`]: {{< ref "Contains" >}}
 [`ContainsKey`]: {{< ref "ContainsKey" >}}
+[`Delay`]: {{< ref "Delay" >}}
 [`Empty`]: {{< ref "Empty" >}}
 [`Gt`]: {{< ref "Gt" >}}
 [`Gte`]: {{< ref "Gte" >}}

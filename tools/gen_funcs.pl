@@ -59,6 +59,9 @@ my %SMUGGLER_OPERATORS;
 # These operators should be renamed when used as *T method
 my %RENAME_METHOD = (Lax => 'CmpLax');
 
+# These operators do not have *T method nor Cmp shortcut
+my %ONLY_OPERATORS = map { $_ => 1 } qw(Catch Delay Ignore Tag);
+
 my @INPUT_LABELS = qw(nil bool str int float cplx
                       array slice map struct ptr if chan func);
 my %INPUTS;
@@ -143,10 +146,7 @@ while (readdir $dh)
                 push(@args, \%arg);
             }
 
-            if ($func ne 'Ignore' and $func ne 'Tag' and $func ne 'Catch')
-            {
-                $funcs{$func}{args} = \@args;
-            }
+	    $funcs{$func}{args} = \@args unless $ONLY_OPERATORS{$func};
 
             die "TAB detected in $func operator documentation" if $doc =~ /\t/;
 
