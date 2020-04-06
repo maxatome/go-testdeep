@@ -16,6 +16,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -672,9 +673,15 @@ func ExampleContainsKey() {
 		td.ContainsKey(td.Between(40, 50)))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
 
+	ok = td.Cmp(t,
+		map[string]int{"FOO": 11, "bar": 22, "zip": 33},
+		td.ContainsKey(td.Smuggle(strings.ToLower, "foo")))
+	fmt.Println(`map contains key "foo" without taking case into account:`, ok)
+
 	// Output:
 	// map contains key "foo": true
 	// map contains at least a key in [40 .. 50]: true
+	// map contains key "foo" without taking case into account: true
 }
 
 func ExampleContainsKey_nil() {

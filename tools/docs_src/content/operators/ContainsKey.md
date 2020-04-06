@@ -53,9 +53,15 @@ td.Cmp(t, hnum, td.ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(
 		td.ContainsKey(td.Between(40, 50)))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
 
+	ok = td.Cmp(t,
+		map[string]int{"FOO": 11, "bar": 22, "zip": 33},
+		td.ContainsKey(td.Smuggle(strings.ToLower, "foo")))
+	fmt.Println(`map contains key "foo" without taking case into account:`, ok)
+
 	// Output:
 	// map contains key "foo": true
 	// map contains at least a key in [40 .. 50]: true
+	// map contains key "foo" without taking case into account: true
 
 ```{{% /expand%}}
 {{%expand "Nil example" %}}```go
@@ -120,9 +126,13 @@ reason of a potential failure.
 	ok = td.CmpContainsKey(t, map[int]bool{12: true, 24: false, 42: true, 51: false}, td.Between(40, 50))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
 
+	ok = td.CmpContainsKey(t, map[string]int{"FOO": 11, "bar": 22, "zip": 33}, td.Smuggle(strings.ToLower, "foo"))
+	fmt.Println(`map contains key "foo" without taking case into account:`, ok)
+
 	// Output:
 	// map contains key "foo": true
 	// map contains at least a key in [40 .. 50]: true
+	// map contains key "foo" without taking case into account: true
 
 ```{{% /expand%}}
 {{%expand "Nil example" %}}```go
@@ -187,9 +197,13 @@ reason of a potential failure.
 	ok = t.ContainsKey(map[int]bool{12: true, 24: false, 42: true, 51: false}, td.Between(40, 50))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
 
+	ok = t.ContainsKey(map[string]int{"FOO": 11, "bar": 22, "zip": 33}, td.Smuggle(strings.ToLower, "foo"))
+	fmt.Println(`map contains key "foo" without taking case into account:`, ok)
+
 	// Output:
 	// map contains key "foo": true
 	// map contains at least a key in [40 .. 50]: true
+	// map contains key "foo" without taking case into account: true
 
 ```{{% /expand%}}
 {{%expand "Nil example" %}}```go
