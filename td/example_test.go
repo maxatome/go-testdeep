@@ -16,6 +16,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -672,9 +673,15 @@ func ExampleContainsKey() {
 		td.ContainsKey(td.Between(40, 50)))
 	fmt.Println("map contains at least a key in [40 .. 50]:", ok)
 
+	ok = td.Cmp(t,
+		map[string]int{"FOO": 11, "bar": 22, "zip": 33},
+		td.ContainsKey(td.Smuggle(strings.ToLower, "foo")))
+	fmt.Println(`map contains key "foo" without taking case into account:`, ok)
+
 	// Output:
 	// map contains key "foo": true
 	// map contains at least a key in [40 .. 50]: true
+	// map contains key "foo" without taking case into account: true
 }
 
 func ExampleContainsKey_nil() {
@@ -700,6 +707,29 @@ func ExampleContainsKey_nil() {
 	// map contains *int nil key: true
 	// map contains Nil() key: true
 	// map contains *byte nil key: false
+}
+
+func ExampleDelay() {
+	t := &testing.T{}
+
+	cmpNow := func(expected td.TestDeep) bool {
+		time.Sleep(time.Microsecond) // imagine a DB insert returning a CreatedAt
+		return td.Cmp(t, time.Now(), expected)
+	}
+
+	before := time.Now()
+
+	ok := cmpNow(td.Between(before, time.Now()))
+	fmt.Println("Between called before compare:", ok)
+
+	ok = cmpNow(td.Delay(func() td.TestDeep {
+		return td.Between(before, time.Now())
+	}))
+	fmt.Println("Between delayed until compare:", ok)
+
+	// Output:
+	// Between called before compare: false
+	// Between delayed until compare: true
 }
 
 func ExampleEmpty() {

@@ -23,6 +23,7 @@ weight: 1
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
 | [`ContainsKey`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`ContainsKey`] |
+| [`Delay`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Delay`] |
 | [`Empty`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ptr on array/slice/map/string | ✓ | ✓ | ✗ | [`Empty`] |
 | [`Gt`] | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗ | ✓ | ✗ | ✗ | [`Gt`] |
 | [`Gte`] | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗ | ✓ | ✗ | ✗ | [`Gte`] |
@@ -31,10 +32,10 @@ weight: 1
 | [`Ignore`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Ignore`] |
 | [`Isa`] | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Isa`] |
 | [`JSON`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | [`JSON`] |
-| [`Keys`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`Keys`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`Keys`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`Keys`] |
 | [`Lax`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Lax`] |
 | [`Len`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | ✓ | ✗ | [`Len`] |
 | [`Lt`] | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗ | ✓ | ✗ | ✗ | [`Lt`] |
@@ -44,10 +45,10 @@ weight: 1
 | [`N`] | ✗ | ✗ | ✗ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | [`N`] |
 | [`NaN`] | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | [`NaN`] |
 | [`Nil`] | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | [`Nil`] |
-| [`None`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`None`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`None`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`None`] |
 | [`Not`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Not`] |
 | [`NotAny`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`NotAny`] |
 | [`NotEmpty`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ptr on array/slice/map/string | ✓ | ✓ | ✗ | [`NotEmpty`] |
@@ -57,10 +58,10 @@ weight: 1
 | [`PPtr`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | [`PPtr`] |
 | [`Ptr`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | [`Ptr`] |
 | [`Re`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`Re`] |
-| [`ReAll`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`ReAll`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`ReAll`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`ReAll`] |
 | [`Set`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`Set`] |
 | [`Shallow`] | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | [`Shallow`] |
 | [`Slice`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ptr on slice | ✓ | ✗ | ✗ | [`Slice`] |
@@ -70,10 +71,10 @@ weight: 1
 | [`Struct`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ptr on struct | ✓ | ✗ | ✗ | [`Struct`] |
 | [`SubBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubBagOf`] |
 | [`SubJSONOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ptr on map/struct | ✓ | ✗ | ✗ | [`SubJSONOf`] |
-| [`SubMapOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map | ✓ | ✗ | ✗ | [`SubMapOf`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
+| [`SubMapOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ptr on map | ✓ | ✗ | ✗ | [`SubMapOf`] |
 | [`SubSetOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubSetOf`] |
 | [`SuperBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SuperBagOf`] |
 | [`SuperJSONOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ptr on map/struct | ✓ | ✗ | ✗ | [`SuperJSONOf`] |
@@ -107,6 +108,7 @@ weight: 1
 [`Code`]: {{< ref "Code" >}}
 [`Contains`]: {{< ref "Contains" >}}
 [`ContainsKey`]: {{< ref "ContainsKey" >}}
+[`Delay`]: {{< ref "Delay" >}}
 [`Empty`]: {{< ref "Empty" >}}
 [`Gt`]: {{< ref "Gt" >}}
 [`Gte`]: {{< ref "Gte" >}}
@@ -292,6 +294,7 @@ Operators likely to succeed for each go type:
 - [`Any`]
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Ignore`]
 - [`JSON`]
 - [`Lax`]
@@ -313,6 +316,7 @@ Operators likely to succeed for each go type:
 - [`Any`]
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Ignore`]
 - [`Isa`]
 - [`JSON`]
@@ -334,6 +338,7 @@ Operators likely to succeed for each go type:
 - [`Catch`]
 - [`Code`]
 - [`Contains`]
+- [`Delay`]
 - [`Empty`]
 - [`Gt`]
 - [`Gte`]
@@ -366,6 +371,7 @@ Operators likely to succeed for each go type:
 - [`Between`]
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Gt`]
 - [`Gte`]
 - [`Ignore`]
@@ -391,6 +397,7 @@ Operators likely to succeed for each go type:
 - [`Between`]
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Gt`]
 - [`Gte`]
 - [`Ignore`]
@@ -417,6 +424,7 @@ Operators likely to succeed for each go type:
 - [`Any`]
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Ignore`]
 - [`Isa`]
 - [`Lax`]
@@ -440,6 +448,7 @@ Operators likely to succeed for each go type:
 - [`Catch`]
 - [`Code`]
 - [`Contains`]
+- [`Delay`]
 - [`Empty`]
 - [`Ignore`]
 - [`Isa`]
@@ -472,6 +481,7 @@ Operators likely to succeed for each go type:
 - [`Catch`]
 - [`Code`]
 - [`Contains`]
+- [`Delay`]
 - [`Empty`]
 - [`Ignore`]
 - [`Isa`]
@@ -508,6 +518,7 @@ Operators likely to succeed for each go type:
 - [`Code`]
 - [`Contains`]
 - [`ContainsKey`]
+- [`Delay`]
 - [`Empty`]
 - [`Ignore`]
 - [`Isa`]
@@ -542,6 +553,7 @@ Operators likely to succeed for each go type:
 - [`Between`] only [`time.Time`]
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Gt`] only [`time.Time`]
 - [`Gte`] only [`time.Time`]
 - [`Ignore`]
@@ -586,6 +598,7 @@ listed below:
 - [`Bag`] only ptr on array/slice
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Empty`] only ptr on array/slice/map/string
 - [`Ignore`]
 - [`Isa`]
@@ -628,6 +641,7 @@ listed below:
 - [`Cap`]
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Empty`]
 - [`Ignore`]
 - [`Isa`]
@@ -652,6 +666,7 @@ listed below:
 - [`Any`]
 - [`Catch`]
 - [`Code`]
+- [`Delay`]
 - [`Ignore`]
 - [`Isa`]
 - [`Lax`]
