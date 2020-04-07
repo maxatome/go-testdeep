@@ -3,7 +3,7 @@ title = "td.T type"
 weight = 50
 +++
 
-Last, [`testing.T`](https://golang.org/pkg/testing/#T) can be
+[`testing.T`](https://golang.org/pkg/testing/#T) can also be
 encapsulated in [`td.T` type]({{< ref "functions/td-t" >}}),
 simplifying again the test:
 

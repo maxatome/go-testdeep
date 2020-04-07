@@ -32,4 +32,7 @@
 // should now be used, in preference of older, but still supported:
 //
 //   import td "github.com/maxatome/go-testdeep"
+//
+// For easy HTTP API testing, see
+// https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp
 package testdeep // import "github.com/maxatome/go-testdeep"

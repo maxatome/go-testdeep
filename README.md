@@ -29,6 +29,8 @@ go-testdeep
 
 ## Latest news
 
+- 2020/04/11:
+  - [`tdhttp`] helper (the HTTP API tester) enhanced and fully documented;
 - 2020/04/06:
   - new [`Delay`] operator;
 - 2020/02/29:
@@ -100,7 +102,7 @@ func TestMyFunc(tt *testing.T) {
 }
 ```
 
-To most complex one, allowing to easily test golang API routes, using
+To most complex one, allowing to easily test HTTP API routes, using
 flexible [operators](https://go-testdeep.zetta.rocks/operators/):
 
 ```go
@@ -123,15 +125,12 @@ func TestMyApi(t *testing.T) {
   var id uint64
   var createdAt time.Time
 
-  beforeCreate := time.Now().Truncate(0)
+  testAPI := tdhttp.NewTestAPI(t, myAPI) // ← ①
 
-  tdhttp.CmpJSONResponse(td.NewT(t).FailureIsFatal(), // ← t.Fatal() if test fails
-    tdhttp.PostJSON("/person", Person{Name: "Bob", Age: 42}), // ← the request
-    myAPI.ServeHTTP, // ← the API handler
-    tdhttp.Response{ // ← the expected response
-      Status: http.StatusCreated,
-      // Header can be tested too… See tdhttp doc.
-      Body: td.JSON(`
+  testAPI.PostJSON("/person", Person{Name: "Bob", Age: 42}). // ← ②
+    Name("Create a new Person").
+    CmpStatus(http.StatusCreated). // ← ③
+    CmpJSONBody(td.JSON(`
 // Note that comments are allowed
 {
   "id":         $id,          // set by the API/DB
@@ -139,20 +138,41 @@ func TestMyApi(t *testing.T) {
   "age":        42,
   "created_at": "$createdAt", // set by the API/DB
 }`,
-        td.Tag("id", td.Catch(&id, td.NotZero())), // catch $id and check ≠ 0
-        td.Tag("created_at", td.All( // ← All combines several operators like a AND
-          td.HasSuffix("Z"), // check the RFC3339 $created_at date ends with "Z"
-          td.Smuggle(func(s string) (time.Time, error) { // convert to time.Time
-            return time.Parse(time.RFC3339Nano, s)
-          }, td.Catch(&createdAt, td.Gte(beforeCreate))), // catch it and check ≥ beforeCreate
-        )),
-      ),
-    },
-    "Create a new Person")
-
-  t.Logf("The new Person ID is %d and was created at %s", id, createdAt)
+      td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ④
+      td.Tag("created_at", td.All(                      // ← ⑤
+        td.HasSuffix("Z"),                              // ← ⑥
+        td.Smuggle(func(s string) (time.Time, error) {  // ← ⑦
+          return time.Parse(time.RFC3339Nano, s)
+        }, td.Catch(&createdAt, td.Between(testAPI.SentAt(), time.Now()))), // ← ⑧
+      )),
+    ))
+  if !testAPI.Failed() {
+    t.Logf("The new Person ID is %d and was created at %s", id, createdAt)
+  }
 }
 ```
+
+1. the API handler ready to be tested;
+2. the POST request with automatic JSON marshalling;
+3. the expected response HTTP status should be `http.StatusCreated`
+   and the line just below, the body should match the [`JSON`] operator;
+4. for the `$id` placeholder, [`Catch`] its
+   value: put it in `id` variable and check it is [`NotZero`];
+5. for the `$created_at` placeholder, use the [`All`]
+   operator. It combines several operators like a AND;
+6. check that `$created_at` date ends with "Z" using
+   [`HasSuffix`]. As we expect a RFC3339
+   date, we require it in UTC time zone;
+7. convert `$created_at` date into a `time.Time` using a custom
+   function thanks to the [`Smuggle`] operator;
+8. then [`Catch`] the resulting value: put it in
+   `createdAt` variable and check it is greater or equal than
+   `testAPI.SentAt()` (the time just before the request is handled) and lesser
+   or equal than `time.Now()`.
+
+See [`tdhttp`] helper or the
+[FAQ](https://go-testdeep.zetta.rocks/faq/#what-about-testing-the-response-using-my-api)
+for details about HTTP API testing.
 
 Example of produced error in case of mismatch:
 

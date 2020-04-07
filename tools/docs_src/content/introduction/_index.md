@@ -58,8 +58,10 @@ func TestMyFunc(tt *testing.T) {
 }
 ```
 
-To most complex one, allowing to easily test golang API routes, using
-flexible [operators]({{< ref "operators" >}}):
+To most complex one, allowing to easily test HTTP API routes, using
+flexible [operators]({{< ref "operators" >}}) and the
+[`tdhttp`](https://godoc.org/github.com/maxatome/go-testdeep/td/helpers/tdhttp)
+helper:
 
 ```go
 import (
@@ -81,15 +83,12 @@ func TestMyApi(t *testing.T) {
   var id uint64
   var createdAt time.Time
 
-  beforeCreate := time.Now().Truncate(0)
+  testAPI := tdhttp.NewTestAPI(t, myAPI) // ← ①
 
-  ok := tdhttp.CmpJSONResponse(t,
-    tdhttp.PostJSON("/person", Person{Name: "Bob", Age: 42}), // ← ①
-    myAPI.ServeHTTP,                                      // ← ②
-    tdhttp.Response{                                      // ← ③
-      Status: http.StatusCreated,
-      // Header can be tested too… See tdhttp doc.
-      Body: td.JSON(`
+  testAPI.PostJSON("/person", Person{Name: "Bob", Age: 42}). // ← ②
+    Name("Create a new Person").
+    CmpStatus(http.StatusCreated). // ← ③
+    CmpJSONBody(td.JSON(`
 // Note that comments are allowed
 {
   "id":         $id,          // set by the API/DB
@@ -97,40 +96,39 @@ func TestMyApi(t *testing.T) {
   "age":        42,
   "created_at": "$createdAt", // set by the API/DB
 }`,
-        td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ④
-        td.Tag("created_at", td.All(                      // ← ⑤
-          td.HasSuffix("Z"),                              // ← ⑥
-          td.Smuggle(func(s string) (time.Time, error) {  // ← ⑦
-            return time.Parse(time.RFC3339Nano, s)
-          }, td.Catch(&createdAt, td.Gte(beforeCreate))), // ← ⑧
-        )),
-      ),
-    },
-    "Create a new Person")
-  if ok {
+      td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ④
+      td.Tag("created_at", td.All(                      // ← ⑤
+        td.HasSuffix("Z"),                              // ← ⑥
+        td.Smuggle(func(s string) (time.Time, error) {  // ← ⑦
+          return time.Parse(time.RFC3339Nano, s)
+        }, td.Catch(&createdAt, td.Between(testAPI.SentAt(), time.Now()))), // ← ⑧
+      )),
+    ))
+  if !testAPI.Failed() {
     t.Logf("The new Person ID is %d and was created at %s", id, createdAt)
   }
 }
 ```
 
+1. the API handler ready to be tested;
 1. the POST request with automatic JSON marshalling;
-2.  the API handler;
-3. the expected response: HTTP status should be `http.StatusCreated`
-   and the body should match the [`JSON`]({{< ref "JSON" >}})
-   operator;
-4. for the `$id` placeholder, [`Catch`]({{< ref "Catch" >}}) its
+1. the expected response HTTP status should be `http.StatusCreated`
+   and the line just below, the body should match the
+   [`JSON`]({{< ref "JSON" >}}) operator;
+1. for the `$id` placeholder, [`Catch`]({{< ref "Catch" >}}) its
    value: put it in `id` variable and check it is
    [`NotZero`]({{< ref "NotZero" >}});
-5. for the `$created_at` placeholder, use the [`All`]({{< ref "All" >}})
+1. for the `$created_at` placeholder, use the [`All`]({{< ref "All" >}})
    operator. It combines several operators like a AND;
-6. check that `$created_at` date ends with "Z" using
+1. check that `$created_at` date ends with "Z" using
    [`HasSuffix`]({{< ref "HasSuffix" >}}). As we expect a RFC3339
    date, we require it in UTC time zone;
-7. convert `$created_at` date into a `time.Time` using a custom
+1. convert `$created_at` date into a `time.Time` using a custom
    function thanks to the [`Smuggle`]({{< ref "Smuggle" >}}) operator;
-8. then [`Catch`]({{< ref "Catch" >}}) the resulting value: put it in
+1. then [`Catch`]({{< ref "Catch" >}}) the resulting value: put it in
    `createdAt` variable and check it is greater or equal than
-   `beforeCreate` (set just before `tdhttp.CmpJSONResponse` call).
+   `testAPI.SentAt()` (the time just before the request is handled) and lesser
+   or equal than `time.Now()`.
 
 
 Example of produced error in case of mismatch:

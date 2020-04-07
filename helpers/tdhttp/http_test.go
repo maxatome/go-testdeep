@@ -10,11 +10,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"regexp"
 	"strings"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -27,6 +29,8 @@ type CmpResponseTest struct {
 }
 
 func TestCmpResponse(tt *testing.T) {
+	defer ctxerr.SaveColorState()()
+
 	handlerNonEmpty := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("X-TestDeep", "foobar")
 		w.WriteHeader(242)
@@ -107,9 +111,11 @@ func TestCmpResponse(tt *testing.T) {
 			Success:      false,
 			ExpectedResp: tdhttp.Response{Status: 243, Body: td.NotEmpty()},
 			ExpectedLogs: []string{
-				"status code should match",
-				"Raw received body:",
-				"text response", // check the complete body is shown
+				`~ Failed test 'status code should match'
+\s+Response.Status: values differ
+\s+got: 242
+\s+expected: 243`,
+				" Raw received body: `text response\n", // check the complete body is shown
 			},
 		},
 		{
@@ -118,9 +124,11 @@ func TestCmpResponse(tt *testing.T) {
 			Success:      false,
 			ExpectedResp: tdhttp.Response{Body: "BAD!"},
 			ExpectedLogs: []string{
-				"Failed test 'body contents is OK'",
-				`*Response.Body: values differ`,
-				"text response", // check the response is shown
+				`~ Failed test 'body contents is OK'
+\s+Response.Body: values differ
+\s+got: \x60text response
+\s+\x60
+\s+expected: "BAD!"`,
 			},
 		},
 		{
@@ -129,18 +137,26 @@ func TestCmpResponse(tt *testing.T) {
 			Success:      false,
 			ExpectedResp: tdhttp.Response{},
 			ExpectedLogs: []string{
-				"Failed test 'body should be empty'",
-				"text response", // check the response is shown
+				`~ Failed test 'body should be empty'
+\s+Response.Body: not empty
+\s+got: (?s:.*?)
+\s+expected: empty`,
+				"text response", // check the response is shown (in got:)
 			},
 		},
 		{
-			Name:         "bad header",
-			Handler:      handlerNonEmpty,
-			Success:      false,
-			ExpectedResp: tdhttp.Response{Header: http.Header{"X-Testdeep": []string{"zzz"}}},
+			Name:    "bad header",
+			Handler: handlerNonEmpty,
+			Success: false,
+			ExpectedResp: tdhttp.Response{
+				Header: http.Header{"X-Testdeep": []string{"zzz"}},
+				Body:   td.NotEmpty(),
+			},
 			ExpectedLogs: []string{
-				"Failed test 'header should match'",
-				`Response.Header["X-Testdeep"][0]: values differ`,
+				`~ Failed test 'header should match'
+\s+Response.Header\["X-Testdeep"\]\[0\]: values differ
+\s+got: "foobar"
+\s+expected: "zzz"`,
 			},
 		},
 		{
@@ -149,10 +165,11 @@ func TestCmpResponse(tt *testing.T) {
 			Success:      false,
 			ExpectedResp: tdhttp.Response{Body: 123},
 			ExpectedLogs: []string{
-				"Failed test 'body unmarshaling'",
-				"unmarshal(Response.Body): should NOT be an error",
-				"Raw received body:",
-				"text response", // check the complete body is shown
+				`~ Failed test 'body unmarshaling'
+\s+unmarshal\(Response\.Body\): should NOT be an error
+\s+got: .*Cmp(Response|Body) only accepts expected(Resp\.)?Body be a \[\]byte, a string or a TestDeep operator allowing to match these types, but not type int.*
+\s+expected: nil`,
+				" Raw received body: `text response\n", // check the complete body is shown
 			},
 		},
 		// Empty success
@@ -173,13 +190,21 @@ func TestCmpResponse(tt *testing.T) {
 			Success:      false,
 			ExpectedResp: tdhttp.Response{Body: "NOT EMPTY!"},
 			ExpectedLogs: []string{
-				"Failed test 'body should not be empty'",
+				`~ Failed test 'body contents is OK'
+\s+Response.Body: values differ
+\s+got: ""
+\s+expected: "NOT EMPTY!"`,
 			},
 		},
 	} {
 		t.RunT(curTest.Name,
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpResponse, "CmpResponse", curTest)
+			})
+
+		t.RunT(curTest.Name+" TestAPI",
+			func(t *td.T) {
+				testTestAPI(t, (*tdhttp.TestAPI).CmpBody, "CmpBody", curTest)
 			})
 	}
 }
@@ -228,16 +253,22 @@ func TestCmpJSONResponse(tt *testing.T) {
 				Body: 123,
 			},
 			ExpectedLogs: []string{
-				"Failed test 'body unmarshaling'",
-				"unmarshal(Response.Body): should NOT be an error",
-				"Raw received body:",
-				`{"name":"Bob"}`, // check the complete body is shown
+				`~ Failed test 'body unmarshaling'
+\s+unmarshal\(Response\.Body\): should NOT be an error
+\s+got: .*cannot unmarshal object into Go value of type int.*
+\s+expected: nil`,
+				`~ Raw received body: \x60\{"name":"Bob"\}\n\s+\x60`, // check the complete body is shown
 			},
 		},
 	} {
 		t.RunT(curTest.Name,
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpJSONResponse, "CmpJSONResponse", curTest)
+			})
+
+		t.RunT(curTest.Name+" TestAPI",
+			func(t *td.T) {
+				testTestAPI(t, (*tdhttp.TestAPI).CmpJSONBody, "CmpJSONBody", curTest)
 			})
 	}
 }
@@ -366,10 +397,11 @@ func TestCmpXMLResponse(tt *testing.T) {
 				Body: func() {},
 			},
 			ExpectedLogs: []string{
-				"Failed test 'body unmarshaling'",
-				"unmarshal(Response.Body): should NOT be an error",
-				"Raw received body:",
-				`<XResp><name>Bob</name></XResp>`, // check the complete body is shown
+				`~ Failed test 'body unmarshaling'
+\s+unmarshal\(Response\.Body\): should NOT be an error
+\s+got: .*unknown type func\(\).*
+\s+expected: nil`,
+				`~ Raw received body: \x60<XResp><name>Bob</name></XResp>\n\s+\x60`, // check the complete body is shown
 			},
 		},
 	} {
@@ -377,6 +409,34 @@ func TestCmpXMLResponse(tt *testing.T) {
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpXMLResponse, "CmpXMLResponse", curTest)
 			})
+
+		t.RunT(curTest.Name+" TestAPI",
+			func(t *td.T) {
+				testTestAPI(t, (*tdhttp.TestAPI).CmpXMLBody, "CmpXMLBody", curTest)
+			})
+	}
+}
+
+func testLogs(t *td.T, mockT *tdutil.T, curTest CmpResponseTest) {
+	t.Helper()
+
+	dumpLogs := !t.Cmp(mockT.Failed(), !curTest.Success, "test failure")
+
+	for _, expectedLog := range curTest.ExpectedLogs {
+		if strings.HasPrefix(expectedLog, "~") {
+			re := regexp.MustCompile(expectedLog[1:])
+			if !re.MatchString(mockT.LogBuf()) {
+				t.Errorf(`logs do not match "%s" regexp`, re)
+				dumpLogs = true
+			}
+		} else if !strings.Contains(mockT.LogBuf(), expectedLog) {
+			t.Errorf(`"%s" not found in test logs`, expectedLog)
+			dumpLogs = true
+		}
+	}
+
+	if dumpLogs {
+		t.Errorf(`Test logs: "%s"`, mockT.LogBuf())
 	}
 }
 
@@ -395,18 +455,34 @@ func testCmpResponse(t *td.T,
 		curTest.ExpectedResp),
 		curTest.Success)
 
-	dumpLogs := !t.Cmp(mockT.Failed(), !curTest.Success)
+	testLogs(t, mockT, curTest)
+}
 
-	for _, expectedLog := range curTest.ExpectedLogs {
-		if !strings.Contains(mockT.LogBuf(), expectedLog) {
-			t.Errorf(`"%s" not found in test logs`, expectedLog)
-			dumpLogs = true
-		}
+func testTestAPI(t *td.T,
+	cmpBody func(*tdhttp.TestAPI, interface{}) *tdhttp.TestAPI,
+	cmpName string,
+	curTest CmpResponseTest,
+) {
+	t.Helper()
+
+	mockT := tdutil.NewT(cmpName)
+
+	ta := tdhttp.NewTestAPI(mockT, http.HandlerFunc(curTest.Handler)).
+		Get("/path")
+
+	if curTest.ExpectedResp.Status != nil {
+		ta.CmpStatus(curTest.ExpectedResp.Status)
 	}
 
-	if dumpLogs {
-		t.Errorf(`Test logs: "%s"`, mockT.LogBuf())
+	if curTest.ExpectedResp.Header != nil {
+		ta.CmpHeader(curTest.ExpectedResp.Header)
 	}
+
+	cmpBody(ta, curTest.ExpectedResp.Body)
+
+	t.Cmp(ta.Failed(), !curTest.Success)
+
+	testLogs(t, mockT, curTest)
 }
 
 func TestMux(t *testing.T) {
@@ -632,7 +708,7 @@ func TestMux(t *testing.T) {
 			t.Contains(mockT.LogBuf(),
 				"Cannot guess the body expected type as Any TestDeep")
 			t.Contains(mockT.LogBuf(),
-				"You can try All(Isa(EXPECTED_TYPE), Any(...)) to disambiguate")
+				"You can try All(Isa(EXPECTED_TYPE), Any(…)) to disambiguate…")
 			t.Contains(mockT.LogBuf(), "Raw received body:")
 		})
 	})
