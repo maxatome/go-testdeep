@@ -255,11 +255,18 @@ func (t *T) initAnchors() {
 		if name != "" {
 			// Do not record a finalizer if no name (should not happen
 			// except perhaps in tests)
-			runtime.SetFinalizer(t.TestingFT, func(t TestingFT) {
+			finalize := func() {
 				allAnchorsMu.Lock()
 				defer allAnchorsMu.Unlock()
 				delete(allAnchors, name)
-			})
+			}
+
+			// From go 1.14, use Cleanup() method
+			if tc, ok := t.TestingFT.(interface{ Cleanup(func()) }); ok {
+				tc.Cleanup(finalize)
+			} else {
+				runtime.SetFinalizer(t.TestingFT, func(t TestingFT) { finalize() })
+			}
 		}
 	}
 }
