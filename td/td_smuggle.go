@@ -426,6 +426,10 @@ func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	case 2:
 		// (value, error)
 		if ret[1].Kind() == reflect.Interface {
+			// For internal use only
+			if cErr, ok := ret[1].Interface().(*ctxerr.Error); ok {
+				return ctx.CollectError(cErr)
+			}
 			reason = ret[1].Interface().(error).Error()
 		}
 		// (value, false)

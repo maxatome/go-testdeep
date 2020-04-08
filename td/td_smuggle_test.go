@@ -13,6 +13,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -224,6 +225,20 @@ func TestSmuggle(t *testing.T) {
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil"),
 			Expected: mustBe("(int64) 13"),
+		})
+
+	// Internal use
+	checkError(t, 12,
+		td.Smuggle(func(n int) (int, error) {
+			return n, &ctxerr.Error{
+				Message: "my message",
+				Summary: ctxerr.NewSummary("my summary"),
+			}
+		}, 13),
+		expectedError{
+			Message: mustBe("my message"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("my summary"),
 		})
 
 	//
