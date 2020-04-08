@@ -281,7 +281,7 @@ func TestStruct(t *testing.T) {
 				"ValBool": false,
 			}).String(),
 		`Struct(td_test.MyStruct{
-  ValBool: (bool) false
+  ValBool: false
   ValInt: 123
   ValStr: "foobar"
 })`)
@@ -297,7 +297,7 @@ func TestStruct(t *testing.T) {
 				"ValBool": false,
 			}).String(),
 		`Struct(*td_test.MyStruct{
-  ValBool: (bool) false
+  ValBool: false
   ValInt: 123
   ValStr: "foobar"
 })`)
@@ -736,7 +736,7 @@ func TestSStruct(t *testing.T) {
 			}).String(),
 		`SStruct(td_test.MyStruct{
   Ptr: (*int)(<nil>)
-  ValBool: (bool) false
+  ValBool: false
   ValInt: 123
   ValStr: "foobar"
 })`)
@@ -753,7 +753,7 @@ func TestSStruct(t *testing.T) {
 			}).String(),
 		`SStruct(*td_test.MyStruct{
   Ptr: (*int)(<nil>)
-  ValBool: (bool) false
+  ValBool: false
   ValInt: 123
   ValStr: "foobar"
 })`)
@@ -762,7 +762,7 @@ func TestSStruct(t *testing.T) {
 		td.SStruct(&MyStruct{}, td.StructFields{}).String(),
 		`SStruct(*td_test.MyStruct{
   Ptr: (*int)(<nil>)
-  ValBool: (bool) false
+  ValBool: false
   ValInt: 0
   ValStr: ""
 })`)
