@@ -385,11 +385,15 @@ func ExampleCmpContains_arraySlice() {
 	ok = td.CmpContains(t, []int{11, 22, 33, 44}, td.Between(20, 25))
 	fmt.Println("slice contains at least one item in [20 .. 25]:", ok)
 
+	ok = td.CmpContains(t, []int{11, 22, 33, 44}, []int{22, 33})
+	fmt.Println("slice contains the sub-slice [22, 33]:", ok)
+
 	// Output:
 	// array contains 22: true
 	// array contains at least one item in [20 .. 25]: true
 	// slice contains 22: true
 	// slice contains at least one item in [20 .. 25]: true
+	// slice contains the sub-slice [22, 33]: true
 }
 
 func ExampleCmpContains_nil() {
@@ -439,6 +443,9 @@ func ExampleCmpContains_string() {
 	ok := td.CmpContains(t, got, "oob", "checks %s", got)
 	fmt.Println("contains `oob` string:", ok)
 
+	ok = td.CmpContains(t, got, []byte("oob"), "checks %s", got)
+	fmt.Println("contains `oob` []byte:", ok)
+
 	ok = td.CmpContains(t, got, 'b', "checks %s", got)
 	fmt.Println("contains 'b' rune:", ok)
 
@@ -450,6 +457,7 @@ func ExampleCmpContains_string() {
 
 	// Output:
 	// contains `oob` string: true
+	// contains `oob` []byte: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// contains at least one character ['n' .. 'p']: true
@@ -494,8 +502,6 @@ func ExampleCmpContains_error() {
 	ok = td.CmpContains(t, got, byte('a'), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = td.CmpContains(t, got, td.Between('n', 'p'), "checks %s", got)
 	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 

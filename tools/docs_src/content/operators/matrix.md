@@ -18,7 +18,7 @@ weight: 1
 | [`Cap`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | [`Cap`] |
 | [`Catch`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Catch`] |
 | [`Code`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Code`] |
-| [`Contains`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`Contains`] |
+| [`Contains`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`Contains`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
@@ -584,6 +584,7 @@ As all operators accept interface values, only specific interfaces are
 listed below:
 
 <!-- go-if-matrix:begin -->
+- [`Contains`] → [`fmt.Stringer`]/[`error`]
 - [`HasPrefix`] → [`fmt.Stringer`]/[`error`]
 - [`HasSuffix`] → [`fmt.Stringer`]/[`error`]
 - [`Re`] → [`fmt.Stringer`]/[`error`]

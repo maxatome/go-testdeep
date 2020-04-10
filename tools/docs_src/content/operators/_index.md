@@ -35,7 +35,7 @@ weight = 15
 : checks using a custom function
 
 [`Contains`]({{< ref "Contains" >}})
-: checks that a string, [`error`] or [`fmt.Stringer`] interfaces contain a sub-string; or an array, slice or map contain a value
+: checks that a string, `[]byte`, [`error`] or [`fmt.Stringer`] interfaces contain a rune, byte or a sub-string; or a slice contains a single value or a sub-slice; or an array or map contain a single value
 
 [`ContainsKey`]({{< ref "ContainsKey" >}})
 : checks that a map contains a key
@@ -205,7 +205,7 @@ The following operators are smuggler ones:
 : catches data on the fly before comparing it
 
 [`Contains`]({{< ref "Contains" >}})
-: checks that a string, [`error`] or [`fmt.Stringer`] interfaces contain a sub-string; or an array, slice or map contain a value
+: checks that a string, `[]byte`, [`error`] or [`fmt.Stringer`] interfaces contain a rune, byte or a sub-string; or a slice contains a single value or a sub-slice; or an array or map contain a single value
 
 [`ContainsKey`]({{< ref "ContainsKey" >}})
 : checks that a map contains a key
