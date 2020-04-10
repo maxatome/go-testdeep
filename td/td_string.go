@@ -33,6 +33,12 @@ func getString(ctx ctxerr.Context, got reflect.Value) (string, *ctxerr.Error) {
 	case reflect.String:
 		return got.String(), nil
 
+	case reflect.Slice:
+		if got.Type().Elem() == uint8Type {
+			return string(got.Bytes()), nil
+		}
+		fallthrough
+
 	default:
 		if got.CanInterface() {
 			switch iface := got.Interface().(type) {
@@ -51,7 +57,7 @@ func getString(ctx ctxerr.Context, got reflect.Value) (string, *ctxerr.Error) {
 		Message: "bad type",
 		Got:     types.RawString(got.Type().String()),
 		Expected: types.RawString(
-			"string (convertible) OR fmt.Stringer OR error"),
+			"string (convertible) OR []byte (convertible) OR fmt.Stringer OR error"),
 	})
 }
 
@@ -61,13 +67,13 @@ type tdString struct {
 
 var _ TestDeep = &tdString{}
 
-// summary(String): checks a string, error or fmt.Stringer
+// summary(String): checks a string, []byte, error or fmt.Stringer
 // interfaces string contents
-// input(String): str,if(✓ + fmt.Stringer/error)
+// input(String): str,slice([]byte),if(✓ + fmt.Stringer/error)
 
-// String operator allows to compare a string (or convertible), error
-// or fmt.Stringer interface (error interface is tested before
-// fmt.Stringer.)
+// String operator allows to compare a string (or convertible), []byte
+// (or convertible), error or fmt.Stringer interface (error interface
+// is tested before fmt.Stringer).
 //
 //   err := errors.New("error!")
 //   td.Cmp(t, err, td.String("error!")) // succeeds
@@ -109,13 +115,15 @@ type tdHasPrefix struct {
 
 var _ TestDeep = &tdHasPrefix{}
 
-// summary(HasPrefix): checks the prefix of a string, error or
+// summary(HasPrefix): checks the prefix of a string, []byte, error or
 // fmt.Stringer interfaces
-// input(HasPrefix): str,if(✓ + fmt.Stringer/error)
+// input(HasPrefix): str,slice([]byte),if(✓ + fmt.Stringer/error)
 
 // HasPrefix operator allows to compare the prefix of a string (or
-// convertible), error or fmt.Stringer interface (error interface is
-// tested before fmt.Stringer.)
+// convertible), []byte (or convertible), error or fmt.Stringer
+// interface (error interface is tested before fmt.Stringer).
+//
+//   td.Cmp(t, []byte("foobar"), td.HasPrefix("foo")) // succeeds
 //
 //   type Foobar string
 //   td.Cmp(t, Foobar("foobar"), td.HasPrefix("foo")) // succeeds
@@ -160,13 +168,15 @@ type tdHasSuffix struct {
 
 var _ TestDeep = &tdHasSuffix{}
 
-// summary(HasSuffix): checks the suffix of a string, error or
+// summary(HasSuffix): checks the suffix of a string, []byte, error or
 // fmt.Stringer interfaces
-// input(HasSuffix): str,if(✓ + fmt.Stringer/error)
+// input(HasSuffix): str,slice([]byte),if(✓ + fmt.Stringer/error)
 
 // HasSuffix operator allows to compare the suffix of a string (or
-// convertible), error or fmt.Stringer interface (error interface is
-// tested before fmt.Stringer.)
+// convertible), []byte (or convertible), error or fmt.Stringer
+// interface (error interface is tested before fmt.Stringer).
+//
+//   td.Cmp(t, []byte("foobar"), td.HasSuffix("bar")) // succeeds
 //
 //   type Foobar string
 //   td.Cmp(t, Foobar("foobar"), td.HasSuffix("bar")) // succeeds

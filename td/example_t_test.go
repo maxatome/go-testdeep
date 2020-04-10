@@ -470,16 +470,14 @@ func ExampleT_Contains_stringer() {
 	ok = t.Contains(got, byte('a'), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = t.Contains(got, td.Between('n', 'p'), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 }
 
 func ExampleT_Contains_error() {
@@ -499,13 +497,13 @@ func ExampleT_Contains_error() {
 	// Be careful! TestDeep operators in Contains() do not work with
 	// fmt.Stringer nor error interfaces
 	ok = t.Contains(got, td.Between('n', 'p'), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 }
 
 func ExampleT_ContainsKey() {
@@ -712,10 +710,14 @@ func ExampleT_HasPrefix() {
 	got := "foobar"
 
 	ok := t.HasPrefix(got, "foo", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = t.Cmp([]byte(got), td.HasPrefix("foo"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 }
 
 func ExampleT_HasPrefix_stringer() {
@@ -749,10 +751,14 @@ func ExampleT_HasSuffix() {
 	got := "foobar"
 
 	ok := t.HasSuffix(got, "bar", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = t.Cmp([]byte(got), td.HasSuffix("bar"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 }
 
 func ExampleT_HasSuffix_stringer() {
@@ -2269,10 +2275,14 @@ func ExampleT_String() {
 	got := "foobar"
 
 	ok := t.String(got, "foobar", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = t.Cmp([]byte(got), td.String("foobar"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 }
 
 func ExampleT_String_stringer() {

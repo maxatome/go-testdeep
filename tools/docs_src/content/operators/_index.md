@@ -53,10 +53,10 @@ weight = 15
 : checks that a number, string or [`time.Time`] is greater or equal than a value
 
 [`HasPrefix`]({{< ref "HasPrefix" >}})
-: checks the prefix of a string, [`error`] or [`fmt.Stringer`] interfaces
+: checks the prefix of a string, `[]byte`, [`error`] or [`fmt.Stringer`] interfaces
 
 [`HasSuffix`]({{< ref "HasSuffix" >}})
-: checks the suffix of a string, [`error`] or [`fmt.Stringer`] interfaces
+: checks the suffix of a string, `[]byte`, [`error`] or [`fmt.Stringer`] interfaces
 
 [`Ignore`]({{< ref "Ignore" >}})
 : allows to ignore a comparison
@@ -146,7 +146,7 @@ weight = 15
 : strictly compares the contents of a struct or a pointer on a struct
 
 [`String`]({{< ref "String" >}})
-: checks a string, [`error`] or [`fmt.Stringer`] interfaces string contents
+: checks a string, `[]byte`, [`error`] or [`fmt.Stringer`] interfaces string contents
 
 [`Struct`]({{< ref "Struct" >}})
 : compares the contents of a struct or a pointer on a struct

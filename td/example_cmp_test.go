@@ -470,16 +470,14 @@ func ExampleCmpContains_stringer() {
 	ok = td.CmpContains(t, got, byte('a'), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = td.CmpContains(t, got, td.Between('n', 'p'), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 }
 
 func ExampleCmpContains_error() {
@@ -499,13 +497,13 @@ func ExampleCmpContains_error() {
 	// Be careful! TestDeep operators in Contains() do not work with
 	// fmt.Stringer nor error interfaces
 	ok = td.CmpContains(t, got, td.Between('n', 'p'), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 }
 
 func ExampleCmpContainsKey() {
@@ -712,10 +710,14 @@ func ExampleCmpHasPrefix() {
 	got := "foobar"
 
 	ok := td.CmpHasPrefix(t, got, "foo", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = td.Cmp(t, []byte(got), td.HasPrefix("foo"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 }
 
 func ExampleCmpHasPrefix_stringer() {
@@ -749,10 +751,14 @@ func ExampleCmpHasSuffix() {
 	got := "foobar"
 
 	ok := td.CmpHasSuffix(t, got, "bar", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = td.Cmp(t, []byte(got), td.HasSuffix("bar"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 }
 
 func ExampleCmpHasSuffix_stringer() {
@@ -2269,10 +2275,14 @@ func ExampleCmpString() {
 	got := "foobar"
 
 	ok := td.CmpString(t, got, "foobar", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = td.Cmp(t, []byte(got), td.String("foobar"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 }
 
 func ExampleCmpString_stringer() {
