@@ -60,6 +60,8 @@ type ContextConfig struct {
 	BeLax bool
 }
 
+// Equal returns true if both ContextConfig are equal. Only public
+// fields are taken into account to check equality.
 func (c ContextConfig) Equal(o ContextConfig) bool {
 	return c.RootName == o.RootName &&
 		c.MaxErrors == o.MaxErrors &&

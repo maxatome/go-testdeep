@@ -12,10 +12,13 @@ import (
 )
 
 var (
-	ErrTagEmpty   = errors.New("A tag cannot be empty")
+	// ErrTagEmpty is the error returned by CheckTag for an empty tag.
+	ErrTagEmpty = errors.New("A tag cannot be empty")
+	// ErrTagInvalid is the error returned by CheckTag for an invalid tag.
 	ErrTagInvalid = errors.New("Invalid tag, should match (Letter|_)(Letter|_|Number)*")
 )
 
+// CheckTag checks that tag is a valid tag (see operator Tag) or not.
 func CheckTag(tag string) error {
 	if tag == "" {
 		return ErrTagEmpty

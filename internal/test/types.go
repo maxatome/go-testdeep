@@ -19,6 +19,7 @@ type TestingT struct {
 	HasFailed   bool
 }
 
+// NewTestingT returns a new instance of *TestingT.
 func NewTestingT() *TestingT {
 	return &TestingT{}
 }
@@ -49,6 +50,7 @@ type TestingFT struct {
 	name string
 }
 
+// NewTestingFT returns a new instance of *TestingFT.
 func NewTestingFT(name string) *TestingFT {
 	return &TestingFT{name: name}
 }

@@ -24,6 +24,8 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
+// TestAPI allows to test one HTTP API. See NewTestAPI function to
+// create a new instance and get some examples of use.
 type TestAPI struct {
 	t       *td.T
 	handler http.Handler
@@ -644,7 +646,7 @@ func (t *TestAPI) CmpXMLBody(expectedBody interface{}) *TestAPI {
 	return t.CmpMarshaledBody(xml.Unmarshal, expectedBody)
 }
 
-// CmpNoBody tests that the last request response body is empty.
+// NoBody tests that the last request response body is empty.
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) NoBody() *TestAPI {
