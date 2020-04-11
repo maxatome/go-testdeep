@@ -66,7 +66,7 @@ td.Cmp(t, "0029",
 ```
 
 Instead of returning (X, `bool`) or (X, `bool`, `string`), *fn* can
-return (X, [`error`](https://golang.org/pkg/builtin/#error)). When a problem occurs, the returned [`error`](https://golang.org/pkg/builtin/#error) is
+return (X, [`error`](https://pkg.go.dev/builtin/#error)). When a problem occurs, the returned [`error`](https://pkg.go.dev/builtin/#error) is
 non-`nil`, as in:
 
 ```go
@@ -96,7 +96,7 @@ td.Cmp(t, time.Date(2015, time.May, 1, 1, 2, 3, 0, time.UTC),
 
 In this case the data location forwarded to next test will be
 something like "DATA.MyTimeField<smuggled>", but you can act on it
-too by returning a [`SmuggledGot`](https://godoc.org/github.com/maxatome/go-testdeep/td#SmuggledGot) struct (by value or by address):
+too by returning a [`SmuggledGot`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot) struct (by value or by address):
 
 ```go
 td.Cmp(t, time.Date(2015, time.May, 1, 1, 2, 3, 0, time.UTC),
@@ -114,7 +114,7 @@ then the data location forwarded to next test will be something like
 "DATA.MyTimeField") and the returned Name "Year" is automatically
 added when Name starts with a Letter.
 
-Note that [`SmuggledGot`](https://godoc.org/github.com/maxatome/go-testdeep/td#SmuggledGot) and [`*SmuggledGot`](https://godoc.org/github.com/maxatome/go-testdeep/td#SmuggledGot) returns are treated equally,
+Note that [`SmuggledGot`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot) and [`*SmuggledGot`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot) returns are treated equally,
 and they are only used when *fn* has only one returned value or
 when the second boolean returned value is true.
 
@@ -195,12 +195,12 @@ output type is strict and must match exactly the expected value
 type. The fields-path `string` *fn* shortcut is not available with
 [`Code`]({{< ref "Code" >}}) operator.
 
-[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of only parameter of
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://pkg.go.dev/reflect/#Type) of only parameter of
 *fn*. For the case where *fn* is a fields-path, it is always
 `interface{}`, as the type can not be known in advance.
 
 
-> See also [<i class='fas fa-book'></i> Smuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Smuggle).
+> See also [<i class='fas fa-book'></i> Smuggle godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Smuggle).
 
 ### Examples
 
@@ -459,12 +459,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSmuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSmuggle).
+> See also [<i class='fas fa-book'></i> CmpSmuggle godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpSmuggle).
 
 ### Examples
 
@@ -695,12 +695,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Smuggle godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Smuggle).
+> See also [<i class='fas fa-book'></i> T.Smuggle godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Smuggle).
 
 ### Examples
 

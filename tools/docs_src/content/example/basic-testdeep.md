@@ -3,7 +3,7 @@ title = "Basic go-testdeep approach"
 weight = 20
 +++
 
-[`td` package](https://godoc.org/github.com/maxatome/go-testdeep/td),
+[`td` package](https://pkg.go.dev/github.com/maxatome/go-testdeep/td),
 via its [`Cmp*`]({{< ref "functions" >}}) functions, handles the tests
 and all the error message boiler plate. Let's do it:
 

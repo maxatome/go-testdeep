@@ -62,7 +62,7 @@ func TestPerson(tt *testing.T) {
    expected parameter. It allows to match exactly some fields, and use
    [TestDeep operators]({{< ref "operators" >}}) on others. Here we
    know that `Name` field should always be "Bob";
-3. [`StructFields`](https://godoc.org/github.com/maxatome/go-testdeep/td#StructFields)
+3. [`StructFields`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#StructFields)
    is a map allowing to use [TestDeep operators]({{< ref "operators" >}})
    for any field;
 4. `ID` field should be ≠ 0. See [`NotZero`]({{< ref "NotZero" >}})
@@ -310,7 +310,7 @@ func TestResponseBody(t *testing.T) {
 
 ## What about testing the response using my API?
 
-[`tdhttp` helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
+[`tdhttp` helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)
 is done for that!
 
 ```golang
@@ -393,16 +393,16 @@ func TestMyApi(t *testing.T) {
    (set just before `tdhttp.NewTestAPI` call).
 
 If you prefer to do one function call instead of chaining methods as
-above, you can try [CmpJSONResponse](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
+above, you can try [CmpJSONResponse](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
 
 
 ## Arf, I use Gin Gonic, and so no `net/http` handlers
 
 It is exactly the same as for `net/http` handlers as [`*gin.Engine`
 implements `http.Handler`
-interface](https://godoc.org/github.com/gin-gonic/gin#Engine.ServeHTTP)!
+interface](https://pkg.go.dev/github.com/gin-gonic/gin#Engine.ServeHTTP)!
 So keep using
-[`tdhttp` helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp):
+[`tdhttp` helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp):
 
 ```go
 import (
@@ -471,12 +471,12 @@ func TestMyGinGonicApi(t *testing.T) {
    (set just before `tdhttp.NewTestAPI` call).
 
 If you prefer to do one function call instead of chaining methods as
-above, you can try [CmpJSONResponse](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
+above, you can try [CmpJSONResponse](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
 
 
 ## Fine, the request succeeds and the ID is not 0, but what is the ID real value?
 
-Stay with [`tdhttp` helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)!
+Stay with [`tdhttp` helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)!
 
 In fact you can [`Catch`]({{< ref "Catch" >}}) the `ID` before comparing
 it to 0 (as well as `CreatedAt` in fact). Try:
@@ -522,12 +522,12 @@ func TestMyGinGonicApi(t *testing.T) {
    (set just before `tdhttp.NewTestAPI` call).
 
 If you prefer to do one function call instead of chaining methods as
-above, you can try [CmpJSONResponse](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
+above, you can try [CmpJSONResponse](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
 
 
 ## OK, but how to be sure the response content is well JSONified?
 
-Again, [`tdhttp` helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
+Again, [`tdhttp` helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)
 is your friend!
 
 With the help of [`JSON`]({{< ref "JSON" >}}) operator of course! See
@@ -596,16 +596,16 @@ func TestMyGinGonicApi(t *testing.T) {
    `testAPI.SentAt()` (the time just before the request is handled).
 
 If you prefer to do one function call instead of chaining methods as
-above, you can try [CmpJSONResponse](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
+above, you can try [CmpJSONResponse](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
 
 
 ## My API use XML not JSON!
 
 [`tdhttp`
-helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
+helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)
 provides the same functions and methods for XML it does for JSON.
 
-[RTFM](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
+[RTFM](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)
 :)
 
 Note that the [`JSON`]({{< ref "JSON" >}}) operator have not its `XML`
@@ -840,8 +840,8 @@ to update corresponding `CmpFooBar` & `T.FooBar` examples.
 Test coverage must be 100%.
 
 
-[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp
+[`Cmp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp
 
-[`A`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.A
-[`Anchor`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.Anchor
-[`SetAnchorsPersist`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.SetAnchorsPersist
+[`A`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A
+[`Anchor`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor
+[`SetAnchorsPersist`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SetAnchorsPersist

@@ -7,13 +7,13 @@ weight: 10
 func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep
 ```
 
-[`TruncTime`]({{< ref "TruncTime" >}}) operator compares [`time.Time`](https://golang.org/pkg/time/#Time) (or assignable) values after
-truncating them to the optional *trunc* duration. See [`time.Truncate`](https://golang.org/pkg/time/#Truncate)
+[`TruncTime`]({{< ref "TruncTime" >}}) operator compares [`time.Time`](https://pkg.go.dev/time/#Time) (or assignable) values after
+truncating them to the optional *trunc* duration. See [`time.Truncate`](https://pkg.go.dev/time/#Truncate)
 for details about the truncation.
 
 If *trunc* is missing, it defaults to 0.
 
-During comparison, location does not matter as [`time.Equal`](https://golang.org/pkg/time/#Equal) method is
+During comparison, location does not matter as [`time.Equal`](https://pkg.go.dev/time/#Equal) method is
 used behind the scenes: a time instant in two different locations
 is the same time instant.
 
@@ -30,10 +30,10 @@ td.Cmp(t, gotDate, td.TruncTime(expected))              // fails, ns differ
 td.Cmp(t, gotDate, td.TruncTime(expected, time.Second)) // succeeds
 ```
 
-[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *expectedTime*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://pkg.go.dev/reflect/#Type) of *expectedTime*.
 
 
-> See also [<i class='fas fa-book'></i> TruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#TruncTime).
+> See also [<i class='fas fa-book'></i> TruncTime godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TruncTime).
 
 ### Examples
 
@@ -97,12 +97,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpTruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpTruncTime).
+> See also [<i class='fas fa-book'></i> CmpTruncTime godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpTruncTime).
 
 ### Examples
 
@@ -166,12 +166,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.TruncTime godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.TruncTime).
+> See also [<i class='fas fa-book'></i> T.TruncTime godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.TruncTime).
 
 ### Examples
 

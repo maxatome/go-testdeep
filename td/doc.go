@@ -23,7 +23,7 @@
 //
 // See https://go-testdeep.zetta.rocks/ for details, and for easy HTTP
 // API testing, see the tdhttp helper
-// https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp
+// https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp
 //
 // Example of use
 //
@@ -174,7 +174,7 @@
 //
 // Not only structs can be compared. A lot of operators can
 // be found below to cover most (all?) needed tests. See
-// https://godoc.org/github.com/maxatome/go-testdeep/td#TestDeep
+// https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TestDeep
 //
 // Using go-testdeep Cmp shortcuts
 //

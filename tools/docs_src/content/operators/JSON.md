@@ -12,9 +12,9 @@ against *expectedJSON*. *expectedJSON* can be a:
 
 - `string` containing JSON data like `{"fullname":"Bob","age":42}`
 - `string` containing a JSON filename, ending with ".json" (its
-  content is [`ioutil.ReadFile`](https://golang.org/pkg/ioutil/#ReadFile) before unmarshaling)
+  content is [`ioutil.ReadFile`](https://pkg.go.dev/ioutil/#ReadFile) before unmarshaling)
 - `[]byte` containing JSON data
-- [`io.Reader`](https://golang.org/pkg/io/#Reader) stream containing JSON data (is [`ioutil.ReadAll`](https://golang.org/pkg/ioutil/#ReadAll) before
+- [`io.Reader`](https://pkg.go.dev/io/#Reader) stream containing JSON data (is [`ioutil.ReadAll`](https://pkg.go.dev/ioutil/#ReadAll) before
   unmarshaling)
 
 
@@ -51,7 +51,7 @@ problem). It is just a matter of taste, double-quoting placeholders
 can be preferred when the JSON data has to conform to the JSON
 specification, like when used in a ".json" file.
 
-Note *expectedJSON* can be a `[]byte`, JSON filename or [`io.Reader`](https://golang.org/pkg/io/#Reader):
+Note *expectedJSON* can be a `[]byte`, JSON filename or [`io.Reader`](https://pkg.go.dev/io/#Reader):
 
 ```go
 td.Cmp(t, gotValue, td.JSON("file.json", td.Between(12, 34)))
@@ -61,7 +61,7 @@ td.Cmp(t, gotValue, td.JSON(osFile, td.Between(12, 34)))
 
 A JSON filename ends with ".json".
 
-To avoid a legit "$" `string` prefix causes a bad placeholder [`error`](https://golang.org/pkg/builtin/#error),
+To avoid a legit "$" `string` prefix causes a bad placeholder [`error`](https://pkg.go.dev/builtin/#error),
 just double it to escape it. Note it is only needed when the "$" is
 the first character of a `string`:
 
@@ -132,13 +132,13 @@ parameters) have shortcuts. They follow:
 - [`Zero`]({{< ref "Zero" >}})     → `$^Zero`
 
 
-[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of the *expectedJSON*
-[`json.Unmarshal`](https://golang.org/pkg/json/#Unmarshal)'ed. So it can be `bool`, `string`, `float64`,
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://pkg.go.dev/reflect/#Type) of the *expectedJSON*
+[`json.Unmarshal`](https://pkg.go.dev/json/#Unmarshal)'ed. So it can be `bool`, `string`, `float64`,
 `[]interface{}`, `map[string]interface{}` or `interface{}` in case
 *expectedJSON* is "null".
 
 
-> See also [<i class='fas fa-book'></i> JSON godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#JSON).
+> See also [<i class='fas fa-book'></i> JSON godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#JSON).
 
 ### Examples
 
@@ -313,12 +313,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpJSON godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpJSON).
+> See also [<i class='fas fa-book'></i> CmpJSON godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpJSON).
 
 ### Examples
 
@@ -476,12 +476,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.JSON godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.JSON).
+> See also [<i class='fas fa-book'></i> T.JSON godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.JSON).
 
 ### Examples
 

@@ -16,7 +16,7 @@ import (
 //
 //   td.Cmp(t, got, td.All(expectedValues...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#All for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#All for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -35,7 +35,7 @@ func CmpAll(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 //
 //   td.Cmp(t, got, td.Any(expectedValues...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Any for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Any for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -54,7 +54,7 @@ func CmpAny(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 //
 //   td.Cmp(t, got, td.Array(model, expectedEntries), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Array for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Array for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -73,7 +73,7 @@ func CmpArray(t TestingT, got interface{}, model interface{}, expectedEntries Ar
 //
 //   td.Cmp(t, got, td.ArrayEach(expectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#ArrayEach for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ArrayEach for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -92,7 +92,7 @@ func CmpArrayEach(t TestingT, got interface{}, expectedValue interface{}, args .
 //
 //   td.Cmp(t, got, td.Bag(expectedItems...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Bag for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Bag for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -111,7 +111,7 @@ func CmpBag(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 //
 //   td.Cmp(t, got, td.Between(from, to, bounds), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Between for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Between for details.
 //
 // Between() optional parameter "bounds" is here mandatory.
 // td.BoundsInIn value should be passed to mimic its absence in
@@ -134,7 +134,7 @@ func CmpBetween(t TestingT, got interface{}, from interface{}, to interface{}, b
 //
 //   td.Cmp(t, got, td.Cap(expectedCap), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Cap for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cap for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -153,7 +153,7 @@ func CmpCap(t TestingT, got interface{}, expectedCap interface{}, args ...interf
 //
 //   td.Cmp(t, got, td.Code(fn), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Code for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Code for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -172,7 +172,7 @@ func CmpCode(t TestingT, got interface{}, fn interface{}, args ...interface{}) b
 //
 //   td.Cmp(t, got, td.Contains(expectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Contains for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Contains for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -191,7 +191,7 @@ func CmpContains(t TestingT, got interface{}, expectedValue interface{}, args ..
 //
 //   td.Cmp(t, got, td.ContainsKey(expectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#ContainsKey for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContainsKey for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -210,7 +210,7 @@ func CmpContainsKey(t TestingT, got interface{}, expectedValue interface{}, args
 //
 //   td.Cmp(t, got, td.Empty(), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Empty for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Empty for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -229,7 +229,7 @@ func CmpEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 //
 //   td.Cmp(t, got, td.Gt(minExpectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Gt for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Gt for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -248,7 +248,7 @@ func CmpGt(t TestingT, got interface{}, minExpectedValue interface{}, args ...in
 //
 //   td.Cmp(t, got, td.Gte(minExpectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Gte for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Gte for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -267,7 +267,7 @@ func CmpGte(t TestingT, got interface{}, minExpectedValue interface{}, args ...i
 //
 //   td.Cmp(t, got, td.HasPrefix(expected), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#HasPrefix for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#HasPrefix for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -286,7 +286,7 @@ func CmpHasPrefix(t TestingT, got interface{}, expected string, args ...interfac
 //
 //   td.Cmp(t, got, td.HasSuffix(expected), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#HasSuffix for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#HasSuffix for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -305,7 +305,7 @@ func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interfac
 //
 //   td.Cmp(t, got, td.Isa(model), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Isa for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Isa for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -324,7 +324,7 @@ func CmpIsa(t TestingT, got interface{}, model interface{}, args ...interface{})
 //
 //   td.Cmp(t, got, td.JSON(expectedJSON, params...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#JSON for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#JSON for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -343,7 +343,7 @@ func CmpJSON(t TestingT, got interface{}, expectedJSON interface{}, params []int
 //
 //   td.Cmp(t, got, td.Keys(val), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Keys for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Keys for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -362,7 +362,7 @@ func CmpKeys(t TestingT, got interface{}, val interface{}, args ...interface{}) 
 //
 //   td.Cmp(t, got, td.Lax(expectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Lax for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lax for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -381,7 +381,7 @@ func CmpLax(t TestingT, got interface{}, expectedValue interface{}, args ...inte
 //
 //   td.Cmp(t, got, td.Len(expectedLen), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Len for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Len for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -400,7 +400,7 @@ func CmpLen(t TestingT, got interface{}, expectedLen interface{}, args ...interf
 //
 //   td.Cmp(t, got, td.Lt(maxExpectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Lt for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lt for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -419,7 +419,7 @@ func CmpLt(t TestingT, got interface{}, maxExpectedValue interface{}, args ...in
 //
 //   td.Cmp(t, got, td.Lte(maxExpectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Lte for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lte for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -438,7 +438,7 @@ func CmpLte(t TestingT, got interface{}, maxExpectedValue interface{}, args ...i
 //
 //   td.Cmp(t, got, td.Map(model, expectedEntries), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Map for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Map for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -457,7 +457,7 @@ func CmpMap(t TestingT, got interface{}, model interface{}, expectedEntries MapE
 //
 //   td.Cmp(t, got, td.MapEach(expectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#MapEach for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#MapEach for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -476,7 +476,7 @@ func CmpMapEach(t TestingT, got interface{}, expectedValue interface{}, args ...
 //
 //   td.Cmp(t, got, td.N(num, tolerance), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#N for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#N for details.
 //
 // N() optional parameter "tolerance" is here mandatory.
 // 0 value should be passed to mimic its absence in
@@ -499,7 +499,7 @@ func CmpN(t TestingT, got interface{}, num interface{}, tolerance interface{}, a
 //
 //   td.Cmp(t, got, td.NaN(), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#NaN for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NaN for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -518,7 +518,7 @@ func CmpNaN(t TestingT, got interface{}, args ...interface{}) bool {
 //
 //   td.Cmp(t, got, td.Nil(), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Nil for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Nil for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -537,7 +537,7 @@ func CmpNil(t TestingT, got interface{}, args ...interface{}) bool {
 //
 //   td.Cmp(t, got, td.None(notExpectedValues...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#None for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#None for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -556,7 +556,7 @@ func CmpNone(t TestingT, got interface{}, notExpectedValues []interface{}, args 
 //
 //   td.Cmp(t, got, td.Not(notExpected), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Not for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Not for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -575,7 +575,7 @@ func CmpNot(t TestingT, got interface{}, notExpected interface{}, args ...interf
 //
 //   td.Cmp(t, got, td.NotAny(expectedItems...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#NotAny for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotAny for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -594,7 +594,7 @@ func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ..
 //
 //   td.Cmp(t, got, td.NotEmpty(), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#NotEmpty for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotEmpty for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -613,7 +613,7 @@ func CmpNotEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 //
 //   td.Cmp(t, got, td.NotNaN(), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#NotNaN for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotNaN for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -632,7 +632,7 @@ func CmpNotNaN(t TestingT, got interface{}, args ...interface{}) bool {
 //
 //   td.Cmp(t, got, td.NotNil(), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#NotNil for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotNil for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -651,7 +651,7 @@ func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool {
 //
 //   td.Cmp(t, got, td.NotZero(), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#NotZero for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotZero for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -670,7 +670,7 @@ func CmpNotZero(t TestingT, got interface{}, args ...interface{}) bool {
 //
 //   td.Cmp(t, got, td.PPtr(val), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#PPtr for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#PPtr for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -689,7 +689,7 @@ func CmpPPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) 
 //
 //   td.Cmp(t, got, td.Ptr(val), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Ptr for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Ptr for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -708,7 +708,7 @@ func CmpPtr(t TestingT, got interface{}, val interface{}, args ...interface{}) b
 //
 //   td.Cmp(t, got, td.Re(reg, capture), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Re for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Re for details.
 //
 // Re() optional parameter "capture" is here mandatory.
 // nil value should be passed to mimic its absence in
@@ -731,7 +731,7 @@ func CmpRe(t TestingT, got interface{}, reg interface{}, capture interface{}, ar
 //
 //   td.Cmp(t, got, td.ReAll(reg, capture), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#ReAll for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ReAll for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -750,7 +750,7 @@ func CmpReAll(t TestingT, got interface{}, reg interface{}, capture interface{},
 //
 //   td.Cmp(t, got, td.Set(expectedItems...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Set for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Set for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -769,7 +769,7 @@ func CmpSet(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 //
 //   td.Cmp(t, got, td.Shallow(expectedPtr), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Shallow for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Shallow for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -788,7 +788,7 @@ func CmpShallow(t TestingT, got interface{}, expectedPtr interface{}, args ...in
 //
 //   td.Cmp(t, got, td.Slice(model, expectedEntries), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Slice for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Slice for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -807,7 +807,7 @@ func CmpSlice(t TestingT, got interface{}, model interface{}, expectedEntries Ar
 //
 //   td.Cmp(t, got, td.Smuggle(fn, expectedValue), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Smuggle for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Smuggle for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -826,7 +826,7 @@ func CmpSmuggle(t TestingT, got interface{}, fn interface{}, expectedValue inter
 //
 //   td.Cmp(t, got, td.SStruct(model, expectedFields), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SStruct for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SStruct for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -845,7 +845,7 @@ func CmpSStruct(t TestingT, got interface{}, model interface{}, expectedFields S
 //
 //   td.Cmp(t, got, td.String(expected), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#String for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#String for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -864,7 +864,7 @@ func CmpString(t TestingT, got interface{}, expected string, args ...interface{}
 //
 //   td.Cmp(t, got, td.Struct(model, expectedFields), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Struct for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Struct for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -883,7 +883,7 @@ func CmpStruct(t TestingT, got interface{}, model interface{}, expectedFields St
 //
 //   td.Cmp(t, got, td.SubBagOf(expectedItems...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SubBagOf for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubBagOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -902,7 +902,7 @@ func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 //
 //   td.Cmp(t, got, td.SubJSONOf(expectedJSON, params...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SubJSONOf for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubJSONOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -921,7 +921,7 @@ func CmpSubJSONOf(t TestingT, got interface{}, expectedJSON interface{}, params 
 //
 //   td.Cmp(t, got, td.SubMapOf(model, expectedEntries), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SubMapOf for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubMapOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -940,7 +940,7 @@ func CmpSubMapOf(t TestingT, got interface{}, model interface{}, expectedEntries
 //
 //   td.Cmp(t, got, td.SubSetOf(expectedItems...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SubSetOf for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubSetOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -959,7 +959,7 @@ func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 //
 //   td.Cmp(t, got, td.SuperBagOf(expectedItems...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SuperBagOf for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperBagOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -978,7 +978,7 @@ func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 //
 //   td.Cmp(t, got, td.SuperJSONOf(expectedJSON, params...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SuperJSONOf for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperJSONOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -997,7 +997,7 @@ func CmpSuperJSONOf(t TestingT, got interface{}, expectedJSON interface{}, param
 //
 //   td.Cmp(t, got, td.SuperMapOf(model, expectedEntries), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SuperMapOf for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperMapOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -1016,7 +1016,7 @@ func CmpSuperMapOf(t TestingT, got interface{}, model interface{}, expectedEntri
 //
 //   td.Cmp(t, got, td.SuperSetOf(expectedItems...), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#SuperSetOf for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperSetOf for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -1035,7 +1035,7 @@ func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 //
 //   td.Cmp(t, got, td.TruncTime(expectedTime, trunc), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#TruncTime for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TruncTime for details.
 //
 // TruncTime() optional parameter "trunc" is here mandatory.
 // 0 value should be passed to mimic its absence in
@@ -1058,7 +1058,7 @@ func CmpTruncTime(t TestingT, got interface{}, expectedTime interface{}, trunc t
 //
 //   td.Cmp(t, got, td.Values(val), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Values for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Values for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
@@ -1077,7 +1077,7 @@ func CmpValues(t TestingT, got interface{}, val interface{}, args ...interface{}
 //
 //   td.Cmp(t, got, td.Zero(), args...)
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#Zero for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Zero for details.
 //
 // Returns true if the test is OK, false if it fails.
 //

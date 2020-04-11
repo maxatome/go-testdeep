@@ -6,9 +6,9 @@ weight = 5
 # go-testdeep
 
 go-testdeep, via the
-[`td` package](https://godoc.org/github.com/maxatome/go-testdeep/td)
+[`td` package](https://pkg.go.dev/github.com/maxatome/go-testdeep/td)
 and its
-[helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers),
+[helpers](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers),
 allows [golang](https://golang.org/) extremely flexible deep
 comparison. It is built for testing.
 

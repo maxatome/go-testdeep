@@ -60,7 +60,7 @@ func TestMyFunc(tt *testing.T) {
 
 To most complex one, allowing to easily test HTTP API routes, using
 flexible [operators]({{< ref "operators" >}}) and the
-[`tdhttp`](https://godoc.org/github.com/maxatome/go-testdeep/td/helpers/tdhttp)
+[`tdhttp`](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)
 helper:
 
 ```go
@@ -151,9 +151,9 @@ up to the caller to display it. Not easy when comparing big data
 structures.
 
 The purpose of go-testdeep, via
-[`td` package](https://godoc.org/github.com/maxatome/go-testdeep/td)
+[`td` package](https://pkg.go.dev/github.com/maxatome/go-testdeep/td)
 and its
-[helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers),
+[helpers](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers),
 is to do its best to introduce this missing flexibility using
 ["operators"]({{< ref "operators" >}}), when the expected value (or
 one of its component) cannot be matched exactly, mixed with some

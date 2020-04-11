@@ -234,19 +234,19 @@ The following operators are smuggler ones:
 [`Values`]({{< ref "Values" >}})
 : checks values of a map
 
-[`T`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T
-[`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep/td#TestDeep
-[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp
+[`T`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T
+[`TestDeep`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TestDeep
+[`Cmp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp
 
-[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/td/helpers/tdhttp
+[`tdhttp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp
 
-[`BeLax` config flag]: https://godoc.org/github.com/maxatome/go-testdeep/td#ContextConfig
-[`error`]: https://golang.org/pkg/builtin/#error
+[`BeLax` config flag]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig
+[`error`]: https://pkg.go.dev/builtin/#error
 
 
-[`fmt.Stringer`]: https://godoc.org/pkg/fmt/#Stringer
-[`time.Time`]: https://godoc.org/pkg/time/#Time
-[`math.NaN`]: https://godoc.org/pkg/math/#NaN
+[`fmt.Stringer`]: https://pkg.go.dev/fmt/#Stringer
+[`time.Time`]: https://pkg.go.dev/time/#Time
+[`math.NaN`]: https://pkg.go.dev/math/#NaN
 [`All`]: {{< ref "All" >}}
 [`Any`]: {{< ref "Any" >}}
 [`Array`]: {{< ref "Array" >}}
@@ -423,8 +423,8 @@ The following operators are smuggler ones:
 [`T.Zero`]: {{< ref "Zero#tzero-shortcut" >}}
 <!-- smugglers:end -->
 
-[`T.Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.Cmp
-[`T.CmpLax`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T.CmpLax
+[`T.Cmp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Cmp
+[`T.CmpLax`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.CmpLax
 
 
 ## `TypeBehind` method

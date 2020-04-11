@@ -45,8 +45,8 @@ td.Cmp(t, array, td.Contains(35))                 // fails
 ```
 
 If data is a `string` (or convertible), `[]byte` (or convertible),
-[`error`](https://golang.org/pkg/builtin/#error) or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface ([`error`](https://golang.org/pkg/builtin/#error) interface is tested before
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer)), *expectedValue* can be a `string`, a `[]byte`, a `rune` or
+[`error`](https://pkg.go.dev/builtin/#error) or [`fmt.Stringer`](https://pkg.go.dev/fmt/#Stringer) interface ([`error`](https://pkg.go.dev/builtin/#error) interface is tested before
+[`fmt.Stringer`](https://pkg.go.dev/fmt/#Stringer)), *expectedValue* can be a `string`, a `[]byte`, a `rune` or
 a `byte`. In this case, it tests if the got `string` contains this
 expected `string`, `[]byte`, `rune` or `byte`.
 
@@ -108,7 +108,7 @@ td.Cmp(t, hash, td.Contains(td.Nil()))    // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> Contains godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Contains).
+> See also [<i class='fas fa-book'></i> Contains godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Contains).
 
 ### Examples
 
@@ -276,12 +276,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpContains godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpContains).
+> See also [<i class='fas fa-book'></i> CmpContains godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpContains).
 
 ### Examples
 
@@ -446,12 +446,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Contains godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Contains).
+> See also [<i class='fas fa-book'></i> T.Contains godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Contains).
 
 ### Examples
 

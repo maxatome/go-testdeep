@@ -28,7 +28,7 @@ td.Cmp(t, got, nil) // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> Nil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Nil).
+> See also [<i class='fas fa-book'></i> Nil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Nil).
 
 ### Examples
 
@@ -82,12 +82,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpNil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNil).
+> See also [<i class='fas fa-book'></i> CmpNil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNil).
 
 ### Examples
 
@@ -141,12 +141,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Nil godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Nil).
+> See also [<i class='fas fa-book'></i> T.Nil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Nil).
 
 ### Examples
 

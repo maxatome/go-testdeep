@@ -19,23 +19,23 @@ func TestMyFunc(t *testing.T) {
 }
 ```
 
-- [`func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp)
-- [`func CmpError(t TestingT, got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpError)
-- [`func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpFalse)
-- [`func CmpLax(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpLax)
+- [`func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp)
+- [`func CmpError(t TestingT, got error, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpError)
+- [`func CmpFalse(t TestingT, got interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpFalse)
+- [`func CmpLax(t TestingT, got interface{}, expected interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpLax)
   (in fact the shortcut of [`Lax` operator]({{< ref "operators/Lax" >}}))
-- [`func CmpNoError(t TestingT, got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNoError)
-- [`func CmpNot(t TestingT, got interface{}, notExpected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNot)
+- [`func CmpNoError(t TestingT, got error, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNoError)
+- [`func CmpNot(t TestingT, got interface{}, notExpected interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNot)
   (in fact the shortcut of [`Not` operator]({{< ref "operators/Not" >}}))
-- [`func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpNotPanic)
-- [`func CmpPanic(t TestingT, fn func(), expectedPanic interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpPanic)
-- [`func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpTrue)
-- [`func EqDeeply(got, expected interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#EqDeeply)
-- [`func EqDeeplyError(got, expected interface{}) error`](https://godoc.org/github.com/maxatome/go-testdeep/td#EqDeeplyError)
+- [`func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNotPanic)
+- [`func CmpPanic(t TestingT, fn func(), expectedPanic interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpPanic)
+- [`func CmpTrue(t TestingT, got interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpTrue)
+- [`func EqDeeply(got, expected interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#EqDeeply)
+- [`func EqDeeplyError(got, expected interface{}) error`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#EqDeeplyError)
 
-[`CmpDeeply()`](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpDeeply)
+[`CmpDeeply()`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpDeeply)
 is now replaced by
-[`Cmp()`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp), but it
+[`Cmp()`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp), but it
 is still available for backward compatibility purpose.
 
 
@@ -54,7 +54,7 @@ func TestMyFunc(t *testing.T) {
 ```
 
 For each of these functions, it is always a shortcut on
-[`Cmp()`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp) and
+[`Cmp()`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp) and
 the correponding [Testdeep operator]({{< ref "operators" >}}):
 
 ```

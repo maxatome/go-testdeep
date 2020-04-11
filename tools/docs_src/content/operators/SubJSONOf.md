@@ -13,9 +13,9 @@ must be a JSON object/map (aka {…}). *expectedJSON* can be a:
 
 - `string` containing JSON data like `{"fullname":"Bob","age":42}`
 - `string` containing a JSON filename, ending with ".json" (its
-  content is [`ioutil.ReadFile`](https://golang.org/pkg/ioutil/#ReadFile) before unmarshaling)
+  content is [`ioutil.ReadFile`](https://pkg.go.dev/ioutil/#ReadFile) before unmarshaling)
 - `[]byte` containing JSON data
-- [`io.Reader`](https://golang.org/pkg/io/#Reader) stream containing JSON data (is [`ioutil.ReadAll`](https://golang.org/pkg/ioutil/#ReadAll) before
+- [`io.Reader`](https://pkg.go.dev/io/#Reader) stream containing JSON data (is [`ioutil.ReadAll`](https://pkg.go.dev/ioutil/#ReadAll) before
   unmarshaling)
 
 
@@ -70,7 +70,7 @@ problem). It is just a matter of taste, double-quoting placeholders
 can be preferred when the JSON data has to conform to the JSON
 specification, like when used in a ".json" file.
 
-Note *expectedJSON* can be a `[]byte`, JSON filename or [`io.Reader`](https://golang.org/pkg/io/#Reader):
+Note *expectedJSON* can be a `[]byte`, JSON filename or [`io.Reader`](https://pkg.go.dev/io/#Reader):
 
 ```go
 td.Cmp(t, gotValue, td.SubJSONOf("file.json", td.Between(12, 34)))
@@ -80,7 +80,7 @@ td.Cmp(t, gotValue, td.SubJSONOf(osFile, td.Between(12, 34)))
 
 A JSON filename ends with ".json".
 
-To avoid a legit "$" `string` prefix causes a bad placeholder [`error`](https://golang.org/pkg/builtin/#error),
+To avoid a legit "$" `string` prefix causes a bad placeholder [`error`](https://pkg.go.dev/builtin/#error),
 just double it to escape it. Note it is only needed when the "$" is
 the first character of a `string`:
 
@@ -154,7 +154,7 @@ parameters) have shortcuts. They follow:
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the `map[string]interface{}` type.
 
 
-> See also [<i class='fas fa-book'></i> SubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SubJSONOf).
+> See also [<i class='fas fa-book'></i> SubJSONOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubJSONOf).
 
 ### Examples
 
@@ -323,12 +323,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSubJSONOf).
+> See also [<i class='fas fa-book'></i> CmpSubJSONOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpSubJSONOf).
 
 ### Examples
 
@@ -474,12 +474,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SubJSONOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SubJSONOf).
+> See also [<i class='fas fa-book'></i> T.SubJSONOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SubJSONOf).
 
 ### Examples
 

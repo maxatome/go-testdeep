@@ -22,7 +22,7 @@ td.Cmp(t, []int{1, 1, 2}, td.Set(1, 2, 3)) // fails, 3 is missing
 ```
 
 
-> See also [<i class='fas fa-book'></i> Set godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Set).
+> See also [<i class='fas fa-book'></i> Set godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Set).
 
 ### Examples
 
@@ -72,12 +72,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSet godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSet).
+> See also [<i class='fas fa-book'></i> CmpSet godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpSet).
 
 ### Examples
 
@@ -127,12 +127,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Set godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Set).
+> See also [<i class='fas fa-book'></i> T.Set godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Set).
 
 ### Examples
 

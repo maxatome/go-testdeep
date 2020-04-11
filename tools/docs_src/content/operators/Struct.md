@@ -32,10 +32,10 @@ td.Cmp(t, td.Struct(
 During a match, all expected fields must be found to
 succeed. Non-expected fields are ignored.
 
-[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *model*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://pkg.go.dev/reflect/#Type) of *model*.
 
 
-> See also [<i class='fas fa-book'></i> Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Struct).
+> See also [<i class='fas fa-book'></i> Struct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Struct).
 
 ### Examples
 
@@ -118,12 +118,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpStruct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpStruct).
+> See also [<i class='fas fa-book'></i> CmpStruct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpStruct).
 
 ### Examples
 
@@ -202,12 +202,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Struct godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Struct).
+> See also [<i class='fas fa-book'></i> T.Struct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Struct).
 
 ### Examples
 

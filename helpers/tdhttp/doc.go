@@ -7,7 +7,7 @@
 // Package tdhttp provides some functions to easily test HTTP handlers.
 //
 // Combined to td package
-// (https://godoc.org/github.com/maxatome/go-testdeep/td) it provides
+// (https://pkg.go.dev/github.com/maxatome/go-testdeep/td) it provides
 // powerful testing features.
 //
 // TestAPI

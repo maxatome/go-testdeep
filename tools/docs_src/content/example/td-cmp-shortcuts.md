@@ -3,7 +3,7 @@ title = "go-testdeep Cmp shortcuts"
 weight = 40
 +++
 
-The [`Cmp`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp)
+The [`Cmp`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp)
 function is the keystone of this package, but to make the writing of
 tests even easier, the family of [`Cmp*`]({{< ref "functions" >}})
 functions are provided and act as shortcuts. Using
