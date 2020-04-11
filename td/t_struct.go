@@ -75,16 +75,16 @@ var _ TestingFT = T{}
 //
 //   === RUN   TestFoobar
 //   --- FAIL: TestFoobar (0.00s)
-//   	foobar_test.go:88: Failed test
-//   		DATA.Id: values differ
-//   			     got: (uint64) 12
-//   			expected: (uint64) 28
-//   		DATA.Name: values differ
-//   			     got: "Bob"
-//   			expected: "John"
-//   		DATA.Age: values differ
-//   			     got: 12
-//   			expected: 28
+//           foobar_test.go:88: Failed test
+//                   DATA.Id: values differ
+//                                got: (uint64) 12
+//                           expected: (uint64) 28
+//                   DATA.Name: values differ
+//                                got: "Bob"
+//                           expected: "John"
+//                   DATA.Age: values differ
+//                                got: 12
+//                           expected: 28
 //   FAIL
 //
 // Now with a special configuration:
@@ -95,20 +95,21 @@ var _ TestingFT = T{}
 //     })
 //   t.Cmp(
 //     Record{Age: 12, Name: "Bob", Id: 12},  // got
-//     Record{Age: 21, Name: "John", Id: 28}) // expected
+//     Record{Age: 21, Name: "John", Id: 28}, // expected
+//   )
 //
 // will produce:
 //
 //   === RUN   TestFoobar
 //   --- FAIL: TestFoobar (0.00s)
-//   	foobar_test.go:96: Failed test
-//   		RECORD.Id: values differ
-//   			     got: (uint64) 12
-//   			expected: (uint64) 28
-//   		RECORD.Name: values differ
-//   			     got: "Bob"
-//   			expected: "John"
-//   		Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)
+//           foobar_test.go:96: Failed test
+//                   RECORD.Id: values differ
+//                                got: (uint64) 12
+//                           expected: (uint64) 28
+//                   RECORD.Name: values differ
+//                                got: "Bob"
+//                           expected: "John"
+//                   Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)
 //   FAIL
 //
 // See RootName method to configure RootName in a more specific fashion.
