@@ -57,8 +57,18 @@ import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/ma
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/example/td-t/</guid>
-      <description>Last, testing.T can be encapsulated in td.T type, simplifying again the test:
+      <description>testing.T can also be encapsulated in td.T type, simplifying again the test:
 import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t := t.RootName(&amp;#34;RECORD&amp;#34;) // Use RECORD instead of DATA in failure reports  // Using Struct shortcut method  t.Struct(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.NotZero(), &amp;#34;CreatedAt&amp;#34;: td.Between(before, time.Now()), }, &amp;#34;Newly created record&amp;#34;) // Or using Cmp method, it&amp;#39;s a matter of taste  t.</description>
+    </item>
+    
+    <item>
+      <title>Using anchoring</title>
+      <link>https://go-testdeep.zetta.rocks/example/anchoring/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://go-testdeep.zetta.rocks/example/anchoring/</guid>
+      <description>Last, operators can directly be anchored in litterals, still using the td.T type, avoiding the use of the Struct operator:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t.RootName(&amp;#34;RECORD&amp;#34;). // Use RECORD instead of DATA in failure reports  Cmp(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, Id: t.Anchor(td.NotZero(), uint64(0)).(uint64), CreatedAt: t.Anchor(td.Between(before, time.Now())).(time.Time), }, &amp;#34;Newly created record&amp;#34;) } } See the Anchor method documentation for details.</description>
     </item>
     
   </channel>

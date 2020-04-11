@@ -126,8 +126,8 @@ td.Cmp(t, gotTime, td.Code(func(date time.Time) bool { return date.Year() == 201
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/operators/contains/</guid>
-      <description>func Contains(expectedValue interface{}) TestDeep Contains is a smuggler operator with a little convenient exception for strings. Contains has to be applied on arrays, slices, maps or strings. It compares each item of data array/slice/map/string (rune for strings) against expectedValue.
-list := []int{12, 34, 28} td.Cmp(t, list, td.Contains(34)) // succeeds td.Cmp(t, list, td.Contains(td.Between(30, 35))) // succeeds too td.Cmp(t, list, td.Contains(35)) // fails  hash := map[string]int{&amp;#34;foo&amp;#34;: 12, &amp;#34;bar&amp;#34;: 34, &amp;#34;zip&amp;#34;: 28} td.</description>
+      <description>func Contains(expectedValue interface{}) TestDeep Contains is a smuggler operator to check if something is contained in another thing. Contains has to be applied on arrays, slices, maps or strings. It tries to be as smarter as possible.
+If expectedValue is a TestDeep operator, each item of data array/slice/map/string (rune for strings) is compared to it. The use of a TestDeep operator as expectedValue works only in this way: item per item.</description>
     </item>
     
     <item>
@@ -138,6 +138,17 @@ list := []int{12, 34, 28} td.Cmp(t, list, td.Contains(34)) // succeeds td.Cmp(t,
       <guid>https://go-testdeep.zetta.rocks/operators/containskey/</guid>
       <description>func ContainsKey(expectedValue interface{}) TestDeep ContainsKey is a smuggler operator and works on maps only. It compares each key of map against expectedValue.
 hash := map[string]int{&amp;#34;foo&amp;#34;: 12, &amp;#34;bar&amp;#34;: 34, &amp;#34;zip&amp;#34;: 28} td.Cmp(t, hash, td.ContainsKey(&amp;#34;foo&amp;#34;)) // succeeds td.Cmp(t, hash, td.ContainsKey(td.HasPrefix(&amp;#34;z&amp;#34;))) // succeeds td.Cmp(t, hash, td.ContainsKey(td.HasPrefix(&amp;#34;x&amp;#34;))) // fails  hnum := map[int]string{1: &amp;#34;foo&amp;#34;, 42: &amp;#34;bar&amp;#34;} td.Cmp(t, hash, td.ContainsKey(42)) // succeeds td.Cmp(t, hash, td.ContainsKey(td.Between(40, 45))) // succeeds When ContainsKey(nil) is used, nil is automatically converted to a typed nil on the fly to avoid confusion (if the map key type allows it of course.</description>
+    </item>
+    
+    <item>
+      <title>Delay</title>
+      <link>https://go-testdeep.zetta.rocks/operators/delay/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://go-testdeep.zetta.rocks/operators/delay/</guid>
+      <description>func Delay(delayed func() TestDeep) TestDeep Delay operator allows to delay the construction of an operator to the time it is used for the first time. Most of the time, it is used with helpers. See the example for a very simple use case.
+ See also Delay godoc.
+ Examples   Base example   t := &amp;amp;testing.T{} cmpNow := func(expected td.TestDeep) bool { time.Sleep(time.Microsecond) // imagine a DB insert returning a CreatedAt 	return td.</description>
     </item>
     
     <item>
@@ -181,9 +192,9 @@ td.Cmp(t, 17, td.Gte(17)) before := time.Now() td.Cmp(t, time.Now(), td.Gte(befo
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/operators/hasprefix/</guid>
-      <description>func HasPrefix(expected string) TestDeep HasPrefix operator allows to compare the prefix of a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
-type Foobar string td.Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), td.HasPrefix(&amp;#34;foo&amp;#34;)) // succeeds  err := errors.New(&amp;#34;error!&amp;#34;) td.Cmp(t, err, td.HasPrefix(&amp;#34;err&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) td.Cmp(t, bstr, td.HasPrefix(&amp;#34;fmt&amp;#34;)) // succeeds  See also HasPrefix godoc.
- Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := td.</description>
+      <description>func HasPrefix(expected string) TestDeep HasPrefix operator allows to compare the prefix of a string (or convertible), []byte (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer).
+td.Cmp(t, []byte(&amp;#34;foobar&amp;#34;), td.HasPrefix(&amp;#34;foo&amp;#34;)) // succeeds  type Foobar string td.Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), td.HasPrefix(&amp;#34;foo&amp;#34;)) // succeeds  err := errors.New(&amp;#34;error!&amp;#34;) td.Cmp(t, err, td.HasPrefix(&amp;#34;err&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) td.Cmp(t, bstr, td.HasPrefix(&amp;#34;fmt&amp;#34;)) // succeeds  See also HasPrefix godoc.
+ Examples    Base example   t := &amp;amp;testing.</description>
     </item>
     
     <item>
@@ -192,9 +203,9 @@ type Foobar string td.Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), td.HasPrefix(&amp
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/operators/hassuffix/</guid>
-      <description>func HasSuffix(expected string) TestDeep HasSuffix operator allows to compare the suffix of a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
-type Foobar string td.Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), td.HasSuffix(&amp;#34;bar&amp;#34;)) // succeeds  err := errors.New(&amp;#34;error!&amp;#34;) td.Cmp(t, err, td.HasSuffix(&amp;#34;!&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) td.Cmp(t, bstr, td.HasSuffix(&amp;#34;!&amp;#34;)) // succeeds  See also HasSuffix godoc.
- Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := td.</description>
+      <description>func HasSuffix(expected string) TestDeep HasSuffix operator allows to compare the suffix of a string (or convertible), []byte (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer).
+td.Cmp(t, []byte(&amp;#34;foobar&amp;#34;), td.HasSuffix(&amp;#34;bar&amp;#34;)) // succeeds  type Foobar string td.Cmp(t, Foobar(&amp;#34;foobar&amp;#34;), td.HasSuffix(&amp;#34;bar&amp;#34;)) // succeeds  err := errors.New(&amp;#34;error!&amp;#34;) td.Cmp(t, err, td.HasSuffix(&amp;#34;!&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) td.Cmp(t, bstr, td.HasSuffix(&amp;#34;!&amp;#34;)) // succeeds  See also HasSuffix godoc.
+ Examples    Base example   t := &amp;amp;testing.</description>
     </item>
     
     <item>
@@ -531,9 +542,9 @@ expectedFields can be nil, if no TestDeep operators are involved.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://go-testdeep.zetta.rocks/operators/string/</guid>
-      <description>func String(expected string) TestDeep String operator allows to compare a string (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer.)
+      <description>func String(expected string) TestDeep String operator allows to compare a string (or convertible), []byte (or convertible), error or fmt.Stringer interface (error interface is tested before fmt.Stringer).
 err := errors.New(&amp;#34;error!&amp;#34;) td.Cmp(t, err, td.String(&amp;#34;error!&amp;#34;)) // succeeds  bstr := bytes.NewBufferString(&amp;#34;fmt.Stringer!&amp;#34;) td.Cmp(t, bstr, td.String(&amp;#34;fmt.Stringer!&amp;#34;)) // succeeds  See also String godoc.
- Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := td.Cmp(t, got, td.String(&amp;#34;foobar&amp;#34;), &amp;#34;checks %s&amp;#34;, got) fmt.Println(ok) // Output: 	// true       Stringer example   t := &amp;amp;testing.</description>
+ Examples    Base example   t := &amp;amp;testing.T{} got := &amp;#34;foobar&amp;#34; ok := td.Cmp(t, got, td.String(&amp;#34;foobar&amp;#34;), &amp;#34;checks %s&amp;#34;, got) fmt.</description>
     </item>
     
     <item>

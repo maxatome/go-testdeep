@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>MapEach :: go-testdeep</title>
+    <title>Using anchoring :: go-testdeep</title>
 
     
     <link href="/css/nucleus.css?1586644972" rel="stylesheet">
@@ -44,7 +44,7 @@
 </style>
 
   </head>
-  <body class="" data-url="/operators/mapeach/">
+  <body class="" data-url="/example/anchoring/">
     <nav id="sidebar" class="">
 
 
@@ -107,7 +107,7 @@
   
     
     <li data-nav-id="/example/" title="Example" class="dd-item 
-        
+        parent
         
         
         ">
@@ -226,7 +226,7 @@
  
   
     
-      <li data-nav-id="/example/anchoring/" title="Using anchoring" class="dd-item ">
+      <li data-nav-id="/example/anchoring/" title="Using anchoring" class="dd-item active">
         <a href="/example/anchoring/">
         Using anchoring
         
@@ -304,7 +304,7 @@
   
     
     <li data-nav-id="/operators/" title="Operators" class="dd-item 
-        parent
+        
         
         
         ">
@@ -841,7 +841,7 @@
  
   
     
-      <li data-nav-id="/operators/mapeach/" title="MapEach" class="dd-item active">
+      <li data-nav-id="/operators/mapeach/" title="MapEach" class="dd-item ">
         <a href="/operators/mapeach/">
         MapEach
         
@@ -1604,7 +1604,7 @@
             
           
           
-            <a href='/'>go-testdeep</a> > <a href='/operators/'>Operators</a> > MapEach
+            <a href='/'>go-testdeep</a> > <a href='/example/'>Example</a> > Using anchoring
           
          
           
@@ -1617,25 +1617,7 @@
                 
                     <div class="progress">
     <div class="wrapper">
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#examples">Examples</a></li>
-      </ul>
-    </li>
-    <li><a href="#cmpmapeach-shortcut">CmpMapEach shortcut</a>
-      <ul>
-        <li><a href="#examples-1">Examples</a></li>
-      </ul>
-    </li>
-    <li><a href="#tmapeach-shortcut">T.MapEach shortcut</a>
-      <ul>
-        <li><a href="#examples-2">Examples</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
     </div>
 </div>
 
@@ -1651,7 +1633,7 @@
           
             <h1>
               
-              MapEach
+              Using anchoring
             </h1>
           
 
@@ -1659,227 +1641,42 @@
 
 
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">MapEach</span>(expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep
-</code></pre></div><p><a href="/operators/mapeach/"><code>MapEach</code></a> operator has to be applied on maps. It compares each value
-of data map against expected value. During a match, all values have
-to match to succeed.</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">got := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">string</span>{<span style="color:#ed9d13">&#34;test&#34;</span>: <span style="color:#ed9d13">&#34;foo&#34;</span>, <span style="color:#ed9d13">&#34;buzz&#34;</span>: <span style="color:#ed9d13">&#34;bar&#34;</span>}
-td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">MapEach</span>(<span style="color:#ed9d13">&#34;bar&#34;</span>))     <span style="color:#999;font-style:italic">// fails, coz &#34;foo&#34; ≠ &#34;bar&#34;
-</span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">MapEach</span>(td.<span style="color:#447fcf">Len</span>(<span style="color:#3677a9">3</span>))) <span style="color:#999;font-style:italic">// succeeds as values are 3 chars long
-</span></code></pre></div><blockquote>
-<p>See also <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#MapEach"><!-- raw HTML omitted --><!-- raw HTML omitted --> MapEach godoc</a>.</p>
-</blockquote>
-<h3 id="examples">Examples</h3>
-<p>
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Map example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
+<p>Last, operators can directly be anchored in litterals, still using the
+<a href="/functions/td-t/"><code>td.T</code> type</a>, avoiding the use of the
+<a href="/operators/struct/"><code>Struct</code></a> operator:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
+  <span style="color:#ed9d13">&#34;testing&#34;</span>
+  <span style="color:#ed9d13">&#34;time&#34;</span>
 
-	got := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
+  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+)
 
-	ok := td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">MapEach</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>)),
-		<span style="color:#ed9d13">&#34;checks each value of map %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
+<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestCreateRecord</span>(tt *testing.T) {
+  t := td.<span style="color:#447fcf">NewT</span>(tt)
 
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>
+  before := time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">Truncate</span>(time.Second)
+  record, err := <span style="color:#447fcf">CreateRecord</span>()
+
+  <span style="color:#6ab825;font-weight:bold">if</span> t.<span style="color:#447fcf">CmpNoError</span>(err) {
+    t.<span style="color:#447fcf">RootName</span>(<span style="color:#ed9d13">&#34;RECORD&#34;</span>). <span style="color:#999;font-style:italic">// Use RECORD instead of DATA in failure reports
+</span><span style="color:#999;font-style:italic"></span>      <span style="color:#447fcf">Cmp</span>(record,
+        &amp;Record{
+          Name:      <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+          Age:       <span style="color:#3677a9">23</span>,
+          Id:        t.<span style="color:#447fcf">Anchor</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint64</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">uint64</span>),
+          CreatedAt: t.<span style="color:#447fcf">Anchor</span>(td.<span style="color:#447fcf">Between</span>(before, time.<span style="color:#447fcf">Now</span>())).(time.Time),
+        },
+        <span style="color:#ed9d13">&#34;Newly created record&#34;</span>)
+  }
+}
+</code></pre></div><p>See the
+<a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor"><code>Anchor</code></a>
+method documentation for details. Note that
+<a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method
+is also a synonym for Anchor.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">          Id:        t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint64</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">uint64</span>),
+          CreatedAt: t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">Between</span>(before, time.<span style="color:#447fcf">Now</span>())).(time.Time),
 </code></pre></div>
-    </div>
-</div>
-
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	TypedMap example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
-
-	<span style="color:#6ab825;font-weight:bold">type</span> MyMap <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>
-
-	got := MyMap{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
-
-	ok := td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">MapEach</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>)),
-		<span style="color:#ed9d13">&#34;checks each value of typed map %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	ok = td.<span style="color:#447fcf">Cmp</span>(t, &amp;got, td.<span style="color:#447fcf">MapEach</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>)),
-		<span style="color:#ed9d13">&#34;checks each value of typed map pointer %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>
-</code></pre></div>
-    </div>
-</div></p>
-<h2 id="cmpmapeach-shortcut">CmpMapEach shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">CmpMapEach</span>(t TestingT, got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
-</code></pre></div><p>CmpMapEach is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">td.<span style="color:#447fcf">Cmp</span>(t, got, td.<span style="color:#447fcf">MapEach</span>(expectedValue), args...)
-</code></pre></div><p>See above for details.</p>
-<p>Returns true if the test is OK, false if it fails.</p>
-<p><em>args&hellip;</em> are optional and allow to name the test. This name is
-used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
-the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
-<a href="https://pkg.go.dev/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
-<a href="https://pkg.go.dev/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
-reason of a potential failure.</p>
-<blockquote>
-<p>See also <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpMapEach"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpMapEach godoc</a>.</p>
-</blockquote>
-<h3 id="examples-1">Examples</h3>
-<p>
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Map example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
-
-	got := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
-
-	ok := td.<span style="color:#447fcf">CmpMapEach</span>(t, got, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>),
-		<span style="color:#ed9d13">&#34;checks each value of map %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>
-</code></pre></div>
-    </div>
-</div>
-
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	TypedMap example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := &amp;testing.T{}
-
-	<span style="color:#6ab825;font-weight:bold">type</span> MyMap <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>
-
-	got := MyMap{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
-
-	ok := td.<span style="color:#447fcf">CmpMapEach</span>(t, got, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>),
-		<span style="color:#ed9d13">&#34;checks each value of typed map %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	ok = td.<span style="color:#447fcf">CmpMapEach</span>(t, &amp;got, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>),
-		<span style="color:#ed9d13">&#34;checks each value of typed map pointer %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>
-</code></pre></div>
-    </div>
-</div></p>
-<h2 id="tmapeach-shortcut">T.MapEach shortcut</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> (t *T) <span style="color:#447fcf">MapEach</span>(got <span style="color:#6ab825;font-weight:bold">interface</span>{}, expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}, args ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) <span style="color:#6ab825;font-weight:bold">bool</span>
-</code></pre></div><p><a href="/operators/mapeach/"><code>MapEach</code></a> is a shortcut for:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">t.<span style="color:#447fcf">Cmp</span>(got, td.<span style="color:#447fcf">MapEach</span>(expectedValue), args...)
-</code></pre></div><p>See above for details.</p>
-<p>Returns true if the test is OK, false if it fails.</p>
-<p><em>args&hellip;</em> are optional and allow to name the test. This name is
-used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
-the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
-<a href="https://pkg.go.dev/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
-<a href="https://pkg.go.dev/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
-reason of a potential failure.</p>
-<blockquote>
-<p>See also <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.MapEach"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.MapEach godoc</a>.</p>
-</blockquote>
-<h3 id="examples-2">Examples</h3>
-<p>
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	Map example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
-
-	got := <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
-
-	ok := t.<span style="color:#447fcf">MapEach</span>(got, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>),
-		<span style="color:#ed9d13">&#34;checks each value of map %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>
-</code></pre></div>
-    </div>
-</div>
-
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-        <span>
-        
-    	
-    	TypedMap example
-    	
-    	</span>
-    </div>
-    <div class="expand-content" style="display: none;">
-        <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	t := td.<span style="color:#447fcf">NewT</span>(&amp;testing.T{})
-
-	<span style="color:#6ab825;font-weight:bold">type</span> MyMap <span style="color:#6ab825;font-weight:bold">map</span>[<span style="color:#6ab825;font-weight:bold">string</span>]<span style="color:#6ab825;font-weight:bold">int</span>
-
-	got := MyMap{<span style="color:#ed9d13">&#34;foo&#34;</span>: <span style="color:#3677a9">12</span>, <span style="color:#ed9d13">&#34;bar&#34;</span>: <span style="color:#3677a9">42</span>, <span style="color:#ed9d13">&#34;zip&#34;</span>: <span style="color:#3677a9">89</span>}
-
-	ok := t.<span style="color:#447fcf">MapEach</span>(got, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>),
-		<span style="color:#ed9d13">&#34;checks each value of typed map %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	ok = t.<span style="color:#447fcf">MapEach</span>(&amp;got, td.<span style="color:#447fcf">Between</span>(<span style="color:#3677a9">10</span>, <span style="color:#3677a9">90</span>),
-		<span style="color:#ed9d13">&#34;checks each value of typed map pointer %v is in [10 .. 90]&#34;</span>, got)
-	fmt.<span style="color:#447fcf">Println</span>(ok)
-
-	<span style="color:#999;font-style:italic">// Output:
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#999;font-style:italic">// true
-</span><span style="color:#999;font-style:italic"></span>
-</code></pre></div>
-    </div>
-</div></p>
-
 
 <footer class=" footline" >
 	
@@ -1936,150 +1733,6 @@ reason of a potential failure.</p>
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                     
                 
                 
@@ -2177,6 +1830,7 @@ reason of a potential failure.</p>
             
                 
                     
+                    
                 
                 
 
@@ -2187,6 +1841,57 @@ reason of a potential failure.</p>
                     
             
         
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
                     
                         
             
@@ -2529,6 +2234,21 @@ reason of a potential failure.</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -2546,8 +2266,85 @@ reason of a potential failure.</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -3116,10 +2913,10 @@ reason of a potential failure.</p>
 	 
 	 
 		
-			<a class="nav nav-prev" href="/operators/map/" title="Map"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/example/td-t/" title="td.T type"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/operators/n/" title="N" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/functions/" title="Functions" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

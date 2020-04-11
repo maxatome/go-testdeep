@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.65.2" />
+    <meta name="generator" content="Hugo 0.68.3" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Re :: go-testdeep</title>
 
     
-    <link href="/css/nucleus.css?1582932361" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1582932361" rel="stylesheet">
-    <link href="/css/hybrid.css?1582932361" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1582932361" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1582932361" rel="stylesheet">
-    <link href="/css/auto-complete.css?1582932361" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1582932361" rel="stylesheet">
-    <link href="/css/theme.css?1582932361" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1582932361" rel="stylesheet">
+    <link href="/css/nucleus.css?1586644972" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1586644972" rel="stylesheet">
+    <link href="/css/hybrid.css?1586644972" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1586644972" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1586644972" rel="stylesheet">
+    <link href="/css/auto-complete.css?1586644972" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1586644972" rel="stylesheet">
+    <link href="/css/theme.css?1586644972" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1586644972" rel="stylesheet">
     
-      <link href="/css/theme-green.css?1582932361" rel="stylesheet">
+      <link href="/css/theme-green.css?1586644972" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1582932361"></script>
+    <script src="/js/jquery-3.3.1.min.js?1586644972"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -61,14 +61,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1582932361"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1582932361"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1586644972"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1586644972"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1582932361"></script>
+<script type="text/javascript" src="/js/search.js?1586644972"></script>
 
     
   </div>
@@ -210,6 +210,25 @@
       <li data-nav-id="/example/td-t/" title="td.T type" class="dd-item ">
         <a href="/example/td-t/">
         td.T type
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/example/anchoring/" title="Using anchoring" class="dd-item ">
+        <a href="/example/anchoring/">
+        Using anchoring
         
         </a>
     </li>
@@ -521,6 +540,25 @@
       <li data-nav-id="/operators/containskey/" title="ContainsKey" class="dd-item ">
         <a href="/operators/containskey/">
         ContainsKey
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/operators/delay/" title="Delay" class="dd-item ">
+        <a href="/operators/delay/">
+        Delay
         
         </a>
     </li>
@@ -1508,15 +1546,15 @@
               </li>
           
               <li> 
-                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep/td"><i class='fas fa-book'></i> godoc</a>
+                  <a class="padding" href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td"><i class='fas fa-book'></i> godoc</a>
               </li>
           
               <li> 
-                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp"><i class='fas fa-book'></i> godoc API tester — tdhttp</a>
+                  <a class="padding" href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp"><i class='fas fa-book'></i> godoc API tester — tdhttp</a>
               </li>
           
               <li> 
-                  <a class="padding" href="https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil"><i class='fas fa-book'></i> godoc helpers utils — tdutil</a>
+                  <a class="padding" href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil"><i class='fas fa-book'></i> godoc helpers utils — tdutil</a>
               </li>
           
         </ul>
@@ -1623,10 +1661,10 @@
 
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">Re</span>(reg <span style="color:#6ab825;font-weight:bold">interface</span>{}, capture ...<span style="color:#6ab825;font-weight:bold">interface</span>{}) TestDeep
 </code></pre></div><p><a href="/operators/re/"><code>Re</code></a> operator allows to apply a regexp on a <code>string</code> (or convertible),
-<code>[]byte</code>, <a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> or <a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a> interface (<a href="https://golang.org/pkg/builtin/#error"><code>error</code></a> interface is tested
-before <a href="https://golang.org/pkg/fmt/#Stringer"><code>fmt.Stringer</code></a>.)</p>
+<code>[]byte</code>, <a href="https://pkg.go.dev/builtin/#error"><code>error</code></a> or <a href="https://pkg.go.dev/fmt/#Stringer"><code>fmt.Stringer</code></a> interface (<a href="https://pkg.go.dev/builtin/#error"><code>error</code></a> interface is tested
+before <a href="https://pkg.go.dev/fmt/#Stringer"><code>fmt.Stringer</code></a>.)</p>
 <p><em>reg</em> is the regexp. It can be a <code>string</code> that is automatically
-compiled using <a href="https://golang.org/pkg/regexp/#MustCompile"><code>regexp.MustCompile</code></a>, or a <a href="https://golang.org/pkg/regexp/#Regexp"><code>*regexp.Regexp</code></a>.</p>
+compiled using <a href="https://pkg.go.dev/regexp/#MustCompile"><code>regexp.MustCompile</code></a>, or a <a href="https://pkg.go.dev/regexp/#Regexp"><code>*regexp.Regexp</code></a>.</p>
 <p>Optional <em>capture</em> parameter can be used to match the contents of
 regexp groups. Groups are presented as a <code>[]string</code> or <code>[][]byte</code>
 depending the original matched data. Note that an other operator
@@ -1637,7 +1675,7 @@ can be used here.</p>
 </span><span style="color:#999;font-style:italic"></span>td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#ed9d13">&#34;John Doe&#34;</span>,
   td.<span style="color:#447fcf">Re</span>(<span style="color:#ed9d13">`^(\w+) (\w+)`</span>, td.<span style="color:#447fcf">Bag</span>(<span style="color:#ed9d13">&#34;Doe&#34;</span>, <span style="color:#ed9d13">&#34;John&#34;</span>))) <span style="color:#999;font-style:italic">// succeeds
 </span></code></pre></div><blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#Re"><!-- raw HTML omitted --><!-- raw HTML omitted --> Re godoc</a>.</p>
+<p>See also <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Re"><!-- raw HTML omitted --><!-- raw HTML omitted --> Re godoc</a>.</p>
 </blockquote>
 <h3 id="examples">Examples</h3>
 <p>
@@ -1878,11 +1916,11 @@ original <a href="/operators/re/"><code>Re()</code></a> call.</p>
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
-<a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
-<a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
+<a href="https://pkg.go.dev/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
+<a href="https://pkg.go.dev/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#CmpRe"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpRe godoc</a>.</p>
+<p>See also <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpRe"><!-- raw HTML omitted --><!-- raw HTML omitted --> CmpRe godoc</a>.</p>
 </blockquote>
 <h3 id="examples-1">Examples</h3>
 <p>
@@ -2123,11 +2161,11 @@ original <a href="/operators/re/"><code>Re()</code></a> call.</p>
 <p><em>args&hellip;</em> are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If <code>len(args) &gt; 1</code> and
 the first item of <em>args</em> is a <code>string</code> and contains a &lsquo;%&rsquo; <code>rune</code> then
-<a href="https://golang.org/pkg/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
-<a href="https://golang.org/pkg/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
+<a href="https://pkg.go.dev/fmt/#Fprintf"><code>fmt.Fprintf</code></a> is used to compose the name, else <em>args</em> are passed to
+<a href="https://pkg.go.dev/fmt/#Fprint"><code>fmt.Fprint</code></a>. Do not forget it is the name of the test, not the
 reason of a potential failure.</p>
 <blockquote>
-<p>See also <a href="https://godoc.org/github.com/maxatome/go-testdeep/td#T.Re"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.Re godoc</a>.</p>
+<p>See also <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Re"><!-- raw HTML omitted --><!-- raw HTML omitted --> T.Re godoc</a>.</p>
 </blockquote>
 <h3 id="examples-2">Examples</h3>
 <p>
@@ -2501,22 +2539,6 @@ reason of a potential failure.</p>
             
         
                     
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
                         
             
             
@@ -2541,6 +2563,38 @@ reason of a potential failure.</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                     
                 
                 
@@ -2557,6 +2611,22 @@ reason of a potential failure.</p>
                     
                         
                         
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -3574,19 +3644,19 @@ reason of a potential failure.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1582932361"></script>
-    <script src="/js/perfect-scrollbar.min.js?1582932361"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1582932361"></script>
-    <script src="/js/jquery.sticky.js?1582932361"></script>
-    <script src="/js/featherlight.min.js?1582932361"></script>
-    <script src="/js/highlight.pack.js?1582932361"></script>
+    <script src="/js/clipboard.min.js?1586644972"></script>
+    <script src="/js/perfect-scrollbar.min.js?1586644972"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1586644972"></script>
+    <script src="/js/jquery.sticky.js?1586644972"></script>
+    <script src="/js/featherlight.min.js?1586644972"></script>
+    <script src="/js/highlight.pack.js?1586644972"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1582932361"></script>
-    <script src="/js/learn.js?1582932361"></script>
-    <script src="/js/hugo-learn.js?1582932361"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1586644972"></script>
+    <script src="/js/learn.js?1586644972"></script>
+    <script src="/js/hugo-learn.js?1586644972"></script>
 
-    <link href="/mermaid/mermaid.css?1582932361" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1582932361"></script>
+    <link href="/mermaid/mermaid.css?1586644972" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1586644972"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
