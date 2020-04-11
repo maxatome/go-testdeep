@@ -18,6 +18,7 @@ type anchor struct {
 	Operator reflect.Value // Operator is a td.TestDeep behind
 }
 
+// Info gathers all anchors information.
 type Info struct {
 	sync.Mutex
 	index   int
@@ -25,12 +26,15 @@ type Info struct {
 	anchors map[interface{}]anchor
 }
 
+// NewInfo returns a new instance of *Info.
 func NewInfo() *Info {
 	return &Info{
 		anchors: map[interface{}]anchor{},
 	}
 }
 
+// AddAnchor anchors a new operator op, with type typ then returns the
+// anchor value.
 func (i *Info) AddAnchor(typ reflect.Type, op reflect.Value) reflect.Value {
 	i.Lock()
 	defer i.Unlock()
@@ -49,18 +53,22 @@ func (i *Info) AddAnchor(typ reflect.Type, op reflect.Value) reflect.Value {
 	return anc
 }
 
+// DoAnchorsPersist returns true if anchors are persistent across tests.
 func (i *Info) DoAnchorsPersist() bool {
 	i.Lock()
 	defer i.Unlock()
 	return i.persist
 }
 
+// SetAnchorsPersist enables or disables anchors persistence.
 func (i *Info) SetAnchorsPersist(persist bool) {
 	i.Lock()
 	defer i.Unlock()
 	i.persist = persist
 }
 
+// ResetAnchors removes all anchors if persistence is disabled or
+// force is true.
 func (i *Info) ResetAnchors(force bool) {
 	i.Lock()
 	defer i.Unlock()

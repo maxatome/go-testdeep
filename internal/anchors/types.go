@@ -21,6 +21,8 @@ type anchorableType struct {
 	builder reflect.Value
 }
 
+// AnchorableTypes contains all non-native types that can be
+// anchorable. See AddAnchorableStructType to add a new type to it.
 var AnchorableTypes []anchorableType
 
 func init() {
