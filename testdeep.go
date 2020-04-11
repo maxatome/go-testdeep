@@ -21,7 +21,7 @@
 // missing flexibility using "operators" when the expected value (or
 // one of its component) cannot be matched exactly.
 //
-// See td/ directory → https://godoc.org/github.com/maxatome/go-testdeep/td
+// See td/ directory → https://pkg.go.dev/github.com/maxatome/go-testdeep/td
 //
 // All variables and types of testdeep package are aliases to respectively
 // functions and types of github.com/maxatome/go-testdeep/td
@@ -34,5 +34,5 @@
 //   import td "github.com/maxatome/go-testdeep"
 //
 // For easy HTTP API testing, see
-// https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp
+// https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp
 package testdeep // import "github.com/maxatome/go-testdeep"

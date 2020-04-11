@@ -17,10 +17,10 @@ func TestMyFunc(tt *testing.T) {
 }
 ```
 
-- [`func NewT(t TestingFT, config ...ContextConfig) *T`](https://godoc.org/github.com/maxatome/go-testdeep/td#NewT)
-- [`func Assert(t TestingFT, config ...ContextConfig) *T`](https://godoc.org/github.com/maxatome/go-testdeep/td#Assert)
-- [`func Require(t TestingFT, config ...ContextConfig) *T`](https://godoc.org/github.com/maxatome/go-testdeep/td#Require)
-- [`func AssertRequire(t TestingFT, config ...ContextConfig) (*T, *T)`](https://godoc.org/github.com/maxatome/go-testdeep/td#AssertRequire)
+- [`func NewT(t TestingFT, config ...ContextConfig) *T`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NewT)
+- [`func Assert(t TestingFT, config ...ContextConfig) *T`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Assert)
+- [`func Require(t TestingFT, config ...ContextConfig) *T`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Require)
+- [`func AssertRequire(t TestingFT, config ...ContextConfig) (*T, *T)`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#AssertRequire)
 
 
 ### Configuring [`*td.T`]
@@ -32,10 +32,10 @@ func TestMyFunc(tt *testing.T) {
 }
 ```
 
-- [`func (t *T) BeLax(enable ...bool) *T`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.BeLax)
-- [`func (t *T) FailureIsFatal(enable ...bool) *T`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.FailureIsFatal)
-- [`func (t *T) RootName(rootName string) *T`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.RootName)
-- [`func (t *T) UseEqual(enable ...bool) *T`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.UseEqual)
+- [`func (t *T) BeLax(enable ...bool) *T`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.BeLax)
+- [`func (t *T) FailureIsFatal(enable ...bool) *T`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.FailureIsFatal)
+- [`func (t *T) RootName(rootName string) *T`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.RootName)
+- [`func (t *T) UseEqual(enable ...bool) *T`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.UseEqual)
 
 
 ### Main methods of [`*td.T`]
@@ -59,33 +59,33 @@ func TestMyFunc(tt *testing.T) {
 }
 ```
 
-- [`func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Cmp)
-- [`func (t *T) CmpError(got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.CmpError)
-- [`func (t *T) CmpLax(got interface{}, expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.CmpLax)
+- [`func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Cmp)
+- [`func (t *T) CmpError(got error, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.CmpError)
+- [`func (t *T) CmpLax(got interface{}, expected interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.CmpLax)
   (in fact the shortcut of [`Lax` operator]({{< ref "operators/Lax" >}}))
-- [`func (t *T) CmpNoError(got error, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.CmpNoError)
-- [`func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.CmpNotPanic)
-- [`func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.CmpPanic)
-- [`func (t *T) False(got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.False)
-- [`func (t *T) Not(got interface{}, notExpected interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Not)
+- [`func (t *T) CmpNoError(got error, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.CmpNoError)
+- [`func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.CmpNotPanic)
+- [`func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.CmpPanic)
+- [`func (t *T) False(got interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.False)
+- [`func (t *T) Not(got interface{}, notExpected interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Not)
   (in fact the shortcut of [`Not` operator]({{< ref "operators/Not" >}}))
-- [`func (t *T) RunT(name string, f func(t *T)) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.RunT)
-- [`func (t *T) True(got interface{}, args ...interface{}) bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.True)
+- [`func (t *T) RunT(name string, f func(t *T)) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.RunT)
+- [`func (t *T) True(got interface{}, args ...interface{}) bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.True)
 
-[`CmpDeeply()`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.CmpDeeply)
+[`CmpDeeply()`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.CmpDeeply)
 method is now replaced by
-[`Cmp()`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Cmp),
+[`Cmp()`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Cmp),
 but it is still available for backward compatibility purpose.
 
 
 ### Anchoring methods of [`*td.T`]
 
-- [`func (t *T) A(operator TestDeep, model ...interface{}) interface{}`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.A)
-- [`func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{}`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Anchor)
-- [`func (t *T) AnchorsPersistTemporarily() func()`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.AnchorsPersistTemporarily)
-- [`func (t *T) DoAnchorsPersist() bool`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.DoAnchorsPersist)
-- [`func (t *T) ResetAnchors()`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.ResetAnchors)
-- [`func (t *T) SetAnchorsPersist(persist bool)`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SetAnchorsPersist)
+- [`func (t *T) A(operator TestDeep, model ...interface{}) interface{}`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A)
+- [`func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{}`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor)
+- [`func (t *T) AnchorsPersistTemporarily() func()`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.AnchorsPersistTemporarily)
+- [`func (t *T) DoAnchorsPersist() bool`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.DoAnchorsPersist)
+- [`func (t *T) ResetAnchors()`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.ResetAnchors)
+- [`func (t *T) SetAnchorsPersist(persist bool)`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SetAnchorsPersist)
 
 
 ### Shortcut methods of [`*td.T`]
@@ -105,7 +105,7 @@ func TestMyFunc(tt *testing.T) {
 ```
 
 For each of these methods, it is always a shortcut on
-[`T.Cmp()`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Cmp) and
+[`T.Cmp()`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Cmp) and
 the correponding [Testdeep operator]({{< ref "operators" >}}):
 
 ```
@@ -121,5 +121,5 @@ Each shortcut method is described in the corresponding operator
 page. See [operators list]({{< ref "operators" >}}).
 
 
-[`td.T`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T
-[`*td.T`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T
+[`td.T`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T
+[`*td.T`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T

@@ -33,14 +33,14 @@ It is more efficient and shorter to write than:
 td.Cmp(t, &pnum, td.Ptr(td.Ptr(val))) // succeeds too
 ```
 
-[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a pointer on a
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://pkg.go.dev/reflect/#Type) of a pointer on a
 pointer on *val*, except if *val* is a [TestDeep operator]({{< ref "operators" >}}). In this
 case, it delegates [`TypeBehind()`]({{< ref "operators#typebehind-method" >}}) to the operator and returns the
-[`reflect.Type`](https://golang.org/pkg/reflect/#Type) of a pointer on a pointer on the returned value (if
+[`reflect.Type`](https://pkg.go.dev/reflect/#Type) of a pointer on a pointer on the returned value (if
 non-`nil` of course).
 
 
-> See also [<i class='fas fa-book'></i> PPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#PPtr).
+> See also [<i class='fas fa-book'></i> PPtr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#PPtr).
 
 ### Examples
 
@@ -80,12 +80,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpPPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpPPtr).
+> See also [<i class='fas fa-book'></i> CmpPPtr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpPPtr).
 
 ### Examples
 
@@ -125,12 +125,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.PPtr godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.PPtr).
+> See also [<i class='fas fa-book'></i> T.PPtr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.PPtr).
 
 ### Examples
 

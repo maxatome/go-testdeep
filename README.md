@@ -5,7 +5,7 @@ go-testdeep
 [![Coverage Status](https://coveralls.io/repos/github/maxatome/go-testdeep/badge.svg?branch=master)](https://coveralls.io/github/maxatome/go-testdeep?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/maxatome/go-testdeep)](https://goreportcard.com/report/github.com/maxatome/go-testdeep)
 [![GolangCI](https://golangci.com/badges/github.com/maxatome/go-testdeep.svg)](https://golangci.com/r/github.com/maxatome/go-testdeep)
-[![GoDoc](https://godoc.org/github.com/maxatome/go-testdeep/td?status.svg)](https://godoc.org/github.com/maxatome/go-testdeep/td)
+[![GoDoc](https://godoc.org/github.com/maxatome/go-testdeep/td?status.svg)](https://pkg.go.dev/github.com/maxatome/go-testdeep/td)
 [![Version](https://img.shields.io/github/tag/maxatome/go-testdeep.svg)](https://github.com/maxatome/go-testdeep/releases)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go/#testing)
 
@@ -20,8 +20,8 @@ go-testdeep
 - [Functions](https://go-testdeep.zetta.rocks/functions/)
 - [Available operators](https://go-testdeep.zetta.rocks/operators/)
 - [Helpers](#helpers)
-  - [`tdhttp` or HTTP API testing helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
-  - [`tdutil` aka the helper of helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil)
+  - [`tdhttp` or HTTP API testing helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)
+  - [`tdutil` aka the helper of helpers](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil)
 - [See also](#see-also)
 - [License](#license)
 - [FAQ](https://go-testdeep.zetta.rocks/faq/)
@@ -194,9 +194,9 @@ up to the caller to display it. Not easy when comparing big data
 structures.
 
 The purpose of go-testdeep, via the
-[`td` package](https://godoc.org/github.com/maxatome/go-testdeep/td)
+[`td` package](https://pkg.go.dev/github.com/maxatome/go-testdeep/td)
 and its
-[helpers](https://godoc.org/github.com/maxatome/go-testdeep/helpers),
+[helpers](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers),
 is to do its best to introduce this missing flexibility using
 ["operators"](https://go-testdeep.zetta.rocks/operators/), when the
 expected value (or one of its component) cannot be matched exactly,
@@ -237,7 +237,7 @@ write unit tests for go-testdeep helpers and so provides some helpful
 functions.
 
 See
-[`tdutil`](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdutil)
+[`tdutil`](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil)
 for details.
 
 
@@ -272,19 +272,19 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 
 
 <!-- links:begin -->
-[`T`]: https://godoc.org/github.com/maxatome/go-testdeep/td#T
-[`TestDeep`]: https://godoc.org/github.com/maxatome/go-testdeep/td#TestDeep
-[`Cmp`]: https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp
+[`T`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T
+[`TestDeep`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TestDeep
+[`Cmp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp
 
-[`tdhttp`]: https://godoc.org/github.com/maxatome/go-testdeep/td/helpers/tdhttp
+[`tdhttp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp
 
-[`BeLax` config flag]: https://godoc.org/github.com/maxatome/go-testdeep/td#ContextConfig
-[`error`]: https://golang.org/pkg/builtin/#error
+[`BeLax` config flag]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig
+[`error`]: https://pkg.go.dev/builtin/#error
 
 
-[`fmt.Stringer`]: https://godoc.org/pkg/fmt/#Stringer
-[`time.Time`]: https://godoc.org/pkg/time/#Time
-[`math.NaN`]: https://godoc.org/pkg/math/#NaN
+[`fmt.Stringer`]: https://pkg.go.dev/fmt/#Stringer
+[`time.Time`]: https://pkg.go.dev/time/#Time
+[`math.NaN`]: https://pkg.go.dev/math/#NaN
 [`All`]: https://go-testdeep.zetta.rocks/operators/all/
 [`Any`]: https://go-testdeep.zetta.rocks/operators/any/
 [`Array`]: https://go-testdeep.zetta.rocks/operators/array/

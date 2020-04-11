@@ -9,9 +9,9 @@ func Lt(maxExpectedValue interface{}) TestDeep
 
 [`Lt`]({{< ref "Lt" >}}) operator checks that data is lesser than
 *maxExpectedValue*. *maxExpectedValue* can be any numeric or
-[`time.Time`](https://golang.org/pkg/time/#Time) (or assignable) value. *maxExpectedValue* must be the
+[`time.Time`](https://pkg.go.dev/time/#Time) (or assignable) value. *maxExpectedValue* must be the
 same kind as the compared value if numeric, and the same type if
-[`time.Time`](https://golang.org/pkg/time/#Time) (or assignable).
+[`time.Time`](https://pkg.go.dev/time/#Time) (or assignable).
 
 ```go
 td.Cmp(t, 17, td.Lt(19))
@@ -19,10 +19,10 @@ before := time.Now()
 td.Cmp(t, before, td.Lt(time.Now()))
 ```
 
-[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://golang.org/pkg/reflect/#Type) of *maxExpectedValue*.
+[`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method returns the [`reflect.Type`](https://pkg.go.dev/reflect/#Type) of *maxExpectedValue*.
 
 
-> See also [<i class='fas fa-book'></i> Lt godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Lt).
+> See also [<i class='fas fa-book'></i> Lt godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lt).
 
 ### Examples
 
@@ -77,12 +77,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpLt godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpLt).
+> See also [<i class='fas fa-book'></i> CmpLt godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpLt).
 
 ### Examples
 
@@ -137,12 +137,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.Lt godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Lt).
+> See also [<i class='fas fa-book'></i> T.Lt godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Lt).
 
 ### Examples
 

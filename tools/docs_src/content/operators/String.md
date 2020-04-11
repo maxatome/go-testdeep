@@ -8,8 +8,8 @@ func String(expected string) TestDeep
 ```
 
 [`String`]({{< ref "String" >}}) operator allows to compare a `string` (or convertible), `[]byte`
-(or convertible), [`error`](https://golang.org/pkg/builtin/#error) or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface ([`error`](https://golang.org/pkg/builtin/#error) interface
-is tested before [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer)).
+(or convertible), [`error`](https://pkg.go.dev/builtin/#error) or [`fmt.Stringer`](https://pkg.go.dev/fmt/#Stringer) interface ([`error`](https://pkg.go.dev/builtin/#error) interface
+is tested before [`fmt.Stringer`](https://pkg.go.dev/fmt/#Stringer)).
 
 ```go
 err := errors.New("error!")
@@ -20,7 +20,7 @@ td.Cmp(t, bstr, td.String("fmt.Stringer!")) // succeeds
 ```
 
 
-> See also [<i class='fas fa-book'></i> String godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#String).
+> See also [<i class='fas fa-book'></i> String godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#String).
 
 ### Examples
 
@@ -84,12 +84,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpString godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpString).
+> See also [<i class='fas fa-book'></i> CmpString godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpString).
 
 ### Examples
 
@@ -153,12 +153,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.String godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.String).
+> See also [<i class='fas fa-book'></i> T.String godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.String).
 
 ### Examples
 

@@ -179,7 +179,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		})
 	}
 
-	// if ctx.Depth > 10 { panic("deepValueEqual") }	// for debugging
+	// if ctx.Depth > 10 { panic("deepValueEqual") } // for debugging
 
 	// Avoid looping forever on cyclic references
 	if ctx.Visited.Record(got, expected) {

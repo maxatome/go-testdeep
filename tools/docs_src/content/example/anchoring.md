@@ -36,9 +36,9 @@ func TestCreateRecord(tt *testing.T) {
 ```
 
 See the
-[`Anchor`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.Anchor)
+[`Anchor`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor)
 method documentation for details. Note that
-[`A`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.A) method
+[`A`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A) method
 is also a synonym for Anchor.
 
 ```go

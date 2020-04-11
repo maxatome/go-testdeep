@@ -51,7 +51,7 @@ if td.Cmp(t, CreateRecord("test"),
 ```
 
 
-> See also [<i class='fas fa-book'></i> Catch godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Catch).
+> See also [<i class='fas fa-book'></i> Catch godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Catch).
 
 ### Examples
 

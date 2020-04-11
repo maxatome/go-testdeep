@@ -12,7 +12,7 @@ the time it is used for the first time. Most of the time, it is
 used with helpers. See the example for a very simple use case.
 
 
-> See also [<i class='fas fa-book'></i> Delay godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Delay).
+> See also [<i class='fas fa-book'></i> Delay godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Delay).
 
 ### Examples
 

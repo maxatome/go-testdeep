@@ -674,7 +674,7 @@ func (t *TestAPI) NoBody() *TestAPI {
 //     })
 //
 // See (*td.T).Anchor documentation for details
-// https://godoc.org/github.com/maxatome/go-testdeep/td#T.Anchor
+// https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor
 //
 // See A method for a shorter synonym of Anchor.
 func (t *TestAPI) Anchor(operator td.TestDeep, model ...interface{}) interface{} {
@@ -696,7 +696,7 @@ func (t *TestAPI) Anchor(operator td.TestDeep, model ...interface{}) interface{}
 //     })
 //
 // See (*td.T).Anchor documentation for details
-// https://godoc.org/github.com/maxatome/go-testdeep/td#T.Anchor
+// https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor
 func (t *TestAPI) A(operator td.TestDeep, model ...interface{}) interface{} {
 	return t.Anchor(operator, model...)
 }

@@ -18,7 +18,7 @@ import (
 // These tests are only here to ensure that all obsolete but aliased
 // functions are still callable from outside.
 //
-// See https://godoc.org/github.com/maxatome/go-testdeep/td for real
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td for real
 // tests and examples.
 func TestCompat(tt *testing.T) {
 	type MyStruct struct {

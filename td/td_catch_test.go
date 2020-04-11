@@ -11,7 +11,6 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
-	//	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 func TestCatch(t *testing.T) {

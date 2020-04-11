@@ -5,7 +5,7 @@ weight = 30
 
 Of course we can test struct fields one by one, but with go-testdeep
 and the [`td` package], the whole struct can be compared with one
-[`Cmp`](https://godoc.org/github.com/maxatome/go-testdeep/td#Cmp) call.
+[`Cmp`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp) call.
 
 We can choose to ignore the non-guessable fields set by
 `CreateRecord()`:

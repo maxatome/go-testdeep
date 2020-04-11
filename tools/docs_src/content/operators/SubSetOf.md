@@ -21,7 +21,7 @@ td.Cmp(t, []int{1, 1, 2}, td.SubSetOf(1, 3)) // fails, 2 is an extra item
 ```
 
 
-> See also [<i class='fas fa-book'></i> SubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SubSetOf).
+> See also [<i class='fas fa-book'></i> SubSetOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubSetOf).
 
 ### Examples
 
@@ -65,12 +65,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSubSetOf).
+> See also [<i class='fas fa-book'></i> CmpSubSetOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpSubSetOf).
 
 ### Examples
 
@@ -114,12 +114,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SubSetOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SubSetOf).
+> See also [<i class='fas fa-book'></i> T.SubSetOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SubSetOf).
 
 ### Examples
 

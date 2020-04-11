@@ -20,7 +20,7 @@ td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 ```
 
 
-> See also [<i class='fas fa-book'></i> SuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#SuperBagOf).
+> See also [<i class='fas fa-book'></i> SuperBagOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperBagOf).
 
 ### Examples
 
@@ -61,12 +61,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> CmpSuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#CmpSuperBagOf).
+> See also [<i class='fas fa-book'></i> CmpSuperBagOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpSuperBagOf).
 
 ### Examples
 
@@ -107,12 +107,12 @@ Returns true if the test is OK, false if it fails.
 *args...* are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If `len(args) > 1` and
 the first item of *args* is a `string` and contains a '%' `rune` then
-[`fmt.Fprintf`](https://golang.org/pkg/fmt/#Fprintf) is used to compose the name, else *args* are passed to
-[`fmt.Fprint`](https://golang.org/pkg/fmt/#Fprint). Do not forget it is the name of the test, not the
+[`fmt.Fprintf`](https://pkg.go.dev/fmt/#Fprintf) is used to compose the name, else *args* are passed to
+[`fmt.Fprint`](https://pkg.go.dev/fmt/#Fprint). Do not forget it is the name of the test, not the
 reason of a potential failure.
 
 
-> See also [<i class='fas fa-book'></i> T.SuperBagOf godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.SuperBagOf).
+> See also [<i class='fas fa-book'></i> T.SuperBagOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SuperBagOf).
 
 ### Examples
 

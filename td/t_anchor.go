@@ -76,10 +76,10 @@ func AddAnchorableStructType(fn interface{}) {
 //     t := td.NewT(tt)
 //     t.Cmp(got, &MyStruct{
 //       Name:    "Bob",
-//   	   Details: &MyDetails{
+//       Details: &MyDetails{
 //         Nick: t.Anchor(td.HasPrefix("Bobby"), "").(string),
 //         Age:  t.Anchor(td.Between(40, 50)).(int),
-//   	   },
+//       },
 //     })
 //   }
 //
@@ -181,10 +181,10 @@ func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
 //     t := td.NewT(tt)
 //     t.Cmp(got, &MyStruct{
 //       Name:    "Bob",
-//   	   Details: &MyDetails{
+//       Details: &MyDetails{
 //         Nick: t.A(td.HasPrefix("Bobby"), "").(string),
 //         Age:  t.A(td.Between(40, 50)).(int),
-//   	   },
+//       },
 //     })
 //   }
 func (t *T) A(operator TestDeep, model ...interface{}) interface{} {

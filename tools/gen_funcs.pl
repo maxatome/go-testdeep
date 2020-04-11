@@ -229,7 +229,7 @@ Cmp$func is a shortcut for:
 EOF
 
     $funcs_contents .= "\n" . go_comment($cmp_doc) . <<EOF;
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#$func for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$func for details.
 EOF
     $cmp_doc .= <<EOF; # operator doc
 See above for details.
@@ -242,7 +242,7 @@ $method_name is a shortcut for:
 
 EOF
     $t_contents .= "\n" . go_comment($t_doc) . <<EOF;
-// See https://godoc.org/github.com/maxatome/go-testdeep/td#$func for details.
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$func for details.
 EOF
     $t_doc .= <<EOF; # operator doc
 See above for details.
@@ -468,24 +468,25 @@ if (@args_errors)
 
 my $common_links = do
 {
-    my $td_url = 'https://godoc.org/github.com/maxatome/go-testdeep/td';
+    my $base_url = 'https://pkg.go.dev/github.com/maxatome/go-testdeep';
+    my $td_url = "$base_url/td";
 
     # Specific types and functions
     join("\n", map "[`$_`]: $td_url#$_", qw(T TestDeep Cmp))
         . "\n\n"
         # Helpers
-        . join("\n", map "[`$_`]: $td_url/helpers/$_",
+        . join("\n", map "[`$_`]: $base_url/helpers/$_",
                qw(tdhttp))
         . "\n\n"
         # Specific links
         . "[`BeLax` config flag]: $td_url#ContextConfig\n"
-        . "[`error`]: https://golang.org/pkg/builtin/#error\n"
+        . "[`error`]: https://pkg.go.dev/builtin/#error\n"
         . "\n\n"
         # Foreign types
-        . join("\n", map "[`$_->[0]`]: https://godoc.org/$_->[1]",
-               [ 'fmt.Stringer' => 'pkg/fmt/#Stringer' ],
-               [ 'time.Time'    => 'pkg/time/#Time' ],
-               [ 'math.NaN'     => 'pkg/math/#NaN' ])
+        . join("\n", map "[`$_->[0]`]: https://pkg.go.dev/$_->[1]",
+               [ 'fmt.Stringer' => 'fmt/#Stringer' ],
+               [ 'time.Time'    => 'time/#Time' ],
+               [ 'math.NaN'     => 'math/#NaN' ])
         . "\n";
 };
 
@@ -574,7 +575,7 @@ $operators{$operator}{signature}
 
 $doc
 
-> See also [<i class='fas fa-book'></i> $operator godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#$operator).
+> See also [<i class='fas fa-book'></i> $operator godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$operator).
 
 ### Examples
 
@@ -604,7 +605,7 @@ $cmp->{signature}
 
 $doc
 
-> See also [<i class='fas fa-book'></i> $cmp->{name} godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#$cmp->{name}).
+> See also [<i class='fas fa-book'></i> $cmp->{name} godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$cmp->{name}).
 
 ### Examples
 
@@ -635,7 +636,7 @@ $t->{signature}
 
 $doc
 
-> See also [<i class='fas fa-book'></i> T.$t->{name} godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#T.$t->{name}).
+> See also [<i class='fas fa-book'></i> T.$t->{name} godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.$t->{name}).
 
 ### Examples
 
@@ -834,7 +835,7 @@ sub doc2md
                     godoc => sub
                     {
                         my($pkg, $fn) = split('\.', $_[0], 2);
-                        "[`$_[0]`](https://golang.org/pkg/$pkg/#$fn)"
+                        "[`$_[0]`](https://pkg.go.dev/$pkg/#$fn)"
                     } };
 
     $doc =~ s/%([a-z]+)\{([^}]+)\}/($repl->{$1} or die $1)->($2)/egr;
@@ -934,11 +935,11 @@ sub process_doc
                my $all = $5;
                my($pkg, $fn) = split('\.', $all, 2);
                $pkg =~ s/^\*//;
-               "[`$all`](https://golang.org/pkg/$pkg/#$fn)"
+               "[`$all`](https://pkg.go.dev/$pkg/#$fn)"
            }
            elsif ($6)
            {
-               "[`$6`](https://golang.org/pkg/builtin/#error)"
+               "[`$6`](https://pkg.go.dev/builtin/#error)"
            }
            elsif ($7)
            {
@@ -946,7 +947,7 @@ sub process_doc
            }
            elsif ($8)
            {
-               "[`$8`](https://godoc.org/github.com/maxatome/go-testdeep/td#BoundsKind)"
+               "[`$8`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#BoundsKind)"
            }
            elsif ($9)
            {
@@ -958,7 +959,7 @@ sub process_doc
            }
            elsif ($11)
            {
-               qq![`$11`](https://godoc.org/github.com/maxatome/go-testdeep/td#SmuggledGot)!
+               qq![`$11`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot)!
            }
        }geox;
 

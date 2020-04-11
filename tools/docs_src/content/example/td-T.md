@@ -53,7 +53,7 @@ func TestCreateRecord(tt *testing.T) {
 ```
 
 Note the use of
-[`RootName`](https://godoc.org/github.com/maxatome/go-testdeep/td#T.RootName)
+[`RootName`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.RootName)
 method, it allows to name what we are going to test, instead of the
 default "DATA".
 
