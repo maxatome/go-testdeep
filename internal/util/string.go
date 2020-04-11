@@ -44,6 +44,10 @@ func ToString(val interface{}) string {
 	case int:
 		return strconv.Itoa(tval)
 
+		// no "(bool)" prefix for booleans
+	case bool:
+		return TernStr(tval, "true", "false")
+
 	case types.TestDeepStringer:
 		return tval.String()
 	}

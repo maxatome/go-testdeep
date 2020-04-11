@@ -584,8 +584,8 @@ func TestEqualOthers(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA.boolean"),
-			Got:      mustBe("(bool) true"),
-			Expected: mustBe("(bool) false"),
+			Got:      mustBe("true"),
+			Expected: mustBe("false"),
 		})
 }
 

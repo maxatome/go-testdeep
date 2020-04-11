@@ -151,6 +151,10 @@ func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if len(ret) > 1 { // (bool, string)
 		reason = ret[1].String()
 	} else if ret[0].Kind() == reflect.Interface { // (error)
+		// For internal use only
+		if cErr, ok := ret[0].Interface().(*ctxerr.Error); ok {
+			return ctx.CollectError(cErr)
+		}
 		reason = ret[0].Interface().(error).Error()
 	}
 	// else (bool) so no reason to report

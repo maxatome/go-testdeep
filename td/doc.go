@@ -21,7 +21,9 @@
 // missing flexibility using "operators" when the expected value (or
 // one of its component) cannot be matched exactly.
 //
-// See https://go-testdeep.zetta.rocks/ for details.
+// See https://go-testdeep.zetta.rocks/ for details, and for easy HTTP
+// API testing, see the tdhttp helper
+// https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp
 //
 // Example of use
 //
@@ -170,39 +172,6 @@
 // the go static typing system and so use other go-testdeep operators
 // for some fields, here NotZero and Between.
 //
-// A step further with operator anchoring
-//
-// Overcome the go static typing system using the Struct operator is
-// sometimes heavy. Especially when structs are nested, as the Struct
-// operator needs to be used for each level surrounding the level in
-// which an operator is involved. Operator anchoring feature has been
-// designed to avoid this heaviness:
-//
-//   import (
-//     "testing"
-//     "time"
-//
-//     "github.com/maxatome/go-testdeep/td"
-//   )
-//
-//   func TestCreateRecord(tt *testing.T) {
-//     before := time.Now().Truncate(time.Second)
-//     record, err := CreateRecord()
-//
-//     t := td.NewT(tt) // operator anchoring needs a *td.T instance
-//
-//     if t.CmpNoError(err) {
-//       t.Cmp(record,
-//         &Record{
-//           Name:      "Bob",
-//           Age:       23,
-//           ID:        t.A(td.NotZero(), uint64(0)).(uint64),
-//           CreatedAt: t.A(td.Between(before, time.Now())).(time.Time),
-//         },
-//         "Newly created record")
-//     }
-//   }
-//
 // Not only structs can be compared. A lot of operators can
 // be found below to cover most (all?) needed tests. See
 // https://godoc.org/github.com/maxatome/go-testdeep/td#TestDeep
@@ -239,10 +208,10 @@
 //     }
 //   }
 //
-// Using td.T type
+// Using T type
 //
-// Last, testing.T can be encapsulated in td.T type, simplifying
-// again the test:
+// testing.T can be encapsulated in td.T type, simplifying again the
+// test:
 //
 //   import (
 //     "testing"
@@ -273,4 +242,40 @@
 //
 // Note the use of RootName method, it allows to name what we are
 // going to test, instead of the default "DATA".
+//
+// A step further with operator anchoring
+//
+// Overcome the go static typing system using the Struct operator is
+// sometimes heavy. Especially when structs are nested, as the Struct
+// operator needs to be used for each level surrounding the level in
+// which an operator is involved. Operator anchoring feature has been
+// designed to avoid this heaviness:
+//
+//   import (
+//     "testing"
+//     "time"
+//
+//     "github.com/maxatome/go-testdeep/td"
+//   )
+//
+//   func TestCreateRecord(tt *testing.T) {
+//     before := time.Now().Truncate(time.Second)
+//     record, err := CreateRecord()
+//
+//     t := td.NewT(tt) // operator anchoring needs a *td.T instance
+//
+//     if t.CmpNoError(err) {
+//       t.Cmp(record,
+//         &Record{
+//           Name:      "Bob",
+//           Age:       23,
+//           ID:        t.A(td.NotZero(), uint64(0)).(uint64),
+//           CreatedAt: t.A(td.Between(before, time.Now())).(time.Time),
+//         },
+//         "Newly created record")
+//     }
+//   }
+//
+// See the A method (or its full name alias Anchor) documentation for
+// details.
 package td // import "github.com/maxatome/go-testdeep/td"

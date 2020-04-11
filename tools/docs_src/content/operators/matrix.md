@@ -18,7 +18,7 @@ weight: 1
 | [`Cap`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | [`Cap`] |
 | [`Catch`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Catch`] |
 | [`Code`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Code`] |
-| [`Contains`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`Contains`] |
+| [`Contains`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`Contains`] |
 
 | Operator vs go type | nil | bool | string | {u,}int* | float* | complex* | array | slice | map | struct | pointer | interface¹ | chan | func | operator |
 | ------------------- | --- | ---- | ------ | -------- | ------ | -------- | ----- | ----- | --- | ------ | ------- | ---------- | ---- | ---- | -------- |
@@ -27,8 +27,8 @@ weight: 1
 | [`Empty`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✗ | ptr on array/slice/map/string | ✓ | ✓ | ✗ | [`Empty`] |
 | [`Gt`] | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗ | ✓ | ✗ | ✗ | [`Gt`] |
 | [`Gte`] | ✗ | ✗ | ✓ | ✓ | ✓ | todo | ✗ | ✗ | ✗ | [`time.Time`] | ✗ | ✓ | ✗ | ✗ | [`Gte`] |
-| [`HasPrefix`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`HasPrefix`] |
-| [`HasSuffix`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`HasSuffix`] |
+| [`HasPrefix`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`HasPrefix`] |
+| [`HasSuffix`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`HasSuffix`] |
 | [`Ignore`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Ignore`] |
 | [`Isa`] | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Isa`] |
 | [`JSON`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | [`JSON`] |
@@ -67,7 +67,7 @@ weight: 1
 | [`Slice`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ptr on slice | ✓ | ✗ | ✗ | [`Slice`] |
 | [`Smuggle`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Smuggle`] |
 | [`SStruct`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ptr on struct | ✓ | ✗ | ✗ | [`SStruct`] |
-| [`String`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`String`] |
+| [`String`] | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | `[]byte` | ✗ | ✗ | ✗ | ✓ + [`fmt.Stringer`]/[`error`] | ✗ | ✗ | [`String`] |
 | [`Struct`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ptr on struct | ✓ | ✗ | ✗ | [`Struct`] |
 | [`SubBagOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ | ptr on array/slice | ✓ | ✗ | ✗ | [`SubBagOf`] |
 | [`SubJSONOf`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | ptr on map/struct | ✓ | ✗ | ✗ | [`SubJSONOf`] |
@@ -483,6 +483,8 @@ Operators likely to succeed for each go type:
 - [`Contains`]
 - [`Delay`]
 - [`Empty`]
+- [`HasPrefix`] only `[]byte`
+- [`HasSuffix`] only `[]byte`
 - [`Ignore`]
 - [`Isa`]
 - [`JSON`]
@@ -501,6 +503,7 @@ Operators likely to succeed for each go type:
 - [`Shallow`]
 - [`Slice`]
 - [`Smuggle`]
+- [`String`] only `[]byte`
 - [`SubBagOf`]
 - [`SubSetOf`]
 - [`SuperBagOf`]
@@ -581,6 +584,7 @@ As all operators accept interface values, only specific interfaces are
 listed below:
 
 <!-- go-if-matrix:begin -->
+- [`Contains`] → [`fmt.Stringer`]/[`error`]
 - [`HasPrefix`] → [`fmt.Stringer`]/[`error`]
 - [`HasSuffix`] → [`fmt.Stringer`]/[`error`]
 - [`Re`] → [`fmt.Stringer`]/[`error`]

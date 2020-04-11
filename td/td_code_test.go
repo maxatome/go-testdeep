@@ -12,6 +12,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -93,6 +94,20 @@ func TestCode(t *testing.T) {
 			Message: mustBe("ran code with %% as argument"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("        value: 12\nit failed coz: very custom error"),
+		})
+
+	// Internal use
+	checkError(t, 12,
+		td.Code(func(i int) error {
+			return &ctxerr.Error{
+				Message: "my message",
+				Summary: ctxerr.NewSummary("my summary"),
+			}
+		}),
+		expectedError{
+			Message: mustBe("my message"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("my summary"),
 		})
 
 	//

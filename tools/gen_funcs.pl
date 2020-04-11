@@ -334,6 +334,7 @@ my $rparam =qr/"(?:\\.|[^"]+)*"            # "string"
               |`[^`]*`                     # `string`
               |&[a-zA-Z_]\w*(?:\.\w+)?(?:$rec)? # &Struct{...}, &variable
               |\[[^][]*\]\w+$rec           # []Array{...}
+              |\[\]byte\("[^"]+"\)         # []byte("...")
               |map${reb}\w+$rec            # map[...]Type{...}
               |func\([^)]*\)[^{]+$rec      # func fn (...) ... { ... }
               |[a-zA-Z_]\w*(?:\.\w+)?(?:$rec|$rep)? # Str{...}, Fn(...), pkg.var
@@ -755,6 +756,48 @@ EOH
         print $fh $matrix;
         close $fh;
         rename "$REPO_DIR/$matrix_file.new", "$REPO_DIR/$matrix_file";
+    }
+
+    # tdhttp example
+    {
+        my $example = do
+        {
+            open(my $fh, '<', "$REPO_DIR/helpers/tdhttp/example_test.go");
+            local $/;
+            <$fh>
+        };
+
+        my($import) = $example =~ /^(import \(.*?^\))$/ms;
+        $import or die "tdhttp example, import not found!\n";
+        $example =~ s/.*^func Example\(\) \{\n\tt := &testing.T\{\}\n\n//ms
+                                                                                            or die "tdhttp example, func Example() not found!\n";
+
+        $example =~ s/fmt\.Printf/t.Logf/g
+            or die "tdhttp example, fmt.Printf not found\n";
+        $example =~ s/fmt\.Println/t.Log/g
+            or die "tdhttp example, fmt.Println not found\n";
+        $example =~ s,\n\t// Output:\n.*,},s
+            or die "tdhttp example, Output: not found\n";
+
+        my $md_file = 'tools/docs_src/content/helpers/_index.md';
+
+        my $final = do { open(my $fh, '<', $md_file); local $/; <$fh> } =~
+            s{(<!-- tdhttp:begin -->).*(<!-- tdhttp:end -->)}
+             <$1
+{{%expand "Main example" %}}```go
+package myapi
+
+$import
+
+func TestMyAPI(t *testing.T) {
+$example
+```{{% /expand%}}
+$2>rs or die "tdhttp example not found in $md_file!";
+
+        open(my $out, '>', "$md_file.new");
+        print $out $final;
+        close $out;
+        rename "$md_file.new", $md_file;
     }
 }
 

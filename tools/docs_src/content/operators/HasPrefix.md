@@ -8,10 +8,12 @@ func HasPrefix(expected string) TestDeep
 ```
 
 [`HasPrefix`]({{< ref "HasPrefix" >}}) operator allows to compare the prefix of a `string` (or
-convertible), [`error`](https://golang.org/pkg/builtin/#error) or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface ([`error`](https://golang.org/pkg/builtin/#error) interface is
-tested before [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer).)
+convertible), `[]byte` (or convertible), [`error`](https://golang.org/pkg/builtin/#error) or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer)
+interface ([`error`](https://golang.org/pkg/builtin/#error) interface is tested before [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer)).
 
 ```go
+td.Cmp(t, []byte("foobar"), td.HasPrefix("foo")) // succeeds
+
 type Foobar string
 td.Cmp(t, Foobar("foobar"), td.HasPrefix("foo")) // succeeds
 
@@ -33,10 +35,14 @@ td.Cmp(t, bstr, td.HasPrefix("fmt")) // succeeds
 	got := "foobar"
 
 	ok := td.Cmp(t, got, td.HasPrefix("foo"), "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = td.Cmp(t, []byte(got), td.HasPrefix("foo"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go
@@ -98,10 +104,14 @@ reason of a potential failure.
 	got := "foobar"
 
 	ok := td.CmpHasPrefix(t, got, "foo", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = td.Cmp(t, []byte(got), td.HasPrefix("foo"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go
@@ -163,10 +173,14 @@ reason of a potential failure.
 	got := "foobar"
 
 	ok := t.HasPrefix(got, "foo", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = t.Cmp([]byte(got), td.HasPrefix("foo"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go

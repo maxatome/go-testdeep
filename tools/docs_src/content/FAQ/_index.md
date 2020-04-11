@@ -366,31 +366,34 @@ func TestMyApi(t *testing.T) {
 
   y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
 
-  tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"), // ← ①
-    myAPI.ServeHTTP,     // ← ②
-    tdhttp.Response{     // ← ③
-      Status: http.StatusOK,
-      // Header can be tested too… See tdhttp doc.
-      Body: td.Struct(&Person{
-        Name: "Bob",
-        Age:  28,
-      }, td.StructFields{
-        "ID":        td.NotZero(),  // ← ④
-        "CreatedAt": td.Gte(y2019), // ← ⑤
-      }),
-    },
-    "Testing GET /json")
+  testAPI := tdhttp.NewTestAPI(t, myAPI) // ← ①
+
+  testAPI.Get("/json").             // ← ②
+    Name("Testing GET /json").
+    CmpStatus(http.StatusOK).       // ← ③
+    CmpJSONBody(td.SStruct(&Person{ // ← ④
+      Name: "Bob",
+      Age:  28,
+    }, td.StructFields{
+      "ID":        td.NotZero(),    // ← ⑤
+      "CreatedAt": td.Gte(y2019),   // ← ⑥
+    }))
+
+  // testAPI can be used to test another route…
 }
 ```
 
+1. the API handler ready to be tested;
 1. the GET request;
-2. the API handler;
-3. the expected response: HTTP status should be `http.StatusOK` and
-   the body should match the [`Struct`]({{< ref "Struct" >}}) operator;
-4. check the `ID` field is [`NotZero`]({{< ref "NotZero" >}});
-5. check the `CreatedAt` field is greater or equal than `y2019` variable
-   (set just before `tdhttp.CmpJSONResponse` call).
+1. the expected HTTP status should be `http.StatusOK`;
+1. the expected body should match the [`SStruct`]({{< ref "SStruct" >}})
+   operator;
+1. check the `ID` field is [`NotZero`]({{< ref "NotZero" >}});
+1. check the `CreatedAt` field is greater or equal than `y2019` variable
+   (set just before `tdhttp.NewTestAPI` call).
+
+If you prefer to do one function call instead of chaining methods as
+above, you can try [CmpJSONResponse](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
 
 
 ## Arf, I use Gin Gonic, and so no `net/http` handlers
@@ -441,34 +444,39 @@ func TestMyGinGonicApi(t *testing.T) {
 
   y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
 
-  tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"), // ← ①
-    myAPI.ServeHTTP,     // ← ②
-    tdhttp.Response{     // ← ③
-      Status: http.StatusOK,
-      // Header can be tested too… See tdhttp doc.
-      Body: td.Struct(&Person{
-        Name: "Bob",
-        Age:  28,
-      }, td.StructFields{
-        "ID":        td.NotZero(),  // ← ④
-        "CreatedAt": td.Gte(y2019), // ← ⑤
-      }),
-    },
-    "Testing GET /json")
+  testAPI := tdhttp.NewTestAPI(t, myAPI) // ← ①
+
+  testAPI.Get("/json").             // ← ②
+    Name("Testing GET /json").
+    CmpStatus(http.StatusOK).       // ← ③
+    CmpJSONBody(td.SStruct(&Person{ // ← ④
+      Name: "Bob",
+      Age:  28,
+    }, td.StructFields{
+      "ID":        td.NotZero(),    // ← ⑤
+      "CreatedAt": td.Gte(y2019),   // ← ⑥
+    }))
+
+  // testAPI can be used to test another route…
 }
 ```
 
+1. the API handler ready to be tested;
 1. the GET request;
-2. the API handler;
-3. the expected response: HTTP status should be `http.StatusOK` and
-   the body should match the [`Struct`]({{< ref "Struct" >}}) operator;
-4. check the `ID` field is [`NotZero`]({{< ref "NotZero" >}});
-5. check the `CreatedAt` field is greater or equal than `y2019` variable
-   (set just before `tdhttp.CmpJSONResponse` call).
+1. the expected HTTP status should be `http.StatusOK`;
+1. the expected body should match the [`SStruct`]({{< ref "SStruct" >}})
+   operator;
+1. check the `ID` field is [`NotZero`]({{< ref "NotZero" >}});
+1. check the `CreatedAt` field is greater or equal than `y2019` variable
+   (set just before `tdhttp.NewTestAPI` call).
+
+If you prefer to do one function call instead of chaining methods as
+above, you can try [CmpJSONResponse](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
 
 
 ## Fine, the request succeeds and the ID is not 0, but what is the ID real value?
+
+Stay with [`tdhttp` helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)!
 
 In fact you can [`Catch`]({{< ref "Catch" >}}) the `ID` before comparing
 it to 0 (as well as `CreatedAt` in fact). Try:
@@ -482,38 +490,45 @@ func TestMyGinGonicApi(t *testing.T) {
 
   y2019, _ := time.Parse(time.RFC3339, "2019-01-01T00:00:00Z")
 
-  if tdhttp.CmpJSONResponse(t,
-    tdhttp.Get("/json"), // ← ①
-    myAPI.ServeHTTP,     // ← ②
-    tdhttp.Response{     // ← ③
-      Status: http.StatusOK,
-      // Header can be tested too… See tdhttp doc.
-      Body: td.Struct(&Person{
-        Name: "Bob",
-        Age:  28,
-      }, td.StructFields{
-        "ID":        td.Catch(&id, td.NotZero()),         // ← ④
-        "CreatedAt": td.Catch(&createdAt, td.Gte(y2019)), // ← ⑤
-      }),
-    },
-    "Testing GET /json") {
+  testAPI := tdhttp.NewTestAPI(t, myAPI) // ← ①
+
+  testAPI.Get("/json").             // ← ②
+    Name("Testing GET /json").
+    CmpStatus(http.StatusOK).       // ← ③
+    CmpJSONBody(td.SStruct(&Person{ // ← ④
+      Name: "Bob",
+      Age:  28,
+    }, td.StructFields{
+      "ID":        td.Catch(&id, td.NotZero()),         // ← ⑤
+      "CreatedAt": td.Catch(&createdAt, td.Gte(y2019)), // ← ⑥
+    }))
+  if !testAPI.Failed() {
     t.Logf("The ID is %d and was created at %s", id, createdAt)
   }
+
+  // testAPI can be used to test another route…
 }
 ```
 
+1. the API handler ready to be tested;
 1. the GET request;
-2. the API handler;
-3. the expected response: HTTP status should be `http.StatusOK` and
-   the body should match the [`Struct`]({{< ref "Struct" >}}) operator;
-4. [`Catch`]({{< ref "Catch" >}}) the `ID` field: put it in `id`
+1. the expected HTTP status should be `http.StatusOK`;
+1. the expected body should match the [`SStruct`]({{< ref "SStruct" >}})
+   operator;
+1. [`Catch`]({{< ref "Catch" >}}) the `ID` field: put it in `id`
    variable and check it is [`NotZero`]({{< ref "NotZero" >}});
-5. [`Catch`]({{< ref "Catch" >}}) the `CreatedAt` field: put it in `createdAt`
+1. [`Catch`]({{< ref "Catch" >}}) the `CreatedAt` field: put it in `createdAt`
    variable and check it is greater or equal than `y2019` variable
-   (set just before `tdhttp.CmpJSONResponse` call).
+   (set just before `tdhttp.NewTestAPI` call).
+
+If you prefer to do one function call instead of chaining methods as
+above, you can try [CmpJSONResponse](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
 
 
 ## OK, but how to be sure the response content is well JSONified?
+
+Again, [`tdhttp` helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
+is your friend!
 
 With the help of [`JSON`]({{< ref "JSON" >}}) operator of course! See
 it below, used with [`Catch`]({{< ref "Catch" >}}) (note it can be used
@@ -533,54 +548,69 @@ func TestMyGinGonicApi(t *testing.T) {
   var id uint64
   var createdAt time.Time
 
-  beforeCreate := time.Now().Truncate(0)
+  testAPI := tdhttp.NewTestAPI(t, myAPI) // ← ①
 
-  if tdhttp.CmpJSONResponse(t,
-    tdhttp.PostJSON("/person", Person{Name: "Bob", Age: 42}), // ← ①
-    myAPI.ServeHTTP,                                      // ← ②
-    tdhttp.Response{                                      // ← ③
-      Status: http.StatusCreated,
-      Body: td.JSON(`
+  testAPI.PostJSON("/person", Person{Name: "Bob", Age: 42}), // ← ②
+    Name("Create a new Person").
+	CmpStatus(http.StatusCreated). // ← ③
+	CmpJSONBody(td.JSON(`
 {
   "id":         $id,
   "name":       "Bob",
   "age":        42,
   "created_at": "$createdAt",
 }`,
-        td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ④
-        td.Tag("created_at", td.All(                      // ← ⑤
-          td.HasSuffix("Z"),                              // ← ⑥
-          td.Smuggle(func(s string) (time.Time, error) {  // ← ⑦
-            return time.Parse(time.RFC3339Nano, s)
-          }, td.Catch(&createdAt, td.Gte(beforeCreate))), // ← ⑧
-        )),
-      ),
-      // Header can be tested too… See tdhttp doc.
-    },
-    "Create a new Person") {
+      td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ④
+      td.Tag("created_at", td.All(                      // ← ⑤
+        td.HasSuffix("Z"),                              // ← ⑥
+        td.Smuggle(func(s string) (time.Time, error) {  // ← ⑦
+          return time.Parse(time.RFC3339Nano, s)
+        }, td.Catch(&createdAt, td.Gte(testAPI.SentAt()))), // ← ⑧
+      )),
+    ))
+  if !testAPI.Failed() {
     t.Logf("The new Person ID is %d and was created at %s", id, createdAt)
   }
+
+  // testAPI can be used to test another route…
 }
 ```
 
+1. the API handler ready to be tested;
 1. the POST request with automatic JSON marshalling;
-2. the API handler;
-3. the expected response: HTTP status should be `http.StatusCreated`
-   and the body should match the [`JSON`]({{< ref "JSON" >}})
-   operator;
-4. for the `$id` placeholder, [`Catch`]({{< ref "Catch" >}}) its
+1. the expected HTTP status should be `http.StatusCreated`
+   and the line just below, the body should match the
+   [`JSON`]({{< ref "JSON" >}}) operator;
+1. for the `$id` placeholder, [`Catch`]({{< ref "Catch" >}}) its
    value: put it in `id` variable and check it is
    [`NotZero`]({{< ref "NotZero" >}});
-5. for the `$created_at` placeholder, use the [`All`]({{< ref "All" >}})
+1. for the `$created_at` placeholder, use the [`All`]({{< ref "All" >}})
    operator. It combines several operators like a AND;
-6. check that `$created_at` date ends with "Z" using
+1. check that `$created_at` date ends with "Z" using
    [`HasSuffix`]({{< ref "HasSuffix" >}}). As we expect a RFC3339
    date, we require it in UTC time zone;
-7. convert `$created_at` date into a `time.Time` using a custom
+1. convert `$created_at` date into a `time.Time` using a custom
    function thanks to the [`Smuggle`]({{< ref "Smuggle" >}}) operator;
-8. then [`Catch`]({{< ref "Catch" >}}) the resulting value: put it in
+1. then [`Catch`]({{< ref "Catch" >}}) the resulting value: put it in
    `createdAt` variable and check it is greater or equal than
-   `beforeCreate` (set just before `tdhttp.CmpJSONResponse` call).
+   `testAPI.SentAt()` (the time just before the request is handled).
+
+If you prefer to do one function call instead of chaining methods as
+above, you can try [CmpJSONResponse](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse).
+
+
+## My API use XML not JSON!
+
+[`tdhttp`
+helper](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
+provides the same functions and methods for XML it does for JSON.
+
+[RTFM](https://godoc.org/github.com/maxatome/go-testdeep/helpers/tdhttp)
+:)
+
+Note that the [`JSON`]({{< ref "JSON" >}}) operator have not its `XML`
+counterpart yet.
+But [PRs are welcome](https://github.com/maxatome/go-testdeep/pulls)!
 
 
 ## Should I import `github.com/maxatome/go-testdeep` or `github.com/maxatome/go-testdeep/td`?

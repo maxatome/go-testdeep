@@ -89,8 +89,8 @@ func TestZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(bool) true"),
-			Expected: mustBe("(bool) false"),
+			Got:      mustBe("true"),
+			Expected: mustBe("false"),
 		})
 
 	//
@@ -179,7 +179,7 @@ func TestNotZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("zero value"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(bool) false"),
+			Got:      mustBe("false"),
 			Expected: mustBe("NotZero()"),
 		})
 

@@ -4,7 +4,6 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-// Package tdhttp provides some functions to easily test HTTP handlers.
 package tdhttp
 
 import (
@@ -12,7 +11,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
-	"net/http/httptest"
 	"reflect"
 	"testing"
 
@@ -29,15 +27,10 @@ type Response struct {
 	Body   interface{} // Body is the expected body (expected to be empty if nil)
 }
 
-// CmpMarshaledResponse is the base function used by all others in
-// tdhttp package. The req *http.Request is launched against
-// handler. The response body is unmarshaled using unmarshal. The
-// response is then tested against expectedResp.
-//
-// It returns true if the tests succeed, false otherwise.
-func CmpMarshaledResponse(tt td.TestingFT,
+func cmpMarshaledResponse(tt td.TestingFT,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
+	acceptEmptyBody bool,
 	unmarshal func([]byte, interface{}) error,
 	expectedResp Response,
 	args ...interface{},
@@ -48,103 +41,52 @@ func CmpMarshaledResponse(tt td.TestingFT,
 		tt.Log(testName)
 	}
 
-	var statusMismatch, headerMismatch bool
-
 	t := td.NewT(tt)
 	defer t.AnchorsPersistTemporarily()()
 
-	w := httptest.NewRecorder()
-
-	handler(w, req)
+	ta := NewTestAPI(t, http.HandlerFunc(handler)).Request(req)
 
 	// Check status, nil = ignore
 	if expectedResp.Status != nil {
-		statusMismatch = !t.RootName("Response.Status").
-			Cmp(w.Code, expectedResp.Status, "status code should match")
+		ta.CmpStatus(expectedResp.Status)
 	}
 
 	// Check header, nil = ignore
 	if expectedResp.Header != nil {
-		headerMismatch = !t.RootName("Response.Header").
-			Cmp(w.Header(), expectedResp.Header, "header should match")
+		ta.CmpHeader(expectedResp.Header)
 	}
 
-	t = t.RootName("Response.Body")
-
-	// Body, nil = no body expected
 	if expectedResp.Body == nil {
-		ok := t.Empty(w.Body.Bytes(), "body should be empty")
-		return !statusMismatch && !headerMismatch && ok
-	}
-
-	if !t.NotEmpty(w.Body.Bytes(), "body should not be empty") {
-		return false
-	}
-
-	var (
-		bodyType reflect.Type
-		body     interface{}
-	)
-
-	// If expectedBody is a TestDeep operator, try to ask it the type
-	// behind it. It should work in most cases (typically Struct(),
-	// Map() & Slice()).
-	var unknownExpectedType, showRawBody bool
-	op, ok := expectedResp.Body.(td.TestDeep)
-	if ok {
-		bodyType = op.TypeBehind()
-		if bodyType == nil {
-			// As the expected body type cannot be guessed, try to
-			// unmarshal in an interface{}
-			bodyType = reflect.TypeOf(&body).Elem()
-			unknownExpectedType = true
-
-			// Special case for Ignore & NotEmpty operators
-			switch op.GetLocation().Func {
-			case "Ignore", "NotEmpty":
-				showRawBody = statusMismatch // Show real body if status failed
-			}
-		}
+		ta.NoBody()
 	} else {
-		bodyType = reflect.TypeOf(expectedResp.Body)
+		ta.cmpMarshaledBody(acceptEmptyBody, unmarshal, expectedResp.Body)
 	}
 
-	// For unmarshaling below, body must be a pointer
-	body = reflect.New(bodyType).Interface()
+	return !ta.Failed()
+}
 
-	success := !statusMismatch && !headerMismatch
-
-	// Try to unmarshal body
-	if !t.RootName("unmarshal(Response.Body)").
-		CmpNoError(unmarshal(w.Body.Bytes(), body), "body unmarshaling") {
-		// If unmarshal failed, perhaps it's coz the expected body type
-		// is unknown?
-		if unknownExpectedType {
-			t.Logf("Cannot guess the body expected type as %[1]s TestDeep\n"+
-				"operator does not know the type behind it.\n"+
-				"You can try All(Isa(EXPECTED_TYPE), %[1]s(...)) to disambiguate...",
-				op.GetLocation().Func)
-		}
-		success = false
-		showRawBody = true // let's show its real body contents
-	} else if !t.Cmp(body, td.Ptr(expectedResp.Body), "body contents is OK") {
-		// If the body comparison fails
-		success = false
-
-		// Try to catch bad body expected type when nothing has been set
-		// to non-zero during unmarshaling body. In this case, require
-		// to show raw body contents.
-		if td.EqDeeply(body, reflect.New(bodyType).Interface()) {
-			showRawBody = true
-			t.Log("Hmm… It seems nothing has been set during unmarshaling…")
-		}
-	}
-
-	if showRawBody {
-		t.Logf("Raw received body: %s", tdutil.FormatString(w.Body.String()))
-	}
-
-	return success
+// CmpMarshaledResponse is the base function used by some others in
+// tdhttp package. The req *http.Request is launched against
+// handler. The response body is unmarshaled using unmarshal. The
+// response is then tested against expectedResp.
+//
+// "args..." are optional and allow to name the test, a t.Log() done
+// before starting any test. If len(args) > 1 and the first item of
+// "args" is a string and contains a '%' rune then fmt.Fprintf is used
+// to compose the name, else "args" are passed to fmt.Fprint.
+//
+// It returns true if the tests succeed, false otherwise.
+//
+// See TestAPI type and its methods for more flexible tests.
+func CmpMarshaledResponse(t td.TestingFT,
+	req *http.Request,
+	handler func(w http.ResponseWriter, r *http.Request),
+	unmarshal func([]byte, interface{}) error,
+	expectedResp Response,
+	args ...interface{},
+) bool {
+	t.Helper()
+	return cmpMarshaledResponse(t, req, handler, false, unmarshal, expectedResp, args...)
 }
 
 // CmpResponse is used to match a []byte or string response body. The
@@ -153,16 +95,39 @@ func CmpMarshaledResponse(tt td.TestingFT,
 // depending on the expectedResp.Body type. The response is then
 // tested against expectedResp.
 //
+// "args..." are optional and allow to name the test, a t.Log() done
+// before starting any test. If len(args) > 1 and the first item of
+// "args" is a string and contains a '%' rune then fmt.Fprintf is used
+// to compose the name, else "args" are passed to fmt.Fprint.
+//
 // It returns true if the tests succeed, false otherwise.
+//
+//   ok := tdhttp.CmpResponse(t,
+//     tdhttp.Get("/test"),
+//     myAPI.ServeHTTP,
+//     Response{
+//       Status: http.StatusOK,
+//       Header: td.ContainsKey("X-Custom-Header"),
+//       Body:   "OK!\n",
+//     },
+//     "/test route")
+//
+// Status, Header and Body fields of Response struct can all be
+// TestDeep operators as it is for Header field here. Otherwise,
+// Status should be an int, Header a http.Header and Body a []byte or
+// a string.
+//
+// See TestAPI type and its methods for more flexible tests.
 func CmpResponse(t td.TestingFT,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,
 	args ...interface{}) bool {
 	t.Helper()
-	return CmpMarshaledResponse(t,
+	return cmpMarshaledResponse(t,
 		req,
 		handler,
+		true,
 		func(body []byte, target interface{}) error {
 			switch t := target.(type) {
 			case *string:
@@ -172,9 +137,11 @@ func CmpResponse(t td.TestingFT,
 			case *interface{}:
 				*t = body
 			default:
+				// cmpMarshaledBody (behind cmpMarshaledResponse) always calls
+				// us with target as a pointer
 				return fmt.Errorf(
-					"CmpResponse does not handle %T body, only string & []byte",
-					target)
+					"CmpResponse only accepts expectedResp.Body be a []byte, a string or a TestDeep operator allowing to match these types, but not type %s",
+					reflect.TypeOf(target).Elem())
 			}
 			return nil
 		},
@@ -187,7 +154,39 @@ func CmpResponse(t td.TestingFT,
 // non-nil, the response body is json.Unmarshal'ed. The response is
 // then tested against expectedResp.
 //
+// "args..." are optional and allow to name the test, a t.Log() done
+// before starting any test. If len(args) > 1 and the first item of
+// "args" is a string and contains a '%' rune then fmt.Fprintf is used
+// to compose the name, else "args" are passed to fmt.Fprint.
+//
 // It returns true if the tests succeed, false otherwise.
+//
+//   ok := tdhttp.CmpJSONResponse(t,
+//     tdhttp.Get("/person/42"),
+//     myAPI.ServeHTTP,
+//     Response{
+//       Status: http.StatusOK,
+//       Header: td.ContainsKey("X-Custom-Header"),
+//       Body:   Person{
+//         ID:   42,
+//         Name: "Bob",
+//         Age:  26,
+//       },
+//     },
+//     "/person/{id} route")
+//
+// Status, Header and Body fields of Response struct can all be
+// TestDeep operators as it is for Header field here. Otherwise,
+// Status should be an int, Header a http.Header and Body any type
+// encoding/json can Unmarshal into.
+//
+// If Status and Header are omitted (or nil), they are not tested.
+//
+// If Body is omitted (or nil), it means the body response has to be
+// empty. If you want to ignore the body response, use td.Ignore()
+// explicitly.
+//
+// See TestAPI type and its methods for more flexible tests.
 func CmpJSONResponse(t td.TestingFT,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
@@ -208,7 +207,39 @@ func CmpJSONResponse(t td.TestingFT,
 // non-nil, the response body is xml.Unmarshal'ed. The response is
 // then tested against expectedResp.
 //
+// "args..." are optional and allow to name the test, a t.Log() done
+// before starting any test. If len(args) > 1 and the first item of
+// "args" is a string and contains a '%' rune then fmt.Fprintf is used
+// to compose the name, else "args" are passed to fmt.Fprint.
+//
 // It returns true if the tests succeed, false otherwise.
+//
+//   ok := tdhttp.CmpXMLResponse(t,
+//     tdhttp.Get("/person/42"),
+//     myAPI.ServeHTTP,
+//     Response{
+//       Status: http.StatusOK,
+//       Header: td.ContainsKey("X-Custom-Header"),
+//       Body:   Person{
+//         ID:   42,
+//         Name: "Bob",
+//         Age:  26,
+//       },
+//     },
+//     "/person/{id} route")
+//
+// Status, Header and Body fields of Response struct can all be
+// TestDeep operators as it is for Header field here. Otherwise,
+// Status should be an int, Header a http.Header and Body any type
+// encoding/xml can Unmarshal into.
+//
+// If Status and Header are omitted (or nil), they are not tested.
+//
+// If Body is omitted (or nil), it means the body response has to be
+// empty. If you want to ignore the body response, use td.Ignore()
+// explicitly.
+//
+// See TestAPI type and its methods for more flexible tests.
 func CmpXMLResponse(t td.TestingFT,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
@@ -236,6 +267,10 @@ func CmpXMLResponse(t td.TestingFT,
 //     tdhttp.Response{
 //       Status: http.StatusOK,
 //     }))
+//
+// See CmpMarshaledResponse documentation for details.
+//
+// See TestAPI type and its methods for more flexible tests.
 func CmpMarshaledResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	unmarshal func([]byte, interface{}) error,
@@ -257,6 +292,10 @@ func CmpMarshaledResponseFunc(req *http.Request,
 //     tdhttp.Response{
 //       Status: http.StatusOK,
 //     }))
+//
+// See CmpResponse documentation for details.
+//
+// See TestAPI type and its methods for more flexible tests.
 func CmpResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response) func(t *testing.T) {
@@ -278,6 +317,10 @@ func CmpResponseFunc(req *http.Request,
 //       Status: http.StatusOK,
 //       Body:   JResp{Comment: "expected comment!"},
 //     }))
+//
+// See CmpJSONResponse documentation for details.
+//
+// See TestAPI type and its methods for more flexible tests.
 func CmpJSONResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response) func(t *testing.T) {
@@ -299,6 +342,10 @@ func CmpJSONResponseFunc(req *http.Request,
 //       Status: http.StatusOK,
 //       Body:   JResp{Comment: "expected comment!"},
 //     }))
+//
+// See CmpXMLResponse documentation for details.
+//
+// See TestAPI type and its methods for more flexible tests.
 func CmpXMLResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response) func(t *testing.T) {

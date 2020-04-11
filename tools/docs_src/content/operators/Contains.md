@@ -7,26 +7,80 @@ weight: 10
 func Contains(expectedValue interface{}) TestDeep
 ```
 
-[`Contains`]({{< ref "Contains" >}}) is a [smuggler operator]({{< ref "operators#smuggler-operators" >}}) with a little convenient exception
-for strings. [`Contains`]({{< ref "Contains" >}}) has to be applied on arrays, slices, maps or
-strings. It compares each item of data array/slice/map/`string` (`rune`
-for strings) against *expectedValue*.
+[`Contains`]({{< ref "Contains" >}}) is a [smuggler operator]({{< ref "operators#smuggler-operators" >}}) to check if something is contained
+in another thing. [`Contains`]({{< ref "Contains" >}}) has to be applied on arrays, slices, maps or
+strings. It tries to be as smarter as possible.
+
+If *expectedValue* is a [TestDeep operator]({{< ref "operators" >}}), each item of data
+array/slice/map/`string` (`rune` for strings) is compared to it. The
+use of a [TestDeep operator]({{< ref "operators" >}}) as *expectedValue* works only in this
+way: item per item.
+
+If data is a slice, and *expectedValue* has the same type, then
+*expectedValue* is searched as a sub-slice, otherwise
+*expectedValue* is compared to each slice value.
 
 ```go
 list := []int{12, 34, 28}
 td.Cmp(t, list, td.Contains(34))                 // succeeds
 td.Cmp(t, list, td.Contains(td.Between(30, 35))) // succeeds too
 td.Cmp(t, list, td.Contains(35))                 // fails
+td.Cmp(t, list, td.Contains([]int{34, 28}))      // succeeds
+```
 
+If data is an array or a map, each value is compared to
+*expectedValue*. [`Map`]({{< ref "Map" >}}) keys are not checked: see [`ContainsKey`]({{< ref "ContainsKey" >}}) to check
+map keys existence.
+
+```go
 hash := map[string]int{"foo": 12, "bar": 34, "zip": 28}
 td.Cmp(t, hash, td.Contains(34))                 // succeeds
 td.Cmp(t, hash, td.Contains(td.Between(30, 35))) // succeeds too
 td.Cmp(t, hash, td.Contains(35))                 // fails
 
+array := [...]int{12, 34, 28}
+td.Cmp(t, array, td.Contains(34))                 // succeeds
+td.Cmp(t, array, td.Contains(td.Between(30, 35))) // succeeds too
+td.Cmp(t, array, td.Contains(35))                 // fails
+```
+
+If data is a `string` (or convertible), `[]byte` (or convertible),
+[`error`](https://golang.org/pkg/builtin/#error) or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface ([`error`](https://golang.org/pkg/builtin/#error) interface is tested before
+[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer)), *expectedValue* can be a `string`, a `[]byte`, a `rune` or
+a `byte`. In this case, it tests if the got `string` contains this
+expected `string`, `[]byte`, `rune` or `byte`.
+
+```go
 got := "foo bar"
 td.Cmp(t, got, td.Contains('o'))                  // succeeds
 td.Cmp(t, got, td.Contains(rune('o')))            // succeeds
 td.Cmp(t, got, td.Contains(td.Between('n', 'p'))) // succeeds
+td.Cmp(t, got, td.Contains("bar"))                // succeeds
+td.Cmp(t, got, td.Contains([]byte("bar")))        // succeeds
+
+td.Cmp(t, []byte("foobar"), td.Contains("ooba")) // succeeds
+
+type Foobar string
+td.Cmp(t, Foobar("foobar"), td.Contains("ooba")) // succeeds
+
+err := errors.New("error!")
+td.Cmp(t, err, td.Contains("ror")) // succeeds
+
+bstr := bytes.NewBufferString("fmt.Stringer!")
+td.Cmp(t, bstr, td.Contains("String")) // succeeds
+```
+
+Pitfall: if you want to check if 2 words are contained in got, don't do:
+
+```go
+td.Cmp(t, "foobar", td.Contains(td.All("foo", "bar"))) // Bad!
+```
+
+as [TestDeep operator]({{< ref "operators" >}}) [`All`]({{< ref "All" >}}) in [`Contains`]({{< ref "Contains" >}}) operates on each `rune`, so it
+does not work as expected, but do::
+
+```go
+td.Cmp(t, "foobar", td.All(td.Contains("foo"), td.Contains("bar")))
 ```
 
 When [`Contains(nil)`]({{< ref "Contains" >}}) is used, `nil` is automatically converted to a
@@ -53,23 +107,6 @@ td.Cmp(t, hash, td.Contains((*int)(nil))) // succeeds
 td.Cmp(t, hash, td.Contains(td.Nil()))    // succeeds
 ```
 
-As a special case for `string` (or convertible), [`error`](https://golang.org/pkg/builtin/#error) or
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface ([`error`](https://golang.org/pkg/builtin/#error) interface is tested before
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer)), *expectedValue* can be a `string`, a `rune` or a
-`byte`. In this case, it tests if the got `string` contains this
-expected `string`, `rune` or `byte`.
-
-```go
-type Foobar string
-td.Cmp(t, Foobar("foobar"), td.Contains("ooba")) // succeeds
-
-err := errors.New("error!")
-td.Cmp(t, err, td.Contains("ror")) // succeeds
-
-bstr := bytes.NewBufferString("fmt.Stringer!")
-td.Cmp(t, bstr, td.Contains("String")) // succeeds
-```
-
 
 > See also [<i class='fas fa-book'></i> Contains godoc](https://godoc.org/github.com/maxatome/go-testdeep/td#Contains).
 
@@ -90,11 +127,15 @@ td.Cmp(t, bstr, td.Contains("String")) // succeeds
 	ok = td.Cmp(t, []int{11, 22, 33, 44}, td.Contains(td.Between(20, 25)))
 	fmt.Println("slice contains at least one item in [20 .. 25]:", ok)
 
+	ok = td.Cmp(t, []int{11, 22, 33, 44}, td.Contains([]int{22, 33}))
+	fmt.Println("slice contains the sub-slice [22, 33]:", ok)
+
 	// Output:
 	// array contains 22: true
 	// array contains at least one item in [20 .. 25]: true
 	// slice contains 22: true
 	// slice contains at least one item in [20 .. 25]: true
+	// slice contains the sub-slice [22, 33]: true
 
 ```{{% /expand%}}
 {{%expand "Nil example" %}}```go
@@ -147,6 +188,9 @@ td.Cmp(t, bstr, td.Contains("String")) // succeeds
 	ok := td.Cmp(t, got, td.Contains("oob"), "checks %s", got)
 	fmt.Println("contains `oob` string:", ok)
 
+	ok = td.Cmp(t, got, td.Contains([]byte("oob")), "checks %s", got)
+	fmt.Println("contains `oob` []byte:", ok)
+
 	ok = td.Cmp(t, got, td.Contains('b'), "checks %s", got)
 	fmt.Println("contains 'b' rune:", ok)
 
@@ -158,6 +202,7 @@ td.Cmp(t, bstr, td.Contains("String")) // succeeds
 
 	// Output:
 	// contains `oob` string: true
+	// contains `oob` []byte: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// contains at least one character ['n' .. 'p']: true
@@ -178,16 +223,14 @@ td.Cmp(t, bstr, td.Contains("String")) // succeeds
 	ok = td.Cmp(t, got, td.Contains(byte('a')), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = td.Cmp(t, got, td.Contains(td.Between('n', 'p')), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 
 ```{{% /expand%}}
 {{%expand "Error example" %}}```go
@@ -204,16 +247,14 @@ td.Cmp(t, bstr, td.Contains("String")) // succeeds
 	ok = td.Cmp(t, got, td.Contains(byte('a')), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = td.Cmp(t, got, td.Contains(td.Between('n', 'p')), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 
 ```{{% /expand%}}
 ## CmpContains shortcut
@@ -259,11 +300,15 @@ reason of a potential failure.
 	ok = td.CmpContains(t, []int{11, 22, 33, 44}, td.Between(20, 25))
 	fmt.Println("slice contains at least one item in [20 .. 25]:", ok)
 
+	ok = td.CmpContains(t, []int{11, 22, 33, 44}, []int{22, 33})
+	fmt.Println("slice contains the sub-slice [22, 33]:", ok)
+
 	// Output:
 	// array contains 22: true
 	// array contains at least one item in [20 .. 25]: true
 	// slice contains 22: true
 	// slice contains at least one item in [20 .. 25]: true
+	// slice contains the sub-slice [22, 33]: true
 
 ```{{% /expand%}}
 {{%expand "Nil example" %}}```go
@@ -313,6 +358,9 @@ reason of a potential failure.
 	ok := td.CmpContains(t, got, "oob", "checks %s", got)
 	fmt.Println("contains `oob` string:", ok)
 
+	ok = td.CmpContains(t, got, []byte("oob"), "checks %s", got)
+	fmt.Println("contains `oob` []byte:", ok)
+
 	ok = td.CmpContains(t, got, 'b', "checks %s", got)
 	fmt.Println("contains 'b' rune:", ok)
 
@@ -324,6 +372,7 @@ reason of a potential failure.
 
 	// Output:
 	// contains `oob` string: true
+	// contains `oob` []byte: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// contains at least one character ['n' .. 'p']: true
@@ -344,16 +393,14 @@ reason of a potential failure.
 	ok = td.CmpContains(t, got, byte('a'), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = td.CmpContains(t, got, td.Between('n', 'p'), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 
 ```{{% /expand%}}
 {{%expand "Error example" %}}```go
@@ -370,16 +417,14 @@ reason of a potential failure.
 	ok = td.CmpContains(t, got, byte('a'), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = td.CmpContains(t, got, td.Between('n', 'p'), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 
 ```{{% /expand%}}
 ## T.Contains shortcut
@@ -425,11 +470,15 @@ reason of a potential failure.
 	ok = t.Contains([]int{11, 22, 33, 44}, td.Between(20, 25))
 	fmt.Println("slice contains at least one item in [20 .. 25]:", ok)
 
+	ok = t.Contains([]int{11, 22, 33, 44}, []int{22, 33})
+	fmt.Println("slice contains the sub-slice [22, 33]:", ok)
+
 	// Output:
 	// array contains 22: true
 	// array contains at least one item in [20 .. 25]: true
 	// slice contains 22: true
 	// slice contains at least one item in [20 .. 25]: true
+	// slice contains the sub-slice [22, 33]: true
 
 ```{{% /expand%}}
 {{%expand "Nil example" %}}```go
@@ -479,6 +528,9 @@ reason of a potential failure.
 	ok := t.Contains(got, "oob", "checks %s", got)
 	fmt.Println("contains `oob` string:", ok)
 
+	ok = t.Contains(got, []byte("oob"), "checks %s", got)
+	fmt.Println("contains `oob` []byte:", ok)
+
 	ok = t.Contains(got, 'b', "checks %s", got)
 	fmt.Println("contains 'b' rune:", ok)
 
@@ -490,6 +542,7 @@ reason of a potential failure.
 
 	// Output:
 	// contains `oob` string: true
+	// contains `oob` []byte: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
 	// contains at least one character ['n' .. 'p']: true
@@ -510,16 +563,14 @@ reason of a potential failure.
 	ok = t.Contains(got, byte('a'), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = t.Contains(got, td.Between('n', 'p'), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 
 ```{{% /expand%}}
 {{%expand "Error example" %}}```go
@@ -536,15 +587,13 @@ reason of a potential failure.
 	ok = t.Contains(got, byte('a'), "checks %s", got)
 	fmt.Println("contains 'a' byte:", ok)
 
-	// Be careful! TestDeep operators in Contains() do not work with
-	// fmt.Stringer nor error interfaces
 	ok = t.Contains(got, td.Between('n', 'p'), "checks %s", got)
-	fmt.Println("try TestDeep operator:", ok)
+	fmt.Println("contains at least one character ['n' .. 'p']:", ok)
 
 	// Output:
 	// contains `oob` string: true
 	// contains 'b' rune: true
 	// contains 'a' byte: true
-	// try TestDeep operator: false
+	// contains at least one character ['n' .. 'p']: true
 
 ```{{% /expand%}}

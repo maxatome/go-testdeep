@@ -15,6 +15,10 @@ import (
 
 func TestString(t *testing.T) {
 	checkOK(t, "foobar", td.String("foobar"))
+	checkOK(t, []byte("foobar"), td.String("foobar"))
+
+	type MyBytes []byte
+	checkOK(t, MyBytes("foobar"), td.String("foobar"))
 
 	type MyString string
 	checkOK(t, MyString("foobar"), td.String("foobar"))
@@ -32,17 +36,29 @@ func TestString(t *testing.T) {
 			Expected: mustContain(`"pipo"`),
 		})
 
+	checkError(t, []int{1, 2}, td.String("bar"),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("[]int"),
+			Expected: mustBe("string (convertible) OR []byte (convertible) OR fmt.Stringer OR error"),
+		})
+
 	checkError(t, 12, td.String("bar"),
 		expectedError{
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
+			Expected: mustBe("string (convertible) OR []byte (convertible) OR fmt.Stringer OR error"),
 		})
 }
 
 func TestHasPrefix(t *testing.T) {
 	checkOK(t, "foobar", td.HasPrefix("foo"))
+	checkOK(t, []byte("foobar"), td.HasPrefix("foo"))
+
+	type MyBytes []byte
+	checkOK(t, MyBytes("foobar"), td.HasPrefix("foo"))
 
 	type MyString string
 	checkOK(t, MyString("foobar"), td.HasPrefix("foo"))
@@ -60,17 +76,29 @@ func TestHasPrefix(t *testing.T) {
 			Expected: mustMatch(`^HasPrefix\(.*"pipo"`),
 		})
 
+	checkError(t, []int{1, 2}, td.HasPrefix("bar"),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("[]int"),
+			Expected: mustBe("string (convertible) OR []byte (convertible) OR fmt.Stringer OR error"),
+		})
+
 	checkError(t, 12, td.HasPrefix("bar"),
 		expectedError{
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
+			Expected: mustBe("string (convertible) OR []byte (convertible) OR fmt.Stringer OR error"),
 		})
 }
 
 func TestHasSuffix(t *testing.T) {
 	checkOK(t, "foobar", td.HasSuffix("bar"))
+	checkOK(t, []byte("foobar"), td.HasSuffix("bar"))
+
+	type MyBytes []byte
+	checkOK(t, MyBytes("foobar"), td.HasSuffix("bar"))
 
 	type MyString string
 	checkOK(t, MyString("foobar"), td.HasSuffix("bar"))
@@ -88,12 +116,20 @@ func TestHasSuffix(t *testing.T) {
 			Expected: mustMatch(`^HasSuffix\(.*"pipo"`),
 		})
 
+	checkError(t, []int{1, 2}, td.HasSuffix("bar"),
+		expectedError{
+			Message:  mustBe("bad type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("[]int"),
+			Expected: mustBe("string (convertible) OR []byte (convertible) OR fmt.Stringer OR error"),
+		})
+
 	checkError(t, 12, td.HasSuffix("bar"),
 		expectedError{
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
+			Expected: mustBe("string (convertible) OR []byte (convertible) OR fmt.Stringer OR error"),
 		})
 }
 

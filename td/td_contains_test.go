@@ -154,21 +154,60 @@ func TestContainsString(t *testing.T) {
 	for idx, got := range []interface{}{
 		"pipo bingo",
 		MyString("pipo bingo"),
+		[]byte("pipo bingo"),
 		errors.New("pipo bingo"), // error interface
 		MyStringer{},             // fmt.Stringer interface
 	} {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
 		checkOK(t, got, td.Contains("po bi"), testName)
+		checkOK(t, got, td.Contains([]byte("po bi")), testName)
 		checkOK(t, got, td.Contains('o'), testName)
 		checkOK(t, got, td.Contains(byte('o')), testName)
+
+		checkOK(t, got, td.Contains(""), testName)
+		checkOK(t, got, td.Contains([]byte{}), testName)
+
+		if _, ok := got.([]byte); ok {
+			checkOK(t, got,
+				td.Contains(td.Code(func(b byte) bool { return b == 'o' })),
+				testName)
+		} else {
+			checkOK(t, got,
+				td.Contains(td.Code(func(r rune) bool { return r == 'o' })),
+				testName)
+		}
 
 		checkError(t, got, td.Contains("zip"),
 			expectedError{
 				Message:  mustBe("does not contain"),
 				Path:     mustBe("DATA"),
-				Got:      mustContain(`"pipo bingo"`),
+				Got:      mustContain(`pipo bingo`),
 				Expected: mustMatch(`^Contains\(.*"zip"`),
+			})
+
+		checkError(t, got, td.Contains([]byte("zip")),
+			expectedError{
+				Message:  mustBe("does not contain"),
+				Path:     mustBe("DATA"),
+				Got:      mustContain(`pipo bingo`),
+				Expected: mustMatch(`^(?s)Contains\(.*zip`),
+			})
+
+		checkError(t, got, td.Contains('z'),
+			expectedError{
+				Message:  mustBe("does not contain"),
+				Path:     mustBe("DATA"),
+				Got:      mustContain(`pipo bingo`),
+				Expected: mustBe(`Contains((int32) 122)`),
+			})
+
+		checkError(t, got, td.Contains(byte('z')),
+			expectedError{
+				Message:  mustBe("does not contain"),
+				Path:     mustBe("DATA"),
+				Got:      mustContain(`pipo bingo`),
+				Expected: mustBe(`Contains((uint8) 122)`),
 			})
 
 		checkError(t, got, td.Contains(12),
@@ -178,6 +217,14 @@ func TestContainsString(t *testing.T) {
 				Got:      mustBe(reflect.TypeOf(got).String()),
 				Expected: mustBe("int"),
 			})
+
+		checkError(t, got, td.Contains([]int{1, 2, 3}),
+			expectedError{
+				Message:  mustBe("cannot check contains"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe(reflect.TypeOf(got).String()),
+				Expected: mustBe("[]int"),
+			})
 	}
 
 	checkError(t, 12, td.Contains("bar"),
@@ -185,7 +232,50 @@ func TestContainsString(t *testing.T) {
 			Message:  mustBe("bad type"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("string (convertible) OR fmt.Stringer OR error"),
+			Expected: mustBe("string (convertible) OR []byte (convertible) OR fmt.Stringer OR error"),
+		})
+
+	checkError(t, "pipo", td.Contains(td.Code(func(x int) bool { return true })),
+		expectedError{
+			Message:  mustBe("TestDeep operator can only match rune in string"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("int"),
+			Expected: mustBe("rune"),
+		})
+}
+
+func TestContainsSlice(t *testing.T) {
+	got := []int{1, 2, 3, 4, 5, 6}
+
+	// Empty slice is always OK
+	checkOK(t, got, td.Contains([]int{}))
+
+	// Expected length > got length
+	checkError(t, got, td.Contains([]int{1, 2, 3, 4, 5, 6, 7}),
+		expectedError{
+			Message:  mustBe("does not contain"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`([]int) (len=6 `),
+			Expected: mustContain(`Contains(([]int) (len=7 `),
+		})
+
+	// Same length
+	checkOK(t, got, td.Contains([]int{1, 2, 3, 4, 5, 6}))
+	checkError(t, got, td.Contains([]int{8, 8, 8, 8, 8, 8}),
+		expectedError{
+			Message:  mustBe("does not contain"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`([]int) (len=6 `),
+			Expected: mustContain(`Contains(([]int) (len=6 `),
+		})
+
+	checkOK(t, got, td.Contains([]int{3, 4, 5}))
+	checkError(t, got, td.Contains([]int{8, 8, 8}),
+		expectedError{
+			Message:  mustBe("does not contain"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`([]int) (len=6 `),
+			Expected: mustContain(`Contains(([]int) (len=3 `),
 		})
 }
 

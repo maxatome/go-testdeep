@@ -7,9 +7,9 @@ weight: 10
 func String(expected string) TestDeep
 ```
 
-[`String`]({{< ref "String" >}}) operator allows to compare a `string` (or convertible), [`error`](https://golang.org/pkg/builtin/#error)
-or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface ([`error`](https://golang.org/pkg/builtin/#error) interface is tested before
-[`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer).)
+[`String`]({{< ref "String" >}}) operator allows to compare a `string` (or convertible), `[]byte`
+(or convertible), [`error`](https://golang.org/pkg/builtin/#error) or [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer) interface ([`error`](https://golang.org/pkg/builtin/#error) interface
+is tested before [`fmt.Stringer`](https://golang.org/pkg/fmt/#Stringer)).
 
 ```go
 err := errors.New("error!")
@@ -30,10 +30,14 @@ td.Cmp(t, bstr, td.String("fmt.Stringer!")) // succeeds
 	got := "foobar"
 
 	ok := td.Cmp(t, got, td.String("foobar"), "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = td.Cmp(t, []byte(got), td.String("foobar"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go
@@ -95,10 +99,14 @@ reason of a potential failure.
 	got := "foobar"
 
 	ok := td.CmpString(t, got, "foobar", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = td.Cmp(t, []byte(got), td.String("foobar"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go
@@ -160,10 +168,14 @@ reason of a potential failure.
 	got := "foobar"
 
 	ok := t.String(got, "foobar", "checks %s", got)
-	fmt.Println(ok)
+	fmt.Println("using string:", ok)
+
+	ok = t.Cmp([]byte(got), td.String("foobar"), "checks %s", got)
+	fmt.Println("using []byte:", ok)
 
 	// Output:
-	// true
+	// using string: true
+	// using []byte: true
 
 ```{{% /expand%}}
 {{%expand "Stringer example" %}}```go

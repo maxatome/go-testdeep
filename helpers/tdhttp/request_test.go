@@ -9,6 +9,7 @@ package tdhttp_test
 import (
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
@@ -23,8 +24,10 @@ func TestNewRequest(tt *testing.T) {
 			"Foo", "Bar",
 			"Zip", "Test")
 
-		t.String(req.Header.Get("Foo"), "Bar")
-		t.String(req.Header.Get("Zip"), "Test")
+		t.Cmp(req.Header, http.Header{
+			"Foo": []string{"Bar"},
+			"Zip": []string{"Test"},
+		})
 	})
 
 	t.RunT("NewRequest last header value less", func(t *td.T) {
@@ -32,8 +35,47 @@ func TestNewRequest(tt *testing.T) {
 			"Foo", "Bar",
 			"Zip")
 
-		t.String(req.Header.Get("Foo"), "Bar")
-		t.String(req.Header.Get("Zip"), "")
+		t.Cmp(req.Header, http.Header{
+			"Foo": []string{"Bar"},
+			"Zip": []string{""},
+		})
+	})
+
+	t.RunT("NewRequest header http.Header", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			http.Header{
+				"Foo": []string{"Bar"},
+				"Zip": []string{"Test"},
+			})
+
+		t.Cmp(req.Header, http.Header{
+			"Foo": []string{"Bar"},
+			"Zip": []string{"Test"},
+		})
+	})
+
+	t.RunT("NewRequest header combined", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			"H1", "V1",
+			http.Header{
+				"H1": []string{"V2"},
+				"H2": []string{"V1", "V2"},
+			},
+			"H2", "V3",
+		)
+
+		t.Cmp(req.Header, http.Header{
+			"H1": []string{"V1", "V2"},
+			"H2": []string{"V1", "V2", "V3"},
+		})
+	})
+
+	t.RunT("NewRequest header panic", func(t *td.T) {
+		t.CmpPanic(func() { tdhttp.NewRequest("GET", "/path", nil, "H", "V", true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[2])")
+
+		t.CmpPanic(func() { tdhttp.NewRequest("GET", "/path", nil, "H1", true) },
+			`header "H1" should have a string value, not a bool (@ headers[1])`)
 	})
 
 	// Get
@@ -41,6 +83,17 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "GET",
+				Header: http.Header{"Foo": []string{"Bar"}},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Head
+	t.Cmp(tdhttp.Head("/path", "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "HEAD",
 				Header: http.Header{"Foo": []string{"Bar"}},
 			},
 			td.StructFields{
@@ -56,6 +109,30 @@ func TestNewRequest(tt *testing.T) {
 			},
 			td.StructFields{
 				"URL": td.String("/path"),
+			}))
+
+	// PostForm
+	t.Cmp(
+		tdhttp.PostForm("/path",
+			url.Values{
+				"param1": []string{"val1", "val2"},
+				"param2": []string{"zip"},
+			},
+			"Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "POST",
+				Header: http.Header{
+					"Content-Type": []string{"application/x-www-form-urlencoded"},
+					"Foo":          []string{"Bar"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+				"Body": td.Smuggle(
+					ioutil.ReadAll,
+					[]byte("param1=val1&param1=val2&param2=zip"),
+				),
 			}))
 
 	// Put
