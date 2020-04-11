@@ -25,7 +25,7 @@ var AnchorableTypes []anchorableType
 
 func init() {
 	AddAnchorableStructType(func(nextAnchor int) time.Time { //nolint: errcheck
-		return time.Unix(int64(math.MaxInt64-1000424443-nextAnchor), 42)
+		return time.Unix(math.MaxInt64-1000424443-int64(nextAnchor), 42)
 	})
 }
 
@@ -44,7 +44,7 @@ func init() {
 // is declared as:
 //
 //   AddAnchorableStructType(func (nextAnchor int) time.Time {
-//     return time.Unix(int64(math.MaxInt64-1000424443-nextAnchor), 42)
+//     return time.Unix(math.MaxInt64-1000424443-int64(nextAnchor), 42)
 //   })
 //
 // Just as a note, the 1000424443 constant allows to avoid to flirt

@@ -126,7 +126,7 @@ func AddAnchorableStructType(fn interface{}) {
 //
 // By default, the value returned by Anchor can only be used in the
 // next T.Cmp or T.CmpLax call. To make it persistent across calls,
-// see PersistAnchor method.
+// see SetAnchorsPersist and AnchorsPersistTemporarily methods.
 //
 // See A method for a shorter synonym of Anchor.
 func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
