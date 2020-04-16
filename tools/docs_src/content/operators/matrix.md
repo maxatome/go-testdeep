@@ -84,6 +84,7 @@ weight: 1
 | [`TruncTime`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | [`time.Time`] | todo | ✓ | ✗ | ✗ | [`TruncTime`] |
 | [`Values`] | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | [`Values`] |
 | [`Zero`] | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [`Zero`] |
+
 [`T`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T
 [`TestDeep`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TestDeep
 [`Cmp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp

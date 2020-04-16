@@ -717,7 +717,7 @@ EOH
                             }
                             $repl .= " | [`$op`] |\n";
                         }
-                        "$repl$md_links\n$2"
+                        "$repl\n$md_links\n$2"
                     }se or die "op-go-matrix tags not found in $matrix_file\n";
 
         my %by_input;
