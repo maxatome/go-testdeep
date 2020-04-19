@@ -17,6 +17,27 @@ from the compared array/slice.
 ```go
 td.Cmp(t, []int{1}, td.SubBagOf(1, 1, 2))       // succeeds
 td.Cmp(t, []int{1, 1, 1}, td.SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
+
+// works with slices/arrays of any type
+td.Cmp(t, personSlice, td.SubBagOf(
+  Person{Name: "Bob", Age: 32},
+  Person{Name: "Alice", Age: 26},
+))
+```
+
+To flatten a non-`[]interface{}` slice/array, use [`Flatten`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Flatten) function
+and so avoid boring and inefficient copies:
+
+```go
+expected := []int{1, 2, 1}
+td.Cmp(t, []int{1}, td.SubBagOf(td.Flatten(expected))) // succeeds
+// = td.Cmp(t, []int{1}, td.SubBagOf(1, 2, 1))
+
+exp1 := []int{5, 1, 1}
+exp2 := []int{8, 42, 3}
+td.Cmp(t, []int{1, 42, 3},
+  td.SubBagOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
+// = td.Cmp(t, []int{1, 42, 3}, td.SubBagOf(5, 1, 1, 3, 8, 42, 3))
 ```
 
 
@@ -50,9 +71,18 @@ td.Cmp(t, []int{1, 1, 1}, td.SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 9, 8}
+	ok = td.Cmp(t, got, td.SubBagOf(td.Flatten(expected)),
+		"checks at least all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 	// true
 
 ```{{% /expand%}}
@@ -104,9 +134,18 @@ reason of a potential failure.
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 9, 8}
+	ok = td.CmpSubBagOf(t, got, []interface{}{td.Flatten(expected)},
+		"checks at least all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 	// true
 
 ```{{% /expand%}}
@@ -158,9 +197,18 @@ reason of a potential failure.
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 9, 8}
+	ok = t.SubBagOf(got, []interface{}{td.Flatten(expected)},
+		"checks at least all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 	// true
 
 ```{{% /expand%}}

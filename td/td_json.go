@@ -19,6 +19,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/flat"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -377,6 +378,7 @@ func JSON(expectedJSON interface{}, params ...interface{}) TestDeep {
 	var v interface{}
 	unmarshal(expectedJSON, &v)
 
+	params = flat.Interfaces(params...)
 	scan(&v, params, getTags(params), "")
 
 	return &tdJSON{
@@ -611,6 +613,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 	var v interface{}
 	unmarshal(expectedJSON, &v)
 
+	params = flat.Interfaces(params...)
 	scan(&v, params, getTags(params), "")
 
 	_, ok := v.(map[string]interface{})
@@ -767,6 +770,7 @@ func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 	var v interface{}
 	unmarshal(expectedJSON, &v)
 
+	params = flat.Interfaces(params...)
 	scan(&v, params, getTags(params), "")
 
 	_, ok := v.(map[string]interface{})

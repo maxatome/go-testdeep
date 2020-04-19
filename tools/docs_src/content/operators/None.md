@@ -15,6 +15,15 @@ td.Cmp(t, 12, td.None(8, 10, 14))     // succeeds
 td.Cmp(t, 12, td.None(8, 10, 12, 14)) // fails
 ```
 
+Note [`Flatten`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Flatten) function can be used to group or reuse some values or
+operators and so avoid boring and inefficient copies:
+
+```go
+prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
+even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
+td.Cmp(t, 9, td.None(prime, even)) // succeeds
+```
+
 
 > See also [<i class='fas fa-book'></i> None godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#None).
 
@@ -41,10 +50,22 @@ td.Cmp(t, 12, td.None(8, 10, 12, 14)) // fails
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
+	prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
+	even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
+	for _, got := range [...]int{9, 3, 8, 15} {
+		ok = td.Cmp(t, got, td.None(prime, even, td.Gt(14)),
+			"checks %v is not prime number, nor an even number and not > 14")
+		fmt.Printf("%d → %t\n", got, ok)
+	}
+
 	// Output:
 	// true
 	// false
 	// false
+	// 9 → true
+	// 3 → false
+	// 8 → false
+	// 15 → false
 
 ```{{% /expand%}}
 ## CmpNone shortcut
@@ -96,10 +117,22 @@ reason of a potential failure.
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
+	prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
+	even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
+	for _, got := range [...]int{9, 3, 8, 15} {
+		ok = td.CmpNone(t, got, []interface{}{prime, even, td.Gt(14)},
+			"checks %v is not prime number, nor an even number and not > 14")
+		fmt.Printf("%d → %t\n", got, ok)
+	}
+
 	// Output:
 	// true
 	// false
 	// false
+	// 9 → true
+	// 3 → false
+	// 8 → false
+	// 15 → false
 
 ```{{% /expand%}}
 ## T.None shortcut
@@ -151,9 +184,21 @@ reason of a potential failure.
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
+	prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
+	even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
+	for _, got := range [...]int{9, 3, 8, 15} {
+		ok = t.None(got, []interface{}{prime, even, td.Gt(14)},
+			"checks %v is not prime number, nor an even number and not > 14")
+		fmt.Printf("%d → %t\n", got, ok)
+	}
+
 	// Output:
 	// true
 	// false
 	// false
+	// 9 → true
+	// 3 → false
+	// 8 → false
+	// 15 → false
 
 ```{{% /expand%}}

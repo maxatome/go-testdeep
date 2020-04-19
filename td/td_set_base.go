@@ -11,6 +11,7 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/flat"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -32,17 +33,12 @@ type tdSetBase struct {
 	expectedItems []reflect.Value
 }
 
-func newSetBase(kind setKind, ignoreDups bool) tdSetBase {
-	return tdSetBase{
-		baseOKNil:  newBaseOKNil(4),
-		kind:       kind,
-		ignoreDups: ignoreDups,
-	}
-}
-
-func (s *tdSetBase) Add(items ...interface{}) {
-	for _, item := range items {
-		s.expectedItems = append(s.expectedItems, reflect.ValueOf(item))
+func newSetBase(kind setKind, ignoreDups bool, expectedItems []interface{}) *tdSetBase {
+	return &tdSetBase{
+		baseOKNil:     newBaseOKNil(4),
+		kind:          kind,
+		ignoreDups:    ignoreDups,
+		expectedItems: flat.Values(expectedItems),
 	}
 }
 

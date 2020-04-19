@@ -12,12 +12,15 @@ import (
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/flat"
 )
 
 func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{}) {
 	t.Helper()
 
 	const failedTest = "Failed test"
+
+	args = flat.Interfaces(args...)
 
 	var buf bytes.Buffer
 	ctxerr.ColorizeTestNameOn(&buf)

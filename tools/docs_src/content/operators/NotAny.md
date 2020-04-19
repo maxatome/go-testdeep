@@ -4,18 +4,40 @@ weight: 10
 ---
 
 ```go
-func NotAny(expectedItems ...interface{}) TestDeep
+func NotAny(notExpectedItems ...interface{}) TestDeep
 ```
 
 [`NotAny`]({{< ref "NotAny" >}}) operator checks that the contents of an array or a slice (or
-a pointer on array/slice) does not contain any of *expectedItems*.
+a pointer on array/slice) does not contain any of *notExpectedItems*.
 
 ```go
 td.Cmp(t, []int{1}, td.NotAny(1, 2, 3)) // fails
 td.Cmp(t, []int{5}, td.NotAny(1, 2, 3)) // succeeds
+
+// works with slices/arrays of any type
+td.Cmp(t, personSlice, td.NotAny(
+  Person{Name: "Bob", Age: 32},
+  Person{Name: "Alice", Age: 26},
+))
 ```
 
-Beware that [`NotAny(…)`]({{< ref "NotAny" >}}) is not equivalent to [`Not(Any(…)`]({{< ref "Not" >}})).
+To flatten a non-`[]interface{}` slice/array, use [`Flatten`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Flatten) function
+and so avoid boring and inefficient copies:
+
+```go
+notExpected := []int{2, 1}
+td.Cmp(t, []int{4, 4, 3, 8}, td.NotAny(td.Flatten(notExpected))) // succeeds
+// = td.Cmp(t, []int{4, 4, 3, 8}, td.NotAny(2, 1))
+
+notExp1 := []int{2, 1}
+notExp2 := []int{5, 8}
+td.Cmp(t, []int{4, 4, 42, 8},
+  td.NotAny(td.Flatten(notExp1), 3, td.Flatten(notExp2))) // succeeds
+// = td.Cmp(t, []int{4, 4, 42, 8}, td.NotAny(2, 1, 3, 5, 8))
+```
+
+Beware that [`NotAny(…)`]({{< ref "NotAny" >}}) is not equivalent to [`Not(Any(…)`]({{< ref "Not" >}})) but is like
+[`Not(SuperSet(…)`]({{< ref "Not" >}})).
 
 
 > See also [<i class='fas fa-book'></i> NotAny godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotAny).
@@ -35,21 +57,30 @@ Beware that [`NotAny(…)`]({{< ref "NotAny" >}}) is not equivalent to [`Not(Any
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using notExpected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	notExpected := []int{3, 6, 8, 41, 43}
+	ok = td.Cmp(t, got, td.NotAny(td.Flatten(notExpected)),
+		"checks %v contains no item listed in notExpected", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 
 ```{{% /expand%}}
 ## CmpNotAny shortcut
 
 ```go
-func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool
+func CmpNotAny(t TestingT, got interface{}, notExpectedItems []interface{}, args ...interface{}) bool
 ```
 
 CmpNotAny is a shortcut for:
 
 ```go
-td.Cmp(t, got, td.NotAny(expectedItems...), args...)
+td.Cmp(t, got, td.NotAny(notExpectedItems...), args...)
 ```
 
 See above for details.
@@ -81,21 +112,30 @@ reason of a potential failure.
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using notExpected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	notExpected := []int{3, 6, 8, 41, 43}
+	ok = td.CmpNotAny(t, got, []interface{}{td.Flatten(notExpected)},
+		"checks %v contains no item listed in notExpected", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 
 ```{{% /expand%}}
 ## T.NotAny shortcut
 
 ```go
-func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interface{}) bool
+func (t *T) NotAny(got interface{}, notExpectedItems []interface{}, args ...interface{}) bool
 ```
 
 [`NotAny`]({{< ref "NotAny" >}}) is a shortcut for:
 
 ```go
-t.Cmp(got, td.NotAny(expectedItems...), args...)
+t.Cmp(got, td.NotAny(notExpectedItems...), args...)
 ```
 
 See above for details.
@@ -127,8 +167,17 @@ reason of a potential failure.
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using notExpected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	notExpected := []int{3, 6, 8, 41, 43}
+	ok = t.NotAny(got, []interface{}{td.Flatten(notExpected)},
+		"checks %v contains no item listed in notExpected", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 
 ```{{% /expand%}}

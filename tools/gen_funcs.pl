@@ -916,7 +916,7 @@ sub process_doc
       | \b(${\join('|', keys %consts)})\b  # $8
       | \b(smuggler\s+operator)\b          # $9
       | \b(TestDeep\s+operators?)\b        # $10
-      | (\*?SmuggledGot)\b                 # $11
+      | (?|\*?(SmuggledGot)|(Flatten))\b   # $11
       >{
            if ($1)
            {
@@ -959,7 +959,7 @@ sub process_doc
            }
            elsif ($11)
            {
-               qq![`$11`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot)!
+               qq![`$11`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$11)!
            }
        }geox;
 

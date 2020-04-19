@@ -573,7 +573,7 @@ func CmpNot(t TestingT, got interface{}, notExpected interface{}, args ...interf
 
 // CmpNotAny is a shortcut for:
 //
-//   td.Cmp(t, got, td.NotAny(expectedItems...), args...)
+//   td.Cmp(t, got, td.NotAny(notExpectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotAny for details.
 //
@@ -585,9 +585,9 @@ func CmpNot(t TestingT, got interface{}, notExpected interface{}, args ...interf
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNotAny(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+func CmpNotAny(t TestingT, got interface{}, notExpectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
-	return Cmp(t, got, NotAny(expectedItems...), args...)
+	return Cmp(t, got, NotAny(notExpectedItems...), args...)
 }
 
 // CmpNotEmpty is a shortcut for:

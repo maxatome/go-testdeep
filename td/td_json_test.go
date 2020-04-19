@@ -63,6 +63,13 @@ func TestJSON(t *testing.T) {
 			td.Between(40, 45),
 			td.NotEmpty()))
 
+	// Same using Flatten
+	checkOK(t, got,
+		td.JSON(`{"name":"$1","age":$2,"gender":"$3"}`,
+			td.Re(`^Bob`),
+			td.Flatten([]td.TestDeep{td.Between(40, 45), td.NotEmpty()}),
+		))
+
 	// Tag placeholders
 	checkOK(t, got,
 		td.JSON(`{"name":"$name","age":$age,"gender":"$gender"}`,
@@ -284,6 +291,19 @@ func TestSubJSONOf(t *testing.T) {
 		td.SubJSONOf(`{"name":"$1","age":$2,"gender":$3,"details":{}}`,
 			"Bob", 42, "male")) // raw values
 
+	checkOK(t, got,
+		td.SubJSONOf(`{"name":"$1","age":$2,"gender":$3,"details":{}}`,
+			td.Re(`^Bob`),
+			td.Between(40, 45),
+			td.NotEmpty()))
+
+	// Same using Flatten
+	checkOK(t, got,
+		td.SubJSONOf(`{"name":"$1","age":$2,"gender":$3,"details":{}}`,
+			td.Re(`^Bob`),
+			td.Flatten([]td.TestDeep{td.Between(40, 45), td.NotEmpty()}),
+		))
+
 	// Tag placeholders
 	checkOK(t, got,
 		td.SubJSONOf(
@@ -403,6 +423,17 @@ func TestSuperJSONOf(t *testing.T) {
 	checkOK(t, got,
 		td.SuperJSONOf(`{"name":"$1","age":$2}`,
 			"Bob", 42)) // raw values
+
+	checkOK(t, got,
+		td.SuperJSONOf(`{"name":"$1","age":$2}`,
+			td.Re(`^Bob`),
+			td.Between(40, 45)))
+
+	// Same using Flatten
+	checkOK(t, got,
+		td.SuperJSONOf(`{"name":"$1","age":$2}`,
+			td.Flatten([]td.TestDeep{td.Re(`^Bob`), td.Between(40, 45)}),
+		))
 
 	// Tag placeholders
 	checkOK(t, got,

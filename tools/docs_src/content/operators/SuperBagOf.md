@@ -17,6 +17,27 @@ expected.
 ```go
 td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1))       // succeeds
 td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1, 1, 1)) // fails, one 1 is missing
+
+// works with slices/arrays of any type
+td.Cmp(t, personSlice, td.SuperBagOf(
+  Person{Name: "Bob", Age: 32},
+  Person{Name: "Alice", Age: 26},
+))
+```
+
+To flatten a non-`[]interface{}` slice/array, use [`Flatten`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Flatten) function
+and so avoid boring and inefficient copies:
+
+```go
+expected := []int{1, 2, 1}
+td.Cmp(t, []int{1}, td.SuperBagOf(td.Flatten(expected))) // succeeds
+// = td.Cmp(t, []int{1}, td.SuperBagOf(1, 2, 1))
+
+exp1 := []int{5, 1, 1}
+exp2 := []int{8, 42}
+td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6},
+  td.SuperBagOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
+// = td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6}, td.SuperBagOf(5, 1, 1, 3, 8, 42))
 ```
 
 
@@ -37,7 +58,16 @@ td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{8, 5, 8}
+	ok = td.Cmp(t, got, td.SuperBagOf(td.Flatten(expected)),
+		"checks the expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 
@@ -83,7 +113,16 @@ reason of a potential failure.
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{8, 5, 8}
+	ok = td.CmpSuperBagOf(t, got, []interface{}{td.Flatten(expected)},
+		"checks the expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 
@@ -129,7 +168,16 @@ reason of a potential failure.
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{8, 5, 8}
+	ok = t.SuperBagOf(got, []interface{}{td.Flatten(expected)},
+		"checks the expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 

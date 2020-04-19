@@ -20,6 +20,17 @@ td.Cmp(t, "foo", td.Any(
 )) // succeeds coz "f" prefix
 ```
 
+Note [`Flatten`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Flatten) function can be used to group or reuse some values or
+operators and so avoid boring and inefficient copies:
+
+```go
+stringOps := td.Flatten([]td.TestDeep{td.HasPrefix("f"), td.HasSuffix("z")})
+td.Cmp(t, "foobar", td.All(
+  td.Len(4),
+  stringOps,
+)) // succeeds coz "f" prefix
+```
+
 [`TypeBehind`]({{< ref "operators#typebehind-method" >}}) method can return a non-`nil` [`reflect.Type`](https://pkg.go.dev/reflect/#Type) if all items
 known non-interface types are equal, or if only interface types
 are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
@@ -46,9 +57,20 @@ are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 		"checks value %s", got)
 	fmt.Println(ok)
 
+	// When some operators or values have to be reused and mixed between
+	// several calls, Flatten can be used to avoid boring and
+	// inefficient []interface{} copies:
+	regOps := td.Flatten([]td.TestDeep{td.Re("a/c"), td.Re(`^xx`), td.Re(`ar$`)})
+	ok = td.Cmp(t,
+		got,
+		td.Any(td.HasPrefix("xxx"), regOps, td.HasSuffix("zip")),
+		"check at least one operator matches value %s", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 
 ```{{% /expand%}}
 ## CmpAny shortcut
@@ -96,9 +118,18 @@ reason of a potential failure.
 		"checks value %s", got)
 	fmt.Println(ok)
 
+	// When some operators or values have to be reused and mixed between
+	// several calls, Flatten can be used to avoid boring and
+	// inefficient []interface{} copies:
+	regOps := td.Flatten([]td.TestDeep{td.Re("a/c"), td.Re(`^xx`), td.Re(`ar$`)})
+	ok = td.CmpAny(t, got, []interface{}{td.HasPrefix("xxx"), regOps, td.HasSuffix("zip")},
+		"check at least one operator matches value %s", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 
 ```{{% /expand%}}
 ## T.Any shortcut
@@ -146,8 +177,17 @@ reason of a potential failure.
 		"checks value %s", got)
 	fmt.Println(ok)
 
+	// When some operators or values have to be reused and mixed between
+	// several calls, Flatten can be used to avoid boring and
+	// inefficient []interface{} copies:
+	regOps := td.Flatten([]td.TestDeep{td.Re("a/c"), td.Re(`^xx`), td.Re(`ar$`)})
+	ok = t.Any(got, []interface{}{td.HasPrefix("xxx"), regOps, td.HasSuffix("zip")},
+		"check at least one operator matches value %s", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 
 ```{{% /expand%}}

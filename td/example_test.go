@@ -161,9 +161,20 @@ func ExampleAll() {
 		"checks value %s", got)
 	fmt.Println(ok)
 
+	// When some operators or values have to be reused and mixed between
+	// several calls, Flatten can be used to avoid boring and
+	// inefficient []interface{} copies:
+	regOps := td.Flatten([]td.TestDeep{td.Re("o/b"), td.Re(`^fo`), td.Re(`ar$`)})
+	ok = td.Cmp(t,
+		got,
+		td.All(td.HasPrefix("foo"), regOps, td.HasSuffix("bar")),
+		"checks all operators against value %s", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 }
 
 func ExampleAny() {
@@ -183,9 +194,20 @@ func ExampleAny() {
 		"checks value %s", got)
 	fmt.Println(ok)
 
+	// When some operators or values have to be reused and mixed between
+	// several calls, Flatten can be used to avoid boring and
+	// inefficient []interface{} copies:
+	regOps := td.Flatten([]td.TestDeep{td.Re("a/c"), td.Re(`^xx`), td.Re(`ar$`)})
+	ok = td.Cmp(t,
+		got,
+		td.Any(td.HasPrefix("xxx"), regOps, td.HasSuffix("zip")),
+		"check at least one operator matches value %s", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 }
 
 func ExampleArray_array() {
@@ -330,10 +352,19 @@ func ExampleBag() {
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5}
+	ok = td.Cmp(t, got, td.Bag(td.Flatten(expected), td.Gt(7)),
+		"checks all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
 	// false
+	// true
 	// true
 }
 
@@ -1512,10 +1543,22 @@ func ExampleNone() {
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
+	prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
+	even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
+	for _, got := range [...]int{9, 3, 8, 15} {
+		ok = td.Cmp(t, got, td.None(prime, even, td.Gt(14)),
+			"checks %v is not prime number, nor an even number and not > 14")
+		fmt.Printf("%d → %t\n", got, ok)
+	}
+
 	// Output:
 	// true
 	// false
 	// false
+	// 9 → true
+	// 3 → false
+	// 8 → false
+	// 15 → false
 }
 
 func ExampleNotAny() {
@@ -1531,9 +1574,18 @@ func ExampleNotAny() {
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using notExpected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	notExpected := []int{3, 6, 8, 41, 43}
+	ok = td.Cmp(t, got, td.NotAny(td.Flatten(notExpected)),
+		"checks %v contains no item listed in notExpected", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 }
 
 func ExampleNot() {
@@ -2022,7 +2074,16 @@ func ExampleSet() {
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 8}
+	ok = td.Cmp(t, got, td.Set(td.Flatten(expected)),
+		"checks all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 	// true
@@ -2650,9 +2711,18 @@ func ExampleSubBagOf() {
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 9, 8}
+	ok = td.Cmp(t, got, td.SubBagOf(td.Flatten(expected)),
+		"checks at least all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 	// true
 }
 
@@ -2854,7 +2924,16 @@ func ExampleSubSetOf() {
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 4, 5, 6, 7, 8}
+	ok = td.Cmp(t, got, td.SubSetOf(td.Flatten(expected)),
+		"checks at least all expected items are present, in any order, ignoring duplicates")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 }
@@ -2872,7 +2951,16 @@ func ExampleSuperBagOf() {
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{8, 5, 8}
+	ok = td.Cmp(t, got, td.SuperBagOf(td.Flatten(expected)),
+		"checks the expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 }
@@ -3086,7 +3174,16 @@ func ExampleSuperSetOf() {
 		"checks at least 2 items of %v match ignoring duplicates", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3}
+	ok = td.Cmp(t, got, td.SuperSetOf(td.Flatten(expected)),
+		"checks the expected items are present, in any order and ignoring duplicates")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 }
