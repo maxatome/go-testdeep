@@ -1,75 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Example on go-testdeep</title>
-    <link>https://go-testdeep.zetta.rocks/example/</link>
-    <description>Recent content in Example on go-testdeep</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    
-	<atom:link href="https://go-testdeep.zetta.rocks/example/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Using testing package</title>
-      <link>https://go-testdeep.zetta.rocks/example/using-testing/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://go-testdeep.zetta.rocks/example/using-testing/</guid>
-      <description>To check the freshly created record contents using standard testing package, we have to do something like that:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if err != nil { t.Errorf(&amp;#34;An error occurred: %s&amp;#34;, err) } else { expected := Record{Name: &amp;#34;Bob&amp;#34;, Age: 23} if record.Id == 0 { t.Error(&amp;#34;Id probably not initialized&amp;#34;) } if record.Name != expected.Name { t.Errorf(&amp;#34;Name field differs, got=%s, expected=%s&amp;#34;, record.</description>
-    </item>
-    
-    <item>
-      <title>Basic go-testdeep approach</title>
-      <link>https://go-testdeep.zetta.rocks/example/basic-testdeep/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://go-testdeep.zetta.rocks/example/basic-testdeep/</guid>
-      <description>td package, via its Cmp* functions, handles the tests and all the error message boiler plate. Let&amp;rsquo;s do it:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record.Id, td.NotZero(), &amp;#34;Id initialized&amp;#34;) td.Cmp(t, record.Name, &amp;#34;Bob&amp;#34;) td.Cmp(t, record.Age, 23) td.Cmp(t, record.CreatedAt, td.Between(before, time.Now())) } } As we cannot guess the Id field value before its creation, we use the NotZero operator to check it is set by CreateRecord() call.</description>
-    </item>
-    
-    <item>
-      <title>Advanced go-testdeep technique</title>
-      <link>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</guid>
-      <description>Of course we can test struct fields one by one, but with go-testdeep and the [td package], the whole struct can be compared with one Cmp call.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Example on go-testdeep</title><link>https://go-testdeep.zetta.rocks/example/</link><description>Recent content in Example on go-testdeep</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://go-testdeep.zetta.rocks/example/index.xml" rel="self" type="application/rss+xml"/><item><title>Using testing package</title><link>https://go-testdeep.zetta.rocks/example/using-testing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://go-testdeep.zetta.rocks/example/using-testing/</guid><description>To check the freshly created record contents using standard testing package, we have to do something like that:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if err != nil { t.Errorf(&amp;#34;An error occurred: %s&amp;#34;, err) } else { expected := Record{Name: &amp;#34;Bob&amp;#34;, Age: 23} if record.Id == 0 { t.Error(&amp;#34;Id probably not initialized&amp;#34;) } if record.Name != expected.Name { t.Errorf(&amp;#34;Name field differs, got=%s, expected=%s&amp;#34;, record.</description></item><item><title>Basic go-testdeep approach</title><link>https://go-testdeep.zetta.rocks/example/basic-testdeep/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://go-testdeep.zetta.rocks/example/basic-testdeep/</guid><description>td package, via its Cmp* functions, handles the tests and all the error message boiler plate. Let&amp;rsquo;s do it:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record.Id, td.NotZero(), &amp;#34;Id initialized&amp;#34;) td.Cmp(t, record.Name, &amp;#34;Bob&amp;#34;) td.Cmp(t, record.Age, 23) td.Cmp(t, record.CreatedAt, td.Between(before, time.Now())) } } As we cannot guess the Id field value before its creation, we use the NotZero operator to check it is set by CreateRecord() call.</description></item><item><title>Advanced go-testdeep technique</title><link>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://go-testdeep.zetta.rocks/example/advanced-testdeep/</guid><description>Of course we can test struct fields one by one, but with go-testdeep and the [td package], the whole struct can be compared with one Cmp call.
 We can choose to ignore the non-guessable fields set by CreateRecord():
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record, td.Struct( &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, nil), &amp;#34;Newly created record&amp;#34;) } } The Struct operator, used here, ignores zero fields in its model parameter.</description>
-    </item>
-    
-    <item>
-      <title>go-testdeep Cmp shortcuts</title>
-      <link>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</guid>
-      <description>The Cmp function is the keystone of this package, but to make the writing of tests even easier, the family of Cmp* functions are provided and act as shortcuts. Using CmpStruct function, the previous example can be written as:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.CmpStruct(t, record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.</description>
-    </item>
-    
-    <item>
-      <title>td.T type</title>
-      <link>https://go-testdeep.zetta.rocks/example/td-t/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://go-testdeep.zetta.rocks/example/td-t/</guid>
-      <description>testing.T can also be encapsulated in td.T type, simplifying again the test:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t := t.RootName(&amp;#34;RECORD&amp;#34;) // Use RECORD instead of DATA in failure reports  // Using Struct shortcut method  t.Struct(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.NotZero(), &amp;#34;CreatedAt&amp;#34;: td.Between(before, time.Now()), }, &amp;#34;Newly created record&amp;#34;) // Or using Cmp method, it&amp;#39;s a matter of taste  t.</description>
-    </item>
-    
-    <item>
-      <title>Using anchoring</title>
-      <link>https://go-testdeep.zetta.rocks/example/anchoring/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://go-testdeep.zetta.rocks/example/anchoring/</guid>
-      <description>Last, operators can directly be anchored in litterals, still using the td.T type, avoiding the use of the Struct operator:
-import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t.RootName(&amp;#34;RECORD&amp;#34;). // Use RECORD instead of DATA in failure reports  Cmp(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, Id: t.Anchor(td.NotZero(), uint64(0)).(uint64), CreatedAt: t.Anchor(td.Between(before, time.Now())).(time.Time), }, &amp;#34;Newly created record&amp;#34;) } } See the Anchor method documentation for details.</description>
-    </item>
-    
-  </channel>
-</rss>
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.Cmp(t, record, td.Struct( &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, nil), &amp;#34;Newly created record&amp;#34;) } } The Struct operator, used here, ignores zero fields in its model parameter.</description></item><item><title>go-testdeep Cmp shortcuts</title><link>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://go-testdeep.zetta.rocks/example/td-cmp-shortcuts/</guid><description>The Cmp function is the keystone of this package, but to make the writing of tests even easier, the family of Cmp* functions are provided and act as shortcuts. Using CmpStruct function, the previous example can be written as:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(t *testing.T) { before := time.Now().Truncate(time.Second) record, err := CreateRecord() if td.CmpNoError(t, err) { td.CmpStruct(t, record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.</description></item><item><title>td.T type</title><link>https://go-testdeep.zetta.rocks/example/td-t/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://go-testdeep.zetta.rocks/example/td-t/</guid><description>testing.T can also be encapsulated in td.T type, simplifying again the test:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t := t.RootName(&amp;#34;RECORD&amp;#34;) // Use RECORD instead of DATA in failure reports // Using Struct shortcut method t.Struct(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, }, td.StructFields{ &amp;#34;Id&amp;#34;: td.NotZero(), &amp;#34;CreatedAt&amp;#34;: td.Between(before, time.Now()), }, &amp;#34;Newly created record&amp;#34;) // Or using Cmp method, it&amp;#39;s a matter of taste t.</description></item><item><title>Using anchoring</title><link>https://go-testdeep.zetta.rocks/example/anchoring/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://go-testdeep.zetta.rocks/example/anchoring/</guid><description>Last, operators can directly be anchored in litterals, still using the td.T type, avoiding the use of the Struct operator:
+import ( &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/maxatome/go-testdeep/td&amp;#34; ) func TestCreateRecord(tt *testing.T) { t := td.NewT(tt) before := time.Now().Truncate(time.Second) record, err := CreateRecord() if t.CmpNoError(err) { t.RootName(&amp;#34;RECORD&amp;#34;). // Use RECORD instead of DATA in failure reports Cmp(record, &amp;amp;Record{ Name: &amp;#34;Bob&amp;#34;, Age: 23, Id: t.Anchor(td.NotZero(), uint64(0)).(uint64), CreatedAt: t.Anchor(td.Between(before, time.Now())).(time.Time), }, &amp;#34;Newly created record&amp;#34;) } } See the Anchor method documentation for details.</description></item></channel></rss>

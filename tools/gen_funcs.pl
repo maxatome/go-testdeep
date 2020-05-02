@@ -806,7 +806,7 @@ $2>rs or die "tdhttp example not found in $md_file!";
 if ($ENV{PROD_SITE})
 {
     chdir "$REPO_DIR/tools/docs_src";
-    exec qw(hugo -d ../../docs);
+    exec qw(hugo -d ../../docs --minify);
 }
 
 

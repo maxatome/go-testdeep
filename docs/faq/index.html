@@ -1,3637 +1,528 @@
-<!DOCTYPE html>
-<html lang="en" class="js csstransforms3d">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.68.3" />
-    <meta name="description" content="">
-
-
-    <link rel="icon" href="/images/favicon.png" type="image/png">
-
-    <title>FAQ :: go-testdeep</title>
-
-    
-    <link href="/css/nucleus.css?1587225807" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1587225807" rel="stylesheet">
-    <link href="/css/hybrid.css?1587225807" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1587225807" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1587225807" rel="stylesheet">
-    <link href="/css/auto-complete.css?1587225807" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1587225807" rel="stylesheet">
-    <link href="/css/theme.css?1587225807" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1587225807" rel="stylesheet">
-    
-      <link href="/css/theme-green.css?1587225807" rel="stylesheet">
-    
-
-    <script src="/js/jquery-3.3.1.min.js?1587225807"></script>
-
-    <style>
-      :root #header + #content > #left > #rlblock_left{
-          display:none !important;
-      }
-      
-        :not(pre) > code + span.copy-to-clipboard {
-            display: none;
-        }
-      
-    </style>
-    <meta name="google-site-verification" content="I15BdfDU61eURsp8IywfU9hV8Rygaa4JsH-U8kKAxVs" />
-<style type="text/css">
-  #body-inner pre {
-      white-space: pre;
-  }
-</style>
-
-  </head>
-  <body class="" data-url="/faq/">
-    <nav id="sidebar" class="">
-
-
-
-  <div id="header-wrapper">
-    <div id="header">
-      <a id="logo" href="https://go-testdeep.zetta.rocks/"><img src="https://go-testdeep.zetta.rocks//images/logo.svg" /></a>
-
-    </div>
-    
-        <div class="searchbox">
-    <label for="search-by"><i class="fas fa-search"></i></label>
-    <input data-search-input id="search-by" type="search" placeholder="Search...">
-    <span data-search-clear=""><i class="fas fa-times"></i></span>
-</div>
-
-<script type="text/javascript" src="/js/lunr.min.js?1587225807"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1587225807"></script>
-<script type="text/javascript">
-    
-        var baseurl = "https:\/\/go-testdeep.zetta.rocks\/";
-    
-</script>
-<script type="text/javascript" src="/js/search.js?1587225807"></script>
-
-    
-  </div>
-
-    <div class="highlightable">
-    <ul class="topics">
-
-        
-          
-          
-
-
- 
-  
-    
-    <li data-nav-id="/introduction/" title="Introduction" class="dd-item 
-        
-        
-        
-        ">
-      <a href="/introduction/">
-          Introduction
-          
-      </a>
-      
-              
-    </li>
-  
- 
-
-          
-          
-
-
- 
-  
-    
-    <li data-nav-id="/example/" title="Example" class="dd-item 
-        
-        
-        
-        ">
-      <a href="/example/">
-          Example
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-          
-        
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/example/using-testing/" title="Using testing package" class="dd-item ">
-        <a href="/example/using-testing/">
-        Using testing package
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/example/basic-testdeep/" title="Basic go-testdeep approach" class="dd-item ">
-        <a href="/example/basic-testdeep/">
-        Basic go-testdeep approach
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/example/advanced-testdeep/" title="Advanced go-testdeep technique" class="dd-item ">
-        <a href="/example/advanced-testdeep/">
-        Advanced go-testdeep technique
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/example/td-cmp-shortcuts/" title="go-testdeep Cmp shortcuts" class="dd-item ">
-        <a href="/example/td-cmp-shortcuts/">
-        go-testdeep Cmp shortcuts
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/example/td-t/" title="td.T type" class="dd-item ">
-        <a href="/example/td-t/">
-        td.T type
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/example/anchoring/" title="Using anchoring" class="dd-item ">
-        <a href="/example/anchoring/">
-        Using anchoring
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-              
-    </li>
-  
- 
-
-          
-          
-
-
- 
-  
-    
-    <li data-nav-id="/functions/" title="Functions" class="dd-item 
-        
-        
-        
-        ">
-      <a href="/functions/">
-          Functions
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-          
-        
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/functions/td-t/" title="td.T" class="dd-item ">
-        <a href="/functions/td-t/">
-        td.T
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-              
-    </li>
-  
- 
-
-          
-          
-
-
- 
-  
-    
-    <li data-nav-id="/operators/" title="Operators" class="dd-item 
-        
-        
-        
-        ">
-      <a href="/operators/">
-          Operators
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-          
-        
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/matrix/" title="Operators matrices" class="dd-item ">
-        <a href="/operators/matrix/">
-        Operators matrices
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/all/" title="All" class="dd-item ">
-        <a href="/operators/all/">
-        All
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/any/" title="Any" class="dd-item ">
-        <a href="/operators/any/">
-        Any
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/array/" title="Array" class="dd-item ">
-        <a href="/operators/array/">
-        Array
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/arrayeach/" title="ArrayEach" class="dd-item ">
-        <a href="/operators/arrayeach/">
-        ArrayEach
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/bag/" title="Bag" class="dd-item ">
-        <a href="/operators/bag/">
-        Bag
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/between/" title="Between" class="dd-item ">
-        <a href="/operators/between/">
-        Between
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/cap/" title="Cap" class="dd-item ">
-        <a href="/operators/cap/">
-        Cap
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/catch/" title="Catch" class="dd-item ">
-        <a href="/operators/catch/">
-        Catch
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/code/" title="Code" class="dd-item ">
-        <a href="/operators/code/">
-        Code
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/contains/" title="Contains" class="dd-item ">
-        <a href="/operators/contains/">
-        Contains
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/containskey/" title="ContainsKey" class="dd-item ">
-        <a href="/operators/containskey/">
-        ContainsKey
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/delay/" title="Delay" class="dd-item ">
-        <a href="/operators/delay/">
-        Delay
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/empty/" title="Empty" class="dd-item ">
-        <a href="/operators/empty/">
-        Empty
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/gt/" title="Gt" class="dd-item ">
-        <a href="/operators/gt/">
-        Gt
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/gte/" title="Gte" class="dd-item ">
-        <a href="/operators/gte/">
-        Gte
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/hasprefix/" title="HasPrefix" class="dd-item ">
-        <a href="/operators/hasprefix/">
-        HasPrefix
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/hassuffix/" title="HasSuffix" class="dd-item ">
-        <a href="/operators/hassuffix/">
-        HasSuffix
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/ignore/" title="Ignore" class="dd-item ">
-        <a href="/operators/ignore/">
-        Ignore
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/isa/" title="Isa" class="dd-item ">
-        <a href="/operators/isa/">
-        Isa
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/json/" title="JSON" class="dd-item ">
-        <a href="/operators/json/">
-        JSON
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/keys/" title="Keys" class="dd-item ">
-        <a href="/operators/keys/">
-        Keys
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/lax/" title="Lax" class="dd-item ">
-        <a href="/operators/lax/">
-        Lax
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/len/" title="Len" class="dd-item ">
-        <a href="/operators/len/">
-        Len
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/lt/" title="Lt" class="dd-item ">
-        <a href="/operators/lt/">
-        Lt
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/lte/" title="Lte" class="dd-item ">
-        <a href="/operators/lte/">
-        Lte
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/map/" title="Map" class="dd-item ">
-        <a href="/operators/map/">
-        Map
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/mapeach/" title="MapEach" class="dd-item ">
-        <a href="/operators/mapeach/">
-        MapEach
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/n/" title="N" class="dd-item ">
-        <a href="/operators/n/">
-        N
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/nan/" title="NaN" class="dd-item ">
-        <a href="/operators/nan/">
-        NaN
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/nil/" title="Nil" class="dd-item ">
-        <a href="/operators/nil/">
-        Nil
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/none/" title="None" class="dd-item ">
-        <a href="/operators/none/">
-        None
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/not/" title="Not" class="dd-item ">
-        <a href="/operators/not/">
-        Not
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/notany/" title="NotAny" class="dd-item ">
-        <a href="/operators/notany/">
-        NotAny
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/notempty/" title="NotEmpty" class="dd-item ">
-        <a href="/operators/notempty/">
-        NotEmpty
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/notnan/" title="NotNaN" class="dd-item ">
-        <a href="/operators/notnan/">
-        NotNaN
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/notnil/" title="NotNil" class="dd-item ">
-        <a href="/operators/notnil/">
-        NotNil
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/notzero/" title="NotZero" class="dd-item ">
-        <a href="/operators/notzero/">
-        NotZero
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/pptr/" title="PPtr" class="dd-item ">
-        <a href="/operators/pptr/">
-        PPtr
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/ptr/" title="Ptr" class="dd-item ">
-        <a href="/operators/ptr/">
-        Ptr
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/re/" title="Re" class="dd-item ">
-        <a href="/operators/re/">
-        Re
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/reall/" title="ReAll" class="dd-item ">
-        <a href="/operators/reall/">
-        ReAll
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/set/" title="Set" class="dd-item ">
-        <a href="/operators/set/">
-        Set
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/shallow/" title="Shallow" class="dd-item ">
-        <a href="/operators/shallow/">
-        Shallow
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/slice/" title="Slice" class="dd-item ">
-        <a href="/operators/slice/">
-        Slice
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/smuggle/" title="Smuggle" class="dd-item ">
-        <a href="/operators/smuggle/">
-        Smuggle
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/sstruct/" title="SStruct" class="dd-item ">
-        <a href="/operators/sstruct/">
-        SStruct
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/string/" title="String" class="dd-item ">
-        <a href="/operators/string/">
-        String
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/struct/" title="Struct" class="dd-item ">
-        <a href="/operators/struct/">
-        Struct
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/subbagof/" title="SubBagOf" class="dd-item ">
-        <a href="/operators/subbagof/">
-        SubBagOf
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/subjsonof/" title="SubJSONOf" class="dd-item ">
-        <a href="/operators/subjsonof/">
-        SubJSONOf
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/submapof/" title="SubMapOf" class="dd-item ">
-        <a href="/operators/submapof/">
-        SubMapOf
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/subsetof/" title="SubSetOf" class="dd-item ">
-        <a href="/operators/subsetof/">
-        SubSetOf
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/superbagof/" title="SuperBagOf" class="dd-item ">
-        <a href="/operators/superbagof/">
-        SuperBagOf
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/superjsonof/" title="SuperJSONOf" class="dd-item ">
-        <a href="/operators/superjsonof/">
-        SuperJSONOf
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/supermapof/" title="SuperMapOf" class="dd-item ">
-        <a href="/operators/supermapof/">
-        SuperMapOf
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/supersetof/" title="SuperSetOf" class="dd-item ">
-        <a href="/operators/supersetof/">
-        SuperSetOf
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/tag/" title="Tag" class="dd-item ">
-        <a href="/operators/tag/">
-        Tag
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/trunctime/" title="TruncTime" class="dd-item ">
-        <a href="/operators/trunctime/">
-        TruncTime
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/values/" title="Values" class="dd-item ">
-        <a href="/operators/values/">
-        Values
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/operators/zero/" title="Zero" class="dd-item ">
-        <a href="/operators/zero/">
-        Zero
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-              
-    </li>
-  
- 
-
-          
-          
-
-
- 
-  
-    
-    <li data-nav-id="/helpers/" title="Helpers" class="dd-item 
-        
-        
-        
-        ">
-      <a href="/helpers/">
-          Helpers
-          
-      </a>
-      
-              
-    </li>
-  
- 
-
-          
-          
-
-
- 
-  
-    
-    <li data-nav-id="/faq/" title="FAQ" class="dd-item 
-        parent
-        active
-        
-        ">
-      <a href="/faq/">
-          FAQ
-          
-      </a>
-      
-              
-    </li>
-  
- 
-
-          
-         
-    </ul>
-
-    
-    
-      <section id="shortcuts">
-        <h3>More</h3>
-        <ul>
-          
-              <li> 
-                  <a class="padding" href="https://github.com/maxatome/go-testdeep"><i class='fab fa-github'></i> Github repo</a>
-              </li>
-          
-              <li> 
-                  <a class="padding" href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td"><i class='fas fa-book'></i> godoc</a>
-              </li>
-          
-              <li> 
-                  <a class="padding" href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp"><i class='fas fa-book'></i> godoc API tester — tdhttp</a>
-              </li>
-          
-              <li> 
-                  <a class="padding" href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil"><i class='fas fa-book'></i> godoc helpers utils — tdutil</a>
-              </li>
-          
-        </ul>
-      </section>
-    
-
-    
-    <section id="footer">
-      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
-
-    </section>
-  </div>
-</nav>
-
-
-
-
-
-        <section id="body">
-        <div id="overlay"></div>
-        <div class="padding highlightable">
-              
-              <div>
-                <div id="top-bar">
-                
-                
-                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                    <span id="sidebar-toggle-span">
-                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
-                          <i class="fas fa-bars"></i>
-                        </a>
-                    </span>
-                  
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
-                  <span class="links">
-                 
-                 
-                    
-          
-          
-            
-            
-          
-          
-            <a href='/'>go-testdeep</a> > FAQ
-          
-         
-          
-        
-                 
-                  </span>
-                </div>
-                
-                    <div class="progress">
-    <div class="wrapper">
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#how-to-mix-strict-requirements-and-simple-assertions">How to mix strict requirements and simple assertions?</a></li>
-    <li><a href="#how-does-operator-anchoring-work">How does operator anchoring work?</a></li>
-    <li><a href="#how-to-test-ioreader-contents-like-nethttpresponsebody-for-example">How to test <code>io.Reader</code> contents, like <code>net/http.Response.Body</code> for example?</a></li>
-    <li><a href="#ok-but-i-prefer-comparing-strings-instead-of-bytes">OK, but I prefer comparing <code>string</code>s instead of <code>byte</code>s</a></li>
-    <li><a href="#ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own">OK, but my response is in fact a JSON marshaled struct of my own</a></li>
-    <li><a href="#ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-dont-know-the-id-in-advance">OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</a></li>
-    <li><a href="#what-about-testing-the-response-using-my-api">What about testing the response using my API?</a></li>
-    <li><a href="#arf-i-use-gin-gonic-and-so-no-nethttp-handlers">Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</a></li>
-    <li><a href="#fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</a></li>
-    <li><a href="#ok-but-how-to-be-sure-the-response-content-is-well-jsonified">OK, but how to be sure the response content is well JSONified?</a></li>
-    <li><a href="#my-api-use-xml-not-json">My API use XML not JSON!</a></li>
-    <li><a href="#should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd">Should I import <code>github.com/maxatome/go-testdeep</code> or <code>github.com/maxatome/go-testdeep/td</code>?</a></li>
-    <li><a href="#what-does-the-error-undefined-testdeepdefaultcontextconfig-mean">What does the error <code>undefined: testdeep.DefaultContextConfig</code> mean?</a></li>
-    <li><a href="#go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</a></li>
-    <li><a href="#how-do-i-change-these-crappy-colors">How do I change these crappy colors?</a>
-      <ul>
-        <li><a href="#color-format">Color format</a></li>
-      </ul>
-    </li>
-    <li><a href="#the-x-testing-framework-allows-to-testdo-y-while-go-testdeep-not">The <code>X</code> testing framework allows to test/do <code>Y</code> while go-testdeep not</a></li>
-    <li><a href="#how-to-add-a-new-operator">How to add a new operator?</a></li>
-  </ul>
-</nav>
-    </div>
-</div>
-
-                
-              </div>
-            </div>
-            
-        <div id="head-tags">
-        
-        </div>
-        
-        <div id="body-inner">
-          
-            <h1>
-              
-              FAQ
-            </h1>
-          
-
-        
-
-
-
-
-	<h2 id="how-to-mix-strict-requirements-and-simple-assertions">How to mix strict requirements and simple assertions?</h2>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
-
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+<!doctype html><html lang=en class="js csstransforms3d"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.69.2"><meta name=description content><link rel=icon href=/images/favicon.png type=image/png><title>FAQ :: go-testdeep</title><link href=/css/nucleus.css?1588458732 rel=stylesheet><link href=/css/fontawesome-all.min.css?1588458732 rel=stylesheet><link href=/css/hybrid.css?1588458732 rel=stylesheet><link href=/css/featherlight.min.css?1588458732 rel=stylesheet><link href=/css/perfect-scrollbar.min.css?1588458732 rel=stylesheet><link href=/css/auto-complete.css?1588458732 rel=stylesheet><link href=/css/atom-one-dark-reasonable.css?1588458732 rel=stylesheet><link href=/css/theme.css?1588458732 rel=stylesheet><link href=/css/hugo-theme.css?1588458732 rel=stylesheet><link href=/css/theme-green.css?1588458732 rel=stylesheet><script src=/js/jquery-3.3.1.min.js?1588458732></script><style>:root #header+#content>#left>#rlblock_left{display:none!important}:not(pre)>code+span.copy-to-clipboard{display:none}</style><meta name=google-site-verification content="I15BdfDU61eURsp8IywfU9hV8Rygaa4JsH-U8kKAxVs"><style type=text/css>#body-inner pre{white-space:pre}</style></head><body data-url=/faq/><nav id=sidebar><div id=header-wrapper><div id=header><a id=logo href=https://go-testdeep.zetta.rocks/><img src=https://go-testdeep.zetta.rocks//images/logo.svg></a></div><div class=searchbox><label for=search-by><i class="fas fa-search"></i></label><input data-search-input id=search-by type=search placeholder=Search...>
+<span data-search-clear><i class="fas fa-times"></i></span></div><script type=text/javascript src=/js/lunr.min.js?1588458732></script><script type=text/javascript src=/js/auto-complete.js?1588458732></script><script type=text/javascript>var baseurl="https:\/\/go-testdeep.zetta.rocks\/";</script><script type=text/javascript src=/js/search.js?1588458732></script></div><div class=highlightable><ul class=topics><li data-nav-id=/introduction/ title=Introduction class=dd-item><a href=/introduction/>Introduction</a></li><li data-nav-id=/example/ title=Example class=dd-item><a href=/example/>Example</a><ul><li data-nav-id=/example/using-testing/ title="Using testing package" class=dd-item><a href=/example/using-testing/>Using testing package</a></li><li data-nav-id=/example/basic-testdeep/ title="Basic go-testdeep approach" class=dd-item><a href=/example/basic-testdeep/>Basic go-testdeep approach</a></li><li data-nav-id=/example/advanced-testdeep/ title="Advanced go-testdeep technique" class=dd-item><a href=/example/advanced-testdeep/>Advanced go-testdeep technique</a></li><li data-nav-id=/example/td-cmp-shortcuts/ title="go-testdeep Cmp shortcuts" class=dd-item><a href=/example/td-cmp-shortcuts/>go-testdeep Cmp shortcuts</a></li><li data-nav-id=/example/td-t/ title="td.T type" class=dd-item><a href=/example/td-t/>td.T type</a></li><li data-nav-id=/example/anchoring/ title="Using anchoring" class=dd-item><a href=/example/anchoring/>Using anchoring</a></li></ul></li><li data-nav-id=/functions/ title=Functions class=dd-item><a href=/functions/>Functions</a><ul><li data-nav-id=/functions/td-t/ title=td.T class=dd-item><a href=/functions/td-t/>td.T</a></li></ul></li><li data-nav-id=/operators/ title=Operators class=dd-item><a href=/operators/>Operators</a><ul><li data-nav-id=/operators/matrix/ title="Operators matrices" class=dd-item><a href=/operators/matrix/>Operators matrices</a></li><li data-nav-id=/operators/all/ title=All class=dd-item><a href=/operators/all/>All</a></li><li data-nav-id=/operators/any/ title=Any class=dd-item><a href=/operators/any/>Any</a></li><li data-nav-id=/operators/array/ title=Array class=dd-item><a href=/operators/array/>Array</a></li><li data-nav-id=/operators/arrayeach/ title=ArrayEach class=dd-item><a href=/operators/arrayeach/>ArrayEach</a></li><li data-nav-id=/operators/bag/ title=Bag class=dd-item><a href=/operators/bag/>Bag</a></li><li data-nav-id=/operators/between/ title=Between class=dd-item><a href=/operators/between/>Between</a></li><li data-nav-id=/operators/cap/ title=Cap class=dd-item><a href=/operators/cap/>Cap</a></li><li data-nav-id=/operators/catch/ title=Catch class=dd-item><a href=/operators/catch/>Catch</a></li><li data-nav-id=/operators/code/ title=Code class=dd-item><a href=/operators/code/>Code</a></li><li data-nav-id=/operators/contains/ title=Contains class=dd-item><a href=/operators/contains/>Contains</a></li><li data-nav-id=/operators/containskey/ title=ContainsKey class=dd-item><a href=/operators/containskey/>ContainsKey</a></li><li data-nav-id=/operators/delay/ title=Delay class=dd-item><a href=/operators/delay/>Delay</a></li><li data-nav-id=/operators/empty/ title=Empty class=dd-item><a href=/operators/empty/>Empty</a></li><li data-nav-id=/operators/gt/ title=Gt class=dd-item><a href=/operators/gt/>Gt</a></li><li data-nav-id=/operators/gte/ title=Gte class=dd-item><a href=/operators/gte/>Gte</a></li><li data-nav-id=/operators/hasprefix/ title=HasPrefix class=dd-item><a href=/operators/hasprefix/>HasPrefix</a></li><li data-nav-id=/operators/hassuffix/ title=HasSuffix class=dd-item><a href=/operators/hassuffix/>HasSuffix</a></li><li data-nav-id=/operators/ignore/ title=Ignore class=dd-item><a href=/operators/ignore/>Ignore</a></li><li data-nav-id=/operators/isa/ title=Isa class=dd-item><a href=/operators/isa/>Isa</a></li><li data-nav-id=/operators/json/ title=JSON class=dd-item><a href=/operators/json/>JSON</a></li><li data-nav-id=/operators/keys/ title=Keys class=dd-item><a href=/operators/keys/>Keys</a></li><li data-nav-id=/operators/lax/ title=Lax class=dd-item><a href=/operators/lax/>Lax</a></li><li data-nav-id=/operators/len/ title=Len class=dd-item><a href=/operators/len/>Len</a></li><li data-nav-id=/operators/lt/ title=Lt class=dd-item><a href=/operators/lt/>Lt</a></li><li data-nav-id=/operators/lte/ title=Lte class=dd-item><a href=/operators/lte/>Lte</a></li><li data-nav-id=/operators/map/ title=Map class=dd-item><a href=/operators/map/>Map</a></li><li data-nav-id=/operators/mapeach/ title=MapEach class=dd-item><a href=/operators/mapeach/>MapEach</a></li><li data-nav-id=/operators/n/ title=N class=dd-item><a href=/operators/n/>N</a></li><li data-nav-id=/operators/nan/ title=NaN class=dd-item><a href=/operators/nan/>NaN</a></li><li data-nav-id=/operators/nil/ title=Nil class=dd-item><a href=/operators/nil/>Nil</a></li><li data-nav-id=/operators/none/ title=None class=dd-item><a href=/operators/none/>None</a></li><li data-nav-id=/operators/not/ title=Not class=dd-item><a href=/operators/not/>Not</a></li><li data-nav-id=/operators/notany/ title=NotAny class=dd-item><a href=/operators/notany/>NotAny</a></li><li data-nav-id=/operators/notempty/ title=NotEmpty class=dd-item><a href=/operators/notempty/>NotEmpty</a></li><li data-nav-id=/operators/notnan/ title=NotNaN class=dd-item><a href=/operators/notnan/>NotNaN</a></li><li data-nav-id=/operators/notnil/ title=NotNil class=dd-item><a href=/operators/notnil/>NotNil</a></li><li data-nav-id=/operators/notzero/ title=NotZero class=dd-item><a href=/operators/notzero/>NotZero</a></li><li data-nav-id=/operators/pptr/ title=PPtr class=dd-item><a href=/operators/pptr/>PPtr</a></li><li data-nav-id=/operators/ptr/ title=Ptr class=dd-item><a href=/operators/ptr/>Ptr</a></li><li data-nav-id=/operators/re/ title=Re class=dd-item><a href=/operators/re/>Re</a></li><li data-nav-id=/operators/reall/ title=ReAll class=dd-item><a href=/operators/reall/>ReAll</a></li><li data-nav-id=/operators/set/ title=Set class=dd-item><a href=/operators/set/>Set</a></li><li data-nav-id=/operators/shallow/ title=Shallow class=dd-item><a href=/operators/shallow/>Shallow</a></li><li data-nav-id=/operators/slice/ title=Slice class=dd-item><a href=/operators/slice/>Slice</a></li><li data-nav-id=/operators/smuggle/ title=Smuggle class=dd-item><a href=/operators/smuggle/>Smuggle</a></li><li data-nav-id=/operators/sstruct/ title=SStruct class=dd-item><a href=/operators/sstruct/>SStruct</a></li><li data-nav-id=/operators/string/ title=String class=dd-item><a href=/operators/string/>String</a></li><li data-nav-id=/operators/struct/ title=Struct class=dd-item><a href=/operators/struct/>Struct</a></li><li data-nav-id=/operators/subbagof/ title=SubBagOf class=dd-item><a href=/operators/subbagof/>SubBagOf</a></li><li data-nav-id=/operators/subjsonof/ title=SubJSONOf class=dd-item><a href=/operators/subjsonof/>SubJSONOf</a></li><li data-nav-id=/operators/submapof/ title=SubMapOf class=dd-item><a href=/operators/submapof/>SubMapOf</a></li><li data-nav-id=/operators/subsetof/ title=SubSetOf class=dd-item><a href=/operators/subsetof/>SubSetOf</a></li><li data-nav-id=/operators/superbagof/ title=SuperBagOf class=dd-item><a href=/operators/superbagof/>SuperBagOf</a></li><li data-nav-id=/operators/superjsonof/ title=SuperJSONOf class=dd-item><a href=/operators/superjsonof/>SuperJSONOf</a></li><li data-nav-id=/operators/supermapof/ title=SuperMapOf class=dd-item><a href=/operators/supermapof/>SuperMapOf</a></li><li data-nav-id=/operators/supersetof/ title=SuperSetOf class=dd-item><a href=/operators/supersetof/>SuperSetOf</a></li><li data-nav-id=/operators/tag/ title=Tag class=dd-item><a href=/operators/tag/>Tag</a></li><li data-nav-id=/operators/trunctime/ title=TruncTime class=dd-item><a href=/operators/trunctime/>TruncTime</a></li><li data-nav-id=/operators/values/ title=Values class=dd-item><a href=/operators/values/>Values</a></li><li data-nav-id=/operators/zero/ title=Zero class=dd-item><a href=/operators/zero/>Zero</a></li></ul></li><li data-nav-id=/helpers/ title=Helpers class=dd-item><a href=/helpers/>Helpers</a></li><li data-nav-id=/faq/ title=FAQ class="dd-item
+parent
+active"><a href=/faq/>FAQ</a></li></ul><section id=shortcuts><h3>More</h3><ul><li><a class=padding href=https://github.com/maxatome/go-testdeep><i class="fab fa-github"></i>Github repo</a></li><li><a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td><i class="fas fa-book"></i>godoc</a></li><li><a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp><i class="fas fa-book"></i>godoc API tester — tdhttp</a></li><li><a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil><i class="fas fa-book"></i>godoc helpers utils — tdutil</a></li></ul></section><section id=footer><p>Built with <a href=https://github.com/matcornic/hugo-theme-learn><i class="fas fa-heart"></i></a>from <a href=https://getgrav.org>Grav</a> and <a href=https://gohugo.io/>Hugo</a></p></section></div></nav><section id=body><div id=overlay></div><div class="padding highlightable"><div><div id=top-bar><div id=breadcrumbs itemscope itemtype=http://schema.org/BreadcrumbList><span id=sidebar-toggle-span><a href=# id=sidebar-toggle data-sidebar-toggle><i class="fas fa-bars"></i></a></span><span id=toc-menu><i class="fas fa-list-alt"></i></span><span class=links><span itemscope itemprop=itemListElement itemtype=http://schema.org/ListItem><a itemprop=item href=/><span itemprop=name>go-testdeep</span><meta itemprop=position content="1"></a></span>> FAQ</span></div><div class=progress><div class=wrapper><nav id=TableOfContents><ul><li><a href=#how-to-mix-strict-requirements-and-simple-assertions>How to mix strict requirements and simple assertions?</a></li><li><a href=#how-does-operator-anchoring-work>How does operator anchoring work?</a></li><li><a href=#how-to-test-ioreader-contents-like-nethttpresponsebody-for-example>How to test <code>io.Reader</code> contents, like <code>net/http.Response.Body</code> for example?</a></li><li><a href=#ok-but-i-prefer-comparing-strings-instead-of-bytes>OK, but I prefer comparing <code>string</code>s instead of <code>byte</code>s</a></li><li><a href=#ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own>OK, but my response is in fact a JSON marshaled struct of my own</a></li><li><a href=#ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-dont-know-the-id-in-advance>OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</a></li><li><a href=#what-about-testing-the-response-using-my-api>What about testing the response using my API?</a></li><li><a href=#arf-i-use-gin-gonic-and-so-no-nethttp-handlers>Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</a></li><li><a href=#fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value>Fine, the request succeeds and the ID is not 0, but what is the ID real value?</a></li><li><a href=#ok-but-how-to-be-sure-the-response-content-is-well-jsonified>OK, but how to be sure the response content is well JSONified?</a></li><li><a href=#my-api-use-xml-not-json>My API use XML not JSON!</a></li><li><a href=#should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd>Should I import <code>github.com/maxatome/go-testdeep</code> or <code>github.com/maxatome/go-testdeep/td</code>?</a></li><li><a href=#what-does-the-error-undefined-testdeepdefaultcontextconfig-mean>What does the error <code>undefined: testdeep.DefaultContextConfig</code> mean?</a></li><li><a href=#go-testdeep-dumps-only-10-errors-how-to-have-more-or-less>go-testdeep dumps only 10 errors, how to have more (or less)?</a></li><li><a href=#how-do-i-change-these-crappy-colors>How do I change these crappy colors?</a><ul><li><a href=#color-format>Color format</a></li></ul></li><li><a href=#the-x-testing-framework-allows-to-testdo-y-while-go-testdeep-not>The <code>X</code> testing framework allows to test/do <code>Y</code> while go-testdeep not</a></li><li><a href=#how-to-add-a-new-operator>How to add a new operator?</a></li></ul></nav></div></div></div></div><div id=head-tags></div><div id=body-inner><h1>FAQ</h1><h2 id=how-to-mix-strict-requirements-and-simple-assertions>How to mix strict requirements and simple assertions?</h2><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
+
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestAssertionsAndRequirements</span>(t *testing.T) {
-  assert, require := td.<span style="color:#447fcf">AssertRequire</span>(t)
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestAssertionsAndRequirements</span>(t *testing.T) {
+  assert, require := td.<span style=color:#447fcf>AssertRequire</span>(t)
 
-  got := <span style="color:#447fcf">SomeFunction</span>()
+  got := <span style=color:#447fcf>SomeFunction</span>()
 
-  require.<span style="color:#447fcf">Cmp</span>(got, expected) <span style="color:#999;font-style:italic">// if it fails: report error + abort
-</span><span style="color:#999;font-style:italic"></span>  assert.<span style="color:#447fcf">Cmp</span>(got, expected)  <span style="color:#999;font-style:italic">// if it fails: report error + continue
-</span><span style="color:#999;font-style:italic"></span>}
-</code></pre></div><h2 id="how-does-operator-anchoring-work">How does operator anchoring work?</h2>
-<p>Take this struct, returned by a <code>GetPerson()</code> function:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-  ID   <span style="color:#6ab825;font-weight:bold">int64</span>
-  Name <span style="color:#6ab825;font-weight:bold">string</span>
-  Age  <span style="color:#6ab825;font-weight:bold">uint8</span>
+  require.<span style=color:#447fcf>Cmp</span>(got, expected) <span style=color:#999;font-style:italic>// if it fails: report error + abort
+</span><span style=color:#999;font-style:italic></span>  assert.<span style=color:#447fcf>Cmp</span>(got, expected)  <span style=color:#999;font-style:italic>// if it fails: report error + continue
+</span><span style=color:#999;font-style:italic></span>}
+</code></pre></div><h2 id=how-does-operator-anchoring-work>How does operator anchoring work?</h2><p>Take this struct, returned by a <code>GetPerson()</code> function:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>type</span> Person <span style=color:#6ab825;font-weight:700>struct</span> {
+  ID   <span style=color:#6ab825;font-weight:700>int64</span>
+  Name <span style=color:#6ab825;font-weight:700>string</span>
+  Age  <span style=color:#6ab825;font-weight:700>uint8</span>
 }
-</code></pre></div><p>For the <code>Person</code> returned by <code>GetPerson()</code>, we expect that:</p>
-<ul>
-<li><code>ID</code> field should be ≠ 0;</li>
-<li><code>Name</code> field should always be &ldquo;Bob&rdquo;;</li>
-<li><code>Age</code> field should be ≥ 40 and ≤ 45.</li>
-</ul>
-<p>Without operator anchoring:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestPerson</span>(tt *testing.T) {
-  t := td.<span style="color:#447fcf">NewT</span>(tt)
+</code></pre></div><p>For the <code>Person</code> returned by <code>GetPerson()</code>, we expect that:</p><ul><li><code>ID</code> field should be ≠ 0;</li><li><code>Name</code> field should always be &ldquo;Bob&rdquo;;</li><li><code>Age</code> field should be ≥ 40 and ≤ 45.</li></ul><p>Without operator anchoring:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestPerson</span>(tt *testing.T) {
+  t := td.<span style=color:#447fcf>NewT</span>(tt)
 
-  t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">GetPerson</span>(),               <span style="color:#999;font-style:italic">// ← ①
-</span><span style="color:#999;font-style:italic"></span>    td.<span style="color:#447fcf">Struct</span>(Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>}, <span style="color:#999;font-style:italic">// ← ②
-</span><span style="color:#999;font-style:italic"></span>      td.StructFields{             <span style="color:#999;font-style:italic">// ← ③
-</span><span style="color:#999;font-style:italic"></span>        <span style="color:#ed9d13">&#34;ID&#34;</span>:  td.<span style="color:#447fcf">NotZero</span>(),       <span style="color:#999;font-style:italic">// ← ④
-</span><span style="color:#999;font-style:italic"></span>        <span style="color:#ed9d13">&#34;Age&#34;</span>: td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>)), <span style="color:#999;font-style:italic">// ← ⑤
-</span><span style="color:#999;font-style:italic"></span>      }))
+  t.<span style=color:#447fcf>Cmp</span>(<span style=color:#447fcf>GetPerson</span>(),               <span style=color:#999;font-style:italic>// ← ①
+</span><span style=color:#999;font-style:italic></span>    td.<span style=color:#447fcf>Struct</span>(Person{Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>}, <span style=color:#999;font-style:italic>// ← ②
+</span><span style=color:#999;font-style:italic></span>      td.StructFields{             <span style=color:#999;font-style:italic>// ← ③
+</span><span style=color:#999;font-style:italic></span>        <span style=color:#ed9d13>&#34;ID&#34;</span>:  td.<span style=color:#447fcf>NotZero</span>(),       <span style=color:#999;font-style:italic>// ← ④
+</span><span style=color:#999;font-style:italic></span>        <span style=color:#ed9d13>&#34;Age&#34;</span>: td.<span style=color:#447fcf>Between</span>(<span style=color:#24909d>uint8</span>(<span style=color:#3677a9>40</span>), <span style=color:#24909d>uint8</span>(<span style=color:#3677a9>45</span>)), <span style=color:#999;font-style:italic>// ← ⑤
+</span><span style=color:#999;font-style:italic></span>      }))
 }
-</code></pre></div><ol>
-<li><code>GetPerson()</code> returns a <code>Person</code>;</li>
-<li>as some fields of the returned <code>Person</code> are not exactly known in
-advance, we use the <a href="/operators/struct/"><code>Struct</code></a> operator as
+</code></pre></div><ol><li><code>GetPerson()</code> returns a <code>Person</code>;</li><li>as some fields of the returned <code>Person</code> are not exactly known in
+advance, we use the <a href=/operators/struct/><code>Struct</code></a> operator as
 expected parameter. It allows to match exactly some fields, and use
-<a href="/operators/">TestDeep operators</a> on others. Here we
-know that <code>Name</code> field should always be &ldquo;Bob&rdquo;;</li>
-<li><a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#StructFields"><code>StructFields</code></a>
-is a map allowing to use <a href="/operators/">TestDeep operators</a>
-for any field;</li>
-<li><code>ID</code> field should be ≠ 0. See <a href="/operators/notzero/"><code>NotZero</code></a>
-operator for details;</li>
-<li><code>Age</code> field should be ≥ 40 and ≤ 45. See <a href="/operators/between/"><code>Between</code></a>
-operator for details.</li>
-</ol>
-<p>With operator anchoring, the use of <a href="/operators/struct/"><code>Struct</code></a>
-operator is no longer needed:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestPerson</span>(tt *testing.T) {
-  t := td.<span style="color:#447fcf">NewT</span>(tt)
+<a href=/operators/>TestDeep operators</a> on others. Here we
+know that <code>Name</code> field should always be &ldquo;Bob&rdquo;;</li><li><a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#StructFields><code>StructFields</code></a>
+is a map allowing to use <a href=/operators/>TestDeep operators</a>
+for any field;</li><li><code>ID</code> field should be ≠ 0. See <a href=/operators/notzero/><code>NotZero</code></a>
+operator for details;</li><li><code>Age</code> field should be ≥ 40 and ≤ 45. See <a href=/operators/between/><code>Between</code></a>
+operator for details.</li></ol><p>With operator anchoring, the use of <a href=/operators/struct/><code>Struct</code></a>
+operator is no longer needed:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestPerson</span>(tt *testing.T) {
+  t := td.<span style=color:#447fcf>NewT</span>(tt)
 
-  t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">GetPerson</span>(), <span style="color:#999;font-style:italic">// ← ①
-</span><span style="color:#999;font-style:italic"></span>    Person{          <span style="color:#999;font-style:italic">// ← ②
-</span><span style="color:#999;font-style:italic"></span>      Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,   <span style="color:#999;font-style:italic">// ← ③
-</span><span style="color:#999;font-style:italic"></span>      ID:   t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">int64</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">int64</span>), <span style="color:#999;font-style:italic">// ← ④
-</span><span style="color:#999;font-style:italic"></span>      Age:  t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>))).(<span style="color:#6ab825;font-weight:bold">uint8</span>), <span style="color:#999;font-style:italic">// ← ⑤
-</span><span style="color:#999;font-style:italic"></span>    })
+  t.<span style=color:#447fcf>Cmp</span>(<span style=color:#447fcf>GetPerson</span>(), <span style=color:#999;font-style:italic>// ← ①
+</span><span style=color:#999;font-style:italic></span>    Person{          <span style=color:#999;font-style:italic>// ← ②
+</span><span style=color:#999;font-style:italic></span>      Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>,   <span style=color:#999;font-style:italic>// ← ③
+</span><span style=color:#999;font-style:italic></span>      ID:   t.<span style=color:#447fcf>A</span>(td.<span style=color:#447fcf>NotZero</span>(), <span style=color:#24909d>int64</span>(<span style=color:#3677a9>0</span>)).(<span style=color:#6ab825;font-weight:700>int64</span>), <span style=color:#999;font-style:italic>// ← ④
+</span><span style=color:#999;font-style:italic></span>      Age:  t.<span style=color:#447fcf>A</span>(td.<span style=color:#447fcf>Between</span>(<span style=color:#24909d>uint8</span>(<span style=color:#3677a9>40</span>), <span style=color:#24909d>uint8</span>(<span style=color:#3677a9>45</span>))).(<span style=color:#6ab825;font-weight:700>uint8</span>), <span style=color:#999;font-style:italic>// ← ⑤
+</span><span style=color:#999;font-style:italic></span>    })
 }
-</code></pre></div><ol>
-<li><code>GetPerson()</code> still returns a <code>Person</code>;</li>
-<li>expected parameter is directly a <code>Person</code>. No operator needed here;</li>
-<li><code>Name</code> field should always be &ldquo;Bob&rdquo;, no change here;</li>
-<li><code>ID</code> field should be ≠ 0: anchor the <a href="/operators/notzero/"><code>NotZero</code></a>
-operator using the <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method. Break this line down:
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t.<span style="color:#447fcf">A</span>(            <span style="color:#999;font-style:italic">// ← ①
-</span><span style="color:#999;font-style:italic"></span>  td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#999;font-style:italic">// ← ②
-</span><span style="color:#999;font-style:italic"></span>  <span style="color:#24909d">int64</span>(<span style="color:#3677a9">0</span>),     <span style="color:#999;font-style:italic">// ← ③
-</span><span style="color:#999;font-style:italic"></span>).(<span style="color:#6ab825;font-weight:bold">int64</span>)       <span style="color:#999;font-style:italic">// ← ④
-</span></code></pre></div><ol>
-<li>the <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method is the key of the anchoring system. It saves
+</code></pre></div><ol><li><code>GetPerson()</code> still returns a <code>Person</code>;</li><li>expected parameter is directly a <code>Person</code>. No operator needed here;</li><li><code>Name</code> field should always be &ldquo;Bob&rdquo;, no change here;</li><li><code>ID</code> field should be ≠ 0: anchor the <a href=/operators/notzero/><code>NotZero</code></a>
+operator using the <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> method. Break this line down:<div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang>t.<span style=color:#447fcf>A</span>(            <span style=color:#999;font-style:italic>// ← ①
+</span><span style=color:#999;font-style:italic></span>  td.<span style=color:#447fcf>NotZero</span>(), <span style=color:#999;font-style:italic>// ← ②
+</span><span style=color:#999;font-style:italic></span>  <span style=color:#24909d>int64</span>(<span style=color:#3677a9>0</span>),     <span style=color:#999;font-style:italic>// ← ③
+</span><span style=color:#999;font-style:italic></span>).(<span style=color:#6ab825;font-weight:700>int64</span>)       <span style=color:#999;font-style:italic>// ← ④
+</span></code></pre></div><ol><li>the <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> method is the key of the anchoring system. It saves
 the operator globally, so it can be retrieved during the
-comparison of the next <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> call,</li>
-<li>the operator we want to anchor,</li>
-<li>this optional parameter is needed to tell <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> that the returned
+comparison of the next <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp><code>Cmp</code></a> call,</li><li>the operator we want to anchor,</li><li>this optional parameter is needed to tell <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> that the returned
 value must be a <code>int64</code>. Sometimes, this type can be deduced
-from the operator, but as <a href="/operators/notzero/"><code>NotZero</code></a> can
+from the operator, but as <a href=/operators/notzero/><code>NotZero</code></a> can
 handle any kind of number, it is not the case here. So we have
-to pass it,</li>
-<li>as <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
-<code>int64</code> type to bypass the golang static typing system,</li>
-</ol>
-</li>
-<li><code>Age </code>field should be ≥ 40 and ≤ 45: anchor the
-<a href="/operators/between/"><code>Between</code></a> operator using the <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a>
-method. Break this line down:
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t.<span style="color:#447fcf">A</span>(                                <span style="color:#999;font-style:italic">// ← ①
-</span><span style="color:#999;font-style:italic"></span>  td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>)), <span style="color:#999;font-style:italic">// ← ②
-</span><span style="color:#999;font-style:italic"></span>).(<span style="color:#6ab825;font-weight:bold">uint8</span>)                           <span style="color:#999;font-style:italic">// ← ③
-</span></code></pre></div><ol>
-<li>the <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method saves the operator globally, so it can be
-retrieved during the comparison of the next <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> call,</li>
-<li>the operator we want to anchor. As <a href="/operators/between/"><code>Between</code></a>
+to pass it,</li><li>as <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
+<code>int64</code> type to bypass the golang static typing system,</li></ol></li><li><code>Age </code>field should be ≥ 40 and ≤ 45: anchor the
+<a href=/operators/between/><code>Between</code></a> operator using the <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a>
+method. Break this line down:<div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang>t.<span style=color:#447fcf>A</span>(                                <span style=color:#999;font-style:italic>// ← ①
+</span><span style=color:#999;font-style:italic></span>  td.<span style=color:#447fcf>Between</span>(<span style=color:#24909d>uint8</span>(<span style=color:#3677a9>40</span>), <span style=color:#24909d>uint8</span>(<span style=color:#3677a9>45</span>)), <span style=color:#999;font-style:italic>// ← ②
+</span><span style=color:#999;font-style:italic></span>).(<span style=color:#6ab825;font-weight:700>uint8</span>)                           <span style=color:#999;font-style:italic>// ← ③
+</span></code></pre></div><ol><li>the <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> method saves the operator globally, so it can be
+retrieved during the comparison of the next <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp><code>Cmp</code></a> call,</li><li>the operator we want to anchor. As <a href=/operators/between/><code>Between</code></a>
 knows the type of its operands (here <code>uint8</code>), there is no need
-to tell <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> the returned type must be <code>uint8</code>. It can be deduced
-from <a href="/operators/between/"><code>Between</code></a>,</li>
-<li>as <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
-<code>uint8</code> type to bypass the golang static typing system.</li>
-</ol>
-</li>
-</ol>
-<p>Note the <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> method is a shortcut of <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor"><code>Anchor</code></a> method.</p>
-<p>Some rules have to be kept in mind:</p>
-<ul>
-<li>never cast a value returned by <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A"><code>A</code></a> or <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor"><code>Anchor</code></a> methods:
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t := td.<span style="color:#447fcf">NewT</span>(tt) <span style="color:#999;font-style:italic">// tt is a *testing.T
-</span><span style="color:#999;font-style:italic"></span>t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint</span>(<span style="color:#3677a9">8</span>)).(<span style="color:#6ab825;font-weight:bold">uint8</span>)         <span style="color:#999;font-style:italic">// OK
-</span><span style="color:#999;font-style:italic"></span><span style="color:#24909d">uint16</span>(t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint</span>(<span style="color:#3677a9">8</span>)).(<span style="color:#6ab825;font-weight:bold">uint8</span>)) <span style="color:#999;font-style:italic">// Not OK!
-</span><span style="color:#999;font-style:italic"></span>t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint16</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">uint16</span>)      <span style="color:#999;font-style:italic">// OK
-</span></code></pre></div></li>
-<li>anchored operators disappear once the next <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> call done. To
-share them between <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> calls, use the <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SetAnchorsPersist"><code>SetAnchorsPersist</code></a>
-method as in:
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang">t := td.<span style="color:#447fcf">NewT</span>(tt) <span style="color:#999;font-style:italic">// tt is a *testing.T
-</span><span style="color:#999;font-style:italic"></span>age := t.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">Between</span>(<span style="color:#24909d">uint8</span>(<span style="color:#3677a9">40</span>), <span style="color:#24909d">uint8</span>(<span style="color:#3677a9">45</span>))).(<span style="color:#6ab825;font-weight:bold">uint8</span>)
+to tell <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> the returned type must be <code>uint8</code>. It can be deduced
+from <a href=/operators/between/><code>Between</code></a>,</li><li>as <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> method returns an <code>interface{}</code>, we need to assert the
+<code>uint8</code> type to bypass the golang static typing system.</li></ol></li></ol><p>Note the <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> method is a shortcut of <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor><code>Anchor</code></a> method.</p><p>Some rules have to be kept in mind:</p><ul><li>never cast a value returned by <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.A><code>A</code></a> or <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor><code>Anchor</code></a> methods:<div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang>t := td.<span style=color:#447fcf>NewT</span>(tt) <span style=color:#999;font-style:italic>// tt is a *testing.T
+</span><span style=color:#999;font-style:italic></span>t.<span style=color:#447fcf>A</span>(td.<span style=color:#447fcf>NotZero</span>(), <span style=color:#24909d>uint</span>(<span style=color:#3677a9>8</span>)).(<span style=color:#6ab825;font-weight:700>uint8</span>)         <span style=color:#999;font-style:italic>// OK
+</span><span style=color:#999;font-style:italic></span><span style=color:#24909d>uint16</span>(t.<span style=color:#447fcf>A</span>(td.<span style=color:#447fcf>NotZero</span>(), <span style=color:#24909d>uint</span>(<span style=color:#3677a9>8</span>)).(<span style=color:#6ab825;font-weight:700>uint8</span>)) <span style=color:#999;font-style:italic>// Not OK!
+</span><span style=color:#999;font-style:italic></span>t.<span style=color:#447fcf>A</span>(td.<span style=color:#447fcf>NotZero</span>(), <span style=color:#24909d>uint16</span>(<span style=color:#3677a9>0</span>)).(<span style=color:#6ab825;font-weight:700>uint16</span>)      <span style=color:#999;font-style:italic>// OK
+</span></code></pre></div></li><li>anchored operators disappear once the next <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp><code>Cmp</code></a> call done. To
+share them between <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp><code>Cmp</code></a> calls, use the <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SetAnchorsPersist><code>SetAnchorsPersist</code></a>
+method as in:<div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang>t := td.<span style=color:#447fcf>NewT</span>(tt) <span style=color:#999;font-style:italic>// tt is a *testing.T
+</span><span style=color:#999;font-style:italic></span>age := t.<span style=color:#447fcf>A</span>(td.<span style=color:#447fcf>Between</span>(<span style=color:#24909d>uint8</span>(<span style=color:#3677a9>40</span>), <span style=color:#24909d>uint8</span>(<span style=color:#3677a9>45</span>))).(<span style=color:#6ab825;font-weight:700>uint8</span>)
 
-t.<span style="color:#447fcf">SetAnchorsPersist</span>(<span style="color:#6ab825;font-weight:bold">true</span>) <span style="color:#999;font-style:italic">// ← Don&#39;t reset anchors after next Cmp() call
-</span><span style="color:#999;font-style:italic"></span>
-t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">GetPerson</span>(<span style="color:#3677a9">1</span>), Person{
-  Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
+t.<span style=color:#447fcf>SetAnchorsPersist</span>(<span style=color:#6ab825;font-weight:700>true</span>) <span style=color:#999;font-style:italic>// ← Don&#39;t reset anchors after next Cmp() call
+</span><span style=color:#999;font-style:italic></span>
+t.<span style=color:#447fcf>Cmp</span>(<span style=color:#447fcf>GetPerson</span>(<span style=color:#3677a9>1</span>), Person{
+  Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>,
   Age:  age,
 })
 
-t.<span style="color:#447fcf">Cmp</span>(<span style="color:#447fcf">GetPerson</span>(<span style="color:#3677a9">2</span>), Person{
-  Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-  Age:  age, <span style="color:#999;font-style:italic">// ← OK
-</span><span style="color:#999;font-style:italic"></span>})
-</code></pre></div></li>
-</ul>
-<h2 id="how-to-test-ioreader-contents-like-nethttpresponsebody-for-example">How to test <code>io.Reader</code> contents, like <code>net/http.Response.Body</code> for example?</h2>
-<p>The <a href="/operators/smuggle/"><code>Smuggle</code></a> operator is done for that,
-here with the help of <a href="https://golang.org/pkg/io/ioutil/#ReadAll"><code>ReadAll</code></a>.</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;net/http&#34;</span>
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
-  <span style="color:#ed9d13">&#34;io/ioutil&#34;</span>
+t.<span style=color:#447fcf>Cmp</span>(<span style=color:#447fcf>GetPerson</span>(<span style=color:#3677a9>2</span>), Person{
+  Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+  Age:  age, <span style=color:#999;font-style:italic>// ← OK
+</span><span style=color:#999;font-style:italic></span>})
+</code></pre></div></li></ul><h2 id=how-to-test-ioreader-contents-like-nethttpresponsebody-for-example>How to test <code>io.Reader</code> contents, like <code>net/http.Response.Body</code> for example?</h2><p>The <a href=/operators/smuggle/><code>Smuggle</code></a> operator is done for that,
+here with the help of <a href=https://golang.org/pkg/io/ioutil/#ReadAll><code>ReadAll</code></a>.</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;net/http&#34;</span>
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
+  <span style=color:#ed9d13>&#34;io/ioutil&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestResponseBody</span>(t *testing.T) {
-  <span style="color:#999;font-style:italic">// Expect this response sends &#34;Expected Response!&#34;
-</span><span style="color:#999;font-style:italic"></span>  <span style="color:#6ab825;font-weight:bold">var</span> resp *http.Response = <span style="color:#447fcf">GetResponse</span>()
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestResponseBody</span>(t *testing.T) {
+  <span style=color:#999;font-style:italic>// Expect this response sends &#34;Expected Response!&#34;
+</span><span style=color:#999;font-style:italic></span>  <span style=color:#6ab825;font-weight:700>var</span> resp *http.Response = <span style=color:#447fcf>GetResponse</span>()
 
-  td.<span style="color:#447fcf">Cmp</span>(t, resp.Body,
-    td.<span style="color:#447fcf">Smuggle</span>(ioutil.ReadAll, []<span style="color:#24909d">byte</span>(<span style="color:#ed9d13">&#34;Expected Response!&#34;</span>)))
+  td.<span style=color:#447fcf>Cmp</span>(t, resp.Body,
+    td.<span style=color:#447fcf>Smuggle</span>(ioutil.ReadAll, []<span style=color:#24909d>byte</span>(<span style=color:#ed9d13>&#34;Expected Response!&#34;</span>)))
 }
-</code></pre></div><h2 id="ok-but-i-prefer-comparing-strings-instead-of-bytes">OK, but I prefer comparing <code>string</code>s instead of <code>byte</code>s</h2>
-<p>No problem, <a href="https://golang.org/pkg/io/ioutil/#ReadAll"><code>ReadAll</code></a> the
+</code></pre></div><h2 id=ok-but-i-prefer-comparing-strings-instead-of-bytes>OK, but I prefer comparing <code>string</code>s instead of <code>byte</code>s</h2><p>No problem, <a href=https://golang.org/pkg/io/ioutil/#ReadAll><code>ReadAll</code></a> the
 body by yourself and cast returned <code>[]byte</code> contents to <code>string</code>,
-still using <a href="/operators/smuggle/"><code>Smuggle</code></a> operator:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;io&#34;</span>
-  <span style="color:#ed9d13">&#34;io/ioutil&#34;</span>
-  <span style="color:#ed9d13">&#34;net/http&#34;</span>
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
+still using <a href=/operators/smuggle/><code>Smuggle</code></a> operator:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;io&#34;</span>
+  <span style=color:#ed9d13>&#34;io/ioutil&#34;</span>
+  <span style=color:#ed9d13>&#34;net/http&#34;</span>
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestResponseBody</span>(t *testing.T) {
-  <span style="color:#999;font-style:italic">// Expect this response sends &#34;Expected Response!&#34;
-</span><span style="color:#999;font-style:italic"></span>  <span style="color:#6ab825;font-weight:bold">var</span> resp *http.Response = <span style="color:#447fcf">GetResponse</span>()
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestResponseBody</span>(t *testing.T) {
+  <span style=color:#999;font-style:italic>// Expect this response sends &#34;Expected Response!&#34;
+</span><span style=color:#999;font-style:italic></span>  <span style=color:#6ab825;font-weight:700>var</span> resp *http.Response = <span style=color:#447fcf>GetResponse</span>()
 
-  td.<span style="color:#447fcf">Cmp</span>(t, resp.Body, td.<span style="color:#447fcf">Smuggle</span>( <span style="color:#999;font-style:italic">// ← transform a io.Reader to a string
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#6ab825;font-weight:bold">func</span>(body io.Reader) (<span style="color:#6ab825;font-weight:bold">string</span>, <span style="color:#6ab825;font-weight:bold">error</span>) {
-      b, err := ioutil.<span style="color:#447fcf">ReadAll</span>(body)
-      <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#24909d">string</span>(b), err
+  td.<span style=color:#447fcf>Cmp</span>(t, resp.Body, td.<span style=color:#447fcf>Smuggle</span>( <span style=color:#999;font-style:italic>// ← transform a io.Reader to a string
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#6ab825;font-weight:700>func</span>(body io.Reader) (<span style=color:#6ab825;font-weight:700>string</span>, <span style=color:#6ab825;font-weight:700>error</span>) {
+      b, err := ioutil.<span style=color:#447fcf>ReadAll</span>(body)
+      <span style=color:#6ab825;font-weight:700>return</span> <span style=color:#24909d>string</span>(b), err
     },
-    <span style="color:#ed9d13">&#34;Expected Response!&#34;</span>))
+    <span style=color:#ed9d13>&#34;Expected Response!&#34;</span>))
 }
 
-</code></pre></div><h2 id="ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own">OK, but my response is in fact a JSON marshaled struct of my own</h2>
-<p>No problem, <a href="https://golang.org/pkg/encoding/json/#Decoder">JSON decode</a>
-while reading the body:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;encoding/json&#34;</span>
-  <span style="color:#ed9d13">&#34;io&#34;</span>
-  <span style="color:#ed9d13">&#34;net/http&#34;</span>
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
+</code></pre></div><h2 id=ok-but-my-response-is-in-fact-a-json-marshaled-struct-of-my-own>OK, but my response is in fact a JSON marshaled struct of my own</h2><p>No problem, <a href=https://golang.org/pkg/encoding/json/#Decoder>JSON decode</a>
+while reading the body:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;encoding/json&#34;</span>
+  <span style=color:#ed9d13>&#34;io&#34;</span>
+  <span style=color:#ed9d13>&#34;net/http&#34;</span>
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestResponseBody</span>(t *testing.T) {
-  <span style="color:#999;font-style:italic">// Expect this response sends `{&#34;ID&#34;:42,&#34;Name&#34;:&#34;Bob&#34;,&#34;Age&#34;:28}`
-</span><span style="color:#999;font-style:italic"></span>  <span style="color:#6ab825;font-weight:bold">var</span> resp *http.Response = <span style="color:#447fcf">GetResponse</span>()
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestResponseBody</span>(t *testing.T) {
+  <span style=color:#999;font-style:italic>// Expect this response sends `{&#34;ID&#34;:42,&#34;Name&#34;:&#34;Bob&#34;,&#34;Age&#34;:28}`
+</span><span style=color:#999;font-style:italic></span>  <span style=color:#6ab825;font-weight:700>var</span> resp *http.Response = <span style=color:#447fcf>GetResponse</span>()
 
-  <span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-    ID   <span style="color:#6ab825;font-weight:bold">uint64</span>
-    Name <span style="color:#6ab825;font-weight:bold">string</span>
-    Age  <span style="color:#6ab825;font-weight:bold">int</span>
+  <span style=color:#6ab825;font-weight:700>type</span> Person <span style=color:#6ab825;font-weight:700>struct</span> {
+    ID   <span style=color:#6ab825;font-weight:700>uint64</span>
+    Name <span style=color:#6ab825;font-weight:700>string</span>
+    Age  <span style=color:#6ab825;font-weight:700>int</span>
   }
 
-  td.<span style="color:#447fcf">Cmp</span>(t, resp.Body, td.<span style="color:#447fcf">Smuggle</span>( <span style="color:#999;font-style:italic">// ← transform a io.Reader in *Person
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#6ab825;font-weight:bold">func</span>(body io.Reader) (*Person, <span style="color:#6ab825;font-weight:bold">error</span>) {
-      <span style="color:#6ab825;font-weight:bold">var</span> s Person
-      <span style="color:#6ab825;font-weight:bold">return</span> &amp;s, json.<span style="color:#447fcf">NewDecoder</span>(body).<span style="color:#447fcf">Decode</span>(&amp;s)
+  td.<span style=color:#447fcf>Cmp</span>(t, resp.Body, td.<span style=color:#447fcf>Smuggle</span>( <span style=color:#999;font-style:italic>// ← transform a io.Reader in *Person
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#6ab825;font-weight:700>func</span>(body io.Reader) (*Person, <span style=color:#6ab825;font-weight:700>error</span>) {
+      <span style=color:#6ab825;font-weight:700>var</span> s Person
+      <span style=color:#6ab825;font-weight:700>return</span> &amp;s, json.<span style=color:#447fcf>NewDecoder</span>(body).<span style=color:#447fcf>Decode</span>(&amp;s)
     },
-    &amp;Person{ <span style="color:#999;font-style:italic">// ← check Person content
-</span><span style="color:#999;font-style:italic"></span>      ID:   <span style="color:#3677a9">42</span>,
-      Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-      Age:  <span style="color:#3677a9">28</span>,
+    &amp;Person{ <span style=color:#999;font-style:italic>// ← check Person content
+</span><span style=color:#999;font-style:italic></span>      ID:   <span style=color:#3677a9>42</span>,
+      Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+      Age:  <span style=color:#3677a9>28</span>,
     }))
 }
-</code></pre></div><h2 id="ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-dont-know-the-id-in-advance">OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</h2>
-<p>No problem, use <a href="/operators/struct/"><code>Struct</code></a> operator to test
-that <code>ID</code> field is non-zero (as a bonus, add a <code>CreatedAt</code> field):</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;encoding/json&#34;</span>
-  <span style="color:#ed9d13">&#34;io&#34;</span>
-  <span style="color:#ed9d13">&#34;net/http&#34;</span>
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
+</code></pre></div><h2 id=ok-but-you-are-funny-this-response-sends-a-new-created-object-so-i-dont-know-the-id-in-advance>OK, but you are funny, this response sends a new created object, so I don&rsquo;t know the ID in advance!</h2><p>No problem, use <a href=/operators/struct/><code>Struct</code></a> operator to test
+that <code>ID</code> field is non-zero (as a bonus, add a <code>CreatedAt</code> field):</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;encoding/json&#34;</span>
+  <span style=color:#ed9d13>&#34;io&#34;</span>
+  <span style=color:#ed9d13>&#34;net/http&#34;</span>
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestResponseBody</span>(t *testing.T) {
-  <span style="color:#999;font-style:italic">// Expect this response sends:
-</span><span style="color:#999;font-style:italic"></span>  <span style="color:#999;font-style:italic">//   `{&#34;ID&#34;:42,&#34;Name&#34;:&#34;Bob&#34;,&#34;Age&#34;:28,&#34;CreatedAt&#34;:&#34;2019-01-02T11:22:33Z&#34;}`
-</span><span style="color:#999;font-style:italic"></span>  <span style="color:#6ab825;font-weight:bold">var</span> resp *http.Response = <span style="color:#447fcf">GetResponse</span>()
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestResponseBody</span>(t *testing.T) {
+  <span style=color:#999;font-style:italic>// Expect this response sends:
+</span><span style=color:#999;font-style:italic></span>  <span style=color:#999;font-style:italic>//   `{&#34;ID&#34;:42,&#34;Name&#34;:&#34;Bob&#34;,&#34;Age&#34;:28,&#34;CreatedAt&#34;:&#34;2019-01-02T11:22:33Z&#34;}`
+</span><span style=color:#999;font-style:italic></span>  <span style=color:#6ab825;font-weight:700>var</span> resp *http.Response = <span style=color:#447fcf>GetResponse</span>()
 
-  <span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-    ID        <span style="color:#6ab825;font-weight:bold">uint64</span>
-    Name      <span style="color:#6ab825;font-weight:bold">string</span>
-    Age       <span style="color:#6ab825;font-weight:bold">int</span>
+  <span style=color:#6ab825;font-weight:700>type</span> Person <span style=color:#6ab825;font-weight:700>struct</span> {
+    ID        <span style=color:#6ab825;font-weight:700>uint64</span>
+    Name      <span style=color:#6ab825;font-weight:700>string</span>
+    Age       <span style=color:#6ab825;font-weight:700>int</span>
     CreatedAt time.Time
   }
 
-  y2019, _ := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2019-01-01T00:00:00Z&#34;</span>)
+  y2019, _ := time.<span style=color:#447fcf>Parse</span>(time.RFC3339, <span style=color:#ed9d13>&#34;2019-01-01T00:00:00Z&#34;</span>)
 
-  td.<span style="color:#447fcf">Cmp</span>(t, resp.Body, td.<span style="color:#447fcf">Smuggle</span>( <span style="color:#999;font-style:italic">// ← transform a io.Reader in *Person
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#6ab825;font-weight:bold">func</span>(body io.Reader) (*Person, <span style="color:#6ab825;font-weight:bold">error</span>) {
-      <span style="color:#6ab825;font-weight:bold">var</span> s Person
-      <span style="color:#6ab825;font-weight:bold">return</span> &amp;s, json.<span style="color:#447fcf">NewDecoder</span>(body).<span style="color:#447fcf">Decode</span>(&amp;s)
+  td.<span style=color:#447fcf>Cmp</span>(t, resp.Body, td.<span style=color:#447fcf>Smuggle</span>( <span style=color:#999;font-style:italic>// ← transform a io.Reader in *Person
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#6ab825;font-weight:700>func</span>(body io.Reader) (*Person, <span style=color:#6ab825;font-weight:700>error</span>) {
+      <span style=color:#6ab825;font-weight:700>var</span> s Person
+      <span style=color:#6ab825;font-weight:700>return</span> &amp;s, json.<span style=color:#447fcf>NewDecoder</span>(body).<span style=color:#447fcf>Decode</span>(&amp;s)
     },
-    td.<span style="color:#447fcf">Struct</span>(&amp;Person{ <span style="color:#999;font-style:italic">// ← check Person content
-</span><span style="color:#999;font-style:italic"></span>      Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-      Age:  <span style="color:#3677a9">28</span>,
+    td.<span style=color:#447fcf>Struct</span>(&amp;Person{ <span style=color:#999;font-style:italic>// ← check Person content
+</span><span style=color:#999;font-style:italic></span>      Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+      Age:  <span style=color:#3677a9>28</span>,
     }, td.StructFields{
-      <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),  <span style="color:#999;font-style:italic">// check ID ≠ 0
-</span><span style="color:#999;font-style:italic"></span>      <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Gte</span>(y2019), <span style="color:#999;font-style:italic">// check CreatedAt ≥ 2019/01/01
-</span><span style="color:#999;font-style:italic"></span>    })))
+      <span style=color:#ed9d13>&#34;ID&#34;</span>:        td.<span style=color:#447fcf>NotZero</span>(),  <span style=color:#999;font-style:italic>// check ID ≠ 0
+</span><span style=color:#999;font-style:italic></span>      <span style=color:#ed9d13>&#34;CreatedAt&#34;</span>: td.<span style=color:#447fcf>Gte</span>(y2019), <span style=color:#999;font-style:italic>// check CreatedAt ≥ 2019/01/01
+</span><span style=color:#999;font-style:italic></span>    })))
 
-  tt := td.<span style="color:#447fcf">newT</span>(t)
-  tt.<span style="color:#447fcf">Cmp</span>(resp.Body, td.<span style="color:#447fcf">Smuggle</span>( <span style="color:#999;font-style:italic">// ← transform a io.Reader in *Person
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#6ab825;font-weight:bold">func</span>(body io.Reader) (*Person, <span style="color:#6ab825;font-weight:bold">error</span>) {
-      <span style="color:#6ab825;font-weight:bold">var</span> s Person
-      <span style="color:#6ab825;font-weight:bold">return</span> &amp;s, json.<span style="color:#447fcf">NewDecoder</span>(body).<span style="color:#447fcf">Decode</span>(&amp;s)
+  tt := td.<span style=color:#447fcf>newT</span>(t)
+  tt.<span style=color:#447fcf>Cmp</span>(resp.Body, td.<span style=color:#447fcf>Smuggle</span>( <span style=color:#999;font-style:italic>// ← transform a io.Reader in *Person
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#6ab825;font-weight:700>func</span>(body io.Reader) (*Person, <span style=color:#6ab825;font-weight:700>error</span>) {
+      <span style=color:#6ab825;font-weight:700>var</span> s Person
+      <span style=color:#6ab825;font-weight:700>return</span> &amp;s, json.<span style=color:#447fcf>NewDecoder</span>(body).<span style=color:#447fcf>Decode</span>(&amp;s)
     },
-    &amp;Person{ <span style="color:#999;font-style:italic">// ← check Person content
-</span><span style="color:#999;font-style:italic"></span>      Name:      <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-      Age:       <span style="color:#3677a9">28</span>,
-      ID:        tt.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">NotZero</span>(), <span style="color:#24909d">uint64</span>(<span style="color:#3677a9">0</span>)).(<span style="color:#6ab825;font-weight:bold">uint64</span>), <span style="color:#999;font-style:italic">// check ID ≠ 0
-</span><span style="color:#999;font-style:italic"></span>      CreatedAt: tt.<span style="color:#447fcf">A</span>(td.<span style="color:#447fcf">Gte</span>(y2019)).(time.Time),        <span style="color:#999;font-style:italic">// check CreatedAt ≥ 2019/01/01
-</span><span style="color:#999;font-style:italic"></span>    }))
+    &amp;Person{ <span style=color:#999;font-style:italic>// ← check Person content
+</span><span style=color:#999;font-style:italic></span>      Name:      <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+      Age:       <span style=color:#3677a9>28</span>,
+      ID:        tt.<span style=color:#447fcf>A</span>(td.<span style=color:#447fcf>NotZero</span>(), <span style=color:#24909d>uint64</span>(<span style=color:#3677a9>0</span>)).(<span style=color:#6ab825;font-weight:700>uint64</span>), <span style=color:#999;font-style:italic>// check ID ≠ 0
+</span><span style=color:#999;font-style:italic></span>      CreatedAt: tt.<span style=color:#447fcf>A</span>(td.<span style=color:#447fcf>Gte</span>(y2019)).(time.Time),        <span style=color:#999;font-style:italic>// check CreatedAt ≥ 2019/01/01
+</span><span style=color:#999;font-style:italic></span>    }))
 }
-</code></pre></div><h2 id="what-about-testing-the-response-using-my-api">What about testing the response using my API?</h2>
-<p><a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp"><code>tdhttp</code> helper</a>
-is done for that!</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;encoding/json&#34;</span>
-  <span style="color:#ed9d13">&#34;net/http&#34;</span>
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
-  <span style="color:#ed9d13">&#34;time&#34;</span>
+</code></pre></div><h2 id=what-about-testing-the-response-using-my-api>What about testing the response using my API?</h2><p><a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp><code>tdhttp</code> helper</a>
+is done for that!</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;encoding/json&#34;</span>
+  <span style=color:#ed9d13>&#34;net/http&#34;</span>
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
+  <span style=color:#ed9d13>&#34;time&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/helpers/tdhttp&#34;</span>
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/helpers/tdhttp&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>
-  Name      <span style="color:#6ab825;font-weight:bold">string</span>
-  Age       <span style="color:#6ab825;font-weight:bold">int</span>
+<span style=color:#6ab825;font-weight:700>type</span> Person <span style=color:#6ab825;font-weight:700>struct</span> {
+  ID        <span style=color:#6ab825;font-weight:700>uint64</span>
+  Name      <span style=color:#6ab825;font-weight:700>string</span>
+  Age       <span style=color:#6ab825;font-weight:700>int</span>
   CreatedAt time.Time
 }
 
-<span style="color:#999;font-style:italic">// MyApi defines our API.
-</span><span style="color:#999;font-style:italic"></span><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">MyAPI</span>() *http.ServeMux {
-  mux := http.<span style="color:#447fcf">NewServeMux</span>()
+<span style=color:#999;font-style:italic>// MyApi defines our API.
+</span><span style=color:#999;font-style:italic></span><span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>MyAPI</span>() *http.ServeMux {
+  mux := http.<span style=color:#447fcf>NewServeMux</span>()
 
-  <span style="color:#999;font-style:italic">// GET /json
-</span><span style="color:#999;font-style:italic"></span>  mux.<span style="color:#447fcf">HandleFunc</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>, <span style="color:#6ab825;font-weight:bold">func</span>(w http.ResponseWriter, req *http.Request) {
-    <span style="color:#6ab825;font-weight:bold">if</span> req.Method != <span style="color:#ed9d13">&#34;GET&#34;</span> {
-      http.<span style="color:#447fcf">NotFound</span>(w, req)
-      <span style="color:#6ab825;font-weight:bold">return</span>
+  <span style=color:#999;font-style:italic>// GET /json
+</span><span style=color:#999;font-style:italic></span>  mux.<span style=color:#447fcf>HandleFunc</span>(<span style=color:#ed9d13>&#34;/json&#34;</span>, <span style=color:#6ab825;font-weight:700>func</span>(w http.ResponseWriter, req *http.Request) {
+    <span style=color:#6ab825;font-weight:700>if</span> req.Method != <span style=color:#ed9d13>&#34;GET&#34;</span> {
+      http.<span style=color:#447fcf>NotFound</span>(w, req)
+      <span style=color:#6ab825;font-weight:700>return</span>
     }
 
-    b, err := json.<span style="color:#447fcf">Marshal</span>(Person{
-      ID:        <span style="color:#3677a9">42</span>,
-      Name:      <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-      Age:       <span style="color:#3677a9">28</span>,
-      CreatedAt: time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">UTC</span>(),
+    b, err := json.<span style=color:#447fcf>Marshal</span>(Person{
+      ID:        <span style=color:#3677a9>42</span>,
+      Name:      <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+      Age:       <span style=color:#3677a9>28</span>,
+      CreatedAt: time.<span style=color:#447fcf>Now</span>().<span style=color:#447fcf>UTC</span>(),
     })
-    <span style="color:#6ab825;font-weight:bold">if</span> err != <span style="color:#6ab825;font-weight:bold">nil</span> {
-      http.<span style="color:#447fcf">Error</span>(w, <span style="color:#ed9d13">&#34;Internal server error&#34;</span>, http.StatusInternalServerError)
-      <span style="color:#6ab825;font-weight:bold">return</span>
+    <span style=color:#6ab825;font-weight:700>if</span> err != <span style=color:#6ab825;font-weight:700>nil</span> {
+      http.<span style=color:#447fcf>Error</span>(w, <span style=color:#ed9d13>&#34;Internal server error&#34;</span>, http.StatusInternalServerError)
+      <span style=color:#6ab825;font-weight:700>return</span>
     }
 
-    w.<span style="color:#447fcf">Header</span>().<span style="color:#447fcf">Set</span>(<span style="color:#ed9d13">&#34;Content-Type&#34;</span>, <span style="color:#ed9d13">&#34;application/json&#34;</span>)
-    w.<span style="color:#447fcf">WriteHeader</span>(http.StatusOK)
-    w.<span style="color:#447fcf">Write</span>(b)
+    w.<span style=color:#447fcf>Header</span>().<span style=color:#447fcf>Set</span>(<span style=color:#ed9d13>&#34;Content-Type&#34;</span>, <span style=color:#ed9d13>&#34;application/json&#34;</span>)
+    w.<span style=color:#447fcf>WriteHeader</span>(http.StatusOK)
+    w.<span style=color:#447fcf>Write</span>(b)
   })
 
-  <span style="color:#6ab825;font-weight:bold">return</span> mux
+  <span style=color:#6ab825;font-weight:700>return</span> mux
 }
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyApi</span>(t *testing.T) {
-  myAPI := <span style="color:#447fcf">MyAPI</span>()
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestMyApi</span>(t *testing.T) {
+  myAPI := <span style=color:#447fcf>MyAPI</span>()
 
-  y2019, _ := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2019-01-01T00:00:00Z&#34;</span>)
+  y2019, _ := time.<span style=color:#447fcf>Parse</span>(time.RFC3339, <span style=color:#ed9d13>&#34;2019-01-01T00:00:00Z&#34;</span>)
 
-  testAPI := tdhttp.<span style="color:#447fcf">NewTestAPI</span>(t, myAPI) <span style="color:#999;font-style:italic">// ← ①
-</span><span style="color:#999;font-style:italic"></span>
-  testAPI.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>).             <span style="color:#999;font-style:italic">// ← ②
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Name</span>(<span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>).
-    <span style="color:#447fcf">CmpStatus</span>(http.StatusOK).       <span style="color:#999;font-style:italic">// ← ③
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">CmpJSONBody</span>(td.<span style="color:#447fcf">SStruct</span>(&amp;Person{ <span style="color:#999;font-style:italic">// ← ④
-</span><span style="color:#999;font-style:italic"></span>      Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-      Age:  <span style="color:#3677a9">28</span>,
+  testAPI := tdhttp.<span style=color:#447fcf>NewTestAPI</span>(t, myAPI) <span style=color:#999;font-style:italic>// ← ①
+</span><span style=color:#999;font-style:italic></span>
+  testAPI.<span style=color:#447fcf>Get</span>(<span style=color:#ed9d13>&#34;/json&#34;</span>).             <span style=color:#999;font-style:italic>// ← ②
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#447fcf>Name</span>(<span style=color:#ed9d13>&#34;Testing GET /json&#34;</span>).
+    <span style=color:#447fcf>CmpStatus</span>(http.StatusOK).       <span style=color:#999;font-style:italic>// ← ③
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#447fcf>CmpJSONBody</span>(td.<span style=color:#447fcf>SStruct</span>(&amp;Person{ <span style=color:#999;font-style:italic>// ← ④
+</span><span style=color:#999;font-style:italic></span>      Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+      Age:  <span style=color:#3677a9>28</span>,
     }, td.StructFields{
-      <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),    <span style="color:#999;font-style:italic">// ← ⑤
-</span><span style="color:#999;font-style:italic"></span>      <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Gte</span>(y2019),   <span style="color:#999;font-style:italic">// ← ⑥
-</span><span style="color:#999;font-style:italic"></span>    }))
+      <span style=color:#ed9d13>&#34;ID&#34;</span>:        td.<span style=color:#447fcf>NotZero</span>(),    <span style=color:#999;font-style:italic>// ← ⑤
+</span><span style=color:#999;font-style:italic></span>      <span style=color:#ed9d13>&#34;CreatedAt&#34;</span>: td.<span style=color:#447fcf>Gte</span>(y2019),   <span style=color:#999;font-style:italic>// ← ⑥
+</span><span style=color:#999;font-style:italic></span>    }))
 
-  <span style="color:#999;font-style:italic">// testAPI can be used to test another route…
-</span><span style="color:#999;font-style:italic"></span>}
-</code></pre></div><ol>
-<li>the API handler ready to be tested;</li>
-<li>the GET request;</li>
-<li>the expected HTTP status should be <code>http.StatusOK</code>;</li>
-<li>the expected body should match the <a href="/operators/sstruct/"><code>SStruct</code></a>
-operator;</li>
-<li>check the <code>ID</code> field is <a href="/operators/notzero/"><code>NotZero</code></a>;</li>
-<li>check the <code>CreatedAt</code> field is greater or equal than <code>y2019</code> variable
-(set just before <code>tdhttp.NewTestAPI</code> call).</li>
-</ol>
-<p>If you prefer to do one function call instead of chaining methods as
-above, you can try <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse">CmpJSONResponse</a>.</p>
-<h2 id="arf-i-use-gin-gonic-and-so-no-nethttp-handlers">Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</h2>
-<p>It is exactly the same as for <code>net/http</code> handlers as <a href="https://pkg.go.dev/github.com/gin-gonic/gin#Engine.ServeHTTP"><code>*gin.Engine</code>
+  <span style=color:#999;font-style:italic>// testAPI can be used to test another route…
+</span><span style=color:#999;font-style:italic></span>}
+</code></pre></div><ol><li>the API handler ready to be tested;</li><li>the GET request;</li><li>the expected HTTP status should be <code>http.StatusOK</code>;</li><li>the expected body should match the <a href=/operators/sstruct/><code>SStruct</code></a>
+operator;</li><li>check the <code>ID</code> field is <a href=/operators/notzero/><code>NotZero</code></a>;</li><li>check the <code>CreatedAt</code> field is greater or equal than <code>y2019</code> variable
+(set just before <code>tdhttp.NewTestAPI</code> call).</li></ol><p>If you prefer to do one function call instead of chaining methods as
+above, you can try <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse>CmpJSONResponse</a>.</p><h2 id=arf-i-use-gin-gonic-and-so-no-nethttp-handlers>Arf, I use Gin Gonic, and so no <code>net/http</code> handlers</h2><p>It is exactly the same as for <code>net/http</code> handlers as <a href=https://pkg.go.dev/github.com/gin-gonic/gin#Engine.ServeHTTP><code>*gin.Engine</code>
 implements <code>http.Handler</code>
 interface</a>!
 So keep using
-<a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp"><code>tdhttp</code> helper</a>:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;net/http&#34;</span>
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
-  <span style="color:#ed9d13">&#34;time&#34;</span>
+<a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp><code>tdhttp</code> helper</a>:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;net/http&#34;</span>
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
+  <span style=color:#ed9d13>&#34;time&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/gin-gonic/gin&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/gin-gonic/gin&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/helpers/tdhttp&#34;</span>
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/helpers/tdhttp&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>
-  Name      <span style="color:#6ab825;font-weight:bold">string</span>
-  Age       <span style="color:#6ab825;font-weight:bold">int</span>
+<span style=color:#6ab825;font-weight:700>type</span> Person <span style=color:#6ab825;font-weight:700>struct</span> {
+  ID        <span style=color:#6ab825;font-weight:700>uint64</span>
+  Name      <span style=color:#6ab825;font-weight:700>string</span>
+  Age       <span style=color:#6ab825;font-weight:700>int</span>
   CreatedAt time.Time
 }
 
-<span style="color:#999;font-style:italic">// MyGinGonicApi defines our API.
-</span><span style="color:#999;font-style:italic"></span><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">MyGinGonicAPI</span>() *gin.Engine {
-  router := gin.<span style="color:#447fcf">Default</span>() <span style="color:#999;font-style:italic">// or gin.New() or receive the router by param it doesn&#39;t matter
-</span><span style="color:#999;font-style:italic"></span>
-  router.<span style="color:#447fcf">GET</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>, <span style="color:#6ab825;font-weight:bold">func</span>(c *gin.Context) {
-    c.<span style="color:#447fcf">JSON</span>(http.StatusOK, Person{
-      ID:        <span style="color:#3677a9">42</span>,
-      Name:      <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-      Age:       <span style="color:#3677a9">28</span>,
-      CreatedAt: time.<span style="color:#447fcf">Now</span>().<span style="color:#447fcf">UTC</span>(),
+<span style=color:#999;font-style:italic>// MyGinGonicApi defines our API.
+</span><span style=color:#999;font-style:italic></span><span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>MyGinGonicAPI</span>() *gin.Engine {
+  router := gin.<span style=color:#447fcf>Default</span>() <span style=color:#999;font-style:italic>// or gin.New() or receive the router by param it doesn&#39;t matter
+</span><span style=color:#999;font-style:italic></span>
+  router.<span style=color:#447fcf>GET</span>(<span style=color:#ed9d13>&#34;/json&#34;</span>, <span style=color:#6ab825;font-weight:700>func</span>(c *gin.Context) {
+    c.<span style=color:#447fcf>JSON</span>(http.StatusOK, Person{
+      ID:        <span style=color:#3677a9>42</span>,
+      Name:      <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+      Age:       <span style=color:#3677a9>28</span>,
+      CreatedAt: time.<span style=color:#447fcf>Now</span>().<span style=color:#447fcf>UTC</span>(),
     })
   })
 
-  <span style="color:#6ab825;font-weight:bold">return</span> router
+  <span style=color:#6ab825;font-weight:700>return</span> router
 }
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyGinGonicApi</span>(t *testing.T) {
-  myAPI := <span style="color:#447fcf">MyGinGonicAPI</span>()
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestMyGinGonicApi</span>(t *testing.T) {
+  myAPI := <span style=color:#447fcf>MyGinGonicAPI</span>()
 
-  y2019, _ := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2019-01-01T00:00:00Z&#34;</span>)
+  y2019, _ := time.<span style=color:#447fcf>Parse</span>(time.RFC3339, <span style=color:#ed9d13>&#34;2019-01-01T00:00:00Z&#34;</span>)
 
-  testAPI := tdhttp.<span style="color:#447fcf">NewTestAPI</span>(t, myAPI) <span style="color:#999;font-style:italic">// ← ①
-</span><span style="color:#999;font-style:italic"></span>
-  testAPI.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>).             <span style="color:#999;font-style:italic">// ← ②
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Name</span>(<span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>).
-    <span style="color:#447fcf">CmpStatus</span>(http.StatusOK).       <span style="color:#999;font-style:italic">// ← ③
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">CmpJSONBody</span>(td.<span style="color:#447fcf">SStruct</span>(&amp;Person{ <span style="color:#999;font-style:italic">// ← ④
-</span><span style="color:#999;font-style:italic"></span>      Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-      Age:  <span style="color:#3677a9">28</span>,
+  testAPI := tdhttp.<span style=color:#447fcf>NewTestAPI</span>(t, myAPI) <span style=color:#999;font-style:italic>// ← ①
+</span><span style=color:#999;font-style:italic></span>
+  testAPI.<span style=color:#447fcf>Get</span>(<span style=color:#ed9d13>&#34;/json&#34;</span>).             <span style=color:#999;font-style:italic>// ← ②
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#447fcf>Name</span>(<span style=color:#ed9d13>&#34;Testing GET /json&#34;</span>).
+    <span style=color:#447fcf>CmpStatus</span>(http.StatusOK).       <span style=color:#999;font-style:italic>// ← ③
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#447fcf>CmpJSONBody</span>(td.<span style=color:#447fcf>SStruct</span>(&amp;Person{ <span style=color:#999;font-style:italic>// ← ④
+</span><span style=color:#999;font-style:italic></span>      Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+      Age:  <span style=color:#3677a9>28</span>,
     }, td.StructFields{
-      <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">NotZero</span>(),    <span style="color:#999;font-style:italic">// ← ⑤
-</span><span style="color:#999;font-style:italic"></span>      <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Gte</span>(y2019),   <span style="color:#999;font-style:italic">// ← ⑥
-</span><span style="color:#999;font-style:italic"></span>    }))
+      <span style=color:#ed9d13>&#34;ID&#34;</span>:        td.<span style=color:#447fcf>NotZero</span>(),    <span style=color:#999;font-style:italic>// ← ⑤
+</span><span style=color:#999;font-style:italic></span>      <span style=color:#ed9d13>&#34;CreatedAt&#34;</span>: td.<span style=color:#447fcf>Gte</span>(y2019),   <span style=color:#999;font-style:italic>// ← ⑥
+</span><span style=color:#999;font-style:italic></span>    }))
 
-  <span style="color:#999;font-style:italic">// testAPI can be used to test another route…
-</span><span style="color:#999;font-style:italic"></span>}
-</code></pre></div><ol>
-<li>the API handler ready to be tested;</li>
-<li>the GET request;</li>
-<li>the expected HTTP status should be <code>http.StatusOK</code>;</li>
-<li>the expected body should match the <a href="/operators/sstruct/"><code>SStruct</code></a>
-operator;</li>
-<li>check the <code>ID</code> field is <a href="/operators/notzero/"><code>NotZero</code></a>;</li>
-<li>check the <code>CreatedAt</code> field is greater or equal than <code>y2019</code> variable
-(set just before <code>tdhttp.NewTestAPI</code> call).</li>
-</ol>
-<p>If you prefer to do one function call instead of chaining methods as
-above, you can try <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse">CmpJSONResponse</a>.</p>
-<h2 id="fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value">Fine, the request succeeds and the ID is not 0, but what is the ID real value?</h2>
-<p>Stay with <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp"><code>tdhttp</code> helper</a>!</p>
-<p>In fact you can <a href="/operators/catch/"><code>Catch</code></a> the <code>ID</code> before comparing
-it to 0 (as well as <code>CreatedAt</code> in fact). Try:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyGinGonicApi</span>(t *testing.T) {
-  myAPI := <span style="color:#447fcf">MyGinGonicAPI</span>()
+  <span style=color:#999;font-style:italic>// testAPI can be used to test another route…
+</span><span style=color:#999;font-style:italic></span>}
+</code></pre></div><ol><li>the API handler ready to be tested;</li><li>the GET request;</li><li>the expected HTTP status should be <code>http.StatusOK</code>;</li><li>the expected body should match the <a href=/operators/sstruct/><code>SStruct</code></a>
+operator;</li><li>check the <code>ID</code> field is <a href=/operators/notzero/><code>NotZero</code></a>;</li><li>check the <code>CreatedAt</code> field is greater or equal than <code>y2019</code> variable
+(set just before <code>tdhttp.NewTestAPI</code> call).</li></ol><p>If you prefer to do one function call instead of chaining methods as
+above, you can try <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse>CmpJSONResponse</a>.</p><h2 id=fine-the-request-succeeds-and-the-id-is-not-0-but-what-is-the-id-real-value>Fine, the request succeeds and the ID is not 0, but what is the ID real value?</h2><p>Stay with <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp><code>tdhttp</code> helper</a>!</p><p>In fact you can <a href=/operators/catch/><code>Catch</code></a> the <code>ID</code> before comparing
+it to 0 (as well as <code>CreatedAt</code> in fact). Try:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestMyGinGonicApi</span>(t *testing.T) {
+  myAPI := <span style=color:#447fcf>MyGinGonicAPI</span>()
 
-  <span style="color:#6ab825;font-weight:bold">var</span> id <span style="color:#6ab825;font-weight:bold">uint64</span>
-  <span style="color:#6ab825;font-weight:bold">var</span> createdAt time.Time
+  <span style=color:#6ab825;font-weight:700>var</span> id <span style=color:#6ab825;font-weight:700>uint64</span>
+  <span style=color:#6ab825;font-weight:700>var</span> createdAt time.Time
 
-  y2019, _ := time.<span style="color:#447fcf">Parse</span>(time.RFC3339, <span style="color:#ed9d13">&#34;2019-01-01T00:00:00Z&#34;</span>)
+  y2019, _ := time.<span style=color:#447fcf>Parse</span>(time.RFC3339, <span style=color:#ed9d13>&#34;2019-01-01T00:00:00Z&#34;</span>)
 
-  testAPI := tdhttp.<span style="color:#447fcf">NewTestAPI</span>(t, myAPI) <span style="color:#999;font-style:italic">// ← ①
-</span><span style="color:#999;font-style:italic"></span>
-  testAPI.<span style="color:#447fcf">Get</span>(<span style="color:#ed9d13">&#34;/json&#34;</span>).             <span style="color:#999;font-style:italic">// ← ②
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Name</span>(<span style="color:#ed9d13">&#34;Testing GET /json&#34;</span>).
-    <span style="color:#447fcf">CmpStatus</span>(http.StatusOK).       <span style="color:#999;font-style:italic">// ← ③
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">CmpJSONBody</span>(td.<span style="color:#447fcf">SStruct</span>(&amp;Person{ <span style="color:#999;font-style:italic">// ← ④
-</span><span style="color:#999;font-style:italic"></span>      Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>,
-      Age:  <span style="color:#3677a9">28</span>,
+  testAPI := tdhttp.<span style=color:#447fcf>NewTestAPI</span>(t, myAPI) <span style=color:#999;font-style:italic>// ← ①
+</span><span style=color:#999;font-style:italic></span>
+  testAPI.<span style=color:#447fcf>Get</span>(<span style=color:#ed9d13>&#34;/json&#34;</span>).             <span style=color:#999;font-style:italic>// ← ②
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#447fcf>Name</span>(<span style=color:#ed9d13>&#34;Testing GET /json&#34;</span>).
+    <span style=color:#447fcf>CmpStatus</span>(http.StatusOK).       <span style=color:#999;font-style:italic>// ← ③
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#447fcf>CmpJSONBody</span>(td.<span style=color:#447fcf>SStruct</span>(&amp;Person{ <span style=color:#999;font-style:italic>// ← ④
+</span><span style=color:#999;font-style:italic></span>      Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>,
+      Age:  <span style=color:#3677a9>28</span>,
     }, td.StructFields{
-      <span style="color:#ed9d13">&#34;ID&#34;</span>:        td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>()),         <span style="color:#999;font-style:italic">// ← ⑤
-</span><span style="color:#999;font-style:italic"></span>      <span style="color:#ed9d13">&#34;CreatedAt&#34;</span>: td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(y2019)), <span style="color:#999;font-style:italic">// ← ⑥
-</span><span style="color:#999;font-style:italic"></span>    }))
-  <span style="color:#6ab825;font-weight:bold">if</span> !testAPI.<span style="color:#447fcf">Failed</span>() {
-    t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The ID is %d and was created at %s&#34;</span>, id, createdAt)
+      <span style=color:#ed9d13>&#34;ID&#34;</span>:        td.<span style=color:#447fcf>Catch</span>(&amp;id, td.<span style=color:#447fcf>NotZero</span>()),         <span style=color:#999;font-style:italic>// ← ⑤
+</span><span style=color:#999;font-style:italic></span>      <span style=color:#ed9d13>&#34;CreatedAt&#34;</span>: td.<span style=color:#447fcf>Catch</span>(&amp;createdAt, td.<span style=color:#447fcf>Gte</span>(y2019)), <span style=color:#999;font-style:italic>// ← ⑥
+</span><span style=color:#999;font-style:italic></span>    }))
+  <span style=color:#6ab825;font-weight:700>if</span> !testAPI.<span style=color:#447fcf>Failed</span>() {
+    t.<span style=color:#447fcf>Logf</span>(<span style=color:#ed9d13>&#34;The ID is %d and was created at %s&#34;</span>, id, createdAt)
   }
 
-  <span style="color:#999;font-style:italic">// testAPI can be used to test another route…
-</span><span style="color:#999;font-style:italic"></span>}
-</code></pre></div><ol>
-<li>the API handler ready to be tested;</li>
-<li>the GET request;</li>
-<li>the expected HTTP status should be <code>http.StatusOK</code>;</li>
-<li>the expected body should match the <a href="/operators/sstruct/"><code>SStruct</code></a>
-operator;</li>
-<li><a href="/operators/catch/"><code>Catch</code></a> the <code>ID</code> field: put it in <code>id</code>
-variable and check it is <a href="/operators/notzero/"><code>NotZero</code></a>;</li>
-<li><a href="/operators/catch/"><code>Catch</code></a> the <code>CreatedAt</code> field: put it in <code>createdAt</code>
+  <span style=color:#999;font-style:italic>// testAPI can be used to test another route…
+</span><span style=color:#999;font-style:italic></span>}
+</code></pre></div><ol><li>the API handler ready to be tested;</li><li>the GET request;</li><li>the expected HTTP status should be <code>http.StatusOK</code>;</li><li>the expected body should match the <a href=/operators/sstruct/><code>SStruct</code></a>
+operator;</li><li><a href=/operators/catch/><code>Catch</code></a> the <code>ID</code> field: put it in <code>id</code>
+variable and check it is <a href=/operators/notzero/><code>NotZero</code></a>;</li><li><a href=/operators/catch/><code>Catch</code></a> the <code>CreatedAt</code> field: put it in <code>createdAt</code>
 variable and check it is greater or equal than <code>y2019</code> variable
-(set just before <code>tdhttp.NewTestAPI</code> call).</li>
-</ol>
-<p>If you prefer to do one function call instead of chaining methods as
-above, you can try <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse">CmpJSONResponse</a>.</p>
-<h2 id="ok-but-how-to-be-sure-the-response-content-is-well-jsonified">OK, but how to be sure the response content is well JSONified?</h2>
-<p>Again, <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp"><code>tdhttp</code> helper</a>
-is your friend!</p>
-<p>With the help of <a href="/operators/json/"><code>JSON</code></a> operator of course! See
-it below, used with <a href="/operators/catch/"><code>Catch</code></a> (note it can be used
-without), for a <code>POST</code> example:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">type</span> Person <span style="color:#6ab825;font-weight:bold">struct</span> {
-  ID        <span style="color:#6ab825;font-weight:bold">uint64</span>    <span style="color:#ed9d13">`json:&#34;id&#34;`</span>
-  Name      <span style="color:#6ab825;font-weight:bold">string</span>    <span style="color:#ed9d13">`json:&#34;name&#34;`</span>
-  Age       <span style="color:#6ab825;font-weight:bold">int</span>       <span style="color:#ed9d13">`json:&#34;age&#34;`</span>
-  CreatedAt time.Time <span style="color:#ed9d13">`json:&#34;created_at&#34;`</span>
+(set just before <code>tdhttp.NewTestAPI</code> call).</li></ol><p>If you prefer to do one function call instead of chaining methods as
+above, you can try <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse>CmpJSONResponse</a>.</p><h2 id=ok-but-how-to-be-sure-the-response-content-is-well-jsonified>OK, but how to be sure the response content is well JSONified?</h2><p>Again, <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp><code>tdhttp</code> helper</a>
+is your friend!</p><p>With the help of <a href=/operators/json/><code>JSON</code></a> operator of course! See
+it below, used with <a href=/operators/catch/><code>Catch</code></a> (note it can be used
+without), for a <code>POST</code> example:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>type</span> Person <span style=color:#6ab825;font-weight:700>struct</span> {
+  ID        <span style=color:#6ab825;font-weight:700>uint64</span>    <span style=color:#ed9d13>`json:&#34;id&#34;`</span>
+  Name      <span style=color:#6ab825;font-weight:700>string</span>    <span style=color:#ed9d13>`json:&#34;name&#34;`</span>
+  Age       <span style=color:#6ab825;font-weight:700>int</span>       <span style=color:#ed9d13>`json:&#34;age&#34;`</span>
+  CreatedAt time.Time <span style=color:#ed9d13>`json:&#34;created_at&#34;`</span>
 }
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyGinGonicApi</span>(t *testing.T) {
-  myAPI := <span style="color:#447fcf">MyGinGonicAPI</span>()
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestMyGinGonicApi</span>(t *testing.T) {
+  myAPI := <span style=color:#447fcf>MyGinGonicAPI</span>()
 
-  <span style="color:#6ab825;font-weight:bold">var</span> id <span style="color:#6ab825;font-weight:bold">uint64</span>
-  <span style="color:#6ab825;font-weight:bold">var</span> createdAt time.Time
+  <span style=color:#6ab825;font-weight:700>var</span> id <span style=color:#6ab825;font-weight:700>uint64</span>
+  <span style=color:#6ab825;font-weight:700>var</span> createdAt time.Time
 
-  testAPI := tdhttp.<span style="color:#447fcf">NewTestAPI</span>(t, myAPI) <span style="color:#999;font-style:italic">// ← ①
-</span><span style="color:#999;font-style:italic"></span>
-  testAPI.<span style="color:#447fcf">PostJSON</span>(<span style="color:#ed9d13">&#34;/person&#34;</span>, Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>}), <span style="color:#999;font-style:italic">// ← ②
-</span><span style="color:#999;font-style:italic"></span>    <span style="color:#447fcf">Name</span>(<span style="color:#ed9d13">&#34;Create a new Person&#34;</span>).
-	<span style="color:#447fcf">CmpStatus</span>(http.StatusCreated). <span style="color:#999;font-style:italic">// ← ③
-</span><span style="color:#999;font-style:italic"></span>	<span style="color:#447fcf">CmpJSONBody</span>(td.<span style="color:#447fcf">JSON</span>(<span style="color:#ed9d13">`
-</span><span style="color:#ed9d13">{
-</span><span style="color:#ed9d13">  &#34;id&#34;:         $id,
-</span><span style="color:#ed9d13">  &#34;name&#34;:       &#34;Bob&#34;,
-</span><span style="color:#ed9d13">  &#34;age&#34;:        42,
-</span><span style="color:#ed9d13">  &#34;created_at&#34;: &#34;$createdAt&#34;,
-</span><span style="color:#ed9d13">}`</span>,
-      td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;id&#34;</span>, td.<span style="color:#447fcf">Catch</span>(&amp;id, td.<span style="color:#447fcf">NotZero</span>())),        <span style="color:#999;font-style:italic">// ← ④
-</span><span style="color:#999;font-style:italic"></span>      td.<span style="color:#447fcf">Tag</span>(<span style="color:#ed9d13">&#34;created_at&#34;</span>, td.<span style="color:#447fcf">All</span>(                      <span style="color:#999;font-style:italic">// ← ⑤
-</span><span style="color:#999;font-style:italic"></span>        td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>),                              <span style="color:#999;font-style:italic">// ← ⑥
-</span><span style="color:#999;font-style:italic"></span>        td.<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s <span style="color:#6ab825;font-weight:bold">string</span>) (time.Time, <span style="color:#6ab825;font-weight:bold">error</span>) {  <span style="color:#999;font-style:italic">// ← ⑦
-</span><span style="color:#999;font-style:italic"></span>          <span style="color:#6ab825;font-weight:bold">return</span> time.<span style="color:#447fcf">Parse</span>(time.RFC3339Nano, s)
-        }, td.<span style="color:#447fcf">Catch</span>(&amp;createdAt, td.<span style="color:#447fcf">Gte</span>(testAPI.<span style="color:#447fcf">SentAt</span>()))), <span style="color:#999;font-style:italic">// ← ⑧
-</span><span style="color:#999;font-style:italic"></span>      )),
+  testAPI := tdhttp.<span style=color:#447fcf>NewTestAPI</span>(t, myAPI) <span style=color:#999;font-style:italic>// ← ①
+</span><span style=color:#999;font-style:italic></span>
+  testAPI.<span style=color:#447fcf>PostJSON</span>(<span style=color:#ed9d13>&#34;/person&#34;</span>, Person{Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>, Age: <span style=color:#3677a9>42</span>}), <span style=color:#999;font-style:italic>// ← ②
+</span><span style=color:#999;font-style:italic></span>    <span style=color:#447fcf>Name</span>(<span style=color:#ed9d13>&#34;Create a new Person&#34;</span>).
+	<span style=color:#447fcf>CmpStatus</span>(http.StatusCreated). <span style=color:#999;font-style:italic>// ← ③
+</span><span style=color:#999;font-style:italic></span>	<span style=color:#447fcf>CmpJSONBody</span>(td.<span style=color:#447fcf>JSON</span>(<span style=color:#ed9d13>`
+</span><span style=color:#ed9d13>{
+</span><span style=color:#ed9d13>  &#34;id&#34;:         $id,
+</span><span style=color:#ed9d13>  &#34;name&#34;:       &#34;Bob&#34;,
+</span><span style=color:#ed9d13>  &#34;age&#34;:        42,
+</span><span style=color:#ed9d13>  &#34;created_at&#34;: &#34;$createdAt&#34;,
+</span><span style=color:#ed9d13>}`</span>,
+      td.<span style=color:#447fcf>Tag</span>(<span style=color:#ed9d13>&#34;id&#34;</span>, td.<span style=color:#447fcf>Catch</span>(&amp;id, td.<span style=color:#447fcf>NotZero</span>())),        <span style=color:#999;font-style:italic>// ← ④
+</span><span style=color:#999;font-style:italic></span>      td.<span style=color:#447fcf>Tag</span>(<span style=color:#ed9d13>&#34;created_at&#34;</span>, td.<span style=color:#447fcf>All</span>(                      <span style=color:#999;font-style:italic>// ← ⑤
+</span><span style=color:#999;font-style:italic></span>        td.<span style=color:#447fcf>HasSuffix</span>(<span style=color:#ed9d13>&#34;Z&#34;</span>),                              <span style=color:#999;font-style:italic>// ← ⑥
+</span><span style=color:#999;font-style:italic></span>        td.<span style=color:#447fcf>Smuggle</span>(<span style=color:#6ab825;font-weight:700>func</span>(s <span style=color:#6ab825;font-weight:700>string</span>) (time.Time, <span style=color:#6ab825;font-weight:700>error</span>) {  <span style=color:#999;font-style:italic>// ← ⑦
+</span><span style=color:#999;font-style:italic></span>          <span style=color:#6ab825;font-weight:700>return</span> time.<span style=color:#447fcf>Parse</span>(time.RFC3339Nano, s)
+        }, td.<span style=color:#447fcf>Catch</span>(&amp;createdAt, td.<span style=color:#447fcf>Gte</span>(testAPI.<span style=color:#447fcf>SentAt</span>()))), <span style=color:#999;font-style:italic>// ← ⑧
+</span><span style=color:#999;font-style:italic></span>      )),
     ))
-  <span style="color:#6ab825;font-weight:bold">if</span> !testAPI.<span style="color:#447fcf">Failed</span>() {
-    t.<span style="color:#447fcf">Logf</span>(<span style="color:#ed9d13">&#34;The new Person ID is %d and was created at %s&#34;</span>, id, createdAt)
+  <span style=color:#6ab825;font-weight:700>if</span> !testAPI.<span style=color:#447fcf>Failed</span>() {
+    t.<span style=color:#447fcf>Logf</span>(<span style=color:#ed9d13>&#34;The new Person ID is %d and was created at %s&#34;</span>, id, createdAt)
   }
 
-  <span style="color:#999;font-style:italic">// testAPI can be used to test another route…
-</span><span style="color:#999;font-style:italic"></span>}
-</code></pre></div><ol>
-<li>the API handler ready to be tested;</li>
-<li>the POST request with automatic JSON marshalling;</li>
-<li>the expected HTTP status should be <code>http.StatusCreated</code>
+  <span style=color:#999;font-style:italic>// testAPI can be used to test another route…
+</span><span style=color:#999;font-style:italic></span>}
+</code></pre></div><ol><li>the API handler ready to be tested;</li><li>the POST request with automatic JSON marshalling;</li><li>the expected HTTP status should be <code>http.StatusCreated</code>
 and the line just below, the body should match the
-<a href="/operators/json/"><code>JSON</code></a> operator;</li>
-<li>for the <code>$id</code> placeholder, <a href="/operators/catch/"><code>Catch</code></a> its
+<a href=/operators/json/><code>JSON</code></a> operator;</li><li>for the <code>$id</code> placeholder, <a href=/operators/catch/><code>Catch</code></a> its
 value: put it in <code>id</code> variable and check it is
-<a href="/operators/notzero/"><code>NotZero</code></a>;</li>
-<li>for the <code>$created_at</code> placeholder, use the <a href="/operators/all/"><code>All</code></a>
-operator. It combines several operators like a AND;</li>
-<li>check that <code>$created_at</code> date ends with &ldquo;Z&rdquo; using
-<a href="/operators/hassuffix/"><code>HasSuffix</code></a>. As we expect a RFC3339
-date, we require it in UTC time zone;</li>
-<li>convert <code>$created_at</code> date into a <code>time.Time</code> using a custom
-function thanks to the <a href="/operators/smuggle/"><code>Smuggle</code></a> operator;</li>
-<li>then <a href="/operators/catch/"><code>Catch</code></a> the resulting value: put it in
+<a href=/operators/notzero/><code>NotZero</code></a>;</li><li>for the <code>$created_at</code> placeholder, use the <a href=/operators/all/><code>All</code></a>
+operator. It combines several operators like a AND;</li><li>check that <code>$created_at</code> date ends with &ldquo;Z&rdquo; using
+<a href=/operators/hassuffix/><code>HasSuffix</code></a>. As we expect a RFC3339
+date, we require it in UTC time zone;</li><li>convert <code>$created_at</code> date into a <code>time.Time</code> using a custom
+function thanks to the <a href=/operators/smuggle/><code>Smuggle</code></a> operator;</li><li>then <a href=/operators/catch/><code>Catch</code></a> the resulting value: put it in
 <code>createdAt</code> variable and check it is greater or equal than
-<code>testAPI.SentAt()</code> (the time just before the request is handled).</li>
-</ol>
-<p>If you prefer to do one function call instead of chaining methods as
-above, you can try <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse">CmpJSONResponse</a>.</p>
-<h2 id="my-api-use-xml-not-json">My API use XML not JSON!</h2>
-<p><a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp"><code>tdhttp</code>
+<code>testAPI.SentAt()</code> (the time just before the request is handled).</li></ol><p>If you prefer to do one function call instead of chaining methods as
+above, you can try <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#CmpJSONResponse>CmpJSONResponse</a>.</p><h2 id=my-api-use-xml-not-json>My API use XML not JSON!</h2><p><a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp><code>tdhttp</code>
 helper</a>
-provides the same functions and methods for XML it does for JSON.</p>
-<p><a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp">RTFM</a>
-:)</p>
-<p>Note that the <a href="/operators/json/"><code>JSON</code></a> operator have not its <code>XML</code>
+provides the same functions and methods for XML it does for JSON.</p><p><a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp>RTFM</a>
+:)</p><p>Note that the <a href=/operators/json/><code>JSON</code></a> operator have not its <code>XML</code>
 counterpart yet.
-But <a href="https://github.com/maxatome/go-testdeep/pulls">PRs are welcome</a>!</p>
-<h2 id="should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd">Should I import <code>github.com/maxatome/go-testdeep</code> or <code>github.com/maxatome/go-testdeep/td</code>?</h2>
-<p>Historically the main package of go-testdeep was <code>testdeep</code> as in:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
+But <a href=https://github.com/maxatome/go-testdeep/pulls>PRs are welcome</a>!</p><h2 id=should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd>Should I import <code>github.com/maxatome/go-testdeep</code> or <code>github.com/maxatome/go-testdeep/td</code>?</h2><p>Historically the main package of go-testdeep was <code>testdeep</code> as in:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
-  testdeep.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">GetPerson</span>(), Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>})
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestMyFunc</span>(t *testing.T) {
+  testdeep.<span style=color:#447fcf>Cmp</span>(t, <span style=color:#447fcf>GetPerson</span>(), Person{Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>, Age: <span style=color:#3677a9>42</span>})
 }
-</code></pre></div><p>As <code>testdeep</code> was boring to type, renaming it to <code>td</code> became a habit as in:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
+</code></pre></div><p>As <code>testdeep</code> was boring to type, renaming it to <code>td</code> became a habit as in:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
 
-  td <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep&#34;</span>
+  td <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
-  td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">GetPerson</span>(), Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>})
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestMyFunc</span>(t *testing.T) {
+  td.<span style=color:#447fcf>Cmp</span>(t, <span style=color:#447fcf>GetPerson</span>(), Person{Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>, Age: <span style=color:#3677a9>42</span>})
 }
 </code></pre></div><p>Forcing the developer to systematically rename <code>testdeep</code> package to
 <code>td</code> in all its tests is not very friendly. That is why a decision was
 taken to create a new package <code>github.com/maxatome/go-testdeep/td</code>
 while keeping <code>github.com/maxatome/go-testdeep</code> working thanks to go
-type aliases.</p>
-<p>So the previous examples (that are still working) can now be written as:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">import</span> (
-  <span style="color:#ed9d13">&#34;testing&#34;</span>
+type aliases.</p><p>So the previous examples (that are still working) can now be written as:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>import</span> (
+  <span style=color:#ed9d13>&#34;testing&#34;</span>
 
-  <span style="color:#ed9d13">&#34;github.com/maxatome/go-testdeep/td&#34;</span>
+  <span style=color:#ed9d13>&#34;github.com/maxatome/go-testdeep/td&#34;</span>
 )
 
-<span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">TestMyFunc</span>(t *testing.T) {
-  td.<span style="color:#447fcf">Cmp</span>(t, <span style="color:#447fcf">GetPerson</span>(), Person{Name: <span style="color:#ed9d13">&#34;Bob&#34;</span>, Age: <span style="color:#3677a9">42</span>})
+<span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>TestMyFunc</span>(t *testing.T) {
+  td.<span style=color:#447fcf>Cmp</span>(t, <span style=color:#447fcf>GetPerson</span>(), Person{Name: <span style=color:#ed9d13>&#34;Bob&#34;</span>, Age: <span style=color:#3677a9>42</span>})
 }
 </code></pre></div><p>There is no package renaming anymore. Switching to import
-<code>github.com/maxatome/go-testdeep/td</code> is advised for new code.</p>
-<h2 id="what-does-the-error-undefined-testdeepdefaultcontextconfig-mean">What does the error <code>undefined: testdeep.DefaultContextConfig</code> mean?</h2>
-<p>Since release <code>v1.3.0</code>, this variable moved to the new
-<code>github.com/maxatome/go-testdeep/td</code> package.</p>
-<ul>
-<li>
-<p>If you rename the <code>testdeep</code> package to <code>td</code> as in:</p>
-<pre><code>import td &quot;github.com/maxatome/go-testdeep&quot;
+<code>github.com/maxatome/go-testdeep/td</code> is advised for new code.</p><h2 id=what-does-the-error-undefined-testdeepdefaultcontextconfig-mean>What does the error <code>undefined: testdeep.DefaultContextConfig</code> mean?</h2><p>Since release <code>v1.3.0</code>, this variable moved to the new
+<code>github.com/maxatome/go-testdeep/td</code> package.</p><ul><li><p>If you rename the <code>testdeep</code> package to <code>td</code> as in:</p><pre><code>import td &quot;github.com/maxatome/go-testdeep&quot;
 …
   td.DefaultContextConfig = td.ContextConfig{…}
-</code></pre><p>then just change the import line to:</p>
-<pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
-</code></pre></li>
-<li>
-<p>Otherwise, you have two choices:</p>
-<ol>
-<li>either add a new import line:
-<pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
+</code></pre><p>then just change the import line to:</p><pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
+</code></pre></li><li><p>Otherwise, you have two choices:</p><ol><li>either add a new import line:<pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
 </code></pre><p>then use <code>td.DefaultContextConfig</code> instead of
 <code>testdeep.DefaultContextConfig</code>, and continue to use <code>testdeep</code>
-package elsewhere.</p>
-</li>
-<li>or replace the import line:
-<pre><code>import &quot;github.com/maxatome/go-testdeep&quot;
-</code></pre><p>by</p>
-<pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
-</code></pre><p>then rename all occurrences of <code>testdeep</code> package to <code>td</code>.</p>
-</li>
-</ol>
-</li>
-</ul>
-<h2 id="go-testdeep-dumps-only-10-errors-how-to-have-more-or-less">go-testdeep dumps only 10 errors, how to have more (or less)?</h2>
-<p>Using the environment variable <code>TESTDEEP_MAX_ERRORS</code>.</p>
-<p><code>TESTDEEP_MAX_ERRORS</code> contains the maximum number of errors to report
-before stopping during one comparison (one <a href="https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp"><code>Cmp</code></a> execution for
-example). It defaults to <code>10</code>.</p>
-<p>Example:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_MAX_ERRORS</span>=<span style="color:#3677a9">30</span> go <span style="color:#24909d">test</span>
-</code></pre></div><p>Setting it to <code>-1</code> means no limit:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_MAX_ERRORS</span>=-1 go <span style="color:#24909d">test</span>
-</code></pre></div><h2 id="how-do-i-change-these-crappy-colors">How do I change these crappy colors?</h2>
-<p>Using some environment variables:</p>
-<ul>
-<li><code>TESTDEEP_COLOR</code> enable (<code>on</code>) or disable (<code>off</code>) the color
-output. It defaults to <code>on</code>;</li>
-<li><code>TESTDEEP_COLOR_TEST_NAME</code> color of the test name. See below
-for color format, it defaults to <code>yellow</code>;</li>
-<li><code>TESTDEEP_COLOR_TITLE</code> color of the test failure title. See below
-for color format, it defaults to <code>cyan</code>;</li>
-<li><code>TESTDEEP_COLOR_OK</code> color of the test expected value. See below
-for color format, it defaults to <code>green</code>;</li>
-<li><code>TESTDEEP_COLOR_BAD</code> color of the test got value. See below
-for color format, it defaults to <code>red</code>;</li>
-</ul>
-<h3 id="color-format">Color format</h3>
-<p>A color in <code>TESTDEEP_COLOR_*</code> environment variables has the following
-format:</p>
-<pre><code>foreground_color                    # set foreground color, background one untouched
+package elsewhere.</p></li><li>or replace the import line:<pre><code>import &quot;github.com/maxatome/go-testdeep&quot;
+</code></pre><p>by</p><pre><code>import &quot;github.com/maxatome/go-testdeep/td&quot;
+</code></pre><p>then rename all occurrences of <code>testdeep</code> package to <code>td</code>.</p></li></ol></li></ul><h2 id=go-testdeep-dumps-only-10-errors-how-to-have-more-or-less>go-testdeep dumps only 10 errors, how to have more (or less)?</h2><p>Using the environment variable <code>TESTDEEP_MAX_ERRORS</code>.</p><p><code>TESTDEEP_MAX_ERRORS</code> contains the maximum number of errors to report
+before stopping during one comparison (one <a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp><code>Cmp</code></a> execution for
+example). It defaults to <code>10</code>.</p><p>Example:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#40ffff>TESTDEEP_MAX_ERRORS</span>=<span style=color:#3677a9>30</span> go <span style=color:#24909d>test</span>
+</code></pre></div><p>Setting it to <code>-1</code> means no limit:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#40ffff>TESTDEEP_MAX_ERRORS</span>=-1 go <span style=color:#24909d>test</span>
+</code></pre></div><h2 id=how-do-i-change-these-crappy-colors>How do I change these crappy colors?</h2><p>Using some environment variables:</p><ul><li><code>TESTDEEP_COLOR</code> enable (<code>on</code>) or disable (<code>off</code>) the color
+output. It defaults to <code>on</code>;</li><li><code>TESTDEEP_COLOR_TEST_NAME</code> color of the test name. See below
+for color format, it defaults to <code>yellow</code>;</li><li><code>TESTDEEP_COLOR_TITLE</code> color of the test failure title. See below
+for color format, it defaults to <code>cyan</code>;</li><li><code>TESTDEEP_COLOR_OK</code> color of the test expected value. See below
+for color format, it defaults to <code>green</code>;</li><li><code>TESTDEEP_COLOR_BAD</code> color of the test got value. See below
+for color format, it defaults to <code>red</code>;</li></ul><h3 id=color-format>Color format</h3><p>A color in <code>TESTDEEP_COLOR_*</code> environment variables has the following
+format:</p><pre><code>foreground_color                    # set foreground color, background one untouched
 foreground_color:background_color   # set foreground AND background color
 :background_color                   # set background color, foreground one untouched
-</code></pre><p><code>foreground_color</code> and <code>background_color</code> can be:</p>
-<ul>
-<li><code>black</code></li>
-<li><code>red</code></li>
-<li><code>green</code></li>
-<li><code>yellow</code></li>
-<li><code>blue</code></li>
-<li><code>magenta</code></li>
-<li><code>cyan</code></li>
-<li><code>white</code></li>
-<li><code>gray</code></li>
-</ul>
-<p>For example:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#40ffff">TESTDEEP_COLOR_OK</span>=black:green <span style="color:#ed9d13">\
-</span><span style="color:#ed9d13"></span>    <span style="color:#40ffff">TESTDEEP_COLOR_BAD</span>=white:red <span style="color:#ed9d13">\
-</span><span style="color:#ed9d13"></span>    <span style="color:#40ffff">TESTDEEP_COLOR_TITLE</span>=yellow <span style="color:#ed9d13">\
-</span><span style="color:#ed9d13"></span>    go <span style="color:#24909d">test</span>
-</code></pre></div><h2 id="the-x-testing-framework-allows-to-testdo-y-while-go-testdeep-not">The <code>X</code> testing framework allows to test/do <code>Y</code> while go-testdeep not</h2>
-<p>The <a href="/operators/code/"><code>Code</code></a> and <a href="/operators/smuggle/"><code>Smuggle</code></a>
-operators should allow to cover all cases not handled by <a href="/operators/">other
-operators</a>.</p>
-<p>If you think this missing feature deserves a specific operator,
+</code></pre><p><code>foreground_color</code> and <code>background_color</code> can be:</p><ul><li><code>black</code></li><li><code>red</code></li><li><code>green</code></li><li><code>yellow</code></li><li><code>blue</code></li><li><code>magenta</code></li><li><code>cyan</code></li><li><code>white</code></li><li><code>gray</code></li></ul><p>For example:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#40ffff>TESTDEEP_COLOR_OK</span>=black:green <span style=color:#ed9d13>\
+</span><span style=color:#ed9d13></span>    <span style=color:#40ffff>TESTDEEP_COLOR_BAD</span>=white:red <span style=color:#ed9d13>\
+</span><span style=color:#ed9d13></span>    <span style=color:#40ffff>TESTDEEP_COLOR_TITLE</span>=yellow <span style=color:#ed9d13>\
+</span><span style=color:#ed9d13></span>    go <span style=color:#24909d>test</span>
+</code></pre></div><h2 id=the-x-testing-framework-allows-to-testdo-y-while-go-testdeep-not>The <code>X</code> testing framework allows to test/do <code>Y</code> while go-testdeep not</h2><p>The <a href=/operators/code/><code>Code</code></a> and <a href=/operators/smuggle/><code>Smuggle</code></a>
+operators should allow to cover all cases not handled by <a href=/operators/>other
+operators</a>.</p><p>If you think this missing feature deserves a specific operator,
 because it is frequently or widely used, file an issue and let&rsquo;s
-discuss about it.</p>
-<p>We plan to add a new <code>github.com/maxatome/go-testdeep/helpers/tdcombo</code>
+discuss about it.</p><p>We plan to add a new <code>github.com/maxatome/go-testdeep/helpers/tdcombo</code>
 helper package, bringing together all what we can call
 combo-operators. Combo-operators are operators using any number of
-<a href="/operators/">already existing operators</a>.</p>
-<p>As an example of such combo-operators, the following one. It allows to
+<a href=/operators/>already existing operators</a>.</p><p>As an example of such combo-operators, the following one. It allows to
 check that a string contains a RFC3339 formatted time, in UTC time
 zone (&ldquo;Z&rdquo; suffix) and then to compare it as a <code>time.Time</code> against
-<code>expectedValue</code> (which can be another <a href="/operators/">operator</a>
-or, of course, a <code>time.Time</code> value).</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#6ab825;font-weight:bold">func</span> <span style="color:#447fcf">RFC3339ZToTime</span>(expectedValue <span style="color:#6ab825;font-weight:bold">interface</span>{}) td.TestDeep {
-  <span style="color:#6ab825;font-weight:bold">return</span> td.<span style="color:#447fcf">All</span>(
-    td.<span style="color:#447fcf">HasSuffix</span>(<span style="color:#ed9d13">&#34;Z&#34;</span>),
-    td.<span style="color:#447fcf">Smuggle</span>(<span style="color:#6ab825;font-weight:bold">func</span>(s <span style="color:#6ab825;font-weight:bold">string</span>) (time.Time, <span style="color:#6ab825;font-weight:bold">error</span>) {
-      <span style="color:#6ab825;font-weight:bold">return</span> time.<span style="color:#447fcf">Parse</span>(time.RFC3339Nano, s)
+<code>expectedValue</code> (which can be another <a href=/operators/>operator</a>
+or, of course, a <code>time.Time</code> value).</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>RFC3339ZToTime</span>(expectedValue <span style=color:#6ab825;font-weight:700>interface</span>{}) td.TestDeep {
+  <span style=color:#6ab825;font-weight:700>return</span> td.<span style=color:#447fcf>All</span>(
+    td.<span style=color:#447fcf>HasSuffix</span>(<span style=color:#ed9d13>&#34;Z&#34;</span>),
+    td.<span style=color:#447fcf>Smuggle</span>(<span style=color:#6ab825;font-weight:700>func</span>(s <span style=color:#6ab825;font-weight:700>string</span>) (time.Time, <span style=color:#6ab825;font-weight:700>error</span>) {
+      <span style=color:#6ab825;font-weight:700>return</span> time.<span style=color:#447fcf>Parse</span>(time.RFC3339Nano, s)
     }, expectedValue),
   )
 }
-</code></pre></div><p>It could be used as:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">before := time.<span style="color:#447fcf">Now</span>()
-record := <span style="color:#447fcf">NewRecord</span>()
-td.<span style="color:#447fcf">Cmp</span>(t, record,
-  td.<span style="color:#447fcf">SuperJSONOf</span>(<span style="color:#ed9d13">`{&#34;created_at&#34;: $1}`</span>,
-    tdcombo.<span style="color:#447fcf">RFC3339ZToTime</span>(td.<span style="color:#447fcf">Between</span>(before, time.<span style="color:#447fcf">Now</span>()),
+</code></pre></div><p>It could be used as:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>before := time.<span style=color:#447fcf>Now</span>()
+record := <span style=color:#447fcf>NewRecord</span>()
+td.<span style=color:#447fcf>Cmp</span>(t, record,
+  td.<span style=color:#447fcf>SuperJSONOf</span>(<span style=color:#ed9d13>`{&#34;created_at&#34;: $1}`</span>,
+    tdcombo.<span style=color:#447fcf>RFC3339ZToTime</span>(td.<span style=color:#447fcf>Between</span>(before, time.<span style=color:#447fcf>Now</span>()),
   )),
-  <span style="color:#ed9d13">&#34;The JSONified record.created_at is UTC-RFC3339&#34;</span>,
+  <span style=color:#ed9d13>&#34;The JSONified record.created_at is UTC-RFC3339&#34;</span>,
 )
-</code></pre></div><h2 id="how-to-add-a-new-operator">How to add a new operator?</h2>
-<p>You want to add a new <code>FooBar</code> operator.</p>
-<ul>
-<li><input disabled="" type="checkbox"> check that another operator does not exist with the same meaning;</li>
-<li><input disabled="" type="checkbox"> add the operator definition in <code>td_foo_bar.go</code> file and fully
-document its usage:
-<ul>
-<li>add a <code>// summary(FooBar): small description</code> line, before
-operator comment,</li>
-<li>add a <code>// input(FooBar): …</code> line, just after <code>summary(FooBar)</code>
-line. This one lists all inputs accepted by the operator;</li>
-</ul>
-</li>
-<li><input disabled="" type="checkbox"> add operator tests in <code>td_foo_bar_test.go</code> file;</li>
-<li><input disabled="" type="checkbox"> in <code>example_test.go</code> file, add examples function(s) <code>ExampleFooBar*</code>
-in alphabetical order;</li>
-<li><input disabled="" type="checkbox"> automatically generate <code>CmpFooBar</code> &amp; <code>T.FooBar</code> (+ examples) code:
-<code>./tools/gen_funcs.pl</code></li>
-<li><input disabled="" type="checkbox"> do not forget to run tests: <code>go test ./...</code></li>
-<li><input disabled="" type="checkbox"> run <code>golangci-lint</code> as in <a href="https://github.com/maxatome/go-testdeep/blob/master/.travis.yml"><code>.travis.yml</code></a>;</li>
-</ul>
-<p>Each time you change <code>example_test.go</code>, re-run <code>./tools/gen_funcs.pl</code>
-to update corresponding <code>CmpFooBar</code> &amp; <code>T.FooBar</code> examples.</p>
-<p>Test coverage must be 100%.</p>
-
-
-
-
-
-<footer class=" footline" >
-	
-</footer>
-
-        
-        </div> 
-        
-
-      </div>
-
-    <div id="navigation">
-        
-        
-        
-        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-        
-        
-
-
-	 
-	 
-		
-			<a class="nav nav-prev" href="/helpers/" title="Helpers"> <i class="fa fa-chevron-left"></i></a>
-		
-		
-			<a class="nav nav-next" href="/introduction/" title="Introduction" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
-		
-	
-    </div>
-
-    </section>
-    
-    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
-      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
-    </div>
-    <script src="/js/clipboard.min.js?1587225807"></script>
-    <script src="/js/perfect-scrollbar.min.js?1587225807"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1587225807"></script>
-    <script src="/js/jquery.sticky.js?1587225807"></script>
-    <script src="/js/featherlight.min.js?1587225807"></script>
-    <script src="/js/highlight.pack.js?1587225807"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1587225807"></script>
-    <script src="/js/learn.js?1587225807"></script>
-    <script src="/js/hugo-learn.js?1587225807"></script>
-
-    <link href="/mermaid/mermaid.css?1587225807" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1587225807"></script>
-    <script>
-        mermaid.initialize({ startOnLoad: true });
-    </script>
-    
-
-  </body>
-</html>
+</code></pre></div><h2 id=how-to-add-a-new-operator>How to add a new operator?</h2><p>You want to add a new <code>FooBar</code> operator.</p><ul><li><input disabled type=checkbox> check that another operator does not exist with the same meaning;</li><li><input disabled type=checkbox> add the operator definition in <code>td_foo_bar.go</code> file and fully
+document its usage:<ul><li>add a <code>// summary(FooBar): small description</code> line, before
+operator comment,</li><li>add a <code>// input(FooBar): …</code> line, just after <code>summary(FooBar)</code>
+line. This one lists all inputs accepted by the operator;</li></ul></li><li><input disabled type=checkbox> add operator tests in <code>td_foo_bar_test.go</code> file;</li><li><input disabled type=checkbox> in <code>example_test.go</code> file, add examples function(s) <code>ExampleFooBar*</code>
+in alphabetical order;</li><li><input disabled type=checkbox> automatically generate <code>CmpFooBar</code> & <code>T.FooBar</code> (+ examples) code:
+<code>./tools/gen_funcs.pl</code></li><li><input disabled type=checkbox> do not forget to run tests: <code>go test ./...</code></li><li><input disabled type=checkbox> run <code>golangci-lint</code> as in <a href=https://github.com/maxatome/go-testdeep/blob/master/.travis.yml><code>.travis.yml</code></a>;</li></ul><p>Each time you change <code>example_test.go</code>, re-run <code>./tools/gen_funcs.pl</code>
+to update corresponding <code>CmpFooBar</code> & <code>T.FooBar</code> examples.</p><p>Test coverage must be 100%.</p><footer class=footline></footer></div></div><div id=navigation><a class="nav nav-prev" href=/helpers/ title=Helpers><i class="fa fa-chevron-left"></i></a><a class="nav nav-next" href=/introduction/ title=Introduction style=margin-right:0><i class="fa fa-chevron-right"></i></a></div></section><div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px><div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div></div><script src=/js/clipboard.min.js?1588458732></script><script src=/js/perfect-scrollbar.min.js?1588458732></script><script src=/js/perfect-scrollbar.jquery.min.js?1588458732></script><script src=/js/jquery.sticky.js?1588458732></script><script src=/js/featherlight.min.js?1588458732></script><script src=/js/highlight.pack.js?1588458732></script><script>hljs.initHighlightingOnLoad();</script><script src=/js/modernizr.custom-3.6.0.js?1588458732></script><script src=/js/learn.js?1588458732></script><script src=/js/hugo-learn.js?1588458732></script><link href=/mermaid/mermaid.css?1588458732 rel=stylesheet><script src=/mermaid/mermaid.js?1588458732></script><script>mermaid.initialize({startOnLoad:true});</script></body></html>
