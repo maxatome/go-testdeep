@@ -31,7 +31,11 @@ func TestTdSetResult(t *testing.T) {
 }
 
 func TestPkgFunc(t *testing.T) {
-	pkg, fn := pkgFunc("the/package.Foo")
+	pkg, fn := pkgFunc("package.Foo")
+	test.EqualStr(t, pkg, "package")
+	test.EqualStr(t, fn, "Foo")
+
+	pkg, fn = pkgFunc("the/package.Foo")
 	test.EqualStr(t, pkg, "the/package")
 	test.EqualStr(t, fn, "Foo")
 
@@ -39,8 +43,20 @@ func TestPkgFunc(t *testing.T) {
 	test.EqualStr(t, pkg, "the/package")
 	test.EqualStr(t, fn, "(*T).Foo")
 
+	pkg, fn = pkgFunc("the/package.glob..func1")
+	test.EqualStr(t, pkg, "the/package")
+	test.EqualStr(t, fn, "glob..func1")
+
 	// Theorically not possible, but...
 	pkg, fn = pkgFunc(".Foo")
 	test.EqualStr(t, pkg, "")
 	test.EqualStr(t, fn, "Foo")
+
+	pkg, fn = pkgFunc("no/func")
+	test.EqualStr(t, pkg, "no/func")
+	test.EqualStr(t, fn, "")
+
+	pkg, fn = pkgFunc("no/func.")
+	test.EqualStr(t, pkg, "no/func")
+	test.EqualStr(t, fn, "")
 }
