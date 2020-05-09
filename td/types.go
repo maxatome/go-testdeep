@@ -86,16 +86,20 @@ type base struct {
 }
 
 func pkgFunc(full string) (string, string) {
-	// the/package.Foo      → "the/package", "Foo"
-	dotPos := strings.LastIndex(full, ".")
-	pkg, fn := full[:dotPos], full[dotPos+1:]
-
-	// the/package.(*T).Foo → "the/package", "(*T).Foo"
-	if dotPos > 0 && pkg[len(pkg)-1] == ')' {
-		dotPos = strings.LastIndex(pkg, ".")
-		pkg, fn = full[:dotPos], full[dotPos+1:]
+	// the/package.Foo         → "the/package", "Foo"
+	// the/package.(*T).Foo    → "the/package", "(*T).Foo"
+	// the/package.glob..func1 → "the/package", "glob..func1"
+	sp := strings.LastIndexByte(full, '/')
+	if sp < 0 {
+		sp = 0 // std package without any '/' in name
 	}
-	return pkg, fn
+
+	dp := strings.IndexByte(full[sp:], '.')
+	if dp < 0 {
+		return full, ""
+	}
+	dp += sp
+	return full[:dp], full[dp+1:]
 }
 
 func (t *base) setLocation(callDepth int) {
