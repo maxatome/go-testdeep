@@ -42,9 +42,18 @@ func ExampleT_All() {
 		"checks value %s", got)
 	fmt.Println(ok)
 
+	// When some operators or values have to be reused and mixed between
+	// several calls, Flatten can be used to avoid boring and
+	// inefficient []interface{} copies:
+	regOps := td.Flatten([]td.TestDeep{td.Re("o/b"), td.Re(`^fo`), td.Re(`ar$`)})
+	ok = t.All(got, []interface{}{td.HasPrefix("foo"), regOps, td.HasSuffix("bar")},
+		"checks all operators against value %s", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 }
 
 func ExampleT_Any() {
@@ -64,9 +73,18 @@ func ExampleT_Any() {
 		"checks value %s", got)
 	fmt.Println(ok)
 
+	// When some operators or values have to be reused and mixed between
+	// several calls, Flatten can be used to avoid boring and
+	// inefficient []interface{} copies:
+	regOps := td.Flatten([]td.TestDeep{td.Re("a/c"), td.Re(`^xx`), td.Re(`ar$`)})
+	ok = t.Any(got, []interface{}{td.HasPrefix("xxx"), regOps, td.HasSuffix("zip")},
+		"check at least one operator matches value %s", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 }
 
 func ExampleT_Array_array() {
@@ -206,10 +224,19 @@ func ExampleT_Bag() {
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5}
+	ok = t.Bag(got, []interface{}{td.Flatten(expected), td.Gt(7)},
+		"checks all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
 	// false
+	// true
 	// true
 }
 
@@ -1386,10 +1413,22 @@ func ExampleT_None() {
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
+	prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
+	even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
+	for _, got := range [...]int{9, 3, 8, 15} {
+		ok = t.None(got, []interface{}{prime, even, td.Gt(14)},
+			"checks %v is not prime number, nor an even number and not > 14")
+		fmt.Printf("%d → %t\n", got, ok)
+	}
+
 	// Output:
 	// true
 	// false
 	// false
+	// 9 → true
+	// 3 → false
+	// 8 → false
+	// 15 → false
 }
 
 func ExampleT_Not() {
@@ -1428,9 +1467,18 @@ func ExampleT_NotAny() {
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using notExpected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	notExpected := []int{3, 6, 8, 41, 43}
+	ok = t.NotAny(got, []interface{}{td.Flatten(notExpected)},
+		"checks %v contains no item listed in notExpected", got)
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 }
 
 func ExampleT_NotEmpty() {
@@ -1892,7 +1940,16 @@ func ExampleT_Set() {
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 8}
+	ok = t.Set(got, []interface{}{td.Flatten(expected)},
+		"checks all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 	// true
@@ -2392,9 +2449,18 @@ func ExampleT_SubBagOf() {
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 9, 8}
+	ok = t.SubBagOf(got, []interface{}{td.Flatten(expected)},
+		"checks at least all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
 	// true
 	// false
+	// true
 	// true
 }
 
@@ -2570,7 +2636,16 @@ func ExampleT_SubSetOf() {
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 4, 5, 6, 7, 8}
+	ok = t.SubSetOf(got, []interface{}{td.Flatten(expected)},
+		"checks at least all expected items are present, in any order, ignoring duplicates")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 }
@@ -2588,7 +2663,16 @@ func ExampleT_SuperBagOf() {
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{8, 5, 8}
+	ok = t.SuperBagOf(got, []interface{}{td.Flatten(expected)},
+		"checks the expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 }
@@ -2775,7 +2859,16 @@ func ExampleT_SuperSetOf() {
 		"checks at least 2 items of %v match ignoring duplicates", got)
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3}
+	ok = t.SuperSetOf(got, []interface{}{td.Flatten(expected)},
+		"checks the expected items are present, in any order and ignoring duplicates")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 }

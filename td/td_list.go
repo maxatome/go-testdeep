@@ -10,6 +10,7 @@ import (
 	"bytes"
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/flat"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -18,14 +19,11 @@ type tdList struct {
 	items []reflect.Value
 }
 
-func newList(items ...interface{}) (ret tdList) {
-	ret.baseOKNil = newBaseOKNil(4)
-	ret.items = make([]reflect.Value, len(items))
-
-	for idx, item := range items {
-		ret.items[idx] = reflect.ValueOf(item)
+func newList(items ...interface{}) tdList {
+	return tdList{
+		baseOKNil: newBaseOKNil(4),
+		items:     flat.Values(items),
 	}
-	return
 }
 
 func (l *tdList) String() string {

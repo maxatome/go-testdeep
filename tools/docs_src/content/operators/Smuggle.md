@@ -114,7 +114,7 @@ then the data location forwarded to next test will be something like
 "DATA.MyTimeField") and the returned Name "Year" is automatically
 added when Name starts with a Letter.
 
-Note that [`SmuggledGot`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot) and [`*SmuggledGot`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot) returns are treated equally,
+Note that [`SmuggledGot`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot) and [`SmuggledGot`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SmuggledGot) returns are treated equally,
 and they are only used when *fn* has only one returned value or
 when the second boolean returned value is true.
 

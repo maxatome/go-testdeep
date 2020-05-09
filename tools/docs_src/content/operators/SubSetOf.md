@@ -18,6 +18,27 @@ from the compared array/slice.
 ```go
 td.Cmp(t, []int{1, 1}, td.SubSetOf(1, 2))    // succeeds
 td.Cmp(t, []int{1, 1, 2}, td.SubSetOf(1, 3)) // fails, 2 is an extra item
+
+// works with slices/arrays of any type
+td.Cmp(t, personSlice, td.SubSetOf(
+  Person{Name: "Bob", Age: 32},
+  Person{Name: "Alice", Age: 26},
+))
+```
+
+To flatten a non-`[]interface{}` slice/array, use [`Flatten`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Flatten) function
+and so avoid boring and inefficient copies:
+
+```go
+expected := []int{2, 1}
+td.Cmp(t, []int{1, 1}, td.SubSetOf(td.Flatten(expected))) // succeeds
+// = td.Cmp(t, []int{1, 1}, td.SubSetOf(2, 1))
+
+exp1 := []int{2, 1}
+exp2 := []int{5, 8}
+td.Cmp(t, []int{1, 5, 1, 3, 3},
+  td.SubSetOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
+// = td.Cmp(t, []int{1, 5, 1, 3, 3}, td.SubSetOf(2, 1, 3, 5, 8))
 ```
 
 
@@ -41,7 +62,16 @@ td.Cmp(t, []int{1, 1, 2}, td.SubSetOf(1, 3)) // fails, 2 is an extra item
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 4, 5, 6, 7, 8}
+	ok = td.Cmp(t, got, td.SubSetOf(td.Flatten(expected)),
+		"checks at least all expected items are present, in any order, ignoring duplicates")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 
@@ -90,7 +120,16 @@ reason of a potential failure.
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 4, 5, 6, 7, 8}
+	ok = td.CmpSubSetOf(t, got, []interface{}{td.Flatten(expected)},
+		"checks at least all expected items are present, in any order, ignoring duplicates")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 
@@ -139,7 +178,16 @@ reason of a potential failure.
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 4, 5, 6, 7, 8}
+	ok = t.SubSetOf(got, []interface{}{td.Flatten(expected)},
+		"checks at least all expected items are present, in any order, ignoring duplicates")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 

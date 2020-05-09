@@ -19,6 +19,27 @@ expected item to succeed.
 td.Cmp(t, []int{1, 1, 2}, td.Set(1, 2))    // succeeds
 td.Cmp(t, []int{1, 1, 2}, td.Set(2, 1))    // succeeds
 td.Cmp(t, []int{1, 1, 2}, td.Set(1, 2, 3)) // fails, 3 is missing
+
+// works with slices/arrays of any type
+td.Cmp(t, personSlice, td.Set(
+  Person{Name: "Bob", Age: 32},
+  Person{Name: "Alice", Age: 26},
+))
+```
+
+To flatten a non-`[]interface{}` slice/array, use [`Flatten`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Flatten) function
+and so avoid boring and inefficient copies:
+
+```go
+expected := []int{2, 1}
+td.Cmp(t, []int{1, 1, 2}, td.Set(td.Flatten(expected))) // succeeds
+// = td.Cmp(t, []int{1, 1, 2}, td.Set(2, 1))
+
+exp1 := []int{2, 1}
+exp2 := []int{5, 8}
+td.Cmp(t, []int{1, 5, 1, 2, 8, 3, 3},
+  td.Set(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
+// = td.Cmp(t, []int{1, 5, 1, 2, 8, 3, 3}, td.Set(2, 1, 3, 5, 8))
 ```
 
 
@@ -47,7 +68,16 @@ td.Cmp(t, []int{1, 1, 2}, td.Set(1, 2, 3)) // fails, 3 is missing
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 8}
+	ok = td.Cmp(t, got, td.Set(td.Flatten(expected)),
+		"checks all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 	// true
@@ -102,7 +132,16 @@ reason of a potential failure.
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 8}
+	ok = td.CmpSet(t, got, []interface{}{td.Flatten(expected)},
+		"checks all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 	// true
@@ -157,7 +196,16 @@ reason of a potential failure.
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
+	// When expected is already a non-[]interface{} slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []interface{} slice, then use td.Flatten!
+	expected := []int{1, 2, 3, 5, 8}
+	ok = t.Set(got, []interface{}{td.Flatten(expected)},
+		"checks all expected items are present, in any order")
+	fmt.Println(ok)
+
 	// Output:
+	// true
 	// true
 	// true
 	// true

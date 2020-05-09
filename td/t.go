@@ -573,7 +573,7 @@ func (t *T) Not(got interface{}, notExpected interface{}, args ...interface{}) b
 
 // NotAny is a shortcut for:
 //
-//   t.Cmp(got, td.NotAny(expectedItems...), args...)
+//   t.Cmp(got, td.NotAny(notExpectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotAny for details.
 //
@@ -585,9 +585,9 @@ func (t *T) Not(got interface{}, notExpected interface{}, args ...interface{}) b
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) NotAny(got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+func (t *T) NotAny(got interface{}, notExpectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
-	return t.Cmp(got, NotAny(expectedItems...), args...)
+	return t.Cmp(got, NotAny(notExpectedItems...), args...)
 }
 
 // NotEmpty is a shortcut for:
