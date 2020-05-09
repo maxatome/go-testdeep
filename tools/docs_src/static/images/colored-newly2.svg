@@ -14,7 +14,7 @@
    viewBox="0 0 205.53027 62.54108"
    version="1.1"
    id="svg206"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="colored-newly2.svg">
   <defs
      id="defs200" />
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="454.11795"
-     inkscape:cy="-21.812134"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="79.386523"
+     inkscape:cy="81.31355"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -35,8 +35,8 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1364"
-     inkscape:window-height="740"
+     inkscape:window-width="1918"
+     inkscape:window-height="1052"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
@@ -48,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -113,7 +113,7 @@
          x="-9.698267"
          y="118.94508"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
-         id="tspan4194">    [under TestDeep operator Not at test_test.go:53]</tspan><tspan
+         id="tspan4194">    [under TestDeep operator NotZero at test_test.go:53]</tspan><tspan
          sodipodi:role="line"
          x="-9.698267"
          y="124.94508"
