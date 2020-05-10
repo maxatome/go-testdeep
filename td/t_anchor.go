@@ -142,11 +142,10 @@ func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
 		var ok bool
 		typ, ok = model[0].(reflect.Type)
 		if !ok {
-			vm := reflect.ValueOf(model[0])
-			if !vm.IsValid() {
+			typ = reflect.TypeOf(model[0])
+			if typ == nil {
 				panic("Untyped nil value is not valid as model for an anchor")
 			}
-			typ = vm.Type()
 		}
 
 		typeBehind := operator.TypeBehind()
