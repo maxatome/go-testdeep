@@ -117,8 +117,8 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 	// "got" must not implement testDeeper
 	if got.Type().Implements(testDeeper) {
-		panic("Found a TestDeep operator in got param, " +
-			"can only use it in expected one!")
+		panic(ctxerr.Bad("Found a TestDeep operator in got param, " +
+			"can only use it in expected one!"))
 	}
 
 	if ctx.UseEqual {

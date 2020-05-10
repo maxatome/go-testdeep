@@ -60,3 +60,20 @@ func TestPkgFunc(t *testing.T) {
 	test.EqualStr(t, pkg, "no/func")
 	test.EqualStr(t, fn, "")
 }
+
+func TestJsonCaller(t *testing.T) {
+	// To test the bad case which should never happen
+	i := 0
+	var res string
+	var fn func()
+	fn = func() {
+		i++
+		if i > 30 {
+			res = jsonCaller()
+			return
+		}
+		fn()
+	}
+	fn()
+	test.EqualStr(t, res, "?")
+}

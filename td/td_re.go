@@ -30,6 +30,8 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 		base: newBase(4),
 	}
 
+	const usage = "(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])"
+
 	switch len(capture) {
 	case 0:
 	case 1:
@@ -37,7 +39,7 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 			r.captures = reflect.ValueOf(capture[0])
 		}
 	default:
-		r.usage()
+		panic(ctxerr.TooManyParams(r.location.Func + usage))
 	}
 
 	switch reg := regIf.(type) {
@@ -46,7 +48,7 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 	case string:
 		r.re = regexp.MustCompile(reg)
 	default:
-		r.usage()
+		panic(ctxerr.BadUsage(r.location.Func+usage, regIf, 1, false))
 	}
 	return
 }
@@ -104,11 +106,6 @@ func ReAll(reg interface{}, capture interface{}) TestDeep {
 	r := newRe(reg, capture)
 	r.numMatches = -1
 	return r
-}
-
-func (r *tdRe) usage() {
-	panic(fmt.Sprintf("usage: %s(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])",
-		r.location.Func))
 }
 
 func (r *tdRe) needCaptures() bool {

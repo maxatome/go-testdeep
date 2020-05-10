@@ -326,19 +326,25 @@ func TestMap(t *testing.T) {
 
 	test.CheckPanic(t,
 		func() { td.Map(&MyMap{}, td.MapEntries{1: 2}) },
-		"expected key 1 type mismatch: int != model key type (string)")
+		"Map(): expected key 1 type mismatch: int != model key type (string)")
+	test.CheckPanic(t,
+		func() { td.SuperMapOf(&MyMap{}, td.MapEntries{1: 2}) },
+		"SuperMapOf(): expected key 1 type mismatch: int != model key type (string)")
+	test.CheckPanic(t,
+		func() { td.SubMapOf(&MyMap{}, td.MapEntries{1: 2}) },
+		"SubMapOf(): expected key 1 type mismatch: int != model key type (string)")
 
 	test.CheckPanic(t,
 		func() { td.Map(&MyMap{}, td.MapEntries{"foo": nil}) },
-		`expected key "foo" value cannot be nil as entries value type is int`)
+		`Map(): expected key "foo" value cannot be nil as entries value type is int`)
 
 	test.CheckPanic(t,
 		func() { td.Map(&MyMap{}, td.MapEntries{"foo": uint16(2)}) },
-		`expected key "foo" value type mismatch: uint16 != model key type (int)`)
+		`Map(): expected key "foo" value type mismatch: uint16 != model key type (int)`)
 
 	test.CheckPanic(t,
 		func() { td.Map(&MyMap{"foo": 1}, td.MapEntries{"foo": 1}) },
-		`"foo" entry exists in both model & expectedEntries`)
+		`Map(): "foo" entry exists in both model & expectedEntries`)
 
 	//
 	// String

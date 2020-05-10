@@ -23,6 +23,8 @@ func TestFlatten(t *testing.T) {
 	_, ok := fs.Slice.([3]int)
 	test.IsTrue(t, ok)
 
-	test.CheckPanic(t, func() { td.Flatten(nil) }, "usage: Flatten(SLICE|ARRAY)")
-	test.CheckPanic(t, func() { td.Flatten(42) }, "usage: Flatten(SLICE|ARRAY)")
+	test.CheckPanic(t, func() { td.Flatten(nil) },
+		"usage: Flatten(SLICE|ARRAY), but received nil as 1st parameter")
+	test.CheckPanic(t, func() { td.Flatten(42) },
+		"usage: Flatten(SLICE|ARRAY), but received int as 1st parameter")
 }

@@ -30,7 +30,7 @@ var _ TestDeep = &tdDelay{}
 // used with helpers. See the example for a very simple use case.
 func Delay(delayed func() TestDeep) TestDeep {
 	if delayed == nil {
-		panic("delayed param must be non-nil")
+		panic(ctxerr.Bad("Delay(DELAYED): DELAYED must be non-nil"))
 	}
 	return &tdDelay{
 		base:    newBase(3),

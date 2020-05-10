@@ -77,7 +77,8 @@ func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 	if strict {
 		s = "S"
 	}
-	panic("usage: " + s + "Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)")
+	panic(ctxerr.BadUsage("usage: "+s+"Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)",
+		model, 1, true))
 }
 
 func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdStruct {
@@ -92,7 +93,8 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 	for fieldName, expectedValue := range expectedFields {
 		field, found := stType.FieldByName(fieldName)
 		if !found {
-			panic(fmt.Sprintf("struct %s has no field `%s'", stType, fieldName))
+			panic(ctxerr.Bad("%s(): struct %s has no field `%s'",
+				st.location.Func, stType, fieldName))
 		}
 
 		if expectedValue == nil {
@@ -101,18 +103,18 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 				reflect.Ptr, reflect.Slice:
 				vexpectedValue = reflect.Zero(field.Type) // change to a typed nil
 			default:
-				panic(fmt.Sprintf(
-					"expected value of field %s cannot be nil as it is a %s",
-					fieldName,
-					field.Type))
+				panic(ctxerr.Bad(
+					"%s(): expected value of field %s cannot be nil as it is a %s",
+					st.location.Func, fieldName, field.Type))
 			}
 		} else {
 			vexpectedValue = reflect.ValueOf(expectedValue)
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !vexpectedValue.Type().AssignableTo(field.Type) {
-					panic(fmt.Sprintf(
-						"type %s of field expected value %s differs from struct one (%s)",
+					panic(ctxerr.Bad(
+						"%s(): type %s of field expected value %s differs from struct one (%s)",
+						st.location.Func,
 						vexpectedValue.Type(),
 						fieldName,
 						field.Type))
@@ -150,7 +152,8 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 			if !ok {
 				// Probably in an environment where "unsafe" package is forbidden… :(
 				fmt.Fprintf(os.Stderr, // nolint: errcheck
-					"field %s is unexported and cannot be overridden, skip it from model.\n",
+					"%s(): field %s is unexported and cannot be overridden, skip it from model.\n",
+					st.location.Func,
 					fieldName)
 				continue
 			}
@@ -158,8 +161,9 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 			// If non-zero field
 			if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(), fieldIf) {
 				if checkedFields[fieldName] {
-					panic(fmt.Sprintf(
-						"non zero field %s in model already exists in expectedFields",
+					panic(ctxerr.Bad(
+						"%s(): non zero field %s in model already exists in expectedFields",
+						st.location.Func,
 						fieldName))
 				}
 

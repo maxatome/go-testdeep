@@ -90,7 +90,9 @@ func Shallow(expectedPtr interface{}) TestDeep {
 		return &shallow
 
 	default:
-		panic("usage: Shallow(CHANNEL|FUNC|MAP|PTR|SLICE|UNSAFE_PTR|STRING)")
+		panic(ctxerr.BadUsage(
+			"Shallow(CHANNEL|FUNC|MAP|PTR|SLICE|UNSAFE_PTR|STRING)",
+			expectedPtr, 1, true))
 	}
 }
 

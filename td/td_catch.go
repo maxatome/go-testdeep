@@ -63,7 +63,7 @@ var _ TestDeep = &tdCatch{}
 func Catch(target interface{}, expectedValue interface{}) TestDeep {
 	vt := reflect.ValueOf(target)
 	if vt.Kind() != reflect.Ptr || vt.IsNil() || !vt.Elem().CanSet() {
-		panic("usage: Catch(NON_NIL_PTR, EXPECTED_VALUE)")
+		panic(ctxerr.BadUsage("Catch(NON_NIL_PTR, EXPECTED_VALUE)", target, 1, true))
 	}
 
 	c := tdCatch{

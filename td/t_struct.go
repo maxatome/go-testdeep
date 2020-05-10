@@ -8,6 +8,8 @@ package td
 
 import (
 	"testing"
+
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 // T is a type that encapsulates *testing.T (in fact TestingFT
@@ -128,8 +130,12 @@ var _ TestingFT = T{}
 func NewT(t TestingFT, config ...ContextConfig) *T {
 	var newT T
 
-	if len(config) > 1 || t == nil {
-		panic("usage: NewT(TestingFT[, ContextConfig]")
+	const usage = "NewT(TestingFT[, ContextConfig])"
+	if len(config) > 1 {
+		panic(ctxerr.TooManyParams(usage))
+	}
+	if t == nil {
+		panic(ctxerr.BadUsage(usage, nil, 1, false))
 	}
 
 	// Already a *T, so steal its TestingFT and its Config if needed

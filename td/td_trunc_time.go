@@ -50,31 +50,37 @@ var _ TestDeep = &tdTruncTime{}
 //
 // TypeBehind method returns the reflect.Type of "expectedTime".
 func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
-	if len(trunc) <= 1 {
-		t := tdTruncTime{
-			tdExpectedType: tdExpectedType{
-				base: newBase(3),
-			},
-		}
+	const usage = "TruncTime(time.Time[, time.Duration])"
 
-		if len(trunc) == 1 {
-			t.trunc = trunc[0]
-		}
-
-		vval := reflect.ValueOf(expectedTime)
-
-		t.expectedType = vval.Type()
-		if t.expectedType == timeType {
-			t.expectedTime = expectedTime.(time.Time).Truncate(t.trunc)
-			return &t
-		}
-		if t.expectedType.ConvertibleTo(timeType) {
-			t.expectedTime = vval.Convert(timeType).
-				Interface().(time.Time).Truncate(t.trunc)
-			return &t
-		}
+	if len(trunc) > 1 {
+		panic(ctxerr.TooManyParams(usage))
 	}
-	panic("usage: TruncTime(time.Time[, time.Duration])")
+
+	t := tdTruncTime{
+		tdExpectedType: tdExpectedType{
+			base: newBase(3),
+		},
+	}
+
+	if len(trunc) == 1 {
+		t.trunc = trunc[0]
+	}
+
+	vval := reflect.ValueOf(expectedTime)
+
+	t.expectedType = vval.Type()
+	if t.expectedType == timeType {
+		t.expectedTime = expectedTime.(time.Time).Truncate(t.trunc)
+		return &t
+	}
+	if t.expectedType.ConvertibleTo(timeType) {
+		t.expectedTime = vval.Convert(timeType).
+			Interface().(time.Time).Truncate(t.trunc)
+		return &t
+	}
+
+	panic(ctxerr.Bad("usage: %s, 1st parameter must be time.Time or convertible to time.Time, but not %T",
+		usage, expectedTime))
 }
 
 func (t *tdTruncTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

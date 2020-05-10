@@ -152,16 +152,16 @@ func TestJSON(t *testing.T) {
 	//
 	// Panics
 	test.CheckPanic(t, func() { td.JSON("uNkNoWnFiLe.json") },
-		"JSON file uNkNoWnFiLe.json cannot be read: ")
+		"JSON(): JSON file uNkNoWnFiLe.json cannot be read: ")
 
 	test.CheckPanic(t, func() { td.JSON(42) },
-		"usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)")
+		"usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...), but received int as 1st parameter")
 
 	test.CheckPanic(t, func() { td.JSON(errReader{}) },
-		"JSON read error: an error occurred")
+		"JSON(): JSON read error: an error occurred")
 
 	test.CheckPanic(t, func() { td.JSON(`pipo`) },
-		"JSON unmarshal error: ")
+		"JSON(): JSON unmarshal error: ")
 
 	test.CheckPanic(t,
 		func() {
@@ -173,22 +173,22 @@ func TestJSON(t *testing.T) {
 
 	// numeric placeholders
 	test.CheckPanic(t, func() { td.JSON(`[1, "$123bad"]`) },
-		`JSON obj[1] contains a bad numeric placeholder "$123bad"`)
+		`JSON(): JSON obj[1] contains a bad numeric placeholder "$123bad"`)
 	test.CheckPanic(t, func() { td.JSON(`[1, $000]`) },
-		`JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
+		`JSON(): JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
 	test.CheckPanic(t, func() { td.JSON(`[1, $1]`) },
-		`JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
+		`JSON(): JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
 	test.CheckPanic(t, func() { td.JSON(`[1, 2, $3]`, td.Ignore()) },
-		`JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
+		`JSON(): JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
 
 	// operator shortcut
 	test.CheckPanic(t, func() { td.JSON(`[1, "$^bad%"]`) },
-		`JSON obj[1] contains a bad operator shortcut "$^bad%"`)
+		`JSON(): JSON obj[1] contains a bad operator shortcut "$^bad%"`)
 	// named placeholders
 	test.CheckPanic(t, func() { td.JSON(`[1, "$bad%"]`) },
-		`JSON obj[1] contains a bad placeholder "$bad%"`)
+		`JSON(): JSON obj[1] contains a bad placeholder "$bad%"`)
 	test.CheckPanic(t, func() { td.JSON(`[1, $unknown]`) },
-		`JSON obj[1] contains a unknown placeholder "$unknown"`)
+		`JSON(): JSON obj[1] contains a unknown placeholder "$unknown"`)
 
 	//
 	// Stringification
@@ -345,25 +345,25 @@ func TestSubJSONOf(t *testing.T) {
 	//
 	// Panics
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$123bad"]`) },
-		`JSON obj[1] contains a bad numeric placeholder "$123bad"`)
+		`SubJSONOf(): JSON obj[1] contains a bad numeric placeholder "$123bad"`)
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $000]`) },
-		`JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
+		`SubJSONOf(): JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $1]`) },
-		`JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
+		`SubJSONOf(): JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, 2, $3]`, td.Ignore()) },
-		`JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
+		`SubJSONOf(): JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
 
 	// operator shortcut
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$^bad%"]`) },
-		`JSON obj[1] contains a bad operator shortcut "$^bad%"`)
+		`SubJSONOf(): JSON obj[1] contains a bad operator shortcut "$^bad%"`)
 	// named placeholders
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$bad%"]`) },
-		`JSON obj[1] contains a bad placeholder "$bad%"`)
+		`SubJSONOf(): JSON obj[1] contains a bad placeholder "$bad%"`)
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $unknown]`) },
-		`JSON obj[1] contains a unknown placeholder "$unknown"`)
+		`SubJSONOf(): JSON obj[1] contains a unknown placeholder "$unknown"`)
 
 	test.CheckPanic(t, func() { td.SubJSONOf("null") },
-		"SubJSONOf only accepts JSON objects {…}")
+		"SubJSONOf() only accepts JSON objects {…}")
 
 	//
 	// Stringification
@@ -490,25 +490,25 @@ func TestSuperJSONOf(t *testing.T) {
 	//
 	// Panics
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$123bad"]`) },
-		`JSON obj[1] contains a bad numeric placeholder "$123bad"`)
+		`SuperJSONOf(): JSON obj[1] contains a bad numeric placeholder "$123bad"`)
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $000]`) },
-		`JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
+		`SuperJSONOf(): JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $1]`) },
-		`JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
+		`SuperJSONOf(): JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, 2, $3]`, td.Ignore()) },
-		`JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
+		`SuperJSONOf(): JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
 
 	// operator shortcut
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$^bad%"]`) },
-		`JSON obj[1] contains a bad operator shortcut "$^bad%"`)
+		`SuperJSONOf(): JSON obj[1] contains a bad operator shortcut "$^bad%"`)
 	// named placeholders
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$bad%"]`) },
-		`JSON obj[1] contains a bad placeholder "$bad%"`)
+		`SuperJSONOf(): JSON obj[1] contains a bad placeholder "$bad%"`)
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $unknown]`) },
-		`JSON obj[1] contains a unknown placeholder "$unknown"`)
+		`SuperJSONOf(): JSON obj[1] contains a unknown placeholder "$unknown"`)
 
 	test.CheckPanic(t, func() { td.SuperJSONOf("null") },
-		"SuperJSONOf only accepts JSON objects {…}")
+		"SuperJSONOf() only accepts JSON objects {…}")
 
 	//
 	// Stringification

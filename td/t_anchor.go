@@ -7,12 +7,12 @@
 package td
 
 import (
-	"fmt"
 	"reflect"
 	"runtime"
 	"sync"
 
 	"github.com/maxatome/go-testdeep/internal/anchors"
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
 // Anchors are stored globally by TestingFT
@@ -46,7 +46,7 @@ var allAnchorsMu sync.Mutex
 func AddAnchorableStructType(fn interface{}) {
 	err := anchors.AddAnchorableStructType(fn)
 	if err != nil {
-		panic(err.Error())
+		panic(ctxerr.Bad(err.Error()))
 	}
 }
 
@@ -131,32 +131,32 @@ func AddAnchorableStructType(fn interface{}) {
 // See A method for a shorter synonym of Anchor.
 func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
 	if operator == nil {
-		panic("Cannot anchor a nil TestDeep operator")
+		panic(ctxerr.Bad("Cannot anchor a nil TestDeep operator"))
 	}
 
 	var typ reflect.Type
 	if len(model) > 0 {
 		if len(model) != 1 {
-			panic("usage: Anchor(OPERATOR[, MODEL])")
+			panic(ctxerr.TooManyParams("Anchor(OPERATOR[, MODEL])"))
 		}
 		var ok bool
 		typ, ok = model[0].(reflect.Type)
 		if !ok {
 			typ = reflect.TypeOf(model[0])
 			if typ == nil {
-				panic("Untyped nil value is not valid as model for an anchor")
+				panic(ctxerr.Bad("Untyped nil value is not valid as model for an anchor"))
 			}
 		}
 
 		typeBehind := operator.TypeBehind()
 		if typeBehind != nil && typeBehind != typ {
-			panic(fmt.Sprintf("Operator %s TypeBehind() returned %s which differs from model type %s. Omit model or ensure its type is %[2]s",
+			panic(ctxerr.Bad("Operator %s TypeBehind() returned %s which differs from model type %s. Omit model or ensure its type is %[2]s",
 				operator.GetLocation().Func, typeBehind, typ))
 		}
 	} else {
 		typ = operator.TypeBehind()
 		if typ == nil {
-			panic(fmt.Sprintf("Cannot anchor operator %s as TypeBehind() returned nil. Use model parameter to specify the type to return",
+			panic(ctxerr.Bad("Cannot anchor operator %s as TypeBehind() returned nil. Use model parameter to specify the type to return",
 				operator.GetLocation().Func))
 		}
 	}

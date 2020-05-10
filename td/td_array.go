@@ -85,7 +85,7 @@ func newArray(kind reflect.Kind, model interface{}, expectedEntries ArrayEntries
 func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	a := newArray(reflect.Array, model, expectedEntries)
 	if a == nil {
-		panic("usage: Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)")
+		panic(ctxerr.BadUsage("Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)", model, 1, true))
 	}
 	return a
 }
@@ -111,7 +111,7 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	a := newArray(reflect.Slice, model, expectedEntries)
 	if a == nil {
-		panic("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES)")
+		panic(ctxerr.BadUsage("Slice(SLICE|&SLICE, EXPECTED_ENTRIES)", model, 1, true))
 	}
 	return a
 }
@@ -130,7 +130,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 		maxLength = a.expectedType.Len()
 
 		if maxLength <= maxIndex {
-			panic(fmt.Sprintf(
+			panic(ctxerr.Bad(
 				"array length is %d, so cannot have #%d expected index",
 				maxLength,
 				maxIndex))
@@ -160,7 +160,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 				reflect.Ptr, reflect.Slice:
 				vexpectedValue = reflect.Zero(elemType) // change to a typed nil
 			default:
-				panic(fmt.Sprintf(
+				panic(ctxerr.Bad(
 					"expected value of #%d cannot be nil as items type is %s",
 					index,
 					elemType))
@@ -170,7 +170,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !vexpectedValue.Type().AssignableTo(elemType) {
-					panic(fmt.Sprintf(
+					panic(ctxerr.Bad(
 						"type %s of #%d expected value differs from %s contents (%s)",
 						vexpectedValue.Type(),
 						index,
@@ -195,7 +195,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 				// If non-zero entry, consider it as an error (= 2 expected
 				// values for the same item)
 				if !reflect.DeepEqual(zero, ventry.Interface()) {
-					panic(fmt.Sprintf(
+					panic(ctxerr.Bad(
 						"non zero #%d entry in model already exists in expectedEntries",
 						index))
 				}

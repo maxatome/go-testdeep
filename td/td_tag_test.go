@@ -42,7 +42,7 @@ func TestTag(t *testing.T) {
 	// Bad usage
 	test.CheckPanic(t,
 		func() { td.Tag("1badTag", td.Between(9, 13)) },
-		util.ErrTagInvalid.Error())
+		"Tag(): "+util.ErrTagInvalid.Error())
 
 	//
 	// String

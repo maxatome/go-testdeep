@@ -116,15 +116,15 @@ func TestCode(t *testing.T) {
 
 	test.CheckPanic(t, func() {
 		td.Code(func() bool { return true })
-	}, "FUNC must take only one argument")
+	}, "FUNC must take only one non-variadic argument")
 
 	test.CheckPanic(t, func() {
 		td.Code(func(x ...int) bool { return true })
-	}, "FUNC must take only one argument")
+	}, "FUNC must take only one non-variadic argument")
 
 	test.CheckPanic(t, func() {
 		td.Code(func(a int, b string) bool { return true })
-	}, "FUNC must take only one argument")
+	}, "FUNC must take only one non-variadic argument")
 
 	test.CheckPanic(t, func() {
 		td.Code(func(n int) (bool, int) { return true, 0 })

@@ -41,7 +41,7 @@ var _ TestDeep = &tdTag{}
 // type of "expectedValue" (or nil if it is originally untyped nil).
 func Tag(tag string, expectedValue interface{}) TestDeep {
 	if err := util.CheckTag(tag); err != nil {
-		panic(err.Error())
+		panic(ctxerr.Bad("Tag(): %s", err))
 	}
 	t := tdTag{
 		tdSmugglerBase: newSmugglerBase(expectedValue),

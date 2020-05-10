@@ -312,15 +312,15 @@ func TestSmuggle(t *testing.T) {
 	// Bad number of args
 	test.CheckPanic(t, func() {
 		td.Smuggle(func() int { return 0 }, 12)
-	}, "FUNC must take only one argument")
+	}, "FUNC must take only one non-variadic argument")
 
 	test.CheckPanic(t, func() {
 		td.Smuggle(func(x ...int) int { return 0 }, 12)
-	}, "FUNC must take only one argument")
+	}, "FUNC must take only one non-variadic argument")
 
 	test.CheckPanic(t, func() {
 		td.Smuggle(func(a int, b string) int { return 0 }, 12)
-	}, "FUNC must take only one argument")
+	}, "FUNC must take only one non-variadic argument")
 
 	// Bad number of returned values
 	const errMesg = "FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"

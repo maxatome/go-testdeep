@@ -84,9 +84,9 @@ func TestBetween(t *testing.T) {
 		func() { td.Between([]byte("test"), []byte("test")) },
 		"usage: Between(")
 	test.CheckPanic(t, func() { td.Between(12, "test") },
-		"from and to params must have the same type")
+		"Between(FROM, TO): FROM and TO must have the same type: int ≠ string")
 	test.CheckPanic(t, func() { td.Between("test", 12) },
-		"from and to params must have the same type")
+		"Between(FROM, TO): FROM and TO must have the same type: string ≠ int")
 	test.CheckPanic(t,
 		func() { td.Between(1, 2, td.BoundsInIn, td.BoundsInOut) },
 		"usage: Between(")
@@ -313,7 +313,7 @@ func TestN(t *testing.T) {
 	test.CheckPanic(t, func() { td.N("test") }, "usage: N(")
 	test.CheckPanic(t, func() { td.N(10, 1, 2) }, "usage: N(")
 	test.CheckPanic(t, func() { td.N(10, "test") },
-		"tolerance param must have the same type as num one")
+		"N(NUM, TOLERANCE): NUM and TOLERANCE must have the same type: int ≠ string")
 }
 
 func TestLGt(t *testing.T) {

@@ -51,7 +51,7 @@ var _ TestDeep = &tdIsa{}
 func Isa(model interface{}) TestDeep {
 	modelType := reflect.TypeOf(model)
 	if modelType == nil {
-		panic("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example")
+		panic(ctxerr.Bad("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example"))
 	}
 
 	return &tdIsa{

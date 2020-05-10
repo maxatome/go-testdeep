@@ -14,6 +14,52 @@ import (
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
+func TestBad(t *testing.T) {
+	defer ctxerr.SaveColorState()()
+
+	test.EqualStr(t, ctxerr.Bad("test"), "test")
+	test.EqualStr(t, ctxerr.Bad("test %d", 123), "test 123")
+}
+
+func TestBadUsage(t *testing.T) {
+	defer ctxerr.SaveColorState()()
+
+	test.EqualStr(t,
+		ctxerr.BadUsage("Zzz(STRING)", nil, 1, true),
+		"usage: Zzz(STRING), but received nil as 1st parameter")
+
+	test.EqualStr(t,
+		ctxerr.BadUsage("Zzz(STRING)", 42, 1, true),
+		"usage: Zzz(STRING), but received int as 1st parameter")
+
+	test.EqualStr(t,
+		ctxerr.BadUsage("Zzz(STRING)", []int{}, 1, true),
+		"usage: Zzz(STRING), but received []int (slice) as 1st parameter")
+	test.EqualStr(t,
+		ctxerr.BadUsage("Zzz(STRING)", []int{}, 1, false),
+		"usage: Zzz(STRING), but received []int as 1st parameter")
+
+	test.EqualStr(t,
+		ctxerr.BadUsage("Zzz(STRING)", nil, 1, true),
+		"usage: Zzz(STRING), but received nil as 1st parameter")
+	test.EqualStr(t,
+		ctxerr.BadUsage("Zzz(STRING)", nil, 2, true),
+		"usage: Zzz(STRING), but received nil as 2nd parameter")
+	test.EqualStr(t,
+		ctxerr.BadUsage("Zzz(STRING)", nil, 3, true),
+		"usage: Zzz(STRING), but received nil as 3rd parameter")
+	test.EqualStr(t,
+		ctxerr.BadUsage("Zzz(STRING)", nil, 4, true),
+		"usage: Zzz(STRING), but received nil as 4th parameter")
+}
+
+func TestTooManyParams(t *testing.T) {
+	defer ctxerr.SaveColorState()()
+
+	test.EqualStr(t, ctxerr.TooManyParams("Zzz(PARAM)"),
+		"usage: Zzz(PARAM), too many parameters")
+}
+
 func TestError(t *testing.T) {
 	defer ctxerr.SaveColorState()()
 

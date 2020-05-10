@@ -9,6 +9,7 @@ package td
 import (
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/flat"
 )
 
@@ -82,6 +83,6 @@ func Flatten(slice interface{}) flat.Slice {
 	case reflect.Slice, reflect.Array:
 		return flat.Slice{Slice: slice}
 	default:
-		panic("usage: Flatten(SLICE|ARRAY)")
+		panic(ctxerr.BadUsage("Flatten(SLICE|ARRAY)", slice, 1, true))
 	}
 }
