@@ -7,12 +7,54 @@
 package ctxerr_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
+
+func TestSaveColorState(t *testing.T) {
+	check := func(expected string) {
+		t.Helper()
+		test.EqualStr(t, os.Getenv("TESTDEEP_COLOR"), expected)
+	}
+
+	defer ctxerr.SaveColorState()()
+	check("off")
+
+	func() {
+		defer ctxerr.SaveColorState(true)()
+		check("on")
+	}()
+	check("off")
+
+	func() {
+		defer ctxerr.SaveColorState(false)()
+		check("off")
+	}()
+	check("off")
+
+	os.Unsetenv("TESTDEEP_COLOR")
+	checkDoesNotExist := func() {
+		t.Helper()
+		_, exists := os.LookupEnv("TESTDEEP_COLOR")
+		test.IsFalse(t, exists)
+	}
+
+	func() {
+		defer ctxerr.SaveColorState(true)()
+		check("on")
+	}()
+	checkDoesNotExist()
+
+	func() {
+		defer ctxerr.SaveColorState(false)()
+		check("off")
+	}()
+	checkDoesNotExist()
+}
 
 func TestBad(t *testing.T) {
 	defer ctxerr.SaveColorState()()

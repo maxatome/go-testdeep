@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"regexp"
 	"strings"
 	"testing"
@@ -20,6 +21,11 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
+func TestMain(m *testing.M) {
+	defer ctxerr.SaveColorState()()
+	os.Exit(m.Run())
+}
+
 type CmpResponseTest struct {
 	Name         string
 	Handler      func(w http.ResponseWriter, r *http.Request)
@@ -29,8 +35,6 @@ type CmpResponseTest struct {
 }
 
 func TestCmpResponse(tt *testing.T) {
-	defer ctxerr.SaveColorState()()
-
 	handlerNonEmpty := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("X-TestDeep", "foobar")
 		w.WriteHeader(242)

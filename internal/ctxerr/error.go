@@ -12,6 +12,7 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"sync"
 
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -32,35 +33,41 @@ var (
 	colorBadOn, colorBadOnBold, colorBadOff string
 )
 
-func init() {
-	InitColors()
+var colorsInitOnce sync.Once
+
+func colorsInit() {
+	colorsInitOnce.Do(func() {
+		_, colorTestNameOn, colorTestNameOff = colorFromEnv(envColorTestName, "yellow")
+		_, colorTitleOn, colorTitleOff = colorFromEnv(envColorTitle, "cyan")
+		colorOKOn, colorOKOnBold, colorOKOff = colorFromEnv(envColorOK, "green")
+		colorBadOn, colorBadOnBold, colorBadOff = colorFromEnv(envColorBad, "red")
+	})
 }
 
-// InitColors initializes all colors from environment. It is
-// automatically called in init(). It is exported to be used in tests.
-func InitColors() {
-	_, colorTestNameOn, colorTestNameOff = colorFromEnv(envColorTestName, "yellow")
-	_, colorTitleOn, colorTitleOff = colorFromEnv(envColorTitle, "cyan")
-	colorOKOn, colorOKOnBold, colorOKOff = colorFromEnv(envColorOK, "green")
-	colorBadOn, colorBadOnBold, colorBadOff = colorFromEnv(envColorBad, "red")
-}
-
-// SaveColorState save the "TESTDEEP_COLOR" environment variable
-// value, sets it to "off", calls InitColors() and returns a function
-// to be called in a defer statement. Only intended to be used in
-// tests like:
+// SaveColorState saves the "TESTDEEP_COLOR" environment variable
+// value, sets it to "on" (if true passed as on) or "false" (if on not
+// passed or set to false), resets the colors initialization and
+// returns a function to be called in a defer statement. Only intended
+// to be used in tests like:
 //
 //   defer ctxerr.SaveColorState()()
-func SaveColorState() func() {
+//
+// It is not thread-safe.
+func SaveColorState(on ...bool) func() {
 	colorState, set := os.LookupEnv(envColor)
-	os.Setenv(envColor, "off") // nolint: errcheck
-	InitColors()
+	if len(on) == 0 || !on[0] {
+		os.Setenv(envColor, "off") // nolint: errcheck
+	} else {
+		os.Setenv(envColor, "on") // nolint: errcheck
+	}
+	colorsInitOnce = sync.Once{}
 	return func() {
 		if set {
 			os.Setenv(envColor, colorState) // nolint: errcheck
 		} else {
 			os.Unsetenv(envColor) // nolint: errcheck
 		}
+		colorsInitOnce = sync.Once{}
 	}
 }
 
@@ -141,11 +148,13 @@ func colorFromEnv(env, defaultColor string) (string, string, string) {
 
 // ColorizeTestNameOn enable test name color in b.
 func ColorizeTestNameOn(b *bytes.Buffer) {
+	colorsInit()
 	b.WriteString(colorTestNameOn)
 }
 
 // ColorizeTestNameOff disable test name color in b.
 func ColorizeTestNameOff(b *bytes.Buffer) {
+	colorsInit()
 	b.WriteString(colorTestNameOff)
 }
 
@@ -154,6 +163,7 @@ func ColorizeTestNameOff(b *bytes.Buffer) {
 //
 // Typically used in panic() when the user made a mistake.
 func Bad(s string, args ...interface{}) string {
+	colorsInit()
 	if len(args) == 0 {
 		return colorBadOnBold + s + colorBadOff
 	}
@@ -164,6 +174,8 @@ func Bad(s string, args ...interface{}) string {
 // user he passes a bad parameter to a function. Typically used in a
 // panic().
 func BadUsage(usage string, param interface{}, pos int, kind bool) string {
+	colorsInit()
+
 	var b bytes.Buffer
 	fmt.Fprintf(&b, "%susage: %s, but received ", colorBadOnBold, usage)
 
@@ -198,6 +210,7 @@ func BadUsage(usage string, param interface{}, pos int, kind bool) string {
 // the user he called a variadic function with too many
 // parameters. Typically used in a panic().
 func TooManyParams(usage string) string {
+	colorsInit()
 	return colorBadOnBold + "usage: " + usage + ", too many parameters" + colorBadOff
 }
 
@@ -249,6 +262,8 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 	if e == BooleanError {
 		return
 	}
+
+	colorsInit()
 
 	var writeEolPrefix func()
 	if prefix != "" {
