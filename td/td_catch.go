@@ -41,14 +41,11 @@ var _ TestDeep = &tdCatch{}
 // It is really useful when used with JSON operator and/or tdhttp helper.
 //
 //   var id int64
-//   if tdhttp.CmpJSONResponse(t,
-//     tdhttp.Post("/item", `{"name":"foo"}`),
-//     api.Handler,
-//     tdhttp.Response{
-//       Status: http.StatusCreated,
-//       Body: td.JSON(`{"id": $id, "name": "foo"}`,
-//         td.Tag("id", td.Catch(&id, td.Gt(0)))),
-//     }) {
+//   ta := tdhttp.NewTestAPI(t, api.Handler).
+//     PostJSON("/item", `{"name":"foo"}`).
+//     CmpStatus(http.StatusCreated).
+//     CmpJSONBody(td.JSON(`{"id": $1, "name": "foo"}`, td.Catch(&id, td.Gt(0))))
+//   if !ta.Failed() {
 //     t.Logf("Created record ID is %d", id)
 //   }
 //
