@@ -769,6 +769,18 @@ TESTDEEP_COLOR_OK=black:green \
 ```
 
 
+## https://play.golang.org/ does not handle colors, error output is nasty
+
+Just add this single line in playground:
+
+```go
+func init() { os.Setenv("TESTDEEP_COLOR", "off") }
+```
+
+Until playground supports [ANSI color escape
+sequences](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors).
+
+
 ## The `X` testing framework allows to test/do `Y` while go-testdeep not
 
 The [`Code`]({{< ref "Code" >}}) and [`Smuggle`]({{< ref "Smuggle" >}})
