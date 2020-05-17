@@ -14,14 +14,11 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
-	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
 
 func TestSetlocation(t *testing.T) {
-	defer ctxerr.SaveColorState()()
-
 //line /go-testdeep/types_test.go:10
 	tt := &tdutil.T{}
 	ok := td.Cmp(tt, 12, 13)

@@ -74,7 +74,7 @@ func Len(expectedLen interface{}) TestDeep {
 	if l.initLenCapBase(expectedLen) {
 		return &l
 	}
-	panic("usage: Len(TESTDEEP_OPERATOR|INT)")
+	panic(ctxerr.BadUsage("Len(TESTDEEP_OPERATOR|INT)", expectedLen, 1, true))
 }
 
 func (l *tdLen) String() string {
@@ -137,7 +137,7 @@ func Cap(expectedCap interface{}) TestDeep {
 	if c.initLenCapBase(expectedCap) {
 		return &c
 	}
-	panic("usage: Cap(TESTDEEP_OPERATOR|INT)")
+	panic(ctxerr.BadUsage("Cap(TESTDEEP_OPERATOR|INT)", expectedCap, 1, true))
 }
 
 func (c *tdCap) String() string {

@@ -96,12 +96,14 @@ func TestRe(t *testing.T) {
 
 	//
 	// Bad usage
-	const reUsage = "usage: Re("
-	test.CheckPanic(t, func() { td.Re(123) }, reUsage)
-	test.CheckPanic(t, func() { td.Re("bar", []string{}, 1) }, reUsage)
+	const up = "(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])"
+	test.CheckPanic(t, func() { td.Re(123) },
+		"usage: Re"+up+", but received int as 1st parameter")
+	test.CheckPanic(t, func() { td.Re("bar", []string{}, 1) },
+		"usage: Re"+up+", too many parameters")
 
-	const reAllUsage = "usage: ReAll("
-	test.CheckPanic(t, func() { td.ReAll(123, 456) }, reAllUsage)
+	test.CheckPanic(t, func() { td.ReAll(123, 456) },
+		"usage: ReAll"+up+", but received int as 1st parameter")
 }
 
 func TestReTypeBehind(t *testing.T) {

@@ -8,7 +8,6 @@ package ctxerr_test
 
 import (
 	"bytes"
-	"os"
 	"strings"
 	"testing"
 
@@ -26,16 +25,6 @@ func TestErrorSummary(t *testing.T) {
 	defer ctxerr.SaveColorState()()
 
 	colored := false
-	color := func(enable bool) {
-		colored = enable
-		if enable {
-			os.Setenv("TESTDEEP_COLOR", "on")
-		} else {
-			os.Setenv("TESTDEEP_COLOR", "off")
-		}
-		ctxerr.InitColors()
-	}
-
 	r := func(s string) string {
 		if s[0] == '\n' {
 			s = s[1:]
@@ -60,7 +49,7 @@ func TestErrorSummary(t *testing.T) {
 	}
 
 	for _, colored = range []bool{false, true} {
-		color(colored)
+		ctxerr.SaveColorState(colored)
 
 		//
 		// errorSummaryString

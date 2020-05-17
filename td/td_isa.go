@@ -49,7 +49,10 @@ var _ TestDeep = &tdIsa{}
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Isa(model interface{}) TestDeep {
-	modelType := reflect.ValueOf(model).Type()
+	modelType := reflect.TypeOf(model)
+	if modelType == nil {
+		panic(ctxerr.Bad("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example"))
+	}
 
 	return &tdIsa{
 		tdExpectedType: tdExpectedType{

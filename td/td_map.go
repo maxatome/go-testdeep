@@ -76,8 +76,8 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 		return &m
 	}
 
-	panic(fmt.Sprintf("usage: %s(MAP|&MAP, EXPECTED_ENTRIES)",
-		m.GetLocation().Func))
+	panic(ctxerr.BadUsage(m.GetLocation().Func+"(MAP|&MAP, EXPECTED_ENTRIES)",
+		model, 1, true))
 }
 
 func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflect.Value) {
@@ -97,8 +97,9 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 	for key, expectedValue := range entries {
 		vkey := reflect.ValueOf(key)
 		if !vkey.Type().AssignableTo(keyType) {
-			panic(fmt.Sprintf(
-				"expected key %s type mismatch: %s != model key type (%s)",
+			panic(ctxerr.Bad(
+				"%s(): expected key %s type mismatch: %s != model key type (%s)",
+				m.GetLocation().Func,
 				util.ToString(key),
 				vkey.Type(),
 				keyType))
@@ -110,8 +111,9 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 				reflect.Ptr, reflect.Slice:
 				entryInfo.expected = reflect.Zero(valueType) // change to a typed nil
 			default:
-				panic(fmt.Sprintf(
-					"expected key %s value cannot be nil as entries value type is %s",
+				panic(ctxerr.Bad(
+					"%s(): expected key %s value cannot be nil as entries value type is %s",
+					m.GetLocation().Func,
 					util.ToString(key),
 					valueType))
 			}
@@ -120,8 +122,9 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !entryInfo.expected.Type().AssignableTo(valueType) {
-					panic(fmt.Sprintf(
-						"expected key %s value type mismatch: %s != model key type (%s)",
+					panic(ctxerr.Bad(
+						"%s(): expected key %s value type mismatch: %s != model key type (%s)",
+						m.GetLocation().Func,
 						util.ToString(key),
 						entryInfo.expected.Type(),
 						valueType))
@@ -143,8 +146,10 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 		entryInfo.expected = v
 
 		if checkedEntries[k.Interface()] {
-			panic(fmt.Sprintf(
-				"%s entry exists in both model & expectedEntries", util.ToString(k)))
+			panic(ctxerr.Bad(
+				"%s(): %s entry exists in both model & expectedEntries",
+				m.GetLocation().Func,
+				util.ToString(k)))
 		}
 
 		entryInfo.key = k

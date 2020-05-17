@@ -137,7 +137,10 @@ func TestTruncTime(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.TruncTime("test") }, "usage: TruncTime(")
+	test.CheckPanic(t, func() { td.TruncTime("test") },
+		"usage: TruncTime(time.Time[, time.Duration]), 1st parameter must be time.Time or convertible to time.Time, but not string")
+	test.CheckPanic(t, func() { td.TruncTime(1, 2, 3) },
+		"usage: TruncTime(time.Time[, time.Duration]), too many parameters")
 }
 
 func TestTruncTimeTypeBehind(t *testing.T) {

@@ -23,6 +23,96 @@ func TestAssertionsAndRequirements(t *testing.T) {
 }
 ```
 
+
+## Why `nil` is handled so specifically?
+
+```golang
+var pn *int
+td.Cmp(t, pn, nil)
+```
+
+fails with the error ![error output](/images/faq-nil-colored-output.svg)
+
+And, yes, it is normal. (TL;DR use
+[`CmpNil`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNil)
+instead, safer, or use
+[`CmpLax`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpLax),
+but be careful of edge cases.)
+
+To understand why, look at the following examples:
+
+```golang
+var err error
+td.Cmp(t, err, nil)
+```
+
+works (and you want it works), but
+
+```golang
+var err error = (*MyError)(nil)
+td.Cmp(t, err, nil)
+```
+
+fails with the error
+![error output](/images/faq-error-nil-colored-output.svg)
+
+and in most cases you want it fails, because `err` is not nil! The
+pointer stored in the interface is nil, but not the interface itself.
+
+As [`Cmp`] `got` parameter type is `interface{}`, when you pass an
+interface variable in it (whatever the interface is), [`Cmp`] always
+receives an `interface{}`. So here, [`Cmp`] receives `(*MyError)(nil)`
+in the `got` interface, and not `error((*MyError)(nil))` ⇒ the `error`
+interface information is lost at the compilation time.
+
+In other words, [`Cmp`] has no abilities to tell the difference
+between `error((*MyError)(nil))` and `(*MyError)(nil)` when passed in
+`got` parameter.
+
+That is why [`Cmp`] is strict by default, and requires that nil be
+strongly typed, to be able to detect when a non-nil interface contains
+a nil pointer.
+
+So to recap:
+```golang
+var pn *int
+td.Cmp(t, pn, nil)               // fails as nil is not strongly typed
+td.Cmp(t, pn, (*int)(nil))       // succeeds
+td.Cmp(t, pn, td.Nil())          // succeeds
+td.CmpNil(t, pn)                 // succeeds
+td.Cmp(t, pn, td.Lax(nil))       // succeeds
+td.CmpLax(t, pn, nil)            // succeeds
+
+var err error
+td.Cmp(t, err, nil)              // succeeds
+td.Cmp(t, err, (*MyError)(nil))  // fails as err does not contain any value
+td.Cmp(t, err, td.Nil())         // succeeds
+td.CmpNil(t, err)                // succeeds
+td.Cmp(t, err, td.Lax(nil))      // succeeds
+td.CmpLax(t, err, nil)           // succeeds
+td.CmpError(t, err)              // fails as err is nil
+td.CmpNoError(t, err)            // succeeds
+
+err = (*MyError)(nil)
+td.Cmp(t, err, nil)              // fails as err contains a value
+td.Cmp(t, err, (*MyError)(nil))  // succeeds
+td.Cmp(t, err, td.Nil())         // succeeds
+td.CmpNil(t, err)                // succeeds
+td.Cmp(t, err, td.Lax(nil))      // succeeds *** /!\ be careful here! ***
+td.CmpLax(t, err, nil)           // succeeds *** /!\ be careful here! ***
+td.CmpError(t, err)              // succeeds
+td.CmpNoError(t, err)            // fails as err contains a value
+```
+
+Morality:
+- to compare a pointer against nil, use
+  [`CmpNil`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNil)
+  or strongly type nil (e.g. `(*int)(nil)`) in expected parameter of [`Cmp`];
+- to compare an error against nil, use
+  [`CmpNoError`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNoError)
+  or nil direcly in expected parameter of [`Cmp`].
+
+
 ## How does operator anchoring work?
 
 Take this struct, returned by a `GetPerson()` function:
@@ -767,6 +857,18 @@ TESTDEEP_COLOR_OK=black:green \
     TESTDEEP_COLOR_TITLE=yellow \
     go test
 ```
+
+
+## https://play.golang.org/ does not handle colors, error output is nasty
+
+Just add this single line in playground:
+
+```go
+func init() { os.Setenv("TESTDEEP_COLOR", "off") }
+```
+
+Until playground supports [ANSI color escape
+sequences](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors).
 
 
 ## The `X` testing framework allows to test/do `Y` while go-testdeep not

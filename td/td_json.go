@@ -13,6 +13,7 @@ import (
 	"io"
 	"io/ioutil"
 	"reflect"
+	"runtime"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -79,6 +80,36 @@ type tdJSON struct {
 
 var _ TestDeep = &tdJSON{}
 
+func jsonCaller() string {
+	var pc [30]uintptr
+
+	skip := 1
+	for {
+		n := runtime.Callers(skip, pc[:])
+		if n == 0 {
+			return "?"
+		}
+
+		frames := runtime.CallersFrames(pc[:n])
+		for {
+			frame, more := frames.Next()
+			switch {
+			case strings.HasSuffix(frame.Function, ".JSON"):
+				return "JSON"
+			case strings.HasSuffix(frame.Function, ".SubJSONOf"):
+				return "SubJSONOf"
+			case strings.HasSuffix(frame.Function, ".SuperJSONOf"):
+				return "SuperJSONOf"
+			}
+			if !more {
+				break
+			}
+		}
+
+		skip += n
+	}
+}
+
 func unmarshal(expectedJSON interface{}, target interface{}) {
 	var (
 		err error
@@ -93,7 +124,8 @@ func unmarshal(expectedJSON interface{}, target interface{}) {
 			// It could be a file name, try to read from it
 			b, err = ioutil.ReadFile(data)
 			if err != nil {
-				panic(fmt.Sprintf("JSON file %s cannot be read: %s", data, err))
+				panic(ctxerr.Bad("%s(): JSON file %s cannot be read: %s",
+					jsonCaller(), data, err))
 			}
 			break
 		}
@@ -105,16 +137,18 @@ func unmarshal(expectedJSON interface{}, target interface{}) {
 	case io.Reader:
 		b, err = ioutil.ReadAll(data)
 		if err != nil {
-			panic(fmt.Sprintf("JSON read error: %s", err))
+			panic(ctxerr.Bad("%s(): JSON read error: %s", jsonCaller(), err))
 		}
 
 	default:
-		panic("usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)")
+		panic(ctxerr.BadUsage(
+			jsonCaller()+"(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)",
+			expectedJSON, 1, false))
 	}
 
 	err = util.UnmarshalJSON(b, target)
 	if err != nil {
-		panic("JSON unmarshal error: " + err.Error())
+		panic(ctxerr.Bad("%s(): JSON unmarshal error: %s", jsonCaller(), err))
 	}
 }
 
@@ -134,7 +168,8 @@ func getTags(params []interface{}) (byTag map[string]*tdTag) {
 	for _, op := range params {
 		if tag, ok := op.(*tdTag); ok {
 			if byTag[tag.tag] != nil {
-				panic(`2 params have the same tag "` + tag.tag + `"`)
+				panic(ctxerr.Bad(`%s(): 2 params have the same tag "%s"`,
+					jsonCaller(), tag.tag))
 			}
 			if byTag == nil {
 				byTag = map[string]*tdTag{}
@@ -176,19 +211,19 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 			if firstRune >= '0' && firstRune <= '9' {
 				np, err := strconv.ParseUint(tv[1:], 10, 64)
 				if err != nil {
-					panic(fmt.Sprintf(
-						`JSON obj%s contains a bad numeric placeholder "%s"`,
-						path, tv))
+					panic(ctxerr.Bad(
+						`%s(): JSON obj%s contains a bad numeric placeholder "%s"`,
+						jsonCaller(), path, tv))
 				}
 				if np == 0 {
-					panic(fmt.Sprintf(
-						`JSON obj%s contains invalid numeric placeholder "%s", it should start at "$1"`,
-						path, tv))
+					panic(ctxerr.Bad(
+						`%s(): JSON obj%s contains invalid numeric placeholder "%s", it should start at "$1"`,
+						jsonCaller(), path, tv))
 				}
 				if np > uint64(len(params)) {
-					panic(fmt.Sprintf(
-						`JSON obj%s contains numeric placeholder "%s", but only %d params given`,
-						path, tv, len(params)))
+					panic(ctxerr.Bad(
+						`%s(): JSON obj%s contains numeric placeholder "%s", but only %d params given`,
+						jsonCaller(), path, tv, len(params)))
 				}
 				val := params[np-1]
 				if op, ok := val.(TestDeep); ok {
@@ -206,8 +241,9 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 			if firstRune == '^' {
 				fn := jsonOpShortcuts[tv[2:]]
 				if fn == nil {
-					panic(fmt.Sprintf(`JSON obj%s contains a bad operator shortcut "%s"`,
-						path, tv))
+					panic(ctxerr.Bad(
+						`%s(): JSON obj%s contains a bad operator shortcut "%s"`,
+						jsonCaller(), path, tv))
 				}
 
 				*v = &tdJSONPlaceholder{
@@ -220,13 +256,14 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 			// Test for $tag
 			err := util.CheckTag(tv[1:])
 			if err != nil {
-				panic(fmt.Sprintf(`JSON obj%s contains a bad placeholder "%s"`,
-					path, tv))
+				panic(ctxerr.Bad(`%s(): JSON obj%s contains a bad placeholder "%s"`,
+					jsonCaller(), path, tv))
 			}
 			op := byTag[tv[1:]]
 			if op == nil {
-				panic(fmt.Sprintf(`JSON obj%s contains a unknown placeholder "%s"`,
-					path, tv))
+				panic(ctxerr.Bad(
+					`%s(): JSON obj%s contains a unknown placeholder "%s"`,
+					jsonCaller(), path, tv))
 			}
 			*v = &tdJSONPlaceholder{
 				TestDeep: op,
@@ -618,7 +655,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 
 	_, ok := v.(map[string]interface{})
 	if !ok {
-		panic("SubJSONOf only accepts JSON objects {…}")
+		panic(ctxerr.Bad("SubJSONOf() only accepts JSON objects {…}"))
 	}
 
 	m := tdMapJSON{
@@ -775,7 +812,7 @@ func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 
 	_, ok := v.(map[string]interface{})
 	if !ok {
-		panic("SuperJSONOf only accepts JSON objects {…}")
+		panic(ctxerr.Bad("SuperJSONOf() only accepts JSON objects {…}"))
 	}
 
 	m := tdMapJSON{

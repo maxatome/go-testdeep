@@ -87,11 +87,11 @@ func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 		expectedMax: reflect.ValueOf(to),
 	}
 
-	const usage = "usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND])"
+	const usage = "Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND])"
 
 	if len(bounds) > 0 {
 		if len(bounds) > 1 {
-			panic(usage)
+			panic(ctxerr.TooManyParams(usage))
 		}
 
 		if bounds[0] == BoundsInIn || bounds[0] == BoundsInOut {
@@ -111,7 +111,10 @@ func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 	}
 
 	if b.expectedMax.Type() != b.expectedMin.Type() {
-		panic("from and to params must have the same type")
+		panic(ctxerr.Bad("Between(FROM, TO): FROM and TO must have the same type: %s ≠ %s",
+			b.expectedMin.Type(),
+			b.expectedMax.Type(),
+		))
 	}
 
 	return b.initBetween(usage)
@@ -175,7 +178,7 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 
 		return &bt
 	}
-	panic(usage)
+	panic(ctxerr.BadUsage(usage, b.expectedMin.Interface(), 1, true))
 }
 
 func (b *tdBetween) nInt(tolerance reflect.Value) {
@@ -253,26 +256,28 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 		maxBound:    boundIn,
 	}
 
-	const usage = "usage: N({,U}INT{,8,16,32,64}|FLOAT{32,64}[, TOLERANCE])"
+	const usage = "N({,U}INT{,8,16,32,64}|FLOAT{32,64}[, TOLERANCE])"
 
 	switch n.expectedMin.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
 		reflect.Float32, reflect.Float64:
 	default:
-		panic(usage)
+		panic(ctxerr.BadUsage(usage, num, 1, true))
 	}
 
 	n.expectedMax = n.expectedMin
 
 	if len(tolerance) > 0 {
 		if len(tolerance) > 1 {
-			panic(usage)
+			panic(ctxerr.TooManyParams(usage))
 		}
 
 		tol := reflect.ValueOf(tolerance[0])
 		if tol.Type() != n.expectedMin.Type() {
-			panic("tolerance param must have the same type as num one")
+			panic(ctxerr.Bad(
+				"N(NUM, TOLERANCE): NUM and TOLERANCE must have the same type: %s ≠ %s",
+				n.expectedMin.Type(), tol.Type()))
 		}
 
 		switch tol.Kind() {

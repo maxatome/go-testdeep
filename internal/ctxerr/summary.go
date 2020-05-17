@@ -40,6 +40,8 @@ var _ ErrorSummary = ErrorSummaryItem{}
 
 // AppendSummary implements the ErrorSummary interface.
 func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
+	colorsInit()
+
 	buf.WriteString(prefix)
 	buf.WriteString(colorBadOnBold)
 	buf.WriteString(s.Label)
@@ -91,6 +93,8 @@ type errorSummaryString string
 var _ ErrorSummary = errorSummaryString("")
 
 func (s errorSummaryString) AppendSummary(buf *bytes.Buffer, prefix string) {
+	colorsInit()
+
 	buf.WriteString(prefix)
 	buf.WriteString(colorBadOn)
 	util.IndentStringIn(buf, string(s), prefix)

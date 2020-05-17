@@ -64,7 +64,7 @@ func Keys(val interface{}) TestDeep {
 	if k.initKVBase(val) {
 		return &k
 	}
-	panic("usage: Keys(TESTDEEP_OPERATOR|SLICE)")
+	panic(ctxerr.BadUsage("Keys(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
 }
 
 func (k *tdKeys) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -123,7 +123,7 @@ func Values(val interface{}) TestDeep {
 	if v.initKVBase(val) {
 		return &v
 	}
-	panic("usage: Values(TESTDEEP_OPERATOR|SLICE)")
+	panic(ctxerr.BadUsage("Values(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
 }
 
 func (v *tdValues) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

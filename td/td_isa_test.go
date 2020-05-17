@@ -99,6 +99,11 @@ func TestIsa(t *testing.T) {
 		})
 
 	//
+	// Bad usage
+	test.CheckPanic(t, func() { td.Isa(nil) },
+		"Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example")
+
+	//
 	// String
 	test.EqualStr(t, td.Isa((*MyStruct)(nil)).String(),
 		"*td_test.MyStruct")

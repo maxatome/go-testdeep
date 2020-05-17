@@ -16,26 +16,29 @@ home = [ "HTML", "RSS", "JSON"]
   themeVariant = "green"
   disableInlineCopyToClipBoard = true
 
+[minify.tdewolff.html]
+keepWhitespace=true
+
 [[menu.shortcuts]]
-name = "<i class='fab fa-github'></i> Github repo"
+name = "<i class='fab fa-github'></i>&nbsp;Github repo"
 identifier = "ds"
 url = "https://github.com/maxatome/go-testdeep"
 weight = 10
 
 [[menu.shortcuts]]
-name = "<i class='fas fa-book'></i> godoc"
+name = "<i class='fas fa-book'></i>&nbsp;godoc"
 identifier = "godoc"
 url = "https://pkg.go.dev/github.com/maxatome/go-testdeep/td"
 weight = 15
 
 [[menu.shortcuts]]
-name = "<i class='fas fa-book'></i> godoc API tester — tdhttp"
+name = "<i class='fas fa-book'></i>&nbsp;godoc API tester — tdhttp"
 identifier = "godoc-tdhttp"
 url = "https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp"
 weight = 20
 
 [[menu.shortcuts]]
-name = "<i class='fas fa-book'></i> godoc helpers utils — tdutil"
+name = "<i class='fas fa-book'></i>&nbsp;godoc helpers utils — tdutil"
 identifier = "godoc-tdutil"
 url = "https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil"
 weight = 25

@@ -238,22 +238,24 @@ func TestStruct(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Struct("test", nil) }, "usage: Struct")
+	test.CheckPanic(t, func() { td.Struct("test", nil) },
+		"usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter")
 
 	i := 12
-	test.CheckPanic(t, func() { td.Struct(&i, nil) }, "usage: Struct")
+	test.CheckPanic(t, func() { td.Struct(&i, nil) },
+		"usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter")
 
 	test.CheckPanic(t,
 		func() { td.Struct(&MyStruct{}, td.StructFields{"UnknownField": 123}) },
-		"struct td_test.MyStruct has no field `UnknownField'")
+		"Struct(): struct td_test.MyStruct has no field `UnknownField'")
 
 	test.CheckPanic(t,
 		func() { td.Struct(&MyStruct{}, td.StructFields{"ValBool": 123}) },
-		"type int of field expected value ValBool differs from struct one (bool)")
+		"Struct(): type int of field expected value ValBool differs from struct one (bool)")
 
 	test.CheckPanic(t,
 		func() { td.Struct(&MyStruct{}, td.StructFields{"ValBool": nil}) },
-		"expected value of field ValBool cannot be nil as it is a bool")
+		"Struct(): expected value of field ValBool cannot be nil as it is a bool")
 
 	test.CheckPanic(t,
 		func() {
@@ -266,7 +268,7 @@ func TestStruct(t *testing.T) {
 			},
 				td.StructFields{"ValBool": false})
 		},
-		"non zero field ValBool in model already exists in expectedFields")
+		"Struct(): non zero field ValBool in model already exists in expectedFields")
 
 	//
 	// String
@@ -692,22 +694,24 @@ func TestSStruct(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.SStruct("test", nil) }, "usage: SStruct")
+	test.CheckPanic(t, func() { td.SStruct("test", nil) },
+		"usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter")
 
 	i := 12
-	test.CheckPanic(t, func() { td.SStruct(&i, nil) }, "usage: SStruct")
+	test.CheckPanic(t, func() { td.SStruct(&i, nil) },
+		"usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter")
 
 	test.CheckPanic(t,
 		func() { td.SStruct(&MyStruct{}, td.StructFields{"UnknownField": 123}) },
-		"struct td_test.MyStruct has no field `UnknownField'")
+		"SStruct(): struct td_test.MyStruct has no field `UnknownField'")
 
 	test.CheckPanic(t,
 		func() { td.SStruct(&MyStruct{}, td.StructFields{"ValBool": 123}) },
-		"type int of field expected value ValBool differs from struct one (bool)")
+		"SStruct(): type int of field expected value ValBool differs from struct one (bool)")
 
 	test.CheckPanic(t,
 		func() { td.SStruct(&MyStruct{}, td.StructFields{"ValBool": nil}) },
-		"expected value of field ValBool cannot be nil as it is a bool")
+		"SStruct(): expected value of field ValBool cannot be nil as it is a bool")
 
 	test.CheckPanic(t,
 		func() {
@@ -720,7 +724,7 @@ func TestSStruct(t *testing.T) {
 			},
 				td.StructFields{"ValBool": false})
 		},
-		"non zero field ValBool in model already exists in expectedFields")
+		"SStruct(): non zero field ValBool in model already exists in expectedFields")
 
 	//
 	// String

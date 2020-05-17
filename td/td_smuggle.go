@@ -298,20 +298,20 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 	case reflect.String:
 		fn, err := buildStructFieldFn(vfn.String())
 		if err != nil {
-			panic(usage + ": " + err.Error())
+			panic(ctxerr.Bad("%s: %s", usage, err))
 		}
 		vfn = reflect.ValueOf(fn)
 
 	case reflect.Func:
-		// nothing to do check
+		// nothing to check
 
 	default:
-		panic("usage: " + usage)
+		panic(ctxerr.BadUsage(usage, fn, 1, true))
 	}
 
 	fnType := vfn.Type()
 	if fnType.IsVariadic() || fnType.NumIn() != 1 {
-		panic(usage + ": FUNC must take only one argument")
+		panic(ctxerr.Bad(usage + ": FUNC must take only one non-variadic argument"))
 	}
 
 	switch fnType.NumOut() {
@@ -343,8 +343,8 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 		return &s
 	}
 
-	panic(usage +
-		": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)")
+	panic(ctxerr.Bad(
+		": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"))
 }
 
 func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {

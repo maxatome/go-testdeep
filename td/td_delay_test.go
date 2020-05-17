@@ -44,7 +44,8 @@ func TestDelay(t *testing.T) {
 		})
 
 	// Bad usage
-	test.CheckPanic(t, func() { td.Delay(nil) }, "delayed param must be non-nil")
+	test.CheckPanic(t, func() { td.Delay(nil) },
+		"Delay(DELAYED): DELAYED must be non-nil")
 }
 
 func TestDelayTypeBehind(t *testing.T) {

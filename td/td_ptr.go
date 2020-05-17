@@ -53,7 +53,7 @@ func Ptr(val interface{}) TestDeep {
 		}
 		return &p
 	}
-	panic("usage: Ptr(NON_NIL_VALUE)")
+	panic(ctxerr.BadUsage("Ptr(NON_NIL_VALUE)", val, 1, true))
 }
 
 func (p *tdPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -144,7 +144,7 @@ func PPtr(val interface{}) TestDeep {
 		}
 		return &p
 	}
-	panic("usage: PPtr(NON_NIL_VALUE)")
+	panic(ctxerr.BadUsage("PPtr(NON_NIL_VALUE)", val, 1, true))
 }
 
 func (p *tdPPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

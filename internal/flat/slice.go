@@ -19,7 +19,7 @@ type Slice struct {
 // isFlat returns true if no flat.Slice items can be contained in
 // f.Slice, so this Slice is already flattened.
 func (f Slice) isFlat() bool {
-	t := reflect.ValueOf(f.Slice).Type().Elem()
+	t := reflect.TypeOf(f.Slice).Elem()
 	return t != SliceType && t.Kind() != reflect.Interface
 }
 
