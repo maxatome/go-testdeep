@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="488.00871"
+     inkscape:cx="264.765"
      inkscape:cy="47.299063"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -35,10 +35,10 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1364"
-     inkscape:window-height="740"
+     inkscape:window-width="1918"
+     inkscape:window-height="1052"
      inkscape:window-x="0"
-     inkscape:window-y="1080"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata99">
@@ -119,6 +119,6 @@
          x="-30.864933"
          y="118.93869"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:6px;font-family:monospace;-inkscape-font-specification:monospace;fill:#ffffff;stroke-width:0.26458332px"
-         id="tspan903">    [under TestDeep operator Struct at client.go:451]</tspan></text>
+         id="tspan903">    [under TestDeep operator Struct at client_test.go:451]</tspan></text>
   </g>
 </svg>

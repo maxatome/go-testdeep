@@ -1,8 +1,477 @@
-<!doctype html><html lang=en class="js csstransforms3d"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.69.2"><meta name=description content><link rel=icon href=/images/favicon.png type=image/png><title>Basic go-testdeep approach :: go-testdeep</title><link href=/css/nucleus.css?1588458732 rel=stylesheet><link href=/css/fontawesome-all.min.css?1588458732 rel=stylesheet><link href=/css/hybrid.css?1588458732 rel=stylesheet><link href=/css/featherlight.min.css?1588458732 rel=stylesheet><link href=/css/perfect-scrollbar.min.css?1588458732 rel=stylesheet><link href=/css/auto-complete.css?1588458732 rel=stylesheet><link href=/css/atom-one-dark-reasonable.css?1588458732 rel=stylesheet><link href=/css/theme.css?1588458732 rel=stylesheet><link href=/css/hugo-theme.css?1588458732 rel=stylesheet><link href=/css/theme-green.css?1588458732 rel=stylesheet><script src=/js/jquery-3.3.1.min.js?1588458732></script><style>:root #header+#content>#left>#rlblock_left{display:none!important}:not(pre)>code+span.copy-to-clipboard{display:none}</style><meta name=google-site-verification content="I15BdfDU61eURsp8IywfU9hV8Rygaa4JsH-U8kKAxVs"><style type=text/css>#body-inner pre{white-space:pre}</style></head><body data-url=/example/basic-testdeep/><nav id=sidebar><div id=header-wrapper><div id=header><a id=logo href=https://go-testdeep.zetta.rocks/><img src=https://go-testdeep.zetta.rocks//images/logo.svg></a></div><div class=searchbox><label for=search-by><i class="fas fa-search"></i></label><input data-search-input id=search-by type=search placeholder=Search...>
-<span data-search-clear><i class="fas fa-times"></i></span></div><script type=text/javascript src=/js/lunr.min.js?1588458732></script><script type=text/javascript src=/js/auto-complete.js?1588458732></script><script type=text/javascript>var baseurl="https:\/\/go-testdeep.zetta.rocks\/";</script><script type=text/javascript src=/js/search.js?1588458732></script></div><div class=highlightable><ul class=topics><li data-nav-id=/introduction/ title=Introduction class=dd-item><a href=/introduction/>Introduction</a></li><li data-nav-id=/example/ title=Example class="dd-item
-parent"><a href=/example/>Example</a><ul><li data-nav-id=/example/using-testing/ title="Using testing package" class=dd-item><a href=/example/using-testing/>Using testing package</a></li><li data-nav-id=/example/basic-testdeep/ title="Basic go-testdeep approach" class="dd-item active"><a href=/example/basic-testdeep/>Basic go-testdeep approach</a></li><li data-nav-id=/example/advanced-testdeep/ title="Advanced go-testdeep technique" class=dd-item><a href=/example/advanced-testdeep/>Advanced go-testdeep technique</a></li><li data-nav-id=/example/td-cmp-shortcuts/ title="go-testdeep Cmp shortcuts" class=dd-item><a href=/example/td-cmp-shortcuts/>go-testdeep Cmp shortcuts</a></li><li data-nav-id=/example/td-t/ title="td.T type" class=dd-item><a href=/example/td-t/>td.T type</a></li><li data-nav-id=/example/anchoring/ title="Using anchoring" class=dd-item><a href=/example/anchoring/>Using anchoring</a></li></ul></li><li data-nav-id=/functions/ title=Functions class=dd-item><a href=/functions/>Functions</a><ul><li data-nav-id=/functions/td-t/ title=td.T class=dd-item><a href=/functions/td-t/>td.T</a></li></ul></li><li data-nav-id=/operators/ title=Operators class=dd-item><a href=/operators/>Operators</a><ul><li data-nav-id=/operators/matrix/ title="Operators matrices" class=dd-item><a href=/operators/matrix/>Operators matrices</a></li><li data-nav-id=/operators/all/ title=All class=dd-item><a href=/operators/all/>All</a></li><li data-nav-id=/operators/any/ title=Any class=dd-item><a href=/operators/any/>Any</a></li><li data-nav-id=/operators/array/ title=Array class=dd-item><a href=/operators/array/>Array</a></li><li data-nav-id=/operators/arrayeach/ title=ArrayEach class=dd-item><a href=/operators/arrayeach/>ArrayEach</a></li><li data-nav-id=/operators/bag/ title=Bag class=dd-item><a href=/operators/bag/>Bag</a></li><li data-nav-id=/operators/between/ title=Between class=dd-item><a href=/operators/between/>Between</a></li><li data-nav-id=/operators/cap/ title=Cap class=dd-item><a href=/operators/cap/>Cap</a></li><li data-nav-id=/operators/catch/ title=Catch class=dd-item><a href=/operators/catch/>Catch</a></li><li data-nav-id=/operators/code/ title=Code class=dd-item><a href=/operators/code/>Code</a></li><li data-nav-id=/operators/contains/ title=Contains class=dd-item><a href=/operators/contains/>Contains</a></li><li data-nav-id=/operators/containskey/ title=ContainsKey class=dd-item><a href=/operators/containskey/>ContainsKey</a></li><li data-nav-id=/operators/delay/ title=Delay class=dd-item><a href=/operators/delay/>Delay</a></li><li data-nav-id=/operators/empty/ title=Empty class=dd-item><a href=/operators/empty/>Empty</a></li><li data-nav-id=/operators/gt/ title=Gt class=dd-item><a href=/operators/gt/>Gt</a></li><li data-nav-id=/operators/gte/ title=Gte class=dd-item><a href=/operators/gte/>Gte</a></li><li data-nav-id=/operators/hasprefix/ title=HasPrefix class=dd-item><a href=/operators/hasprefix/>HasPrefix</a></li><li data-nav-id=/operators/hassuffix/ title=HasSuffix class=dd-item><a href=/operators/hassuffix/>HasSuffix</a></li><li data-nav-id=/operators/ignore/ title=Ignore class=dd-item><a href=/operators/ignore/>Ignore</a></li><li data-nav-id=/operators/isa/ title=Isa class=dd-item><a href=/operators/isa/>Isa</a></li><li data-nav-id=/operators/json/ title=JSON class=dd-item><a href=/operators/json/>JSON</a></li><li data-nav-id=/operators/keys/ title=Keys class=dd-item><a href=/operators/keys/>Keys</a></li><li data-nav-id=/operators/lax/ title=Lax class=dd-item><a href=/operators/lax/>Lax</a></li><li data-nav-id=/operators/len/ title=Len class=dd-item><a href=/operators/len/>Len</a></li><li data-nav-id=/operators/lt/ title=Lt class=dd-item><a href=/operators/lt/>Lt</a></li><li data-nav-id=/operators/lte/ title=Lte class=dd-item><a href=/operators/lte/>Lte</a></li><li data-nav-id=/operators/map/ title=Map class=dd-item><a href=/operators/map/>Map</a></li><li data-nav-id=/operators/mapeach/ title=MapEach class=dd-item><a href=/operators/mapeach/>MapEach</a></li><li data-nav-id=/operators/n/ title=N class=dd-item><a href=/operators/n/>N</a></li><li data-nav-id=/operators/nan/ title=NaN class=dd-item><a href=/operators/nan/>NaN</a></li><li data-nav-id=/operators/nil/ title=Nil class=dd-item><a href=/operators/nil/>Nil</a></li><li data-nav-id=/operators/none/ title=None class=dd-item><a href=/operators/none/>None</a></li><li data-nav-id=/operators/not/ title=Not class=dd-item><a href=/operators/not/>Not</a></li><li data-nav-id=/operators/notany/ title=NotAny class=dd-item><a href=/operators/notany/>NotAny</a></li><li data-nav-id=/operators/notempty/ title=NotEmpty class=dd-item><a href=/operators/notempty/>NotEmpty</a></li><li data-nav-id=/operators/notnan/ title=NotNaN class=dd-item><a href=/operators/notnan/>NotNaN</a></li><li data-nav-id=/operators/notnil/ title=NotNil class=dd-item><a href=/operators/notnil/>NotNil</a></li><li data-nav-id=/operators/notzero/ title=NotZero class=dd-item><a href=/operators/notzero/>NotZero</a></li><li data-nav-id=/operators/pptr/ title=PPtr class=dd-item><a href=/operators/pptr/>PPtr</a></li><li data-nav-id=/operators/ptr/ title=Ptr class=dd-item><a href=/operators/ptr/>Ptr</a></li><li data-nav-id=/operators/re/ title=Re class=dd-item><a href=/operators/re/>Re</a></li><li data-nav-id=/operators/reall/ title=ReAll class=dd-item><a href=/operators/reall/>ReAll</a></li><li data-nav-id=/operators/set/ title=Set class=dd-item><a href=/operators/set/>Set</a></li><li data-nav-id=/operators/shallow/ title=Shallow class=dd-item><a href=/operators/shallow/>Shallow</a></li><li data-nav-id=/operators/slice/ title=Slice class=dd-item><a href=/operators/slice/>Slice</a></li><li data-nav-id=/operators/smuggle/ title=Smuggle class=dd-item><a href=/operators/smuggle/>Smuggle</a></li><li data-nav-id=/operators/sstruct/ title=SStruct class=dd-item><a href=/operators/sstruct/>SStruct</a></li><li data-nav-id=/operators/string/ title=String class=dd-item><a href=/operators/string/>String</a></li><li data-nav-id=/operators/struct/ title=Struct class=dd-item><a href=/operators/struct/>Struct</a></li><li data-nav-id=/operators/subbagof/ title=SubBagOf class=dd-item><a href=/operators/subbagof/>SubBagOf</a></li><li data-nav-id=/operators/subjsonof/ title=SubJSONOf class=dd-item><a href=/operators/subjsonof/>SubJSONOf</a></li><li data-nav-id=/operators/submapof/ title=SubMapOf class=dd-item><a href=/operators/submapof/>SubMapOf</a></li><li data-nav-id=/operators/subsetof/ title=SubSetOf class=dd-item><a href=/operators/subsetof/>SubSetOf</a></li><li data-nav-id=/operators/superbagof/ title=SuperBagOf class=dd-item><a href=/operators/superbagof/>SuperBagOf</a></li><li data-nav-id=/operators/superjsonof/ title=SuperJSONOf class=dd-item><a href=/operators/superjsonof/>SuperJSONOf</a></li><li data-nav-id=/operators/supermapof/ title=SuperMapOf class=dd-item><a href=/operators/supermapof/>SuperMapOf</a></li><li data-nav-id=/operators/supersetof/ title=SuperSetOf class=dd-item><a href=/operators/supersetof/>SuperSetOf</a></li><li data-nav-id=/operators/tag/ title=Tag class=dd-item><a href=/operators/tag/>Tag</a></li><li data-nav-id=/operators/trunctime/ title=TruncTime class=dd-item><a href=/operators/trunctime/>TruncTime</a></li><li data-nav-id=/operators/values/ title=Values class=dd-item><a href=/operators/values/>Values</a></li><li data-nav-id=/operators/zero/ title=Zero class=dd-item><a href=/operators/zero/>Zero</a></li></ul></li><li data-nav-id=/helpers/ title=Helpers class=dd-item><a href=/helpers/>Helpers</a></li><li data-nav-id=/faq/ title=FAQ class=dd-item><a href=/faq/>FAQ</a></li></ul><section id=shortcuts><h3>More</h3><ul><li><a class=padding href=https://github.com/maxatome/go-testdeep><i class="fab fa-github"></i>Github repo</a></li><li><a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td><i class="fas fa-book"></i>godoc</a></li><li><a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp><i class="fas fa-book"></i>godoc API tester — tdhttp</a></li><li><a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil><i class="fas fa-book"></i>godoc helpers utils — tdutil</a></li></ul></section><section id=footer><p>Built with <a href=https://github.com/matcornic/hugo-theme-learn><i class="fas fa-heart"></i></a>from <a href=https://getgrav.org>Grav</a> and <a href=https://gohugo.io/>Hugo</a></p></section></div></nav><section id=body><div id=overlay></div><div class="padding highlightable"><div><div id=top-bar><div id=breadcrumbs itemscope itemtype=http://schema.org/BreadcrumbList><span id=sidebar-toggle-span><a href=# id=sidebar-toggle data-sidebar-toggle><i class="fas fa-bars"></i></a></span><span id=toc-menu><i class="fas fa-list-alt"></i></span><span class=links><span itemscope itemprop=itemListElement itemtype=http://schema.org/ListItem><a itemprop=item href=/><span itemprop=name>go-testdeep</span><meta itemprop=position content="1"></a></span>> <span itemscope itemprop=itemListElement itemtype=http://schema.org/ListItem><a itemprop=item href=/example/><span itemprop=name>Example</span><meta itemprop=position content="2"></a></span>> Basic go-testdeep approach</span></div><div class=progress><div class=wrapper><nav id=TableOfContents></nav></div></div></div></div><div id=head-tags></div><div id=body-inner><h1>Basic go-testdeep approach</h1><p><a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td><code>td</code> package</a>,
+<!doctype html><html lang=en class="js csstransforms3d">
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=generator content="Hugo 0.70.0">
+<meta name=description content>
+<link rel=icon href=/images/favicon.png type=image/png>
+<title>Basic go-testdeep approach :: go-testdeep</title>
+<link href=/css/nucleus.css?1589705003 rel=stylesheet>
+<link href=/css/fontawesome-all.min.css?1589705003 rel=stylesheet>
+<link href=/css/hybrid.css?1589705003 rel=stylesheet>
+<link href=/css/featherlight.min.css?1589705003 rel=stylesheet>
+<link href=/css/perfect-scrollbar.min.css?1589705003 rel=stylesheet>
+<link href=/css/auto-complete.css?1589705003 rel=stylesheet>
+<link href=/css/atom-one-dark-reasonable.css?1589705003 rel=stylesheet>
+<link href=/css/theme.css?1589705003 rel=stylesheet>
+<link href=/css/hugo-theme.css?1589705003 rel=stylesheet>
+<link href=/css/theme-green.css?1589705003 rel=stylesheet>
+<script src=/js/jquery-3.3.1.min.js?1589705003></script>
+<style>:root #header+#content>#left>#rlblock_left{display:none!important}:not(pre)>code+span.copy-to-clipboard{display:none}</style>
+<meta name=google-site-verification content="I15BdfDU61eURsp8IywfU9hV8Rygaa4JsH-U8kKAxVs">
+<style type=text/css>#body-inner pre{white-space:pre}</style>
+</head>
+<body data-url=/example/basic-testdeep/>
+<nav id=sidebar>
+<div id=header-wrapper>
+<div id=header>
+<a id=logo href=https://go-testdeep.zetta.rocks/><img src=https://go-testdeep.zetta.rocks//images/logo.svg></a>
+</div>
+<div class=searchbox>
+<label for=search-by><i class="fas fa-search"></i></label>
+<input data-search-input id=search-by type=search placeholder=Search...>
+<span data-search-clear><i class="fas fa-times"></i></span>
+</div>
+<script type=text/javascript src=/js/lunr.min.js?1589705003></script>
+<script type=text/javascript src=/js/auto-complete.js?1589705003></script>
+<script type=text/javascript>var baseurl="https:\/\/go-testdeep.zetta.rocks\/";</script>
+<script type=text/javascript src=/js/search.js?1589705003></script>
+</div>
+<div class=highlightable>
+<ul class=topics>
+<li data-nav-id=/introduction/ title=Introduction class=dd-item>
+<a href=/introduction/>
+Introduction
+</a>
+</li>
+<li data-nav-id=/example/ title=Example class="dd-item
+parent">
+<a href=/example/>
+Example
+</a>
+<ul>
+<li data-nav-id=/example/using-testing/ title="Using testing package" class=dd-item>
+<a href=/example/using-testing/>
+Using testing package
+</a>
+</li>
+<li data-nav-id=/example/basic-testdeep/ title="Basic go-testdeep approach" class="dd-item active">
+<a href=/example/basic-testdeep/>
+Basic go-testdeep approach
+</a>
+</li>
+<li data-nav-id=/example/advanced-testdeep/ title="Advanced go-testdeep technique" class=dd-item>
+<a href=/example/advanced-testdeep/>
+Advanced go-testdeep technique
+</a>
+</li>
+<li data-nav-id=/example/td-cmp-shortcuts/ title="go-testdeep Cmp shortcuts" class=dd-item>
+<a href=/example/td-cmp-shortcuts/>
+go-testdeep Cmp shortcuts
+</a>
+</li>
+<li data-nav-id=/example/td-t/ title="td.T type" class=dd-item>
+<a href=/example/td-t/>
+td.T type
+</a>
+</li>
+<li data-nav-id=/example/anchoring/ title="Using anchoring" class=dd-item>
+<a href=/example/anchoring/>
+Using anchoring
+</a>
+</li>
+</ul>
+</li>
+<li data-nav-id=/functions/ title=Functions class=dd-item>
+<a href=/functions/>
+Functions
+</a>
+<ul>
+<li data-nav-id=/functions/td-t/ title=td.T class=dd-item>
+<a href=/functions/td-t/>
+td.T
+</a>
+</li>
+</ul>
+</li>
+<li data-nav-id=/operators/ title=Operators class=dd-item>
+<a href=/operators/>
+Operators
+</a>
+<ul>
+<li data-nav-id=/operators/matrix/ title="Operators matrices" class=dd-item>
+<a href=/operators/matrix/>
+Operators matrices
+</a>
+</li>
+<li data-nav-id=/operators/all/ title=All class=dd-item>
+<a href=/operators/all/>
+All
+</a>
+</li>
+<li data-nav-id=/operators/any/ title=Any class=dd-item>
+<a href=/operators/any/>
+Any
+</a>
+</li>
+<li data-nav-id=/operators/array/ title=Array class=dd-item>
+<a href=/operators/array/>
+Array
+</a>
+</li>
+<li data-nav-id=/operators/arrayeach/ title=ArrayEach class=dd-item>
+<a href=/operators/arrayeach/>
+ArrayEach
+</a>
+</li>
+<li data-nav-id=/operators/bag/ title=Bag class=dd-item>
+<a href=/operators/bag/>
+Bag
+</a>
+</li>
+<li data-nav-id=/operators/between/ title=Between class=dd-item>
+<a href=/operators/between/>
+Between
+</a>
+</li>
+<li data-nav-id=/operators/cap/ title=Cap class=dd-item>
+<a href=/operators/cap/>
+Cap
+</a>
+</li>
+<li data-nav-id=/operators/catch/ title=Catch class=dd-item>
+<a href=/operators/catch/>
+Catch
+</a>
+</li>
+<li data-nav-id=/operators/code/ title=Code class=dd-item>
+<a href=/operators/code/>
+Code
+</a>
+</li>
+<li data-nav-id=/operators/contains/ title=Contains class=dd-item>
+<a href=/operators/contains/>
+Contains
+</a>
+</li>
+<li data-nav-id=/operators/containskey/ title=ContainsKey class=dd-item>
+<a href=/operators/containskey/>
+ContainsKey
+</a>
+</li>
+<li data-nav-id=/operators/delay/ title=Delay class=dd-item>
+<a href=/operators/delay/>
+Delay
+</a>
+</li>
+<li data-nav-id=/operators/empty/ title=Empty class=dd-item>
+<a href=/operators/empty/>
+Empty
+</a>
+</li>
+<li data-nav-id=/operators/gt/ title=Gt class=dd-item>
+<a href=/operators/gt/>
+Gt
+</a>
+</li>
+<li data-nav-id=/operators/gte/ title=Gte class=dd-item>
+<a href=/operators/gte/>
+Gte
+</a>
+</li>
+<li data-nav-id=/operators/hasprefix/ title=HasPrefix class=dd-item>
+<a href=/operators/hasprefix/>
+HasPrefix
+</a>
+</li>
+<li data-nav-id=/operators/hassuffix/ title=HasSuffix class=dd-item>
+<a href=/operators/hassuffix/>
+HasSuffix
+</a>
+</li>
+<li data-nav-id=/operators/ignore/ title=Ignore class=dd-item>
+<a href=/operators/ignore/>
+Ignore
+</a>
+</li>
+<li data-nav-id=/operators/isa/ title=Isa class=dd-item>
+<a href=/operators/isa/>
+Isa
+</a>
+</li>
+<li data-nav-id=/operators/json/ title=JSON class=dd-item>
+<a href=/operators/json/>
+JSON
+</a>
+</li>
+<li data-nav-id=/operators/keys/ title=Keys class=dd-item>
+<a href=/operators/keys/>
+Keys
+</a>
+</li>
+<li data-nav-id=/operators/lax/ title=Lax class=dd-item>
+<a href=/operators/lax/>
+Lax
+</a>
+</li>
+<li data-nav-id=/operators/len/ title=Len class=dd-item>
+<a href=/operators/len/>
+Len
+</a>
+</li>
+<li data-nav-id=/operators/lt/ title=Lt class=dd-item>
+<a href=/operators/lt/>
+Lt
+</a>
+</li>
+<li data-nav-id=/operators/lte/ title=Lte class=dd-item>
+<a href=/operators/lte/>
+Lte
+</a>
+</li>
+<li data-nav-id=/operators/map/ title=Map class=dd-item>
+<a href=/operators/map/>
+Map
+</a>
+</li>
+<li data-nav-id=/operators/mapeach/ title=MapEach class=dd-item>
+<a href=/operators/mapeach/>
+MapEach
+</a>
+</li>
+<li data-nav-id=/operators/n/ title=N class=dd-item>
+<a href=/operators/n/>
+N
+</a>
+</li>
+<li data-nav-id=/operators/nan/ title=NaN class=dd-item>
+<a href=/operators/nan/>
+NaN
+</a>
+</li>
+<li data-nav-id=/operators/nil/ title=Nil class=dd-item>
+<a href=/operators/nil/>
+Nil
+</a>
+</li>
+<li data-nav-id=/operators/none/ title=None class=dd-item>
+<a href=/operators/none/>
+None
+</a>
+</li>
+<li data-nav-id=/operators/not/ title=Not class=dd-item>
+<a href=/operators/not/>
+Not
+</a>
+</li>
+<li data-nav-id=/operators/notany/ title=NotAny class=dd-item>
+<a href=/operators/notany/>
+NotAny
+</a>
+</li>
+<li data-nav-id=/operators/notempty/ title=NotEmpty class=dd-item>
+<a href=/operators/notempty/>
+NotEmpty
+</a>
+</li>
+<li data-nav-id=/operators/notnan/ title=NotNaN class=dd-item>
+<a href=/operators/notnan/>
+NotNaN
+</a>
+</li>
+<li data-nav-id=/operators/notnil/ title=NotNil class=dd-item>
+<a href=/operators/notnil/>
+NotNil
+</a>
+</li>
+<li data-nav-id=/operators/notzero/ title=NotZero class=dd-item>
+<a href=/operators/notzero/>
+NotZero
+</a>
+</li>
+<li data-nav-id=/operators/pptr/ title=PPtr class=dd-item>
+<a href=/operators/pptr/>
+PPtr
+</a>
+</li>
+<li data-nav-id=/operators/ptr/ title=Ptr class=dd-item>
+<a href=/operators/ptr/>
+Ptr
+</a>
+</li>
+<li data-nav-id=/operators/re/ title=Re class=dd-item>
+<a href=/operators/re/>
+Re
+</a>
+</li>
+<li data-nav-id=/operators/reall/ title=ReAll class=dd-item>
+<a href=/operators/reall/>
+ReAll
+</a>
+</li>
+<li data-nav-id=/operators/set/ title=Set class=dd-item>
+<a href=/operators/set/>
+Set
+</a>
+</li>
+<li data-nav-id=/operators/shallow/ title=Shallow class=dd-item>
+<a href=/operators/shallow/>
+Shallow
+</a>
+</li>
+<li data-nav-id=/operators/slice/ title=Slice class=dd-item>
+<a href=/operators/slice/>
+Slice
+</a>
+</li>
+<li data-nav-id=/operators/smuggle/ title=Smuggle class=dd-item>
+<a href=/operators/smuggle/>
+Smuggle
+</a>
+</li>
+<li data-nav-id=/operators/sstruct/ title=SStruct class=dd-item>
+<a href=/operators/sstruct/>
+SStruct
+</a>
+</li>
+<li data-nav-id=/operators/string/ title=String class=dd-item>
+<a href=/operators/string/>
+String
+</a>
+</li>
+<li data-nav-id=/operators/struct/ title=Struct class=dd-item>
+<a href=/operators/struct/>
+Struct
+</a>
+</li>
+<li data-nav-id=/operators/subbagof/ title=SubBagOf class=dd-item>
+<a href=/operators/subbagof/>
+SubBagOf
+</a>
+</li>
+<li data-nav-id=/operators/subjsonof/ title=SubJSONOf class=dd-item>
+<a href=/operators/subjsonof/>
+SubJSONOf
+</a>
+</li>
+<li data-nav-id=/operators/submapof/ title=SubMapOf class=dd-item>
+<a href=/operators/submapof/>
+SubMapOf
+</a>
+</li>
+<li data-nav-id=/operators/subsetof/ title=SubSetOf class=dd-item>
+<a href=/operators/subsetof/>
+SubSetOf
+</a>
+</li>
+<li data-nav-id=/operators/superbagof/ title=SuperBagOf class=dd-item>
+<a href=/operators/superbagof/>
+SuperBagOf
+</a>
+</li>
+<li data-nav-id=/operators/superjsonof/ title=SuperJSONOf class=dd-item>
+<a href=/operators/superjsonof/>
+SuperJSONOf
+</a>
+</li>
+<li data-nav-id=/operators/supermapof/ title=SuperMapOf class=dd-item>
+<a href=/operators/supermapof/>
+SuperMapOf
+</a>
+</li>
+<li data-nav-id=/operators/supersetof/ title=SuperSetOf class=dd-item>
+<a href=/operators/supersetof/>
+SuperSetOf
+</a>
+</li>
+<li data-nav-id=/operators/tag/ title=Tag class=dd-item>
+<a href=/operators/tag/>
+Tag
+</a>
+</li>
+<li data-nav-id=/operators/trunctime/ title=TruncTime class=dd-item>
+<a href=/operators/trunctime/>
+TruncTime
+</a>
+</li>
+<li data-nav-id=/operators/values/ title=Values class=dd-item>
+<a href=/operators/values/>
+Values
+</a>
+</li>
+<li data-nav-id=/operators/zero/ title=Zero class=dd-item>
+<a href=/operators/zero/>
+Zero
+</a>
+</li>
+</ul>
+</li>
+<li data-nav-id=/helpers/ title=Helpers class=dd-item>
+<a href=/helpers/>
+Helpers
+</a>
+</li>
+<li data-nav-id=/faq/ title=FAQ class=dd-item>
+<a href=/faq/>
+FAQ
+</a>
+</li>
+</ul>
+<section id=shortcuts>
+<h3>More</h3>
+<ul>
+<li>
+<a class=padding href=https://github.com/maxatome/go-testdeep><i class="fab fa-github"></i>&nbsp;Github repo</a>
+</li>
+<li>
+<a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td><i class="fas fa-book"></i>&nbsp;godoc</a>
+</li>
+<li>
+<a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp><i class="fas fa-book"></i>&nbsp;godoc API tester — tdhttp</a>
+</li>
+<li>
+<a class=padding href=https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil><i class="fas fa-book"></i>&nbsp;godoc helpers utils — tdutil</a>
+</li>
+</ul>
+</section>
+<section id=footer>
+<p>Built with <a href=https://github.com/matcornic/hugo-theme-learn><i class="fas fa-heart"></i></a> from <a href=https://getgrav.org>Grav</a> and <a href=https://gohugo.io/>Hugo</a></p>
+</section>
+</div>
+</nav>
+<section id=body>
+<div id=overlay></div>
+<div class="padding highlightable">
+<div>
+<div id=top-bar>
+<div id=breadcrumbs itemscope itemtype=http://schema.org/BreadcrumbList>
+<span id=sidebar-toggle-span>
+<a href=# id=sidebar-toggle data-sidebar-toggle>
+<i class="fas fa-bars"></i>
+</a>
+</span>
+<span id=toc-menu><i class="fas fa-list-alt"></i></span>
+<span class=links>
+<span itemscope itemprop=itemListElement itemtype=http://schema.org/ListItem><a itemprop=item href=/> <span itemprop=name>go-testdeep</span><meta itemprop=position content="1"></a></span> > <span itemscope itemprop=itemListElement itemtype=http://schema.org/ListItem><a itemprop=item href=/example/> <span itemprop=name>Example</span><meta itemprop=position content="2"></a></span> > Basic go-testdeep approach
+</span>
+</div>
+<div class=progress>
+<div class=wrapper>
+<nav id=TableOfContents></nav>
+</div>
+</div>
+</div>
+</div>
+<div id=head-tags>
+</div>
+<div id=body-inner>
+<h1>
+Basic go-testdeep approach
+</h1>
+<p><a href=https://pkg.go.dev/github.com/maxatome/go-testdeep/td><code>td</code> package</a>,
 via its <a href=/functions/><code>Cmp*</code></a> functions, handles the tests
-and all the error message boiler plate. Let&rsquo;s do it:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>import</span> (
+and all the error message boiler plate. Let&rsquo;s do it:</p>
+<div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>import</span> (
   <span style=color:#ed9d13>&#34;testing&#34;</span>
   <span style=color:#ed9d13>&#34;time&#34;</span>
 
@@ -25,8 +494,10 @@ and all the error message boiler plate. Let&rsquo;s do it:</p><div class=highlig
 set by <code>CreateRecord()</code> call. The same is true for the creation date
 field <code>CreatedAt</code>. Thanks to the <a href=/operators/between/><code>Between</code></a>
 operator we can check it is set with a value included between
-the date before <code>CreateRecord()</code> call and the date just after.</p><p>Note that if <code>Id</code> and <code>CreateAt</code> could be known in advance, we could
-simply do:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>import</span> (
+the date before <code>CreateRecord()</code> call and the date just after.</p>
+<p>Note that if <code>Id</code> and <code>CreateAt</code> could be known in advance, we could
+simply do:</p>
+<div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>import</span> (
   <span style=color:#ed9d13>&#34;testing&#34;</span>
   <span style=color:#ed9d13>&#34;time&#34;</span>
 
@@ -47,4 +518,31 @@ simply do:</p><div class=highlight><pre style=color:#d0d0d0;background-color:#20
   }
 }
 </code></pre></div><p>But unfortunately, it is common to not know exactly the value of some
-fields…</p><footer class=footline></footer></div></div><div id=navigation><a class="nav nav-prev" href=/example/using-testing/ title="Using testing package"><i class="fa fa-chevron-left"></i></a><a class="nav nav-next" href=/example/advanced-testdeep/ title="Advanced go-testdeep technique" style=margin-right:0><i class="fa fa-chevron-right"></i></a></div></section><div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px><div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div></div><script src=/js/clipboard.min.js?1588458732></script><script src=/js/perfect-scrollbar.min.js?1588458732></script><script src=/js/perfect-scrollbar.jquery.min.js?1588458732></script><script src=/js/jquery.sticky.js?1588458732></script><script src=/js/featherlight.min.js?1588458732></script><script src=/js/highlight.pack.js?1588458732></script><script>hljs.initHighlightingOnLoad();</script><script src=/js/modernizr.custom-3.6.0.js?1588458732></script><script src=/js/learn.js?1588458732></script><script src=/js/hugo-learn.js?1588458732></script><link href=/mermaid/mermaid.css?1588458732 rel=stylesheet><script src=/mermaid/mermaid.js?1588458732></script><script>mermaid.initialize({startOnLoad:true});</script></body></html>
+fields…</p>
+<footer class=footline>
+</footer>
+</div>
+</div>
+<div id=navigation>
+<a class="nav nav-prev" href=/example/using-testing/ title="Using testing package"> <i class="fa fa-chevron-left"></i></a>
+<a class="nav nav-next" href=/example/advanced-testdeep/ title="Advanced go-testdeep technique" style=margin-right:0><i class="fa fa-chevron-right"></i></a>
+</div>
+</section>
+<div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px>
+<div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div>
+</div>
+<script src=/js/clipboard.min.js?1589705003></script>
+<script src=/js/perfect-scrollbar.min.js?1589705003></script>
+<script src=/js/perfect-scrollbar.jquery.min.js?1589705003></script>
+<script src=/js/jquery.sticky.js?1589705003></script>
+<script src=/js/featherlight.min.js?1589705003></script>
+<script src=/js/highlight.pack.js?1589705003></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src=/js/modernizr.custom-3.6.0.js?1589705003></script>
+<script src=/js/learn.js?1589705003></script>
+<script src=/js/hugo-learn.js?1589705003></script>
+<link href=/mermaid/mermaid.css?1589705003 rel=stylesheet>
+<script src=/mermaid/mermaid.js?1589705003></script>
+<script>mermaid.initialize({startOnLoad:true});</script>
+</body>
+</html>
