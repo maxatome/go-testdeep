@@ -29,6 +29,7 @@ go-testdeep
 
 ## Latest news
 
+- 2020/05/17: [v1.5.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.5.0);
 - 2020/04/11:
   - [`tdhttp`] helper (the HTTP API tester) enhanced and fully documented;
 - 2020/04/06:
@@ -38,11 +39,6 @@ go-testdeep
     use `github.com/maxatome/go-testdeep/td` instead. See the
     [FAQ point](https://go-testdeep.zetta.rocks/faq/#should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd)
     for details about migration;
-- 2020/02/13:
-  - new operator anchoring feature, see the [corresponding FAQ
-    section](https://go-testdeep.zetta.rocks/faq/#how-does-operator-anchoring-work)
-    and the [new anchoring methods](https://go-testdeep.zetta.rocks/functions/td-t/#anchoring-methods-of-tdt);
-  - new [`SStruct`] operator (and its friends [`CmpSStruct`] & [`T.SStruct`]),
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
