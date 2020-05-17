@@ -28,7 +28,7 @@ td.Cmp(t, got, td.Not(nil)) // succeeds, as the interface is not nil
 
 > See also [<i class='fas fa-book'></i> NotNil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotNil).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -87,7 +87,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpNotNil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNotNil).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -146,7 +146,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.NotNil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.NotNil).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

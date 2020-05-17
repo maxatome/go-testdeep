@@ -28,5 +28,3 @@ type of *expectedValue* (or `nil` if it is originally untyped `nil`).
 
 > See also [<i class='fas fa-book'></i> Tag godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Tag).
 
-### Examples
-

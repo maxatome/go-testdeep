@@ -27,7 +27,7 @@ td.Cmp(t, &AnyStruct{}, td.Ptr(td.NotZero())) // is false
 
 > See also [<i class='fas fa-book'></i> NotZero godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotZero).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -109,7 +109,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpNotZero godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNotZero).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -191,7 +191,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.NotZero godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.NotZero).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

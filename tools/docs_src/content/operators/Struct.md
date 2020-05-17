@@ -37,7 +37,7 @@ succeed. Non-expected fields are ignored.
 
 > See also [<i class='fas fa-book'></i> Struct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Struct).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -125,7 +125,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpStruct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpStruct).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -209,7 +209,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.Struct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Struct).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

@@ -29,7 +29,7 @@ td.Cmp(t, got, td.Values(td.Bag("c", "a", "b"))) // succeeds
 
 > See also [<i class='fas fa-book'></i> Values godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Values).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -85,7 +85,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpValues godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpValues).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -141,7 +141,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.Values godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Values).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

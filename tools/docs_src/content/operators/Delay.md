@@ -14,7 +14,7 @@ used with helpers. See the example for a very simple use case.
 
 > See also [<i class='fas fa-book'></i> Delay godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Delay).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}

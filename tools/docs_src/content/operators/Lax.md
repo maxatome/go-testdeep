@@ -36,7 +36,7 @@ operator]({{< ref "operators" >}}). In this case, it delegates [`TypeBehind()`](
 
 > See also [<i class='fas fa-book'></i> Lax godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lax).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -90,7 +90,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpLax godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpLax).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -144,7 +144,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.CmpLax godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.CmpLax).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

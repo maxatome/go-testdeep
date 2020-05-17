@@ -35,7 +35,7 @@ td.Cmp(t, gotDate, td.TruncTime(expected, time.Second)) // succeeds
 
 > See also [<i class='fas fa-book'></i> TruncTime godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TruncTime).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -104,7 +104,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpTruncTime godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpTruncTime).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -173,7 +173,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.TruncTime godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.TruncTime).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

@@ -33,7 +33,7 @@ pointer on the returned value (if non-`nil` of course).
 
 > See also [<i class='fas fa-book'></i> Ptr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Ptr).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -77,7 +77,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpPtr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpPtr).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -121,7 +121,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.Ptr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Ptr).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

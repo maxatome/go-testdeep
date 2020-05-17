@@ -40,7 +40,7 @@ succeed.
 
 > See also [<i class='fas fa-book'></i> SStruct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SStruct).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -129,7 +129,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpSStruct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpSStruct).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -214,7 +214,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.SStruct godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SStruct).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

@@ -42,7 +42,7 @@ Beware that [`NotAny(…)`]({{< ref "NotAny" >}}) is not equivalent to [`Not(Any
 
 > See also [<i class='fas fa-book'></i> NotAny godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotAny).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -97,7 +97,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpNotAny godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNotAny).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -152,7 +152,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.NotAny godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.NotAny).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

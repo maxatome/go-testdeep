@@ -21,7 +21,7 @@ td.Cmp(t, 12.2, td.N(12., 0.1)) // fails
 
 > See also [<i class='fas fa-book'></i> N godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#N).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -66,7 +66,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpN godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpN).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -111,7 +111,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.N godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.N).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

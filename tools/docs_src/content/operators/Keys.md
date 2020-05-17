@@ -29,7 +29,7 @@ td.Cmp(t, got, td.Keys(td.Bag("c", "a", "b"))) // succeeds
 
 > See also [<i class='fas fa-book'></i> Keys godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Keys).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -85,7 +85,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpKeys godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpKeys).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -141,7 +141,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.Keys godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Keys).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

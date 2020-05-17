@@ -38,7 +38,7 @@ are found (mostly issued from [`Isa()`]({{< ref "Isa" >}})) and they are equal.
 
 > See also [<i class='fas fa-book'></i> Any godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Any).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -99,7 +99,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpAny godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpAny).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -158,7 +158,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.Any godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Any).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

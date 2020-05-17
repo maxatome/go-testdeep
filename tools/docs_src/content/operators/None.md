@@ -27,7 +27,7 @@ td.Cmp(t, 9, td.None(prime, even)) // succeeds
 
 > See also [<i class='fas fa-book'></i> None godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#None).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -94,7 +94,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpNone godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNone).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -161,7 +161,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.None godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.None).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

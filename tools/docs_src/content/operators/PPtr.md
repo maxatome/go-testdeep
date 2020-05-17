@@ -42,7 +42,7 @@ non-`nil` of course).
 
 > See also [<i class='fas fa-book'></i> PPtr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#PPtr).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -87,7 +87,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpPPtr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpPPtr).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -132,7 +132,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.PPtr godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.PPtr).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

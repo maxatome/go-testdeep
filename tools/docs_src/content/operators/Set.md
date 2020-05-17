@@ -45,7 +45,7 @@ td.Cmp(t, []int{1, 5, 1, 2, 8, 3, 3},
 
 > See also [<i class='fas fa-book'></i> Set godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Set).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -109,7 +109,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpSet godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpSet).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -173,7 +173,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.Set godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Set).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

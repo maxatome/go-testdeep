@@ -30,7 +30,7 @@ td.Cmp(t, got, nil) // succeeds
 
 > See also [<i class='fas fa-book'></i> Nil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Nil).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -89,7 +89,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpNil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpNil).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -148,7 +148,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.Nil godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Nil).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

@@ -27,7 +27,7 @@ td.Cmp(t, td.SStruct(
 
 > See also [<i class='fas fa-book'></i> Ignore godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Ignore).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}

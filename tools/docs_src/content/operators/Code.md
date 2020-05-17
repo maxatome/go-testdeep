@@ -67,7 +67,7 @@ operator should be used instead.
 
 > See also [<i class='fas fa-book'></i> Code godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Code).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -147,7 +147,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpCode godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpCode).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -224,7 +224,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.Code godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Code).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})

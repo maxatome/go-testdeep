@@ -577,20 +577,24 @@ $doc
 
 > See also [<i class='fas fa-book'></i> $operator godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$operator).
 
-### Examples
-
 EOM
 
+        my @examples;
         my $re = qr/^func Example${operator}(?:_(\w+))?\(\) \{\n(.+?)^\}$/ms;
         while ($op_examples =~ /$re/g)
         {
             my $name = ucfirst($1 // 'Base');
 
-            print $fh <<EOE;
+            push(@examples, <<EOE);
 {{%expand "$name example" %}}```go
 ${2}
 ```{{% /expand%}}
 EOE
+        }
+        if (@examples)
+        {
+            printf $fh "### Example%s\n\n", @examples > 1 ? 's' : '';
+            print $fh @examples;
         }
 
         if (my $cmp = $operators{$operator}{cmp})
@@ -607,20 +611,24 @@ $doc
 
 > See also [<i class='fas fa-book'></i> $cmp->{name} godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$cmp->{name}).
 
-### Examples
-
 EOM
 
+            @examples = ();
             my $re = qr/func ExampleCmp${operator}(?:_(\w+))?\(\) \{\n(.+?)^\}$/ms;
             while ($cmp_examples =~ /$re/g)
             {
                 my $name = ucfirst($1 // 'Base');
 
-                print $fh <<EOE;
+                push(@examples, <<EOE);
 {{%expand "$name example" %}}```go
 ${2}
 ```{{% /expand%}}
 EOE
+            }
+            if (@examples)
+            {
+                printf $fh "### Example%s\n\n", @examples > 1 ? 's' : '';
+                print $fh @examples;
             }
         }
 
@@ -638,20 +646,24 @@ $doc
 
 > See also [<i class='fas fa-book'></i> T.$t->{name} godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.$t->{name}).
 
-### Examples
-
 EOM
 
+            @examples = ();
             my $re = qr/func ExampleT_$t->{name}(?:_(\w+))?\(\) \{\n(.+?)^\}$/ms;
             while ($t_examples =~ /$re/g)
             {
                 my $name = ucfirst($1 // 'Base');
 
-                print $fh <<EOE;
+                push(@examples, <<EOE);
 {{%expand "$name example" %}}```go
 ${2}
 ```{{% /expand%}}
 EOE
+            }
+            if (@examples)
+            {
+                printf $fh "### Example%s\n\n", @examples > 1 ? 's' : '';
+                print $fh @examples;
             }
         }
         close $fh;

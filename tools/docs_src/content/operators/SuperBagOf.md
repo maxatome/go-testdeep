@@ -43,7 +43,7 @@ td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6},
 
 > See also [<i class='fas fa-book'></i> SuperBagOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperBagOf).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -98,7 +98,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> CmpSuperBagOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#CmpSuperBagOf).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := &testing.T{}
@@ -153,7 +153,7 @@ reason of a potential failure.
 
 > See also [<i class='fas fa-book'></i> T.SuperBagOf godoc](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.SuperBagOf).
 
-### Examples
+### Example
 
 {{%expand "Base example" %}}```go
 	t := td.NewT(&testing.T{})
