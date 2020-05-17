@@ -859,7 +859,7 @@ TESTDEEP_COLOR_OK=black:green \
 ```
 
 
-## https://play.golang.org/ does not handle colors, error output is nasty
+## play.golang.org does not handle colors, error output is nasty
 
 Just add this single line in playground:
 

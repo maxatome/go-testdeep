@@ -6,17 +6,17 @@
 <meta name=description content>
 <link rel=icon href=/images/favicon.png type=image/png>
 <title>FAQ :: go-testdeep</title>
-<link href=/css/nucleus.css?1589705004 rel=stylesheet>
-<link href=/css/fontawesome-all.min.css?1589705004 rel=stylesheet>
-<link href=/css/hybrid.css?1589705004 rel=stylesheet>
-<link href=/css/featherlight.min.css?1589705004 rel=stylesheet>
-<link href=/css/perfect-scrollbar.min.css?1589705004 rel=stylesheet>
-<link href=/css/auto-complete.css?1589705004 rel=stylesheet>
-<link href=/css/atom-one-dark-reasonable.css?1589705004 rel=stylesheet>
-<link href=/css/theme.css?1589705004 rel=stylesheet>
-<link href=/css/hugo-theme.css?1589705004 rel=stylesheet>
-<link href=/css/theme-green.css?1589705004 rel=stylesheet>
-<script src=/js/jquery-3.3.1.min.js?1589705004></script>
+<link href=/css/nucleus.css?1589706614 rel=stylesheet>
+<link href=/css/fontawesome-all.min.css?1589706614 rel=stylesheet>
+<link href=/css/hybrid.css?1589706614 rel=stylesheet>
+<link href=/css/featherlight.min.css?1589706614 rel=stylesheet>
+<link href=/css/perfect-scrollbar.min.css?1589706614 rel=stylesheet>
+<link href=/css/auto-complete.css?1589706614 rel=stylesheet>
+<link href=/css/atom-one-dark-reasonable.css?1589706614 rel=stylesheet>
+<link href=/css/theme.css?1589706614 rel=stylesheet>
+<link href=/css/hugo-theme.css?1589706614 rel=stylesheet>
+<link href=/css/theme-green.css?1589706614 rel=stylesheet>
+<script src=/js/jquery-3.3.1.min.js?1589706614></script>
 <style>:root #header+#content>#left>#rlblock_left{display:none!important}:not(pre)>code+span.copy-to-clipboard{display:none}</style>
 <meta name=google-site-verification content="I15BdfDU61eURsp8IywfU9hV8Rygaa4JsH-U8kKAxVs">
 <style type=text/css>#body-inner pre{white-space:pre}</style>
@@ -32,10 +32,10 @@
 <input data-search-input id=search-by type=search placeholder=Search...>
 <span data-search-clear><i class="fas fa-times"></i></span>
 </div>
-<script type=text/javascript src=/js/lunr.min.js?1589705004></script>
-<script type=text/javascript src=/js/auto-complete.js?1589705004></script>
+<script type=text/javascript src=/js/lunr.min.js?1589706614></script>
+<script type=text/javascript src=/js/auto-complete.js?1589706614></script>
 <script type=text/javascript>var baseurl="https:\/\/go-testdeep.zetta.rocks\/";</script>
-<script type=text/javascript src=/js/search.js?1589705004></script>
+<script type=text/javascript src=/js/search.js?1589706614></script>
 </div>
 <div class=highlightable>
 <ul class=topics>
@@ -480,7 +480,7 @@ FAQ
 <li><a href=#color-format>Color format</a></li>
 </ul>
 </li>
-<li><a href=#httpsplaygolangorg-does-not-handle-colors-error-output-is-nasty><a href=https://play.golang.org/>https://play.golang.org/</a> does not handle colors, error output is nasty</a></li>
+<li><a href=#playgolangorg-does-not-handle-colors-error-output-is-nasty>play.golang.org does not handle colors, error output is nasty</a></li>
 <li><a href=#the-x-testing-framework-allows-to-testdo-y-while-go-testdeep-not>The <code>X</code> testing framework allows to test/do <code>Y</code> while go-testdeep not</a></li>
 <li><a href=#how-to-add-a-new-operator>How to add a new operator?</a></li>
 </ul>
@@ -1214,7 +1214,7 @@ foreground_color:background_color   # set foreground AND background color
 </span><span style=color:#ed9d13></span>    <span style=color:#40ffff>TESTDEEP_COLOR_BAD</span>=white:red <span style=color:#ed9d13>\
 </span><span style=color:#ed9d13></span>    <span style=color:#40ffff>TESTDEEP_COLOR_TITLE</span>=yellow <span style=color:#ed9d13>\
 </span><span style=color:#ed9d13></span>    go <span style=color:#24909d>test</span>
-</code></pre></div><h2 id=httpsplaygolangorg-does-not-handle-colors-error-output-is-nasty><a href=https://play.golang.org/>https://play.golang.org/</a> does not handle colors, error output is nasty</h2>
+</code></pre></div><h2 id=playgolangorg-does-not-handle-colors-error-output-is-nasty>play.golang.org does not handle colors, error output is nasty</h2>
 <p>Just add this single line in playground:</p>
 <div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6ab825;font-weight:700>func</span> <span style=color:#447fcf>init</span>() { os.<span style=color:#447fcf>Setenv</span>(<span style=color:#ed9d13>&#34;TESTDEEP_COLOR&#34;</span>, <span style=color:#ed9d13>&#34;off&#34;</span>) }
 </code></pre></div><p>Until playground supports <a href=https://en.wikipedia.org/wiki/ANSI_escape_code#Colors>ANSI color escape
@@ -1288,18 +1288,18 @@ to update corresponding <code>CmpFooBar</code> & <code>T.FooBar</code> examples.
 <div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px>
 <div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div>
 </div>
-<script src=/js/clipboard.min.js?1589705004></script>
-<script src=/js/perfect-scrollbar.min.js?1589705004></script>
-<script src=/js/perfect-scrollbar.jquery.min.js?1589705004></script>
-<script src=/js/jquery.sticky.js?1589705004></script>
-<script src=/js/featherlight.min.js?1589705004></script>
-<script src=/js/highlight.pack.js?1589705004></script>
+<script src=/js/clipboard.min.js?1589706614></script>
+<script src=/js/perfect-scrollbar.min.js?1589706614></script>
+<script src=/js/perfect-scrollbar.jquery.min.js?1589706614></script>
+<script src=/js/jquery.sticky.js?1589706614></script>
+<script src=/js/featherlight.min.js?1589706614></script>
+<script src=/js/highlight.pack.js?1589706614></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<script src=/js/modernizr.custom-3.6.0.js?1589705004></script>
-<script src=/js/learn.js?1589705004></script>
-<script src=/js/hugo-learn.js?1589705004></script>
-<link href=/mermaid/mermaid.css?1589705004 rel=stylesheet>
-<script src=/mermaid/mermaid.js?1589705004></script>
+<script src=/js/modernizr.custom-3.6.0.js?1589706614></script>
+<script src=/js/learn.js?1589706614></script>
+<script src=/js/hugo-learn.js?1589706614></script>
+<link href=/mermaid/mermaid.css?1589706614 rel=stylesheet>
+<script src=/mermaid/mermaid.js?1589706614></script>
 <script>mermaid.initialize({startOnLoad:true});</script>
 </body>
 </html>
