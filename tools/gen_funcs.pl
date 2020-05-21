@@ -18,6 +18,18 @@ die "usage $0 [-h]\n" if @ARGV != 0;
 (my $REPO_DIR = $0) =~ s,/[^/]+\z,/..,;
 -d $REPO_DIR or die "Cannot find repository directory ($REPO_DIR)\n";
 
+my $SITE_REPO_DIR = "$REPO_DIR/../go-testdeep-site";
+unless (-d $SITE_REPO_DIR)
+{
+    if ($ENV{PROD_SITE})
+    {
+        die "*** Cannot PROD_SITE as $SITE_REPO_DIR not found!\n";
+    }
+
+    warn "*** WARNING: cannot find $SITE_REPO_DIR. Disabling site upgrade.\n";
+    undef $SITE_REPO_DIR;
+}
+
 my $DIR = "$REPO_DIR/td";
 -d $DIR or die "Cannot find td/ directory ($DIR)\n";
 
@@ -544,10 +556,11 @@ my $gh_links = do
 }
 
 # Hugo
+if (defined $SITE_REPO_DIR)
 {
     my $op_examples = do { local $/;
-                            open(my $fh, '<', "$DIR/example_test.go");
-                            <$fh> };
+                           open(my $fh, '<', "$DIR/example_test.go");
+                           <$fh> };
 
     # Reload generated examples so they are properly gofmt'ed
     my $cmp_examples = do { local $/;
@@ -562,7 +575,7 @@ my $gh_links = do
         # Rework each operator doc
         my $doc = process_doc($operators{$operator});
 
-        open(my $fh, '>', "$REPO_DIR/tools/docs_src/content/operators/$operator.md");
+        open(my $fh, '>', "$SITE_REPO_DIR/docs_src/content/operators/$operator.md");
         print $fh <<EOM;
 ---
 title: "$operator"
@@ -671,10 +684,8 @@ EOE
 
     # Dump operators
     {
-        my $op_list_file = 'tools/docs_src/content/operators/_index.md';
-        my $op_list = do { local $/;
-                           open(my $fh, '<', "$REPO_DIR/$op_list_file");
-                           <$fh> };
+        my $op_list_file = "$SITE_REPO_DIR/docs_src/content/operators/_index.md";
+        my $op_list = do { local $/; open(my $fh, '<', $op_list_file); <$fh> };
 
         $op_list =~ s{(<!-- operators:begin -->).*(<!-- operators:end -->)}
                      {
@@ -695,18 +706,16 @@ EOE
                              . "$md_links\n$2"
                      }se or die "smugglers tags not found in $op_list_file\n";
 
-        open(my $fh, '>', "$REPO_DIR/$op_list_file.new");
+        open(my $fh, '>', "$op_list_file.new");
         print $fh $op_list;
         close $fh;
-        rename "$REPO_DIR/$op_list_file.new", "$REPO_DIR/$op_list_file";
+        rename "$op_list_file.new", $op_list_file;
     }
 
     # Dump matrices
     {
-        my $matrix_file = 'tools/docs_src/content/operators/matrix.md';
-        my $matrix = do { local $/;
-                          open(my $fh, '<', "$REPO_DIR/$matrix_file");
-                          <$fh> };
+        my $matrix_file = "$SITE_REPO_DIR/docs_src/content/operators/matrix.md";
+        my $matrix = do { local $/; open(my $fh, '<', $matrix_file); <$fh> };
 
         my $header = <<'EOH';
 
@@ -765,10 +774,10 @@ EOH
                         $repl . $3
                     }gse or die "go-op-matrix tags not found in $matrix_file\n";
 
-        open(my $fh, '>', "$REPO_DIR/$matrix_file.new");
+        open(my $fh, '>', "$matrix_file.new");
         print $fh $matrix;
         close $fh;
-        rename "$REPO_DIR/$matrix_file.new", "$REPO_DIR/$matrix_file";
+        rename "$matrix_file.new", $matrix_file;
     }
 
     # tdhttp example
@@ -792,7 +801,7 @@ EOH
         $example =~ s,\n\t// Output:\n.*,},s
             or die "tdhttp example, Output: not found\n";
 
-        my $md_file = 'tools/docs_src/content/helpers/_index.md';
+        my $md_file = "$SITE_REPO_DIR/docs_src/content/helpers/_index.md";
 
         my $final = do { open(my $fh, '<', $md_file); local $/; <$fh> } =~
             s{(<!-- tdhttp:begin -->).*(<!-- tdhttp:end -->)}
@@ -812,13 +821,14 @@ $2>rs or die "tdhttp example not found in $md_file!";
         close $out;
         rename "$md_file.new", $md_file;
     }
-}
 
-# Final publish
-if ($ENV{PROD_SITE})
-{
-    chdir "$REPO_DIR/tools/docs_src";
-    exec qw(hugo -d ../../docs --minify);
+    # Final publish
+    if ($ENV{PROD_SITE})
+    {
+        # Delegate to go-testdeep-site repository
+        chdir $SITE_REPO_DIR;
+        exec './publish.sh';
+    }
 }
 
 
