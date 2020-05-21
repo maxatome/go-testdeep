@@ -9,7 +9,7 @@ go-testdeep
 [![Version](https://img.shields.io/github/tag/maxatome/go-testdeep.svg)](https://github.com/maxatome/go-testdeep/releases)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go/#testing)
 
-![go-testdeep](tools/docs_src/static/images/logo.png)
+![go-testdeep](https://github.com/maxatome/go-testdeep-site/raw/master/docs_src/static/images/logo.png)
 
 **Extremely flexible golang deep comparison, extends the go testing package.**
 
@@ -172,7 +172,7 @@ for details about HTTP API testing.
 
 Example of produced error in case of mismatch:
 
-![error output](tools/docs_src/static/images/colored-output.svg)
+![error output](https://github.com/maxatome/go-testdeep-site/raw/master/docs_src/static/images/colored-output.svg)
 
 
 ## Description
