@@ -63,7 +63,7 @@ import (
 //
 //   td.Cmp(t, got, td.Set(11, 22, 33, 44, 55, 66, 77, 88, 99))
 //
-// Not that Flatten calls can even be nested:
+// Note that Flatten calls can even be nested:
 //
 //   td.Cmp(t, got,
 //     td.Set(
