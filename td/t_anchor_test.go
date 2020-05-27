@@ -147,7 +147,7 @@ func TestAnchorsPersist(tt *testing.T) {
 	t3 := td.NewT(t1)
 
 	tt.Run("without anchors persistence", func(tt *testing.T) {
-		// Anchors persistence is shared for a same TestingFT
+		// Anchors persistence is shared for a same testing.TB
 		td.CmpFalse(tt, t1.DoAnchorsPersist())
 		td.CmpFalse(tt, t2.DoAnchorsPersist())
 		td.CmpFalse(tt, t3.DoAnchorsPersist())

@@ -136,8 +136,3 @@ func (t *TestingTB) Skipf(format string, args ...interface{}) {}
 func (t *TestingTB) Skipped() bool {
 	return false
 }
-
-// Run mocks testing.T Run method.
-func (t *TestingTB) Run(name string, f func(t *testing.T)) bool {
-	return true
-}

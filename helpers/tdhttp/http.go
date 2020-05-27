@@ -27,7 +27,7 @@ type Response struct {
 	Body   interface{} // Body is the expected body (expected to be empty if nil)
 }
 
-func cmpMarshaledResponse(tt td.TestingFT,
+func cmpMarshaledResponse(tb testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	acceptEmptyBody bool,
@@ -35,13 +35,13 @@ func cmpMarshaledResponse(tt td.TestingFT,
 	expectedResp Response,
 	args ...interface{},
 ) bool {
-	tt.Helper()
+	tb.Helper()
 
 	if testName := tdutil.BuildTestName(args...); testName != "" {
-		tt.Log(testName)
+		tb.Log(testName)
 	}
 
-	t := td.NewT(tt)
+	t := td.NewT(tb)
 	defer t.AnchorsPersistTemporarily()()
 
 	ta := NewTestAPI(t, http.HandlerFunc(handler)).Request(req)
@@ -78,7 +78,7 @@ func cmpMarshaledResponse(tt td.TestingFT,
 // It returns true if the tests succeed, false otherwise.
 //
 // See TestAPI type and its methods for more flexible tests.
-func CmpMarshaledResponse(t td.TestingFT,
+func CmpMarshaledResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	unmarshal func([]byte, interface{}) error,
@@ -118,7 +118,7 @@ func CmpMarshaledResponse(t td.TestingFT,
 // a string.
 //
 // See TestAPI type and its methods for more flexible tests.
-func CmpResponse(t td.TestingFT,
+func CmpResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,
@@ -187,7 +187,7 @@ func CmpResponse(t td.TestingFT,
 // explicitly.
 //
 // See TestAPI type and its methods for more flexible tests.
-func CmpJSONResponse(t td.TestingFT,
+func CmpJSONResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,
@@ -240,7 +240,7 @@ func CmpJSONResponse(t td.TestingFT,
 // explicitly.
 //
 // See TestAPI type and its methods for more flexible tests.
-func CmpXMLResponse(t td.TestingFT,
+func CmpXMLResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,

@@ -445,7 +445,7 @@ func testLogs(t *td.T, mockT *tdutil.T, curTest CmpResponseTest) {
 }
 
 func testCmpResponse(t *td.T,
-	cmp func(td.TestingFT, *http.Request, func(http.ResponseWriter, *http.Request), tdhttp.Response, ...interface{}) bool,
+	cmp func(testing.TB, *http.Request, func(http.ResponseWriter, *http.Request), tdhttp.Response, ...interface{}) bool,
 	cmpName string,
 	curTest CmpResponseTest,
 ) {
