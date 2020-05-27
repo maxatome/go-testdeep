@@ -221,8 +221,8 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 //       Name: "John Doe",
 //     },
 //     td.StructFields{
-//       Age:      td.Between(40, 45),
-//       Children: 0,
+//       "Age":      td.Between(40, 45),
+//       "Children": 0,
 //     }),
 //   )
 //
@@ -256,8 +256,8 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 //       Name: "John Doe",
 //     },
 //     td.StructFields{
-//       Age:      td.Between(40, 45),
-//       Children: td.Ignore(),
+//       "Age":      td.Between(40, 45),
+//       "Children": td.Ignore(),
 //     }),
 //   )
 //
