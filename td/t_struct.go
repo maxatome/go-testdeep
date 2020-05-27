@@ -7,6 +7,8 @@
 package td
 
 import (
+	"reflect"
+	"sync"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
@@ -464,32 +466,98 @@ func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
 	return cmpNotPanic(newContextWithConfig(t.Config), t, fn, args...)
 }
 
-// RunT runs "f" as a subtest of t called "name". It runs "f" in a
-// separate goroutine and blocks until "f" returns or calls t.Parallel
-// to become a parallel test. RunT reports whether "f" succeeded (or at
-// least did not fail before calling t.Parallel).
+type runtFuncs struct {
+	run reflect.Value
+	fnt reflect.Type
+}
+
+var (
+	runtMu sync.Mutex
+	runt   = map[reflect.Type]runtFuncs{}
+)
+
+func (t *T) getRunFunc() (runtFuncs, bool) {
+	ttb := reflect.TypeOf(t.TB)
+
+	runtMu.Lock()
+	defer runtMu.Unlock()
+
+	vfuncs, ok := runt[ttb]
+	if !ok {
+		run, ok := ttb.MethodByName("Run")
+		if ok {
+			mt := run.Type
+			if mt.NumIn() == 3 && mt.NumOut() == 1 && !mt.IsVariadic() &&
+				mt.In(1) == stringType && mt.Out(0) == boolType {
+				fnt := mt.In(2)
+				if fnt.Kind() == reflect.Func &&
+					fnt.NumIn() == 1 && fnt.NumOut() == 0 &&
+					fnt.In(0) == mt.In(0) {
+					vfuncs = runtFuncs{
+						run: run.Func,
+						fnt: fnt,
+					}
+					runt[ttb] = vfuncs
+					ok = true
+				}
+			}
+		}
+		if !ok {
+			runt[ttb] = vfuncs
+		}
+	}
+
+	return vfuncs, vfuncs != (runtFuncs{})
+}
+
+// Run runs "f" as a subtest of t called "name".
 //
-// RunT may be called simultaneously from multiple goroutines, but all
-// such calls must return before the outer test function for t
-// returns.
+// If t.TB implement a method with the following signature:
 //
-// Under the hood, RunT delegates all this stuff to (*testing.T).Run
-// or (*testing.B).Run if t.TB is respectively a *testing.T or a
-// *testing.B (that is why this documentation is a copy/paste of these
-// Run methods), otherwise it logs "name" then execute "f" using a new
-// *T instance in the current goroutine.
-func (t *T) RunT(name string, f func(t *T)) bool {
+//   (X) Run(string, func(X)) bool
+//
+// it calls it with a function of its own in which it creates a new
+// instance of *T on the fly before calling "f" with it.
+//
+// So if t.TB is a *testing.T or a *testing.B (which is in normal
+// cases), let's quote the testing.T.Run() & testing.B.Run()
+// documentation: "f" is called in a separate goroutine and blocks
+// until "f" returns or calls t.Parallel to become a parallel
+// test. Run reports whether "f" succeeded (or at least did not fail
+// before calling t.Parallel). Run may be called simultaneously from
+// multiple goroutines, but all such calls must return before the
+// outer test function for t returns.
+//
+// If this Run() method is not found, it simply logs "name" then
+// executes "f" using a new *T instance in the current goroutine. Note
+// that it is only done for convenience.
+func (t *T) Run(name string, f func(t *T)) bool {
 	t.Helper()
 
-	switch tb := t.TB.(type) {
-	case *testing.T:
-		return tb.Run(name, func(tb *testing.T) { f(NewT(tb, t.Config)) })
-	case *testing.B:
-		return tb.Run(name, func(tb *testing.B) { f(NewT(tb, t.Config)) })
-	default:
+	vfuncs, ok := t.getRunFunc()
+	if !ok {
 		t = NewT(t)
 		t.Logf("++++ %s", name)
 		f(t)
 		return !t.Failed()
 	}
+
+	ret := vfuncs.run.Call([]reflect.Value{
+		reflect.ValueOf(t.TB),
+		reflect.ValueOf(name),
+		reflect.MakeFunc(vfuncs.fnt,
+			func(args []reflect.Value) (results []reflect.Value) {
+				f(NewT(args[0].Interface().(testing.TB), t.Config))
+				return nil
+			}),
+	})
+
+	return ret[0].Bool()
+}
+
+// Deprecated: RunT has been superseded by Run() method. It is kept
+// for compatibility.
+func (t *T) RunT(name string, f func(t *T)) bool {
+	t.Helper()
+	return t.Run(name, f)
 }

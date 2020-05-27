@@ -27,6 +27,7 @@ var (
 	intType            = reflect.TypeOf(int(0))
 	uint8Type          = reflect.TypeOf(uint8(0))
 	runeType           = reflect.TypeOf(rune(0))
+	stringType         = reflect.TypeOf("")
 	boolType           = reflect.TypeOf(false)
 	smuggledGotType    = reflect.TypeOf(SmuggledGot{})
 	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
