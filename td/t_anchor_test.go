@@ -24,7 +24,7 @@ func TestAnchor(tt *testing.T) {
 		return dt
 	}
 
-	ttt := test.NewTestingFT(tt.Name())
+	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
 	type MyStruct struct {
 		PNum  *int
@@ -113,7 +113,7 @@ func TestAddAnchorableStructType(tt *testing.T) {
 		Priv privStruct
 	}
 
-	ttt := test.NewTestingFT(tt.Name())
+	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
 
 	// We want to anchor this operator
@@ -140,7 +140,7 @@ func TestAddAnchorableStructType(tt *testing.T) {
 }
 
 func TestAnchorsPersist(tt *testing.T) {
-	ttt := test.NewTestingFT(tt.Name())
+	ttt := test.NewTestingTB(tt.Name())
 
 	t1 := td.NewT(ttt)
 	t2 := td.NewT(ttt)

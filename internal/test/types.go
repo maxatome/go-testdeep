@@ -8,6 +8,7 @@ package test
 
 import (
 	"fmt"
+	"runtime"
 	"testing"
 )
 
@@ -43,70 +44,100 @@ func (t *TestingT) Helper() {
 	// Do nothing
 }
 
-// TestingFT is a type implementing td.TestingFT intended to be used
-// in tests.
-type TestingFT struct {
+// TestingTB is a type implementing testing.TB intended to be used in
+// tests.
+type TestingTB struct {
 	TestingT
 	name string
+	testing.TB
+	cleanup func()
 }
 
-// NewTestingFT returns a new instance of *TestingFT.
-func NewTestingFT(name string) *TestingFT {
-	return &TestingFT{name: name}
+// NewTestingTB returns a new instance of *TestingTB.
+func NewTestingTB(name string) *TestingTB {
+	return &TestingTB{name: name}
+}
+
+// Cleanup mocks testing.T Cleanup method. Not thread-safe but we
+// don't care in tests.
+func (t *TestingTB) Cleanup(fn func()) {
+	old := t.cleanup
+	t.cleanup = func() {
+		if old != nil {
+			defer old()
+		}
+		fn()
+	}
+	runtime.SetFinalizer(t, func(t *TestingTB) { t.cleanup() })
+}
+
+// Fatal mocks testing.T Error method.
+func (t *TestingTB) Error(args ...interface{}) {
+	t.TestingT.Error(args...)
 }
 
 // Errorf mocks testing.T Errorf method.
-func (t *TestingFT) Errorf(format string, args ...interface{}) {
-	t.Error(fmt.Sprintf(format, args...))
+func (t *TestingTB) Errorf(format string, args ...interface{}) {
+	t.TestingT.Error(fmt.Sprintf(format, args...))
 }
 
 // Fail mocks testing.T Fail method.
-func (t *TestingFT) Fail() {
+func (t *TestingTB) Fail() {
 	t.HasFailed = true
 }
 
 // FailNow mocks testing.T FailNow method.
-func (t *TestingFT) FailNow() {
+func (t *TestingTB) FailNow() {
 	t.HasFailed = true
 	t.IsFatal = true
 }
 
 // Failed mocks testing.T Failed method.
-func (t *TestingFT) Failed() bool {
+func (t *TestingTB) Failed() bool {
 	return t.HasFailed
 }
 
+// Fatal mocks testing.T Fatal method.
+func (t *TestingTB) Fatal(args ...interface{}) {
+	t.TestingT.Fatal(args...)
+}
+
 // Fatalf mocks testing.T Fatalf method.
-func (t *TestingFT) Fatalf(format string, args ...interface{}) {
-	t.Fatal(fmt.Sprintf(format, args...))
+func (t *TestingTB) Fatalf(format string, args ...interface{}) {
+	t.TestingT.Fatal(fmt.Sprintf(format, args...))
+}
+
+// Helper mocks testing.T Helper method.
+func (t *TestingTB) Helper() {
+	// Do nothing
 }
 
 // Log mocks testing.T Log method.
-func (t *TestingFT) Log(args ...interface{}) {}
+func (t *TestingTB) Log(args ...interface{}) {}
 
 // Logf mocks testing.T Logf method.
-func (t *TestingFT) Logf(format string, args ...interface{}) {}
+func (t *TestingTB) Logf(format string, args ...interface{}) {}
 
 // Name mocks testing.T Name method.
-func (t *TestingFT) Name() string {
+func (t *TestingTB) Name() string {
 	return t.name
 }
 
 // Skip mocks testing.T Skip method.
-func (t *TestingFT) Skip(args ...interface{}) {}
+func (t *TestingTB) Skip(args ...interface{}) {}
 
 // SkipNow mocks testing.T SkipNow method.
-func (t *TestingFT) SkipNow() {}
+func (t *TestingTB) SkipNow() {}
 
 // Skipf mocks testing.T Skipf method.
-func (t *TestingFT) Skipf(format string, args ...interface{}) {}
+func (t *TestingTB) Skipf(format string, args ...interface{}) {}
 
 // Skipped mocks testing.T Skipped method.
-func (t *TestingFT) Skipped() bool {
+func (t *TestingTB) Skipped() bool {
 	return false
 }
 
 // Run mocks testing.T Run method.
-func (t *TestingFT) Run(name string, f func(t *testing.T)) bool {
+func (t *TestingTB) Run(name string, f func(t *testing.T)) bool {
 	return true
 }

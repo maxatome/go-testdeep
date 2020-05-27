@@ -89,21 +89,21 @@ DATA: test error message
 }
 
 func TestCmp(t *testing.T) {
-	tt := test.NewTestingFT(t.Name())
+	tt := test.NewTestingTB(t.Name())
 	test.IsTrue(t, Cmp(tt, 1, 1))
 	test.IsFalse(t, tt.Failed())
 
-	tt = test.NewTestingFT(t.Name())
+	tt = test.NewTestingTB(t.Name())
 	test.IsFalse(t, Cmp(tt, 1, 2))
 	test.IsTrue(t, tt.Failed())
 }
 
 func TestCmpDeeply(t *testing.T) {
-	tt := test.NewTestingFT(t.Name())
+	tt := test.NewTestingTB(t.Name())
 	test.IsTrue(t, CmpDeeply(tt, 1, 1))
 	test.IsFalse(t, tt.Failed())
 
-	tt = test.NewTestingFT(t.Name())
+	tt = test.NewTestingTB(t.Name())
 	test.IsFalse(t, CmpDeeply(tt, 1, 2))
 	test.IsTrue(t, tt.Failed())
 }
