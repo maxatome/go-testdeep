@@ -8,14 +8,13 @@ package td
 
 import (
 	"reflect"
-	"runtime"
 	"sync"
 
 	"github.com/maxatome/go-testdeep/internal/anchors"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
-// Anchors are stored globally by TestingFT
+// Anchors are stored globally by testing.TB.Name().
 var allAnchors = map[string]*anchors.Info{}
 var allAnchorsMu sync.Mutex
 
@@ -251,21 +250,14 @@ func (t *T) initAnchors() {
 		t.Config.anchors = anchors.NewInfo()
 		allAnchors[name] = t.Config.anchors
 
+		// Do not record a finalizer if no name (should not happen
+		// except perhaps in tests)
 		if name != "" {
-			// Do not record a finalizer if no name (should not happen
-			// except perhaps in tests)
-			finalize := func() {
+			cleanupTB(t.TB, func() {
 				allAnchorsMu.Lock()
 				defer allAnchorsMu.Unlock()
 				delete(allAnchors, name)
-			}
-
-			// From go 1.14, use Cleanup() method
-			if tc, ok := t.TestingFT.(interface{ Cleanup(func()) }); ok {
-				tc.Cleanup(finalize)
-			} else {
-				runtime.SetFinalizer(t.TestingFT, func(t TestingFT) { finalize() })
-			}
+			})
 		}
 	}
 }

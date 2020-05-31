@@ -17,6 +17,7 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
+	"testing"
 	"time"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
@@ -57,9 +58,9 @@ type TestAPI struct {
 //   ta.Get("/ping").
 //     CmpStatus(200).
 //     CmpBody("pong")
-func NewTestAPI(tt td.TestingFT, handler http.Handler) *TestAPI {
+func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 	return &TestAPI{
-		t:       td.NewT(tt),
+		t:       td.NewT(tb),
 		handler: handler,
 	}
 }

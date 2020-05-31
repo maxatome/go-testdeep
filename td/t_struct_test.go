@@ -83,50 +83,112 @@ func TestT(tt *testing.T) {
 }
 
 func TestTCmp(tt *testing.T) {
-	ttt := test.NewTestingFT(tt.Name())
+	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
 	td.CmpTrue(tt, t.Cmp(1, 1))
 	td.CmpFalse(tt, ttt.Failed())
 
-	ttt = test.NewTestingFT(tt.Name())
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt)
 	td.CmpFalse(tt, t.Cmp(1, 2))
 	td.CmpTrue(tt, ttt.Failed())
 }
 
 func TestTCmpDeeply(tt *testing.T) {
-	ttt := test.NewTestingFT(tt.Name())
+	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
 	td.CmpTrue(tt, t.CmpDeeply(1, 1))
 	td.CmpFalse(tt, ttt.Failed())
 
-	ttt = test.NewTestingFT(tt.Name())
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt)
 	td.CmpFalse(tt, t.CmpDeeply(1, 2))
 	td.CmpTrue(tt, ttt.Failed())
 }
 
-func TestRunT(tt *testing.T) {
-	t := td.NewT(tt)
+func TestRun(t *testing.T) {
+	t.Run("test.TB with Run", func(tt *testing.T) {
+		t := td.NewT(tt)
 
-	runPassed := false
+		runPassed := false
 
-	ok := t.RunT("Test level1",
-		func(t *td.T) {
-			ok := t.RunT("Test level2",
-				func(t *td.T) {
-					runPassed = t.True(true) // test succeeds!
-				})
+		ok := t.Run("Test level1",
+			func(t *td.T) {
+				ok := t.Run("Test level2",
+					func(t *td.T) {
+						runPassed = t.True(true) // test succeeds!
+					})
 
-			t.True(ok)
-		})
+				t.True(ok)
+			})
 
-	t.True(ok)
-	t.True(runPassed)
+		t.True(ok)
+		t.True(runPassed)
+	})
+
+	t.Run("test.TB without Run", func(tt *testing.T) {
+		t := td.NewT(test.NewTestingTB("gg"))
+
+		runPassed := false
+
+		ok := t.Run("Test level1",
+			func(t *td.T) {
+				ok := t.Run("Test level2",
+					func(t *td.T) {
+						runPassed = t.True(true) // test succeeds!
+					})
+
+				t.True(ok)
+			})
+
+		t.True(ok)
+		t.True(runPassed)
+	})
+}
+
+// Deprecated RunT
+func TestRunT(t *testing.T) {
+	t.Run("test.TB with Run", func(tt *testing.T) {
+		t := td.NewT(tt)
+
+		runPassed := false
+
+		ok := t.RunT("Test level1",
+			func(t *td.T) {
+				ok := t.RunT("Test level2",
+					func(t *td.T) {
+						runPassed = t.True(true) // test succeeds!
+					})
+
+				t.True(ok)
+			})
+
+		t.True(ok)
+		t.True(runPassed)
+	})
+
+	t.Run("test.TB without Run", func(tt *testing.T) {
+		t := td.NewT(test.NewTestingTB("gg"))
+
+		runPassed := false
+
+		ok := t.RunT("Test level1",
+			func(t *td.T) {
+				ok := t.RunT("Test level2",
+					func(t *td.T) {
+						runPassed = t.True(true) // test succeeds!
+					})
+
+				t.True(ok)
+			})
+
+		t.True(ok)
+		t.True(runPassed)
+	})
 }
 
 func TestFailureIsFatal(tt *testing.T) {
-	ttt := test.NewTestingFT(tt.Name())
+	ttt := test.NewTestingTB(tt.Name())
 
 	// All t.True(false) tests of course fail
 
@@ -213,7 +275,7 @@ func TestFailureIsFatal(tt *testing.T) {
 }
 
 func TestUseEqual(tt *testing.T) {
-	ttt := test.NewTestingFT(tt.Name())
+	ttt := test.NewTestingTB(tt.Name())
 
 	var time1, time2 time.Time
 	for {
@@ -243,7 +305,7 @@ func TestUseEqual(tt *testing.T) {
 }
 
 func TestBeLax(tt *testing.T) {
-	ttt := test.NewTestingFT(tt.Name())
+	ttt := test.NewTestingTB(tt.Name())
 
 	// Using default config
 	t := td.NewT(ttt)

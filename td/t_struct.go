@@ -7,20 +7,22 @@
 package td
 
 import (
+	"reflect"
+	"sync"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 )
 
-// T is a type that encapsulates *testing.T (in fact TestingFT
-// interface which is implemented by *testing.T) allowing to easily
-// use *testing.T methods as well as T ones.
+// T is a type that encapsulates testing.TB interface (which is
+// implemented by *testing.T and *testing.B) allowing to easily use
+// *testing.T methods as well as T ones.
 type T struct {
-	TestingFT
+	testing.TB
 	Config ContextConfig // defaults to DefaultContextConfig
 }
 
-var _ TestingFT = T{}
+var _ testing.TB = T{}
 
 // NewT returns a new T instance. Typically used as:
 //
@@ -127,10 +129,10 @@ var _ TestingFT = T{}
 // Of course "t" can already be a *T, in this special case if "config"
 // is omitted, the Config of the new instance is a copy of the "t"
 // Config.
-func NewT(t TestingFT, config ...ContextConfig) *T {
+func NewT(t testing.TB, config ...ContextConfig) *T {
 	var newT T
 
-	const usage = "NewT(TestingFT[, ContextConfig])"
+	const usage = "NewT(testing.TB[, ContextConfig])"
 	if len(config) > 1 {
 		panic(ctxerr.TooManyParams(usage))
 	}
@@ -138,16 +140,16 @@ func NewT(t TestingFT, config ...ContextConfig) *T {
 		panic(ctxerr.BadUsage(usage, nil, 1, false))
 	}
 
-	// Already a *T, so steal its TestingFT and its Config if needed
+	// Already a *T, so steal its testing.TB and its Config if needed
 	if tdT, ok := t.(*T); ok {
-		newT.TestingFT = tdT.TestingFT
+		newT.TB = tdT.TB
 		if len(config) == 0 {
 			newT.Config = tdT.Config
 		} else {
 			newT.Config = config[0]
 		}
 	} else {
-		newT.TestingFT = t
+		newT.TB = t
 		if len(config) == 0 {
 			newT.Config = DefaultContextConfig
 		} else {
@@ -171,7 +173,7 @@ func NewT(t TestingFT, config ...ContextConfig) *T {
 //   assert := NewT(t).FailureIsFatal(false)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
-func Assert(t TestingFT, config ...ContextConfig) *T {
+func Assert(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal(false)
 }
 
@@ -185,7 +187,7 @@ func Assert(t TestingFT, config ...ContextConfig) *T {
 //   require := NewT(t).FailureIsFatal(true)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
-func Require(t TestingFT, config ...ContextConfig) *T {
+func Require(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal()
 }
 
@@ -200,7 +202,7 @@ func Require(t TestingFT, config ...ContextConfig) *T {
 //   assert, require := Assert(t), Require(t)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
-func AssertRequire(t TestingFT, config ...ContextConfig) (*T, *T) {
+func AssertRequire(t testing.TB, config ...ContextConfig) (*T, *T) {
 	assert := Assert(t, config...)
 	return assert, assert.FailureIsFatal()
 }
@@ -241,11 +243,11 @@ func (t *T) RootName(rootName string) *T {
 	return &new
 }
 
-// FailureIsFatal allows to choose whether t.TestingFT.Fatal() or
-// t.TestingFT.Error() will be used to print the next failure
+// FailureIsFatal allows to choose whether t.TB.Fatal() or
+// t.TB.Error() will be used to print the next failure
 // reports. When "enable" is true (or missing) testing.Fatal() will be
-// called, else testing.Error(). Using *testing.T instance as
-// t.TestingFT value, FailNow() is called behind the scenes when
+// called, else testing.Error(). Using *testing.T or *testing.B instance as
+// t.TB value, FailNow() is called behind the scenes when
 // Fatal() is called. See testing documentation for details.
 //
 // It returns a new instance of *T so does not alter the original t
@@ -310,7 +312,7 @@ func (t *T) BeLax(enable ...bool) *T {
 
 // Cmp is mostly a shortcut for:
 //
-//   Cmp(t.TestingFT, got, expected, args...)
+//   Cmp(t.TB, got, expected, args...)
 //
 // with the exception that t.Config is used to configure the test
 // Context.
@@ -325,7 +327,7 @@ func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	defer t.resetNonPersistentAnchors()
 	return cmpDeeply(newContextWithConfig(t.Config),
-		t.TestingFT, got, expected, args...)
+		t.TB, got, expected, args...)
 }
 
 // CmpDeeply works the same as Cmp and is still available for
@@ -334,7 +336,7 @@ func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	defer t.resetNonPersistentAnchors()
 	return cmpDeeply(newContextWithConfig(t.Config),
-		t.TestingFT, got, expected, args...)
+		t.TB, got, expected, args...)
 }
 
 // True is shortcut for:
@@ -380,7 +382,7 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 //   _, err := MyFunction(1, 2, 3)
 //   t.CmpError(err, "MyFunction(1, 2, 3) should return an error")
 //
-// CmpError and not Error to avoid collision with t.TestingFT.Error method.
+// CmpError and not Error to avoid collision with t.TB.Error method.
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -390,7 +392,7 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 // reason of a potential failure.
 func (t *T) CmpError(got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpError(newContextWithConfig(t.Config), t.TestingFT, got, args...)
+	return cmpError(newContextWithConfig(t.Config), t.TB, got, args...)
 }
 
 // CmpNoError checks that "got" is nil error.
@@ -410,7 +412,7 @@ func (t *T) CmpError(got error, args ...interface{}) bool {
 // reason of a potential failure.
 func (t *T) CmpNoError(got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpNoError(newContextWithConfig(t.Config), t.TestingFT, got, args...)
+	return cmpNoError(newContextWithConfig(t.Config), t.TB, got, args...)
 }
 
 // CmpPanic calls "fn" and checks a panic() occurred with the
@@ -464,23 +466,98 @@ func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
 	return cmpNotPanic(newContextWithConfig(t.Config), t, fn, args...)
 }
 
-// RunT runs "f" as a subtest of t called "name". It runs "f" in a
-// separate goroutine and blocks until "f" returns or calls t.Parallel
-// to become a parallel test. RunT reports whether "f" succeeded (or at
-// least did not fail before calling t.Parallel).
+type runtFuncs struct {
+	run reflect.Value
+	fnt reflect.Type
+}
+
+var (
+	runtMu sync.Mutex
+	runt   = map[reflect.Type]runtFuncs{}
+)
+
+func (t *T) getRunFunc() (runtFuncs, bool) {
+	ttb := reflect.TypeOf(t.TB)
+
+	runtMu.Lock()
+	defer runtMu.Unlock()
+
+	vfuncs, ok := runt[ttb]
+	if !ok {
+		run, ok := ttb.MethodByName("Run")
+		if ok {
+			mt := run.Type
+			if mt.NumIn() == 3 && mt.NumOut() == 1 && !mt.IsVariadic() &&
+				mt.In(1) == stringType && mt.Out(0) == boolType {
+				fnt := mt.In(2)
+				if fnt.Kind() == reflect.Func &&
+					fnt.NumIn() == 1 && fnt.NumOut() == 0 &&
+					fnt.In(0) == mt.In(0) {
+					vfuncs = runtFuncs{
+						run: run.Func,
+						fnt: fnt,
+					}
+					runt[ttb] = vfuncs
+					ok = true
+				}
+			}
+		}
+		if !ok {
+			runt[ttb] = vfuncs
+		}
+	}
+
+	return vfuncs, vfuncs != (runtFuncs{})
+}
+
+// Run runs "f" as a subtest of t called "name".
 //
-// RunT may be called simultaneously from multiple goroutines, but all
-// such calls must return before the outer test function for t
-// returns.
+// If t.TB implement a method with the following signature:
 //
-// Under the hood, RunT delegates all this stuff to testing.Run. That
-// is why this documentation is a copy/paste of testing.Run one.
+//   (X) Run(string, func(X)) bool
 //
-// In versions up to v1.0.8, the name of this function was Run. As *T
-// now implements TestingFT interface, the original
-// (*testing.T).Run(string, func(t *testing.T)) is callable directly
-// on *T.
+// it calls it with a function of its own in which it creates a new
+// instance of *T on the fly before calling "f" with it.
+//
+// So if t.TB is a *testing.T or a *testing.B (which is in normal
+// cases), let's quote the testing.T.Run() & testing.B.Run()
+// documentation: "f" is called in a separate goroutine and blocks
+// until "f" returns or calls t.Parallel to become a parallel
+// test. Run reports whether "f" succeeded (or at least did not fail
+// before calling t.Parallel). Run may be called simultaneously from
+// multiple goroutines, but all such calls must return before the
+// outer test function for t returns.
+//
+// If this Run() method is not found, it simply logs "name" then
+// executes "f" using a new *T instance in the current goroutine. Note
+// that it is only done for convenience.
+func (t *T) Run(name string, f func(t *T)) bool {
+	t.Helper()
+
+	vfuncs, ok := t.getRunFunc()
+	if !ok {
+		t = NewT(t)
+		t.Logf("++++ %s", name)
+		f(t)
+		return !t.Failed()
+	}
+
+	ret := vfuncs.run.Call([]reflect.Value{
+		reflect.ValueOf(t.TB),
+		reflect.ValueOf(name),
+		reflect.MakeFunc(vfuncs.fnt,
+			func(args []reflect.Value) (results []reflect.Value) {
+				f(NewT(args[0].Interface().(testing.TB), t.Config))
+				return nil
+			}),
+	})
+
+	return ret[0].Bool()
+}
+
+// Deprecated: RunT has been superseded by Run() method. It is kept
+// for compatibility.
 func (t *T) RunT(name string, f func(t *T)) bool {
 	t.Helper()
-	return t.TestingFT.Run(name, func(tt *testing.T) { f(NewT(tt, t.Config)) })
+	return t.Run(name, f)
 }

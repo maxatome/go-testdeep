@@ -201,12 +201,12 @@ func TestCmpResponse(tt *testing.T) {
 			},
 		},
 	} {
-		t.RunT(curTest.Name,
+		t.Run(curTest.Name,
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpResponse, "CmpResponse", curTest)
 			})
 
-		t.RunT(curTest.Name+" TestAPI",
+		t.Run(curTest.Name+" TestAPI",
 			func(t *td.T) {
 				testTestAPI(t, (*tdhttp.TestAPI).CmpBody, "CmpBody", curTest)
 			})
@@ -265,12 +265,12 @@ func TestCmpJSONResponse(tt *testing.T) {
 			},
 		},
 	} {
-		t.RunT(curTest.Name,
+		t.Run(curTest.Name,
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpJSONResponse, "CmpJSONResponse", curTest)
 			})
 
-		t.RunT(curTest.Name+" TestAPI",
+		t.Run(curTest.Name+" TestAPI",
 			func(t *td.T) {
 				testTestAPI(t, (*tdhttp.TestAPI).CmpJSONBody, "CmpJSONBody", curTest)
 			})
@@ -409,12 +409,12 @@ func TestCmpXMLResponse(tt *testing.T) {
 			},
 		},
 	} {
-		t.RunT(curTest.Name,
+		t.Run(curTest.Name,
 			func(t *td.T) {
 				testCmpResponse(t, tdhttp.CmpXMLResponse, "CmpXMLResponse", curTest)
 			})
 
-		t.RunT(curTest.Name+" TestAPI",
+		t.Run(curTest.Name+" TestAPI",
 			func(t *td.T) {
 				testTestAPI(t, (*tdhttp.TestAPI).CmpXMLBody, "CmpXMLBody", curTest)
 			})
@@ -445,7 +445,7 @@ func testLogs(t *td.T, mockT *tdutil.T, curTest CmpResponseTest) {
 }
 
 func testCmpResponse(t *td.T,
-	cmp func(td.TestingFT, *http.Request, func(http.ResponseWriter, *http.Request), tdhttp.Response, ...interface{}) bool,
+	cmp func(testing.TB, *http.Request, func(http.ResponseWriter, *http.Request), tdhttp.Response, ...interface{}) bool,
 	cmpName string,
 	curTest CmpResponseTest,
 ) {

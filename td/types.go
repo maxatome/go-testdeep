@@ -27,38 +27,23 @@ var (
 	intType            = reflect.TypeOf(int(0))
 	uint8Type          = reflect.TypeOf(uint8(0))
 	runeType           = reflect.TypeOf(rune(0))
+	stringType         = reflect.TypeOf("")
 	boolType           = reflect.TypeOf(false)
 	smuggledGotType    = reflect.TypeOf(SmuggledGot{})
 	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
 )
 
 // TestingT is the minimal interface used by Cmp to report errors. It
-// is commonly implemented by *testing.T and testing.TB.
+// is commonly implemented by *testing.T and *testing.B.
 type TestingT interface {
 	Error(args ...interface{})
 	Fatal(args ...interface{})
 	Helper()
 }
 
-// TestingFT (aka TestingF<ull>T) is the interface used by T to
-// delegate common *testing.T functions to it. Of course, *testing.T
-// implements it.
-type TestingFT interface {
-	TestingT
-	Errorf(format string, args ...interface{})
-	Fail()
-	FailNow()
-	Failed() bool
-	Fatalf(format string, args ...interface{})
-	Log(args ...interface{})
-	Logf(format string, args ...interface{})
-	Name() string
-	Skip(args ...interface{})
-	SkipNow()
-	Skipf(format string, args ...interface{})
-	Skipped() bool
-	Run(name string, f func(t *testing.T)) bool
-}
+// TestingFT is a deprecated alias of testing.TB. Use testing.TB
+// directly in new code.
+type TestingFT = testing.TB
 
 // TestDeep is the representation of a go-testdeep operator. It is not
 // intended to be used directly, but through Cmp* functions.

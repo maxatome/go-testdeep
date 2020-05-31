@@ -10,10 +10,10 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
-// TestingT is a deprecated alias of github.com/maxatome/go-testdeep/td.TestingT
+// TestingT is a deprecated alias of github.com/maxatome/go-testdeep/td.TestingT.
 type TestingT = td.TestingT
 
-// TestingFT is a deprecated alias of github.com/maxatome/go-testdeep/td.TestingFT.
+// TestingFT is a deprecated alias of github.com/maxatome/go-testdeep/td.TestingFT, which is itself a deprecated alias of testing.TB.
 type TestingFT = td.TestingFT
 
 // TestDeep is a deprecated alias of github.com/maxatome/go-testdeep/td.TestDeep.

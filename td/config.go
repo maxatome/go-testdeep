@@ -38,7 +38,7 @@ type ContextConfig struct {
 	MaxErrors int
 	anchors   *anchors.Info
 	// FailureIsFatal allows to Fatal() (instead of Error()) when a test
-	// fails. Using *testing.T instance as t.TestingFT value, FailNow()
+	// fails. Using *testing.T or *testing.B instance as t.TB value, FailNow()
 	// is called behind the scenes when Fatal() is called. See testing
 	// documentation for details.
 	FailureIsFatal bool
