@@ -29,16 +29,12 @@ go-testdeep
 
 ## Latest news
 
+- 2020/05/31: [v1.6.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.6.0);
 - 2020/05/17: [v1.5.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.5.0);
 - 2020/04/11:
   - [`tdhttp`] helper (the HTTP API tester) enhanced and fully documented;
 - 2020/04/06:
   - new [`Delay`] operator;
-- 2020/02/29:
-  - `github.com/maxatome/go-testdeep` deprecated (but still usable),
-    use `github.com/maxatome/go-testdeep/td` instead. See the
-    [FAQ point](https://go-testdeep.zetta.rocks/faq/#should-i-import-githubcommaxatomego-testdeep-or-githubcommaxatomego-testdeeptd)
-    for details about migration;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
