@@ -17,7 +17,7 @@
 //   ta := tdhttp.NewTestAPI(t, mux)
 //
 //   ta.Get("/person/42", "Accept", "application/xml").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpHeader(td.ContainsKey("X-Custom-Header")).
 //     CmpXMLBody(Person{
 //       ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
@@ -26,7 +26,7 @@
 //     })
 //
 //   ta.Get("/person/42", "Accept", "application/json").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpHeader(td.ContainsKey("X-Custom-Header")).
 //     CmpJSONBody(td.JSON(`
 //   {

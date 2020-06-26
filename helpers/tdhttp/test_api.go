@@ -511,11 +511,11 @@ func (t *TestAPI) CmpMarshaledBody(unmarshal func([]byte, interface{}) error, ex
 //   ta := tdhttp.NewTestAPI(t, mux)
 //
 //   ta.Get("/test").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpBody("OK!\n")
 //
 //   ta.Get("/test").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpBody(td.Contains("OK"))
 //
 // It fails if no request has been sent yet.
@@ -555,7 +555,7 @@ func (t *TestAPI) CmpBody(expectedBody interface{}) *TestAPI {
 //   ta := tdhttp.NewTestAPI(t, mux)
 //
 //   ta.Get("/person/42").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpJSONBody(Person{
 //       ID:   42,
 //       Name: "Bob",
@@ -563,7 +563,7 @@ func (t *TestAPI) CmpBody(expectedBody interface{}) *TestAPI {
 //     })
 //
 //   ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
-//     CmpStatus(htp.StatusCreated).
+//     CmpStatus(http.StatusCreated).
 //     CmpJSONBody(td.SStruct(
 //       Person{
 //         Name: "Bob",
@@ -578,7 +578,7 @@ func (t *TestAPI) CmpBody(expectedBody interface{}) *TestAPI {
 //   ta := tdhttp.NewTestAPI(tt, mux)
 //
 //   ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
-//     CmpStatus(htp.StatusCreated).
+//     CmpStatus(http.StatusCreated).
 //     CmpJSONBody(Person{
 //       ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
 //       Name: "Bob",
@@ -588,7 +588,7 @@ func (t *TestAPI) CmpBody(expectedBody interface{}) *TestAPI {
 // The same using td.JSON():
 //
 //   ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
-//     CmpStatus(htp.StatusCreated).
+//     CmpStatus(http.StatusCreated).
 //     CmpJSONBody(td.JSON(`
 //   {
 //     "id":   $1,
@@ -611,7 +611,7 @@ func (t *TestAPI) CmpJSONBody(expectedBody interface{}) *TestAPI {
 //   ta := tdhttp.NewTestAPI(t, mux)
 //
 //   ta.Get("/person/42").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpXMLBody(Person{
 //       ID:   42,
 //       Name: "Bob",
@@ -619,7 +619,7 @@ func (t *TestAPI) CmpJSONBody(expectedBody interface{}) *TestAPI {
 //     })
 //
 //   ta.Get("/person/43").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpXMLBody(td.SStruct(
 //       Person{
 //         Name: "Bob",
@@ -634,7 +634,7 @@ func (t *TestAPI) CmpJSONBody(expectedBody interface{}) *TestAPI {
 //   ta := tdhttp.NewTestAPI(tt, mux)
 //
 //   ta.Get("/person/42").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpXMLBody(Person{
 //       ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
 //       Name: "Bob",
@@ -669,7 +669,7 @@ func (t *TestAPI) NoBody() *TestAPI {
 //   ta := tdhttp.NewTestAPI(tt, mux)
 //
 //   ta.Get("/person/42").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpJSONBody(Person{
 //       ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
 //       Name: "Bob",
@@ -691,7 +691,7 @@ func (t *TestAPI) Anchor(operator td.TestDeep, model ...interface{}) interface{}
 //   ta := tdhttp.NewTestAPI(tt, mux)
 //
 //   ta.Get("/person/42").
-//     CmpStatus(htp.StatusOK).
+//     CmpStatus(http.StatusOK).
 //     CmpJSONBody(Person{
 //       ID:   ta.A(td.NotZero(), uint64(0)).(uint64),
 //       Name: "Bob",
@@ -708,7 +708,7 @@ func (t *TestAPI) A(operator td.TestDeep, model ...interface{}) interface{} {
 // can be used to check the time a route sets and returns, as in:
 //
 //   ta.PostJSON("/person/42", Person{Name: "Bob", Age: 23}).
-//     CmpStatus(htp.StatusCreated).
+//     CmpStatus(http.StatusCreated).
 //     CmpJSONBody(Person{
 //       ID:        ta.A(td.NotZero(), uint64(0)).(uint64),
 //       Name:      "Bob",
