@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
@@ -463,4 +464,108 @@ func TestNewTestAPI(t *testing.T) {
 		td.CmpContains(t, mockT.LogBuf(), "Response body is empty!")
 		td.CmpContains(t, mockT.LogBuf(), "Body cannot be empty when using CmpXMLBody")
 	})
+}
+
+func TestOr(t *testing.T) {
+	mux := server()
+
+	t.Run("Success", func(t *testing.T) {
+		var orCalled bool
+		for i, fn := range []interface{}{
+			func(body string) { orCalled = true },
+			func(t *td.T, body string) { orCalled = true },
+			func(body []byte) { orCalled = true },
+			func(t *td.T, body []byte) { orCalled = true },
+			func(t *td.T, r *httptest.ResponseRecorder) { orCalled = true },
+		} {
+			orCalled = false
+			// As CmpStatus succeeds, Or function is not called
+			td.CmpFalse(t,
+				tdhttp.NewTestAPI(tdutil.NewT("test"), mux).
+					Head("/any").
+					CmpStatus(200).
+					Or(fn).
+					Failed(),
+				"Not failed #%d", i)
+			td.CmpFalse(t, orCalled, "called #%d", i)
+		}
+	})
+
+	t.Run("No request sent", func(t *testing.T) {
+		var ok, orCalled bool
+		for i, fn := range []interface{}{
+			func(body string) { orCalled = true; ok = body == "" },
+			func(t *td.T, body string) { orCalled = true; ok = t != nil && body == "" },
+			func(body []byte) { orCalled = true; ok = body == nil },
+			func(t *td.T, body []byte) { orCalled = true; ok = t != nil && body == nil },
+			func(t *td.T, r *httptest.ResponseRecorder) { orCalled = true; ok = t != nil && r == nil },
+		} {
+			orCalled, ok = false, false
+			// Check status without sending a request → fail
+			td.CmpTrue(t,
+				tdhttp.NewTestAPI(tdutil.NewT("test"), mux).
+					CmpStatus(123).
+					Or(fn).
+					Failed(),
+				"Failed #%d", i)
+			td.CmpTrue(t, orCalled, "called #%d", i)
+			td.CmpTrue(t, ok, "OK #%d", i)
+		}
+	})
+
+	t.Run("Empty bodies", func(t *testing.T) {
+		var ok, orCalled bool
+		for i, fn := range []interface{}{
+			func(body string) { orCalled = true; ok = body == "" },
+			func(t *td.T, body string) { orCalled = true; ok = t != nil && body == "" },
+			func(body []byte) { orCalled = true; ok = body == nil },
+			func(t *td.T, body []byte) { orCalled = true; ok = t != nil && body == nil },
+			func(t *td.T, r *httptest.ResponseRecorder) {
+				orCalled = true
+				ok = t != nil && r != nil && r.Body.Len() == 0
+			},
+		} {
+			orCalled, ok = false, false
+			// HEAD /any = no body + CmpStatus fails
+			td.CmpTrue(t,
+				tdhttp.NewTestAPI(tdutil.NewT("test"), mux).
+					Head("/any").
+					CmpStatus(123).
+					Or(fn).
+					Failed(),
+				"Failed #%d", i)
+			td.CmpTrue(t, orCalled, "called #%d", i)
+			td.CmpTrue(t, ok, "OK #%d", i)
+		}
+	})
+
+	t.Run("Body", func(t *testing.T) {
+		var ok, orCalled bool
+		for i, fn := range []interface{}{
+			func(body string) { orCalled = true; ok = body == "GET!" },
+			func(t *td.T, body string) { orCalled = true; ok = t != nil && body == "GET!" },
+			func(body []byte) { orCalled = true; ok = string(body) == "GET!" },
+			func(t *td.T, body []byte) { orCalled = true; ok = t != nil && string(body) == "GET!" },
+			func(t *td.T, r *httptest.ResponseRecorder) {
+				orCalled = true
+				ok = t != nil && r != nil && r.Body.String() == "GET!"
+			},
+		} {
+			orCalled, ok = false, false
+			// GET /any = "GET!" body + CmpStatus fails
+			td.CmpTrue(t,
+				tdhttp.NewTestAPI(tdutil.NewT("test"), mux).
+					Get("/any").
+					CmpStatus(123).
+					Or(fn).
+					Failed(),
+				"Failed #%d", i)
+			td.CmpTrue(t, orCalled, "called #%d", i)
+			td.CmpTrue(t, ok, "OK #%d", i)
+		}
+	})
+
+	td.CmpPanic(t,
+		func() { tdhttp.NewTestAPI(tdutil.NewT("test"), mux).Or(123) },
+		"usage: Or(func([*td.T,]string) | func([*td.T,][]byte) | func(*td.T,*httptest.ResponseRecorder)), but received int as 1st parameter")
 }

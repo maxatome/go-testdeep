@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -658,6 +659,74 @@ func (t *TestAPI) NoBody() *TestAPI {
 	t.bodyFailed = !t.checkRequestSent() ||
 		!t.t.RootName("Response.Body").
 			Empty(t.response.Body.Bytes(), "body should be empty")
+
+	return t
+}
+
+// Or executes function "fn" if t.Failed() is true at the moment it is called.
+//
+// "fn" can have several types:
+//   - func(body string) or func(t *td.T, body string)
+//     → "fn" is called with response body as a string.
+//       If no response has been received yet, body is "";
+//   - func(body []byte) or func(t *td.T, body []byte)
+//     → "fn" is called with response body as a []byte.
+//       If no response has been received yet, body is nil;
+//   - func(t *td.T, resp *httptest.ResponseRecorder)
+//     → "fn" is called with the internal object containing the response.
+//       See net/http/httptest for details.
+//       If no response has been received yet, resp is nil.
+//
+// If "fn" type is not one of these types, it panics.
+func (t *TestAPI) Or(fn interface{}) *TestAPI {
+	t.t.Helper()
+	switch fn := fn.(type) {
+	case func(string):
+		if t.Failed() {
+			var body string
+			if t.response != nil && t.response.Body != nil {
+				body = t.response.Body.String()
+			}
+			fn(body)
+		}
+
+	case func(*td.T, string):
+		if t.Failed() {
+			var body string
+			if t.response != nil && t.response.Body != nil {
+				body = t.response.Body.String()
+			}
+			fn(t.t, body)
+		}
+
+	case func([]byte):
+		if t.Failed() {
+			var body []byte
+			if t.response != nil && t.response.Body != nil {
+				body = t.response.Body.Bytes()
+			}
+			fn(body)
+		}
+
+	case func(*td.T, []byte):
+		if t.Failed() {
+			var body []byte
+			if t.response != nil && t.response.Body != nil {
+				body = t.response.Body.Bytes()
+			}
+			fn(t.t, body)
+		}
+
+	case func(*td.T, *httptest.ResponseRecorder):
+		if t.Failed() {
+			fn(t.t, t.response)
+		}
+
+	default:
+		panic(color.BadUsage(
+			"Or(func([*td.T,]string) | func([*td.T,][]byte) | func(*td.T,*httptest.ResponseRecorder))",
+			fn, 1, true))
+	}
 
 	return t
 }
