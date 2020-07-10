@@ -78,7 +78,7 @@ func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 	if strict {
 		s = "S"
 	}
-	panic(color.BadUsage("usage: "+s+"Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)",
+	panic(color.BadUsage(s+"Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)",
 		model, 1, true))
 }
 
