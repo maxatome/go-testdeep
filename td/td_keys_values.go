@@ -10,6 +10,7 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -64,7 +65,7 @@ func Keys(val interface{}) TestDeep {
 	if k.initKVBase(val) {
 		return &k
 	}
-	panic(ctxerr.BadUsage("Keys(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
+	panic(color.BadUsage("Keys(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
 }
 
 func (k *tdKeys) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -123,7 +124,7 @@ func Values(val interface{}) TestDeep {
 	if v.initKVBase(val) {
 		return &v
 	}
-	panic(ctxerr.BadUsage("Values(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
+	panic(color.BadUsage("Values(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
 }
 
 func (v *tdValues) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

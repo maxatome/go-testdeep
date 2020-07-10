@@ -11,7 +11,7 @@ import (
 	"sync"
 
 	"github.com/maxatome/go-testdeep/internal/anchors"
-	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/color"
 )
 
 // Anchors are stored globally by testing.TB.Name().
@@ -45,7 +45,7 @@ var allAnchorsMu sync.Mutex
 func AddAnchorableStructType(fn interface{}) {
 	err := anchors.AddAnchorableStructType(fn)
 	if err != nil {
-		panic(ctxerr.Bad(err.Error()))
+		panic(color.Bad(err.Error()))
 	}
 }
 
@@ -130,32 +130,32 @@ func AddAnchorableStructType(fn interface{}) {
 // See A method for a shorter synonym of Anchor.
 func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
 	if operator == nil {
-		panic(ctxerr.Bad("Cannot anchor a nil TestDeep operator"))
+		panic(color.Bad("Cannot anchor a nil TestDeep operator"))
 	}
 
 	var typ reflect.Type
 	if len(model) > 0 {
 		if len(model) != 1 {
-			panic(ctxerr.TooManyParams("Anchor(OPERATOR[, MODEL])"))
+			panic(color.TooManyParams("Anchor(OPERATOR[, MODEL])"))
 		}
 		var ok bool
 		typ, ok = model[0].(reflect.Type)
 		if !ok {
 			typ = reflect.TypeOf(model[0])
 			if typ == nil {
-				panic(ctxerr.Bad("Untyped nil value is not valid as model for an anchor"))
+				panic(color.Bad("Untyped nil value is not valid as model for an anchor"))
 			}
 		}
 
 		typeBehind := operator.TypeBehind()
 		if typeBehind != nil && typeBehind != typ {
-			panic(ctxerr.Bad("Operator %s TypeBehind() returned %s which differs from model type %s. Omit model or ensure its type is %[2]s",
+			panic(color.Bad("Operator %s TypeBehind() returned %s which differs from model type %s. Omit model or ensure its type is %[2]s",
 				operator.GetLocation().Func, typeBehind, typ))
 		}
 	} else {
 		typ = operator.TypeBehind()
 		if typ == nil {
-			panic(ctxerr.Bad("Cannot anchor operator %s as TypeBehind() returned nil. Use model parameter to specify the type to return",
+			panic(color.Bad("Cannot anchor operator %s as TypeBehind() returned nil. Use model parameter to specify the type to return",
 				operator.GetLocation().Func))
 		}
 	}

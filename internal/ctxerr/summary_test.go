@@ -11,6 +11,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
@@ -22,7 +23,7 @@ func errorSummaryToString(s ctxerr.ErrorSummary, prefix string) string {
 }
 
 func TestErrorSummary(t *testing.T) {
-	defer ctxerr.SaveColorState()()
+	defer color.SaveState()()
 
 	colored := false
 	r := func(s string) string {
@@ -49,7 +50,7 @@ func TestErrorSummary(t *testing.T) {
 	}
 
 	for _, colored = range []bool{false, true} {
-		ctxerr.SaveColorState(colored)
+		color.SaveState(colored)
 
 		//
 		// errorSummaryString

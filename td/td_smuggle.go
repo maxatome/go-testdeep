@@ -13,6 +13,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -298,7 +299,7 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 	case reflect.String:
 		fn, err := buildStructFieldFn(vfn.String())
 		if err != nil {
-			panic(ctxerr.Bad("%s: %s", usage, err))
+			panic(color.Bad("%s: %s", usage, err))
 		}
 		vfn = reflect.ValueOf(fn)
 
@@ -306,12 +307,12 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 		// nothing to check
 
 	default:
-		panic(ctxerr.BadUsage(usage, fn, 1, true))
+		panic(color.BadUsage(usage, fn, 1, true))
 	}
 
 	fnType := vfn.Type()
 	if fnType.IsVariadic() || fnType.NumIn() != 1 {
-		panic(ctxerr.Bad(usage + ": FUNC must take only one non-variadic argument"))
+		panic(color.Bad(usage + ": FUNC must take only one non-variadic argument"))
 	}
 
 	switch fnType.NumOut() {
@@ -343,7 +344,7 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 		return &s
 	}
 
-	panic(ctxerr.Bad(
+	panic(color.Bad(
 		": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"))
 }
 

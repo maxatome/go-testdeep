@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/color"
 )
 
 // T is a type that encapsulates testing.TB interface (which is
@@ -134,10 +134,10 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 
 	const usage = "NewT(testing.TB[, ContextConfig])"
 	if len(config) > 1 {
-		panic(ctxerr.TooManyParams(usage))
+		panic(color.TooManyParams(usage))
 	}
 	if t == nil {
-		panic(ctxerr.BadUsage(usage, nil, 1, false))
+		panic(color.BadUsage(usage, nil, 1, false))
 	}
 
 	// Already a *T, so steal its testing.TB and its Config if needed

@@ -9,6 +9,7 @@ package td
 import (
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -51,7 +52,7 @@ var _ TestDeep = &tdIsa{}
 func Isa(model interface{}) TestDeep {
 	modelType := reflect.TypeOf(model)
 	if modelType == nil {
-		panic(ctxerr.Bad("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example"))
+		panic(color.Bad("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example"))
 	}
 
 	return &tdIsa{

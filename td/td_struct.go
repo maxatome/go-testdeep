@@ -13,6 +13,7 @@ import (
 	"reflect"
 	"sort"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -77,7 +78,7 @@ func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 	if strict {
 		s = "S"
 	}
-	panic(ctxerr.BadUsage("usage: "+s+"Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)",
+	panic(color.BadUsage("usage: "+s+"Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)",
 		model, 1, true))
 }
 
@@ -93,7 +94,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 	for fieldName, expectedValue := range expectedFields {
 		field, found := stType.FieldByName(fieldName)
 		if !found {
-			panic(ctxerr.Bad("%s(): struct %s has no field `%s'",
+			panic(color.Bad("%s(): struct %s has no field `%s'",
 				st.location.Func, stType, fieldName))
 		}
 
@@ -103,7 +104,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 				reflect.Ptr, reflect.Slice:
 				vexpectedValue = reflect.Zero(field.Type) // change to a typed nil
 			default:
-				panic(ctxerr.Bad(
+				panic(color.Bad(
 					"%s(): expected value of field %s cannot be nil as it is a %s",
 					st.location.Func, fieldName, field.Type))
 			}
@@ -112,7 +113,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !vexpectedValue.Type().AssignableTo(field.Type) {
-					panic(ctxerr.Bad(
+					panic(color.Bad(
 						"%s(): type %s of field expected value %s differs from struct one (%s)",
 						st.location.Func,
 						vexpectedValue.Type(),
@@ -161,7 +162,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 			// If non-zero field
 			if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(), fieldIf) {
 				if checkedFields[fieldName] {
-					panic(ctxerr.Bad(
+					panic(color.Bad(
 						"%s(): non zero field %s in model already exists in expectedFields",
 						st.location.Func,
 						fieldName))

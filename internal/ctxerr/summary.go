@@ -10,6 +10,7 @@ import (
 	"bytes"
 	"strings"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -40,14 +41,14 @@ var _ ErrorSummary = ErrorSummaryItem{}
 
 // AppendSummary implements the ErrorSummary interface.
 func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
-	colorsInit()
+	color.Init()
 
 	buf.WriteString(prefix)
-	buf.WriteString(colorBadOnBold)
+	buf.WriteString(color.BadOnBold)
 	buf.WriteString(s.Label)
 	buf.WriteString(": ")
 
-	buf.WriteString(colorBadOn)
+	buf.WriteString(color.BadOn)
 	util.IndentStringIn(buf, s.Value, prefix+strings.Repeat(" ", len(s.Label)+2))
 
 	if s.Explanation != "" {
@@ -56,7 +57,7 @@ func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
 		util.IndentStringIn(buf, s.Explanation, prefix)
 	}
 
-	buf.WriteString(colorBadOff)
+	buf.WriteString(color.BadOff)
 }
 
 // ErrorSummaryItems implements the ErrorSummary interface and allows
@@ -93,12 +94,12 @@ type errorSummaryString string
 var _ ErrorSummary = errorSummaryString("")
 
 func (s errorSummaryString) AppendSummary(buf *bytes.Buffer, prefix string) {
-	colorsInit()
+	color.Init()
 
 	buf.WriteString(prefix)
-	buf.WriteString(colorBadOn)
+	buf.WriteString(color.BadOn)
 	util.IndentStringIn(buf, string(s), prefix)
-	buf.WriteString(colorBadOff)
+	buf.WriteString(color.BadOff)
 }
 
 // NewSummary returns an ErrorSummary composed by the simple string s.

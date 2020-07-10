@@ -17,12 +17,12 @@ import (
 
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
-	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/td"
 )
 
 func TestMain(m *testing.M) {
-	defer ctxerr.SaveColorState()()
+	defer color.SaveState()()
 	os.Exit(m.Run())
 }
 

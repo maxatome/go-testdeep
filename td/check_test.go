@@ -15,6 +15,7 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
@@ -22,7 +23,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	defer ctxerr.SaveColorState()()
+	defer color.SaveState()()
 	os.Exit(m.Run())
 }
 

@@ -11,6 +11,8 @@ import (
 	"math"
 	"reflect"
 	"sync"
+
+	"github.com/maxatome/go-testdeep/internal/color"
 )
 
 type anchor struct {
@@ -251,7 +253,7 @@ func (i *Info) build(typ reflect.Type) (reflect.Value, interface{}) {
 				return nvm, nvm.Interface()
 			}
 		}
-		panic(typ.String() + " struct type is not supported as an anchor. Try AddAnchorableStructType")
+		panic(color.Bad(typ.String() + " struct type is not supported as an anchor. Try AddAnchorableStructType"))
 
 	default:
 		panic(typ.Kind().String() + " kind is not supported as an anchor")

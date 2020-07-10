@@ -8,211 +8,12 @@ package ctxerr
 
 import (
 	"bytes"
-	"fmt"
-	"os"
-	"reflect"
 	"strings"
-	"sync"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
-
-const (
-	envColor         = "TESTDEEP_COLOR"
-	envColorTestName = "TESTDEEP_COLOR_TEST_NAME"
-	envColorTitle    = "TESTDEEP_COLOR_TITLE"
-	envColorOK       = "TESTDEEP_COLOR_OK"
-	envColorBad      = "TESTDEEP_COLOR_BAD"
-)
-
-var (
-	colorTestNameOn, colorTestNameOff       string
-	colorTitleOn, colorTitleOff             string
-	colorOKOn, colorOKOnBold, colorOKOff    string
-	colorBadOn, colorBadOnBold, colorBadOff string
-)
-
-var colorsInitOnce sync.Once
-
-func colorsInit() {
-	colorsInitOnce.Do(func() {
-		_, colorTestNameOn, colorTestNameOff = colorFromEnv(envColorTestName, "yellow")
-		_, colorTitleOn, colorTitleOff = colorFromEnv(envColorTitle, "cyan")
-		colorOKOn, colorOKOnBold, colorOKOff = colorFromEnv(envColorOK, "green")
-		colorBadOn, colorBadOnBold, colorBadOff = colorFromEnv(envColorBad, "red")
-	})
-}
-
-// SaveColorState saves the "TESTDEEP_COLOR" environment variable
-// value, sets it to "on" (if true passed as on) or "false" (if on not
-// passed or set to false), resets the colors initialization and
-// returns a function to be called in a defer statement. Only intended
-// to be used in tests like:
-//
-//   defer ctxerr.SaveColorState()()
-//
-// It is not thread-safe.
-func SaveColorState(on ...bool) func() {
-	colorState, set := os.LookupEnv(envColor)
-	if len(on) == 0 || !on[0] {
-		os.Setenv(envColor, "off") // nolint: errcheck
-	} else {
-		os.Setenv(envColor, "on") // nolint: errcheck
-	}
-	colorsInitOnce = sync.Once{}
-	return func() {
-		if set {
-			os.Setenv(envColor, colorState) // nolint: errcheck
-		} else {
-			os.Unsetenv(envColor) // nolint: errcheck
-		}
-		colorsInitOnce = sync.Once{}
-	}
-}
-
-var colors = map[string]byte{
-	"black":   '0',
-	"red":     '1',
-	"green":   '2',
-	"yellow":  '3',
-	"blue":    '4',
-	"magenta": '5',
-	"cyan":    '6',
-	"white":   '7',
-	"gray":    '7',
-}
-
-func colorFromEnv(env, defaultColor string) (string, string, string) {
-	var color string
-	switch os.Getenv(envColor) {
-	case "on", "":
-		if curColor := os.Getenv(env); curColor != "" {
-			color = curColor
-		} else {
-			color = defaultColor
-		}
-	default: // "off" or any other value
-		color = ""
-	}
-
-	if color == "" {
-		return "", "", ""
-	}
-
-	names := strings.SplitN(color, ":", 2)
-
-	light := [...]byte{
-		//   0    1    2    4    4    5    6
-		'\x1b', '[', '0', ';', '3', 'y', 'm', // foreground
-		//   7    8    9   10   11
-		'\x1b', '[', '4', 'z', 'm', // background
-	}
-	bold := [...]byte{
-		//   0    1    2    4    4    5    6
-		'\x1b', '[', '1', ';', '3', 'y', 'm', // foreground
-		//   7    8    9   10   11
-		'\x1b', '[', '4', 'z', 'm', // background
-	}
-
-	var start, end int
-
-	// Foreground
-	if names[0] != "" {
-		c := colors[names[0]]
-		if c == 0 {
-			c = colors[defaultColor]
-		}
-
-		light[5] = c
-		bold[5] = c
-
-		end = 7
-	} else {
-		start = 7
-	}
-
-	// Background
-	if len(names) > 1 && names[1] != "" {
-		c := colors[names[1]]
-		if c != 0 {
-			light[10] = c
-			bold[10] = c
-
-			end = 12
-		}
-	}
-
-	return string(light[start:end]), string(bold[start:end]), "\x1b[0m"
-}
-
-// ColorizeTestNameOn enable test name color in b.
-func ColorizeTestNameOn(b *bytes.Buffer) {
-	colorsInit()
-	b.WriteString(colorTestNameOn)
-}
-
-// ColorizeTestNameOff disable test name color in b.
-func ColorizeTestNameOff(b *bytes.Buffer) {
-	colorsInit()
-	b.WriteString(colorTestNameOff)
-}
-
-// Bad returns a string surrounded by BAD color. If len(args) is > 0,
-// s and args are given to fmt.Sprintf.
-//
-// Typically used in panic() when the user made a mistake.
-func Bad(s string, args ...interface{}) string {
-	colorsInit()
-	if len(args) == 0 {
-		return colorBadOnBold + s + colorBadOff
-	}
-	return fmt.Sprintf(colorBadOnBold+s+colorBadOff, args...)
-}
-
-// BadUsage returns a string surrounded by BAD color to notice the
-// user he passes a bad parameter to a function. Typically used in a
-// panic().
-func BadUsage(usage string, param interface{}, pos int, kind bool) string {
-	colorsInit()
-
-	var b bytes.Buffer
-	fmt.Fprintf(&b, "%susage: %s, but received ", colorBadOnBold, usage)
-
-	if param == nil {
-		b.WriteString("nil")
-	} else {
-		t := reflect.TypeOf(param)
-		if kind && t.String() != t.Kind().String() {
-			fmt.Fprintf(&b, "%s (%s)", t, t.Kind())
-		} else {
-			b.WriteString(t.String())
-		}
-	}
-
-	b.WriteString(" as ")
-	switch pos {
-	case 1:
-		b.WriteString("1st")
-	case 2:
-		b.WriteString("2nd")
-	case 3:
-		b.WriteString("3rd")
-	default:
-		fmt.Fprintf(&b, "%dth", pos)
-	}
-	b.WriteString(" parameter")
-	b.WriteString(colorBadOff)
-	return b.String()
-}
-
-// TooManyParams returns a string surrounded by BAD color to notice
-// the user he called a variadic function with too many
-// parameters. Typically used in a panic().
-func TooManyParams(usage string) string {
-	colorsInit()
-	return colorBadOnBold + "usage: " + usage + ", too many parameters" + colorBadOff
-}
 
 // Error represents errors generated by td (go-testdeep) functions.
 type Error struct {
@@ -263,7 +64,7 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 		return
 	}
 
-	colorsInit()
+	color.Init()
 
 	var writeEolPrefix func()
 	if prefix != "" {
@@ -282,13 +83,13 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 	}
 
 	if e == ErrTooManyErrors {
-		buf.WriteString(colorTitleOn)
+		buf.WriteString(color.TitleOn)
 		buf.WriteString(e.Message)
-		buf.WriteString(colorTitleOff)
+		buf.WriteString(color.TitleOff)
 		return
 	}
 
-	buf.WriteString(colorTitleOn)
+	buf.WriteString(color.TitleOn)
 	if pos := strings.Index(e.Message, "%%"); pos >= 0 {
 		buf.WriteString(e.Message[:pos])
 		buf.WriteString(e.Context.Path.String())
@@ -298,24 +99,24 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 		buf.WriteString(": ")
 		buf.WriteString(e.Message)
 	}
-	buf.WriteString(colorTitleOff)
+	buf.WriteString(color.TitleOff)
 
 	if e.Summary != nil {
 		buf.WriteByte('\n')
 		e.Summary.AppendSummary(buf, prefix+"\t")
 	} else {
 		writeEolPrefix()
-		buf.WriteString(colorBadOnBold)
+		buf.WriteString(color.BadOnBold)
 		buf.WriteString("\t     got: ")
-		buf.WriteString(colorBadOn)
+		buf.WriteString(color.BadOn)
 		util.IndentStringIn(buf, e.GotString(), prefix+"\t          ")
-		buf.WriteString(colorBadOff)
+		buf.WriteString(color.BadOff)
 		writeEolPrefix()
-		buf.WriteString(colorOKOnBold)
+		buf.WriteString(color.OKOnBold)
 		buf.WriteString("\texpected: ")
-		buf.WriteString(colorOKOn)
+		buf.WriteString(color.OKOn)
 		util.IndentStringIn(buf, e.ExpectedString(), prefix+"\t          ")
-		buf.WriteString(colorOKOff)
+		buf.WriteString(color.OKOff)
 	}
 
 	// This error comes from another one
