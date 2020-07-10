@@ -151,6 +151,90 @@ func TestRun(t *testing.T) {
 	})
 }
 
+func TestRunAssertRequire(t *testing.T) {
+	t.Run("test.TB with Run", func(tt *testing.T) {
+		t := td.NewT(tt)
+
+		runPassed := false
+		assertIsFatal := true
+		requireIsFatal := false
+
+		ok := t.RunAssertRequire("Test level1",
+			func(assert *td.T, require *td.T) {
+				assertIsFatal = assert.Config.FailureIsFatal
+				requireIsFatal = require.Config.FailureIsFatal
+
+				ok := assert.RunAssertRequire("Test level2",
+					func(assert *td.T, require *td.T) {
+						runPassed = assert.True(true)               // test succeeds!
+						runPassed = runPassed && require.True(true) // test succeeds!
+
+						assertIsFatal = assertIsFatal || assert.Config.FailureIsFatal
+						requireIsFatal = requireIsFatal && require.Config.FailureIsFatal
+					})
+				assert.True(ok)
+				require.True(ok)
+
+				ok = require.RunAssertRequire("Test level2",
+					func(assert *td.T, require *td.T) {
+						runPassed = runPassed && assert.True(true)  // test succeeds!
+						runPassed = runPassed && require.True(true) // test succeeds!
+
+						assertIsFatal = assertIsFatal || assert.Config.FailureIsFatal
+						requireIsFatal = requireIsFatal && require.Config.FailureIsFatal
+					})
+				assert.True(ok)
+				require.True(ok)
+			})
+
+		test.IsTrue(tt, ok)
+		test.IsTrue(tt, runPassed)
+		test.IsFalse(tt, assertIsFatal)
+		test.IsTrue(tt, requireIsFatal)
+	})
+
+	t.Run("test.TB without Run", func(tt *testing.T) {
+		t := td.NewT(test.NewTestingTB("gg"))
+
+		runPassed := false
+		assertIsFatal := true
+		requireIsFatal := false
+
+		ok := t.RunAssertRequire("Test level1",
+			func(assert *td.T, require *td.T) {
+				assertIsFatal = assert.Config.FailureIsFatal
+				requireIsFatal = require.Config.FailureIsFatal
+
+				ok := assert.RunAssertRequire("Test level2",
+					func(assert *td.T, require *td.T) {
+						runPassed = assert.True(true)               // test succeeds!
+						runPassed = runPassed && require.True(true) // test succeeds!
+
+						assertIsFatal = assertIsFatal || assert.Config.FailureIsFatal
+						requireIsFatal = requireIsFatal && require.Config.FailureIsFatal
+					})
+				assert.True(ok)
+				require.True(ok)
+
+				ok = require.RunAssertRequire("Test level2",
+					func(assert *td.T, require *td.T) {
+						runPassed = runPassed && assert.True(true)  // test succeeds!
+						runPassed = runPassed && require.True(true) // test succeeds!
+
+						assertIsFatal = assertIsFatal || assert.Config.FailureIsFatal
+						requireIsFatal = requireIsFatal && require.Config.FailureIsFatal
+					})
+				assert.True(ok)
+				require.True(ok)
+			})
+
+		test.IsTrue(tt, ok)
+		test.IsTrue(tt, runPassed)
+		test.IsFalse(tt, assertIsFatal)
+		test.IsTrue(tt, requireIsFatal)
+	})
+}
+
 // Deprecated RunT
 func TestRunT(t *testing.T) {
 	t.Run("test.TB with Run", func(tt *testing.T) {

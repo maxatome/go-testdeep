@@ -558,6 +558,58 @@ func (t *T) Run(name string, f func(t *T)) bool {
 	return ret[0].Bool()
 }
 
+// RunAssertRequire runs "f" as a subtest of t called "name".
+//
+// If t.TB implement a method with the following signature:
+//
+//   (X) Run(string, func(X)) bool
+//
+// it calls it with a function of its own in which it creates two new
+// instances of *T using AssertRequire() on the fly before calling "f"
+// with them.
+//
+// So if t.TB is a *testing.T or a *testing.B (which is in normal
+// cases), let's quote the testing.T.Run() & testing.B.Run()
+// documentation: "f" is called in a separate goroutine and blocks
+// until "f" returns or calls t.Parallel to become a parallel
+// test. Run reports whether "f" succeeded (or at least did not fail
+// before calling t.Parallel). Run may be called simultaneously from
+// multiple goroutines, but all such calls must return before the
+// outer test function for t returns.
+//
+// If this Run() method is not found, it simply logs "name" then
+// executes "f" using two new instances of *T (built with
+// AssertRequire()) in the current goroutine. Note that it is only
+// done for convenience.
+//
+// The "assert" and "require" params of "f" inherit the configuration
+// of the self-reference, except that a failure is never fatal using
+// "assert" and always fatal using "require".
+func (t *T) RunAssertRequire(name string, f func(assert *T, require *T)) bool {
+	t.Helper()
+
+	vfuncs, ok := t.getRunFunc()
+	if !ok {
+		assert, require := AssertRequire(t)
+		t.Logf("++++ %s", name)
+		f(assert, require)
+		return !t.Failed()
+	}
+
+	conf := t.Config
+	ret := vfuncs.run.Call([]reflect.Value{
+		reflect.ValueOf(t.TB),
+		reflect.ValueOf(name),
+		reflect.MakeFunc(vfuncs.fnt,
+			func(args []reflect.Value) (results []reflect.Value) {
+				f(AssertRequire(NewT(args[0].Interface().(testing.TB), conf)))
+				return nil
+			}),
+	})
+
+	return ret[0].Bool()
+}
+
 // Deprecated: RunT has been superseded by Run() method. It is kept
 // for compatibility.
 func (t *T) RunT(name string, f func(t *T)) bool {
