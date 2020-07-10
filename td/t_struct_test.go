@@ -111,12 +111,16 @@ func TestRun(t *testing.T) {
 		t := td.NewT(tt)
 
 		runPassed := false
+		nestedFailureIsFatal := false
 
 		ok := t.Run("Test level1",
 			func(t *td.T) {
-				ok := t.Run("Test level2",
+				ok := t.FailureIsFatal().Run("Test level2",
 					func(t *td.T) {
 						runPassed = t.True(true) // test succeeds!
+
+						// Check we inherit config from caller
+						nestedFailureIsFatal = t.Config.FailureIsFatal
 					})
 
 				t.True(ok)
@@ -124,6 +128,7 @@ func TestRun(t *testing.T) {
 
 		test.IsTrue(tt, ok)
 		test.IsTrue(tt, runPassed)
+		test.IsTrue(tt, nestedFailureIsFatal)
 	})
 
 	t.Run("test.TB without Run", func(tt *testing.T) {

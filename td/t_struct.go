@@ -531,6 +531,8 @@ func (t *T) getRunFunc() (runtFuncs, bool) {
 // If this Run() method is not found, it simply logs "name" then
 // executes "f" using a new *T instance in the current goroutine. Note
 // that it is only done for convenience.
+//
+// The "t" param of "f" inherits the configuration of the self-reference.
 func (t *T) Run(name string, f func(t *T)) bool {
 	t.Helper()
 
@@ -542,12 +544,13 @@ func (t *T) Run(name string, f func(t *T)) bool {
 		return !t.Failed()
 	}
 
+	conf := t.Config
 	ret := vfuncs.run.Call([]reflect.Value{
 		reflect.ValueOf(t.TB),
 		reflect.ValueOf(name),
 		reflect.MakeFunc(vfuncs.fnt,
 			func(args []reflect.Value) (results []reflect.Value) {
-				f(NewT(args[0].Interface().(testing.TB), t.Config))
+				f(NewT(args[0].Interface().(testing.TB), conf))
 				return nil
 			}),
 	})
