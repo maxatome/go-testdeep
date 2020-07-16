@@ -4,8 +4,7 @@ go-testdeep
 [![Build Status](https://travis-ci.org/maxatome/go-testdeep.svg?branch=master)](https://travis-ci.org/maxatome/go-testdeep)
 [![Coverage Status](https://coveralls.io/repos/github/maxatome/go-testdeep/badge.svg?branch=master)](https://coveralls.io/github/maxatome/go-testdeep?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/maxatome/go-testdeep)](https://goreportcard.com/report/github.com/maxatome/go-testdeep)
-[![GolangCI](https://golangci.com/badges/github.com/maxatome/go-testdeep.svg)](https://golangci.com/r/github.com/maxatome/go-testdeep)
-[![GoDoc](https://godoc.org/github.com/maxatome/go-testdeep/td?status.svg)](https://pkg.go.dev/github.com/maxatome/go-testdeep/td)
+[![GoDoc](https://pkg.go.dev/badge/github.com/maxatome/go-testdeep)](https://pkg.go.dev/github.com/maxatome/go-testdeep/td)
 [![Version](https://img.shields.io/github/tag/maxatome/go-testdeep.svg)](https://github.com/maxatome/go-testdeep/releases)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go/#testing)
 
