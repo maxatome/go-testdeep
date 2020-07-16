@@ -22,29 +22,66 @@ func TestVisited(t *testing.T) {
 		test.IsFalse(t, v.Record(reflect.ValueOf(a), reflect.ValueOf(b)))
 	})
 
-	// Visited.Record() needs its param be addressable, that's why we
-	// use a struct pointer below
-
 	t.Run("map", func(t *testing.T) {
 		v := visited.NewVisited()
 
-		type vMap struct{ m map[string]bool }
-		a, b := &vMap{m: map[string]bool{}}, &vMap{m: map[string]bool{}}
+		a, b := map[string]bool{}, map[string]bool{}
 
-		f := func(vm *vMap) reflect.Value {
-			return reflect.ValueOf(vm).Elem().Field(0)
+		f := func(m map[string]bool) reflect.Value {
+			return reflect.ValueOf(m)
 		}
 
 		test.IsFalse(t, v.Record(f(a), f(b)))
 		test.IsTrue(t, v.Record(f(a), f(b)))
 		test.IsTrue(t, v.Record(f(b), f(a)))
+
+		// nil maps are not recorded
+		b = nil
+		test.IsFalse(t, v.Record(f(a), f(b)))
+		test.IsFalse(t, v.Record(f(a), f(b)))
+		test.IsFalse(t, v.Record(f(b), f(a)))
+		test.IsFalse(t, v.Record(f(b), f(a)))
 	})
+
+	t.Run("pointer", func(t *testing.T) {
+		v := visited.NewVisited()
+
+		type S struct {
+			p  *S
+			ok bool
+		}
+		a, b := &S{}, &S{}
+		a.p = &S{ok: true}
+		b.p = &S{ok: false}
+
+		f := func(m *S) reflect.Value {
+			return reflect.ValueOf(m)
+		}
+
+		test.IsFalse(t, v.Record(f(a), f(b)))
+		test.IsTrue(t, v.Record(f(a), f(b)))
+		test.IsTrue(t, v.Record(f(b), f(a)))
+
+		test.IsFalse(t, v.Record(f(a.p), f(b.p)))
+		test.IsTrue(t, v.Record(f(a.p), f(b.p)))
+		test.IsTrue(t, v.Record(f(b.p), f(a.p)))
+
+		// nil pointers are not recorded
+		b = nil
+		test.IsFalse(t, v.Record(f(a), f(b)))
+		test.IsFalse(t, v.Record(f(a), f(b)))
+		test.IsFalse(t, v.Record(f(b), f(a)))
+		test.IsFalse(t, v.Record(f(b), f(a)))
+	})
+
+	// Visited.Record() needs its slice or interface param be
+	// addressable, that's why we use a struct pointer below
 
 	t.Run("slice", func(t *testing.T) {
 		v := visited.NewVisited()
 
 		type vSlice struct{ s []string }
-		a, b := &vSlice{s: []string{}}, &vSlice{}
+		a, b := &vSlice{s: []string{}}, &vSlice{[]string{}}
 
 		f := func(vm *vSlice) reflect.Value {
 			return reflect.ValueOf(vm).Elem().Field(0)
@@ -53,29 +90,20 @@ func TestVisited(t *testing.T) {
 		test.IsFalse(t, v.Record(f(a), f(b)))
 		test.IsTrue(t, v.Record(f(a), f(b)))
 		test.IsTrue(t, v.Record(f(b), f(a)))
-	})
 
-	t.Run("ptr", func(t *testing.T) {
-		v := visited.NewVisited()
-
-		type vPtr struct{ p *int }
-		n := 42
-		a, b := &vPtr{p: &n}, &vPtr{}
-
-		f := func(vm *vPtr) reflect.Value {
-			return reflect.ValueOf(vm).Elem().Field(0)
-		}
-
+		// nil slices are not recorded
+		b = &vSlice{}
 		test.IsFalse(t, v.Record(f(a), f(b)))
-		test.IsTrue(t, v.Record(f(a), f(b)))
-		test.IsTrue(t, v.Record(f(b), f(a)))
+		test.IsFalse(t, v.Record(f(a), f(b)))
+		test.IsFalse(t, v.Record(f(b), f(a)))
+		test.IsFalse(t, v.Record(f(b), f(a)))
 	})
 
 	t.Run("interface", func(t *testing.T) {
 		v := visited.NewVisited()
 
 		type vIf struct{ i interface{} }
-		a, b := &vIf{i: 42}, &vIf{}
+		a, b := &vIf{i: 42}, &vIf{i: 24}
 
 		f := func(vm *vIf) reflect.Value {
 			return reflect.ValueOf(vm).Elem().Field(0)
@@ -84,5 +112,12 @@ func TestVisited(t *testing.T) {
 		test.IsFalse(t, v.Record(f(a), f(b)))
 		test.IsTrue(t, v.Record(f(a), f(b)))
 		test.IsTrue(t, v.Record(f(b), f(a)))
+
+		// nil interfaces are not recorded
+		b = &vIf{}
+		test.IsFalse(t, v.Record(f(a), f(b)))
+		test.IsFalse(t, v.Record(f(a), f(b)))
+		test.IsFalse(t, v.Record(f(b), f(a)))
+		test.IsFalse(t, v.Record(f(b), f(a)))
 	})
 }

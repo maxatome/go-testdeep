@@ -601,9 +601,10 @@ func TestEqualReallyPrivate(t *testing.T) {
 	checkOKOrPanicIfUnsafeDisabled(t, Private{channel: ch}, Private{channel: ch})
 }
 
-func TestEqualRecurs(t *testing.T) {
+func TestEqualRecursPtr(t *testing.T) {
 	type S struct {
 		Next *S
+		OK   bool
 	}
 
 	expected1 := &S{}
@@ -617,6 +618,33 @@ func TestEqualRecurs(t *testing.T) {
 
 	checkOK(t, got, expected1)
 	checkOK(t, got, expected2)
+
+	got.Next = &S{OK: true}
+	expected1.Next = &S{OK: false}
+	checkError(t, got, expected1,
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.Next.OK"),
+			Got:      mustBe("true"),
+			Expected: mustBe("false"),
+		})
+}
+
+func TestEqualRecursMap(t *testing.T) { // issue #101
+	gen := func() interface{} {
+		type S struct {
+			Map map[int]S
+		}
+
+		m := make(map[int]S)
+		m[1] = S{
+			Map: m,
+		}
+
+		return m
+	}
+
+	checkOK(t, gen(), gen())
 }
 
 func TestEqualPanic(t *testing.T) {
