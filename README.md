@@ -28,12 +28,11 @@ go-testdeep
 
 ## Latest news
 
+- 2020/07/19: [v1.7.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.7.0);
 - 2020/05/31: [v1.6.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.6.0);
 - 2020/05/17: [v1.5.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.5.0);
 - 2020/04/11:
   - [`tdhttp`] helper (the HTTP API tester) enhanced and fully documented;
-- 2020/04/06:
-  - new [`Delay`] operator;
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
