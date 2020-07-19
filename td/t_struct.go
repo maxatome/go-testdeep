@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/color"
 )
 
 // T is a type that encapsulates testing.TB interface (which is
@@ -134,10 +134,10 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 
 	const usage = "NewT(testing.TB[, ContextConfig])"
 	if len(config) > 1 {
-		panic(ctxerr.TooManyParams(usage))
+		panic(color.TooManyParams(usage))
 	}
 	if t == nil {
-		panic(ctxerr.BadUsage(usage, nil, 1, false))
+		panic(color.BadUsage(usage, nil, 1, false))
 	}
 
 	// Already a *T, so steal its testing.TB and its Config if needed
@@ -531,6 +531,8 @@ func (t *T) getRunFunc() (runtFuncs, bool) {
 // If this Run() method is not found, it simply logs "name" then
 // executes "f" using a new *T instance in the current goroutine. Note
 // that it is only done for convenience.
+//
+// The "t" param of "f" inherits the configuration of the self-reference.
 func (t *T) Run(name string, f func(t *T)) bool {
 	t.Helper()
 
@@ -542,12 +544,65 @@ func (t *T) Run(name string, f func(t *T)) bool {
 		return !t.Failed()
 	}
 
+	conf := t.Config
 	ret := vfuncs.run.Call([]reflect.Value{
 		reflect.ValueOf(t.TB),
 		reflect.ValueOf(name),
 		reflect.MakeFunc(vfuncs.fnt,
 			func(args []reflect.Value) (results []reflect.Value) {
-				f(NewT(args[0].Interface().(testing.TB), t.Config))
+				f(NewT(args[0].Interface().(testing.TB), conf))
+				return nil
+			}),
+	})
+
+	return ret[0].Bool()
+}
+
+// RunAssertRequire runs "f" as a subtest of t called "name".
+//
+// If t.TB implement a method with the following signature:
+//
+//   (X) Run(string, func(X)) bool
+//
+// it calls it with a function of its own in which it creates two new
+// instances of *T using AssertRequire() on the fly before calling "f"
+// with them.
+//
+// So if t.TB is a *testing.T or a *testing.B (which is in normal
+// cases), let's quote the testing.T.Run() & testing.B.Run()
+// documentation: "f" is called in a separate goroutine and blocks
+// until "f" returns or calls t.Parallel to become a parallel
+// test. Run reports whether "f" succeeded (or at least did not fail
+// before calling t.Parallel). Run may be called simultaneously from
+// multiple goroutines, but all such calls must return before the
+// outer test function for t returns.
+//
+// If this Run() method is not found, it simply logs "name" then
+// executes "f" using two new instances of *T (built with
+// AssertRequire()) in the current goroutine. Note that it is only
+// done for convenience.
+//
+// The "assert" and "require" params of "f" inherit the configuration
+// of the self-reference, except that a failure is never fatal using
+// "assert" and always fatal using "require".
+func (t *T) RunAssertRequire(name string, f func(assert *T, require *T)) bool {
+	t.Helper()
+
+	vfuncs, ok := t.getRunFunc()
+	if !ok {
+		assert, require := AssertRequire(t)
+		t.Logf("++++ %s", name)
+		f(assert, require)
+		return !t.Failed()
+	}
+
+	conf := t.Config
+	ret := vfuncs.run.Call([]reflect.Value{
+		reflect.ValueOf(t.TB),
+		reflect.ValueOf(name),
+		reflect.MakeFunc(vfuncs.fnt,
+			func(args []reflect.Value) (results []reflect.Value) {
+				f(AssertRequire(NewT(args[0].Interface().(testing.TB), conf)))
 				return nil
 			}),
 	})

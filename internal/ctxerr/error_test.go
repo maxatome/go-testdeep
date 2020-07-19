@@ -7,103 +7,16 @@
 package ctxerr_test
 
 import (
-	"os"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
-func TestSaveColorState(t *testing.T) {
-	check := func(expected string) {
-		t.Helper()
-		test.EqualStr(t, os.Getenv("TESTDEEP_COLOR"), expected)
-	}
-
-	defer ctxerr.SaveColorState()()
-	check("off")
-
-	func() {
-		defer ctxerr.SaveColorState(true)()
-		check("on")
-	}()
-	check("off")
-
-	func() {
-		defer ctxerr.SaveColorState(false)()
-		check("off")
-	}()
-	check("off")
-
-	os.Unsetenv("TESTDEEP_COLOR")
-	checkDoesNotExist := func() {
-		t.Helper()
-		_, exists := os.LookupEnv("TESTDEEP_COLOR")
-		test.IsFalse(t, exists)
-	}
-
-	func() {
-		defer ctxerr.SaveColorState(true)()
-		check("on")
-	}()
-	checkDoesNotExist()
-
-	func() {
-		defer ctxerr.SaveColorState(false)()
-		check("off")
-	}()
-	checkDoesNotExist()
-}
-
-func TestBad(t *testing.T) {
-	defer ctxerr.SaveColorState()()
-
-	test.EqualStr(t, ctxerr.Bad("test"), "test")
-	test.EqualStr(t, ctxerr.Bad("test %d", 123), "test 123")
-}
-
-func TestBadUsage(t *testing.T) {
-	defer ctxerr.SaveColorState()()
-
-	test.EqualStr(t,
-		ctxerr.BadUsage("Zzz(STRING)", nil, 1, true),
-		"usage: Zzz(STRING), but received nil as 1st parameter")
-
-	test.EqualStr(t,
-		ctxerr.BadUsage("Zzz(STRING)", 42, 1, true),
-		"usage: Zzz(STRING), but received int as 1st parameter")
-
-	test.EqualStr(t,
-		ctxerr.BadUsage("Zzz(STRING)", []int{}, 1, true),
-		"usage: Zzz(STRING), but received []int (slice) as 1st parameter")
-	test.EqualStr(t,
-		ctxerr.BadUsage("Zzz(STRING)", []int{}, 1, false),
-		"usage: Zzz(STRING), but received []int as 1st parameter")
-
-	test.EqualStr(t,
-		ctxerr.BadUsage("Zzz(STRING)", nil, 1, true),
-		"usage: Zzz(STRING), but received nil as 1st parameter")
-	test.EqualStr(t,
-		ctxerr.BadUsage("Zzz(STRING)", nil, 2, true),
-		"usage: Zzz(STRING), but received nil as 2nd parameter")
-	test.EqualStr(t,
-		ctxerr.BadUsage("Zzz(STRING)", nil, 3, true),
-		"usage: Zzz(STRING), but received nil as 3rd parameter")
-	test.EqualStr(t,
-		ctxerr.BadUsage("Zzz(STRING)", nil, 4, true),
-		"usage: Zzz(STRING), but received nil as 4th parameter")
-}
-
-func TestTooManyParams(t *testing.T) {
-	defer ctxerr.SaveColorState()()
-
-	test.EqualStr(t, ctxerr.TooManyParams("Zzz(PARAM)"),
-		"usage: Zzz(PARAM), too many parameters")
-}
-
 func TestError(t *testing.T) {
-	defer ctxerr.SaveColorState()()
+	defer color.SaveState()()
 
 	err := ctxerr.Error{
 		Context: ctxerr.Context{

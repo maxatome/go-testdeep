@@ -15,6 +15,7 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
@@ -117,7 +118,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 	// "got" must not implement testDeeper
 	if got.Type().Implements(testDeeper) {
-		panic(ctxerr.Bad("Found a TestDeep operator in got param, " +
+		panic(color.Bad("Found a TestDeep operator in got param, " +
 			"can only use it in expected one!"))
 	}
 

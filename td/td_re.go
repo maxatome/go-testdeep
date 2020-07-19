@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"regexp"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
@@ -39,7 +40,7 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 			r.captures = reflect.ValueOf(capture[0])
 		}
 	default:
-		panic(ctxerr.TooManyParams(r.location.Func + usage))
+		panic(color.TooManyParams(r.location.Func + usage))
 	}
 
 	switch reg := regIf.(type) {
@@ -48,7 +49,7 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 	case string:
 		r.re = regexp.MustCompile(reg)
 	default:
-		panic(ctxerr.BadUsage(r.location.Func+usage, regIf, 1, false))
+		panic(color.BadUsage(r.location.Func+usage, regIf, 1, false))
 	}
 	return
 }

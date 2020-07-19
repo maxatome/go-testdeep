@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -85,7 +86,7 @@ func newArray(kind reflect.Kind, model interface{}, expectedEntries ArrayEntries
 func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	a := newArray(reflect.Array, model, expectedEntries)
 	if a == nil {
-		panic(ctxerr.BadUsage("Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)", model, 1, true))
+		panic(color.BadUsage("Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)", model, 1, true))
 	}
 	return a
 }
@@ -111,7 +112,7 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
 	a := newArray(reflect.Slice, model, expectedEntries)
 	if a == nil {
-		panic(ctxerr.BadUsage("Slice(SLICE|&SLICE, EXPECTED_ENTRIES)", model, 1, true))
+		panic(color.BadUsage("Slice(SLICE|&SLICE, EXPECTED_ENTRIES)", model, 1, true))
 	}
 	return a
 }
@@ -130,7 +131,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 		maxLength = a.expectedType.Len()
 
 		if maxLength <= maxIndex {
-			panic(ctxerr.Bad(
+			panic(color.Bad(
 				"array length is %d, so cannot have #%d expected index",
 				maxLength,
 				maxIndex))
@@ -160,7 +161,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 				reflect.Ptr, reflect.Slice:
 				vexpectedValue = reflect.Zero(elemType) // change to a typed nil
 			default:
-				panic(ctxerr.Bad(
+				panic(color.Bad(
 					"expected value of #%d cannot be nil as items type is %s",
 					index,
 					elemType))
@@ -170,7 +171,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !vexpectedValue.Type().AssignableTo(elemType) {
-					panic(ctxerr.Bad(
+					panic(color.Bad(
 						"type %s of #%d expected value differs from %s contents (%s)",
 						vexpectedValue.Type(),
 						index,
@@ -195,7 +196,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 				// If non-zero entry, consider it as an error (= 2 expected
 				// values for the same item)
 				if !reflect.DeepEqual(zero, ventry.Interface()) {
-					panic(ctxerr.Bad(
+					panic(color.Bad(
 						"non zero #%d entry in model already exists in expectedEntries",
 						index))
 				}

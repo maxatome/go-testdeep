@@ -10,12 +10,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/color"
 )
 
 func addHeaders(req *http.Request, headers []interface{}) *http.Request {
@@ -27,7 +28,7 @@ func addHeaders(req *http.Request, headers []interface{}) *http.Request {
 			if i < len(headers) {
 				var ok bool
 				if val, ok = headers[i].(string); !ok {
-					panic(fmt.Sprintf(`header "%s" should have a string value, not a %T (@ headers[%d])`,
+					panic(color.Bad(`header "%s" should have a string value, not a %T (@ headers[%d])`,
 						cur, headers[i], i))
 				}
 			}
@@ -39,7 +40,7 @@ func addHeaders(req *http.Request, headers []interface{}) *http.Request {
 			}
 
 		default:
-			panic(fmt.Sprintf("headers... can only contains string and http.Header, not %T (@ headers[%d])", cur, i))
+			panic(color.Bad("headers... can only contains string and http.Header, not %T (@ headers[%d])", cur, i))
 		}
 	}
 	return req
@@ -165,7 +166,7 @@ func Delete(target string, body io.Reader, headers ...interface{}) *http.Request
 func NewJSONRequest(method, target string, body interface{}, headers ...interface{}) *http.Request {
 	b, err := json.Marshal(body)
 	if err != nil {
-		panic("JSON encoding failed: " + err.Error())
+		panic(color.Bad("JSON encoding failed: %s", err))
 	}
 
 	return addHeaders(NewRequest(method, target, bytes.NewBuffer(b)),
@@ -230,7 +231,7 @@ func DeleteJSON(target string, body interface{}, headers ...interface{}) *http.R
 func NewXMLRequest(method, target string, body interface{}, headers ...interface{}) *http.Request {
 	b, err := xml.Marshal(body)
 	if err != nil {
-		panic("XML encoding failed: " + err.Error())
+		panic(color.Bad("XML encoding failed: %s", err))
 	}
 
 	return addHeaders(NewRequest(method, target, bytes.NewBuffer(b)),

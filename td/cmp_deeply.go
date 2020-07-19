@@ -11,6 +11,7 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/flat"
 )
@@ -23,7 +24,7 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	args = flat.Interfaces(args...)
 
 	var buf bytes.Buffer
-	ctxerr.ColorizeTestNameOn(&buf)
+	color.AppendTestNameOn(&buf)
 	if len(args) == 0 {
 		buf.WriteString(failedTest + "\n")
 	} else {
@@ -31,7 +32,7 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 		tdutil.FbuildTestName(&buf, args...)
 		buf.WriteString("'\n")
 	}
-	ctxerr.ColorizeTestNameOff(&buf)
+	color.AppendTestNameOff(&buf)
 
 	err.Append(&buf, "")
 

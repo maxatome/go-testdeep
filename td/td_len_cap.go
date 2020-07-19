@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -74,7 +75,7 @@ func Len(expectedLen interface{}) TestDeep {
 	if l.initLenCapBase(expectedLen) {
 		return &l
 	}
-	panic(ctxerr.BadUsage("Len(TESTDEEP_OPERATOR|INT)", expectedLen, 1, true))
+	panic(color.BadUsage("Len(TESTDEEP_OPERATOR|INT)", expectedLen, 1, true))
 }
 
 func (l *tdLen) String() string {
@@ -137,7 +138,7 @@ func Cap(expectedCap interface{}) TestDeep {
 	if c.initLenCapBase(expectedCap) {
 		return &c
 	}
-	panic(ctxerr.BadUsage("Cap(TESTDEEP_OPERATOR|INT)", expectedCap, 1, true))
+	panic(color.BadUsage("Cap(TESTDEEP_OPERATOR|INT)", expectedCap, 1, true))
 }
 
 func (c *tdCap) String() string {

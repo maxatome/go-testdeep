@@ -12,6 +12,7 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -91,7 +92,7 @@ func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 
 	if len(bounds) > 0 {
 		if len(bounds) > 1 {
-			panic(ctxerr.TooManyParams(usage))
+			panic(color.TooManyParams(usage))
 		}
 
 		if bounds[0] == BoundsInIn || bounds[0] == BoundsInOut {
@@ -111,7 +112,7 @@ func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
 	}
 
 	if b.expectedMax.Type() != b.expectedMin.Type() {
-		panic(ctxerr.Bad("Between(FROM, TO): FROM and TO must have the same type: %s ≠ %s",
+		panic(color.Bad("Between(FROM, TO): FROM and TO must have the same type: %s ≠ %s",
 			b.expectedMin.Type(),
 			b.expectedMax.Type(),
 		))
@@ -178,7 +179,7 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 
 		return &bt
 	}
-	panic(ctxerr.BadUsage(usage, b.expectedMin.Interface(), 1, true))
+	panic(color.BadUsage(usage, b.expectedMin.Interface(), 1, true))
 }
 
 func (b *tdBetween) nInt(tolerance reflect.Value) {
@@ -263,19 +264,19 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
 		reflect.Float32, reflect.Float64:
 	default:
-		panic(ctxerr.BadUsage(usage, num, 1, true))
+		panic(color.BadUsage(usage, num, 1, true))
 	}
 
 	n.expectedMax = n.expectedMin
 
 	if len(tolerance) > 0 {
 		if len(tolerance) > 1 {
-			panic(ctxerr.TooManyParams(usage))
+			panic(color.TooManyParams(usage))
 		}
 
 		tol := reflect.ValueOf(tolerance[0])
 		if tol.Type() != n.expectedMin.Type() {
-			panic(ctxerr.Bad(
+			panic(color.Bad(
 				"N(NUM, TOLERANCE): NUM and TOLERANCE must have the same type: %s ≠ %s",
 				n.expectedMin.Type(), tol.Type()))
 		}

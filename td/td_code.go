@@ -9,6 +9,7 @@ package td
 import (
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -78,12 +79,12 @@ func Code(fn interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
 	if vfn.Kind() != reflect.Func {
-		panic(ctxerr.BadUsage("Code(FUNC)", fn, 1, true))
+		panic(color.BadUsage("Code(FUNC)", fn, 1, true))
 	}
 
 	fnType := vfn.Type()
 	if fnType.IsVariadic() || fnType.NumIn() != 1 {
-		panic(ctxerr.Bad("Code(FUNC): FUNC must take only one non-variadic argument"))
+		panic(color.Bad("Code(FUNC): FUNC must take only one non-variadic argument"))
 	}
 
 	switch fnType.NumOut() {
@@ -106,7 +107,7 @@ func Code(fn interface{}) TestDeep {
 		}
 	}
 
-	panic(ctxerr.Bad("Code(FUNC): FUNC must return bool or (bool, string) or error"))
+	panic(color.Bad("Code(FUNC): FUNC must return bool or (bool, string) or error"))
 }
 
 func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

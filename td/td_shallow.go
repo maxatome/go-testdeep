@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"unsafe"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -90,7 +91,7 @@ func Shallow(expectedPtr interface{}) TestDeep {
 		return &shallow
 
 	default:
-		panic(ctxerr.BadUsage(
+		panic(color.BadUsage(
 			"Shallow(CHANNEL|FUNC|MAP|PTR|SLICE|UNSAFE_PTR|STRING)",
 			expectedPtr, 1, true))
 	}

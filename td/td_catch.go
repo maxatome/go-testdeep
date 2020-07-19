@@ -9,6 +9,7 @@ package td
 import (
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -60,7 +61,7 @@ var _ TestDeep = &tdCatch{}
 func Catch(target interface{}, expectedValue interface{}) TestDeep {
 	vt := reflect.ValueOf(target)
 	if vt.Kind() != reflect.Ptr || vt.IsNil() || !vt.Elem().CanSet() {
-		panic(ctxerr.BadUsage("Catch(NON_NIL_PTR, EXPECTED_VALUE)", target, 1, true))
+		panic(color.BadUsage("Catch(NON_NIL_PTR, EXPECTED_VALUE)", target, 1, true))
 	}
 
 	c := tdCatch{

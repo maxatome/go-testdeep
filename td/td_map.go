@@ -12,6 +12,7 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -76,7 +77,7 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 		return &m
 	}
 
-	panic(ctxerr.BadUsage(m.GetLocation().Func+"(MAP|&MAP, EXPECTED_ENTRIES)",
+	panic(color.BadUsage(m.GetLocation().Func+"(MAP|&MAP, EXPECTED_ENTRIES)",
 		model, 1, true))
 }
 
@@ -97,7 +98,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 	for key, expectedValue := range entries {
 		vkey := reflect.ValueOf(key)
 		if !vkey.Type().AssignableTo(keyType) {
-			panic(ctxerr.Bad(
+			panic(color.Bad(
 				"%s(): expected key %s type mismatch: %s != model key type (%s)",
 				m.GetLocation().Func,
 				util.ToString(key),
@@ -111,7 +112,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 				reflect.Ptr, reflect.Slice:
 				entryInfo.expected = reflect.Zero(valueType) // change to a typed nil
 			default:
-				panic(ctxerr.Bad(
+				panic(color.Bad(
 					"%s(): expected key %s value cannot be nil as entries value type is %s",
 					m.GetLocation().Func,
 					util.ToString(key),
@@ -122,7 +123,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !entryInfo.expected.Type().AssignableTo(valueType) {
-					panic(ctxerr.Bad(
+					panic(color.Bad(
 						"%s(): expected key %s value type mismatch: %s != model key type (%s)",
 						m.GetLocation().Func,
 						util.ToString(key),
@@ -146,7 +147,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 		entryInfo.expected = v
 
 		if checkedEntries[k.Interface()] {
-			panic(ctxerr.Bad(
+			panic(color.Bad(
 				"%s(): %s entry exists in both model & expectedEntries",
 				m.GetLocation().Func,
 				util.ToString(k)))

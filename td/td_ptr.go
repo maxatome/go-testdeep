@@ -9,6 +9,7 @@ package td
 import (
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -53,7 +54,7 @@ func Ptr(val interface{}) TestDeep {
 		}
 		return &p
 	}
-	panic(ctxerr.BadUsage("Ptr(NON_NIL_VALUE)", val, 1, true))
+	panic(color.BadUsage("Ptr(NON_NIL_VALUE)", val, 1, true))
 }
 
 func (p *tdPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -144,7 +145,7 @@ func PPtr(val interface{}) TestDeep {
 		}
 		return &p
 	}
-	panic(ctxerr.BadUsage("PPtr(NON_NIL_VALUE)", val, 1, true))
+	panic(color.BadUsage("PPtr(NON_NIL_VALUE)", val, 1, true))
 }
 
 func (p *tdPPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

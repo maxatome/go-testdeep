@@ -9,6 +9,7 @@ package td
 import (
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -41,7 +42,7 @@ var _ TestDeep = &tdTag{}
 // type of "expectedValue" (or nil if it is originally untyped nil).
 func Tag(tag string, expectedValue interface{}) TestDeep {
 	if err := util.CheckTag(tag); err != nil {
-		panic(ctxerr.Bad("Tag(): %s", err))
+		panic(color.Bad("Tag(): %s", err))
 	}
 	t := tdTag{
 		tdSmugglerBase: newSmugglerBase(expectedValue),

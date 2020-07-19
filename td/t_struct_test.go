@@ -85,25 +85,25 @@ func TestT(tt *testing.T) {
 func TestTCmp(tt *testing.T) {
 	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
-	td.CmpTrue(tt, t.Cmp(1, 1))
-	td.CmpFalse(tt, ttt.Failed())
+	test.IsTrue(tt, t.Cmp(1, 1))
+	test.IsFalse(tt, ttt.Failed())
 
 	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt)
-	td.CmpFalse(tt, t.Cmp(1, 2))
-	td.CmpTrue(tt, ttt.Failed())
+	test.IsFalse(tt, t.Cmp(1, 2))
+	test.IsTrue(tt, ttt.Failed())
 }
 
 func TestTCmpDeeply(tt *testing.T) {
 	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
-	td.CmpTrue(tt, t.CmpDeeply(1, 1))
-	td.CmpFalse(tt, ttt.Failed())
+	test.IsTrue(tt, t.CmpDeeply(1, 1))
+	test.IsFalse(tt, ttt.Failed())
 
 	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt)
-	td.CmpFalse(tt, t.CmpDeeply(1, 2))
-	td.CmpTrue(tt, ttt.Failed())
+	test.IsFalse(tt, t.CmpDeeply(1, 2))
+	test.IsTrue(tt, ttt.Failed())
 }
 
 func TestRun(t *testing.T) {
@@ -111,19 +111,24 @@ func TestRun(t *testing.T) {
 		t := td.NewT(tt)
 
 		runPassed := false
+		nestedFailureIsFatal := false
 
 		ok := t.Run("Test level1",
 			func(t *td.T) {
-				ok := t.Run("Test level2",
+				ok := t.FailureIsFatal().Run("Test level2",
 					func(t *td.T) {
 						runPassed = t.True(true) // test succeeds!
+
+						// Check we inherit config from caller
+						nestedFailureIsFatal = t.Config.FailureIsFatal
 					})
 
 				t.True(ok)
 			})
 
-		t.True(ok)
-		t.True(runPassed)
+		test.IsTrue(tt, ok)
+		test.IsTrue(tt, runPassed)
+		test.IsTrue(tt, nestedFailureIsFatal)
 	})
 
 	t.Run("test.TB without Run", func(tt *testing.T) {
@@ -143,6 +148,90 @@ func TestRun(t *testing.T) {
 
 		t.True(ok)
 		t.True(runPassed)
+	})
+}
+
+func TestRunAssertRequire(t *testing.T) {
+	t.Run("test.TB with Run", func(tt *testing.T) {
+		t := td.NewT(tt)
+
+		runPassed := false
+		assertIsFatal := true
+		requireIsFatal := false
+
+		ok := t.RunAssertRequire("Test level1",
+			func(assert *td.T, require *td.T) {
+				assertIsFatal = assert.Config.FailureIsFatal
+				requireIsFatal = require.Config.FailureIsFatal
+
+				ok := assert.RunAssertRequire("Test level2",
+					func(assert *td.T, require *td.T) {
+						runPassed = assert.True(true)               // test succeeds!
+						runPassed = runPassed && require.True(true) // test succeeds!
+
+						assertIsFatal = assertIsFatal || assert.Config.FailureIsFatal
+						requireIsFatal = requireIsFatal && require.Config.FailureIsFatal
+					})
+				assert.True(ok)
+				require.True(ok)
+
+				ok = require.RunAssertRequire("Test level2",
+					func(assert *td.T, require *td.T) {
+						runPassed = runPassed && assert.True(true)  // test succeeds!
+						runPassed = runPassed && require.True(true) // test succeeds!
+
+						assertIsFatal = assertIsFatal || assert.Config.FailureIsFatal
+						requireIsFatal = requireIsFatal && require.Config.FailureIsFatal
+					})
+				assert.True(ok)
+				require.True(ok)
+			})
+
+		test.IsTrue(tt, ok)
+		test.IsTrue(tt, runPassed)
+		test.IsFalse(tt, assertIsFatal)
+		test.IsTrue(tt, requireIsFatal)
+	})
+
+	t.Run("test.TB without Run", func(tt *testing.T) {
+		t := td.NewT(test.NewTestingTB("gg"))
+
+		runPassed := false
+		assertIsFatal := true
+		requireIsFatal := false
+
+		ok := t.RunAssertRequire("Test level1",
+			func(assert *td.T, require *td.T) {
+				assertIsFatal = assert.Config.FailureIsFatal
+				requireIsFatal = require.Config.FailureIsFatal
+
+				ok := assert.RunAssertRequire("Test level2",
+					func(assert *td.T, require *td.T) {
+						runPassed = assert.True(true)               // test succeeds!
+						runPassed = runPassed && require.True(true) // test succeeds!
+
+						assertIsFatal = assertIsFatal || assert.Config.FailureIsFatal
+						requireIsFatal = requireIsFatal && require.Config.FailureIsFatal
+					})
+				assert.True(ok)
+				require.True(ok)
+
+				ok = require.RunAssertRequire("Test level2",
+					func(assert *td.T, require *td.T) {
+						runPassed = runPassed && assert.True(true)  // test succeeds!
+						runPassed = runPassed && require.True(true) // test succeeds!
+
+						assertIsFatal = assertIsFatal || assert.Config.FailureIsFatal
+						requireIsFatal = requireIsFatal && require.Config.FailureIsFatal
+					})
+				assert.True(ok)
+				require.True(ok)
+			})
+
+		test.IsTrue(tt, ok)
+		test.IsTrue(tt, runPassed)
+		test.IsFalse(tt, assertIsFatal)
+		test.IsTrue(tt, requireIsFatal)
 	})
 }
 
@@ -163,8 +252,8 @@ func TestRunT(t *testing.T) {
 				t.True(ok)
 			})
 
-		t.True(ok)
-		t.True(runPassed)
+		test.IsTrue(tt, ok)
+		test.IsTrue(tt, runPassed)
 	})
 
 	t.Run("test.TB without Run", func(tt *testing.T) {
@@ -182,8 +271,8 @@ func TestRunT(t *testing.T) {
 				t.True(ok)
 			})
 
-		t.True(ok)
-		t.True(runPassed)
+		test.IsTrue(tt, ok)
+		test.IsTrue(tt, runPassed)
 	})
 }
 
@@ -193,85 +282,98 @@ func TestFailureIsFatal(tt *testing.T) {
 	// All t.True(false) tests of course fail
 
 	// Using default config
+	ttt.LastMessage = ""
 	t := td.NewT(ttt)
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpFalse(tt, ttt.IsFatal, "by default it not fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsFalse(tt, ttt.IsFatal, "by default it not fatal")
 
 	// Using specific config
+	ttt.LastMessage = ""
 	t = td.NewT(ttt, td.ContextConfig{FailureIsFatal: true})
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using FailureIsFatal()
+	ttt.LastMessage = ""
 	t = td.NewT(ttt).FailureIsFatal()
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using FailureIsFatal(true)
+	ttt.LastMessage = ""
 	t = td.NewT(ttt).FailureIsFatal(true)
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using Require()
+	ttt.LastMessage = ""
 	t = td.Require(ttt)
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using Require() with specific config (cannot override FailureIsFatal)
+	ttt.LastMessage = ""
 	t = td.Require(ttt, td.ContextConfig{FailureIsFatal: false})
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Canceling specific config
+	ttt.LastMessage = ""
 	t = td.NewT(ttt, td.ContextConfig{FailureIsFatal: false}).
 		FailureIsFatal(false)
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// Using Assert()
+	ttt.LastMessage = ""
 	t = td.Assert(ttt)
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// Using Assert() with specific config (cannot override FailureIsFatal)
+	ttt.LastMessage = ""
 	t = td.Assert(ttt, td.ContextConfig{FailureIsFatal: true})
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// AssertRequire() / assert
+	ttt.LastMessage = ""
 	t, _ = td.AssertRequire(ttt)
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// Using AssertRequire() / assert with specific config (cannot
 	// override FailureIsFatal)
+	ttt.LastMessage = ""
 	t, _ = td.AssertRequire(ttt, td.ContextConfig{FailureIsFatal: true})
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpFalse(tt, ttt.IsFatal, "it must be not fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// AssertRequire() / require
+	ttt.LastMessage = ""
 	_, t = td.AssertRequire(ttt)
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using AssertRequire() / require with specific config (cannot
 	// override FailureIsFatal)
+	ttt.LastMessage = ""
 	_, t = td.AssertRequire(ttt, td.ContextConfig{FailureIsFatal: true})
 	t.True(false) // failure
-	td.CmpNotEmpty(tt, ttt.LastMessage)
-	td.CmpTrue(tt, ttt.IsFatal, "it must be fatal")
+	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 }
 
 func TestUseEqual(tt *testing.T) {

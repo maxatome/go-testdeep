@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -53,7 +54,7 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	const usage = "TruncTime(time.Time[, time.Duration])"
 
 	if len(trunc) > 1 {
-		panic(ctxerr.TooManyParams(usage))
+		panic(color.TooManyParams(usage))
 	}
 
 	t := tdTruncTime{
@@ -79,7 +80,7 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 		return &t
 	}
 
-	panic(ctxerr.Bad("usage: %s, 1st parameter must be time.Time or convertible to time.Time, but not %T",
+	panic(color.Bad("usage: %s, 1st parameter must be time.Time or convertible to time.Time, but not %T",
 		usage, expectedTime))
 }
 
