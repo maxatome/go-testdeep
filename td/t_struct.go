@@ -610,6 +610,8 @@ func (t *T) RunAssertRequire(name string, f func(assert *T, require *T)) bool {
 	return ret[0].Bool()
 }
 
+// RunT runs "f" as a subtest of t called "name".
+//
 // Deprecated: RunT has been superseded by Run() method. It is kept
 // for compatibility.
 func (t *T) RunT(name string, f func(t *T)) bool {

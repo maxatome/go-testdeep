@@ -16,24 +16,48 @@ import (
 )
 
 const (
-	EnvColor         = "TESTDEEP_COLOR"
+	// EnvColor is the name of the environment variable allowing to
+	// enable/disable coloring feature.
+	EnvColor = "TESTDEEP_COLOR"
+	// EnvColorTestName is the name of the environment variable
+	// containing the color of test names in error reports.
 	EnvColorTestName = "TESTDEEP_COLOR_TEST_NAME"
-	EnvColorTitle    = "TESTDEEP_COLOR_TITLE"
-	EnvColorOK       = "TESTDEEP_COLOR_OK"
-	EnvColorBad      = "TESTDEEP_COLOR_BAD"
+	// EnvColorTitle is the name of the environment variable
+	// containing the color of failure reason in error reports.
+	EnvColorTitle = "TESTDEEP_COLOR_TITLE"
+	// EnvColorOK is the name of the environment variable
+	// containing the color of "expected" in error reports.
+	EnvColorOK = "TESTDEEP_COLOR_OK"
+	// EnvColorBad is the name of the environment variable
+	// containing the color of "got" in error reports.
+	EnvColorBad = "TESTDEEP_COLOR_BAD"
 )
 
 var (
-	TestNameOn  string
+	// TestNameOn contains the ANSI color escape sequence to turn test
+	// name color on.
+	TestNameOn string
+	// TestNameOff contains the ANSI color escape sequence to turn test
+	// name color off.
 	TestNameOff string
-	TitleOn     string
-	TitleOff    string
-	OKOn        string
-	OKOnBold    string
-	OKOff       string
-	BadOn       string
-	BadOnBold   string
-	BadOff      string
+	// TitleOn contains the ANSI color escape sequence to turn title color on.
+	TitleOn string
+	// TitleOff contains the ANSI color escape sequence to turn title color off.
+	TitleOff string
+	// OKOn contains the ANSI color escape sequence to turn "expected" color on.
+	OKOn string
+	// OKOnBold contains the ANSI color escape sequence to turn
+	// "expected" color and bold on.
+	OKOnBold string
+	// OKOff contains the ANSI color escape sequence to turn "expected" color off.
+	OKOff string
+	// BadOn contains the ANSI color escape sequence to turn "got" color on.
+	BadOn string
+	// BadOnBold contains the ANSI color escape sequence to turn "got"
+	// color and bold on.
+	BadOnBold string
+	// BadOff contains the ANSI color escape sequence to turn "got" color off.
+	BadOff string
 )
 
 var initOnce sync.Once
