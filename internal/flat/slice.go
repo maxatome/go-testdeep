@@ -127,8 +127,8 @@ func Values(items []interface{}) []reflect.Value {
 	return sv
 }
 
-// Values returns the items values as a slice of interface{}. Nested
-// Slice items are flattened.
+// Interfaces returns the items values as a slice of
+// interface{}. Nested Slice items are flattened.
 func Interfaces(items ...interface{}) []interface{} {
 	l, flattened := Len(items)
 	if flattened {
