@@ -11,7 +11,6 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 type tdIsa struct {
@@ -81,7 +80,7 @@ func (i *tdIsa) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(i.errorTypeMismatch(types.RawString(gotType.String())))
+	return ctx.CollectError(i.errorTypeMismatch(gotType))
 }
 
 func (i *tdIsa) String() string {

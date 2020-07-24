@@ -173,11 +173,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "type mismatch",
-			Got:      types.RawString(got.Type().String()),
-			Expected: types.RawString(expected.Type().String()),
-		})
+		return ctx.CollectError(ctxerr.TypeMismatch(got.Type(), expected.Type()))
 	}
 
 	// if ctx.Depth > 10 { panic("deepValueEqual") } // for debugging

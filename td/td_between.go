@@ -488,11 +488,7 @@ func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&ctxerr.Error{
-				Message:  "type mismatch",
-				Got:      types.RawString(got.Type().String()),
-				Expected: types.RawString(b.expectedMin.Type().String()),
-			})
+			return ctx.CollectError(ctxerr.TypeMismatch(got.Type(), b.expectedMin.Type()))
 		}
 	}
 
@@ -596,11 +592,7 @@ func (b *tdBetweenTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&ctxerr.Error{
-				Message:  "type mismatch",
-				Got:      types.RawString(got.Type().String()),
-				Expected: types.RawString(b.expectedType.String()),
-			})
+			return ctx.CollectError(ctxerr.TypeMismatch(got.Type(), b.expectedType))
 		}
 	}
 
