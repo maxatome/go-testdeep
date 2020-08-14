@@ -9,6 +9,8 @@ package util_test
 import (
 	"bytes"
 	"reflect"
+	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/test"
@@ -110,4 +112,67 @@ items:
 		test.EqualStr(t, util.SliceToBuffer(buf, items).String(),
 			curTest.Expected)
 	}
+}
+
+func TestTypeFullName(t *testing.T) {
+	// our full package name
+	pc, _, _, _ := runtime.Caller(0)
+	pkg := strings.TrimSuffix(runtime.FuncForPC(pc).Name(), ".TestTypeFullName")
+
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(123)), "int")
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf([]int{})), "[]int")
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf([3]int{})), "[3]int")
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf((**float64)(nil))), "**float64")
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(map[int]float64{})), "map[int]float64")
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(struct{}{})), "struct {}")
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(struct {
+		a int
+		b bool
+	}{})), "struct { a int; b bool }")
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(struct {
+		s struct{ a []int }
+		b bool
+	}{})), "struct { s struct { a []int }; b bool }")
+
+	type anon struct{ a []int } //nolint: structcheck,unused
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(struct {
+		anon
+		b bool
+	}{})), "struct { "+pkg+".anon; b bool }")
+
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(func() {})), "func()")
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf(func(a int) {})),
+		"func(int)")
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf(func(a int, b ...bool) rune { return 0 })),
+		"func(int, ...bool) int32")
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf(func() (int, bool, int) { return 0, true, 0 })),
+		"func() (int, bool, int)")
+
+	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(func() {})), "func()")
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf(func(a int) {})),
+		"func(int)")
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf(func(a int, b ...bool) rune { return 0 })),
+		"func(int, ...bool) int32")
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf(func() (int, bool, int) { return 0, true, 0 })),
+		"func() (int, bool, int)")
+
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf((<-chan []int)(nil))),
+		"<-chan []int")
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf((chan<- []int)(nil))),
+		"chan<- []int")
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf((chan []int)(nil))),
+		"chan []int")
+
+	test.EqualStr(t,
+		util.TypeFullName(reflect.TypeOf((*interface{})(nil))),
+		"*interface {}")
 }

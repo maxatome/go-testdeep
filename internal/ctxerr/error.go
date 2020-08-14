@@ -8,10 +8,12 @@ package ctxerr
 
 import (
 	"bytes"
+	"reflect"
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/location"
+	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -47,6 +49,48 @@ var (
 		Message: "Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)",
 	}
 )
+
+// TypeMismatch returns a "type mismatch" error. It is the caller
+// responsibility to check that both types differ.
+//
+// If they resolve to the same name (via their String method), it
+// tries to deeply dump the full package name of each type.
+//
+// It works pretty well with the exception of identical anomymous
+// structs in 2 different packages with the same last name: in this
+// case reflect does not allow us to retrieve the package from which
+// each type comes.
+//
+//   package foo // in a/
+//   var Foo struct { a int }
+//
+//   package foo // in b/
+//   var Foo struct { a int }
+//
+//   package ctxerr
+//   import(
+//     a_foo "a/foo"
+//     b_foo "b/foo"
+//   )
+//   …
+//   TypeMismatch(reflect.TypeOf(a_foo.Foo), reflect.TypeOf(b_foo.Foo))
+//
+// returns an error producing:
+//
+//   type mismatch
+//        got: struct { a int }
+//   expected: struct { a int }
+func TypeMismatch(got, expected reflect.Type) *Error {
+	gs, es := got.String(), expected.String()
+	if gs == es {
+		gs, es = util.TypeFullName(got), util.TypeFullName(expected)
+	}
+	return &Error{
+		Message:  "type mismatch",
+		Got:      types.RawString(gs),
+		Expected: types.RawString(es),
+	}
+}
 
 // Error implements error interface.
 func (e *Error) Error() string {

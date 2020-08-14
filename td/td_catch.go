@@ -11,7 +11,6 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -80,11 +79,7 @@ func (c *tdCatch) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&ctxerr.Error{
-				Message:  "type mismatch",
-				Got:      types.RawString(got.Type().String()),
-				Expected: types.RawString(c.target.Elem().Type().String()),
-			})
+			return ctx.CollectError(ctxerr.TypeMismatch(got.Type(), c.target.Elem().Type()))
 		}
 
 		c.target.Elem().Set(got.Convert(targetType))

@@ -7,12 +7,14 @@
 package ctxerr_test
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 func TestError(t *testing.T) {
@@ -206,6 +208,23 @@ DATA[13].Field: Error message
 	// ErrTooManyErrors
 	test.EqualStr(t, ctxerr.ErrTooManyErrors.Error(),
 		`Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)`)
+}
+
+func TestTypeMismatch(t *testing.T) {
+	rErr := ctxerr.TypeMismatch(reflect.TypeOf(0), reflect.TypeOf(""))
+	test.EqualStr(t, rErr.Message, "type mismatch")
+	test.EqualStr(t, string(rErr.Got.(types.RawString)), `int`)
+	test.EqualStr(t, string(rErr.Expected.(types.RawString)), `string`)
+
+	// It is the caller responsibility to check that both types
+	// differ. To ease testing we can pass twice the same type, it is
+	// the same as passing 2 different types but with the same short
+	// name (a/too.Type vs b/foo.Type), util.TypeFullName() is called
+	// for both types.
+	rErr = ctxerr.TypeMismatch(reflect.TypeOf(0), reflect.TypeOf(0))
+	test.EqualStr(t, rErr.Message, "type mismatch")
+	test.EqualStr(t, string(rErr.Got.(types.RawString)), `int`)
+	test.EqualStr(t, string(rErr.Expected.(types.RawString)), `int`)
 }
 
 func TestBooleanError(t *testing.T) {
