@@ -148,12 +148,12 @@ func TestMyApi(t *testing.T) {
    and the line just below, the body should match the [`JSON`] operator;
 4. for the `$id` placeholder, [`Catch`] its
    value: put it in `id` variable and check it is [`NotZero`];
-5. for the `$created_at` placeholder, use the [`All`]
+5. for the `$createdAt` placeholder, use the [`All`]
    operator. It combines several operators like a AND;
-6. check that `$created_at` date ends with "Z" using
+6. check that `$createdAt` date ends with "Z" using
    [`HasSuffix`]. As we expect a RFC3339
    date, we require it in UTC time zone;
-7. convert `$created_at` date into a `time.Time` using a custom
+7. convert `$createdAt` date into a `time.Time` using a custom
    function thanks to the [`Smuggle`] operator;
 8. then [`Catch`] the resulting value: put it in
    `createdAt` variable and check it is greater or equal than
