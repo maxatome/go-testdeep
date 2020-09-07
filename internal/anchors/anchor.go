@@ -93,7 +93,14 @@ func (i *Info) nextIndex() (n int) {
 // operator or not. If yes, this operator is returned with true. If
 // no, the value is returned as is with false.
 func (i *Info) ResolveAnchor(v reflect.Value) (reflect.Value, bool) {
-	if i == nil || len(i.anchors) == 0 || !v.CanInterface() {
+	if i == nil || !v.CanInterface() {
+		return v, false
+	}
+	// Shortcut
+	i.Lock()
+	la := len(i.anchors)
+	i.Unlock()
+	if la == 0 {
 		return v, false
 	}
 
@@ -141,6 +148,8 @@ sw:
 		return v, false
 	}
 
+	i.Lock()
+	defer i.Unlock()
 	if anchor, ok := i.anchors[key]; ok {
 		return anchor.Operator, true
 	}
