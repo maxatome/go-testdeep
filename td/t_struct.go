@@ -25,7 +25,7 @@ type T struct {
 
 var _ testing.TB = T{}
 
-// NewT returns a new T instance. Typically used as:
+// NewT returns a new *T instance. Typically used as:
 //
 //   import (
 //     "testing"
@@ -129,7 +129,7 @@ var _ testing.TB = T{}
 //
 // Of course "t" can already be a *T, in this special case if "config"
 // is omitted, the Config of the new instance is a copy of the "t"
-// Config.
+// Config, including hooks.
 func NewT(t testing.TB, config ...ContextConfig) *T {
 	var newT T
 
@@ -164,7 +164,7 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 	return &newT
 }
 
-// Assert return a new T instance with FailureIsFatal flag set to
+// Assert return a new *T instance with FailureIsFatal flag set to
 // false.
 //
 //   assert := Assert(t)
@@ -178,7 +178,7 @@ func Assert(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal(false)
 }
 
-// Require return a new T instance with FailureIsFatal flag set to
+// Require return a new *T instance with FailureIsFatal flag set to
 // true.
 //
 //   require := Require(t)
@@ -192,7 +192,7 @@ func Require(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal()
 }
 
-// AssertRequire returns 2 instances of T. The first one called
+// AssertRequire returns 2 instances of *T. The first one called
 // "assert" with FailureIsFatal flag set to false, and the second
 // called "require" with FailureIsFatal flag set to true.
 //
