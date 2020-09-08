@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/color"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 // T is a type that encapsulates testing.TB interface (which is
@@ -488,7 +489,7 @@ func (t *T) getRunFunc() (runtFuncs, bool) {
 		if ok {
 			mt := run.Type
 			if mt.NumIn() == 3 && mt.NumOut() == 1 && !mt.IsVariadic() &&
-				mt.In(1) == stringType && mt.Out(0) == boolType {
+				mt.In(1) == types.String && mt.Out(0) == types.Bool {
 				fnt := mt.In(2)
 				if fnt.Kind() == reflect.Func &&
 					fnt.NumIn() == 1 && fnt.NumOut() == 0 &&

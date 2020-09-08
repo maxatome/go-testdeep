@@ -509,7 +509,7 @@ func (j *tdJSON) TypeBehind() reflect.Type {
 	if j.expected.IsValid() {
 		return j.expected.Type()
 	}
-	return interfaceInterface
+	return types.Interface
 }
 
 type tdMapJSON struct {

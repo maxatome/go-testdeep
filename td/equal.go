@@ -100,7 +100,7 @@ func isCustomEqual(a, b reflect.Value) (bool, bool) {
 			ft.NumIn() == 2 &&
 			ft.NumOut() == 1 &&
 			ft.In(0).AssignableTo(ft.In(1)) &&
-			ft.Out(0) == boolType &&
+			ft.Out(0) == types.Bool &&
 			bType.AssignableTo(ft.In(1)) {
 			return true, equal.Func.Call([]reflect.Value{a, b})[0].Bool()
 		}

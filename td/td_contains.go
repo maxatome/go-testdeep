@@ -159,7 +159,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 	case reflect.Slice:
 		if !c.isTestDeeper && c.expectedValue.IsValid() {
 			// Special case for []byte & expected []byte or string
-			if got.Type().Elem() == uint8Type {
+			if got.Type().Elem() == types.Uint8 {
 				switch c.expectedValue.Kind() {
 				case reflect.String:
 					if bytes.Contains(got.Bytes(), []byte(c.expectedValue.String())) {
@@ -168,7 +168,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 					return c.doesNotContainErr(ctx, got)
 
 				case reflect.Slice:
-					if c.expectedValue.Type().Elem() == uint8Type {
+					if c.expectedValue.Type().Elem() == types.Uint8 {
 						if bytes.Contains(got.Bytes(), c.expectedValue.Bytes()) {
 							return nil
 						}
@@ -247,7 +247,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 		// If the type behind the operator is known *and* is not rune,
 		// then no need to go further, but return an explicit error to
 		// help our user to fix his probably bogus code
-		if typeBehind := c.expectedValue.Interface().(TestDeep).TypeBehind(); typeBehind != nil && typeBehind != runeType {
+		if typeBehind := c.expectedValue.Interface().(TestDeep).TypeBehind(); typeBehind != nil && typeBehind != types.Rune {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
@@ -281,7 +281,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 
 	case reflect.Slice:
 		// Only []byte
-		if c.expectedValue.Type().Elem() == uint8Type {
+		if c.expectedValue.Type().Elem() == types.Uint8 {
 			contains = strings.Contains(str, string(c.expectedValue.Bytes()))
 			break
 		}

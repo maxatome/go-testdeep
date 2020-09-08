@@ -98,7 +98,7 @@ func Code(fn interface{}) TestDeep {
 		// (*bool*) or (*bool*, string)
 		if fnType.Out(0).Kind() == reflect.Bool ||
 			// (*error*)
-			(fnType.NumOut() == 1 && fnType.Out(0) == errorInterface) {
+			(fnType.NumOut() == 1 && fnType.Out(0) == types.Error) {
 			return &tdCode{
 				base:     newBase(3),
 				function: vfn,

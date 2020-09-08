@@ -23,6 +23,7 @@ import (
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -443,7 +444,7 @@ func (t *TestAPI) cmpMarshaledBody(
 		if bodyType == nil {
 			// As the expected body type cannot be guessed, try to
 			// unmarshal in an interface{}
-			bodyType = reflect.TypeOf((*interface{})(nil)).Elem()
+			bodyType = types.Interface
 			unknownExpectedType = true
 
 			// Special case for Ignore & NotEmpty operators

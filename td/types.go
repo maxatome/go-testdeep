@@ -7,11 +7,9 @@
 package td
 
 import (
-	"fmt"
 	"reflect"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/location"
@@ -20,15 +18,6 @@ import (
 
 var (
 	testDeeper         = reflect.TypeOf((*TestDeep)(nil)).Elem()
-	interfaceInterface = reflect.TypeOf((*interface{})(nil)).Elem()
-	stringerInterface  = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
-	errorInterface     = reflect.TypeOf((*error)(nil)).Elem()
-	timeType           = reflect.TypeOf(time.Time{})
-	intType            = reflect.TypeOf(int(0))
-	uint8Type          = reflect.TypeOf(uint8(0))
-	runeType           = reflect.TypeOf(rune(0))
-	stringType         = reflect.TypeOf("")
-	boolType           = reflect.TypeOf(false)
 	smuggledGotType    = reflect.TypeOf(SmuggledGot{})
 	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
 )
