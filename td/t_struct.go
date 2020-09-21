@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/color"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 // T is a type that encapsulates testing.TB interface (which is
@@ -24,7 +25,7 @@ type T struct {
 
 var _ testing.TB = T{}
 
-// NewT returns a new T instance. Typically used as:
+// NewT returns a new *T instance. Typically used as:
 //
 //   import (
 //     "testing"
@@ -128,7 +129,7 @@ var _ testing.TB = T{}
 //
 // Of course "t" can already be a *T, in this special case if "config"
 // is omitted, the Config of the new instance is a copy of the "t"
-// Config.
+// Config, including hooks.
 func NewT(t testing.TB, config ...ContextConfig) *T {
 	var newT T
 
@@ -163,7 +164,7 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 	return &newT
 }
 
-// Assert return a new T instance with FailureIsFatal flag set to
+// Assert return a new *T instance with FailureIsFatal flag set to
 // false.
 //
 //   assert := Assert(t)
@@ -177,7 +178,7 @@ func Assert(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal(false)
 }
 
-// Require return a new T instance with FailureIsFatal flag set to
+// Require return a new *T instance with FailureIsFatal flag set to
 // true.
 //
 //   require := Require(t)
@@ -191,7 +192,7 @@ func Require(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal()
 }
 
-// AssertRequire returns 2 instances of T. The first one called
+// AssertRequire returns 2 instances of *T. The first one called
 // "assert" with FailureIsFatal flag set to false, and the second
 // called "require" with FailureIsFatal flag set to true.
 //
@@ -488,7 +489,7 @@ func (t *T) getRunFunc() (runtFuncs, bool) {
 		if ok {
 			mt := run.Type
 			if mt.NumIn() == 3 && mt.NumOut() == 1 && !mt.IsVariadic() &&
-				mt.In(1) == stringType && mt.Out(0) == boolType {
+				mt.In(1) == types.String && mt.Out(0) == types.Bool {
 				fnt := mt.In(2)
 				if fnt.Kind() == reflect.Func &&
 					fnt.NumIn() == 1 && fnt.NumOut() == 0 &&

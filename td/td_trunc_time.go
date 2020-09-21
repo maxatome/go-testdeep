@@ -70,12 +70,12 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	vval := reflect.ValueOf(expectedTime)
 
 	t.expectedType = vval.Type()
-	if t.expectedType == timeType {
+	if t.expectedType == types.Time {
 		t.expectedTime = expectedTime.(time.Time).Truncate(t.trunc)
 		return &t
 	}
-	if t.expectedType.ConvertibleTo(timeType) {
-		t.expectedTime = vval.Convert(timeType).
+	if t.expectedType.ConvertibleTo(types.Time) {
+		t.expectedTime = vval.Convert(types.Time).
 			Interface().(time.Time).Truncate(t.trunc)
 		return &t
 	}
@@ -90,7 +90,7 @@ func (t *tdTruncTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 		return ctx.CollectError(err)
 	}
 
-	gotTime, err := getTime(ctx, got, got.Type() != timeType)
+	gotTime, err := getTime(ctx, got, got.Type() != types.Time)
 	if err != nil {
 		return ctx.CollectError(err)
 	}
@@ -106,8 +106,8 @@ func (t *tdTruncTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 	}
 
 	var gotRawStr, gotTruncStr string
-	if t.expectedType != timeType &&
-		t.expectedType.Implements(stringerInterface) {
+	if t.expectedType != types.Time &&
+		t.expectedType.Implements(types.FmtStringer) {
 		gotRawStr = got.Interface().(fmt.Stringer).String()
 		gotTruncStr = reflect.ValueOf(gotTimeTrunc).Convert(t.expectedType).
 			Interface().(fmt.Stringer).String()
@@ -124,7 +124,7 @@ func (t *tdTruncTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 }
 
 func (t *tdTruncTime) String() string {
-	if t.expectedType.Implements(stringerInterface) {
+	if t.expectedType.Implements(types.FmtStringer) {
 		return reflect.ValueOf(t.expectedTime).Convert(t.expectedType).
 			Interface().(fmt.Stringer).String()
 	}

@@ -21,6 +21,7 @@ func TestT(tt *testing.T) {
 		td.Cmp(tt, got,
 			td.SStruct(expected, td.StructFields{
 				"anchors": td.Ignore(),
+				"hooks":   td.Ignore(),
 			}),
 		)
 	}

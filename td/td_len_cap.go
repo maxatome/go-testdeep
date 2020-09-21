@@ -29,7 +29,7 @@ func (b *tdLenCapBase) initLenCapBase(val interface{}) bool {
 		}
 
 		// A len or capacity is always an int
-		if vval.Type() == intType {
+		if vval.Type() == types.Int {
 			b.expectedValue = vval
 			return true
 		}

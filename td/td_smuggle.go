@@ -327,7 +327,7 @@ func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
 		if fnType.Out(1).Kind() != reflect.Bool &&
 			// (value, *error*)
 			(fnType.NumOut() > 2 ||
-				fnType.Out(1) != errorInterface) {
+				fnType.Out(1) != types.Error) {
 			break
 		}
 		fallthrough

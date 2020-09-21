@@ -12,6 +12,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/anchors"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/hooks"
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
@@ -37,6 +38,7 @@ type ContextConfig struct {
 	// will be dumped.
 	MaxErrors int
 	anchors   *anchors.Info
+	hooks     *hooks.Info
 	// FailureIsFatal allows to Fatal() (instead of Error()) when a test
 	// fails. Using *testing.T or *testing.B instance as t.TB value, FailNow()
 	// is called behind the scenes when Fatal() is called. See testing
@@ -123,6 +125,7 @@ func newContextWithConfig(config ContextConfig) (ctx ctxerr.Context) {
 		Visited:        visited.NewVisited(),
 		MaxErrors:      config.MaxErrors,
 		Anchors:        config.anchors,
+		Hooks:          config.hooks,
 		FailureIsFatal: config.FailureIsFatal,
 		UseEqual:       config.UseEqual,
 		BeLax:          config.BeLax,

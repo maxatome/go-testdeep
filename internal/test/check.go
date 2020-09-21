@@ -136,3 +136,25 @@ func CheckPanic(t *testing.T, fn func(), contains string) bool {
 	}
 	return true
 }
+
+// NoError checks that err is nil.
+func NoError(t *testing.T, err error, args ...interface{}) bool {
+	if err == nil {
+		return true
+	}
+
+	t.Helper()
+	EqualErrorMessage(t, err, nil, args...)
+	return false
+}
+
+// Error checks that err is non-nil.
+func Error(t *testing.T, err error, args ...interface{}) bool {
+	if err != nil {
+		return true
+	}
+
+	t.Helper()
+	EqualErrorMessage(t, nil, err, args...)
+	return false
+}

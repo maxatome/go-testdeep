@@ -155,19 +155,19 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 
 	case reflect.Struct:
 		var bt tdBetweenTime
-		if b.expectedMin.Type() == timeType {
+		if b.expectedMin.Type() == types.Time {
 			bt = tdBetweenTime{
 				tdBetween:    *b,
-				expectedType: timeType,
+				expectedType: types.Time,
 			}
-		} else if b.expectedMin.Type().ConvertibleTo(timeType) {
+		} else if b.expectedMin.Type().ConvertibleTo(types.Time) {
 			bt = tdBetweenTime{
 				tdBetween:    *b,
 				expectedType: b.expectedMin.Type(),
 				mustConvert:  true,
 			}
-			bt.expectedMin = b.expectedMin.Convert(timeType)
-			bt.expectedMax = b.expectedMax.Convert(timeType)
+			bt.expectedMin = b.expectedMin.Convert(types.Time)
+			bt.expectedMax = b.expectedMax.Convert(types.Time)
 		} else {
 			break
 		}

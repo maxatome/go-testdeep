@@ -100,7 +100,7 @@ func isCustomEqual(a, b reflect.Value) (bool, bool) {
 			ft.NumIn() == 2 &&
 			ft.NumOut() == 1 &&
 			ft.In(0).AssignableTo(ft.In(1)) &&
-			ft.Out(0) == boolType &&
+			ft.Out(0) == types.Bool &&
 			bType.AssignableTo(ft.In(1)) {
 			return true, equal.Func.Call([]reflect.Value{a, b})[0].Bool()
 		}
@@ -122,6 +122,32 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			"can only use it in expected one!"))
 	}
 
+	// Check if a Smuggle hook matches got type
+	if handled, e := ctx.Hooks.Smuggle(&got); handled {
+		if e != nil {
+			// ctx.BooleanError is always false here as hooks cannot be set globally
+			return ctx.CollectError(&ctxerr.Error{
+				Message:  e.Error(),
+				Got:      got,
+				Expected: expected,
+			})
+		}
+	}
+
+	// Check if a Cmp hook matches got & expected types
+	if handled, e := ctx.Hooks.Cmp(got, expected); handled {
+		if e == nil {
+			return
+		}
+		// ctx.BooleanError is always false here as hooks cannot be set globally
+		return ctx.CollectError(&ctxerr.Error{
+			Message:  e.Error(),
+			Got:      got,
+			Expected: expected,
+		})
+	}
+
+	// Look for an Equal() method
 	if ctx.UseEqual {
 		hasEqual, isEqual := isCustomEqual(got, expected)
 		if hasEqual {
