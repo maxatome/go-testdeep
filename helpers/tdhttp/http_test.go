@@ -119,7 +119,12 @@ func TestCmpResponse(tt *testing.T) {
 \s+Response.Status: values differ
 \s+got: 242
 \s+expected: 243`,
-				" Raw received body: `text response\n", // check the complete body is shown
+				`~ Received response:
+\s+\x60(?s:.+?)
+\s+
+\s+text response
+\s+\x60
+`, // check the complete body is shown
 			},
 		},
 		{
@@ -142,10 +147,15 @@ func TestCmpResponse(tt *testing.T) {
 			ExpectedResp: tdhttp.Response{},
 			ExpectedLogs: []string{
 				`~ Failed test 'body should be empty'
-\s+Response.Body: not empty
-\s+got: (?s:.*?)
+\s+Response.Body is not empty
+\s+got: not empty
 \s+expected: empty`,
-				"text response", // check the response is shown (in got:)
+				`~ Received response:
+\s+\x60(?s:.+?)
+\s+
+\s+text response
+\s+\x60
+`, // check the complete body is shown
 			},
 		},
 		{
@@ -173,7 +183,12 @@ func TestCmpResponse(tt *testing.T) {
 \s+unmarshal\(Response\.Body\): should NOT be an error
 \s+got: .*Cmp(Response|Body) only accepts expected(Resp\.)?Body be a \[\]byte, a string or a TestDeep operator allowing to match these types, but not type int.*
 \s+expected: nil`,
-				" Raw received body: `text response\n", // check the complete body is shown
+				`~ Received response:
+\s+\x60(?s:.+?)
+\s+
+\s+text response
+\s+\x60
+`, // check the complete body is shown
 			},
 		},
 		// Empty success
@@ -261,7 +276,12 @@ func TestCmpJSONResponse(tt *testing.T) {
 \s+unmarshal\(Response\.Body\): should NOT be an error
 \s+got: .*cannot unmarshal object into Go value of type int.*
 \s+expected: nil`,
-				`~ Raw received body: \x60\{"name":"Bob"\}\n\s+\x60`, // check the complete body is shown
+				`~ Received response:
+\s+\x60(?s:.+?)
+\s+
+\s+\{"name":"Bob"\}
+\s+\x60
+`, // check the complete body is shown
 			},
 		},
 	} {
@@ -405,7 +425,12 @@ func TestCmpXMLResponse(tt *testing.T) {
 \s+unmarshal\(Response\.Body\): should NOT be an error
 \s+got: .*unknown type func\(\).*
 \s+expected: nil`,
-				`~ Raw received body: \x60<XResp><name>Bob</name></XResp>\n\s+\x60`, // check the complete body is shown
+				`~ Received response:
+\s+\x60(?s:.+?)
+\s+
+\s+<XResp><name>Bob</name></XResp>
+\s+\x60
+`, // check the complete body is shown
 			},
 		},
 	} {
@@ -420,6 +445,12 @@ func TestCmpXMLResponse(tt *testing.T) {
 			})
 	}
 }
+
+var logsViz = strings.NewReplacer(
+	" ", "·",
+	"\t", "→",
+	"\r", "<cr>",
+)
 
 func testLogs(t *td.T, mockT *tdutil.T, curTest CmpResponseTest) {
 	t.Helper()
@@ -440,7 +471,7 @@ func testLogs(t *td.T, mockT *tdutil.T, curTest CmpResponseTest) {
 	}
 
 	if dumpLogs {
-		t.Errorf(`Test logs: "%s"`, mockT.LogBuf())
+		t.Errorf(`Test logs: "%s"`, logsViz.Replace(mockT.LogBuf()))
 	}
 }
 
@@ -637,7 +668,7 @@ func TestMux(t *testing.T) {
 			t.False(ok)
 			t.True(mockT.Failed())
 			t.Contains(mockT.LogBuf(), "nothing has been set during unmarshaling")
-			t.Contains(mockT.LogBuf(), "Raw received body:")
+			t.Contains(mockT.LogBuf(), "Received response:")
 		})
 	})
 
@@ -713,7 +744,7 @@ func TestMux(t *testing.T) {
 				"Cannot guess the body expected type as Any TestDeep")
 			t.Contains(mockT.LogBuf(),
 				"You can try All(Isa(EXPECTED_TYPE), Any(…)) to disambiguate…")
-			t.Contains(mockT.LogBuf(), "Raw received body:")
+			t.Contains(mockT.LogBuf(), "Received response:")
 		})
 	})
 }
