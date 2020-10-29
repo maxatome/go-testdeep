@@ -47,7 +47,7 @@ func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {
 
 	if expected.IsValid() { // here: !got.IsValid()
 		if expected.Type().Implements(testDeeper) {
-			curOperator := expected.Interface().(TestDeep)
+			curOperator := dark.MustGetInterface(expected).(TestDeep)
 			ctx.CurOperator = curOperator
 			if curOperator.HandleInvalid() {
 				return curOperator.Match(ctx, got)
@@ -167,7 +167,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 	if got.Type() != expected.Type() {
 		if expected.Type().Implements(testDeeper) {
-			curOperator := expected.Interface().(TestDeep)
+			curOperator := dark.MustGetInterface(expected).(TestDeep)
 
 			// Resolve interface
 			if got.Kind() == reflect.Interface {
@@ -258,6 +258,13 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			maxLen = expectedLen
 		} else {
 			maxLen = gotLen
+		}
+
+		// Special case for internal tuple type: it is clearer to read
+		// TUPLE instead of DATA when an error occurs when using this type
+		if got.Type() == tupleType &&
+			ctx.Path.Len() == 1 && ctx.Path.String() == contextDefaultRootName {
+			ctx = ctx.ResetPath("TUPLE")
 		}
 
 		for i := 0; i < maxLen; i++ {
