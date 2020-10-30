@@ -8,6 +8,8 @@ package td
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/flat"
 )
 
 var tupleType = reflect.TypeOf(tuple{})
@@ -42,8 +44,20 @@ type Tuple interface {
 }
 
 // TupleFrom returns a new Tuple initialized to the values of "vals".
+//
+//   td.TupleFrom(float64(0), "", td.Not(nil))
+//
+// Flatten can be used to flatten non-[]interface{} slice/array into a
+// new Tuple:
+//
+//   ints := []int64{1, 2, 3}
+//   td.TupleFrom(td.Flatten(ints), "OK", nil)
+//
+// is the same as:
+//
+//   td.TupleFrom(int64(1), int64(2), int64(3), "OK", nil)
 func TupleFrom(vals ...interface{}) Tuple {
-	return tuple(vals)
+	return tuple(flat.Interfaces(vals...))
 }
 
 type tuple []interface{}

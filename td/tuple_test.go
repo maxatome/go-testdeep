@@ -45,4 +45,10 @@ func TestTuple(t *testing.T) {
 		td.TupleFrom(price(-10)),
 		td.TupleFrom(float64(0), "", td.Not(nil)),
 	)
+
+	// With Flatten
+	td.Cmp(t,
+		td.TupleFrom(td.Flatten([]int64{1, 2, 3}), "OK", nil),
+		td.TupleFrom(int64(1), int64(2), int64(3), "OK", nil),
+	)
 }
