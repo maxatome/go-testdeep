@@ -33,9 +33,10 @@ jobs:
       - name: Linting
         if: matrix.full-tests
         run: |
+          mkdir /tmp/linter-bin
           wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
-              sh -s -- -b $GOPATH/bin v1.30.0
-          golangci-lint run -E gofmt -E golint -E maligned -E misspell -E prealloc -E unconvert -E whitespace -E goimports ./...
+              sh -s -- -b /tmp/linter-bin v1.30.0
+          /tmp/linter-bin/golangci-lint run -E gofmt -E golint -E maligned -E misspell -E prealloc -E unconvert -E whitespace -E goimports ./...
       - name: Testing
         run: |
           if [ ${{ matrix.full-tests }} = true ]; then
