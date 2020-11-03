@@ -30,12 +30,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set environment
-        if: ${{ matrix.full-tests }}
-        env:
-          GO_TEST_SAFE_FLAGS:   "-covermode=atomic -coverprofile=coverage-safe.out"
-          GO_TEST_UNSAFE_FLAGS: "-covermode=atomic -coverprofile=coverage-unsafe.out"
-
       - name: Linting
         if: ${{ matrix.full-tests }}
         run: |
@@ -45,6 +39,10 @@ jobs:
 
       - name: Testing
         run: |
+          if [ ${{ matrix.full-tests }} = true ]; then
+              GO_TEST_SAFE_FLAGS="-covermode=atomic -coverprofile=coverage-safe.out"
+              GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out"
+          fi
           export GORACE="halt_on_error=1"
           go get -t ./...
           go test -race -tags safe $GO_TEST_SAFE_FLAGS ./...
