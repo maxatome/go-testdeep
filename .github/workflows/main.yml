@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Linting
-        if: ${{ matrix.full-tests }}
+        if: matrix.full-tests
         run: |
           wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
               sh -s -- -b $GOPATH/bin v1.30.0
@@ -47,7 +47,7 @@ jobs:
           go test -race -tags safe $GO_TEST_SAFE_FLAGS ./...
           go test -race $GO_TEST_UNSAFE_FLAGS ./...
       - name: Reporting
-        if: ${{ matrix.full-tests }}
+        if: matrix.full-tests
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
