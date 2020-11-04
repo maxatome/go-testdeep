@@ -2,8 +2,7 @@ name: Build
 
 on:
   push:
-    paths:
-      - '**.go'
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
