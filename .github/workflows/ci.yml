@@ -1,4 +1,4 @@
-name: Main
+name: Build
 
 on:
   push:
@@ -37,16 +37,25 @@ jobs:
           wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
               sh -s -- -b /tmp/linter-bin v1.30.0
           /tmp/linter-bin/golangci-lint run -E gofmt -E golint -E maligned -E misspell -E prealloc -E unconvert -E whitespace -E goimports ./...
+
       - name: Testing
         run: |
           if [ ${{ matrix.full-tests }} = true ]; then
               GO_TEST_SAFE_FLAGS="-covermode=atomic -coverprofile=coverage-safe.out"
               GO_TEST_UNSAFE_FLAGS="-covermode=atomic -coverprofile=coverage-unsafe.out"
           fi
+          # Before go 1.11, go modules are not available
+          if [ "$(expr ${{ matrix.go-version }} : '^1\.\([0-9]\+\)')" -le 10 ]; then
+              mkdir -p ../src/github.com/maxatome
+              ln -s $(pwd) ../src/github.com/maxatome/go-testdeep
+              export GOPATH=$(dirname $(pwd))
+              cd $GOPATH/src/github.com/maxatome/go-testdeep
+          fi
           export GORACE="halt_on_error=1"
           go get -t ./...
           go test -race -tags safe $GO_TEST_SAFE_FLAGS ./...
           go test -race $GO_TEST_UNSAFE_FLAGS ./...
+
       - name: Reporting
         if: matrix.full-tests
         env:
