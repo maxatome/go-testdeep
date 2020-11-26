@@ -20,7 +20,7 @@ type tdSmugglerBase struct {
 func newSmugglerBase(val interface{}, depth ...int) (ret tdSmugglerBase) {
 	callDepth := 4
 	if len(depth) > 0 {
-		callDepth = depth[0]
+		callDepth += depth[0]
 	}
 	ret.base = newBase(callDepth)
 
