@@ -40,3 +40,5 @@ func (i RawInt) _TestDeep() {}
 func (i RawInt) String() string {
 	return strconv.Itoa(int(i))
 }
+
+var _ = []TestDeepStringer{RawString(""), RawInt(0)}

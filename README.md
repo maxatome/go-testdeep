@@ -295,6 +295,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`Ignore`]: https://go-testdeep.zetta.rocks/operators/ignore/
 [`Isa`]: https://go-testdeep.zetta.rocks/operators/isa/
 [`JSON`]: https://go-testdeep.zetta.rocks/operators/json/
+[`JSONPointer`]: https://go-testdeep.zetta.rocks/operators/jsonpointer/
 [`Keys`]: https://go-testdeep.zetta.rocks/operators/keys/
 [`Lax`]: https://go-testdeep.zetta.rocks/operators/lax/
 [`Len`]: https://go-testdeep.zetta.rocks/operators/len/
@@ -353,6 +354,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpHasSuffix`]: https://go-testdeep.zetta.rocks/operators/hassuffix/#cmphassuffix-shortcut
 [`CmpIsa`]: https://go-testdeep.zetta.rocks/operators/isa/#cmpisa-shortcut
 [`CmpJSON`]: https://go-testdeep.zetta.rocks/operators/json/#cmpjson-shortcut
+[`CmpJSONPointer`]: https://go-testdeep.zetta.rocks/operators/jsonpointer/#cmpjsonpointer-shortcut
 [`CmpKeys`]: https://go-testdeep.zetta.rocks/operators/keys/#cmpkeys-shortcut
 [`CmpLax`]: https://go-testdeep.zetta.rocks/operators/lax/#cmplax-shortcut
 [`CmpLen`]: https://go-testdeep.zetta.rocks/operators/len/#cmplen-shortcut
@@ -410,6 +412,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.HasSuffix`]: https://go-testdeep.zetta.rocks/operators/hassuffix/#thassuffix-shortcut
 [`T.Isa`]: https://go-testdeep.zetta.rocks/operators/isa/#tisa-shortcut
 [`T.JSON`]: https://go-testdeep.zetta.rocks/operators/json/#tjson-shortcut
+[`T.JSONPointer`]: https://go-testdeep.zetta.rocks/operators/jsonpointer/#tjsonpointer-shortcut
 [`T.Keys`]: https://go-testdeep.zetta.rocks/operators/keys/#tkeys-shortcut
 [`T.CmpLax`]: https://go-testdeep.zetta.rocks/operators/lax/#tcmplax-shortcut
 [`T.Len`]: https://go-testdeep.zetta.rocks/operators/len/#tlen-shortcut

@@ -198,6 +198,16 @@ func TestNewTestAPI(t *testing.T) {
 		mockT = tdutil.NewT("test")
 		td.CmpFalse(t,
 			tdhttp.NewTestAPI(mockT, mux).
+				NewJSONRequest("ZIP", "/any/json", requestBody).
+				CmpStatus(200).
+				CmpHeader(containsKey).
+				CmpJSONBody(td.JSONPointer("/body/hey", 123)).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
 				PostJSON("/any/json", requestBody).
 				CmpStatus(200).
 				CmpHeader(containsKey).
