@@ -273,6 +273,9 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 //   // Tests that got.B.A.Num is 12
 //   td.Cmp(t, got, td.Smuggle("B.A.Num", 12))
 //
+// Contrary to JSONPointer operator, private fields can be followed
+// but not maps nor slices items.
+//
 // Behind the scenes, a temporary function is automatically created to
 // achieve the same goal, but add some checks against nil values and
 // auto-dereference interfaces and pointers.

@@ -23,7 +23,7 @@ type tdKVBase struct {
 func (b *tdKVBase) initKVBase(val interface{}) bool {
 	vval := reflect.ValueOf(val)
 	if vval.IsValid() {
-		b.tdSmugglerBase = newSmugglerBase(val, 5)
+		b.tdSmugglerBase = newSmugglerBase(val, 1)
 
 		if b.isTestDeeper {
 			return true

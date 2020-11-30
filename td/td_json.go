@@ -275,17 +275,26 @@ func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path st
 }
 
 func gotViaJSON(ctx ctxerr.Context, pGot *reflect.Value) *ctxerr.Error {
-	gotIf, ok := dark.GetInterface(*pGot, true)
+	got, err := jsonify(ctx, *pGot)
+	if err != nil {
+		return err
+	}
+	*pGot = reflect.ValueOf(got)
+	return nil
+}
+
+func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error) {
+	gotIf, ok := dark.GetInterface(got, true)
 	if !ok {
-		return ctx.CannotCompareError()
+		return nil, ctx.CannotCompareError()
 	}
 
 	b, err := json.Marshal(gotIf)
 	if err != nil {
 		if ctx.BooleanError {
-			return ctxerr.BooleanError
+			return nil, ctxerr.BooleanError
 		}
-		return &ctxerr.Error{
+		return nil, &ctxerr.Error{
 			Message: "json.Marshal failed",
 			Summary: ctxerr.NewSummary(err.Error()),
 		}
@@ -294,9 +303,7 @@ func gotViaJSON(ctx ctxerr.Context, pGot *reflect.Value) *ctxerr.Error {
 	// As Marshal succeeded, Unmarshal in an interface{} cannot fail
 	var vgot interface{}
 	json.Unmarshal(b, &vgot) //nolint: errcheck
-
-	*pGot = reflect.ValueOf(vgot)
-	return nil
+	return vgot, nil
 }
 
 // summary(JSON): compares against JSON representation

@@ -1015,6 +1015,188 @@ func ExampleCmpJSON_file() {
 	// Full match from io.Reader: true
 }
 
+func ExampleCmpJSONPointer_rfc6901() {
+	t := &testing.T{}
+
+	got := json.RawMessage(`
+{
+   "foo":  ["bar", "baz"],
+   "":     0,
+   "a/b":  1,
+   "c%d":  2,
+   "e^f":  3,
+   "g|h":  4,
+   "i\\j": 5,
+   "k\"l": 6,
+   " ":    7,
+   "m~n":  8
+}`)
+
+	expected := map[string]interface{}{
+		"foo": []interface{}{"bar", "baz"},
+		"":    0,
+		"a/b": 1,
+		"c%d": 2,
+		"e^f": 3,
+		"g|h": 4,
+		`i\j`: 5,
+		`k"l`: 6,
+		" ":   7,
+		"m~n": 8,
+	}
+	ok := td.CmpJSONPointer(t, got, "", expected)
+	fmt.Println("Empty JSON pointer means all:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/foo`, []interface{}{"bar", "baz"})
+	fmt.Println("Extract `foo` key:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/foo/0`, "bar")
+	fmt.Println("First item of `foo` key slice:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/`, 0)
+	fmt.Println("Empty key:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/a~1b`, 1)
+	fmt.Println("Slash has to be escaped using `~1`:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/c%d`, 2)
+	fmt.Println("% in key:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/e^f`, 3)
+	fmt.Println("^ in key:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/g|h`, 4)
+	fmt.Println("| in key:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/i\j`, 5)
+	fmt.Println("Backslash in key:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/k"l`, 6)
+	fmt.Println("Double-quote in key:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/ `, 7)
+	fmt.Println("Space key:", ok)
+
+	ok = td.CmpJSONPointer(t, got, `/m~0n`, 8)
+	fmt.Println("Tilde has to be escaped using `~0`:", ok)
+
+	// Output:
+	// Empty JSON pointer means all: true
+	// Extract `foo` key: true
+	// First item of `foo` key slice: true
+	// Empty key: true
+	// Slash has to be escaped using `~1`: true
+	// % in key: true
+	// ^ in key: true
+	// | in key: true
+	// Backslash in key: true
+	// Double-quote in key: true
+	// Space key: true
+	// Tilde has to be escaped using `~0`: true
+}
+
+func ExampleCmpJSONPointer_struct() {
+	t := &testing.T{}
+
+	// Without json tags, encoding/json uses public fields name
+	type Item struct {
+		Name  string
+		Value int64
+		Next  *Item
+	}
+
+	got := Item{
+		Name:  "first",
+		Value: 1,
+		Next: &Item{
+			Name:  "second",
+			Value: 2,
+			Next: &Item{
+				Name:  "third",
+				Value: 3,
+			},
+		},
+	}
+
+	ok := td.CmpJSONPointer(t, got, "/Next/Next/Name", "third")
+	fmt.Println("3rd item name is `third`:", ok)
+
+	ok = td.CmpJSONPointer(t, got, "/Next/Next/Value", td.Gte(int64(3)))
+	fmt.Println("3rd item value is greater or equal than 3:", ok)
+
+	ok = td.CmpJSONPointer(t, got, "/Next", td.JSONPointer("/Next",
+		td.JSONPointer("/Value", td.Gte(int64(3)))))
+	fmt.Println("3rd item value is still greater or equal than 3:", ok)
+
+	ok = td.CmpJSONPointer(t, got, "/Next/Next/Next/Name", td.Ignore())
+	fmt.Println("4th item exists and has a name:", ok)
+
+	// Struct comparison work with or without pointer: &Item{…} works too
+	ok = td.CmpJSONPointer(t, got, "/Next/Next", Item{
+		Name:  "third",
+		Value: 3,
+	})
+	fmt.Println("3rd item full comparison:", ok)
+
+	// Output:
+	// 3rd item name is `third`: true
+	// 3rd item value is greater or equal than 3: true
+	// 3rd item value is still greater or equal than 3: true
+	// 4th item exists and has a name: false
+	// 3rd item full comparison: true
+}
+
+func ExampleCmpJSONPointer_has_hasnt() {
+	t := &testing.T{}
+
+	got := json.RawMessage(`
+{
+  "name": "Bob",
+  "age": 42,
+  "children": [
+    {
+      "name": "Alice",
+      "age": 16
+    },
+    {
+      "name": "Britt",
+      "age": 21,
+      "children": [
+        {
+          "name": "John",
+          "age": 1
+        }
+      ]
+    }
+  ]
+}`)
+
+	// Has Bob some children?
+	ok := td.CmpJSONPointer(t, got, "/children", td.Len(td.Gt(0)))
+	fmt.Println("Bob has at least one child:", ok)
+
+	// But checking "children" exists is enough here
+	ok = td.CmpJSONPointer(t, got, "/children/0/children", td.Ignore())
+	fmt.Println("Alice has children:", ok)
+
+	ok = td.CmpJSONPointer(t, got, "/children/1/children", td.Ignore())
+	fmt.Println("Britt has children:", ok)
+
+	// The reverse can be checked too
+	ok = td.Cmp(t, got, td.Not(td.JSONPointer("/children/0/children", td.Ignore())))
+	fmt.Println("Alice hasn't children:", ok)
+
+	ok = td.Cmp(t, got, td.Not(td.JSONPointer("/children/1/children", td.Ignore())))
+	fmt.Println("Britt hasn't children:", ok)
+
+	// Output:
+	// Bob has at least one child: true
+	// Alice has children: false
+	// Britt has children: true
+	// Alice hasn't children: true
+	// Britt hasn't children: false
+}
+
 func ExampleCmpKeys() {
 	t := &testing.T{}
 
