@@ -36,7 +36,19 @@ jobs:
           wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
               sh -s -- -b $HOME/go/bin v1.33.0
           echo $PATH
-          $HOME/go/bin/golangci-lint run -E gofmt -E golint -E maligned -E misspell -E prealloc -E unconvert -E whitespace -E goimports ./...
+          $HOME/go/bin/golangci-lint run --max-issues-per-linter 0 \
+                                         --max-same-issues 0 \
+                                         -E exportloopref \
+                                         -E gocritic \
+                                         -E godot \
+                                         -E goimports \
+                                         -E golint \
+                                         -E maligned \
+                                         -E misspell \
+                                         -E prealloc \
+                                         -E unconvert \
+                                         -E whitespace \
+                                         ./...
 
       - name: Testing
         continue-on-error: ${{ matrix.go-version == 'tip' }}

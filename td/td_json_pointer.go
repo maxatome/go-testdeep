@@ -30,7 +30,7 @@ var _ TestDeep = &tdJSONPointer{}
 // input(JSONPointer): nil,bool,str,int,float,array,slice,map,struct,ptr
 
 // JSONPointer is a smuggler operator. It takes the JSON
-// representation of data, get the value corresponding to the JSON
+// representation of data, gets the value corresponding to the JSON
 // pointer "pointer" (as RFC 6901 specifies it) and compares it to
 // "expectedValue".
 //
@@ -165,11 +165,12 @@ func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 
 func (p *tdJSONPointer) String() string {
 	var expected string
-	if p.isTestDeeper {
+	switch {
+	case p.isTestDeeper:
 		expected = p.expectedValue.Interface().(TestDeep).String()
-	} else if p.expectedValue.IsValid() {
+	case p.expectedValue.IsValid():
 		expected = util.ToString(p.expectedValue.Interface())
-	} else {
+	default:
 		expected = "nil"
 	}
 	return fmt.Sprintf("JSONPointer(%s, %s)", p.pointer, expected)

@@ -2275,7 +2275,7 @@ func ExampleCmpSmuggle_convert() {
 		"checks that number in %#v is in [120 .. 130]")
 	fmt.Println(ok)
 
-	ok = td.CmpSmuggle(t, "123", func(numStr string) (int, error) {
+	ok = td.CmpSmuggle(t, "123", func(numStr string) (int, error) { // nolint: gocritic
 		return strconv.Atoi(numStr)
 	}, td.Between(120, 130),
 		"checks that number in %#v is in [120 .. 130]")

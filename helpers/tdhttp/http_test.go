@@ -22,7 +22,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	defer color.SaveState()()
+	color.SaveState()
 	os.Exit(m.Run())
 }
 

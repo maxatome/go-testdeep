@@ -768,8 +768,9 @@ func (t *TestAPI) Anchor(operator td.TestDeep, model ...interface{}) interface{}
 //       Age:  26,
 //     })
 //
-// See (*td.T).Anchor documentation for details
+// See (*td.T).Anchor documentation
 // https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor
+// for details.
 func (t *TestAPI) A(operator td.TestDeep, model ...interface{}) interface{} {
 	return t.Anchor(operator, model...)
 }

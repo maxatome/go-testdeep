@@ -494,7 +494,7 @@ func jsonStringify(opName string, v reflect.Value) string {
 
 		// Multiline comment?
 		if indent != "" {
-			b.WriteString(strings.Replace(str[:endPos], "\n", "\n"+indent, -1))
+			b.WriteString(strings.Replace(str[:endPos], "\n", "\n"+indent, -1)) //nolint: gocritic
 		} else {
 			b.WriteString(str[:endPos])
 		}

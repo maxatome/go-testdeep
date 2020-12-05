@@ -38,7 +38,7 @@ func TestContainsKey(t *testing.T) {
 	}
 }
 
-// nil case
+// nil case.
 func TestContainsKeyNil(t *testing.T) {
 	type MyPtrMap map[*int]int
 

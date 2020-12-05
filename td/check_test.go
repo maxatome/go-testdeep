@@ -23,7 +23,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	defer color.SaveState()()
+	color.SaveState()
 	os.Exit(m.Run())
 }
 
@@ -83,7 +83,7 @@ func mustContain(str string) expectedErrorMatch {
 }
 
 func indent(str string, numSpc int) string {
-	return strings.Replace(str, "\n", "\n\t"+strings.Repeat(" ", numSpc), -1)
+	return strings.Replace(str, "\n", "\n\t"+strings.Repeat(" ", numSpc), -1) //nolint: gocritic
 }
 
 func cmpErrorStr(t *testing.T, err *ctxerr.Error,
@@ -99,7 +99,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	> %s`,
 			tdutil.BuildTestName(args...),
 			fieldName, indent(got, 10), indent(expected.Exact, 10),
-			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
+			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1)) //nolint: gocritic
 		return false
 	}
 
@@ -112,7 +112,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 			tdutil.BuildTestName(args...),
 			fieldName,
 			indent(got, 16), indent(expected.Contain, 16),
-			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
+			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1)) //nolint: gocritic
 		return false
 	}
 
@@ -125,7 +125,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 			tdutil.BuildTestName(args...),
 			fieldName,
 			indent(got, 14), indent(expected.Match.String(), 14),
-			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1))
+			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1)) //nolint: gocritic
 		return false
 	}
 

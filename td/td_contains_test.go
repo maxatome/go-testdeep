@@ -63,7 +63,7 @@ func TestContains(t *testing.T) {
 	}
 }
 
-// nil case
+// nil case.
 func TestContainsNil(t *testing.T) {
 	type (
 		MyPtrSlice []*int
