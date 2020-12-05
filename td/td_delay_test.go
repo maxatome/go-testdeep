@@ -25,7 +25,7 @@ func TestDelay(t *testing.T) {
 	checkOK(t, 12, op)
 	test.EqualInt(t, called, 1)
 
-	delayNil := td.Delay(func() td.TestDeep { return td.Nil() })
+	delayNil := td.Delay(td.Nil)
 	checkOK(t, nil, delayNil)
 
 	test.EqualStr(t, delayNil.String(), "nil")

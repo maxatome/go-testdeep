@@ -139,7 +139,7 @@ func (c *tdContains) doesNotContainErr(ctx ctxerr.Context, got interface{}) *ctx
 // getExpectedValue returns the expected value handling the
 // Contains(nil) case: in this case it returns a typed nil (same type
 // as the items of got).
-// got is an array, a slice or a map (it's the caller responsibility to check)
+// got is an array, a slice or a map (it's the caller responsibility to check).
 func (c *tdContains) getExpectedValue(got reflect.Value) reflect.Value {
 	// If the expectValue is non-typed nil
 	if !c.expectedValue.IsValid() {

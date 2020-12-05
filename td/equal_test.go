@@ -24,7 +24,7 @@ type ItemProperty struct {
 }
 
 //
-// Array
+// Array.
 func TestEqualArray(t *testing.T) {
 	checkOK(t, [8]int{1, 2}, [8]int{1, 2})
 
@@ -168,7 +168,7 @@ func TestEqualArray(t *testing.T) {
 }
 
 //
-// Slice
+// Slice.
 func TestEqualSlice(t *testing.T) {
 	checkOK(t, []int{1, 2}, []int{1, 2})
 
@@ -227,7 +227,7 @@ func TestEqualSlice(t *testing.T) {
 }
 
 //
-// Interface
+// Interface.
 func TestEqualInterface(t *testing.T) {
 	checkOK(t, []interface{}{1, "foo"}, []interface{}{1, "foo"})
 	checkOK(t, []interface{}{1, nil}, []interface{}{1, nil})
@@ -258,7 +258,7 @@ func TestEqualInterface(t *testing.T) {
 }
 
 //
-// Ptr
+// Ptr.
 func TestEqualPtr(t *testing.T) {
 	expected := 12
 	gotOK := expected
@@ -277,7 +277,7 @@ func TestEqualPtr(t *testing.T) {
 }
 
 //
-// Struct
+// Struct.
 func TestEqualStruct(t *testing.T) {
 	checkOK(t,
 		ItemProperty{ // got
@@ -311,7 +311,7 @@ func TestEqualStruct(t *testing.T) {
 }
 
 //
-// Map
+// Map.
 func TestEqualMap(t *testing.T) {
 	checkOK(t, map[string]int{}, map[string]int{})
 	checkOK(t, (map[string]int)(nil), (map[string]int)(nil))
@@ -375,7 +375,7 @@ func TestEqualMap(t *testing.T) {
 }
 
 //
-// Func
+// Func.
 func TestEqualFunc(t *testing.T) {
 	checkOK(t, (func())(nil), (func())(nil))
 
@@ -388,7 +388,7 @@ func TestEqualFunc(t *testing.T) {
 }
 
 //
-// Channel
+// Channel.
 func TestEqualChannel(t *testing.T) {
 	var gotCh, expectedCh chan int
 
@@ -407,7 +407,7 @@ func TestEqualChannel(t *testing.T) {
 }
 
 //
-// Others
+// Others.
 func TestEqualOthers(t *testing.T) {
 	type Private struct { // nolint: maligned
 		num   int
@@ -590,7 +590,7 @@ func TestEqualOthers(t *testing.T) {
 }
 
 //
-// Private non-copyable fields
+// Private non-copyable fields.
 func TestEqualReallyPrivate(t *testing.T) {
 	type Private struct {
 		channel chan int

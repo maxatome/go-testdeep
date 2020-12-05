@@ -41,13 +41,13 @@ var _ TestDeep = &tdBetween{}
 type BoundsKind uint8
 
 const (
-	// BoundsInIn allows to match between "from" and "to" both included
+	// BoundsInIn allows to match between "from" and "to" both included.
 	BoundsInIn BoundsKind = iota
-	// BoundsInOut allows to match between "from" included and "to" excluded
+	// BoundsInOut allows to match between "from" included and "to" excluded.
 	BoundsInOut
-	// BoundsOutIn allows to match between "from" excluded and "to" included
+	// BoundsOutIn allows to match between "from" excluded and "to" included.
 	BoundsOutIn
-	// BoundsOutOut allows to match between "from" and "to" both excluded
+	// BoundsOutOut allows to match between "from" and "to" both excluded.
 	BoundsOutOut
 )
 
@@ -155,7 +155,7 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 
 	case reflect.Struct:
 		var bt tdBetweenTime
-		if b.expectedMin.Type() == types.Time {
+		if b.expectedMin.Type() == types.Time { //nolint: gocritic
 			bt = tdBetweenTime{
 				tdBetween:    *b,
 				expectedType: types.Time,

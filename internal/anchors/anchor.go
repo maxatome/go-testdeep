@@ -185,6 +185,9 @@ func (i *Info) setComplex(typ reflect.Type, min float64) (reflect.Value, interfa
 // forms:
 //   - the new value itself as a reflect.Value;
 //   - an interface{} usable as a key in an AnchorsSet map.
+//
+// It panics if "typ" kind is not recognized or if it is a
+// non-anchorable struct.
 func (i *Info) build(typ reflect.Type) (reflect.Value, interface{}) {
 	// For each numeric type, anchor the operator on a number close to
 	// the limit of this type, but not at the extreme limit to avoid

@@ -236,7 +236,7 @@ func TestRunAssertRequire(t *testing.T) {
 	})
 }
 
-// Deprecated RunT
+// Deprecated RunT.
 func TestRunT(t *testing.T) {
 	t.Run("test.TB with Run", func(tt *testing.T) {
 		t := td.NewT(tt)
