@@ -74,6 +74,9 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
+		// Lax
+		checkOK(t, got, td.Lax(td.Bag(float64(5), 4, 1, 4, 3)), testName)
+
 		//
 		// SubBagOf
 		checkOK(t, got, td.SubBagOf(5, 4, 1, 4, 3), testName)
@@ -87,6 +90,9 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
+		// Lax
+		checkOK(t, got, td.Lax(td.SubBagOf(float64(5), 4, 1, 4, 3)), testName)
+
 		//
 		// SuperBagOf
 		checkOK(t, got, td.SuperBagOf(5, 4, 1, 4, 3), testName)
@@ -99,6 +105,9 @@ func TestBag(t *testing.T) {
 				Summary: mustBe("Missing item: (66)"),
 			},
 			testName)
+
+		// Lax
+		checkOK(t, got, td.Lax(td.SuperBagOf(float64(5), 4, 1, 4, 3)), testName)
 	}
 
 	checkOK(t, []interface{}{123, "foo", nil, "bar", nil},

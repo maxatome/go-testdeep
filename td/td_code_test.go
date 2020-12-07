@@ -42,6 +42,9 @@ func TestCode(t *testing.T) {
 			return nil
 		}))
 
+	// Lax
+	checkOK(t, 123, td.Lax(td.Code(func(n float64) bool { return n == 123 })))
+
 	checkError(t, 123, td.Code(func(n float64) bool { return true }),
 		expectedError{
 			Message:  mustBe("incompatible parameter type"),

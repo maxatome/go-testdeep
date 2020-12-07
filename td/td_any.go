@@ -52,7 +52,7 @@ func Any(expectedValues ...interface{}) TestDeep {
 
 func (a *tdAny) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	for _, item := range a.items {
-		if deepValueEqualOK(got, item) {
+		if deepValueEqualFinalOK(ctx, got, item) {
 			return nil
 		}
 	}

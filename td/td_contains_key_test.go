@@ -35,6 +35,9 @@ func TestContainsKey(t *testing.T) {
                (12|28|34),
                (12|28|34)\)`),
 			}, testName)
+
+		// Lax
+		checkOK(t, got, td.Lax(td.ContainsKey(float64(34))), testName)
 	}
 }
 

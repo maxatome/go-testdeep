@@ -81,6 +81,9 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
+		// Lax
+		checkOK(t, got, td.Lax(td.Set(5, float64(4), 1, 3)), testName)
+
 		//
 		// SubSetOf
 		checkOK(t, got, td.SubSetOf(5, 4, 1, 3), testName)
@@ -93,6 +96,9 @@ func TestSet(t *testing.T) {
 				Summary: mustBe("Extra item: (1)"),
 			},
 			testName)
+
+		// Lax
+		checkOK(t, got, td.Lax(td.SubSetOf(5, float64(4), 1, 3)), testName)
 
 		//
 		// SuperSetOf
@@ -107,6 +113,9 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
+		// Lax
+		checkOK(t, got, td.Lax(td.SuperSetOf(5, float64(4), 1, 3)), testName)
+
 		//
 		// NotAny
 		checkOK(t, got, td.NotAny(10, 20, 30), testName)
@@ -116,6 +125,17 @@ func TestSet(t *testing.T) {
 				Message: mustBe("comparing %% as a NotAny"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("Extra item: (3)"),
+			},
+			testName)
+
+		// Lax
+		checkOK(t, got, td.NotAny(float64(3)), testName)
+
+		checkError(t, got, td.Lax(td.NotAny(float64(3))),
+			expectedError{
+				Message: mustBe("comparing %% as a NotAny"),
+				Path:    mustBe("DATA"),
+				Summary: mustBe("Extra item: ((float64) 3)"),
 			},
 			testName)
 	}
