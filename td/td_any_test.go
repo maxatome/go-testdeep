@@ -42,6 +42,9 @@ func TestAny(t *testing.T) {
 			Expected: mustBe("Any(6)"),
 		})
 
+	// Lax
+	checkOK(t, float64(123), td.Lax(td.Any(122, 123, 124)))
+
 	//
 	// String
 	test.EqualStr(t, td.Any(6).String(), "Any(6)")

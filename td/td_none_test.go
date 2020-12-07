@@ -33,6 +33,15 @@ func TestNone(t *testing.T) {
 			Expected: mustBe("None(7,\n     nil)"),
 		})
 
+	// Lax
+	checkError(t, float64(6), td.Lax(td.None(6, 7)),
+		expectedError{
+			Message:  mustBe("comparing with None (part 1 of 2 is OK)"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("(float64) 6"),
+			Expected: mustBe("None(6,\n     7)"),
+		})
+
 	//
 	// String
 	test.EqualStr(t, td.None(6).String(), "None(6)")

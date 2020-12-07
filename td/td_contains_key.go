@@ -100,10 +100,10 @@ func (c *tdContainsKey) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	if got.Kind() == reflect.Map {
 		expectedValue := c.getExpectedValue(got)
 
-		// If expected value is a TestDeep operator, check each key
-		if c.isTestDeeper {
+		// If expected value is a TestDeep operator OR BeLax, check each key
+		if c.isTestDeeper || ctx.BeLax {
 			for _, k := range got.MapKeys() {
-				if deepValueEqualOK(k, expectedValue) {
+				if deepValueEqualFinalOK(ctx, k, expectedValue) {
 					return nil
 				}
 			}

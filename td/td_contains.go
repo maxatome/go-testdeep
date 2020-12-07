@@ -220,7 +220,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 	case reflect.Array:
 		expectedValue := c.getExpectedValue(got)
 		for index := got.Len() - 1; index >= 0; index-- {
-			if deepValueEqualOK(got.Index(index), expectedValue) {
+			if deepValueEqualFinalOK(ctx, got.Index(index), expectedValue) {
 				return nil
 			}
 		}
@@ -229,7 +229,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 	case reflect.Map:
 		expectedValue := c.getExpectedValue(got)
 		if !tdutil.MapEachValue(got, func(v reflect.Value) bool {
-			return !deepValueEqualOK(v, expectedValue)
+			return !deepValueEqualFinalOK(ctx, v, expectedValue)
 		}) {
 			return nil
 		}
@@ -247,7 +247,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 		// If the type behind the operator is known *and* is not rune,
 		// then no need to go further, but return an explicit error to
 		// help our user to fix his probably bogus code
-		if typeBehind := c.expectedValue.Interface().(TestDeep).TypeBehind(); typeBehind != nil && typeBehind != types.Rune {
+		if typeBehind := c.expectedValue.Interface().(TestDeep).TypeBehind(); typeBehind != nil && typeBehind != types.Rune && !ctx.BeLax {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
@@ -259,7 +259,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 		}
 
 		for _, chr := range str {
-			if deepValueEqualOK(reflect.ValueOf(chr), c.expectedValue) {
+			if deepValueEqualFinalOK(ctx, reflect.ValueOf(chr), c.expectedValue) {
 				return nil
 			}
 		}

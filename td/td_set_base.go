@@ -80,7 +80,7 @@ func (s *tdSetBase) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 					continue
 				}
 
-				if deepValueEqualOK(got.Index(idx), expected) {
+				if deepValueEqualFinalOK(ctx, got.Index(idx), expected) {
 					foundItems = append(foundItems, expected)
 
 					foundGotIdxes[idx] = true
@@ -112,7 +112,7 @@ func (s *tdSetBase) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 				nextExpected:
 					for _, expected := range missingItems {
 						for idxGot := range foundGotIdxes {
-							if deepValueEqualOK(got.Index(idxGot), expected) {
+							if deepValueEqualFinalOK(ctx, got.Index(idxGot), expected) {
 								continue nextExpected
 							}
 						}

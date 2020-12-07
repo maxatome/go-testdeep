@@ -40,6 +40,13 @@ func deepValueEqualFinal(ctx ctxerr.Context, got, expected reflect.Value) (err *
 	return
 }
 
+func deepValueEqualFinalOK(ctx ctxerr.Context, got, expected reflect.Value) bool {
+	ctx = ctx.ResetErrors()
+	ctx.BooleanError = true
+
+	return deepValueEqualFinal(ctx, got, expected) == nil
+}
+
 // nilHandler is called when one of got or expected is nil (but never
 // both, it is caller responsibility).
 func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {

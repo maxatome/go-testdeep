@@ -43,6 +43,9 @@ func TestContains(t *testing.T) {
 				Got:      mustContain("34"), // as well as other items in fact...
 				Expected: mustBe("Contains(35)"),
 			}, testName)
+
+		// Lax
+		checkOK(t, got, td.Lax(td.Contains(float64(34))), testName)
 	}
 
 	for idx, got := range []interface{}{
@@ -225,6 +228,11 @@ func TestContainsString(t *testing.T) {
 				Got:      mustBe(reflect.TypeOf(got).String()),
 				Expected: mustBe("[]int"),
 			})
+
+		// Lax
+		checkOK(t, got,
+			td.Lax(td.Contains(td.Code(func(b int) bool { return b == 'o' }))),
+			testName)
 	}
 
 	checkError(t, 12, td.Contains("bar"),

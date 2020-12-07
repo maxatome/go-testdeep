@@ -112,14 +112,17 @@ func Code(fn interface{}) TestDeep {
 
 func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if !got.Type().AssignableTo(c.argType) {
-		if ctx.BooleanError {
-			return ctxerr.BooleanError
+		if !ctx.BeLax || !got.Type().ConvertibleTo(c.argType) {
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+			return ctx.CollectError(&ctxerr.Error{
+				Message:  "incompatible parameter type",
+				Got:      types.RawString(got.Type().String()),
+				Expected: types.RawString(c.argType.String()),
+			})
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "incompatible parameter type",
-			Got:      types.RawString(got.Type().String()),
-			Expected: types.RawString(c.argType.String()),
-		})
+		got = got.Convert(c.argType)
 	}
 
 	// Refuse to override unexported fields access in this case. It is a
