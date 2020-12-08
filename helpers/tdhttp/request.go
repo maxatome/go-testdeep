@@ -17,9 +17,12 @@ import (
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/color"
+	"github.com/maxatome/go-testdeep/internal/flat"
 )
 
 func addHeaders(req *http.Request, headers []interface{}) *http.Request {
+	headers = flat.Interfaces(headers...)
+
 	for i := 0; i < len(headers); i++ {
 		switch cur := headers[i].(type) {
 		case string:
@@ -75,6 +78,22 @@ func addHeaders(req *http.Request, headers []interface{}) *http.Request {
 //     "Content-type": []string{"application/pdf"},
 //     "X-Test":       []string{"value1", "value2"},
 //   }
+//
+// A string slice can be flatened as well. As NewRequest() expects
+// ...interface{}, td.Flatten() can help here too:
+//   strHeaders := []string{
+//     "X-Length", "666",
+//     "X-Foo", "bar",
+//   }
+//   req := NewRequest("POST", "/pdf", body, td.Flatten(strHeaders))
+//
+// Or combined with forms seen above:
+//   req := NewRequest("POST", "/pdf",
+//     "Content-type", "application/pdf",
+//     http.Header{"X-Test": []string{"value1"}},
+//     td.Flatten(strHeaders),
+//     "X-Test", "value2",
+//   )
 func NewRequest(method, target string, body io.Reader, headers ...interface{}) *http.Request {
 	return addHeaders(httptest.NewRequest(method, target, body), headers)
 }
