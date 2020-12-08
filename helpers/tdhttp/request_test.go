@@ -54,6 +54,19 @@ func TestNewRequest(tt *testing.T) {
 		})
 	})
 
+	t.Run("NewRequest header flattened", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			td.Flatten([]string{
+				"Foo", "Bar",
+				"Zip", "Test",
+			}))
+
+		t.Cmp(req.Header, http.Header{
+			"Foo": []string{"Bar"},
+			"Zip": []string{"Test"},
+		})
+	})
+
 	t.Run("NewRequest header combined", func(t *td.T) {
 		req := tdhttp.NewRequest("GET", "/path", nil,
 			"H1", "V1",
@@ -62,11 +75,17 @@ func TestNewRequest(tt *testing.T) {
 				"H2": []string{"V1", "V2"},
 			},
 			"H2", "V3",
+			td.Flatten([]string{
+				"H2", "V4",
+				"H3", "V1",
+				"H3", "V2",
+			}),
 		)
 
 		t.Cmp(req.Header, http.Header{
 			"H1": []string{"V1", "V2"},
-			"H2": []string{"V1", "V2", "V3"},
+			"H2": []string{"V1", "V2", "V3", "V4"},
+			"H3": []string{"V1", "V2"},
 		})
 	})
 
