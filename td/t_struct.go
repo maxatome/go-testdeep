@@ -586,7 +586,7 @@ func (t *T) Run(name string, f func(t *T)) bool {
 // The "assert" and "require" params of "f" inherit the configuration
 // of the self-reference, except that a failure is never fatal using
 // "assert" and always fatal using "require".
-func (t *T) RunAssertRequire(name string, f func(assert *T, require *T)) bool {
+func (t *T) RunAssertRequire(name string, f func(assert, require *T)) bool {
 	t.Helper()
 
 	vfuncs, ok := t.getRunFunc()

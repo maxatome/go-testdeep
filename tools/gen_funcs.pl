@@ -146,7 +146,8 @@ while (readdir $dh)
             {
                 my %arg;
                 @arg{qw(name type)} = split(/ /, $arg, 2);
-                if ($arg{variadic} = $arg{type} =~ s/^\.{3}//)
+                if (defined $arg{type}
+                    and $arg{variadic} = $arg{type} =~ s/^\.{3}//)
                 {
                     if (exists $IGNORE_VARIADIC{$func})
                     {
@@ -156,6 +157,18 @@ while (readdir $dh)
                 }
 
                 push(@args, \%arg);
+            }
+            my $last_type;
+            foreach my $arg (reverse @args)
+            {
+                if (defined(my $arg_type = $arg->{type}) and not $arg->{variadic})
+                {
+                    if (defined $last_type and $arg_type eq $last_type)
+                    {
+                        delete $arg->{type};
+                    }
+                    $last_type = $arg_type;
+                }
             }
 
 	    $funcs{$func}{args} = \@args unless $ONLY_OPERATORS{$func};
@@ -212,7 +225,26 @@ foreach my $func (@sorted_funcs)
     my $func_name = "Cmp$func";
     my $method_name = $RENAME_METHOD{$func} // $func;
 
-    my $cmp_args = 'got interface{}';
+    my $cmp_args = 'got';
+    if (@{$funcs{$func}{args}})
+    {
+        foreach my $arg (@{$funcs{$func}{args}})
+        {
+            if (defined $arg->{type})
+            {
+                if ($arg->{type} ne 'interface{}' or $arg->{variadic})
+                {
+                    $cmp_args .= ' interface{}';
+                }
+                last
+            }
+        }
+    }
+    else
+    {
+        $cmp_args .= ' interface{}';
+    }
+
     my $call_args = '';
     my @cmpt_args;
 
@@ -230,7 +262,7 @@ foreach my $func (@sorted_funcs)
             $cmp_args .= '[]';
         }
 
-        $cmp_args .= $arg->{type};
+        $cmp_args .= $arg->{type} if defined $arg->{type};
     }
 
     my $cmp_doc = <<EOF;

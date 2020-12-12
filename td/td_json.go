@@ -111,7 +111,7 @@ func jsonCaller() string {
 	}
 }
 
-func unmarshal(expectedJSON interface{}, target interface{}) {
+func unmarshal(expectedJSON, target interface{}) {
 	var (
 		err error
 		b   []byte

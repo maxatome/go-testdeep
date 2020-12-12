@@ -103,7 +103,7 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 //     td.ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
 //   td.Cmp(t, "John Doe",
 //     td.ReAll(`(\w+)(?: |\z)`, td.Bag("Doe", "John"))) // succeeds
-func ReAll(reg interface{}, capture interface{}) TestDeep {
+func ReAll(reg, capture interface{}) TestDeep {
 	r := newRe(reg, capture)
 	r.numMatches = -1
 	return r

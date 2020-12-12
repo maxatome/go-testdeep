@@ -161,12 +161,12 @@ func TestRunAssertRequire(t *testing.T) {
 		requireIsFatal := false
 
 		ok := t.RunAssertRequire("Test level1",
-			func(assert *td.T, require *td.T) {
+			func(assert, require *td.T) {
 				assertIsFatal = assert.Config.FailureIsFatal
 				requireIsFatal = require.Config.FailureIsFatal
 
 				ok := assert.RunAssertRequire("Test level2",
-					func(assert *td.T, require *td.T) {
+					func(assert, require *td.T) {
 						runPassed = assert.True(true)               // test succeeds!
 						runPassed = runPassed && require.True(true) // test succeeds!
 
@@ -177,7 +177,7 @@ func TestRunAssertRequire(t *testing.T) {
 				require.True(ok)
 
 				ok = require.RunAssertRequire("Test level2",
-					func(assert *td.T, require *td.T) {
+					func(assert, require *td.T) {
 						runPassed = runPassed && assert.True(true)  // test succeeds!
 						runPassed = runPassed && require.True(true) // test succeeds!
 
@@ -202,12 +202,12 @@ func TestRunAssertRequire(t *testing.T) {
 		requireIsFatal := false
 
 		ok := t.RunAssertRequire("Test level1",
-			func(assert *td.T, require *td.T) {
+			func(assert, require *td.T) {
 				assertIsFatal = assert.Config.FailureIsFatal
 				requireIsFatal = require.Config.FailureIsFatal
 
 				ok := assert.RunAssertRequire("Test level2",
-					func(assert *td.T, require *td.T) {
+					func(assert, require *td.T) {
 						runPassed = assert.True(true)               // test succeeds!
 						runPassed = runPassed && require.True(true) // test succeeds!
 
@@ -218,7 +218,7 @@ func TestRunAssertRequire(t *testing.T) {
 				require.True(ok)
 
 				ok = require.RunAssertRequire("Test level2",
-					func(assert *td.T, require *td.T) {
+					func(assert, require *td.T) {
 						runPassed = runPassed && assert.True(true)  // test succeeds!
 						runPassed = runPassed && require.True(true) // test succeeds!
 
