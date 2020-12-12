@@ -57,7 +57,7 @@ var _ TestDeep = &tdCatch{}
 //     td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.Ignore()))) {
 //     t.Logf("Created record ID is %d", id)
 //   }
-func Catch(target interface{}, expectedValue interface{}) TestDeep {
+func Catch(target, expectedValue interface{}) TestDeep {
 	vt := reflect.ValueOf(target)
 	if vt.Kind() != reflect.Ptr || vt.IsNil() || !vt.Elem().CanSet() {
 		panic(color.BadUsage("Catch(NON_NIL_PTR, EXPECTED_VALUE)", target, 1, true))

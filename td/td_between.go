@@ -82,7 +82,7 @@ var _ TestDeep = &tdBetweenTime{}
 //   tc.Cmp(t, 17, td.Between(17, 20, BoundsOutOut)) // fails
 //
 // TypeBehind method returns the reflect.Type of "from" (same as the "to" one.)
-func Between(from interface{}, to interface{}, bounds ...BoundsKind) TestDeep {
+func Between(from, to interface{}, bounds ...BoundsKind) TestDeep {
 	b := tdBetween{
 		expectedMin: reflect.ValueOf(from),
 		expectedMax: reflect.ValueOf(to),

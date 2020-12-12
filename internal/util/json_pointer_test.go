@@ -46,7 +46,7 @@ func TestJSONPointer(t *testing.T) {
 		}
 	}
 
-	checkErr := func(pointer string, errExpected string) {
+	checkErr := func(pointer, errExpected string) {
 		t.Helper()
 
 		got, err := util.JSONPointer(ref, pointer)

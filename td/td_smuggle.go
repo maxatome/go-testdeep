@@ -293,7 +293,7 @@ func buildStructFieldFn(path string) (func(interface{}) (smuggleValue, error), e
 // TypeBehind method returns the reflect.Type of only parameter of
 // "fn". For the case where "fn" is a fields-path, it is always
 // interface{}, as the type can not be known in advance.
-func Smuggle(fn interface{}, expectedValue interface{}) TestDeep {
+func Smuggle(fn, expectedValue interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
 	const usage = "Smuggle(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
