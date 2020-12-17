@@ -131,7 +131,7 @@ func (t *T) WithCmpHooks(fns ...interface{}) *T {
 // There is no way to add or remove hooks of an existing *T instance,
 // only create a new one with this method or WithCmpHooks to add some.
 //
-// AddSmuggleHooks panics if an item of "fns" is not a function or if its
+// WithSmuggleHooks panics if an item of "fns" is not a function or if its
 // signature does not match the expected ones.
 func (t *T) WithSmuggleHooks(fns ...interface{}) *T {
 	t = t.copyWithHooks()
