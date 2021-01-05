@@ -173,22 +173,27 @@ func TestJSON(t *testing.T) {
 
 	// numeric placeholders
 	test.CheckPanic(t, func() { td.JSON(`[1, "$123bad"]`) },
-		`JSON(): JSON obj[1] contains a bad numeric placeholder "$123bad"`)
+		`JSON(): JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`)
 	test.CheckPanic(t, func() { td.JSON(`[1, $000]`) },
-		`JSON(): JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
+		`JSON(): JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`)
 	test.CheckPanic(t, func() { td.JSON(`[1, $1]`) },
-		`JSON(): JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
+		`JSON(): JSON unmarshal error: numeric placeholder "$1", but only 0 param(s) given at line 1:4 (pos 4)`)
 	test.CheckPanic(t, func() { td.JSON(`[1, 2, $3]`, td.Ignore()) },
-		`JSON(): JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
+		`JSON(): JSON unmarshal error: numeric placeholder "$3", but only 1 param(s) given at line 1:7 (pos 7)`)
 
 	// operator shortcut
 	test.CheckPanic(t, func() { td.JSON(`[1, "$^bad%"]`) },
-		`JSON(): JSON obj[1] contains a bad operator shortcut "$^bad%"`)
+		`JSON(): JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`)
 	// named placeholders
-	test.CheckPanic(t, func() { td.JSON(`[1, "$bad%"]`) },
-		`JSON(): JSON obj[1] contains a bad placeholder "$bad%"`)
+	test.CheckPanic(t, func() {
+		td.JSON(`[
+  1,
+  "$bad%"
+]`)
+	},
+		`JSON(): JSON unmarshal error: bad placeholder "$bad%" at line 3:3 (pos 10)`)
 	test.CheckPanic(t, func() { td.JSON(`[1, $unknown]`) },
-		`JSON(): JSON obj[1] contains a unknown placeholder "$unknown"`)
+		`JSON(): JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`)
 
 	//
 	// Stringification
@@ -345,22 +350,22 @@ func TestSubJSONOf(t *testing.T) {
 	//
 	// Panics
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$123bad"]`) },
-		`SubJSONOf(): JSON obj[1] contains a bad numeric placeholder "$123bad"`)
+		`SubJSONOf(): JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`)
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $000]`) },
-		`SubJSONOf(): JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
+		`SubJSONOf(): JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`)
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $1]`) },
-		`SubJSONOf(): JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
+		`SubJSONOf(): JSON unmarshal error: numeric placeholder "$1", but only 0 param(s) given at line 1:4 (pos 4)`)
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, 2, $3]`, td.Ignore()) },
-		`SubJSONOf(): JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
+		`SubJSONOf(): JSON unmarshal error: numeric placeholder "$3", but only 1 param(s) given at line 1:7 (pos 7)`)
 
 	// operator shortcut
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$^bad%"]`) },
-		`SubJSONOf(): JSON obj[1] contains a bad operator shortcut "$^bad%"`)
+		`SubJSONOf(): JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`)
 	// named placeholders
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$bad%"]`) },
-		`SubJSONOf(): JSON obj[1] contains a bad placeholder "$bad%"`)
+		`SubJSONOf(): JSON unmarshal error: bad placeholder "$bad%" at line 1:5 (pos 5)`)
 	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $unknown]`) },
-		`SubJSONOf(): JSON obj[1] contains a unknown placeholder "$unknown"`)
+		`SubJSONOf(): JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`)
 
 	test.CheckPanic(t, func() { td.SubJSONOf("null") },
 		"SubJSONOf() only accepts JSON objects {…}")
@@ -490,22 +495,22 @@ func TestSuperJSONOf(t *testing.T) {
 	//
 	// Panics
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$123bad"]`) },
-		`SuperJSONOf(): JSON obj[1] contains a bad numeric placeholder "$123bad"`)
+		`SuperJSONOf(): JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`)
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $000]`) },
-		`SuperJSONOf(): JSON obj[1] contains invalid numeric placeholder "$000", it should start at "$1"`)
+		`SuperJSONOf(): JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`)
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $1]`) },
-		`SuperJSONOf(): JSON obj[1] contains numeric placeholder "$1", but only 0 params given`)
+		`SuperJSONOf(): JSON unmarshal error: numeric placeholder "$1", but only 0 param(s) given at line 1:4 (pos 4)`)
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, 2, $3]`, td.Ignore()) },
-		`SuperJSONOf(): JSON obj[2] contains numeric placeholder "$3", but only 1 params given`)
+		`SuperJSONOf(): JSON unmarshal error: numeric placeholder "$3", but only 1 param(s) given at line 1:7 (pos 7)`)
 
 	// operator shortcut
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$^bad%"]`) },
-		`SuperJSONOf(): JSON obj[1] contains a bad operator shortcut "$^bad%"`)
+		`SuperJSONOf(): JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`)
 	// named placeholders
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$bad%"]`) },
-		`SuperJSONOf(): JSON obj[1] contains a bad placeholder "$bad%"`)
+		`SuperJSONOf(): JSON unmarshal error: bad placeholder "$bad%" at line 1:5 (pos 5)`)
 	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $unknown]`) },
-		`SuperJSONOf(): JSON obj[1] contains a unknown placeholder "$unknown"`)
+		`SuperJSONOf(): JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`)
 
 	test.CheckPanic(t, func() { td.SuperJSONOf("null") },
 		"SuperJSONOf() only accepts JSON objects {…}")

@@ -8,20 +8,19 @@ package td
 
 import (
 	"bytes"
-	"encoding/json"
+	ejson "encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"reflect"
 	"runtime"
-	"strconv"
 	"strings"
-	"unicode/utf8"
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/flat"
+	"github.com/maxatome/go-testdeep/internal/json"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -111,7 +110,19 @@ func jsonCaller() string {
 	}
 }
 
-func unmarshal(expectedJSON, target interface{}) {
+var jsonOpShortcuts = map[string]func() TestDeep{
+	"Empty":    Empty,
+	"Ignore":   Ignore,
+	"NaN":      NaN,
+	"Nil":      Nil,
+	"NotEmpty": NotEmpty,
+	"NotNaN":   NotNaN,
+	"NotNil":   NotNil,
+	"NotZero":  NotZero,
+	"Zero":     Zero,
+}
+
+func unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
 	var (
 		err error
 		b   []byte
@@ -147,131 +158,51 @@ func unmarshal(expectedJSON, target interface{}) {
 			expectedJSON, 1, false))
 	}
 
-	err = util.UnmarshalJSON(b, target)
+	params = flat.Interfaces(params...)
+	var byTag map[string]interface{}
+
+	for i, p := range params {
+		switch op := p.(type) {
+		case *tdTag:
+			if byTag[op.tag] != nil {
+				panic(color.Bad(`%s(): 2 params have the same tag "%s"`,
+					jsonCaller(), op.tag))
+			}
+			if byTag == nil {
+				byTag = map[string]interface{}{}
+			}
+			byTag[op.tag] = &tdJSONPlaceholder{
+				TestDeep: op,
+				name:     op.tag,
+			}
+		case TestDeep:
+			params[i] = &tdJSONPlaceholder{
+				TestDeep: op,
+				num:      uint64(i + 1),
+			}
+		}
+	}
+
+	final, err := json.Parse(b, json.ParseOpts{
+		Placeholders:       params,
+		PlaceholdersByName: byTag,
+		OpShortcutFn: func(name string) (interface{}, error) {
+			op := jsonOpShortcuts[name]
+			if op != nil {
+				return &tdJSONPlaceholder{
+					TestDeep: op(),
+					name:     "^" + name,
+				}, nil
+			}
+			return nil, fmt.Errorf("unknown operator %q", name)
+		},
+	})
+
 	if err != nil {
 		panic(color.Bad("%s(): JSON unmarshal error: %s", jsonCaller(), err))
 	}
-}
 
-var jsonOpShortcuts = map[string]func() TestDeep{
-	"Empty":    Empty,
-	"Ignore":   Ignore,
-	"NaN":      NaN,
-	"Nil":      Nil,
-	"NotEmpty": NotEmpty,
-	"NotNaN":   NotNaN,
-	"NotNil":   NotNil,
-	"NotZero":  NotZero,
-	"Zero":     Zero,
-}
-
-func getTags(params []interface{}) (byTag map[string]*tdTag) {
-	for _, op := range params {
-		if tag, ok := op.(*tdTag); ok {
-			if byTag[tag.tag] != nil {
-				panic(color.Bad(`%s(): 2 params have the same tag "%s"`,
-					jsonCaller(), tag.tag))
-			}
-			if byTag == nil {
-				byTag = map[string]*tdTag{}
-			}
-			byTag[tag.tag] = tag
-		}
-	}
-	return
-}
-
-// scan scans "*v" data structure to find strings containing
-// placeholders (like $123 or $name) corresponding to a value or
-// TestDeep operator contained in "params" and "byTag".
-func scan(v *interface{}, params []interface{}, byTag map[string]*tdTag, path string) {
-	if *v == nil {
-		return
-	}
-
-	switch tv := (*v).(type) {
-	case map[string]interface{}:
-		for k, v := range tv {
-			scan(&v, params, byTag, path+`["`+k+`"]`)
-			tv[k] = v
-		}
-	case []interface{}:
-		for i := range tv {
-			scan(&tv[i], params, byTag, path+"["+strconv.Itoa(i)+"]")
-		}
-	case string:
-		if strings.HasPrefix(tv, "$") && len(tv) > 1 {
-			// Double $$ at start of strings escape a $
-			if strings.HasPrefix(tv[1:], "$") {
-				*v = tv[1:]
-				break
-			}
-
-			firstRune, _ := utf8.DecodeRuneInString(tv[1:])
-			// Test for $123
-			if firstRune >= '0' && firstRune <= '9' {
-				np, err := strconv.ParseUint(tv[1:], 10, 64)
-				if err != nil {
-					panic(color.Bad(
-						`%s(): JSON obj%s contains a bad numeric placeholder "%s"`,
-						jsonCaller(), path, tv))
-				}
-				if np == 0 {
-					panic(color.Bad(
-						`%s(): JSON obj%s contains invalid numeric placeholder "%s", it should start at "$1"`,
-						jsonCaller(), path, tv))
-				}
-				if np > uint64(len(params)) {
-					panic(color.Bad(
-						`%s(): JSON obj%s contains numeric placeholder "%s", but only %d params given`,
-						jsonCaller(), path, tv, len(params)))
-				}
-				val := params[np-1]
-				if op, ok := val.(TestDeep); ok {
-					*v = &tdJSONPlaceholder{
-						TestDeep: op,
-						num:      np,
-					}
-				} else {
-					*v = val
-				}
-				break
-			}
-
-			// Test for operator shortcut
-			if firstRune == '^' {
-				fn := jsonOpShortcuts[tv[2:]]
-				if fn == nil {
-					panic(color.Bad(
-						`%s(): JSON obj%s contains a bad operator shortcut "%s"`,
-						jsonCaller(), path, tv))
-				}
-
-				*v = &tdJSONPlaceholder{
-					TestDeep: fn(),
-					name:     tv[1:],
-				}
-				break
-			}
-
-			// Test for $tag
-			err := util.CheckTag(tv[1:])
-			if err != nil {
-				panic(color.Bad(`%s(): JSON obj%s contains a bad placeholder "%s"`,
-					jsonCaller(), path, tv))
-			}
-			op := byTag[tv[1:]]
-			if op == nil {
-				panic(color.Bad(
-					`%s(): JSON obj%s contains a unknown placeholder "%s"`,
-					jsonCaller(), path, tv))
-			}
-			*v = &tdJSONPlaceholder{
-				TestDeep: op,
-				name:     tv[1:],
-			}
-		}
-	}
+	return final
 }
 
 func gotViaJSON(ctx ctxerr.Context, pGot *reflect.Value) *ctxerr.Error {
@@ -289,7 +220,7 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 		return nil, ctx.CannotCompareError()
 	}
 
-	b, err := json.Marshal(gotIf)
+	b, err := ejson.Marshal(gotIf)
 	if err != nil {
 		if ctx.BooleanError {
 			return nil, ctxerr.BooleanError
@@ -302,7 +233,7 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 
 	// As Marshal succeeded, Unmarshal in an interface{} cannot fail
 	var vgot interface{}
-	json.Unmarshal(b, &vgot) //nolint: errcheck
+	ejson.Unmarshal(b, &vgot) //nolint: errcheck
 	return vgot, nil
 }
 
@@ -420,11 +351,7 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 // []interface{}, map[string]interface{} or interface{} in case
 // "expectedJSON" is "null".
 func JSON(expectedJSON interface{}, params ...interface{}) TestDeep {
-	var v interface{}
-	unmarshal(expectedJSON, &v)
-
-	params = flat.Interfaces(params...)
-	scan(&v, params, getTags(params), "")
+	v := unmarshal(expectedJSON, params)
 
 	return &tdJSON{
 		baseOKNil: newBaseOKNil(3),
@@ -457,7 +384,7 @@ func jsonStringify(opName string, v reflect.Value) string {
 	b.WriteString(opName)
 	b.WriteByte('(')
 
-	enc := json.NewEncoder(&b)
+	enc := ejson.NewEncoder(&b)
 	enc.SetEscapeHTML(false)
 	enc.SetIndent(strings.Repeat(" ", len(opName)+1), "  ")
 
@@ -655,11 +582,7 @@ var _ TestDeep = &tdMapJSON{}
 //
 // TypeBehind method returns the map[string]interface{} type.
 func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
-	var v interface{}
-	unmarshal(expectedJSON, &v)
-
-	params = flat.Interfaces(params...)
-	scan(&v, params, getTags(params), "")
+	v := unmarshal(expectedJSON, params)
 
 	_, ok := v.(map[string]interface{})
 	if !ok {
@@ -812,11 +735,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //
 // TypeBehind method returns the map[string]interface{} type.
 func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
-	var v interface{}
-	unmarshal(expectedJSON, &v)
-
-	params = flat.Interfaces(params...)
-	scan(&v, params, getTags(params), "")
+	v := unmarshal(expectedJSON, params)
 
 	_, ok := v.(map[string]interface{})
 	if !ok {
