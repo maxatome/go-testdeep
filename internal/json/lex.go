@@ -461,14 +461,14 @@ ws:
 			switch j.buf[j.pos.bpos+1] {
 			case '/': // comment till eol
 				j.curSize = 0
-				if end := bytes.IndexByte(j.buf[j.pos.bpos+2:], '\n'); end >= 0 {
-					lineLen := 3 + utf8.RuneCount(j.buf[j.pos.bpos+2:j.pos.bpos+2+end])
+				if end := indexAfterEol(j.buf[j.pos.bpos+2:]); end >= 0 {
+					lineLen := 2 + utf8.RuneCount(j.buf[j.pos.bpos+2:j.pos.bpos+2+end])
 					j.pos.Pos += lineLen
 					j.pos.Col += lineLen
-					j.pos.bpos += 3 + end
+					j.pos.bpos += 2 + end
 					continue ws
 				}
-				lineLen := 3 + utf8.RuneCount(j.buf[j.pos.bpos+2:])
+				lineLen := 2 + utf8.RuneCount(j.buf[j.pos.bpos+2:])
 				j.pos.Pos += lineLen
 				j.pos.Col += lineLen
 				j.pos.bpos = len(j.buf) // till eof
@@ -479,13 +479,17 @@ ws:
 				if end := bytes.Index(j.buf[j.pos.bpos+2:], []byte("*/")); end >= 0 {
 					comment := j.buf[j.pos.bpos+2 : j.pos.bpos+2+end]
 					commentLen := 4 + utf8.RuneCount(comment)
+					// Count \r\n as only one rune
+					if crnl := bytes.Count(comment, []byte("\r\n")); crnl > 0 {
+						commentLen -= crnl
+					}
 					j.pos.Pos += commentLen
 					j.pos.bpos += 4 + end
 
-					nLines := bytes.Count(comment, []byte{'\n'})
+					nLines := countEol(comment)
 					if nLines > 0 {
 						j.pos.Line += nLines
-						j.pos.Col = len(comment) - bytes.LastIndexByte(comment, '\n') + 1
+						j.pos.Col = len(comment) - bytes.LastIndexAny(comment, "\r\n") + 1
 					} else {
 						j.pos.Col += commentLen
 					}
@@ -507,15 +511,67 @@ ws:
 	return true
 }
 
+// indexAfterEol returns the index of the byte just after the first
+// instance of an end-of-line ('\n' alone, '\r' alone or "\r\n") in
+// buf, or -1 if no end-of-line is found.
+func indexAfterEol(buf []byte) int {
+	// new line for:
+	// - \n alone
+	// - \r\n
+	// - \r alone
+	for i, b := range buf {
+		switch b {
+		case '\n':
+			return i + 1
+		case '\r':
+			if i+1 == len(buf) || buf[i+1] != '\n' {
+				return i + 1
+			}
+			return i + 2
+		}
+	}
+	return -1
+}
+
+// countEol returns the number of end-of-line ('\n' alone, '\r' alone
+// or "\r\n") occurrences in buf.
+func countEol(buf []byte) int {
+	// new line for:
+	// - \n alone
+	// - \r\n
+	// - \r alone
+	num := 0
+	for {
+		eol := indexAfterEol(buf)
+		if eol < 0 {
+			return num
+		}
+		buf = buf[eol:]
+		num++
+	}
+}
+
 func (j *json) getRune() (rune, bool) {
 	if j.curSize > 0 {
-		if j.buf[j.pos.bpos] == '\n' {
+		// new line for:
+		// - \n alone
+		// - \r\n (+ consider it as one rune)
+		// - \r alone
+		switch j.buf[j.pos.bpos] {
+		case '\n':
+			if j.pos.bpos > 0 && j.buf[j.pos.bpos-1] == '\r' {
+				// \r\n → already handled
+				break
+			}
+			fallthrough
+		case '\r':
 			j.pos.Line++
 			j.pos.Col = 0
-		} else {
+			j.pos.Pos++
+		default:
 			j.pos.Col++
+			j.pos.Pos++
 		}
-		j.pos.Pos++
 		j.pos.bpos += j.curSize
 		j.curSize = 0
 	}

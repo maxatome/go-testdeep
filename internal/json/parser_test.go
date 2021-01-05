@@ -66,6 +66,7 @@ func TestJSON(t *testing.T) {
 		for i, js := range []string{
 			"  // comment\ntrue",
 			"  true // comment\n   ",
+			"  true // comment\n",
 			"  true // comment",
 			"  /* comment\nmulti\nline */true",
 			"  true /* comment\nmulti\nline */",
@@ -73,16 +74,22 @@ func TestJSON(t *testing.T) {
 			"  true /* comment\nmulti\nline */  // comment",
 			"/**///\ntrue/**/",
 		} {
-			got, err := json.Parse([]byte(js))
-			if !test.NoError(t, err, "#%d, json.Parse succeeds", i) {
-				continue
-			}
+			for j, s := range []string{
+				js,
+				strings.Replace(js, "\n", "\r", -1),   //nolint: gocritic
+				strings.Replace(js, "\n", "\r\n", -1), //nolint: gocritic
+			} {
+				got, err := json.Parse([]byte(s))
+				if !test.NoError(t, err, "#%d/%d, json.Parse succeeds", i, j) {
+					continue
+				}
 
-			if !reflect.DeepEqual(got, true) {
-				test.EqualErrorMessage(t,
-					got, true,
-					"#%d is OK", i,
-				)
+				if !reflect.DeepEqual(got, true) {
+					test.EqualErrorMessage(t,
+						got, true,
+						"#%d/%d is OK", i, j,
+					)
+				}
 			}
 		}
 	})
@@ -209,8 +216,18 @@ func TestJSON(t *testing.T) {
 			},
 		} {
 			_, err := json.Parse([]byte(tst.js))
-			if test.Error(t, err, "#%d, json.Parse fails", i) {
-				test.EqualStr(t, err.Error(), tst.err, "#%d, err OK", i)
+			if test.Error(t, err, `#%d \n, json.Parse fails`, i) {
+				test.EqualStr(t, err.Error(), tst.err, `#%d \n, err OK`, i)
+			}
+
+			_, err = json.Parse([]byte(strings.Replace(tst.js, "\n", "\r", -1))) //nolint: gocritic
+			if test.Error(t, err, `#%d \r, json.Parse fails`, i) {
+				test.EqualStr(t, err.Error(), tst.err, `#%d \r, err OK`, i)
+			}
+
+			_, err = json.Parse([]byte(strings.Replace(tst.js, "\n", "\r\n", -1))) //nolint: gocritic
+			if test.Error(t, err, `#%d \r\n, json.Parse fails`, i) {
+				test.EqualStr(t, err.Error(), tst.err, `#%d \r\n, err OK`, i)
 			}
 		}
 
