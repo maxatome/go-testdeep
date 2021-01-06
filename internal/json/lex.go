@@ -52,7 +52,7 @@ type json struct {
 type ParseOpts struct {
 	Placeholders       []interface{}
 	PlaceholdersByName map[string]interface{}
-	OpShortcutFn       func(string) (interface{}, error)
+	OpShortcutFn       func(string) (interface{}, bool)
 	OpFn               func(Operator) (interface{}, error)
 }
 
@@ -123,9 +123,9 @@ func (j *json) moveHoriz(bytes int, runes ...int) {
 	j.curSize = 0
 }
 
-func (j *json) getOperatorShortcut(operator string) (interface{}, error) {
+func (j *json) getOperatorShortcut(operator string) (interface{}, bool) {
 	if j.opts.OpShortcutFn == nil {
-		return nil, fmt.Errorf("unknown operator %q", operator)
+		return nil, false
 	}
 	return j.opts.OpShortcutFn(operator)
 }
@@ -144,10 +144,7 @@ func (j *json) nextToken(lval *yySymType) int {
 
 	j.lastTokenPos = j.pos
 
-	r, ok := j.getRune()
-	if !ok {
-		return 0
-	}
+	r, _ := j.getRune()
 
 	switch r {
 	case '"':
@@ -390,8 +387,8 @@ func (j *json) parseDollarToken(dollarToken string, dollarPos Position) (int, in
 
 	// Test for operator shortcut
 	if firstRune == '^' {
-		op, err := j.getOperatorShortcut(dollarToken[1:])
-		if err != nil {
+		op, ok := j.getOperatorShortcut(dollarToken[1:])
+		if !ok {
 			j.error(
 				fmt.Sprintf(`bad operator shortcut "$%s"`, dollarToken),
 				dollarPos)

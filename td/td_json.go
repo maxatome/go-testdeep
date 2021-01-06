@@ -186,15 +186,15 @@ func unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
 	final, err := json.Parse(b, json.ParseOpts{
 		Placeholders:       params,
 		PlaceholdersByName: byTag,
-		OpShortcutFn: func(name string) (interface{}, error) {
+		OpShortcutFn: func(name string) (interface{}, bool) {
 			op := jsonOpShortcuts[name]
 			if op != nil {
 				return &tdJSONPlaceholder{
 					TestDeep: op(),
 					name:     "^" + name,
-				}, nil
+				}, true
 			}
-			return nil, fmt.Errorf("unknown operator %q", name)
+			return nil, false
 		},
 	})
 

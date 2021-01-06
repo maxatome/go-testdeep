@@ -35,7 +35,7 @@ func TestJSON(t *testing.T) {
 			`0`,
 			`""`,
 			`"123.456$"`,
-			` "foo bar \" \\ \/ \b \f \n\r \t \u2665 héhô" `,
+			` "foo bar \" \\ \/ \b \f \n\r \t \u10e6 \u10E6 héhô" `,
 			`[ 1, 2,3, 4 ]`,
 			`{"foo":{"bar":true},"zip":1234}`,
 		} {
@@ -56,6 +56,66 @@ func TestJSON(t *testing.T) {
 				test.EqualErrorMessage(t,
 					strings.TrimRight(spew.Sdump(got), "\n"),
 					strings.TrimRight(spew.Sdump(expected), "\n"),
+					"#%d is OK", i,
+				)
+			}
+		}
+	})
+
+	t.Run("Special string cases", func(t *testing.T) {
+		for i, tst := range []struct{ in, expected string }{
+			{
+				in:       `"$"`,
+				expected: `$`,
+			},
+			{
+				in:       `"$$"`,
+				expected: `$`,
+			},
+			{
+				in:       `"$$toto"`,
+				expected: `$toto`,
+			},
+		} {
+			got, err := json.Parse([]byte(tst.in))
+			if !test.NoError(t, err, "#%d, json.Parse succeeds", i) {
+				continue
+			}
+
+			if !reflect.DeepEqual(got, tst.expected) {
+				test.EqualErrorMessage(t,
+					strings.TrimRight(spew.Sdump(got), "\n"),
+					strings.TrimRight(spew.Sdump(tst.expected), "\n"),
+					"#%d is OK", i,
+				)
+			}
+		}
+	})
+
+	t.Run("Placeholder cases", func(t *testing.T) {
+		for i, js := range []string{
+			`  $2  `,
+			` "$2" `,
+			`  $ph  `,
+			` "$ph" `,
+			`  $héhé  `,
+			` "$héhé" `,
+		} {
+			got, err := json.Parse([]byte(js), json.ParseOpts{
+				Placeholders: []interface{}{"foo", "bar"},
+				PlaceholdersByName: map[string]interface{}{
+					"ph":   "bar",
+					"héhé": "bar",
+				},
+			})
+			if !test.NoError(t, err, "#%d, json.Parse succeeds", i) {
+				continue
+			}
+
+			if !reflect.DeepEqual(got, `bar`) {
+				test.EqualErrorMessage(t,
+					strings.TrimRight(spew.Sdump(got), "\n"),
+					strings.TrimRight(spew.Sdump(`bar`), "\n"),
 					"#%d is OK", i,
 				)
 			}
@@ -214,6 +274,13 @@ func TestJSON(t *testing.T) {
 				js:  "  \n 123.345\U0002f500",
 				err: `syntax error: unexpected '\U0002f500' at line 2:8 (pos 11)`,
 			},
+			// multiple errors
+			{
+				js: "[$1,$2,",
+				err: `numeric placeholder "$1", but only 0 param(s) given at line 1:1 (pos 1)
+numeric placeholder "$2", but only 0 param(s) given at line 1:4 (pos 4)
+syntax error: unexpected $end at line 1:6 (pos 6)`,
+			},
 		} {
 			_, err := json.Parse([]byte(tst.js))
 			if test.Error(t, err, `#%d \n, json.Parse fails`, i) {
@@ -237,12 +304,32 @@ func TestJSON(t *testing.T) {
 					if op.Name == "KnownOp" {
 						return "OK", nil
 					}
-					return nil, fmt.Errorf("unknown operator %q", op.Name)
+					return nil, fmt.Errorf("hmm weird operator %q", op.Name)
 				},
 			})
 		if test.Error(t, err, "json.Parse fails") {
 			test.EqualStr(t, err.Error(),
-				`unknown operator "AnyOp" at line 1:12 (pos 12)`)
+				`hmm weird operator "AnyOp" at line 1:12 (pos 12)`)
+		}
+
+		for _, js := range []string{
+			`  [ $^KnownOp,    $^AnyOp ]`,
+			`  [ "$^KnownOp", "$^AnyOp" ]`,
+		} {
+			_, err := json.Parse([]byte(js),
+				json.ParseOpts{
+					OpShortcutFn: func(name string) (interface{}, bool) {
+						if name == "KnownOp" {
+							return "OK", true
+						}
+						return nil, false
+					},
+				})
+			if test.Error(t, err, "json.Parse fails", js) {
+				test.EqualStr(t, err.Error(),
+					`bad operator shortcut "$^AnyOp" at line 1:18 (pos 18)`,
+					js)
+			}
 		}
 	})
 }
