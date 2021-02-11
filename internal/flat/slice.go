@@ -8,11 +8,13 @@ package flat
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 )
 
 var sliceType = reflect.TypeOf(Slice{})
 
-// Slice allows to flatten any slice.
+// Slice allows to flatten any slice, array or map.
 type Slice struct {
 	Slice interface{}
 }
@@ -24,25 +26,71 @@ func (f Slice) isFlat() bool {
 	return t != sliceType && t.Kind() != reflect.Interface
 }
 
+func subLen(v reflect.Value) int {
+	if v.Kind() == reflect.Interface {
+		v = v.Elem()
+	}
+	if s, ok := v.Interface().(Slice); ok {
+		return s.len()
+	}
+	return 1
+}
+
 func (f Slice) len() int {
-	if f.isFlat() {
-		return reflect.ValueOf(f.Slice).Len()
+	fv := reflect.ValueOf(f.Slice)
+	l := 0
+
+	if fv.Kind() == reflect.Map {
+		if f.isFlat() {
+			return fv.Len() * 2
+		}
+		tdutil.MapEach(fv, func(k, v reflect.Value) bool {
+			l += 1 + subLen(v)
+			return true
+		})
+		return l
 	}
 
-	fv := reflect.ValueOf(f.Slice)
 	fvLen := fv.Len()
-	l := fvLen
-
+	if f.isFlat() {
+		return fvLen
+	}
 	for i := 0; i < fvLen; i++ {
-		if subf, ok := fv.Index(i).Interface().(Slice); ok {
-			l += subf.len() - 1
-		}
+		l += subLen(fv.Index(i))
 	}
 	return l
 }
 
+func subAppendValuesTo(sv []reflect.Value, v reflect.Value) []reflect.Value {
+	if v.Kind() == reflect.Interface {
+		v = v.Elem()
+	}
+	if s, ok := v.Interface().(Slice); ok {
+		return s.appendValuesTo(sv)
+	}
+	return append(sv, v)
+}
+
 func (f Slice) appendValuesTo(sv []reflect.Value) []reflect.Value {
 	fv := reflect.ValueOf(f.Slice)
+
+	if fv.Kind() == reflect.Map {
+		if f.isFlat() {
+			tdutil.MapEach(fv, func(k, v reflect.Value) bool {
+				sv = append(sv, k, v)
+				return true
+			})
+			return sv
+		}
+
+		tdutil.MapEach(fv, func(k, v reflect.Value) bool {
+			sv = append(sv, k)
+			sv = subAppendValuesTo(sv, v)
+			return true
+		})
+		return sv
+	}
+
 	fvLen := fv.Len()
 
 	if f.isFlat() {
@@ -53,21 +101,42 @@ func (f Slice) appendValuesTo(sv []reflect.Value) []reflect.Value {
 	}
 
 	for i := 0; i < fvLen; i++ {
-		cv := fv.Index(i)
-		if cv.Kind() == reflect.Interface {
-			cv = cv.Elem()
-		}
-		if subf, ok := cv.Interface().(Slice); ok {
-			sv = subf.appendValuesTo(sv)
-		} else {
-			sv = append(sv, cv)
-		}
+		sv = subAppendValuesTo(sv, fv.Index(i))
 	}
 	return sv
 }
 
+func subAppendTo(si []interface{}, v reflect.Value) []interface{} {
+	if v.Kind() == reflect.Interface {
+		v = v.Elem()
+	}
+	i := v.Interface()
+	if s, ok := i.(Slice); ok {
+		return s.appendTo(si)
+	}
+	return append(si, i)
+}
+
 func (f Slice) appendTo(si []interface{}) []interface{} {
 	fv := reflect.ValueOf(f.Slice)
+
+	if fv.Kind() == reflect.Map {
+		if f.isFlat() {
+			tdutil.MapEach(fv, func(k, v reflect.Value) bool {
+				si = append(si, k.Interface(), v.Interface())
+				return true
+			})
+			return si
+		}
+
+		tdutil.MapEach(fv, func(k, v reflect.Value) bool {
+			si = append(si, k.Interface())
+			si = subAppendTo(si, v)
+			return true
+		})
+		return si
+	}
+
 	fvLen := fv.Len()
 
 	if f.isFlat() {
@@ -78,12 +147,7 @@ func (f Slice) appendTo(si []interface{}) []interface{} {
 	}
 
 	for i := 0; i < fvLen; i++ {
-		item := fv.Index(i).Interface()
-		if subf, ok := item.(Slice); ok {
-			si = subf.appendTo(si)
-		} else {
-			si = append(si, item)
-		}
+		si = subAppendTo(si, fv.Index(i))
 	}
 	return si
 }

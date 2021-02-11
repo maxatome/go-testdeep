@@ -21,16 +21,24 @@ func TestLen(t *testing.T) {
 	num, flattened = flat.Len([]interface{}{
 		1, 2,
 		flat.Slice{Slice: []int{3, 4, 5, 6}},
+		flat.Slice{Slice: map[int]int{-1: -2, -3: -4}},
 		7,
 		flat.Slice{
 			Slice: []interface{}{
 				flat.Slice{Slice: []int{8, 9}},
 				flat.Slice{Slice: []int{10, 11}},
+				flat.Slice{Slice: map[int]interface{}{
+					-5: -6,
+					-7: flat.Slice{Slice: []int{-8, -9, -10}},
+				}},
 			},
 		},
 		12,
+		flat.Slice{Slice: map[interface{}]interface{}{
+			-11: flat.Slice{Slice: []int{-12, -13}},
+		}},
 	})
-	test.EqualInt(t, num, 12)
+	test.EqualInt(t, num, 12+13)
 	test.IsFalse(t, flattened)
 }
 
@@ -58,8 +66,13 @@ func TestValues(t *testing.T) {
 			},
 		},
 		14,
+		flat.Slice{
+			Slice: map[int]interface{}{
+				15: flat.Slice{Slice: map[int]int{16: 17}},
+			},
+		},
 	})
-	if test.EqualInt(t, len(sv), 14) {
+	if test.EqualInt(t, len(sv), 17) {
 		for i, v := range sv {
 			test.EqualInt(t, int(v.Int()), i+1)
 		}
@@ -89,8 +102,13 @@ func TestInterfaces(t *testing.T) {
 			},
 		},
 		14,
+		flat.Slice{
+			Slice: map[int]interface{}{
+				15: flat.Slice{Slice: map[int]int{16: 17}},
+			},
+		},
 	)
-	if test.EqualInt(t, len(si), 14) {
+	if test.EqualInt(t, len(si), 17) {
 		for i, iface := range si {
 			test.EqualInt(t, iface.(int), i+1)
 		}
