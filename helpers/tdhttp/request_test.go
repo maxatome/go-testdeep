@@ -59,11 +59,18 @@ func TestNewRequest(tt *testing.T) {
 			td.Flatten([]string{
 				"Foo", "Bar",
 				"Zip", "Test",
-			}))
+			}),
+			td.Flatten(map[string]string{
+				"Pipo": "Bingo",
+				"Hey":  "Yo",
+			}),
+		)
 
 		t.Cmp(req.Header, http.Header{
-			"Foo": []string{"Bar"},
-			"Zip": []string{"Test"},
+			"Foo":  []string{"Bar"},
+			"Zip":  []string{"Test"},
+			"Pipo": []string{"Bingo"},
+			"Hey":  []string{"Yo"},
 		})
 	})
 
@@ -80,12 +87,16 @@ func TestNewRequest(tt *testing.T) {
 				"H3", "V1",
 				"H3", "V2",
 			}),
+			td.Flatten(map[string]string{
+				"H2": "V5",
+				"H3": "V3",
+			}),
 		)
 
 		t.Cmp(req.Header, http.Header{
 			"H1": []string{"V1", "V2"},
-			"H2": []string{"V1", "V2", "V3", "V4"},
-			"H3": []string{"V1", "V2"},
+			"H2": []string{"V1", "V2", "V3", "V4", "V5"},
+			"H3": []string{"V1", "V2", "V3"},
 		})
 	})
 

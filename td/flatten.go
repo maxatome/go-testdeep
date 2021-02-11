@@ -13,7 +13,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/flat"
 )
 
-// Flatten allows to flatten any slice or array in parameters of
+// Flatten allows to flatten any slice, array or map in parameters of
 // operators expecting ...interface{}.
 //
 // For example the Set operator is defined as:
@@ -78,11 +78,17 @@ import (
 // is exactly the same as:
 //
 //   td.Cmp(t, got, td.Set(11, 22, 33, 44, 55, 66, 77))
-func Flatten(slice interface{}) flat.Slice {
-	switch reflect.ValueOf(slice).Kind() {
-	case reflect.Slice, reflect.Array:
-		return flat.Slice{Slice: slice}
+//
+// Maps can be flattened too, keeping in mind there is no particular order:
+//
+//   td.Flatten(map[int]int{1: 2, 3: 4})
+//
+// is flattened as 1, 2, 3, 4 or 3, 4, 1, 2.
+func Flatten(sliceOrMap interface{}) flat.Slice {
+	switch reflect.ValueOf(sliceOrMap).Kind() {
+	case reflect.Slice, reflect.Array, reflect.Map:
+		return flat.Slice{Slice: sliceOrMap}
 	default:
-		panic(color.BadUsage("Flatten(SLICE|ARRAY)", slice, 1, true))
+		panic(color.BadUsage("Flatten(SLICE|ARRAY|MAP)", sliceOrMap, 1, true))
 	}
 }

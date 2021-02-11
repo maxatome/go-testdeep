@@ -79,11 +79,11 @@ func addHeaders(req *http.Request, headers []interface{}) *http.Request {
 //     "X-Test":       []string{"value1", "value2"},
 //   }
 //
-// A string slice can be flatened as well. As NewRequest() expects
+// A string slice or a map can be flatened as well. As NewRequest() expects
 // ...interface{}, td.Flatten() can help here too:
-//   strHeaders := []string{
-//     "X-Length", "666",
-//     "X-Foo", "bar",
+//   strHeaders := map[string]string{
+//     "X-Length": "666",
+//     "X-Foo":    "bar",
 //   }
 //   req := NewRequest("POST", "/pdf", body, td.Flatten(strHeaders))
 //
