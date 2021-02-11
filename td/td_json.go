@@ -1,4 +1,4 @@
-// Copyright (c) 2019, Maxime Soulé
+// Copyright (c) 2019-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -9,11 +9,11 @@ package td
 import (
 	"bytes"
 	ejson "encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"reflect"
-	"runtime"
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/color"
@@ -21,95 +21,39 @@ import (
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/flat"
 	"github.com/maxatome/go-testdeep/internal/json"
+	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/types"
-	"github.com/maxatome/go-testdeep/internal/util"
 )
 
-var jsonEscaper = strings.NewReplacer(
-	"\n", `<testdeep:nl>`,
-	`\`, `<testdeep:bs>`,
-	`"`, `<testdeep:qq>`,
-)
-
-var jsonUnescaper = strings.NewReplacer(
-	`<testdeep:nl>`, "\n",
-	`<testdeep:bs>`, `\`,
-	`<testdeep:qq>`, `"`,
-)
-
-const (
-	commentStart = `<testdeep:opOn>`
-	commentEnd   = `<testdeep:opOff>"` // note final "
-
-	commentStartRepl = `" /* `
-	commentEndRepl   = ` */`
-)
-
-type tdJSONPlaceholder struct {
-	TestDeep
-	name string
-	num  uint64
+// forbiddenOpsInJSON contains operators forbidden inside JSON,
+// SubJSONOf or SuperJSONOf, optionally with an alternative to help
+// the user.
+var forbiddenOpsInJSON = map[string]string{
+	"Array":       "literal []",
+	"Cap":         "",
+	"Catch":       "",
+	"Code":        "",
+	"Delay":       "",
+	"Isa":         "",
+	"JSON":        "literal JSON",
+	"Lax":         "",
+	"Map":         "literal {}",
+	"PPtr":        "",
+	"Ptr":         "",
+	"SStruct":     "",
+	"Shallow":     "",
+	"Slice":       "literal []",
+	"Smuggle":     "",
+	"String":      `literal ""`,
+	"SubJSONOf":   "SubMapOf operator",
+	"SuperJSONOf": "SuperMapOf operator",
+	"Struct":      "",
+	"Tag":         "",
+	"TruncTime":   "",
 }
 
-func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
-	var b bytes.Buffer
-
-	if p.num == 0 {
-		fmt.Fprintf(&b, `"$%s`, p.name)
-
-		// Don't add a comment for operator shorcuts (aka $^NotZero)
-		if p.name[0] == '^' {
-			b.WriteByte('"')
-			return b.Bytes(), nil
-		}
-	} else {
-		fmt.Fprintf(&b, `"$%d`, p.num)
-	}
-
-	b.WriteString(commentStart)
-	b.WriteString(jsonEscaper.Replace(util.ToString(p.TestDeep)))
-	b.WriteString(commentEnd)
-
-	return b.Bytes(), nil
-}
-
-type tdJSON struct {
-	baseOKNil
-	expected reflect.Value
-}
-
-var _ TestDeep = &tdJSON{}
-
-func jsonCaller() string {
-	var pc [30]uintptr
-
-	skip := 1
-	for {
-		n := runtime.Callers(skip, pc[:])
-		if n == 0 {
-			return "?"
-		}
-
-		frames := runtime.CallersFrames(pc[:n])
-		for {
-			frame, more := frames.Next()
-			switch {
-			case strings.HasSuffix(frame.Function, ".JSON"):
-				return "JSON"
-			case strings.HasSuffix(frame.Function, ".SubJSONOf"):
-				return "SubJSONOf"
-			case strings.HasSuffix(frame.Function, ".SuperJSONOf"):
-				return "SuperJSONOf"
-			}
-			if !more {
-				break
-			}
-		}
-
-		skip += n
-	}
-}
-
+// jsonOpShortcuts contains operator that can be used as
+// $^OperatorName inside JSON, SubJSONOf or SuperJSONOf.
 var jsonOpShortcuts = map[string]func() TestDeep{
 	"Empty":    Empty,
 	"Ignore":   Ignore,
@@ -122,7 +66,37 @@ var jsonOpShortcuts = map[string]func() TestDeep{
 	"Zero":     Zero,
 }
 
-func unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
+// tdJSONUnmarshaler handles the JSON unmarshaling of JSON, SubJSONOf
+// and SuperJSONOf first parameter.
+type tdJSONUnmarshaler struct {
+	location.Location // position of the operator
+}
+
+// newJSONUnmarshaler returns a new instance of tdJSONUnmarshaler.
+func newJSONUnmarshaler(pos location.Location) tdJSONUnmarshaler {
+	return tdJSONUnmarshaler{
+		Location: pos,
+	}
+}
+
+// replaceLocation replaces the location of tdOp by the
+// JSON/SubJSONOf/SuperJSONOf one then add the position of the
+// operator inside the JSON string.
+func (u tdJSONUnmarshaler) replaceLocation(tdOp TestDeep, posInJSON json.Position) {
+	// The goal, instead of:
+	//    [under operator Len at value.go:476]
+	// having:
+	//    [under operator Len at line 12:7 (pos 123) inside operator JSON at file.go:23]
+	//                 so add ^------------------------------------------^
+
+	newPos := u.Location
+	newPos.Inside = fmt.Sprintf("%s inside operator %s ", posInJSON, u.Func)
+	newPos.Func = tdOp.GetLocation().Func
+	tdOp.replaceLocation(newPos)
+}
+
+// unmarshal unmarshals "expectedJSON" using placeholder parameters "params".
+func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
 	var (
 		err error
 		b   []byte
@@ -137,7 +111,7 @@ func unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
 			b, err = ioutil.ReadFile(data)
 			if err != nil {
 				panic(color.Bad("%s(): JSON file %s cannot be read: %s",
-					jsonCaller(), data, err))
+					u.Func, data, err))
 			}
 			break
 		}
@@ -149,12 +123,12 @@ func unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
 	case io.Reader:
 		b, err = ioutil.ReadAll(data)
 		if err != nil {
-			panic(color.Bad("%s(): JSON read error: %s", jsonCaller(), err))
+			panic(color.Bad("%s(): JSON read error: %s", u.Func, err))
 		}
 
 	default:
 		panic(color.BadUsage(
-			jsonCaller()+"(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)",
+			u.Func+"(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)",
 			expectedJSON, 1, false))
 	}
 
@@ -165,8 +139,7 @@ func unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
 		switch op := p.(type) {
 		case *tdTag:
 			if byTag[op.tag] != nil {
-				panic(color.Bad(`%s(): 2 params have the same tag "%s"`,
-					jsonCaller(), op.tag))
+				panic(color.Bad(`%s(): 2 params have the same tag "%s"`, u.Func, op.tag))
 			}
 			if byTag == nil {
 				byTag = map[string]interface{}{}
@@ -175,35 +148,225 @@ func unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
 				TestDeep: op,
 				name:     op.tag,
 			}
+
 		case TestDeep:
 			params[i] = &tdJSONPlaceholder{
 				TestDeep: op,
 				num:      uint64(i + 1),
 			}
+
+		default:
+			bp, err := ejson.Marshal(op)
+			if err != nil {
+				panic(color.Bad(`%s(): param #%d of type %T cannot be JSON marshalled`, u.Func, i+1, p))
+			}
+			// As Marshal succeeded, Unmarshal in an interface{} cannot fail
+			params[i] = nil
+			ejson.Unmarshal(bp, &params[i]) //nolint: errcheck
 		}
 	}
 
 	final, err := json.Parse(b, json.ParseOpts{
 		Placeholders:       params,
 		PlaceholdersByName: byTag,
-		OpShortcutFn: func(name string) (interface{}, bool) {
-			op := jsonOpShortcuts[name]
-			if op != nil {
-				return &tdJSONPlaceholder{
-					TestDeep: op(),
-					name:     "^" + name,
-				}, true
-			}
-			return nil, false
-		},
+		OpShortcutFn:       u.resolveOpShortcut(),
+		OpFn:               u.resolveOp(),
 	})
 
 	if err != nil {
-		panic(color.Bad("%s(): JSON unmarshal error: %s", jsonCaller(), err))
+		panic(color.Bad("%s(): JSON unmarshal error: %s", u.Func, err))
 	}
 
 	return final
 }
+
+// resolveOp returns a closure usable as json.ParseOpts.OpFn.
+func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (interface{}, error) {
+	return func(jop json.Operator, posInJSON json.Position) (interface{}, error) {
+		op, exists := allOperators[jop.Name]
+		if !exists {
+			return nil, fmt.Errorf("unknown operator %s()", jop.Name)
+		}
+
+		if hint, exists := forbiddenOpsInJSON[jop.Name]; exists {
+			if hint == "" {
+				return nil, fmt.Errorf("%s() is not usable in JSON()", jop.Name)
+			}
+			return nil, fmt.Errorf("%s() is not usable in JSON(), use %s instead",
+				jop.Name, hint)
+		}
+
+		vfn := reflect.ValueOf(op)
+		tfn := vfn.Type()
+
+		// Special cases
+		var min, max int
+		addNilParam := false
+		switch jop.Name {
+		case "Between":
+			min, max = 2, 3
+			if len(jop.Params) == 3 {
+				switch s, _ := jop.Params[2].(string); s {
+				case "[]", "BoundsInIn":
+					jop.Params[2] = BoundsInIn
+				case "[[", "BoundsInOut":
+					jop.Params[2] = BoundsInOut
+				case "]]", "BoundsOutIn":
+					jop.Params[2] = BoundsOutIn
+				case "][", "BoundsOutOut":
+					jop.Params[2] = BoundsOutOut
+				default:
+					return nil, errors.New(`Between() bad 3rd parameter, use "[]", "[[", "]]" or "]["`)
+				}
+			}
+		case "N":
+			min, max = 1, 2
+		case "Re":
+			min, max = 1, 2
+		case "SubMapOf":
+			min, max, addNilParam = 1, 1, true
+		case "SuperMapOf":
+			min, max, addNilParam = 1, 1, true
+		default:
+			min = tfn.NumIn()
+			if tfn.IsVariadic() {
+				// for All(expected ...interface{}) → min == 1, as All() is a non-sense
+				max = -1
+			} else {
+				max = min
+			}
+		}
+		if len(jop.Params) < min || (max >= 0 && len(jop.Params) > max) {
+			switch {
+			case max < 0:
+				return nil, fmt.Errorf("%s() requires at least one parameter", jop.Name)
+			case max == 0:
+				return nil, fmt.Errorf("%s() requires no parameters", jop.Name)
+			case min == max:
+				if min == 1 {
+					return nil, fmt.Errorf("%s() requires only one parameter", jop.Name)
+				}
+				return nil, fmt.Errorf("%s() requires %d parameters", jop.Name, min)
+			default:
+				return nil, fmt.Errorf("%s() requires %d or %d parameters", jop.Name, min, max)
+			}
+		}
+
+		var in []reflect.Value
+		if len(jop.Params) > 0 {
+			in = make([]reflect.Value, len(jop.Params))
+			for i, p := range jop.Params {
+				in[i] = reflect.ValueOf(p)
+			}
+			if addNilParam {
+				in = append(in, reflect.ValueOf(MapEntries(nil)))
+			}
+
+			// If the function is variadic, no need to check each param as all
+			// variadic operator is always a ...interface{}
+			numCheck := len(in)
+			if tfn.IsVariadic() {
+				numCheck = tfn.NumIn() - 1
+			}
+			for i, p := range in[:numCheck] {
+				fpt := tfn.In(i)
+				if fpt.Kind() != reflect.Interface && p.Type() != fpt {
+					return nil, fmt.Errorf(
+						"%s() bad #%d parameter type: %s required but %s received",
+						jop.Name, i+1,
+						fpt, p.Type(),
+					)
+				}
+			}
+		}
+
+		var (
+			panicArg interface{}
+			tdOp     TestDeep
+		)
+		func() {
+			defer func() { panicArg = recover() }()
+			tdOp = vfn.Call(in)[0].Interface().(TestDeep)
+		}()
+
+		if tdOp != nil {
+			// replace the location by the JSON/SubJSONOf/SuperJSONOf one
+			u.replaceLocation(tdOp, posInJSON)
+			return &tdJSONEmbedded{tdOp}, nil
+		}
+		if s, ok := panicArg.(string); ok {
+			panicArg = color.UnBad(s)
+		}
+		return nil, fmt.Errorf("%s() %v", jop.Name, panicArg)
+	}
+}
+
+// resolveOpShortcut returns a closure usable as json.ParseOpts.OpShortcutFn.
+func (u tdJSONUnmarshaler) resolveOpShortcut() func(string, json.Position) (interface{}, bool) {
+	return func(opName string, posInJSON json.Position) (interface{}, bool) {
+		opFn := jsonOpShortcuts[opName]
+		if opFn != nil {
+			tdOp := opFn()
+
+			// replace the location by the JSON/SubJSONOf/SuperJSONOf one
+			u.replaceLocation(tdOp, posInJSON)
+
+			return &tdJSONPlaceholder{
+				TestDeep: tdOp,
+				name:     "^" + opName,
+			}, true
+		}
+		return nil, false
+	}
+}
+
+// tdJSONPlaceholder represents a JSON placeholder in an unmarshalled
+// JSON expected data structure.
+type tdJSONPlaceholder struct {
+	TestDeep
+	name string
+	num  uint64
+}
+
+func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
+	var b bytes.Buffer
+
+	start := b.Len()
+	if p.num == 0 {
+		fmt.Fprintf(&b, `"$%s"`, p.name)
+
+		// Don't add a comment for operator shortcuts (aka $^NotZero)
+		if p.name[0] == '^' {
+			return b.Bytes(), nil
+		}
+	} else {
+		fmt.Fprintf(&b, `"$%d"`, p.num)
+	}
+
+	b.WriteString(` /* `)
+
+	indent := "\n" + strings.Repeat(" ", b.Len()-start)
+	b.WriteString(strings.Replace(p.String(), "\n", indent, -1)) //nolint: gocritic
+
+	b.WriteString(` */`)
+
+	return b.Bytes(), nil
+}
+
+type tdJSONEmbedded struct {
+	TestDeep
+}
+
+func (e *tdJSONEmbedded) MarshalJSON() ([]byte, error) {
+	return []byte(e.String()), nil
+}
+
+type tdJSON struct {
+	baseOKNil
+	expected reflect.Value
+}
+
+var _ TestDeep = &tdJSON{}
 
 func gotViaJSON(ctx ctxerr.Context, pGot *reflect.Value) *ctxerr.Error {
 	got, err := jsonify(ctx, *pGot)
@@ -252,9 +415,10 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //
 // "expectedJSON" JSON value can contain placeholders. The "params"
 // are for any placeholder parameters in "expectedJSON". "params" can
-// contain TestDeep operators as well as raw values. A placeholder can
-// be numeric like $2 or named like $name and always references an
-// item in "params".
+// contain TestDeep operators as well as raw values. Raw values are
+// first json.Marshal'ed then json.Unmarshal'ed in an interface{}. A
+// placeholder can be numeric like $2 or named like $name and always
+// references an item in "params".
 //
 // Numeric placeholders reference the n'th "operators" item (starting
 // at 1). Named placeholders are used with Tag operator as follows:
@@ -324,9 +488,40 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //   - multi-lines comments start with the character sequence /* and stop
 //     with the first subsequent character sequence */.
 //
-// Last but not least, simple operators can be directly embedded in
-// JSON data without requiring any placeholder but using directly
-// $^OperatorName. They are operator shortcuts:
+// Most operators can be directly embedded in JSON without requiring
+// any placeholder.
+//
+//   td.Cmp(t, gotValue,
+//     td.JSON(`
+//   {
+//     "fullname": HasPrefix("Foo"),
+//     "age":      Between(41, 43),
+//     "details":  SuperMapOf({
+//       "address": NotEmpty(),
+//       "car":     Any("Peugeot", "Tesla", "Jeep") // any of these
+//     })
+//   }`))
+//
+// Placeholders can be used anywhere, even in operators parameters as in:
+//
+//   td.Cmp(t, gotValue, td.JSON(`{"fullname": HasPrefix($1)}`, "Zip"))
+//
+// A few notes about operators embedding:
+//   - SubMapOf and SuperMapOf take only one parameter, a JSON object;
+//   - the optional 3rd parameter of Between has to be specified as a string
+//     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
+//     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
+//   - not all operators are embeddable only the following are;
+//   - All, Any, ArrayEach, Bag, Between, Contains, ContainsKey, Empty, Gt,
+//     Gte, HasPrefix, HasSuffix, Ignore, JSONPointer, Keys, Len, Lt, Lte,
+//     MapEach, N, NaN, Nil, None, Not, NotAny, NotEmpty, NotNaN, NotNil,
+//     NotZero, Re, ReAll, Set, SubBagOf, SubMapOf, SubSetOf, SuperBagOf,
+//     SuperMapOf, SuperSetOf, Values and Zero.
+//
+// Operators taking no parameters can also be directly embedded in
+// JSON data using $^OperatorName or "$^OperatorName" notation. They
+// are named shortcut operators (they predate the above operators embedding
+// but they subsist for compatibility):
 //
 //   td.Cmp(t, gotValue, td.JSON(`{"id": $1}`, td.NotZero()))
 //
@@ -334,8 +529,14 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //
 //   td.Cmp(t, gotValue, td.JSON(`{"id": $^NotZero}`))
 //
-// Unfortunately, only simple operators (in fact those which take no
-// parameters) have shortcuts. They follow:
+// or
+//
+//   td.Cmp(t, gotValue, td.JSON(`{"id": "$^NotZero"}`))
+//
+// As for placeholders, there is no differences between $^NotZero and
+// "$^NotZero".
+//
+// The allowed shortcut operators follow:
 //   - Empty    → $^Empty
 //   - Ignore   → $^Ignore
 //   - NaN      → $^NaN
@@ -351,10 +552,12 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 // []interface{}, map[string]interface{} or interface{} in case
 // "expectedJSON" is "null".
 func JSON(expectedJSON interface{}, params ...interface{}) TestDeep {
-	v := unmarshal(expectedJSON, params)
+	b := newBaseOKNil(3)
+
+	v := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
 
 	return &tdJSON{
-		baseOKNil: newBaseOKNil(3),
+		baseOKNil: b,
 		expected:  reflect.ValueOf(v),
 	}
 }
@@ -383,59 +586,9 @@ func jsonStringify(opName string, v reflect.Value) string {
 
 	b.WriteString(opName)
 	b.WriteByte('(')
-
-	enc := ejson.NewEncoder(&b)
-	enc.SetEscapeHTML(false)
-	enc.SetIndent(strings.Repeat(" ", len(opName)+1), "  ")
-
-	// cannot return an error here
-	enc.Encode(v.Interface()) //nolint: errcheck
-
-	b.Truncate(b.Len() - 1)
+	json.AppendMarshal(&b, v.Interface(), len(opName)+1) //nolint: errcheck
 	b.WriteByte(')')
 
-	str := jsonUnescaper.Replace(b.String())
-
-	b.Reset()
-	for {
-		beginPos := strings.Index(str, commentStart)
-		if beginPos < 0 {
-			break
-		}
-		endPos := strings.Index(str[beginPos+len(commentStart):], commentEnd)
-		if endPos < 0 {
-			break
-		}
-
-		b.WriteString(str[:beginPos])
-		b.WriteString(commentStartRepl)
-
-		// Multiline comment, compute indent level
-		indent := ""
-		if strings.ContainsRune(str[beginPos+len(commentStart):endPos+beginPos+len(commentStart)], '\n') {
-			begLine := strings.LastIndexByte(str[:beginPos], '\n') + 1
-			indent = strings.Repeat(" ", beginPos-begLine+len(commentStartRepl))
-		}
-
-		str = str[beginPos+len(commentStart):]
-
-		// Multiline comment?
-		if indent != "" {
-			b.WriteString(strings.Replace(str[:endPos], "\n", "\n"+indent, -1)) //nolint: gocritic
-		} else {
-			b.WriteString(str[:endPos])
-		}
-
-		b.WriteString(commentEndRepl)
-
-		str = str[endPos+len(commentEnd):]
-	}
-
-	if b.Len() == 0 {
-		return str
-	}
-
-	b.WriteString(str)
 	return b.String()
 }
 
@@ -582,7 +735,9 @@ var _ TestDeep = &tdMapJSON{}
 //
 // TypeBehind method returns the map[string]interface{} type.
 func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
-	v := unmarshal(expectedJSON, params)
+	b := newBase(3)
+
+	v := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
 
 	_, ok := v.(map[string]interface{})
 	if !ok {
@@ -592,7 +747,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 	m := tdMapJSON{
 		tdMap: tdMap{
 			tdExpectedType: tdExpectedType{
-				base:         newBase(3),
+				base:         b,
 				expectedType: reflect.TypeOf((map[string]interface{})(nil)),
 			},
 			kind: subMap,
@@ -735,7 +890,9 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //
 // TypeBehind method returns the map[string]interface{} type.
 func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
-	v := unmarshal(expectedJSON, params)
+	b := newBase(3)
+
+	v := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
 
 	_, ok := v.(map[string]interface{})
 	if !ok {
@@ -745,7 +902,7 @@ func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 	m := tdMapJSON{
 		tdMap: tdMap{
 			tdExpectedType: tdExpectedType{
-				base:         newBase(3),
+				base:         b,
 				expectedType: reflect.TypeOf((map[string]interface{})(nil)),
 			},
 			kind: superMap,

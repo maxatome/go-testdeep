@@ -1,4 +1,4 @@
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020, 2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -37,6 +37,10 @@ func (p Position) incHoriz(bytes int, runes ...int) Position {
 	return p
 }
 
+func (p Position) String() string {
+	return fmt.Sprintf("at line %d:%d (pos %d)", p.Line, p.Col, p.Pos)
+}
+
 type json struct {
 	buf          []byte
 	pos          Position
@@ -52,8 +56,8 @@ type json struct {
 type ParseOpts struct {
 	Placeholders       []interface{}
 	PlaceholdersByName map[string]interface{}
-	OpShortcutFn       func(string) (interface{}, bool)
-	OpFn               func(Operator) (interface{}, error)
+	OpShortcutFn       func(string, Position) (interface{}, bool)
+	OpFn               func(Operator, Position) (interface{}, error)
 }
 
 func Parse(buf []byte, opts ...ParseOpts) (interface{}, error) {
@@ -102,6 +106,8 @@ func (j *json) Error(s string) {
 			default:
 				s = fmt.Sprintf(syntaxErrorUnexpected+`'\U%08x'`, j.curRune)
 			}
+		} else if strings.HasPrefix(s, syntaxErrorUnexpected+"$end") {
+			s = strings.Replace(s, "$end", "EOF", 1)
 		}
 		j.fatal(s, j.lastTokenPos)
 	}
@@ -123,18 +129,18 @@ func (j *json) moveHoriz(bytes int, runes ...int) {
 	j.curSize = 0
 }
 
-func (j *json) getOperatorShortcut(operator string) (interface{}, bool) {
+func (j *json) getOperatorShortcut(operator string, opPos Position) (interface{}, bool) {
 	if j.opts.OpShortcutFn == nil {
 		return nil, false
 	}
-	return j.opts.OpShortcutFn(operator)
+	return j.opts.OpShortcutFn(operator, opPos)
 }
 
-func (j *json) getOperator(operator Operator) (interface{}, error) {
+func (j *json) getOperator(operator Operator, opPos Position) (interface{}, error) {
 	if j.opts.OpFn == nil {
 		return nil, fmt.Errorf("unknown operator %q", operator.Name)
 	}
-	return j.opts.OpFn(operator)
+	return j.opts.OpFn(operator, opPos)
 }
 
 func (j *json) nextToken(lval *yySymType) int {
@@ -202,7 +208,7 @@ func (j *json) nextToken(lval *yySymType) int {
 
 	case '$':
 		var dollarToken string
-		end := bytes.IndexAny(j.buf[j.pos.bpos+1:], " \t\r\n,}]")
+		end := bytes.IndexAny(j.buf[j.pos.bpos+1:], " \t\r\n,}])")
 		if end >= 0 {
 			dollarToken = string(j.buf[j.pos.bpos+1 : j.pos.bpos+1+end])
 		} else {
@@ -375,11 +381,22 @@ func (j *json) parseDollarToken(dollarToken string, dollarPos Position) (int, in
 				dollarPos)
 			return PLACEHOLDER, nil // continue parsing
 		}
-		if np > uint64(len(j.opts.Placeholders)) {
-			j.error(
-				fmt.Sprintf(`numeric placeholder "$%s", but only %d param(s) given`,
-					dollarToken, len(j.opts.Placeholders)),
-				dollarPos)
+		if numParams := len(j.opts.Placeholders); np > uint64(numParams) {
+			switch numParams {
+			case 0:
+				j.error(
+					fmt.Sprintf(`numeric placeholder "$%s", but no params given`, dollarToken),
+					dollarPos)
+			case 1:
+				j.error(
+					fmt.Sprintf(`numeric placeholder "$%s", but only one param given`, dollarToken),
+					dollarPos)
+			default:
+				j.error(
+					fmt.Sprintf(`numeric placeholder "$%s", but only %d params given`,
+						dollarToken, numParams),
+					dollarPos)
+			}
 			return PLACEHOLDER, nil // continue parsing
 		}
 		return PLACEHOLDER, j.opts.Placeholders[np-1]
@@ -387,7 +404,7 @@ func (j *json) parseDollarToken(dollarToken string, dollarPos Position) (int, in
 
 	// Test for operator shortcut
 	if firstRune == '^' {
-		op, ok := j.getOperatorShortcut(dollarToken[1:])
+		op, ok := j.getOperatorShortcut(dollarToken[1:], dollarPos)
 		if !ok {
 			j.error(
 				fmt.Sprintf(`bad operator shortcut "$%s"`, dollarToken),
@@ -461,7 +478,8 @@ ws:
 				if end := indexAfterEol(j.buf[j.pos.bpos+2:]); end >= 0 {
 					lineLen := 2 + utf8.RuneCount(j.buf[j.pos.bpos+2:j.pos.bpos+2+end])
 					j.pos.Pos += lineLen
-					j.pos.Col += lineLen
+					j.pos.Line++
+					j.pos.Col = 0
 					j.pos.bpos += 2 + end
 					continue ws
 				}
@@ -620,8 +638,5 @@ type Error struct {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf(
-		"%s at line %d:%d (pos %d)",
-		e.mesg, e.Pos.Line, e.Pos.Col, e.Pos.Pos,
-	)
+	return e.mesg + " " + e.Pos.String()
 }

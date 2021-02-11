@@ -1,4 +1,4 @@
-// Copyright (c) 2018, 2019, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -11,6 +11,72 @@ package td
 import (
 	"time"
 )
+
+// allOperators lists the 61 operators.
+// nil means not usable in JSON().
+var allOperators = map[string]interface{}{
+	"All":         All,
+	"Any":         Any,
+	"Array":       nil,
+	"ArrayEach":   ArrayEach,
+	"Bag":         Bag,
+	"Between":     Between,
+	"Cap":         nil,
+	"Catch":       nil,
+	"Code":        nil,
+	"Contains":    Contains,
+	"ContainsKey": ContainsKey,
+	"Delay":       nil,
+	"Empty":       Empty,
+	"Gt":          Gt,
+	"Gte":         Gte,
+	"HasPrefix":   HasPrefix,
+	"HasSuffix":   HasSuffix,
+	"Ignore":      Ignore,
+	"Isa":         nil,
+	"JSON":        nil,
+	"JSONPointer": JSONPointer,
+	"Keys":        Keys,
+	"Lax":         nil,
+	"Len":         Len,
+	"Lt":          Lt,
+	"Lte":         Lte,
+	"Map":         nil,
+	"MapEach":     MapEach,
+	"N":           N,
+	"NaN":         NaN,
+	"Nil":         Nil,
+	"None":        None,
+	"Not":         Not,
+	"NotAny":      NotAny,
+	"NotEmpty":    NotEmpty,
+	"NotNaN":      NotNaN,
+	"NotNil":      NotNil,
+	"NotZero":     NotZero,
+	"PPtr":        nil,
+	"Ptr":         nil,
+	"Re":          Re,
+	"ReAll":       ReAll,
+	"SStruct":     nil,
+	"Set":         Set,
+	"Shallow":     nil,
+	"Slice":       nil,
+	"Smuggle":     nil,
+	"String":      nil,
+	"Struct":      nil,
+	"SubBagOf":    SubBagOf,
+	"SubJSONOf":   nil,
+	"SubMapOf":    SubMapOf,
+	"SubSetOf":    SubSetOf,
+	"SuperBagOf":  SuperBagOf,
+	"SuperJSONOf": nil,
+	"SuperMapOf":  SuperMapOf,
+	"SuperSetOf":  SuperSetOf,
+	"Tag":         nil,
+	"TruncTime":   nil,
+	"Values":      Values,
+	"Zero":        Zero,
+}
 
 // CmpAll is a shortcut for:
 //

@@ -125,8 +125,8 @@ func CheckPanic(t *testing.T, fn func(), contains string) bool {
 
 	panicStr, ok := panicParam.(string)
 	if !ok {
-		t.Errorf("panic() occurred but recover()d %T type instead of string",
-			panicParam)
+		t.Errorf("panic() occurred but recover()d %T type (%v) instead of string",
+			panicParam, panicParam)
 		return false
 	}
 

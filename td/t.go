@@ -1,4 +1,4 @@
-// Copyright (c) 2018, 2019, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the

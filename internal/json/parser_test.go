@@ -1,4 +1,4 @@
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020, 2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -218,11 +218,11 @@ func TestJSON(t *testing.T) {
 			},
 			{
 				js:  `  $1 `,
-				err: `numeric placeholder "$1", but only 0 param(s) given at line 1:2 (pos 2)`,
+				err: `numeric placeholder "$1", but no params given at line 1:2 (pos 2)`,
 			},
 			{
 				js:  `  "$1" `,
-				err: `numeric placeholder "$1", but only 0 param(s) given at line 1:3 (pos 3)`,
+				err: `numeric placeholder "$1", but no params given at line 1:3 (pos 3)`,
 			},
 			{
 				js:  `  $^AnyOp `,
@@ -277,9 +277,9 @@ func TestJSON(t *testing.T) {
 			// multiple errors
 			{
 				js: "[$1,$2,",
-				err: `numeric placeholder "$1", but only 0 param(s) given at line 1:1 (pos 1)
-numeric placeholder "$2", but only 0 param(s) given at line 1:4 (pos 4)
-syntax error: unexpected $end at line 1:6 (pos 6)`,
+				err: `numeric placeholder "$1", but no params given at line 1:1 (pos 1)
+numeric placeholder "$2", but no params given at line 1:4 (pos 4)
+syntax error: unexpected EOF at line 1:6 (pos 6)`,
 			},
 		} {
 			_, err := json.Parse([]byte(tst.js))
@@ -298,16 +298,39 @@ syntax error: unexpected $end at line 1:6 (pos 6)`,
 			}
 		}
 
-		_, err := json.Parse([]byte(`  KnownOp(  AnyOp()  )`),
+		_, err := json.Parse(
+			[]byte(`[$2]`),
+			json.ParseOpts{Placeholders: []interface{}{1}},
+		)
+		if test.Error(t, err) {
+			test.EqualStr(t, err.Error(),
+				`numeric placeholder "$2", but only one param given at line 1:1 (pos 1)`)
+		}
+
+		_, err = json.Parse(
+			[]byte(`[$3]`),
+			json.ParseOpts{Placeholders: []interface{}{1, 2}},
+		)
+		if test.Error(t, err) {
+			test.EqualStr(t, err.Error(),
+				`numeric placeholder "$3", but only 2 params given at line 1:1 (pos 1)`)
+		}
+
+		var anyOpPos json.Position
+		_, err = json.Parse([]byte(`  KnownOp(  AnyOp()  )`),
 			json.ParseOpts{
-				OpFn: func(op json.Operator) (interface{}, error) {
+				OpFn: func(op json.Operator, pos json.Position) (interface{}, error) {
 					if op.Name == "KnownOp" {
 						return "OK", nil
 					}
+					anyOpPos = pos
 					return nil, fmt.Errorf("hmm weird operator %q", op.Name)
 				},
 			})
 		if test.Error(t, err, "json.Parse fails") {
+			test.EqualInt(t, anyOpPos.Pos, 12)
+			test.EqualInt(t, anyOpPos.Line, 1)
+			test.EqualInt(t, anyOpPos.Col, 12)
 			test.EqualStr(t, err.Error(),
 				`hmm weird operator "AnyOp" at line 1:12 (pos 12)`)
 		}
@@ -318,14 +341,18 @@ syntax error: unexpected $end at line 1:6 (pos 6)`,
 		} {
 			_, err := json.Parse([]byte(js),
 				json.ParseOpts{
-					OpShortcutFn: func(name string) (interface{}, bool) {
+					OpShortcutFn: func(name string, pos json.Position) (interface{}, bool) {
 						if name == "KnownOp" {
 							return "OK", true
 						}
+						anyOpPos = pos
 						return nil, false
 					},
 				})
 			if test.Error(t, err, "json.Parse fails", js) {
+				test.EqualInt(t, anyOpPos.Pos, 18)
+				test.EqualInt(t, anyOpPos.Line, 1)
+				test.EqualInt(t, anyOpPos.Col, 18)
 				test.EqualStr(t, err.Error(),
 					`bad operator shortcut "$^AnyOp" at line 1:18 (pos 18)`,
 					js)

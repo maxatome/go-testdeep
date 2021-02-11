@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -42,6 +42,7 @@ type TestDeep interface {
 	// Match checks "got" against the operator. It returns nil if it matches.
 	Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 	setLocation(int)
+	replaceLocation(location.Location)
 	// HandleInvalid returns true if the operator is able to handle
 	// untyped nil value. Otherwise the untyped nil value is handled
 	// generically.
@@ -76,6 +77,7 @@ func pkgFunc(full string) (string, string) {
 	return full[:dp], full[dp+1:]
 }
 
+// setLocation sets location using the stack trace going "callDepth" levels up.
 func (t *base) setLocation(callDepth int) {
 	var ok bool
 	t.location, ok = location.New(callDepth)
@@ -100,6 +102,11 @@ func (t *base) setLocation(callDepth int) {
 			t.location.BehindCmp = true
 		}
 	}
+}
+
+// replaceLocation replaces the location by "loc".
+func (t *base) replaceLocation(loc location.Location) {
+	t.location = loc
 }
 
 // GetLocation returns a copy of the location.Location where the TestDeep

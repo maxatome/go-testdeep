@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -70,5 +70,5 @@ func ExampleEqDeeplyError() {
 	// DATA.Items[2]: values differ
 	// 	     got: 9
 	// 	expected: 3 ≤ got ≤ 8
-	// [under TestDeep operator Between at example.go:18]
+	// [under operator Between at example.go:18]
 }

@@ -80,7 +80,7 @@ func Init() {
 // returns a function to be called in a defer statement. Only intended
 // to be used in tests like:
 //
-//   defer ctxerr.SaveState()()
+//   defer color.SaveState()()
 //
 // It is not thread-safe.
 func SaveState(on ...bool) func() {
@@ -247,4 +247,9 @@ func BadUsage(usage string, param interface{}, pos int, kind bool) string {
 func TooManyParams(usage string) string {
 	Init()
 	return BadOnBold + "usage: " + usage + ", too many parameters" + BadOff
+}
+
+// UnBad returns "s" with bad color prefix & suffix removed.
+func UnBad(s string) string {
+	return strings.TrimSuffix(strings.TrimPrefix(s, BadOnBold), BadOff)
 }

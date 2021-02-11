@@ -34,7 +34,7 @@ my $DIR = "$REPO_DIR/td";
 -d $DIR or die "Cannot find td/ directory ($DIR)\n";
 
 my $HEADER = <<'EOH';
-// Copyright (c) 2018, 2019, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -81,13 +81,21 @@ my %INPUTS;
 
 opendir(my $dh, $DIR);
 
-my(%funcs, %operators, %consts);
+my(%funcs, %operators, %consts, %forbiddenOpsInJSON);
 
 while (readdir $dh)
 {
     if (/^td_.*\.go\z/ and not /_test.go\z/)
     {
         my $contents = do { local $/; open(my $fh, '<', "$DIR/$_"); <$fh> };
+
+        # Load the operators forbidden inside JSON()
+        if ($_ eq 'td_json.go')
+        {
+            $contents =~ /^var forbiddenOpsInJSON = map\[string\]string\{(.*?)^\}/ms
+                or die "$_: forbiddenOpsInJSON map not found\n";
+            @forbiddenOpsInJSON{$1 =~ /"([^"]+)":/g} = ();
+        }
 
         while ($contents =~ /^const \(\n(.+)^\)\n/gms)
         {
@@ -216,7 +224,19 @@ package td
 import (
 \t"time"
 )
+
 EOH
+
+$funcs_contents .= <<EOV;
+// allOperators lists the ${\scalar(keys(%funcs) + keys %ONLY_OPERATORS)} operators.
+// nil means not usable in JSON().
+var allOperators = map[string]interface{}{
+  ${\join('', map
+              { qq("$_": ) . (exists $forbiddenOpsInJSON{$_} ? 'nil' : $_) . ",\n" }
+              sort keys(%funcs), keys %ONLY_OPERATORS)}
+}
+
+EOV
 
 my @sorted_funcs = sort { lc($a) cmp lc($b) } keys %funcs;
 

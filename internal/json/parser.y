@@ -1,5 +1,5 @@
 %{
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020, 2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -42,7 +42,7 @@ func finalize(l yyLexer, value interface{}) {
 
 %type <object>   object members
 %type <member>   member
-%type <array>    array elements
+%type <array>    array elements op_params
 %type <value>    json value operator
 
 %%
@@ -112,17 +112,26 @@ elements:
                   $$ = append($1, $3)
                 }
 
+op_params: elements
+                {
+                  $$ = $1
+                }
+  | elements ','
+                {
+                  $$ = $1
+                }
+
 operator:
     OPERATOR_SHORTCUT
-  | OPERATOR  '(' elements ')'
+  | OPERATOR  '(' op_params ')'
                 {
                   j := yylex.(*json)
                   opPos := j.popPos()
-                  op, err := j.getOperator(Operator{Name: $1, Params: $3})
+                  op, err := j.getOperator(Operator{Name: $1, Params: $3}, opPos)
                   if err != nil {
-                    j.error(err.Error(), opPos)
-                  } else {
-                    $$ = op
+                    j.fatal(err.Error(), opPos)
+                    return 1
                   }
+                  $$ = op
                 }
 %%
