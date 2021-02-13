@@ -27,6 +27,8 @@ func TestRe(t *testing.T) {
 	type MyString string
 	checkOK(t, MyString("Ho zz hoho"),
 		td.ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
+	checkOK(t, MyString("Ho zz hoho"),
+		td.ReAll("(?i)(ho)", []interface{}{"Ho", "ho", "ho"}))
 
 	// error interface
 	checkOK(t, errors.New("pipo bingo"), td.Re("bin"))
@@ -57,6 +59,13 @@ func TestRe(t *testing.T) {
 			Got:      mustContain(`"foo bar test"`),
 			Expected: mustBe("(pi)(po)"),
 		})
+	checkError(t, "foo bar test", td.Re("(pi)(po)", []interface{}{"pi", "po"}),
+		expectedError{
+			Message:  mustBe("does not match Regexp"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`"foo bar test"`),
+			Expected: mustBe("(pi)(po)"),
+		})
 
 	//
 	// bytes
@@ -68,6 +77,8 @@ func TestRe(t *testing.T) {
 	type MySlice []byte
 	checkOK(t, MySlice("Ho zz hoho"),
 		td.ReAll("(?i)(ho)", []string{"Ho", "ho", "ho"}))
+	checkOK(t, MySlice("Ho zz hoho"),
+		td.ReAll("(?i)(ho)", []interface{}{"Ho", "ho", "ho"}))
 
 	checkError(t, []int{12}, td.Re("bar"),
 		expectedError{
@@ -87,6 +98,14 @@ func TestRe(t *testing.T) {
 
 	checkError(t, []byte("foo bar test"),
 		td.Re("(pi)(po)", []string{"pi", "po"}),
+		expectedError{
+			Message:  mustBe("does not match Regexp"),
+			Path:     mustBe("DATA"),
+			Got:      mustContain(`foo bar test`),
+			Expected: mustBe("(pi)(po)"),
+		})
+	checkError(t, []byte("foo bar test"),
+		td.Re("(pi)(po)", []interface{}{"pi", "po"}),
 		expectedError{
 			Message:  mustBe("does not match Regexp"),
 			Path:     mustBe("DATA"),

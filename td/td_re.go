@@ -124,13 +124,24 @@ func (r *tdRe) matchByteCaptures(ctx ctxerr.Context, got []byte, result [][][]by
 	}
 
 	// Not perfect but cast captured groups to string
+
+	// Special case to accepted expected []interface{} type
+	if r.captures.Type() == types.SliceInterface {
+		captures := make([]interface{}, 0, num)
+		for _, set := range result {
+			for _, match := range set[1:] {
+				captures = append(captures, string(match))
+			}
+		}
+		return r.matchCaptures(ctx, captures)
+	}
+
 	captures := make([]string, 0, num)
 	for _, set := range result {
 		for _, match := range set[1:] {
 			captures = append(captures, string(match))
 		}
 	}
-
 	return r.matchCaptures(ctx, captures)
 }
 
@@ -144,15 +155,25 @@ func (r *tdRe) matchStringCaptures(ctx ctxerr.Context, got string, result [][]st
 		num += len(set) - 1
 	}
 
+	// Special case to accepted expected []interface{} type
+	if r.captures.Type() == types.SliceInterface {
+		captures := make([]interface{}, 0, num)
+		for _, set := range result {
+			for _, match := range set[1:] {
+				captures = append(captures, match)
+			}
+		}
+		return r.matchCaptures(ctx, captures)
+	}
+
 	captures := make([]string, 0, num)
 	for _, set := range result {
 		captures = append(captures, set[1:]...)
 	}
-
 	return r.matchCaptures(ctx, captures)
 }
 
-func (r *tdRe) matchCaptures(ctx ctxerr.Context, captures []string) (err *ctxerr.Error) {
+func (r *tdRe) matchCaptures(ctx ctxerr.Context, captures interface{}) (err *ctxerr.Error) {
 	return deepValueEqual(
 		ctx.ResetPath("("+ctx.Path.String()+" =~ "+r.String()+")"),
 		reflect.ValueOf(captures), r.captures)
