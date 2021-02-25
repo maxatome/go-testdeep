@@ -15,9 +15,9 @@ import (
 // TestingT is a type implementing td.TestingT intended to be used in
 // tests.
 type TestingT struct {
-	LastMessage string
-	IsFatal     bool
-	HasFailed   bool
+	Messages  []string
+	IsFatal   bool
+	HasFailed bool
 }
 
 // NewTestingT returns a new instance of *TestingT.
@@ -25,16 +25,16 @@ func NewTestingT() *TestingT {
 	return &TestingT{}
 }
 
-// Fatal mocks testing.T Error method.
+// Error mocks testing.T Error method.
 func (t *TestingT) Error(args ...interface{}) {
-	t.LastMessage = fmt.Sprint(args...)
+	t.Messages = append(t.Messages, fmt.Sprint(args...))
 	t.IsFatal = false
 	t.HasFailed = true
 }
 
 // Fatal mocks testing.T Fatal method.
 func (t *TestingT) Fatal(args ...interface{}) {
-	t.LastMessage = fmt.Sprint(args...)
+	t.Messages = append(t.Messages, fmt.Sprint(args...))
 	t.IsFatal = true
 	t.HasFailed = true
 }
@@ -42,6 +42,19 @@ func (t *TestingT) Fatal(args ...interface{}) {
 // Helper mocks testing.T Helper method.
 func (t *TestingT) Helper() {
 	// Do nothing
+}
+
+// LastMessage returns the last message.
+func (t *TestingT) LastMessage() string {
+	if len(t.Messages) == 0 {
+		return ""
+	}
+	return t.Messages[len(t.Messages)-1]
+}
+
+// ResetMessages resets the messages.
+func (t *TestingT) ResetMessages() {
+	t.Messages = t.Messages[:0]
 }
 
 // TestingTB is a type implementing testing.TB intended to be used in
@@ -113,10 +126,14 @@ func (t *TestingTB) Helper() {
 }
 
 // Log mocks testing.T Log method.
-func (t *TestingTB) Log(args ...interface{}) {}
+func (t *TestingTB) Log(args ...interface{}) {
+	t.Messages = append(t.Messages, fmt.Sprint(args...))
+}
 
 // Logf mocks testing.T Logf method.
-func (t *TestingTB) Logf(format string, args ...interface{}) {}
+func (t *TestingTB) Logf(format string, args ...interface{}) {
+	t.Log(fmt.Sprintf(format, args...))
+}
 
 // Name mocks testing.T Name method.
 func (t *TestingTB) Name() string {

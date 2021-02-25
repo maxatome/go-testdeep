@@ -98,8 +98,8 @@ func TestWithCmpHooks(tt *testing.T) {
 
 		td.CmpFalse(tt, t.Cmp(1, 1))
 
-		if !strings.Contains(ttt.LastMessage, "DATA: never equal\n") {
-			tt.Errorf(`<%s> does not contain "DATA: never equal\n"`, ttt.LastMessage)
+		if !strings.Contains(ttt.LastMessage(), "DATA: never equal\n") {
+			tt.Errorf(`<%s> does not contain "DATA: never equal\n"`, ttt.LastMessage())
 		}
 	})
 
@@ -181,8 +181,8 @@ func TestWithSmuggleHooks(tt *testing.T) {
 
 		td.CmpFalse(tt, t.Cmp(1, 1))
 
-		if !strings.Contains(ttt.LastMessage, "DATA: never equal\n") {
-			tt.Errorf(`<%s> does not contain "DATA: never equal\n"`, ttt.LastMessage)
+		if !strings.Contains(ttt.LastMessage(), "DATA: never equal\n") {
+			tt.Errorf(`<%s> does not contain "DATA: never equal\n"`, ttt.LastMessage())
 		}
 	})
 

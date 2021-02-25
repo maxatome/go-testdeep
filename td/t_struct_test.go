@@ -278,102 +278,100 @@ func TestRunT(t *testing.T) {
 }
 
 func TestFailureIsFatal(tt *testing.T) {
-	ttt := test.NewTestingTB(tt.Name())
-
 	// All t.True(false) tests of course fail
 
 	// Using default config
-	ttt.LastMessage = ""
+	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsFalse(tt, ttt.IsFatal, "by default it not fatal")
 
 	// Using specific config
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt, td.ContextConfig{FailureIsFatal: true})
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using FailureIsFatal()
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt).FailureIsFatal()
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using FailureIsFatal(true)
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt).FailureIsFatal(true)
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using Require()
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.Require(ttt)
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using Require() with specific config (cannot override FailureIsFatal)
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.Require(ttt, td.ContextConfig{FailureIsFatal: false})
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Canceling specific config
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt, td.ContextConfig{FailureIsFatal: false}).
 		FailureIsFatal(false)
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// Using Assert()
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.Assert(ttt)
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// Using Assert() with specific config (cannot override FailureIsFatal)
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t = td.Assert(ttt, td.ContextConfig{FailureIsFatal: true})
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// AssertRequire() / assert
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t, _ = td.AssertRequire(ttt)
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// Using AssertRequire() / assert with specific config (cannot
 	// override FailureIsFatal)
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	t, _ = td.AssertRequire(ttt, td.ContextConfig{FailureIsFatal: true})
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsFalse(tt, ttt.IsFatal, "it must be not fatal")
 
 	// AssertRequire() / require
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	_, t = td.AssertRequire(ttt)
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using AssertRequire() / require with specific config (cannot
 	// override FailureIsFatal)
-	ttt.LastMessage = ""
+	ttt = test.NewTestingTB(tt.Name())
 	_, t = td.AssertRequire(ttt, td.ContextConfig{FailureIsFatal: true})
 	t.True(false) // failure
-	test.IsTrue(tt, ttt.LastMessage != "")
+	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 }
 
