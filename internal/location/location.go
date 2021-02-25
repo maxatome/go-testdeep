@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -17,7 +17,8 @@ type Location struct {
 	File      string // File name
 	Func      string // Function name
 	Line      int    // Line number inside file
-	BehindCmp bool   // BehindCmp is true when operator is behind a Cmp* function
+	Inside    string
+	BehindCmp bool // BehindCmp is true when operator is behind a Cmp* function
 }
 
 // GetLocationer is the interface that wraps the basic GetLocation method.
@@ -58,5 +59,5 @@ func (l Location) IsInitialized() bool {
 
 // Implements fmt.Stringer.
 func (l Location) String() string {
-	return fmt.Sprintf("%s at %s:%d", l.Func, l.File, l.Line)
+	return fmt.Sprintf("%s %sat %s:%d", l.Func, l.Inside, l.File, l.Line)
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2019, Maxime Soulé
+// Copyright (c) 2019-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -44,7 +44,7 @@ func TestSetlocation(t *testing.T) {
         	expected: Any(13,
         	              14,
         	              15)
-        [under TestDeep operator Any at types_test.go:23]
+        [under operator Any at types_test.go:23]
 `)
 	} else {
 		t.Error("Cmp returned true!")
@@ -80,7 +80,7 @@ func TestSetlocation(t *testing.T) {
         	expected: Any(13,
         	              14,
         	              15)
-        [under TestDeep operator Any at types_test.go:44]
+        [under operator Any at types_test.go:44]
 `)
 	} else {
 		t.Error("Cmp returned true!")

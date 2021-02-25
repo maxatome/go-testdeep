@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -71,7 +71,7 @@ func TestError(t *testing.T) {
 		`DATA[12].Field: Error message
 	     got: 1
 	expected: 2
-[under TestDeep operator Operator at file.go:23]`)
+[under operator Operator at file.go:23]`)
 
 	err = ctxerr.Error{
 		Context: ctxerr.Context{
@@ -103,8 +103,8 @@ func TestError(t *testing.T) {
 Originates from following error:
 	DATA[12].Field<All#1/2>: Origin error message
 		42
-	[under TestDeep operator SubOperator at file2.go:236]
-[under TestDeep operator Operator at file.go:23]`)
+	[under operator SubOperator at file2.go:236]
+[under operator Operator at file.go:23]`)
 	test.EqualStr(t, err.GotString(), "")
 	test.EqualStr(t, err.ExpectedString(), "")
 	test.EqualStr(t, err.SummaryString(), "666")
@@ -152,10 +152,10 @@ Originates from following error:
 Originates from following error:
 	DATA[12].Field<All#1/2>: Origin error message
 		42
-	[under TestDeep operator SubOperator at file2.go:236]
+	[under operator SubOperator at file2.go:236]
 DATA[13].Field: Error message
 	888
-[under TestDeep operator Operator at file.go:23]`)
+[under operator Operator at file.go:23]`)
 
 	err = ctxerr.Error{
 		Context: ctxerr.Context{Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field")},
@@ -198,11 +198,11 @@ DATA[13].Field: Error message
 Originates from following error:
 	DATA[12].Field<All#1/2>: Origin error message
 		42
-	[under TestDeep operator SubOperator at file2.go:236]
-[under TestDeep operator Operator at file.go:23]
+	[under operator SubOperator at file2.go:236]
+[under operator Operator at file.go:23]
 DATA[13].Field: Error message
 	888
-[under TestDeep operator Operator at file.go:24]`)
+[under operator Operator at file.go:24]`)
 
 	//
 	// ErrTooManyErrors

@@ -36,14 +36,14 @@ import (
 //     t := td.NewT(tt)
 //
 //     // Test reflect.Value contents instead of default field/field
-//     t = t.WithCmpHooks(func (got, expected reflect.Value) {
+//     t = t.WithCmpHooks(func (got, expected reflect.Value) bool {
 //       return td.EqDeeply(got.Interface(), expected.Interface())
 //     })
 //     a, b := 1, 1
 //     t.Cmp(reflect.ValueOf(&a), relect.ValueOf(&b)) // succeeds
 //
 //     // Test reflect.Type correctly instead of default field/field
-//     t = t.WithCmpHooks(func (got, expected reflect.Type) {
+//     t = t.WithCmpHooks(func (got, expected reflect.Type) bool {
 //       return got == expected
 //     })
 //
@@ -55,10 +55,10 @@ import (
 //
 //     // Several hooks can be declared at once
 //     t = t.WithCmpHooks(
-//       func (got, expected reflect.Value) {
+//       func (got, expected reflect.Value) bool {
 //         return td.EqDeeply(got.Interface(), expected.Interface())
 //       },
-//       func (got, expected reflect.Type) {
+//       func (got, expected reflect.Type) bool {
 //         return got == expected
 //       },
 //       (time.Time).Equal,

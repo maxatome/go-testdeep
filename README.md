@@ -122,17 +122,17 @@ func TestMyApi(t *testing.T) {
     CmpJSONBody(td.JSON(`
 // Note that comments are allowed
 {
-  "id":         $id,          // set by the API/DB
-  "name":       "Bob",
-  "age":        42,
-  "created_at": "$createdAt", // set by the API/DB
+  "id":         $id,             // set by the API/DB
+  "name":       "Alice",
+  "age":        Between(40, 45), // ← ④
+  "created_at": "$createdAt",    // set by the API/DB
 }`,
-      td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ④
-      td.Tag("created_at", td.All(                      // ← ⑤
-        td.HasSuffix("Z"),                              // ← ⑥
-        td.Smuggle(func(s string) (time.Time, error) {  // ← ⑦
+      td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ⑤
+      td.Tag("created_at", td.All(                      // ← ⑥
+        td.HasSuffix("Z"),                              // ← ⑦
+        td.Smuggle(func(s string) (time.Time, error) {  // ← ⑧
           return time.Parse(time.RFC3339Nano, s)
-        }, td.Catch(&createdAt, td.Between(testAPI.SentAt(), time.Now()))), // ← ⑧
+        }, td.Catch(&createdAt, td.Between(testAPI.SentAt(), time.Now()))), // ← ⑨
       )),
     ))
   if !testAPI.Failed() {
@@ -145,16 +145,17 @@ func TestMyApi(t *testing.T) {
 2. the POST request with automatic JSON marshalling;
 3. the expected response HTTP status should be `http.StatusCreated`
    and the line just below, the body should match the [`JSON`] operator;
-4. for the `$id` placeholder, [`Catch`] its
+4. some operators can be embedded, like [`Between`] here;
+5. for the `$id` placeholder, [`Catch`] its
    value: put it in `id` variable and check it is [`NotZero`];
-5. for the `$createdAt` placeholder, use the [`All`]
+6. for the `$createdAt` placeholder, use the [`All`]
    operator. It combines several operators like a AND;
-6. check that `$createdAt` date ends with "Z" using
+7. check that `$createdAt` date ends with "Z" using
    [`HasSuffix`]. As we expect a RFC3339
    date, we require it in UTC time zone;
-7. convert `$createdAt` date into a `time.Time` using a custom
+8. convert `$createdAt` date into a `time.Time` using a custom
    function thanks to the [`Smuggle`] operator;
-8. then [`Catch`] the resulting value: put it in
+9. then [`Catch`] the resulting value: put it in
    `createdAt` variable and check it is greater or equal than
    `testAPI.SentAt()` (the time just before the request is handled) and lesser
    or equal than `time.Now()`.
@@ -170,7 +171,7 @@ Example of produced error in case of mismatch:
 
 ## Description
 
-go-testdeep is a go rewrite and adaptation of wonderful
+go-testdeep is historically a go rewrite and adaptation of wonderful
 [Test::Deep perl](https://metacpan.org/pod/Test::Deep).
 
 In golang, comparing data structure is usually done using

@@ -1070,15 +1070,55 @@ func ExampleJSON_placeholders() {
 			td.Tag("name", td.HasSuffix("Foobar"))))
 	fmt.Println("check got with named placeholders:", ok)
 
-	ok = td.Cmp(t, got, td.JSON(`{"age": $^NotZero, "fullname": $^NotEmpty}`))
-	fmt.Println("check got with operator shortcuts:", ok)
-
 	// Output:
 	// check got with numeric placeholders without operators: true
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
+}
+
+func ExampleJSON_embedding() {
+	t := &testing.T{}
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+	}
+
+	ok := td.Cmp(t, got, td.JSON(`{"age": NotZero(), "fullname": NotEmpty()}`))
+	fmt.Println("check got with simple operators:", ok)
+
+	ok = td.Cmp(t, got, td.JSON(`{"age": $^NotZero, "fullname": $^NotEmpty}`))
+	fmt.Println("check got with operator shortcuts:", ok)
+
+	ok = td.Cmp(t, got, td.JSON(`
+{
+  "age":      Between(40, 42, "]]"), // in ]40; 42]
+  "fullname": All(
+    HasPrefix("Bob"),
+    HasSuffix("bar")  // ← comma is optional here
+  )
+}`))
+	fmt.Println("check got with complex operators:", ok)
+
+	ok = td.Cmp(t, got, td.JSON(`
+{
+  "age":      Between(40, 42, "]["), // in ]40; 42[ → 42 excluded
+  "fullname": All(
+    HasPrefix("Bob"),
+    HasSuffix("bar"),
+  )
+}`))
+	fmt.Println("check got with complex operators:", ok)
+
+	// Output:
+	// check got with simple operators: true
 	// check got with operator shortcuts: true
+	// check got with complex operators: true
+	// check got with complex operators: false
 }
 
 func ExampleJSON_file() {

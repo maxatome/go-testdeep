@@ -1,4 +1,4 @@
-// Copyright (c) 2018, 2019, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -958,15 +958,55 @@ func ExampleT_JSON_placeholders() {
 	ok = t.JSON(got, `{"age": $age, "fullname": $name}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar"))})
 	fmt.Println("check got with named placeholders:", ok)
 
-	ok = t.JSON(got, `{"age": $^NotZero, "fullname": $^NotEmpty}`, nil)
-	fmt.Println("check got with operator shortcuts:", ok)
-
 	// Output:
 	// check got with numeric placeholders without operators: true
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
+}
+
+func ExampleT_JSON_embedding() {
+	t := td.NewT(&testing.T{})
+
+	got := &struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}{
+		Fullname: "Bob Foobar",
+		Age:      42,
+	}
+
+	ok := t.JSON(got, `{"age": NotZero(), "fullname": NotEmpty()}`, nil)
+	fmt.Println("check got with simple operators:", ok)
+
+	ok = t.JSON(got, `{"age": $^NotZero, "fullname": $^NotEmpty}`, nil)
+	fmt.Println("check got with operator shortcuts:", ok)
+
+	ok = t.JSON(got, `
+{
+  "age":      Between(40, 42, "]]"), // in ]40; 42]
+  "fullname": All(
+    HasPrefix("Bob"),
+    HasSuffix("bar")  // ← comma is optional here
+  )
+}`, nil)
+	fmt.Println("check got with complex operators:", ok)
+
+	ok = t.JSON(got, `
+{
+  "age":      Between(40, 42, "]["), // in ]40; 42[ → 42 excluded
+  "fullname": All(
+    HasPrefix("Bob"),
+    HasSuffix("bar"),
+  )
+}`, nil)
+	fmt.Println("check got with complex operators:", ok)
+
+	// Output:
+	// check got with simple operators: true
 	// check got with operator shortcuts: true
+	// check got with complex operators: true
+	// check got with complex operators: false
 }
 
 func ExampleT_JSON_file() {

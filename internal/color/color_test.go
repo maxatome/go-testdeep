@@ -171,3 +171,14 @@ func TestTooManyParams(t *testing.T) {
 	test.EqualStr(t, color.TooManyParams("Zzz(PARAM)"),
 		"usage: Zzz(PARAM), too many parameters")
 }
+
+func TestUnBad(t *testing.T) {
+	defer color.SaveState(true)()
+
+	const mesg = "test"
+	s := color.Bad(mesg)
+	if s == mesg {
+		t.Errorf("Bad should produce colored output: %s ≠ %s", s, mesg)
+	}
+	test.EqualStr(t, color.UnBad(s), mesg)
+}
