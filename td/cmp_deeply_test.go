@@ -15,8 +15,6 @@ import (
 )
 
 func TestFormatError(t *testing.T) {
-	ttt := test.NewTestingT()
-
 	err := &ctxerr.Error{
 		Context: newContext(),
 		Message: "test error message",
@@ -28,60 +26,68 @@ func TestFormatError(t *testing.T) {
 	for _, fatal := range []bool{false, true} {
 		//
 		// Without args
+		ttt := test.NewTestingT()
 		formatError(ttt, fatal, err)
-		test.EqualStr(t, ttt.LastMessage, `Failed test
+		test.EqualStr(t, ttt.LastMessage(), `Failed test
 DATA: test error message
 	test error summary`)
 		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		//
 		// With one arg
+		ttt = test.NewTestingT()
 		formatError(ttt, fatal, err, "foo bar!")
-		test.EqualStr(t, ttt.LastMessage, `Failed test 'foo bar!'
+		test.EqualStr(t, ttt.LastMessage(), `Failed test 'foo bar!'
 DATA: test error message
 	test error summary`)
 		test.EqualBool(t, ttt.IsFatal, fatal)
 
+		ttt = test.NewTestingT()
 		formatError(ttt, fatal, err, nonStringName)
-		test.EqualStr(t, ttt.LastMessage, `Failed test 'zip!'
+		test.EqualStr(t, ttt.LastMessage(), `Failed test 'zip!'
 DATA: test error message
 	test error summary`)
 		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		//
 		// With several args & Printf format
+		ttt = test.NewTestingT()
 		formatError(ttt, fatal, err, "hello %d!", 123)
-		test.EqualStr(t, ttt.LastMessage, `Failed test 'hello 123!'
+		test.EqualStr(t, ttt.LastMessage(), `Failed test 'hello 123!'
 DATA: test error message
 	test error summary`)
 		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		//
 		// With several args & Printf format + Flatten
+		ttt = test.NewTestingT()
 		formatError(ttt, fatal, err, "hello %s → %d/%d!", "bob", Flatten([]int{123, 125}))
-		test.EqualStr(t, ttt.LastMessage, `Failed test 'hello bob → 123/125!'
+		test.EqualStr(t, ttt.LastMessage(), `Failed test 'hello bob → 123/125!'
 DATA: test error message
 	test error summary`)
 		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		//
 		// With several args without Printf format
+		ttt = test.NewTestingT()
 		formatError(ttt, fatal, err, "hello ", "world! ", 123)
-		test.EqualStr(t, ttt.LastMessage, `Failed test 'hello world! 123'
+		test.EqualStr(t, ttt.LastMessage(), `Failed test 'hello world! 123'
 DATA: test error message
 	test error summary`)
 		test.EqualBool(t, ttt.IsFatal, fatal)
 
 		//
 		// With several args without Printf format + Flatten
+		ttt = test.NewTestingT()
 		formatError(ttt, fatal, err, "hello ", "world! ", Flatten([]int{123, 125}))
-		test.EqualStr(t, ttt.LastMessage, `Failed test 'hello world! 123 125'
+		test.EqualStr(t, ttt.LastMessage(), `Failed test 'hello world! 123 125'
 DATA: test error message
 	test error summary`)
 		test.EqualBool(t, ttt.IsFatal, fatal)
 
+		ttt = test.NewTestingT()
 		formatError(ttt, fatal, err, nonStringName, "hello ", "world! ", 123)
-		test.EqualStr(t, ttt.LastMessage, `Failed test 'zip!hello world! 123'
+		test.EqualStr(t, ttt.LastMessage(), `Failed test 'zip!hello world! 123'
 DATA: test error message
 	test error summary`)
 		test.EqualBool(t, ttt.IsFatal, fatal)
