@@ -9,17 +9,19 @@ package td
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"reflect"
-	"runtime"
-	"sort"
-	"strings"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/flat"
+	"github.com/maxatome/go-testdeep/internal/trace"
 )
+
+func init() {
+	trace.Init()
+	trace.IgnorePackage(1)
+}
 
 func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{}) {
 	t.Helper()
@@ -42,32 +44,22 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	err.Append(&buf, "")
 
 	// Stask trace
-	fmt.Println("===============================================")
-	env := os.Environ()
-	sort.Strings(env)
-	for _, e := range env {
-		fmt.Printf("- %s\n", e)
-	}
-	fmt.Println("===============================================")
-	var trace []string
-	var pc [40]uintptr
-	if num := runtime.Callers(0, pc[:]); num > 0 {
-		frames := runtime.CallersFrames(pc[:num])
-		for {
-			frame, more := frames.Next()
-			if frame.Function == "testing.tRunner" {
-				break
-			}
-			trace = append(trace,
-				fmt.Sprintf("\t%s:%d %s", frame.File, frame.Line, frame.Function))
-			if !more {
-				break
+	if trace := trace.Retrieve(2, "testing.tRunner"); len(trace) > 1 {
+		buf.WriteString("\nThis is how we got here:\n")
+
+		fnMaxLen := 0
+		for _, level := range trace {
+			if len(level.Func) > fnMaxLen {
+				fnMaxLen = len(level.Func)
 			}
 		}
-	}
-	if len(trace) > 1 {
-		buf.WriteString("\nTrace:\n")
-		buf.WriteString(strings.Join(trace, "\n"))
+		fnMaxLen += 2
+
+		nl := ""
+		for _, level := range trace {
+			fmt.Fprintf(&buf, "%s\t%-*s %s", nl, fnMaxLen, level.Func+"()", level.FileLine)
+			nl = "\n"
+		}
 	}
 
 	if isFatal {
