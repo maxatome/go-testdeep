@@ -12,13 +12,13 @@ import (
 	"strings"
 )
 
-// Location record a place in a source file.
+// Location records a place in a source file.
 type Location struct {
 	File      string // File name
 	Func      string // Function name
 	Line      int    // Line number inside file
-	Inside    string
-	BehindCmp bool // BehindCmp is true when operator is behind a Cmp* function
+	Inside    string // Inside is used when Location is inside something else
+	BehindCmp bool   // BehindCmp is true when operator is behind a Cmp* function
 }
 
 // GetLocationer is the interface that wraps the basic GetLocation method.

@@ -8,13 +8,20 @@ package td
 
 import (
 	"bytes"
+	"fmt"
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/flat"
+	"github.com/maxatome/go-testdeep/internal/trace"
 )
+
+func init() {
+	trace.Init()
+	trace.IgnorePackage()
+}
 
 func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{}) {
 	t.Helper()
@@ -35,6 +42,25 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	color.AppendTestNameOff(&buf)
 
 	err.Append(&buf, "")
+
+	// Stask trace
+	if trace := trace.Retrieve(0, "testing.tRunner"); len(trace) > 1 {
+		buf.WriteString("\nThis is how we got here:\n")
+
+		fnMaxLen := 0
+		for _, level := range trace {
+			if len(level.Func) > fnMaxLen {
+				fnMaxLen = len(level.Func)
+			}
+		}
+		fnMaxLen += 2
+
+		nl := ""
+		for _, level := range trace {
+			fmt.Fprintf(&buf, "%s\t%-*s %s", nl, fnMaxLen, level.Func+"()", level.FileLine)
+			nl = "\n"
+		}
+	}
 
 	if isFatal {
 		t.Fatal(buf.String())
