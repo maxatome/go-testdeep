@@ -8,7 +8,12 @@ package td
 
 import (
 	"bytes"
+	"fmt"
+	"os"
 	"reflect"
+	"runtime"
+	"sort"
+	"strings"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/color"
@@ -35,6 +40,35 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	color.AppendTestNameOff(&buf)
 
 	err.Append(&buf, "")
+
+	// Stask trace
+	fmt.Println("===============================================")
+	env := os.Environ()
+	sort.Strings(env)
+	for _, e := range env {
+		fmt.Printf("- %s\n", e)
+	}
+	fmt.Println("===============================================")
+	var trace []string
+	var pc [40]uintptr
+	if num := runtime.Callers(0, pc[:]); num > 0 {
+		frames := runtime.CallersFrames(pc[:num])
+		for {
+			frame, more := frames.Next()
+			if frame.Function == "testing.tRunner" {
+				break
+			}
+			trace = append(trace,
+				fmt.Sprintf("\t%s:%d %s", frame.File, frame.Line, frame.Function))
+			if !more {
+				break
+			}
+		}
+	}
+	if len(trace) > 1 {
+		buf.WriteString("\nTrace:\n")
+		buf.WriteString(strings.Join(trace, "\n"))
+	}
 
 	if isFatal {
 		t.Fatal(buf.String())
