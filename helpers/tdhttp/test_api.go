@@ -1,4 +1,4 @@
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020, 2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -20,6 +20,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/maxatome/go-testdeep/helpers/tdhttp/internal"
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
@@ -39,6 +40,10 @@ type TestAPI struct {
 	statusFailed bool
 	headerFailed bool
 	bodyFailed   bool
+
+	// autoDumpResponse dumps the received response when a test fails.
+	autoDumpResponse bool
+	responseDumped   bool
 }
 
 // NewTestAPI creates a TestAPI that can be used to test routes of the
@@ -60,11 +65,66 @@ type TestAPI struct {
 //   ta.Get("/ping").
 //     CmpStatus(200).
 //     CmpBody("pong")
+//
+// Note that "tb" can be a *testing.T as well as a *td.T.
 func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 	return &TestAPI{
 		t:       td.NewT(tb),
 		handler: handler,
 	}
+}
+
+// With creates a new *TestAPI instance copied from "t", but resetting
+// the testing.TB instance the tests are based on to "tb". The
+// returned instance is independent from "t", sharing only the same
+// handler.
+//
+// It is typically used when the *TestAPI instance is "reused" in
+// sub-tests, as in:
+//
+//   func TestMyAPI(t *testing.T) {
+//     ta := tdhttp.NewTestAPI(t, MyAPIHandler())
+//
+//     ta.Get("/test").CmpStatus(200)
+//
+//     t.Run("errors", func (t *testing.T) {
+//       ta := ta.With(t)
+//
+//       ta.Get("/test?bad=1").CmpStatus(400)
+//       ta.Get("/test?bad=buzz").CmpStatus(400)
+//     }
+//
+//     ta.Get("/next").CmpStatus(200)
+//   }
+//
+// Note that "tb" can be a *testing.T as well as a *td.T.
+//
+// See Run method for another way to handle subtests.
+func (t *TestAPI) With(tb testing.TB) *TestAPI {
+	return &TestAPI{
+		t:                td.NewT(tb),
+		handler:          t.handler,
+		autoDumpResponse: t.autoDumpResponse,
+	}
+}
+
+// T returns the internal instance of *td.T.
+func (t *TestAPI) T() *td.T {
+	return t.t
+}
+
+// Run runs "f" as a subtest of t called "name".
+func (t *TestAPI) Run(name string, f func(t *TestAPI)) bool {
+	return t.t.Run(name, func(tdt *td.T) {
+		f(NewTestAPI(tdt, t.handler))
+	})
+}
+
+// AutoDumpResponse allows to dump the HTTP response when the first
+// error is encountered after a request.
+func (t *TestAPI) AutoDumpResponse() *TestAPI {
+	t.autoDumpResponse = true
+	return t
 }
 
 // Name allows to name the series of tests that follow. This name is
@@ -91,6 +151,7 @@ func (t *TestAPI) Request(req *http.Request) *TestAPI {
 	t.headerFailed = false
 	t.bodyFailed = false
 	t.sentAt = time.Now().Truncate(0)
+	t.responseDumped = false
 
 	t.handler.ServeHTTP(t.response, req)
 
@@ -321,9 +382,17 @@ func (t *TestAPI) CmpStatus(expectedStatus interface{}) *TestAPI {
 
 	t.t.Helper()
 
-	t.statusFailed = !t.checkRequestSent() ||
-		!t.t.RootName("Response.Status").
-			CmpLax(t.response.Code, expectedStatus, t.name+"status code should match")
+	if !t.checkRequestSent() {
+		t.statusFailed = true
+		return t
+	}
+
+	t.statusFailed = !t.t.RootName("Response.Status").
+		CmpLax(t.response.Code, expectedStatus, t.name+"status code should match")
+
+	if t.statusFailed && t.autoDumpResponse {
+		t.dumpResponse()
+	}
 
 	return t
 }
@@ -343,7 +412,7 @@ func (t *TestAPI) CmpStatus(expectedStatus interface{}) *TestAPI {
 //
 //   ta.CmpHeader(td.SuperMapOf(
 //     http.Header{
-//       "X-Account": "Bob",
+//       "X-Account": []string{"Bob"},
 //     },
 //     td.MapEntries{
 //       "X-Token": td.Re(`^[a-z0-9-]{32}\z`),
@@ -368,9 +437,17 @@ func (t *TestAPI) CmpHeader(expectedHeader interface{}) *TestAPI {
 
 	t.t.Helper()
 
-	t.headerFailed = !t.checkRequestSent() ||
-		!t.t.RootName("Response.Header").
-			CmpLax(t.response.Header(), expectedHeader, t.name+"header should match")
+	if !t.checkRequestSent() {
+		t.headerFailed = true
+		return t
+	}
+
+	t.headerFailed = !t.t.RootName("Response.Header").
+		CmpLax(t.response.Header(), expectedHeader, t.name+"header should match")
+
+	if t.headerFailed && t.autoDumpResponse {
+		t.dumpResponse()
+	}
 
 	return t
 }
@@ -427,6 +504,9 @@ func (t *TestAPI) cmpMarshaledBody(
 			},
 			t.name+"body should not be empty") {
 		t.bodyFailed = true
+		if t.autoDumpResponse {
+			t.dumpResponse()
+		}
 		return t
 	}
 
@@ -485,9 +565,8 @@ func (t *TestAPI) cmpMarshaledBody(
 		t.bodyFailed = true
 	}
 
-	if showRawBody {
-		tt.Logf("Raw received body: %s",
-			tdutil.FormatString(t.response.Body.String()))
+	if showRawBody || (t.bodyFailed && t.autoDumpResponse) {
+		t.dumpResponse()
 	}
 
 	return t
@@ -593,11 +672,10 @@ func (t *TestAPI) CmpBody(expectedBody interface{}) *TestAPI {
 //     CmpStatus(http.StatusCreated).
 //     CmpJSONBody(td.JSON(`
 //   {
-//     "id":   $1,
+//     "id":   NotZero(),
 //     "name": "Bob",
 //     "age":  26
-//   }`,
-//       td.NotZero()))
+//   }`))
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpJSONBody(expectedBody interface{}) *TestAPI {
@@ -657,9 +735,28 @@ func (t *TestAPI) NoBody() *TestAPI {
 
 	t.t.Helper()
 
-	t.bodyFailed = !t.checkRequestSent() ||
-		!t.t.RootName("Response.Body").
-			Empty(t.response.Body.Bytes(), "body should be empty")
+	if !t.checkRequestSent() {
+		t.bodyFailed = true
+		return t
+	}
+
+	t.bodyFailed = !t.t.RootName("Response.Body").
+		Code(len(t.response.Body.Bytes()) == 0,
+			func(empty bool) error {
+				if empty {
+					return nil
+				}
+				return &ctxerr.Error{
+					Message:  "%% is not empty",
+					Got:      types.RawString("not empty"),
+					Expected: types.RawString("empty"),
+				}
+			},
+			"body should be empty")
+
+	if t.bodyFailed { // Systematically dump response, no AutoDumpResponse needed
+		t.dumpResponse()
+	}
 
 	return t
 }
@@ -730,6 +827,43 @@ func (t *TestAPI) Or(fn interface{}) *TestAPI {
 	}
 
 	return t
+}
+
+// OrDumpResponse dumps the response if at least one previous test failed.
+//
+//   ta := tdhttp.NewTestAPI(t, handler)
+//
+//   ta.Get("/foo").
+//     CmpStatus(200).
+//     OrDumpResponse(). // if status check failed, dumps the response
+//     CmpBody("bar")    // if it fails, the response is not dumped
+//
+//   ta.Get("/foo").
+//     CmpStatus(200).
+//     CmpBody("bar").
+//     OrDumpResponse() // dumps the response if status and/or body checks fail
+//
+// See AutoDumpResponse method to automatize this dump.
+func (t *TestAPI) OrDumpResponse() *TestAPI {
+	if t.Failed() {
+		t.dumpResponse()
+	}
+	return t
+}
+
+func (t *TestAPI) dumpResponse() {
+	if t.responseDumped {
+		return
+	}
+
+	t.t.Helper()
+	if t.response != nil {
+		t.responseDumped = true
+		internal.DumpResponse(t.t, t.response.Result())
+		return
+	}
+
+	t.t.Logf("No response received yet")
 }
 
 // Anchor returns a typed value allowing to anchor the TestDeep
