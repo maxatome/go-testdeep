@@ -234,17 +234,17 @@ func TestEqualInterface(t *testing.T) {
 
 	checkError(t, []interface{}{1, nil}, []interface{}{1, "foo"},
 		expectedError{
-			Message:  mustBe("nil interface"),
+			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
 			Got:      mustBe("nil"),
-			Expected: mustBe("not nil"),
+			Expected: mustBe(`"foo"`),
 		})
 
 	checkError(t, []interface{}{1, "foo"}, []interface{}{1, nil},
 		expectedError{
-			Message:  mustBe("nil interface"),
+			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
-			Got:      mustBe("not nil"),
+			Got:      mustBe(`"foo"`),
 			Expected: mustBe("nil"),
 		})
 
