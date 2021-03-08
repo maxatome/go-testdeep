@@ -7,6 +7,7 @@
 package td_test
 
 import (
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"os"
@@ -115,6 +116,32 @@ func TestJSON(t *testing.T) {
 		td.JSON([]byte(`{"name":"$name","age":$1,"gender":"male"}`),
 			td.Tag("age", td.Between(40, 45)),
 			td.Tag("name", td.Re(`^Bob`))))
+
+	//
+	// nil++
+	checkOK(t, nil, td.JSON(`$1`, nil))
+	checkOK(t, (*int)(nil), td.JSON(`$1`, td.Nil()))
+
+	checkOK(t, nil, td.JSON(`$x`, td.Tag("x", nil)))
+	checkOK(t, (*int)(nil), td.JSON(`$x`, td.Tag("x", nil)))
+
+	checkOK(t, json.RawMessage(`{"foo": null}`), td.JSON(`{"foo": null}`))
+
+	checkOK(t,
+		json.RawMessage(`{"foo": null}`),
+		td.JSON(`{"foo": $1}`, nil))
+
+	checkOK(t,
+		json.RawMessage(`{"foo": null}`),
+		td.JSON(`{"foo": $1}`, td.Nil()))
+
+	checkOK(t,
+		json.RawMessage(`{"foo": null}`),
+		td.JSON(`{"foo": $x}`, td.Tag("x", nil)))
+
+	checkOK(t,
+		json.RawMessage(`{"foo": null}`),
+		td.JSON(`{"foo": $x}`, td.Tag("x", td.Nil())))
 
 	//
 	// Loading a file
