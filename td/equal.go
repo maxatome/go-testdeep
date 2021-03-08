@@ -116,17 +116,17 @@ func isCustomEqual(a, b reflect.Value) (bool, bool) {
 }
 
 func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxerr.Error) {
+	// "got" must not implement testDeeper
+	if got.IsValid() && got.Type().Implements(testDeeper) {
+		panic(color.Bad("Found a TestDeep operator in got param, " +
+			"can only use it in expected one!"))
+	}
+
 	if !got.IsValid() || !expected.IsValid() {
 		if got.IsValid() == expected.IsValid() {
 			return
 		}
 		return nilHandler(ctx, got, expected)
-	}
-
-	// "got" must not implement testDeeper
-	if got.Type().Implements(testDeeper) {
-		panic(color.Bad("Found a TestDeep operator in got param, " +
-			"can only use it in expected one!"))
 	}
 
 	// Check if a Smuggle hook matches got type
@@ -308,19 +308,6 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		return
 
 	case reflect.Interface:
-		if got.IsNil() || expected.IsNil() {
-			if got.IsNil() == expected.IsNil() {
-				return
-			}
-			if ctx.BooleanError {
-				return ctxerr.BooleanError
-			}
-			return ctx.CollectError(&ctxerr.Error{
-				Message:  "nil interface",
-				Got:      isNilStr(got.IsNil()),
-				Expected: isNilStr(expected.IsNil()),
-			})
-		}
 		return deepValueEqual(ctx, got.Elem(), expected.Elem())
 
 	case reflect.Ptr:
