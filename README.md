@@ -28,10 +28,16 @@ go-testdeep
 
 ## Latest news
 
+- 2021/03/09: [v1.9.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.9.0)
+with many new features, among:
+  - new [`tdsuite` helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdsuite),
+  - [`JSON`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#JSON), [`SubJSONOf`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubJSONOf) and [`SuperJSONOf`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperJSONOf) now accept almost all operators embedded directly in JSON,
+  - when a `Cmp` failure occurs outside the root of a test function, a trace of all successive function calls is displayed,
+  - [`tdhttp.TestAPI`](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#TestAPI) gains several methods,
+  - and [more…](https://github.com/maxatome/go-testdeep/releases/tag/v1.9.0)
 - 2020/12/17: [v1.8.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.8.0);
 - 2020/07/19: [v1.7.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.7.0);
 - 2020/05/31: [v1.6.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.6.0);
-- 2020/05/17: [v1.5.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.5.0);
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
