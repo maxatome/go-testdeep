@@ -15,8 +15,13 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/trace"
 	"github.com/maxatome/go-testdeep/td"
 )
+
+func init() {
+	trace.IgnorePackage()
+}
 
 // Response is used by Cmp*Response functions to make the HTTP
 // response match easier. Each field, can be a TestDeep operator as
