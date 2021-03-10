@@ -169,10 +169,15 @@ func TestZRetrieve(t *testing.T) {
 	levels := a("testing.tRunner")
 	if !test.EqualInt(t, len(levels), 5) ||
 		!test.EqualStr(t, levels[0].Func, "d") ||
+		!test.EqualStr(t, levels[0].Package, "github.com/maxatome/go-testdeep/internal/trace_test") ||
 		!test.EqualStr(t, levels[1].Func, "c") ||
+		!test.EqualStr(t, levels[1].Package, "github.com/maxatome/go-testdeep/internal/trace_test") ||
 		!test.EqualStr(t, levels[2].Func, "b") ||
+		!test.EqualStr(t, levels[2].Package, "github.com/maxatome/go-testdeep/internal/trace_test") ||
 		!test.EqualStr(t, levels[3].Func, "a") ||
-		!test.EqualStr(t, levels[4].Func, "TestZRetrieve") {
+		!test.EqualStr(t, levels[3].Package, "github.com/maxatome/go-testdeep/internal/trace_test") ||
+		!test.EqualStr(t, levels[4].Func, "TestZRetrieve") ||
+		!test.EqualStr(t, levels[4].Package, "github.com/maxatome/go-testdeep/internal/trace_test") {
 		t.Errorf("%#v", levels)
 	}
 
@@ -228,22 +233,26 @@ func TestZRetrieveFake(t *testing.T) {
 			{Function: "", File: "/foo/bar/src/zip/zip.go", Line: 23},
 			{Function: "", File: "/foo/bar/pkg/mod/zzz/zzz.go", Line: 42},
 			{Function: "", File: "/bar/foo.go", Line: 34},
-			{Function: "MyFunc"},
+			{Function: "pkg.MyFunc"},
 			{},
 		},
 	}
 	levels := trace.Retrieve(0, "pipo")
 	if test.EqualInt(t, len(levels), 4) {
 		test.EqualStr(t, levels[0].Func, "<unknown function>")
+		test.EqualStr(t, levels[0].Package, "")
 		test.EqualStr(t, levels[0].FileLine, "zip/zip.go:23")
 
 		test.EqualStr(t, levels[1].Func, "<unknown function>")
+		test.EqualStr(t, levels[1].Package, "")
 		test.EqualStr(t, levels[1].FileLine, "zzz/zzz.go:42")
 
 		test.EqualStr(t, levels[2].Func, "<unknown function>")
+		test.EqualStr(t, levels[2].Package, "")
 		test.EqualStr(t, levels[2].FileLine, "/bar/foo.go:34")
 
 		test.EqualStr(t, levels[3].Func, "MyFunc")
+		test.EqualStr(t, levels[3].Package, "pkg")
 		test.EqualStr(t, levels[3].FileLine, "")
 	} else {
 		t.Errorf("%#v", levels)
