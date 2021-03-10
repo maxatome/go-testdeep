@@ -23,6 +23,7 @@ var (
 
 // Level represents a level when retrieving a trace.
 type Level struct {
+	Package  string
 	Func     string
 	FileLine string
 }
@@ -199,7 +200,10 @@ func Retrieve(skip int, endFunction string) []Level {
 				}
 			}
 
-			level := Level{Func: fn}
+			level := Level{
+				Package: pkg,
+				Func:    fn,
+			}
 			if file != "" {
 				level.FileLine = fmt.Sprintf("%s:%d", file, frame.Line)
 			}

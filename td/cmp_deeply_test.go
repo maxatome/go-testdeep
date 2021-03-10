@@ -8,11 +8,95 @@ package td
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/trace"
 )
+
+func TestStripTrace(t *testing.T) {
+	check := func(got, expected []trace.Level) {
+		got = stripTrace(got)
+		if !reflect.DeepEqual(got, expected) {
+			t.Helper()
+			t.Errorf("\n     got: %#v\nexpected: %#v", got, expected)
+		}
+	}
+
+	check(nil, nil)
+
+	tce := []trace.Level{
+		{Package: "test", Func: "A"},
+	}
+	check(tce, tce)
+
+	tce = []trace.Level{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "TestSimple"},
+	}
+	check(tce, tce)
+
+	tce = []trace.Level{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "TestSubtestTd.func1"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).Run.func1"},
+	}
+	check(tce, tce[:2])
+
+	tce = []trace.Level{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "TestSubtestTd.func1"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).RunAssertRequire.func1"},
+	}
+	check(tce, tce[:2])
+
+	tce = []trace.Level{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "TestSubtestTd.func1"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdhttp", Func: "(*TestAPI).Run.func1"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).Run.func1"},
+	}
+	check(tce, tce[:2])
+
+	tce = []trace.Level{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "Suite.TestSuite"},
+		{Package: "reflect", Func: "Value.call"},
+		{Package: "reflect", Func: "Value.Call"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func2"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).Run.func1"},
+	}
+	check(tce, tce[:2])
+
+	tce = []trace.Level{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "Suite.TestSuite"},
+		{Package: "reflect", Func: "Value.call"},
+		{Package: "reflect", Func: "Value.Call"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func1"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).RunAssertRequire.func1"},
+	}
+	check(tce, tce[:2])
+
+	// Improbable cases
+	tce = []trace.Level{
+		{Package: "reflect", Func: "Value.call"},
+		{Package: "reflect", Func: "Value.Call"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func1"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).RunAssertRequire.func1"},
+	}
+	check(tce, nil)
+
+	tce = []trace.Level{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "Suite.TestSuite"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func1"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).RunAssertRequire.func1"},
+	}
+	check(tce, tce[:2])
+}
 
 func TestFormatError(t *testing.T) {
 	err := &ctxerr.Error{
