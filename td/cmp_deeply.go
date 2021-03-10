@@ -25,64 +25,92 @@ func init() {
 }
 
 // stripTrace removes go-testdeep useless calls in a trace returned by
-// trace.Retrieve().
-//
-// Remove (*T).Run() call:
-//    A()                   zz.go:20
-//    TestSubtestTd.func1() zz_test.go:24
-//   →(*T).Run.func1()      github.com/maxatome/go-testdeep@xxx/td/t_struct.go:554
-//
-// Remove (*T).RunAssertRequire() call:
-//    A()                           zz.go:20
-//    TestSubtestTd.func1()         zz_test.go:24
-//   →(*T).RunAssertRequire.func1() github.com/maxatome/go-testdeep@xxx/td/t_struct.go:554
-//
-// Remove (*TestAPI).Run() call:
-//    Subtest.func1() zz.go:20
-//   →(*TestAPI).Run.func1() github.com/maxatome/go-testdeep@xxx/helpers/tdhttp/test_api.go:119
-//   ⇒(*T).Run.func1()       github.com/maxatome/go-testdeep@xxx/td/t_struct.go:554
-//
-// Remove github.com/maxatome/go-testdeep/helpers/tdsuite calls:
-//    A()               zz.go:20
-//    Suite.TestSuite() zz_test.go:35
-//   →Value.call()      $GOROOT/src/reflect/value.go:476
-//   →Value.Call()      $GOROOT/src/reflect/value.go:337
-//   →run.func2()       github.com/maxatome/go-testdeep@xxx/helpers/tdsuite/suite.go:301
-//   ⇒(*T).Run.func1()  github.com/maxatome/go-testdeep@xxx/td/t_struct.go:554
-func stripTrace(tce []trace.Level) []trace.Level {
-	if len(tce) <= 1 {
-		return tce
+// trace.Retrieve() to make it clearer for the reader.
+func stripTrace(s trace.Stack) trace.Stack {
+	if len(s) <= 1 {
+		return s
 	}
+
+	const (
+		tdPkg      = "github.com/maxatome/go-testdeep/td"
+		tdhttpPkg  = "github.com/maxatome/go-testdeep/helpers/tdhttp"
+		tdsuitePkg = "github.com/maxatome/go-testdeep/helpers/tdsuite"
+	)
 
 	// Remove useless possible (*T).Run() or (*T).RunAssertRequire() first call
-	first := tce[len(tce)-1]
-	if first.Package != "github.com/maxatome/go-testdeep/td" ||
-		(first.Func != "(*T).Run.func1" &&
-			first.Func != "(*T).RunAssertRequire.func1") {
-		return tce
-	}
-
-	tce = tce[:len(tce)-1]
-	first = tce[len(tce)-1]
-
-	// Remove useless tdhttp (*TestAPI).Run() call
-	if first.Package == "github.com/maxatome/go-testdeep/helpers/tdhttp" &&
-		first.Func == "(*TestAPI).Run.func1" {
-		return tce[:len(tce)-1]
-	}
-
-	// Remove useless tdsuite calls
-	if first.Package != "github.com/maxatome/go-testdeep/helpers/tdsuite" ||
-		!strings.HasPrefix(first.Func, "run.func") {
-		return tce
-	}
-
-	for i := len(tce) - 2; i >= 1; i-- {
-		if tce[i].Package != "reflect" {
-			return tce[:i+1]
+	if s.Match(-1, tdPkg, "(*T).Run.func1", "(*T).RunAssertRequire.func1") {
+		// Remove useless tdhttp (*TestAPI).Run() call
+		//
+		// ✓ xxx      Subtest.func1()
+		// ✗ …/tdhttp (*TestAPI).Run.func1
+		// ✗ …/td     (*T).Run.func1()
+		if s.Match(-2, tdhttpPkg, "(*TestAPI).Run.func1") {
+			return s[:len(s)-2]
 		}
+
+		// Remove useless tdsuite calls
+		//
+		// ✓ xxx       Suite.TestSuite
+		// ✗ reflect   Value.call
+		// ✗ reflect   Value.Call
+		// ✗ …/tdsuite run.func2
+		// ✗ …/td      (*T).Run.func1() or (*T).RunAssertRequire.func1()
+		//
+		// or for PostTest
+		// ✓ xxx       Suite.PostTest
+		// ✗ …/tdsuite run.func2.1
+		// ✗ …/tdsuite run.func2
+		// ✗ …/td      (*T).Run.func1() or (*T).RunAssertRequire.func1()
+		if s.Match(-2, tdsuitePkg, "run.func*") {
+			// PostTest
+			if s.Match(-3, tdsuitePkg, "run.func*") &&
+				len(s) > 4 &&
+				strings.HasSuffix(s[len(s)-4].Func, ".PostTest") {
+				return s[:len(s)-3]
+			}
+
+			for i := len(s) - 3; i >= 1; i-- {
+				if !s.Match(i, "reflect") {
+					return s[:i+1]
+				}
+			}
+			return nil
+		}
+
+		return s[:len(s)-1]
 	}
-	return nil
+
+	// Remove testing.Cleanup() stack
+	//
+	// ✓ xxx     TestCleanup.func2
+	// ✗ testing (*common).Cleanup.func1
+	// ✗ testing (*common).runCleanup
+	// ✗ testing tRunner.func2
+	if s.Match(-1, "testing", "tRunner.func*") &&
+		s.Match(-2, "testing", "(*common).runCleanup") &&
+		s.Match(-3, "testing", "(*common).Cleanup.func1") {
+		return s[:len(s)-3]
+	}
+
+	// Remove tdsuite pre-Setup/BetweenTests/Destroy stack
+	//
+	// ✓ xxx       Suite.Destroy
+	// ✗ …/tdsuite run.func1
+	// ✗ …/tdsuite run
+	// ✗ …/tdsuite Run
+	// ✓ xxx       TestSuiteDestroy
+	if !s.Match(-1, tdsuitePkg) &&
+		s.Match(-2, tdsuitePkg, "Run") {
+		for i := len(s) - 3; i >= 0; i-- {
+			if !s.Match(i, tdsuitePkg) {
+				s[i+1] = s[len(s)-1]
+				return s[:i+2]
+			}
+		}
+		return s[:1]
+	}
+
+	return s
 }
 
 func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{}) {
@@ -106,11 +134,11 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	err.Append(&buf, "")
 
 	// Stask trace
-	if tce := stripTrace(trace.Retrieve(0, "testing.tRunner")); len(tce) > 1 {
+	if s := stripTrace(trace.Retrieve(0, "testing.tRunner")); len(s) > 1 {
 		buf.WriteString("\nThis is how we got here:\n")
 
 		fnMaxLen := 0
-		for _, level := range tce {
+		for _, level := range s {
 			if len(level.Func) > fnMaxLen {
 				fnMaxLen = len(level.Func)
 			}
@@ -118,7 +146,7 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 		fnMaxLen += 2
 
 		nl := ""
-		for _, level := range tce {
+		for _, level := range s {
 			fmt.Fprintf(&buf, "%s\t%-*s %s", nl, fnMaxLen, level.Func+"()", level.FileLine)
 			nl = "\n"
 		}

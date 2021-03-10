@@ -14,9 +14,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/trace"
-
 	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/trace"
 )
 
 func TestIgnorePackage(t *testing.T) {

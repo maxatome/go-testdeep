@@ -17,7 +17,7 @@ import (
 )
 
 func TestStripTrace(t *testing.T) {
-	check := func(got, expected []trace.Level) {
+	check := func(got, expected trace.Stack) {
 		got = stripTrace(got)
 		if !reflect.DeepEqual(got, expected) {
 			t.Helper()
@@ -27,40 +27,62 @@ func TestStripTrace(t *testing.T) {
 
 	check(nil, nil)
 
-	tce := []trace.Level{
+	s := trace.Stack{
 		{Package: "test", Func: "A"},
 	}
-	check(tce, tce)
+	check(s, s)
 
-	tce = []trace.Level{
+	s = trace.Stack{
 		{Package: "test", Func: "A"},
 		{Package: "test", Func: "TestSimple"},
 	}
-	check(tce, tce)
+	check(s, s)
 
-	tce = []trace.Level{
+	// inside testing.Cleanup() call
+	s = trace.Stack{
+		{Package: "test", Func: "TestCleanup.func2"},
+		{Package: "testing", Func: "(*common).Cleanup.func1"},
+		{Package: "testing", Func: "(*common).runCleanup"},
+		{Package: "testing", Func: "tRunner.func2"},
+	}
+	check(s, s[:1])
+
+	//
+	// td
+	//
+	// td.(*T).Run() call
+	s = trace.Stack{
 		{Package: "test", Func: "A"},
 		{Package: "test", Func: "TestSubtestTd.func1"},
 		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).Run.func1"},
 	}
-	check(tce, tce[:2])
+	check(s, s[:2])
 
-	tce = []trace.Level{
+	// td.(*T).RunAssertRequire() call
+	s = trace.Stack{
 		{Package: "test", Func: "A"},
 		{Package: "test", Func: "TestSubtestTd.func1"},
 		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).RunAssertRequire.func1"},
 	}
-	check(tce, tce[:2])
+	check(s, s[:2])
 
-	tce = []trace.Level{
+	//
+	// tdhttp
+	//
+	// tdhttp.(*TestAPI).Run() call
+	s = trace.Stack{
 		{Package: "test", Func: "A"},
 		{Package: "test", Func: "TestSubtestTd.func1"},
 		{Package: "github.com/maxatome/go-testdeep/helpers/tdhttp", Func: "(*TestAPI).Run.func1"},
 		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).Run.func1"},
 	}
-	check(tce, tce[:2])
+	check(s, s[:2])
 
-	tce = []trace.Level{
+	//
+	// tdsuite
+	//
+	// tdsuite.Run() call → TestSuite(*td.T)
+	s = trace.Stack{
 		{Package: "test", Func: "A"},
 		{Package: "test", Func: "Suite.TestSuite"},
 		{Package: "reflect", Func: "Value.call"},
@@ -68,9 +90,10 @@ func TestStripTrace(t *testing.T) {
 		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func2"},
 		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).Run.func1"},
 	}
-	check(tce, tce[:2])
+	check(s, s[:2])
 
-	tce = []trace.Level{
+	// tdsuite.Run() call → TestSuite(assert, require *td.T)
+	s = trace.Stack{
 		{Package: "test", Func: "A"},
 		{Package: "test", Func: "Suite.TestSuite"},
 		{Package: "reflect", Func: "Value.call"},
@@ -78,24 +101,95 @@ func TestStripTrace(t *testing.T) {
 		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func1"},
 		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).RunAssertRequire.func1"},
 	}
-	check(tce, tce[:2])
+	check(s, s[:2])
+
+	// tdsuite.Run() call → Suite.Setup()
+	s = trace.Stack{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "Suite.Setup"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "Run"},
+		{Package: "test", Func: "TestSuiteSetup"},
+	}
+	check(s, append(s[:2:2], s[4]))
+
+	// tdsuite.Run() call → Suite.PreTest()
+	s = trace.Stack{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "Suite.PreTest"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func2"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).Run.func1"},
+	}
+	check(s, s[:2])
+
+	// tdsuite.Run() call → Suite.PostTest()
+	s = trace.Stack{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "Suite.PostTest"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func2.1"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func2"},
+		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).Run.func1"},
+	}
+	check(s, s[:2])
+
+	// tdsuite.Run() call → Suite.BetweenTests()
+	s = trace.Stack{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "Suite.BetweenTests"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "Run"},
+		{Package: "test", Func: "TestSuiteBetweenTests"},
+	}
+	check(s, append(s[:2:2], s[4]))
+
+	// tdsuite.Run() call → Suite.Destroy()
+	s = trace.Stack{
+		{Package: "test", Func: "A"},
+		{Package: "test", Func: "Suite.Destroy"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func1"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "Run"},
+		{Package: "test", Func: "TestSuiteDestroy"},
+	}
+	check(s, append(s[:2:2], s[5]))
 
 	// Improbable cases
-	tce = []trace.Level{
+	s = trace.Stack{
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "Run"},
+		{Package: "test", Func: "TestSuiteDestroy"},
+	}
+	check(s, s[:1])
+
+	s = trace.Stack{
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "y"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "x"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "Run"},
+		{Package: "test", Func: "TestSuiteDestroy"},
+	}
+	check(s, s[:1])
+
+	s = trace.Stack{
+		{Package: "test", Func: "Suite.TestXxx"},
+		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "Run"},
+		{Package: "test", Func: "TestSuiteDestroy"},
+	}
+	check(s, append(s[:1:1], s[2]))
+
+	s = trace.Stack{
 		{Package: "reflect", Func: "Value.call"},
 		{Package: "reflect", Func: "Value.Call"},
 		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func1"},
 		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).RunAssertRequire.func1"},
 	}
-	check(tce, nil)
+	check(s, nil)
 
-	tce = []trace.Level{
+	s = trace.Stack{
 		{Package: "test", Func: "A"},
 		{Package: "test", Func: "Suite.TestSuite"},
 		{Package: "github.com/maxatome/go-testdeep/helpers/tdsuite", Func: "run.func1"},
 		{Package: "github.com/maxatome/go-testdeep/td", Func: "(*T).RunAssertRequire.func1"},
 	}
-	check(tce, tce[:2])
+	check(s, s[:2])
 }
 
 func TestFormatError(t *testing.T) {
