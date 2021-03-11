@@ -20,6 +20,7 @@ go-testdeep
 - [Available operators](https://go-testdeep.zetta.rocks/operators/)
 - [Helpers](#helpers)
   - [`tdhttp` or HTTP API testing helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)
+  - [`tdsuite` or testing suite helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdsuite)
   - [`tdutil` aka the helper of helpers](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil)
 - [See also](#see-also)
 - [License](#license)
@@ -105,7 +106,8 @@ import (
   "testing"
   "time"
 
-  "github.com/maxatome/go-testdeep/helpers/tdhttp"
+  "github.com/maxatome/go-testdeep/helpers/
+  "
   "github.com/maxatome/go-testdeep/td"
 )
 
@@ -226,6 +228,18 @@ See [`tdhttp`] documentation for details or
 [FAQ](https://go-testdeep.zetta.rocks/faq/#what-about-testing-the-response-using-my-api) for an
 example of use.
 
+### `tdsuite` or testing suite helper
+
+The package `github.com/maxatome/go-testdeep/helpers/tdsuite` adds tests
+suite feature to go-testdeep in a non-intrusive way, but easily and powerfully.
+
+A tests suite is a set of tests run sequentially that share some data.
+
+Some hooks can be set to be automatically called before the suite is run,
+before, after and/or between each test, and at the end of the suite. 
+
+See [`tdsuite`] documentation for details.
+
 ### `tdutil` aka the helper of helpers
 
 The package `github.com/maxatome/go-testdeep/helpers/tdutil` allows to
@@ -273,6 +287,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`Cmp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cmp
 
 [`tdhttp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp
+[`tdsuite`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdsuite
 
 [`BeLax` config flag]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig
 [`error`]: https://pkg.go.dev/builtin/#error
