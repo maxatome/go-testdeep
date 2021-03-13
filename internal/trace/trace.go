@@ -21,13 +21,6 @@ var (
 	goModDir  string
 )
 
-// Level represents a level when retrieving a trace.
-type Level struct {
-	Package  string
-	Func     string
-	FileLine string
-}
-
 func getPackage(skip ...int) string {
 	sk := 2
 	if len(skip) > 0 {
@@ -149,8 +142,8 @@ var CallersFrames = func(callers []uintptr) Frames {
 }
 
 // Retrieve retrieves a trace and returns it.
-func Retrieve(skip int, endFunction string) []Level {
-	var trace []Level
+func Retrieve(skip int, endFunction string) Stack {
+	var trace Stack
 	var pc [40]uintptr
 	if num := runtime.Callers(skip+2, pc[:]); num > 0 {
 		checkIgnore := true
