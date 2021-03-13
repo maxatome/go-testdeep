@@ -104,19 +104,19 @@ func TestWithCmpHooks(tt *testing.T) {
 	})
 
 	for _, tst := range []struct {
-		name     string
-		cmp      interface{}
-		panicked string
+		name  string
+		cmp   interface{}
+		fatal string
 	}{
 		{
-			name:     "not a function",
-			cmp:      "Booh",
-			panicked: "WithCmpHooks expects a function, not a string",
+			name:  "not a function",
+			cmp:   "Booh",
+			fatal: "WithCmpHooks expects a function, not a string",
 		},
 		{
-			name:     "wrong signature",
-			cmp:      func(a []int, b ...int) bool { return false },
-			panicked: "WithCmpHooks expects: func (T, T) bool|error not ",
+			name:  "wrong signature",
+			cmp:   func(a []int, b ...int) bool { return false },
+			fatal: "WithCmpHooks expects: func (T, T) bool|error not ",
 		},
 	} {
 		tt.Run("panic: "+tst.name, func(tt *testing.T) {
@@ -124,7 +124,11 @@ func TestWithCmpHooks(tt *testing.T) {
 
 			t := td.NewT(ttt)
 
-			test.CheckPanic(tt, func() { _ = t.WithCmpHooks(tst.cmp) }, tst.panicked)
+			fatalMesg := ttt.CatchFatal(func() { t.WithCmpHooks(tst.cmp) })
+			test.IsTrue(tt, ttt.IsFatal)
+			if !strings.Contains(fatalMesg, tst.fatal) {
+				tt.Errorf(`<%s> does not contain %q`, fatalMesg, tst.fatal)
+			}
 		})
 	}
 }
@@ -187,19 +191,19 @@ func TestWithSmuggleHooks(tt *testing.T) {
 	})
 
 	for _, tst := range []struct {
-		name     string
-		cmp      interface{}
-		panicked string
+		name  string
+		cmp   interface{}
+		fatal string
 	}{
 		{
-			name:     "not a function",
-			cmp:      "Booh",
-			panicked: "WithSmuggleHooks expects a function, not a string",
+			name:  "not a function",
+			cmp:   "Booh",
+			fatal: "WithSmuggleHooks expects a function, not a string",
 		},
 		{
-			name:     "wrong signature",
-			cmp:      func(a []int, b ...int) bool { return false },
-			panicked: "WithSmuggleHooks expects: func (A) (B[, error]) not ",
+			name:  "wrong signature",
+			cmp:   func(a []int, b ...int) bool { return false },
+			fatal: "WithSmuggleHooks expects: func (A) (B[, error]) not ",
 		},
 	} {
 		tt.Run("panic: "+tst.name, func(tt *testing.T) {
@@ -207,8 +211,11 @@ func TestWithSmuggleHooks(tt *testing.T) {
 
 			t := td.NewT(ttt)
 
-			test.CheckPanic(tt,
-				func() { _ = t.WithSmuggleHooks(tst.cmp) }, tst.panicked)
+			fatalMesg := ttt.CatchFatal(func() { t.WithSmuggleHooks(tst.cmp) })
+			test.IsTrue(tt, ttt.IsFatal)
+			if !strings.Contains(fatalMesg, tst.fatal) {
+				tt.Errorf(`<%s> does not contain %q`, fatalMesg, tst.fatal)
+			}
 		})
 	}
 }

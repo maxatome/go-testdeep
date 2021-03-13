@@ -11,6 +11,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -43,18 +44,21 @@ var _ TestDeep = &tdPtr{}
 // pointer on the returned value (if non-nil of course).
 func Ptr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
-	if vval.IsValid() {
-		p := tdPtr{
-			tdSmugglerBase: newSmugglerBase(val),
-		}
-
-		if !p.isTestDeeper {
-			p.expectedValue = reflect.New(vval.Type())
-			p.expectedValue.Elem().Set(vval)
-		}
-		return &p
+	if !vval.IsValid() {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage("Ptr(NON_NIL_VALUE)", val, 1, true))
 	}
-	panic(color.BadUsage("Ptr(NON_NIL_VALUE)", val, 1, true))
+
+	p := tdPtr{
+		tdSmugglerBase: newSmugglerBase(val),
+	}
+
+	if !p.isTestDeeper {
+		p.expectedValue = reflect.New(vval.Type())
+		p.expectedValue.Elem().Set(vval)
+	}
+	return &p
 }
 
 func (p *tdPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -131,21 +135,24 @@ var _ TestDeep = &tdPPtr{}
 // non-nil of course).
 func PPtr(val interface{}) TestDeep {
 	vval := reflect.ValueOf(val)
-	if vval.IsValid() {
-		p := tdPPtr{
-			tdSmugglerBase: newSmugglerBase(val),
-		}
-
-		if !p.isTestDeeper {
-			pVval := reflect.New(vval.Type())
-			pVval.Elem().Set(vval)
-
-			p.expectedValue = reflect.New(pVval.Type())
-			p.expectedValue.Elem().Set(pVval)
-		}
-		return &p
+	if !vval.IsValid() {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage("PPtr(NON_NIL_VALUE)", val, 1, true))
 	}
-	panic(color.BadUsage("PPtr(NON_NIL_VALUE)", val, 1, true))
+
+	p := tdPPtr{
+		tdSmugglerBase: newSmugglerBase(val),
+	}
+
+	if !p.isTestDeeper {
+		pVval := reflect.New(vval.Type())
+		pVval.Elem().Set(vval)
+
+		p.expectedValue = reflect.New(pVval.Type())
+		p.expectedValue.Elem().Set(pVval)
+	}
+	return &p
 }
 
 func (p *tdPPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

@@ -775,7 +775,7 @@ func (t *TestAPI) NoBody() *TestAPI {
 //       See net/http/httptest for details.
 //       If no response has been received yet, resp is nil.
 //
-// If "fn" type is not one of these types, it panics.
+// If "fn" type is not one of these types, it calls t.T().Fatal().
 func (t *TestAPI) Or(fn interface{}) *TestAPI {
 	t.t.Helper()
 	switch fn := fn.(type) {
@@ -821,7 +821,7 @@ func (t *TestAPI) Or(fn interface{}) *TestAPI {
 		}
 
 	default:
-		panic(color.BadUsage(
+		t.t.Fatal(color.BadUsage(
 			"Or(func([*td.T,]string) | func([*td.T,][]byte) | func(*td.T,*httptest.ResponseRecorder))",
 			fn, 1, true))
 	}

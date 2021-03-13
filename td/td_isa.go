@@ -11,6 +11,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 )
 
 type tdIsa struct {
@@ -51,7 +52,9 @@ var _ TestDeep = &tdIsa{}
 func Isa(model interface{}) TestDeep {
 	modelType := reflect.TypeOf(model)
 	if modelType == nil {
-		panic(color.Bad("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example"))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example"))
 	}
 
 	return &tdIsa{

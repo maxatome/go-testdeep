@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestT(t *testing.T) {
@@ -25,6 +26,37 @@ func TestT(t *testing.T) {
 	buf := mockT.LogBuf()
 	if !strings.HasSuffix(buf, "Hey this is a log message!\n") {
 		t.Errorf(`LogBuf does not work as expected: "%s"`, buf)
+	}
+}
+
+func TestFailNow(t *testing.T) {
+	mockT := tdutil.NewT("hey!")
+
+	test.IsFalse(t, mockT.CatchFailNow(func() {}))
+
+	test.IsTrue(t, mockT.CatchFailNow(func() { mockT.FailNow() }))
+	test.IsTrue(t, mockT.CatchFailNow(func() { mockT.Fatal("Ouch!") }))
+	test.IsTrue(t, mockT.CatchFailNow(func() { mockT.Fatalf("Ouch!") }))
+
+	// No FailNow() but panic()
+	var (
+		panicked, failNowOccurred bool
+		panicParam                interface{}
+	)
+	func() {
+		defer func() { panicParam = recover() }()
+
+		panicked = true
+		failNowOccurred = mockT.CatchFailNow(func() { panic("Boom!") })
+		panicked = false
+	}()
+
+	test.IsFalse(t, failNowOccurred)
+	if test.IsTrue(t, panicked) {
+		panicStr, ok := panicParam.(string)
+		if test.IsTrue(t, ok) {
+			test.EqualStr(t, panicStr, "Boom!")
+		}
 	}
 }
 

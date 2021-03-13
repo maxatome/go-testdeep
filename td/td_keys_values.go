@@ -12,6 +12,7 @@ import (
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -62,10 +63,12 @@ var _ TestDeep = &tdKeys{}
 //   td.Cmp(t, got, td.Keys(td.Bag("c", "a", "b"))) // succeeds
 func Keys(val interface{}) TestDeep {
 	k := tdKeys{}
-	if k.initKVBase(val) {
-		return &k
+	if !k.initKVBase(val) {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage("Keys(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
 	}
-	panic(color.BadUsage("Keys(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
+	return &k
 }
 
 func (k *tdKeys) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
@@ -121,10 +124,12 @@ var _ TestDeep = &tdValues{}
 //   td.Cmp(t, got, td.Values(td.Bag("c", "a", "b"))) // succeeds
 func Values(val interface{}) TestDeep {
 	v := tdValues{}
-	if v.initKVBase(val) {
-		return &v
+	if !v.initKVBase(val) {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage("Values(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
 	}
-	panic(color.BadUsage("Values(TESTDEEP_OPERATOR|SLICE)", val, 1, true))
+	return &v
 }
 
 func (v *tdValues) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

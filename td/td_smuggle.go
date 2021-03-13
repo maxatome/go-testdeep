@@ -17,6 +17,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -462,7 +463,9 @@ func Smuggle(fn, expectedValue interface{}) TestDeep {
 	case reflect.String:
 		fn, err := buildFieldsPathFn(vfn.String())
 		if err != nil {
-			panic(color.Bad("%s: %s", usage, err))
+			f := dark.GetFatalizer()
+			f.Helper()
+			dark.Fatal(f, color.Bad("%s: %s", usage, err))
 		}
 		vfn = reflect.ValueOf(fn)
 
@@ -470,12 +473,16 @@ func Smuggle(fn, expectedValue interface{}) TestDeep {
 		// nothing to check
 
 	default:
-		panic(color.BadUsage(usage, fn, 1, true))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage(usage, fn, 1, true))
 	}
 
 	fnType := vfn.Type()
 	if fnType.IsVariadic() || fnType.NumIn() != 1 {
-		panic(color.Bad(usage + ": FUNC must take only one non-variadic argument"))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad(usage+": FUNC must take only one non-variadic argument"))
 	}
 
 	switch fnType.NumOut() {
@@ -507,8 +514,11 @@ func Smuggle(fn, expectedValue interface{}) TestDeep {
 		return &s
 	}
 
-	panic(color.Bad(
+	f := dark.GetFatalizer()
+	f.Helper()
+	dark.Fatal(f, color.Bad(
 		": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"))
+	return nil // never reached
 }
 
 func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {

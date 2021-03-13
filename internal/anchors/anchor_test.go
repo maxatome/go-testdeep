@@ -32,10 +32,12 @@ func TestBuildResolveAnchor(t *testing.T) {
 
 	checkResolveAnchor := func(t *testing.T, val interface{}, opName string) {
 		t.Helper()
-		v := i.AddAnchor(reflect.TypeOf(val), reflect.ValueOf(opName))
-		op, found := i.ResolveAnchor(v)
-		test.IsTrue(t, found)
-		test.EqualStr(t, op.String(), opName)
+		v, err := i.AddAnchor(reflect.TypeOf(val), reflect.ValueOf(opName))
+		if test.NoError(t, err) {
+			op, found := i.ResolveAnchor(v)
+			test.IsTrue(t, found)
+			test.EqualStr(t, op.String(), opName)
+		}
 	}
 
 	t.Run("AddAnchor basic types", func(t *testing.T) {
@@ -102,14 +104,18 @@ func TestBuildResolveAnchor(t *testing.T) {
 		checkResolveAnchor(t, time.Time{}, "time.Time{}")
 
 		// AddAnchor for unknown type
-		test.CheckPanic(t, func() {
-			i.AddAnchor(reflect.TypeOf(func() {}), reflect.ValueOf(123))
-		}, "func kind is not supported as an anchor")
+		_, err = i.AddAnchor(reflect.TypeOf(func() {}), reflect.ValueOf(123))
+		if test.Error(t, err) {
+			test.EqualStr(t, err.Error(), "func kind is not supported as an anchor")
+		}
 
 		// AddAnchor for unknown struct type
-		test.CheckPanic(t, func() {
-			i.AddAnchor(reflect.TypeOf(struct{}{}), reflect.ValueOf(123))
-		}, "struct {} struct type is not supported as an anchor. Try AddAnchorableStructType")
+		_, err = i.AddAnchor(reflect.TypeOf(struct{}{}), reflect.ValueOf(123))
+		if test.Error(t, err) {
+			test.EqualStr(t,
+				err.Error(),
+				"struct {} struct type is not supported as an anchor. Try AddAnchorableStructType")
+		}
 
 		// Struct not comparable
 		type notComparable struct{ s []int }
@@ -146,7 +152,10 @@ func TestBuildResolveAnchor(t *testing.T) {
 	})
 
 	t.Run("ResetAnchors", func(t *testing.T) {
-		v := i.AddAnchor(reflect.TypeOf(12), reflect.ValueOf("zip"))
+		v, err := i.AddAnchor(reflect.TypeOf(12), reflect.ValueOf("zip"))
+		if !test.NoError(t, err) {
+			return
+		}
 
 		op, found := i.ResolveAnchor(v)
 		test.IsTrue(t, found)
@@ -164,7 +173,10 @@ func TestBuildResolveAnchor(t *testing.T) {
 		test.IsFalse(t, found)
 
 		i.SetAnchorsPersist(false)
-		v = i.AddAnchor(reflect.TypeOf(12), reflect.ValueOf("xxx"))
+		v, err = i.AddAnchor(reflect.TypeOf(12), reflect.ValueOf("xxx"))
+		if !test.NoError(t, err) {
+			return
+		}
 
 		op, found = i.ResolveAnchor(v)
 		test.IsTrue(t, found)

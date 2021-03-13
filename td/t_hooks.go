@@ -68,14 +68,15 @@ import (
 // There is no way to add or remove hooks of an existing *T instance,
 // only create a new one with this method or WithSmuggleHooks to add some.
 //
-// WithCmpHooks panics if an item of "fns" is not a function or if its
-// signature does not match the expected ones.
+// WithCmpHooks calls t.Fatal if an item of "fns" is not a function or
+// if its signature does not match the expected ones.
 func (t *T) WithCmpHooks(fns ...interface{}) *T {
 	t = t.copyWithHooks()
 
 	err := t.Config.hooks.AddCmpHooks(fns)
 	if err != nil {
-		panic(color.Bad("WithCmpHooks " + err.Error()))
+		t.Helper()
+		t.Fatal(color.Bad("WithCmpHooks " + err.Error()))
 	}
 
 	return t
@@ -131,14 +132,15 @@ func (t *T) WithCmpHooks(fns ...interface{}) *T {
 // There is no way to add or remove hooks of an existing *T instance,
 // only create a new one with this method or WithCmpHooks to add some.
 //
-// WithSmuggleHooks panics if an item of "fns" is not a function or if its
-// signature does not match the expected ones.
+// WithSmuggleHooks calls t.Fatal if an item of "fns" is not a
+// function or if its signature does not match the expected ones.
 func (t *T) WithSmuggleHooks(fns ...interface{}) *T {
 	t = t.copyWithHooks()
 
 	err := t.Config.hooks.AddSmuggleHooks(fns)
 	if err != nil {
-		panic(color.Bad("WithSmuggleHooks " + err.Error()))
+		t.Helper()
+		t.Fatal(color.Bad("WithSmuggleHooks " + err.Error()))
 	}
 
 	return t

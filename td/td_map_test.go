@@ -9,6 +9,7 @@ package td_test
 import (
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -307,42 +308,42 @@ func TestMap(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Map("test", nil) }, "usage: Map(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t, func() { td.Map("test", nil) }, "usage: Map(")
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SuperMapOf("test", nil) },
 		"usage: SuperMapOf(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SubMapOf("test", nil) },
 		"usage: SubMapOf(")
 
 	num := 12
-	test.CheckPanic(t, func() { td.Map(&num, nil) }, "usage: Map(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t, func() { td.Map(&num, nil) }, "usage: Map(")
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SuperMapOf(&num, nil) },
 		"usage: SuperMapOf(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SubMapOf(&num, nil) },
 		"usage: SubMapOf(")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Map(&MyMap{}, td.MapEntries{1: 2}) },
 		"Map(): expected key 1 type mismatch: int != model key type (string)")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SuperMapOf(&MyMap{}, td.MapEntries{1: 2}) },
 		"SuperMapOf(): expected key 1 type mismatch: int != model key type (string)")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SubMapOf(&MyMap{}, td.MapEntries{1: 2}) },
 		"SubMapOf(): expected key 1 type mismatch: int != model key type (string)")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Map(&MyMap{}, td.MapEntries{"foo": nil}) },
 		`Map(): expected key "foo" value cannot be nil as entries value type is int`)
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Map(&MyMap{}, td.MapEntries{"foo": uint16(2)}) },
 		`Map(): expected key "foo" value type mismatch: uint16 != model key type (int)`)
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Map(&MyMap{"foo": 1}, td.MapEntries{"foo": 1}) },
 		`Map(): "foo" entry exists in both model & expectedEntries`)
 

@@ -142,7 +142,7 @@ func TestRun(t *testing.T) {
 
 	t.Run("ErrNil", func(t *testing.T) {
 		tb := test.NewTestingTB("TestNil")
-		tdsuite.Run(tb, nil)
+		tb.CatchFatal(func() { tdsuite.Run(tb, nil) })
 		td.CmpTrue(t, tb.IsFatal)
 		td.Cmp(t, tb.LastMessage(), "Run(): suite parameter cannot be nil")
 	})
@@ -150,7 +150,7 @@ func TestRun(t *testing.T) {
 	t.Run("ErrNone", func(t *testing.T) {
 		suite := ErrNone{}
 		tb := test.NewTestingTB("TestErrNone")
-		tdsuite.Run(tb, suite)
+		tb.CatchFatal(func() { tdsuite.Run(tb, suite) })
 		td.CmpTrue(t, tb.IsFatal)
 		td.Cmp(t, tb.LastMessage(), "Run(): no test methods found for type tdsuite_test.ErrNone")
 	})
@@ -158,7 +158,7 @@ func TestRun(t *testing.T) {
 	t.Run("ErrOut1", func(t *testing.T) {
 		suite := ErrOut1{}
 		tb := test.NewTestingTB("TestErrOut1")
-		tdsuite.Run(tb, suite)
+		tb.CatchFatal(func() { tdsuite.Run(tb, suite) })
 		td.CmpTrue(t, tb.IsFatal)
 		td.Cmp(t, tb.LastMessage(), "Run(): method tdsuite_test.ErrOut1.Test returns int value. Only bool or error are allowed")
 	})
@@ -166,7 +166,7 @@ func TestRun(t *testing.T) {
 	t.Run("ErrOut2a", func(t *testing.T) {
 		suite := ErrOut2a{}
 		tb := test.NewTestingTB("TestErrOut2a")
-		tdsuite.Run(tb, suite)
+		tb.CatchFatal(func() { tdsuite.Run(tb, suite) })
 		td.CmpTrue(t, tb.IsFatal)
 		td.Cmp(t, tb.LastMessage(), "Run(): method tdsuite_test.ErrOut2a.Test returns (bool, int) values. Only (bool, error) is allowed")
 	})
@@ -174,7 +174,7 @@ func TestRun(t *testing.T) {
 	t.Run("ErrOut2b", func(t *testing.T) {
 		suite := ErrOut2b{}
 		tb := test.NewTestingTB("TestErrOut2b")
-		tdsuite.Run(tb, suite)
+		tb.CatchFatal(func() { tdsuite.Run(tb, suite) })
 		td.CmpTrue(t, tb.IsFatal)
 		td.Cmp(t, tb.LastMessage(), "Run(): method tdsuite_test.ErrOut2b.Test returns (int, error) values. Only (bool, error) is allowed")
 	})
@@ -182,7 +182,7 @@ func TestRun(t *testing.T) {
 	t.Run("ErrOut", func(t *testing.T) {
 		suite := ErrOut{}
 		tb := test.NewTestingTB("TestErrOut")
-		tdsuite.Run(tb, suite)
+		tb.CatchFatal(func() { tdsuite.Run(tb, suite) })
 		td.CmpTrue(t, tb.IsFatal)
 		td.Cmp(t, tb.LastMessage(), "Run(): method tdsuite_test.ErrOut.Test returns 3 values. Only 0, 1 (bool or error) or 2 (bool, error) values are allowed")
 	})

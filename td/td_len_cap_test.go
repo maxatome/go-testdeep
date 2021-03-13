@@ -9,6 +9,7 @@ package td_test
 import (
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -63,7 +64,7 @@ func TestLen(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Len(int64(12)) }, "usage: Len(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Len(int64(12)) }, "usage: Len(")
 }
 
 func TestCap(t *testing.T) {
@@ -108,7 +109,7 @@ func TestCap(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Cap(int64(12)) }, "usage: Cap(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Cap(int64(12)) }, "usage: Cap(")
 }
 
 func TestLenCapTypeBehind(t *testing.T) {

@@ -10,6 +10,7 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/color"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/flat"
 )
 
@@ -89,6 +90,9 @@ func Flatten(sliceOrMap interface{}) flat.Slice {
 	case reflect.Slice, reflect.Array, reflect.Map:
 		return flat.Slice{Slice: sliceOrMap}
 	default:
-		panic(color.BadUsage("Flatten(SLICE|ARRAY|MAP)", sliceOrMap, 1, true))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage("Flatten(SLICE|ARRAY|MAP)", sliceOrMap, 1, true))
+		return flat.Slice{} // never reached
 	}
 }

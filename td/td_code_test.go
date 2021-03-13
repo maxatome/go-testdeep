@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -115,45 +116,45 @@ func TestCode(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Code("test") }, "usage: Code")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Code("test") }, "usage: Code")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func() bool { return true })
 	}, "FUNC must take only one non-variadic argument")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(x ...int) bool { return true })
 	}, "FUNC must take only one non-variadic argument")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(a int, b string) bool { return true })
 	}, "FUNC must take only one non-variadic argument")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(n int) (bool, int) { return true, 0 })
 	}, "FUNC must return bool or (bool, string) or error")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(n int) (error, string) { return nil, "" }) // nolint: staticcheck
 	}, "FUNC must return bool or (bool, string) or error")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(n int) (int, string) { return 0, "" })
 	}, "FUNC must return bool or (bool, string) or error")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(n int) (string, bool) { return "", true })
 	}, "FUNC must return bool or (bool, string) or error")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(n int) (bool, string, int) { return true, "", 0 })
 	}, "FUNC must return bool or (bool, string) or error")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(n int) {})
 	}, "FUNC must return bool or (bool, string) or error")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Code(func(n int) int { return 0 })
 	}, "FUNC must return bool or (bool, string) or error")
 

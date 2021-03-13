@@ -8,12 +8,14 @@ package td
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"reflect"
 	"sort"
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -38,7 +40,7 @@ const (
 	arraySuper
 )
 
-func newArray(kind uint, model interface{}, expectedEntries ArrayEntries) *tdArray {
+func newArray(kind uint, model interface{}, expectedEntries ArrayEntries) (*tdArray, error) {
 	vmodel := reflect.ValueOf(model)
 
 	a := tdArray{
@@ -65,15 +67,14 @@ func newArray(kind uint, model interface{}, expectedEntries ArrayEntries) *tdArr
 	switch vk := vmodel.Kind(); {
 	case vk == reflect.Ptr:
 		if !kindIsOK(vmodel.Type().Elem().Kind()) {
-			return nil
+			return nil, nil
 		}
 
 		a.isPtr = true
 
 		if vmodel.IsNil() {
 			a.expectedType = vmodel.Type().Elem()
-			a.populateExpectedEntries(expectedEntries, reflect.Value{})
-			return &a
+			return &a, a.populateExpectedEntries(expectedEntries, reflect.Value{})
 		}
 
 		vmodel = vmodel.Elem()
@@ -81,11 +82,10 @@ func newArray(kind uint, model interface{}, expectedEntries ArrayEntries) *tdArr
 
 	case kindIsOK(vk):
 		a.expectedType = vmodel.Type()
-		a.populateExpectedEntries(expectedEntries, vmodel)
-		return &a
+		return &a, a.populateExpectedEntries(expectedEntries, vmodel)
 	}
 
-	return nil
+	return nil, nil
 }
 
 // summary(Array): compares the contents of an array or a pointer on an array
@@ -112,9 +112,14 @@ func newArray(kind uint, model interface{}, expectedEntries ArrayEntries) *tdArr
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
-	a := newArray(arrayArray, model, expectedEntries)
-	if a == nil {
-		panic(color.BadUsage("Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)", model, 1, true))
+	a, err := newArray(arrayArray, model, expectedEntries)
+	if err != nil || a == nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		if err != nil {
+			dark.Fatal(f, err)
+		}
+		dark.Fatal(f, color.BadUsage("Array(ARRAY|&ARRAY, EXPECTED_ENTRIES)", model, 1, true))
 	}
 	return a
 }
@@ -143,9 +148,14 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
-	a := newArray(arraySlice, model, expectedEntries)
-	if a == nil {
-		panic(color.BadUsage("Slice(SLICE|&SLICE, EXPECTED_ENTRIES)", model, 1, true))
+	a, err := newArray(arraySlice, model, expectedEntries)
+	if err != nil || a == nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		if err != nil {
+			dark.Fatal(f, err)
+		}
+		dark.Fatal(f, color.BadUsage("Slice(SLICE|&SLICE, EXPECTED_ENTRIES)", model, 1, true))
 	}
 	return a
 }
@@ -186,14 +196,19 @@ func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
 //   td.Cmp(t, got, td.SuperSliceOf([5]int{12}, td.ArrayEntries{2: 17}))             // succeeds
 //   td.Cmp(t, &got, td.SuperSliceOf(&[5]int{0, 14}, td.ArrayEntries{2: td.Gt(16)})) // succeeds
 func SuperSliceOf(model interface{}, expectedEntries ArrayEntries) TestDeep {
-	a := newArray(arraySuper, model, expectedEntries)
-	if a == nil {
-		panic(color.BadUsage("SuperSliceOf(ARRAY|&ARRAY|SLICE|&SLICE, EXPECTED_ENTRIES)", model, 1, true))
+	a, err := newArray(arraySuper, model, expectedEntries)
+	if err != nil || a == nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		if err != nil {
+			dark.Fatal(f, err)
+		}
+		dark.Fatal(f, color.BadUsage("SuperSliceOf(ARRAY|&ARRAY|SLICE|&SLICE, EXPECTED_ENTRIES)", model, 1, true))
 	}
 	return a
 }
 
-func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expectedModel reflect.Value) {
+func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expectedModel reflect.Value) error {
 	// Compute highest expected index
 	maxExpectedIdx := -1
 	for index := range expectedEntries {
@@ -208,7 +223,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 		numEntries = a.expectedType.Len()
 
 		if numEntries <= maxExpectedIdx {
-			panic(color.Bad(
+			return errors.New(color.Bad(
 				"array length is %d, so cannot have #%d expected index",
 				numEntries,
 				maxExpectedIdx))
@@ -235,7 +250,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 				reflect.Ptr, reflect.Slice:
 				vexpectedValue = reflect.Zero(elemType) // change to a typed nil
 			default:
-				panic(color.Bad(
+				return errors.New(color.Bad(
 					"expected value of #%d cannot be nil as items type is %s",
 					index,
 					elemType))
@@ -245,7 +260,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !vexpectedValue.Type().AssignableTo(elemType) {
-					panic(color.Bad(
+					return errors.New(color.Bad(
 						"type %s of #%d expected value differs from %s contents (%s)",
 						vexpectedValue.Type(),
 						index,
@@ -277,7 +292,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 				// If non-zero entry, consider it as an error (= 2 expected
 				// values for the same item)
 				if !modelIsZero {
-					panic(color.Bad(
+					return errors.New(color.Bad(
 						"non zero #%d entry in model already exists in expectedEntries",
 						index))
 				}
@@ -296,13 +311,14 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 		}
 	} else if a.expectedType.Kind() == reflect.Slice {
 		sort.Ints(a.onlyIndexes)
-		return // nil slice
+		// nil slice
+		return nil
 	}
 
 	// For SuperSliceOf, we don't want to initialize missing entries
 	if a.onlyIndexes != nil {
 		sort.Ints(a.onlyIndexes)
-		return
+		return nil
 	}
 
 	var index int
@@ -311,7 +327,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 	if array {
 		// Non-nil array => a.expectedEntries already fully initialized
 		if expectedModel.IsValid() {
-			return
+			return nil
 		}
 		// nil array => a.expectedEntries must be initialized from index=0
 		// to numEntries - 1 below
@@ -327,6 +343,7 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 			a.expectedEntries[index] = vzero
 		}
 	}
+	return nil
 }
 
 func (a *tdArray) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

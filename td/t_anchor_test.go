@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -83,19 +84,19 @@ func TestAnchor(tt *testing.T) {
 
 	// Errors
 	tt.Run("errors", func(tt *testing.T) {
-		test.CheckPanic(tt, func() { t.Anchor(nil) },
+		td.Cmp(tt, ttt.CatchFatal(func() { t.Anchor(nil) }),
 			"Cannot anchor a nil TestDeep operator")
 
-		test.CheckPanic(tt, func() { t.Anchor(td.Ignore(), 1, 2) },
-			"usage: Anchor(OPERATOR[, MODEL])")
+		td.Cmp(tt, ttt.CatchFatal(func() { t.Anchor(td.Ignore(), 1, 2) }),
+			"usage: Anchor(OPERATOR[, MODEL]), too many parameters")
 
-		test.CheckPanic(tt, func() { t.Anchor(td.Ignore(), nil) },
+		td.Cmp(tt, ttt.CatchFatal(func() { t.Anchor(td.Ignore(), nil) }),
 			"Untyped nil value is not valid as model for an anchor")
 
-		test.CheckPanic(tt, func() { t.Anchor(td.Between(1, 2), 12.3) },
+		td.Cmp(tt, ttt.CatchFatal(func() { t.Anchor(td.Between(1, 2), 12.3) }),
 			"Operator Between TypeBehind() returned int which differs from model type float64. Omit model or ensure its type is int")
 
-		test.CheckPanic(tt, func() { t.Anchor(td.Ignore()) },
+		td.Cmp(tt, ttt.CatchFatal(func() { t.Anchor(td.Ignore()) }),
 			"Cannot anchor operator Ignore as TypeBehind() returned nil. Use model parameter to specify the type to return")
 	})
 }
@@ -120,7 +121,7 @@ func TestAddAnchorableStructType(tt *testing.T) {
 	op := td.Smuggle((privStruct).Num, int64(42))
 
 	// Without making privStruct anchorable, it does not work
-	test.CheckPanic(tt, func() { t.A(op, privStruct{}) },
+	td.Cmp(tt, ttt.CatchFatal(func() { t.A(op, privStruct{}) }),
 		"td_test.privStruct struct type is not supported as an anchor. Try AddAnchorableStructType")
 
 	// Make privStruct anchorable
@@ -135,7 +136,7 @@ func TestAddAnchorableStructType(tt *testing.T) {
 			}))
 
 	// Error
-	test.CheckPanic(tt, func() { td.AddAnchorableStructType(123) },
+	dark.CheckFatalizerBarrierErr(tt, func() { td.AddAnchorableStructType(123) },
 		"usage: AddAnchorableStructType(func (nextAnchor int) STRUCT_TYPE)")
 }
 

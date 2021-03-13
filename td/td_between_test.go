@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -80,17 +80,17 @@ func TestBetween(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Between([]byte("test"), []byte("test")) },
 		"usage: Between(")
-	test.CheckPanic(t, func() { td.Between(12, "test") },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Between(12, "test") },
 		"Between(FROM, TO): FROM and TO must have the same type: int ≠ string")
-	test.CheckPanic(t, func() { td.Between("test", 12) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Between("test", 12) },
 		"Between(FROM, TO): FROM and TO must have the same type: string ≠ int")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Between(1, 2, td.BoundsInIn, td.BoundsInOut) },
 		"usage: Between(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() {
 			type notTime struct{}
 			td.Between(notTime{}, notTime{})
@@ -310,9 +310,9 @@ func TestN(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.N("test") }, "usage: N(")
-	test.CheckPanic(t, func() { td.N(10, 1, 2) }, "usage: N(")
-	test.CheckPanic(t, func() { td.N(10, "test") },
+	dark.CheckFatalizerBarrierErr(t, func() { td.N("test") }, "usage: N(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.N(10, 1, 2) }, "usage: N(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.N(10, "test") },
 		"N(NUM, TOLERANCE): NUM and TOLERANCE must have the same type: int ≠ string")
 }
 
@@ -417,10 +417,10 @@ func TestLGt(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Gt([]byte("test")) }, "usage: Gt(")
-	test.CheckPanic(t, func() { td.Gte([]byte("test")) }, "usage: Gte(")
-	test.CheckPanic(t, func() { td.Lt([]byte("test")) }, "usage: Lt(")
-	test.CheckPanic(t, func() { td.Lte([]byte("test")) }, "usage: Lte(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Gt([]byte("test")) }, "usage: Gt(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Gte([]byte("test")) }, "usage: Gte(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Lt([]byte("test")) }, "usage: Lt(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Lte([]byte("test")) }, "usage: Lte(")
 }
 
 func TestBetweenTime(t *testing.T) {

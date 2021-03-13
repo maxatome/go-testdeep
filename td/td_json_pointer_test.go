@@ -11,6 +11,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -282,7 +283,7 @@ func TestJSONPointer(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.JSONPointer("x", 1234) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSONPointer("x", 1234) },
 		"JSONPointer(): bad JSON pointer x")
 }
 

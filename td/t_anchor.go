@@ -12,6 +12,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/anchors"
 	"github.com/maxatome/go-testdeep/internal/color"
+	"github.com/maxatome/go-testdeep/internal/dark"
 )
 
 // Anchors are stored globally by testing.TB.Name().
@@ -45,7 +46,9 @@ var allAnchorsMu sync.Mutex
 func AddAnchorableStructType(fn interface{}) {
 	err := anchors.AddAnchorableStructType(fn)
 	if err != nil {
-		panic(color.Bad(err.Error()))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad(err.Error()))
 	}
 }
 
@@ -130,37 +133,46 @@ func AddAnchorableStructType(fn interface{}) {
 // See A method for a shorter synonym of Anchor.
 func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
 	if operator == nil {
-		panic(color.Bad("Cannot anchor a nil TestDeep operator"))
+		t.Helper()
+		t.Fatal(color.Bad("Cannot anchor a nil TestDeep operator"))
 	}
 
 	var typ reflect.Type
 	if len(model) > 0 {
 		if len(model) != 1 {
-			panic(color.TooManyParams("Anchor(OPERATOR[, MODEL])"))
+			t.Helper()
+			t.Fatal(color.TooManyParams("Anchor(OPERATOR[, MODEL])"))
 		}
 		var ok bool
 		typ, ok = model[0].(reflect.Type)
 		if !ok {
 			typ = reflect.TypeOf(model[0])
 			if typ == nil {
-				panic(color.Bad("Untyped nil value is not valid as model for an anchor"))
+				t.Helper()
+				t.Fatal(color.Bad("Untyped nil value is not valid as model for an anchor"))
 			}
 		}
 
 		typeBehind := operator.TypeBehind()
 		if typeBehind != nil && typeBehind != typ {
-			panic(color.Bad("Operator %s TypeBehind() returned %s which differs from model type %s. Omit model or ensure its type is %[2]s",
+			t.Helper()
+			t.Fatal(color.Bad("Operator %s TypeBehind() returned %s which differs from model type %s. Omit model or ensure its type is %[2]s",
 				operator.GetLocation().Func, typeBehind, typ))
 		}
 	} else {
 		typ = operator.TypeBehind()
 		if typ == nil {
-			panic(color.Bad("Cannot anchor operator %s as TypeBehind() returned nil. Use model parameter to specify the type to return",
+			t.Helper()
+			t.Fatal(color.Bad("Cannot anchor operator %s as TypeBehind() returned nil. Use model parameter to specify the type to return",
 				operator.GetLocation().Func))
 		}
 	}
 
-	nvm := t.Config.anchors.AddAnchor(typ, reflect.ValueOf(operator))
+	nvm, err := t.Config.anchors.AddAnchor(typ, reflect.ValueOf(operator))
+	if err != nil {
+		t.Helper()
+		t.Fatal(color.Bad(err.Error()))
+	}
 
 	return nvm.Interface()
 }
@@ -186,6 +198,7 @@ func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
 //     })
 //   }
 func (t *T) A(operator TestDeep, model ...interface{}) interface{} {
+	t.Helper()
 	return t.Anchor(operator, model...)
 }
 

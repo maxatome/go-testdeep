@@ -9,6 +9,7 @@ package td_test
 import (
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -41,11 +42,11 @@ func TestCatch(t *testing.T) {
 
 	//
 	// Bad usages
-	test.CheckPanic(t, func() { td.Catch(12, 28) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Catch(12, 28) },
 		"usage: Catch(NON_NIL_PTR, EXPECTED_VALUE)")
-	test.CheckPanic(t, func() { td.Catch(nil, 28) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Catch(nil, 28) },
 		"usage: Catch(NON_NIL_PTR, EXPECTED_VALUE)")
-	test.CheckPanic(t, func() { td.Catch((*int)(nil), 28) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Catch((*int)(nil), 28) },
 		"usage: Catch(NON_NIL_PTR, EXPECTED_VALUE)")
 
 	//

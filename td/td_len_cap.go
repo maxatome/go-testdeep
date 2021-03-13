@@ -12,6 +12,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -72,10 +73,12 @@ var _ TestDeep = &tdLen{}
 //   td.Cmp(t, gotSlice, td.Len(td.Between(3, 4)))
 func Len(expectedLen interface{}) TestDeep {
 	l := tdLen{}
-	if l.initLenCapBase(expectedLen) {
-		return &l
+	if !l.initLenCapBase(expectedLen) {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage("Len(TESTDEEP_OPERATOR|INT)", expectedLen, 1, true))
 	}
-	panic(color.BadUsage("Len(TESTDEEP_OPERATOR|INT)", expectedLen, 1, true))
+	return &l
 }
 
 func (l *tdLen) String() string {
@@ -135,10 +138,12 @@ var _ TestDeep = &tdCap{}
 //   td.Cmp(t, gotSlice, td.Cap(td.Between(3, 4)))
 func Cap(expectedCap interface{}) TestDeep {
 	c := tdCap{}
-	if c.initLenCapBase(expectedCap) {
-		return &c
+	if !c.initLenCapBase(expectedCap) {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage("Cap(TESTDEEP_OPERATOR|INT)", expectedCap, 1, true))
 	}
-	panic(color.BadUsage("Cap(TESTDEEP_OPERATOR|INT)", expectedCap, 1, true))
+	return &c
 }
 
 func (c *tdCap) String() string {

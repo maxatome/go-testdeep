@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -101,11 +102,41 @@ func TestNewRequest(tt *testing.T) {
 	})
 
 	t.Run("NewRequest header panic", func(t *td.T) {
-		t.CmpPanic(func() { tdhttp.NewRequest("GET", "/path", nil, "H", "V", true) },
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.NewRequest("GET", "/path", nil, "H", "V", true) },
 			"headers... can only contains string and http.Header, not bool (@ headers[2])")
 
-		t.CmpPanic(func() { tdhttp.NewRequest("GET", "/path", nil, "H1", true) },
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.NewRequest("GET", "/path", nil, "H1", true) },
 			`header "H1" should have a string value, not a bool (@ headers[1])`)
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.Get("/path", true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.Head("/path", true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.Post("/path", nil, true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PostForm("/path", nil, true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.Patch("/path", nil, true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.Put("/path", nil, true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.Delete("/path", nil, true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
 	})
 
 	// Get
@@ -225,19 +256,34 @@ func TestNewJSONRequest(tt *testing.T) {
 	})
 
 	t.Run("NewJSONRequest panic", func(t *td.T) {
-		t.CmpPanic(
+		dark.CheckFatalizerBarrierErr(t,
 			func() { tdhttp.NewJSONRequest("GET", "/path", func() {}) },
-			td.HasPrefix("JSON encoding failed: "),
-			"JSON encoding failed")
+			"json: unsupported type: func()")
 
-		t.CmpPanic(
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PostJSON("/path", func() {}) },
+			"json: unsupported type: func()")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PutJSON("/path", func() {}) },
+			"json: unsupported type: func()")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PatchJSON("/path", func() {}) },
+			"json: unsupported type: func()")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.DeleteJSON("/path", func() {}) },
+			"json: unsupported type: func()")
+
+		dark.CheckFatalizerBarrierErr(t,
 			func() { tdhttp.NewJSONRequest("GET", "/path", td.JSONPointer("/a", 0)) },
-			"JSONPointer TestDeep operator cannot be json.Marshal'led")
+			"JSON encoding failed: json: error calling MarshalJSON for type *td.tdJSONPointer: JSONPointer TestDeep operator cannot be json.Marshal'led")
 
 		// Common user mistake
-		t.CmpPanic(
+		dark.CheckFatalizerBarrierErr(t,
 			func() { tdhttp.NewJSONRequest("GET", "/path", td.JSON(`{}`)) },
-			"JSON TestDeep operator cannot be json.Marshal'led, use json.RawMessage() instead")
+			`JSON encoding failed: json: error calling MarshalJSON for type *td.tdJSON: JSON TestDeep operator cannot be json.Marshal'led, use json.RawMessage() instead`)
 	})
 
 	// Post
@@ -319,9 +365,24 @@ func TestNewXMLRequest(tt *testing.T) {
 	})
 
 	t.Run("NewXMLRequest panic", func(t *td.T) {
-		t.CmpPanic(
+		dark.CheckFatalizerBarrierErr(t,
 			func() { tdhttp.NewXMLRequest("GET", "/path", func() {}) },
-			td.NotEmpty(),
+			"XML encoding failed")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PostXML("/path", func() {}) },
+			"XML encoding failed")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PutXML("/path", func() {}) },
+			"XML encoding failed")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PatchXML("/path", func() {}) },
+			"XML encoding failed")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.DeleteXML("/path", func() {}) },
 			"XML encoding failed")
 	})
 

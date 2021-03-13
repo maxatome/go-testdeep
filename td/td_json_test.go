@@ -14,6 +14,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -197,20 +198,20 @@ func TestJSON(t *testing.T) {
 		})
 
 	//
-	// Panics
-	test.CheckPanic(t, func() { td.JSON("uNkNoWnFiLe.json") },
+	// Fatal errors
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON("uNkNoWnFiLe.json") },
 		"JSON(): JSON file uNkNoWnFiLe.json cannot be read: ")
 
-	test.CheckPanic(t, func() { td.JSON(42) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(42) },
 		"usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...), but received int as 1st parameter")
 
-	test.CheckPanic(t, func() { td.JSON(errReader{}) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(errReader{}) },
 		"JSON(): JSON read error: an error occurred")
 
-	test.CheckPanic(t, func() { td.JSON(`pipo`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`pipo`) },
 		"JSON(): JSON unmarshal error: ")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() {
 			td.JSON(`[$foo]`,
 				td.Tag("foo", td.Ignore()),
@@ -218,31 +219,31 @@ func TestJSON(t *testing.T) {
 		},
 		`2 params have the same tag "foo"`)
 
-	test.CheckPanic(t, func() { td.JSON(`[$1]`, func() {}) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[$1]`, func() {}) },
 		"JSON(): param #1 of type func() cannot be JSON marshalled")
 
 	// numeric placeholders
-	test.CheckPanic(t, func() { td.JSON(`[1, "$123bad"]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[1, "$123bad"]`) },
 		`JSON(): JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`)
-	test.CheckPanic(t, func() { td.JSON(`[1, $000]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[1, $000]`) },
 		`JSON(): JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`)
-	test.CheckPanic(t, func() { td.JSON(`[1, $1]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[1, $1]`) },
 		`JSON(): JSON unmarshal error: numeric placeholder "$1", but no params given at line 1:4 (pos 4)`)
-	test.CheckPanic(t, func() { td.JSON(`[1, 2, $3]`, td.Ignore()) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[1, 2, $3]`, td.Ignore()) },
 		`JSON(): JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`)
 
 	// operator shortcut
-	test.CheckPanic(t, func() { td.JSON(`[1, "$^bad%"]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[1, "$^bad%"]`) },
 		`JSON(): JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`)
 	// named placeholders
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.JSON(`[
   1,
   "$bad%"
 ]`)
 	},
 		`JSON(): JSON unmarshal error: bad placeholder "$bad%" at line 3:3 (pos 10)`)
-	test.CheckPanic(t, func() { td.JSON(`[1, $unknown]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[1, $unknown]`) },
 		`JSON(): JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`)
 
 	//
@@ -377,16 +378,16 @@ func TestJSONInside(t *testing.T) {
 		}
 
 		// Bad 3rd parameter
-		test.CheckPanic(t, func() {
+		dark.CheckFatalizerBarrierErr(t, func() {
 			td.JSON(`{
   "val2": Between(1, 2, "<>")
 }`)
 		},
 			`JSON(): JSON unmarshal error: Between() bad 3rd parameter, use "[]", "[[", "]]" or "][" at line 2:10 (pos 12)`)
 
-		test.CheckPanic(t, func() { td.JSON(`{"val2": Between(1)}`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`{"val2": Between(1)}`) },
 			`JSON(): JSON unmarshal error: Between() requires 2 or 3 parameters at line 1:9 (pos 9)`)
-		test.CheckPanic(t, func() { td.JSON(`{"val2": Between(1,2,3,4)}`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`{"val2": Between(1,2,3,4)}`) },
 			`JSON(): JSON unmarshal error: Between() requires 2 or 3 parameters at line 1:9 (pos 9)`)
 	})
 
@@ -397,9 +398,9 @@ func TestJSONInside(t *testing.T) {
 		checkOK(t, got, td.JSON(`{"val": N(2.1)}`))
 		checkOK(t, got, td.JSON(`{"val": N(2, 0.1)}`))
 
-		test.CheckPanic(t, func() { td.JSON(`{"val2": N()}`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`{"val2": N()}`) },
 			`JSON(): JSON unmarshal error: N() requires 1 or 2 parameters at line 1:9 (pos 9)`)
-		test.CheckPanic(t, func() { td.JSON(`{"val2": N(1,2,3)}`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`{"val2": N(1,2,3)}`) },
 			`JSON(): JSON unmarshal error: N() requires 1 or 2 parameters at line 1:9 (pos 9)`)
 	})
 
@@ -411,9 +412,9 @@ func TestJSONInside(t *testing.T) {
 		checkOK(t, got, td.JSON(`{"val": Re("^(\\w+)", ["Foo"])}`))
 		checkOK(t, got, td.JSON(`{"val": Re("^(\\w+)", Bag("Foo"))}`))
 
-		test.CheckPanic(t, func() { td.JSON(`{"val2": Re()}`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`{"val2": Re()}`) },
 			`JSON(): JSON unmarshal error: Re() requires 1 or 2 parameters at line 1:9 (pos 9)`)
-		test.CheckPanic(t, func() { td.JSON(`{"val2": Re(1,2,3)}`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`{"val2": Re(1,2,3)}`) },
 			`JSON(): JSON unmarshal error: Re() requires 1 or 2 parameters at line 1:9 (pos 9)`)
 	})
 
@@ -423,9 +424,9 @@ func TestJSONInside(t *testing.T) {
 
 		checkOK(t, got, td.JSON(`[ SubMapOf({"val1":1, "val2":2, "xxx": "yyy"}) ]`))
 
-		test.CheckPanic(t, func() { td.JSON(`[ SubMapOf() ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ SubMapOf() ]`) },
 			`JSON(): JSON unmarshal error: SubMapOf() requires only one parameter at line 1:2 (pos 2)`)
-		test.CheckPanic(t, func() { td.JSON(`[ SubMapOf(1, 2) ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ SubMapOf(1, 2) ]`) },
 			`JSON(): JSON unmarshal error: SubMapOf() requires only one parameter at line 1:2 (pos 2)`)
 	})
 
@@ -435,39 +436,39 @@ func TestJSONInside(t *testing.T) {
 
 		checkOK(t, got, td.JSON(`[ SuperMapOf({"val1":1}) ]`))
 
-		test.CheckPanic(t, func() { td.JSON(`[ SuperMapOf() ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ SuperMapOf() ]`) },
 			`JSON(): JSON unmarshal error: SuperMapOf() requires only one parameter at line 1:2 (pos 2)`)
-		test.CheckPanic(t, func() { td.JSON(`[ SuperMapOf(1, 2) ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ SuperMapOf(1, 2) ]`) },
 			`JSON(): JSON unmarshal error: SuperMapOf() requires only one parameter at line 1:2 (pos 2)`)
 	})
 
 	// errors
 	t.Run("Errors", func(t *testing.T) {
-		test.CheckPanic(t, func() { td.JSON(`[ UnknownOp() ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ UnknownOp() ]`) },
 			`JSON(): JSON unmarshal error: unknown operator UnknownOp() at line 1:2 (pos 2)`)
 
-		test.CheckPanic(t, func() { td.JSON(`[ Catch() ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ Catch() ]`) },
 			`JSON(): JSON unmarshal error: Catch() is not usable in JSON() at line 1:2 (pos 2)`)
 
-		test.CheckPanic(t, func() { td.JSON(`[ JSON() ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ JSON() ]`) },
 			`JSON(): JSON unmarshal error: JSON() is not usable in JSON(), use literal JSON instead at line 1:2 (pos 2)`)
 
-		test.CheckPanic(t, func() { td.JSON(`[ All() ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ All() ]`) },
 			`JSON(): JSON unmarshal error: All() requires at least one parameter at line 1:2 (pos 2)`)
 
-		test.CheckPanic(t, func() { td.JSON(`[ Empty(12) ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ Empty(12) ]`) },
 			`JSON(): JSON unmarshal error: Empty() requires no parameters at line 1:2 (pos 2)`)
 
-		test.CheckPanic(t, func() { td.JSON(`[ HasPrefix() ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ HasPrefix() ]`) },
 			`JSON(): JSON unmarshal error: HasPrefix() requires only one parameter at line 1:2 (pos 2)`)
 
-		test.CheckPanic(t, func() { td.JSON(`[ JSONPointer(1, 2, 3) ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ JSONPointer(1, 2, 3) ]`) },
 			`JSON(): JSON unmarshal error: JSONPointer() requires 2 parameters at line 1:2 (pos 2)`)
 
-		test.CheckPanic(t, func() { td.JSON(`[ JSONPointer(1, 2) ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ JSONPointer(1, 2) ]`) },
 			`JSON(): JSON unmarshal error: JSONPointer() bad #1 parameter type: string required but float64 received at line 1:2 (pos 2)`)
 
-		test.CheckPanic(t, func() { td.JSON(`[ Re(1) ]`) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.JSON(`[ Re(1) ]`) },
 			`JSON(): JSON unmarshal error: Re() usage: Re(STRING|*regexp.Regexp[, NON_NIL_CAPTURE]), but received float64 as 1st parameter at line 1:2 (pos 2)`)
 	})
 }
@@ -567,26 +568,26 @@ func TestSubJSONOf(t *testing.T) {
 	}
 
 	//
-	// Panics
-	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$123bad"]`) },
+	// Fatal errors
+	dark.CheckFatalizerBarrierErr(t, func() { td.SubJSONOf(`[1, "$123bad"]`) },
 		`SubJSONOf(): JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`)
-	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $000]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SubJSONOf(`[1, $000]`) },
 		`SubJSONOf(): JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`)
-	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $1]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SubJSONOf(`[1, $1]`) },
 		`SubJSONOf(): JSON unmarshal error: numeric placeholder "$1", but no params given at line 1:4 (pos 4)`)
-	test.CheckPanic(t, func() { td.SubJSONOf(`[1, 2, $3]`, td.Ignore()) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SubJSONOf(`[1, 2, $3]`, td.Ignore()) },
 		`SubJSONOf(): JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`)
 
 	// operator shortcut
-	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$^bad%"]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SubJSONOf(`[1, "$^bad%"]`) },
 		`SubJSONOf(): JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`)
 	// named placeholders
-	test.CheckPanic(t, func() { td.SubJSONOf(`[1, "$bad%"]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SubJSONOf(`[1, "$bad%"]`) },
 		`SubJSONOf(): JSON unmarshal error: bad placeholder "$bad%" at line 1:5 (pos 5)`)
-	test.CheckPanic(t, func() { td.SubJSONOf(`[1, $unknown]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SubJSONOf(`[1, $unknown]`) },
 		`SubJSONOf(): JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`)
 
-	test.CheckPanic(t, func() { td.SubJSONOf("null") },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SubJSONOf("null") },
 		"SubJSONOf() only accepts JSON objects {…}")
 
 	//
@@ -712,26 +713,26 @@ func TestSuperJSONOf(t *testing.T) {
 	}
 
 	//
-	// Panics
-	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$123bad"]`) },
+	// Fatal errors
+	dark.CheckFatalizerBarrierErr(t, func() { td.SuperJSONOf(`[1, "$123bad"]`) },
 		`SuperJSONOf(): JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`)
-	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $000]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SuperJSONOf(`[1, $000]`) },
 		`SuperJSONOf(): JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`)
-	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $1]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SuperJSONOf(`[1, $1]`) },
 		`SuperJSONOf(): JSON unmarshal error: numeric placeholder "$1", but no params given at line 1:4 (pos 4)`)
-	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, 2, $3]`, td.Ignore()) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SuperJSONOf(`[1, 2, $3]`, td.Ignore()) },
 		`SuperJSONOf(): JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`)
 
 	// operator shortcut
-	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$^bad%"]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SuperJSONOf(`[1, "$^bad%"]`) },
 		`SuperJSONOf(): JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`)
 	// named placeholders
-	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, "$bad%"]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SuperJSONOf(`[1, "$bad%"]`) },
 		`SuperJSONOf(): JSON unmarshal error: bad placeholder "$bad%" at line 1:5 (pos 5)`)
-	test.CheckPanic(t, func() { td.SuperJSONOf(`[1, $unknown]`) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SuperJSONOf(`[1, $unknown]`) },
 		`SuperJSONOf(): JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`)
 
-	test.CheckPanic(t, func() { td.SuperJSONOf("null") },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SuperJSONOf("null") },
 		"SuperJSONOf() only accepts JSON objects {…}")
 
 	//

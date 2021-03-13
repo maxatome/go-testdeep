@@ -12,6 +12,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 )
 
 type tdDelay struct {
@@ -31,7 +32,9 @@ var _ TestDeep = &tdDelay{}
 // used with helpers. See the example for a very simple use case.
 func Delay(delayed func() TestDeep) TestDeep {
 	if delayed == nil {
-		panic(color.Bad("Delay(DELAYED): DELAYED must be non-nil"))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad("Delay(DELAYED): DELAYED must be non-nil"))
 	}
 	return &tdDelay{
 		base:    newBase(3),

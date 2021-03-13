@@ -697,9 +697,12 @@ func TestOr(t *testing.T) {
 		}
 	})
 
-	td.CmpPanic(t,
-		func() { tdhttp.NewTestAPI(tdutil.NewT("test"), mux).Or(123) },
-		"usage: Or(func([*td.T,]string) | func([*td.T,][]byte) | func(*td.T,*httptest.ResponseRecorder)), but received int as 1st parameter")
+	tt := tdutil.NewT("test")
+	ta := tdhttp.NewTestAPI(tt, mux)
+	if td.CmpTrue(t, tt.CatchFailNow(func() { ta.Or(123) })) {
+		td.CmpContains(t, tt.LogBuf(),
+			"usage: Or(func([*td.T,]string) | func([*td.T,][]byte) | func(*td.T,*httptest.ResponseRecorder)), but received int as 1st parameter")
+	}
 }
 
 func TestRun(t *testing.T) {

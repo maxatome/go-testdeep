@@ -7,6 +7,7 @@
 package td
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"regexp"
@@ -26,8 +27,8 @@ type tdRe struct {
 
 var _ TestDeep = &tdRe{}
 
-func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
-	r = &tdRe{
+func newRe(regIf interface{}, capture ...interface{}) (*tdRe, error) {
+	r := &tdRe{
 		base: newBase(4),
 	}
 
@@ -40,7 +41,7 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 			r.captures = reflect.ValueOf(capture[0])
 		}
 	default:
-		panic(color.TooManyParams(r.location.Func + usage))
+		return nil, errors.New(color.TooManyParams(r.location.Func + usage))
 	}
 
 	switch reg := regIf.(type) {
@@ -49,9 +50,9 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 	case string:
 		r.re = regexp.MustCompile(reg)
 	default:
-		panic(color.BadUsage(r.location.Func+usage, regIf, 1, false))
+		return nil, errors.New(color.BadUsage(r.location.Func+usage, regIf, 1, false))
 	}
-	return
+	return r, nil
 }
 
 // summary(Re): allows to apply a regexp on a string (or convertible),
@@ -77,7 +78,12 @@ func newRe(regIf interface{}, capture ...interface{}) (r *tdRe) {
 //   td.Cmp(t, "John Doe",
 //     td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
 func Re(reg interface{}, capture ...interface{}) TestDeep {
-	r := newRe(reg, capture...)
+	r, err := newRe(reg, capture...)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
 	r.numMatches = 1
 	return r
 }
@@ -104,7 +110,12 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 //   td.Cmp(t, "John Doe",
 //     td.ReAll(`(\w+)(?: |\z)`, td.Bag("Doe", "John"))) // succeeds
 func ReAll(reg, capture interface{}) TestDeep {
-	r := newRe(reg, capture)
+	r, err := newRe(reg, capture)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
 	r.numMatches = -1
 	return r
 }

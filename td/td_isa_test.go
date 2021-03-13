@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -100,7 +101,7 @@ func TestIsa(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Isa(nil) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Isa(nil) },
 		"Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example")
 
 	//

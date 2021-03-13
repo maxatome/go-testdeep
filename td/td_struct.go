@@ -8,6 +8,7 @@ package td
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 	"reflect"
@@ -44,7 +45,7 @@ func (e fieldInfoSlice) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
 // (which can be a TestDeep operator as well as a zero value.)
 type StructFields map[string]interface{}
 
-func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
+func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value, error) {
 	vmodel := reflect.ValueOf(model)
 
 	st := tdStruct{
@@ -63,7 +64,7 @@ func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 
 		if vmodel.IsNil() {
 			st.expectedType = vmodel.Type().Elem()
-			return &st, reflect.Value{}
+			return &st, reflect.Value{}, nil
 		}
 
 		vmodel = vmodel.Elem()
@@ -71,19 +72,23 @@ func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 
 	case reflect.Struct:
 		st.expectedType = vmodel.Type()
-		return &st, vmodel
+		return &st, vmodel, nil
 	}
 
 	var s string
 	if strict {
 		s = "S"
 	}
-	panic(color.BadUsage(s+"Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)",
-		model, 1, true))
+	return nil, reflect.Value{},
+		errors.New(color.BadUsage(s+"Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)",
+			model, 1, true))
 }
 
-func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdStruct {
-	st, vmodel := newStruct(model, strict)
+func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*tdStruct, error) {
+	st, vmodel, err := newStruct(model, strict)
+	if err != nil {
+		return nil, err
+	}
 
 	st.expectedFields = make([]fieldInfo, 0, len(expectedFields))
 	checkedFields := make(map[string]bool, len(expectedFields))
@@ -94,7 +99,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 	for fieldName, expectedValue := range expectedFields {
 		field, found := stType.FieldByName(fieldName)
 		if !found {
-			panic(color.Bad("%s(): struct %s has no field `%s'",
+			return nil, errors.New(color.Bad("%s(): struct %s has no field `%s'",
 				st.location.Func, stType, fieldName))
 		}
 
@@ -104,7 +109,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 				reflect.Ptr, reflect.Slice:
 				vexpectedValue = reflect.Zero(field.Type) // change to a typed nil
 			default:
-				panic(color.Bad(
+				return nil, errors.New(color.Bad(
 					"%s(): expected value of field %s cannot be nil as it is a %s",
 					st.location.Func, fieldName, field.Type))
 			}
@@ -113,7 +118,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !vexpectedValue.Type().AssignableTo(field.Type) {
-					panic(color.Bad(
+					return nil, errors.New(color.Bad(
 						"%s(): type %s of field expected value %s differs from struct one (%s)",
 						st.location.Func,
 						vexpectedValue.Type(),
@@ -162,7 +167,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 			// If non-zero field
 			if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(), fieldIf) {
 				if checkedFields[fieldName] {
-					panic(color.Bad(
+					return nil, errors.New(color.Bad(
 						"%s(): non zero field %s in model already exists in expectedFields",
 						st.location.Func,
 						fieldName))
@@ -200,7 +205,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 
 	sort.Sort(st.expectedFields)
 
-	return st
+	return st, nil
 }
 
 // summary(Struct): compares the contents of a struct or a pointer on
@@ -232,7 +237,13 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Struct(model interface{}, expectedFields StructFields) TestDeep {
-	return anyStruct(model, expectedFields, false)
+	op, err := anyStruct(model, expectedFields, false)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 // summary(SStruct): strictly compares the contents of a struct or a
@@ -267,7 +278,13 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 //
 // TypeBehind method returns the reflect.Type of "model".
 func SStruct(model interface{}, expectedFields StructFields) TestDeep {
-	return anyStruct(model, expectedFields, true)
+	op, err := anyStruct(model, expectedFields, true)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {

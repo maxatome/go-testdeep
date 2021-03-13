@@ -7,6 +7,7 @@
 package td
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"reflect"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -92,7 +94,9 @@ func Between(from, to interface{}, bounds ...BoundsKind) TestDeep {
 
 	if len(bounds) > 0 {
 		if len(bounds) > 1 {
-			panic(color.TooManyParams(usage))
+			f := dark.GetFatalizer()
+			f.Helper()
+			dark.Fatal(f, color.TooManyParams(usage))
 		}
 
 		if bounds[0] == BoundsInIn || bounds[0] == BoundsInOut {
@@ -112,16 +116,24 @@ func Between(from, to interface{}, bounds ...BoundsKind) TestDeep {
 	}
 
 	if b.expectedMax.Type() != b.expectedMin.Type() {
-		panic(color.Bad("Between(FROM, TO): FROM and TO must have the same type: %s ≠ %s",
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad("Between(FROM, TO): FROM and TO must have the same type: %s ≠ %s",
 			b.expectedMin.Type(),
 			b.expectedMax.Type(),
 		))
 	}
 
-	return b.initBetween(usage)
+	op, err := b.initBetween(usage)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
-func (b *tdBetween) initBetween(usage string) TestDeep {
+func (b *tdBetween) initBetween(usage string) (TestDeep, error) {
 	b.base = newBase(4)
 
 	if !b.expectedMax.IsValid() {
@@ -133,25 +145,25 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 		if b.expectedMin.Int() > b.expectedMax.Int() {
 			b.expectedMin, b.expectedMax = b.expectedMax, b.expectedMin
 		}
-		return b
+		return b, nil
 
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		if b.expectedMin.Uint() > b.expectedMax.Uint() {
 			b.expectedMin, b.expectedMax = b.expectedMax, b.expectedMin
 		}
-		return b
+		return b, nil
 
 	case reflect.Float32, reflect.Float64:
 		if b.expectedMin.Float() > b.expectedMax.Float() {
 			b.expectedMin, b.expectedMax = b.expectedMax, b.expectedMin
 		}
-		return b
+		return b, nil
 
 	case reflect.String:
 		if b.expectedMin.String() > b.expectedMax.String() {
 			b.expectedMin, b.expectedMax = b.expectedMax, b.expectedMin
 		}
-		return b
+		return b, nil
 
 	case reflect.Struct:
 		var bt tdBetweenTime
@@ -177,9 +189,9 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 			bt.expectedMin, bt.expectedMax = bt.expectedMax, bt.expectedMin
 		}
 
-		return &bt
+		return &bt, nil
 	}
-	panic(color.BadUsage(usage, b.expectedMin.Interface(), 1, true))
+	return nil, errors.New(color.BadUsage(usage, b.expectedMin.Interface(), 1, true))
 }
 
 func (b *tdBetween) nInt(tolerance reflect.Value) {
@@ -264,19 +276,25 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
 		reflect.Float32, reflect.Float64:
 	default:
-		panic(color.BadUsage(usage, num, 1, true))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage(usage, num, 1, true))
 	}
 
 	n.expectedMax = n.expectedMin
 
 	if len(tolerance) > 0 {
 		if len(tolerance) > 1 {
-			panic(color.TooManyParams(usage))
+			f := dark.GetFatalizer()
+			f.Helper()
+			dark.Fatal(f, color.TooManyParams(usage))
 		}
 
 		tol := reflect.ValueOf(tolerance[0])
 		if tol.Type() != n.expectedMin.Type() {
-			panic(color.Bad(
+			f := dark.GetFatalizer()
+			f.Helper()
+			dark.Fatal(f, color.Bad(
 				"N(NUM, TOLERANCE): NUM and TOLERANCE must have the same type: %s ≠ %s",
 				n.expectedMin.Type(), tol.Type()))
 		}
@@ -317,7 +335,13 @@ func Gt(minExpectedValue interface{}) TestDeep {
 		expectedMin: reflect.ValueOf(minExpectedValue),
 		minBound:    boundOut,
 	}
-	return b.initBetween("usage: Gt(NUM|STRING|TIME)")
+	op, err := b.initBetween("usage: Gt(NUM|STRING|TIME)")
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 // summary(Gte): checks that a number, string or time.Time is
@@ -340,7 +364,13 @@ func Gte(minExpectedValue interface{}) TestDeep {
 		expectedMin: reflect.ValueOf(minExpectedValue),
 		minBound:    boundIn,
 	}
-	return b.initBetween("usage: Gte(NUM|STRING|TIME)")
+	op, err := b.initBetween("usage: Gte(NUM|STRING|TIME)")
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 // summary(Lt): checks that a number, string or time.Time is
@@ -363,7 +393,13 @@ func Lt(maxExpectedValue interface{}) TestDeep {
 		expectedMin: reflect.ValueOf(maxExpectedValue),
 		maxBound:    boundOut,
 	}
-	return b.initBetween("usage: Lt(NUM|STRING|TIME)")
+	op, err := b.initBetween("usage: Lt(NUM|STRING|TIME)")
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 // summary(Lte): checks that a number, string or time.Time is
@@ -386,7 +422,13 @@ func Lte(maxExpectedValue interface{}) TestDeep {
 		expectedMin: reflect.ValueOf(maxExpectedValue),
 		maxBound:    boundIn,
 	}
-	return b.initBetween("usage: Lte(NUM|STRING|TIME)")
+	op, err := b.initBetween("usage: Lte(NUM|STRING|TIME)")
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 func (b *tdBetween) matchInt(got reflect.Value) (ok bool) {
