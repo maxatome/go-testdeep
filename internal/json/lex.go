@@ -311,8 +311,8 @@ str:
 				if j.remain() >= 5 {
 					r, ok = hex(j.buf[j.pos.bpos+1 : j.pos.bpos+5])
 					if ok {
-						j.pos = j.pos.incHoriz(4)
 						appendBuffer(r)
+						j.pos = j.pos.incHoriz(4)
 						break
 					}
 				}
