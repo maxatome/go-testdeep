@@ -18,6 +18,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/flat"
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 func addHeaders(req *http.Request, headers []interface{}) *http.Request {
@@ -185,6 +186,14 @@ func Delete(target string, body io.Reader, headers ...interface{}) *http.Request
 func NewJSONRequest(method, target string, body interface{}, headers ...interface{}) *http.Request {
 	b, err := json.Marshal(body)
 	if err != nil {
+		if opErr, ok := types.AsOperatorNotJSONMarshallableError(err); ok {
+			mesg := opErr.Error()
+			switch op := opErr.Operator(); op {
+			case "JSON", "SubJSONOf", "SuperJSONOf":
+				mesg += ", use json.RawMessage() instead"
+			}
+			panic(color.Bad(mesg))
+		}
 		panic(color.Bad("JSON encoding failed: %s", err))
 	}
 
