@@ -25,7 +25,12 @@ func (b *base) rec(plus ...string) {
 	pc, _, _, _ := runtime.Caller(1)
 	name := runtime.FuncForPC(pc).Name()
 	pos := strings.LastIndexByte(name, '.')
-	name = name[pos+1:]
+	if name[pos+1:] == "func1" { // Cleanup()
+		npos := strings.LastIndexByte(name[:pos], '.')
+		name = name[npos+1:pos] + ".Cleanup"
+	} else {
+		name = name[pos+1:]
+	}
 	if len(plus) > 0 {
 		name += "+" + strings.Join(plus, "+")
 	}
@@ -108,7 +113,7 @@ func TestRun(t *testing.T) {
 	t.Run("Full", func(t *testing.T) {
 		suite := Full{}
 		td.CmpTrue(t, tdsuite.Run(t, &suite))
-		td.Cmp(t, suite.calls, []string{
+		ok := td.Cmp(t, suite.calls, []string{
 			"Setup",
 			/**/ "PreTest+Test1",
 			/**/ "Test1",
@@ -123,6 +128,16 @@ func TestRun(t *testing.T) {
 			/**/ "PostTest+Test3",
 			"Destroy",
 		})
+		if !ok {
+			for _, c := range suite.calls {
+				switch c[0] {
+				case 'S', 'B', 'D':
+					t.Log(c)
+				default:
+					t.Log("  ", c)
+				}
+			}
+		}
 	})
 
 	t.Run("ErrNil", func(t *testing.T) {
