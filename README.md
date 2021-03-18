@@ -29,6 +29,8 @@ go-testdeep
 
 ## Latest news
 
+- 2021/03/18: [v1.9.2 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.9.2)
+  with minor fixes;
 - 2021/03/16: [v1.9.1 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.9.1)
   with minor fixes;
 - 2021/03/09: [v1.9.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.9.0)
@@ -39,7 +41,6 @@ with many new features, among:
   - [`tdhttp.TestAPI`](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp#TestAPI) gains several methods,
   - and [more…](https://github.com/maxatome/go-testdeep/releases/tag/v1.9.0)
 - 2020/12/17: [v1.8.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.8.0);
-- 2020/07/19: [v1.7.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.7.0);
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
