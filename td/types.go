@@ -128,6 +128,13 @@ func (t base) TypeBehind() reflect.Type {
 	return nil
 }
 
+// MarshalJSON implements encoding/json.Marshaler only to returns an
+// error, as a TestDeep operator should never be JSON marshalled. So
+// it is better to tell the user he/she does a mistake.
+func (t base) MarshalJSON() ([]byte, error) {
+	return nil, types.OperatorNotJSONMarshallableError(t.location.Func)
+}
+
 // newBase returns a new base struct with location.Location set to the
 // "callDepth" depth.
 func newBase(callDepth int) (b base) {

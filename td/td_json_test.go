@@ -53,6 +53,8 @@ func TestJSON(t *testing.T) {
 	checkOK(t, got,
 		td.JSON(`{"name":"Bob","age":42,"gender":"male"}`))
 
+	checkOK(t, got, td.JSON(`$1`, got)) // json.Marshal() got for $1
+
 	// Numeric placeholders
 	checkOK(t, got,
 		td.JSON(`{"name":"$1","age":$2,"gender":$3}`,
@@ -70,6 +72,14 @@ func TestJSON(t *testing.T) {
 			td.Re(`^Bob`),
 			td.Flatten([]td.TestDeep{td.Between(40, 45), td.NotEmpty()}),
 		))
+
+	// Operators are not JSON marshallable
+	checkOK(t, got,
+		td.JSON(`$1`, map[string]interface{}{
+			"name":   td.Re(`^Bob`),
+			"age":    42,
+			"gender": td.NotEmpty(),
+		}))
 
 	// Tag placeholders
 	checkOK(t, got,

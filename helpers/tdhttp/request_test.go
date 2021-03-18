@@ -227,8 +227,17 @@ func TestNewJSONRequest(tt *testing.T) {
 	t.Run("NewJSONRequest panic", func(t *td.T) {
 		t.CmpPanic(
 			func() { tdhttp.NewJSONRequest("GET", "/path", func() {}) },
-			td.NotEmpty(),
+			td.HasPrefix("JSON encoding failed: "),
 			"JSON encoding failed")
+
+		t.CmpPanic(
+			func() { tdhttp.NewJSONRequest("GET", "/path", td.JSONPointer("/a", 0)) },
+			"JSONPointer TestDeep operator cannot be json.Marshal'led")
+
+		// Common user mistake
+		t.CmpPanic(
+			func() { tdhttp.NewJSONRequest("GET", "/path", td.JSON(`{}`)) },
+			"JSON TestDeep operator cannot be json.Marshal'led, use json.RawMessage() instead")
 	})
 
 	// Post

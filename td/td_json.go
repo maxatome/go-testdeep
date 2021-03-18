@@ -158,6 +158,12 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 		default:
 			bp, err := ejson.Marshal(op)
 			if err != nil {
+				// There is a TestDeep operator into the bowels of this
+				// parameter. Let it untouched and trust the user.
+				// (cannot use errors.As() as we want to support 1.9≤go<1.13)
+				if _, ok := types.AsOperatorNotJSONMarshallableError(err); ok {
+					break
+				}
 				panic(color.Bad(`%s(): param #%d of type %T cannot be JSON marshalled`, u.Func, i+1, p))
 			}
 			// As Marshal succeeded, Unmarshal in an interface{} cannot fail
@@ -415,8 +421,9 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //
 // "expectedJSON" JSON value can contain placeholders. The "params"
 // are for any placeholder parameters in "expectedJSON". "params" can
-// contain TestDeep operators as well as raw values. Raw values are
-// first json.Marshal'ed then json.Unmarshal'ed in an interface{}. A
+// contain TestDeep operators as well as raw values. Raw values, that
+// do not contain TestDeep operators deeply nested, are first
+// json.Marshal'ed then json.Unmarshal'ed in an interface{}. A
 // placeholder can be numeric like $2 or named like $name and always
 // references an item in "params".
 //
