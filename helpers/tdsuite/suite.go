@@ -302,17 +302,17 @@ func run(t *td.T, suite interface{}, methods []int) {
 			})
 		} else {
 			t.RunAssertRequire(m.Name, func(assert, require *td.T) {
-				if err := preTest(t, m.Name); err != nil {
-					t.Errorf("%s pre-test error: %s", m.Name, err)
+				if err := preTest(assert, m.Name); err != nil {
+					assert.Errorf("%s pre-test error: %s", m.Name, err)
 					return
 				}
 				defer func() {
-					if err := postTest(t, m.Name); err != nil {
-						t.Errorf("%s post-test error: %s", m.Name, err)
+					if err := postTest(assert, m.Name); err != nil {
+						assert.Errorf("%s post-test error: %s", m.Name, err)
 					}
 				}()
 
-				cont = shouldContinue(t, m.Name, call([]reflect.Value{
+				cont = shouldContinue(assert, m.Name, call([]reflect.Value{
 					reflect.ValueOf(assert),
 					reflect.ValueOf(require),
 				}))
