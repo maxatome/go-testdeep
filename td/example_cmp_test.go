@@ -2491,10 +2491,20 @@ func ExampleCmpSmuggle_field_path() {
 	ok = td.CmpSmuggle(t, got, "Body.Value.Num", td.Between(100, 200))
 	fmt.Println("check Num using an other fields-path:", ok)
 
+	// Note that maps and array/slices are supported
+	got.Request.Body.Value = map[string]interface{}{
+		"foo": []interface{}{
+			3: map[int]string{666: "bar"},
+		},
+	}
+	ok = td.CmpSmuggle(t, got, "Body.Value[foo][3][666]", "bar")
+	fmt.Println("check fields-path including maps/slices:", ok)
+
 	// Output:
 	// check Num by hand: true
 	// check Num using a fields-path: true
 	// check Num using an other fields-path: true
+	// check fields-path including maps/slices: true
 }
 
 func ExampleCmpSStruct() {
