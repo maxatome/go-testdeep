@@ -65,25 +65,29 @@ value:
   | PLACEHOLDER
   ;
 
-object: '{' members '}'
+object: '{' '}'
+                {
+                  $$ = map[string]interface{}{}
+                }
+  | '{' members '}'
+                {
+                  $$ = $2
+                }
+  | '{' members ',' '}' // not JSON spec but useful
                 {
                   $$ = $2
                 }
 
-members:
-                {
-                  $$ = map[string]interface{}{}
-                }
-  | member
+members: member
                 {
                   $$ = map[string]interface{}{
                     $1.key: $1.value,
                   }
                 }
-  | member ',' members
+  | members ',' member
                 {
-                  $3[$1.key] = $1.value
-                  $$ = $3
+                  $1[$3.key] = $3.value
+                  $$ = $1
                 }
 
 member: STRING ':' value
@@ -94,16 +98,20 @@ member: STRING ':' value
                   }
                 }
 
-array: '[' elements ']'
+array: '[' ']'
+                {
+                  $$ = []interface{}{}
+                }
+  | '[' elements ']'
+                {
+                  $$ = $2
+                }
+  | '[' elements ',' ']' // not JSON spec but useful
                 {
                   $$ = $2
                 }
 
-elements:
-                {
-                  $$ = []interface{}{}
-                }
-  | value
+elements: value
                 {
                   $$ = []interface{}{$1}
                 }
@@ -112,22 +120,26 @@ elements:
                   $$ = append($1, $3)
                 }
 
-op_params: elements
+op_params: '(' ')'
                 {
-                  $$ = $1
+                  $$ = []interface{}{}
                 }
-  | elements ','
+  | '(' elements ')'
                 {
-                  $$ = $1
+                  $$ = $2
+                }
+  | '(' elements ',' ')'
+                {
+                  $$ = $2
                 }
 
 operator:
     OPERATOR_SHORTCUT
-  | OPERATOR  '(' op_params ')'
+  | OPERATOR op_params
                 {
                   j := yylex.(*json)
                   opPos := j.popPos()
-                  op, err := j.getOperator(Operator{Name: $1, Params: $3}, opPos)
+                  op, err := j.getOperator(Operator{Name: $1, Params: $2}, opPos)
                   if err != nil {
                     j.fatal(err.Error(), opPos)
                     return 1

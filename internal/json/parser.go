@@ -82,50 +82,55 @@ var yyExca = [...]int{
 
 const yyPrivate = 57344
 
-const yyLast = 38
+const yyLast = 86
 
 var yyAct = [...]int{
-	20, 2, 8, 9, 10, 7, 11, 14, 6, 15,
-	12, 16, 32, 26, 13, 19, 25, 24, 21, 33,
-	23, 22, 18, 5, 27, 30, 4, 31, 17, 3,
-	1, 0, 0, 0, 31, 29, 0, 28,
+	22, 2, 8, 9, 10, 7, 11, 14, 6, 15,
+	12, 21, 24, 37, 13, 27, 5, 39, 38, 8,
+	9, 10, 7, 11, 14, 6, 15, 12, 34, 23,
+	36, 13, 25, 26, 30, 18, 31, 4, 36, 8,
+	9, 10, 7, 11, 14, 6, 15, 12, 17, 3,
+	1, 13, 35, 8, 9, 10, 7, 11, 14, 6,
+	15, 12, 33, 0, 0, 13, 20, 8, 9, 10,
+	7, 11, 14, 6, 15, 12, 0, 19, 29, 13,
+	32, 28, 19, 0, 0, 16,
 }
 
 var yyPact = [...]int{
-	-2, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	-1000, -1000, 12, -2, -1000, 0, 8, 6, 2, -1,
-	-1000, -2, -1000, 12, -2, -1000, -2, -7, 5, -1000,
-	-1000, -1000, -1000, -2,
+	63, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
+	-1000, -1000, 72, 49, -1000, -6, -1000, 19, -1000, 0,
+	-1000, 64, -1000, -1000, 15, -1000, 67, 63, -1000, 35,
+	-1000, -1, -1000, -1000, -1000, -1000, -1000, -2, -1000, -1000,
 }
 
 var yyPgo = [...]int{
-	0, 30, 29, 11, 28, 26, 15, 24, 0, 23,
+	0, 50, 49, 48, 35, 37, 11, 29, 0, 16,
 }
 
 var yyR1 = [...]int{
 	0, 1, 8, 8, 8, 8, 8, 8, 8, 8,
-	8, 2, 3, 3, 3, 4, 5, 6, 6, 6,
-	7, 7, 9, 9,
+	8, 2, 2, 2, 3, 3, 4, 5, 5, 5,
+	6, 6, 7, 7, 7, 9, 9,
 }
 
 var yyR2 = [...]int{
 	0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 3, 0, 1, 3, 3, 3, 0, 1, 3,
-	1, 2, 1, 4,
+	1, 2, 3, 4, 1, 3, 3, 2, 3, 4,
+	1, 3, 2, 3, 4, 1, 2,
 }
 
 var yyChk = [...]int{
 	-1000, -1, -8, -2, -5, -9, 10, 7, 4, 5,
-	6, 8, 12, 16, 9, 11, -3, -4, 10, -6,
-	-8, 18, 13, 14, 15, 17, 14, -7, -6, -3,
-	-8, -8, 19, 14,
+	6, 8, 12, 16, 9, 11, 13, -3, -4, 10,
+	17, -6, -8, -7, 18, 13, 14, 15, 17, 14,
+	19, -6, 13, -4, -8, 17, -8, 14, 19, 19,
 }
 
 var yyDef = [...]int{
 	0, -2, 1, 2, 3, 4, 5, 6, 7, 8,
-	9, 10, 12, 17, 22, 0, 0, 13, 0, 0,
-	18, 17, 11, 12, 0, 16, 0, 0, 20, 14,
-	15, 19, 23, 21,
+	9, 10, 0, 0, 25, 0, 11, 0, 14, 0,
+	17, 0, 20, 26, 0, 12, 0, 0, 18, 0,
+	22, 0, 13, 15, 16, 19, 21, 0, 23, 24,
 }
 
 var yyTok1 = [...]int{
@@ -514,29 +519,34 @@ yydefault:
 			yyVAL.value = yyDollar[1].string
 		}
 	case 11:
+		yyDollar = yyS[yypt-2 : yypt+1]
+		{
+			yyVAL.object = map[string]interface{}{}
+		}
+	case 12:
 		yyDollar = yyS[yypt-3 : yypt+1]
 		{
 			yyVAL.object = yyDollar[2].object
 		}
-	case 12:
-		yyDollar = yyS[yypt-0 : yypt+1]
-		{
-			yyVAL.object = map[string]interface{}{}
-		}
 	case 13:
+		yyDollar = yyS[yypt-4 : yypt+1]
+		{
+			yyVAL.object = yyDollar[2].object
+		}
+	case 14:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
 			yyVAL.object = map[string]interface{}{
 				yyDollar[1].member.key: yyDollar[1].member.value,
 			}
 		}
-	case 14:
+	case 15:
 		yyDollar = yyS[yypt-3 : yypt+1]
 		{
-			yyDollar[3].object[yyDollar[1].member.key] = yyDollar[1].member.value
-			yyVAL.object = yyDollar[3].object
+			yyDollar[1].object[yyDollar[3].member.key] = yyDollar[3].member.value
+			yyVAL.object = yyDollar[1].object
 		}
-	case 15:
+	case 16:
 		yyDollar = yyS[yypt-3 : yypt+1]
 		{
 			yyVAL.member = member{
@@ -544,42 +554,52 @@ yydefault:
 				value: yyDollar[3].value,
 			}
 		}
-	case 16:
-		yyDollar = yyS[yypt-3 : yypt+1]
-		{
-			yyVAL.array = yyDollar[2].array
-		}
 	case 17:
-		yyDollar = yyS[yypt-0 : yypt+1]
+		yyDollar = yyS[yypt-2 : yypt+1]
 		{
 			yyVAL.array = []interface{}{}
 		}
 	case 18:
-		yyDollar = yyS[yypt-1 : yypt+1]
-		{
-			yyVAL.array = []interface{}{yyDollar[1].value}
-		}
-	case 19:
 		yyDollar = yyS[yypt-3 : yypt+1]
 		{
-			yyVAL.array = append(yyDollar[1].array, yyDollar[3].value)
+			yyVAL.array = yyDollar[2].array
+		}
+	case 19:
+		yyDollar = yyS[yypt-4 : yypt+1]
+		{
+			yyVAL.array = yyDollar[2].array
 		}
 	case 20:
 		yyDollar = yyS[yypt-1 : yypt+1]
 		{
-			yyVAL.array = yyDollar[1].array
+			yyVAL.array = []interface{}{yyDollar[1].value}
 		}
 	case 21:
+		yyDollar = yyS[yypt-3 : yypt+1]
+		{
+			yyVAL.array = append(yyDollar[1].array, yyDollar[3].value)
+		}
+	case 22:
 		yyDollar = yyS[yypt-2 : yypt+1]
 		{
-			yyVAL.array = yyDollar[1].array
+			yyVAL.array = []interface{}{}
 		}
 	case 23:
+		yyDollar = yyS[yypt-3 : yypt+1]
+		{
+			yyVAL.array = yyDollar[2].array
+		}
+	case 24:
 		yyDollar = yyS[yypt-4 : yypt+1]
+		{
+			yyVAL.array = yyDollar[2].array
+		}
+	case 26:
+		yyDollar = yyS[yypt-2 : yypt+1]
 		{
 			j := yylex.(*json)
 			opPos := j.popPos()
-			op, err := j.getOperator(Operator{Name: yyDollar[1].string, Params: yyDollar[3].array}, opPos)
+			op, err := j.getOperator(Operator{Name: yyDollar[1].string, Params: yyDollar[2].array}, opPos)
 			if err != nil {
 				j.fatal(err.Error(), opPos)
 				return 1
