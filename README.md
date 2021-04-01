@@ -108,8 +108,7 @@ import (
   "testing"
   "time"
 
-  "github.com/maxatome/go-testdeep/helpers/
-  "
+  "github.com/maxatome/go-testdeep/helpers/tdhttp"
   "github.com/maxatome/go-testdeep/td"
 )
 
