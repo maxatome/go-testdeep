@@ -82,6 +82,34 @@ func TestJSON(t *testing.T) {
 		}
 	})
 
+	t.Run("JSON spec infringements", func(t *testing.T) {
+		check := func(gotJSON, expectedJSON string) {
+			t.Helper()
+			var expected interface{}
+			err := ejson.Unmarshal([]byte(expectedJSON), &expected)
+			if err != nil {
+				t.Fatalf("bad JSON: %s", err)
+			}
+
+			got, err := json.Parse([]byte(gotJSON))
+			if !test.NoError(t, err, "json.Parse succeeds") {
+				return
+			}
+			if !reflect.DeepEqual(got, expected) {
+				test.EqualErrorMessage(t,
+					strings.TrimRight(spew.Sdump(got), "\n"),
+					strings.TrimRight(spew.Sdump(expected), "\n"),
+					"got matches expected",
+				)
+			}
+		}
+		// "," is accepted just before non-empty "}" or "]"
+		check(`{"foo": "bar", }`, `{"foo":"bar"}`)
+		check(`{"foo":"bar",}`, `{"foo":"bar"}`)
+		check(`[ 1, 2, 3, ]`, `[1,2,3]`)
+		check(`[ 1,2,3,]`, `[1,2,3]`)
+	})
+
 	t.Run("Special string cases", func(t *testing.T) {
 		for i, tst := range []struct{ in, expected string }{
 			{

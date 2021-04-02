@@ -79,7 +79,7 @@ var _ TestDeep = &tdJSONPointer{}
 //
 //   td.Cmp(t, got, td.JSONPointer("/Next/Next", Item{Val: 3}))
 //
-// Contrary to Smuggle operator and its field-path feature, only
+// Contrary to Smuggle operator and its fields-path feature, only
 // public fields can be followed, as private ones are never (un)marshalled.
 //
 // There is no JSONHas nor JSONHasnt operators to only check a JSON

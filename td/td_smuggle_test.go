@@ -306,8 +306,8 @@ func TestSmuggle(t *testing.T) {
 	//
 	// Bad usage
 	test.CheckPanic(t, func() { td.Smuggle(123, 12) }, "usage: Smuggle")
-	test.CheckPanic(t, func() { td.Smuggle("foo.9bingo", 12) },
-		"bad field name `9bingo' in FIELDS_PATH")
+	test.CheckPanic(t, func() { td.Smuggle("bad[path", 12) },
+		`Smuggle(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE): cannot find final ']' in FIELD_PATH "bad[path"`)
 
 	// Bad number of args
 	test.CheckPanic(t, func() {
@@ -368,7 +368,7 @@ func TestSmuggle(t *testing.T) {
 		"Smuggle(func(int) (int, td_test.MyBool, td_test.MyString))")
 }
 
-func TestSmuggleFieldPath(t *testing.T) {
+func TestSmuggleFieldsPath(t *testing.T) {
 	num := 42
 	gotStruct := MyStruct{
 		MyStructMid: MyStructMid{
@@ -447,52 +447,88 @@ func TestSmuggleFieldPath(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("        value: 12\nit failed coz: it is not a struct and should be"),
+			Summary: mustBe("        value: 12\nit failed coz: it is a int and should be a struct"),
 		})
 	checkError(t, gotStruct, td.Smuggle("ValInt.bar", 23),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustContain("\nit failed coz: field `ValInt' is not a struct and should be"),
+			Summary: mustContain("\nit failed coz: field \"ValInt\" is a int and should be a struct"),
 		})
 	checkError(t, gotStruct, td.Smuggle("MyStructMid.ValStr.foobar", 23),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustContain("\nit failed coz: field `MyStructMid.ValStr' is not a struct and should be"),
+			Summary: mustContain("\nit failed coz: field \"MyStructMid.ValStr\" is a string and should be a struct"),
 		})
 
 	checkError(t, gotStruct, td.Smuggle("foo.bar", 23),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustContain("\nit failed coz: field `foo' not found"),
+			Summary: mustContain("\nit failed coz: field \"foo\" not found"),
 		})
 
 	checkError(t, b, td.Smuggle("C.PA2.Num", 456),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustContain("\nit failed coz: field `C.PA2' is nil"),
+			Summary: mustContain("\nit failed coz: field \"C.PA2\" is nil"),
 		})
 	checkError(t, b, td.Smuggle("C.Iface3.Num", 456),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustContain("\nit failed coz: field `C.Iface3' is nil"),
+			Summary: mustContain("\nit failed coz: field \"C.Iface3\" is nil"),
 		})
 	checkError(t, b, td.Smuggle("C.Iface4.Num", 456),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustContain("\nit failed coz: field `C.Iface4' is nil"),
+			Summary: mustContain("\nit failed coz: field \"C.Iface4\" is nil"),
 		})
 	checkError(t, b, td.Smuggle("Iface3.Num", 456),
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustContain("\nit failed coz: field `Iface3' is nil"),
+			Summary: mustContain("\nit failed coz: field \"Iface3\" is nil"),
 		})
+
+	// Referencing maps and array/slices
+	x := B{
+		Iface: map[string]interface{}{
+			"test": []int{2, 3, 4},
+		},
+		C: &C{
+			Iface1: []interface{}{
+				map[int]interface{}{42: []string{"pipo"}, 66: [2]string{"foo", "bar"}},
+				map[int8]interface{}{42: []string{"pipo"}},
+				map[int16]interface{}{42: []string{"pipo"}},
+				map[int32]interface{}{42: []string{"pipo"}},
+				map[int64]interface{}{42: []string{"pipo"}},
+				map[uint]interface{}{42: []string{"pipo"}},
+				map[uint8]interface{}{42: []string{"pipo"}},
+				map[uint16]interface{}{42: []string{"pipo"}},
+				map[uint32]interface{}{42: []string{"pipo"}},
+				map[uint64]interface{}{42: []string{"pipo"}},
+				map[uintptr]interface{}{42: []string{"pipo"}},
+				map[float32]interface{}{42: []string{"pipo"}},
+				map[float64]interface{}{42: []string{"pipo"}},
+			},
+		},
+	}
+	checkOK(t, x, td.Smuggle("Iface[test][1]", 3))
+	checkOK(t, x, td.Smuggle("C.Iface1[0][66][1]", "bar"))
+	for i := 0; i < 12; i++ {
+		checkOK(t, x,
+			td.Smuggle(fmt.Sprintf("C.Iface1[%d][42][0]", i), "pipo"))
+
+		checkOK(t, x,
+			td.Smuggle(fmt.Sprintf("C.Iface1[%d][42][-1]", i-12), "pipo"))
+	}
+
+	checkOK(t, x, td.Lax(td.Smuggle("PppA", nil)))
+	checkOK(t, x, td.Smuggle("PppA", td.Nil()))
 }
 
 func TestSmuggleTypeBehind(t *testing.T) {
@@ -510,5 +546,9 @@ func TestSmuggleTypeBehind(t *testing.T) {
 
 	equalTypes(t,
 		td.Smuggle(func(from interface{}) interface{} { return from }, nil),
+		reflect.TypeOf((*interface{})(nil)).Elem())
+
+	equalTypes(t,
+		td.Smuggle("foo.bar", nil),
 		reflect.TypeOf((*interface{})(nil)).Elem())
 }
