@@ -12,70 +12,71 @@ import (
 	"time"
 )
 
-// allOperators lists the 61 operators.
+// allOperators lists the 62 operators.
 // nil means not usable in JSON().
 var allOperators = map[string]interface{}{
-	"All":         All,
-	"Any":         Any,
-	"Array":       nil,
-	"ArrayEach":   ArrayEach,
-	"Bag":         Bag,
-	"Between":     Between,
-	"Cap":         nil,
-	"Catch":       nil,
-	"Code":        nil,
-	"Contains":    Contains,
-	"ContainsKey": ContainsKey,
-	"Delay":       nil,
-	"Empty":       Empty,
-	"Gt":          Gt,
-	"Gte":         Gte,
-	"HasPrefix":   HasPrefix,
-	"HasSuffix":   HasSuffix,
-	"Ignore":      Ignore,
-	"Isa":         nil,
-	"JSON":        nil,
-	"JSONPointer": JSONPointer,
-	"Keys":        Keys,
-	"Lax":         nil,
-	"Len":         Len,
-	"Lt":          Lt,
-	"Lte":         Lte,
-	"Map":         nil,
-	"MapEach":     MapEach,
-	"N":           N,
-	"NaN":         NaN,
-	"Nil":         Nil,
-	"None":        None,
-	"Not":         Not,
-	"NotAny":      NotAny,
-	"NotEmpty":    NotEmpty,
-	"NotNaN":      NotNaN,
-	"NotNil":      NotNil,
-	"NotZero":     NotZero,
-	"PPtr":        nil,
-	"Ptr":         nil,
-	"Re":          Re,
-	"ReAll":       ReAll,
-	"SStruct":     nil,
-	"Set":         Set,
-	"Shallow":     nil,
-	"Slice":       nil,
-	"Smuggle":     nil,
-	"String":      nil,
-	"Struct":      nil,
-	"SubBagOf":    SubBagOf,
-	"SubJSONOf":   nil,
-	"SubMapOf":    SubMapOf,
-	"SubSetOf":    SubSetOf,
-	"SuperBagOf":  SuperBagOf,
-	"SuperJSONOf": nil,
-	"SuperMapOf":  SuperMapOf,
-	"SuperSetOf":  SuperSetOf,
-	"Tag":         nil,
-	"TruncTime":   nil,
-	"Values":      Values,
-	"Zero":        Zero,
+	"All":          All,
+	"Any":          Any,
+	"Array":        nil,
+	"ArrayEach":    ArrayEach,
+	"Bag":          Bag,
+	"Between":      Between,
+	"Cap":          nil,
+	"Catch":        nil,
+	"Code":         nil,
+	"Contains":     Contains,
+	"ContainsKey":  ContainsKey,
+	"Delay":        nil,
+	"Empty":        Empty,
+	"Gt":           Gt,
+	"Gte":          Gte,
+	"HasPrefix":    HasPrefix,
+	"HasSuffix":    HasSuffix,
+	"Ignore":       Ignore,
+	"Isa":          nil,
+	"JSON":         nil,
+	"JSONPointer":  JSONPointer,
+	"Keys":         Keys,
+	"Lax":          nil,
+	"Len":          Len,
+	"Lt":           Lt,
+	"Lte":          Lte,
+	"Map":          nil,
+	"MapEach":      MapEach,
+	"N":            N,
+	"NaN":          NaN,
+	"Nil":          Nil,
+	"None":         None,
+	"Not":          Not,
+	"NotAny":       NotAny,
+	"NotEmpty":     NotEmpty,
+	"NotNaN":       NotNaN,
+	"NotNil":       NotNil,
+	"NotZero":      NotZero,
+	"PPtr":         nil,
+	"Ptr":          nil,
+	"Re":           Re,
+	"ReAll":        ReAll,
+	"SStruct":      nil,
+	"Set":          Set,
+	"Shallow":      nil,
+	"Slice":        nil,
+	"Smuggle":      nil,
+	"String":       nil,
+	"Struct":       nil,
+	"SubBagOf":     SubBagOf,
+	"SubJSONOf":    nil,
+	"SubMapOf":     SubMapOf,
+	"SubSetOf":     SubSetOf,
+	"SuperBagOf":   SuperBagOf,
+	"SuperJSONOf":  nil,
+	"SuperMapOf":   SuperMapOf,
+	"SuperSetOf":   SuperSetOf,
+	"SuperSliceOf": nil,
+	"Tag":          nil,
+	"TruncTime":    nil,
+	"Values":       Values,
+	"Zero":         Zero,
 }
 
 // CmpAll is a shortcut for:
@@ -1114,6 +1115,25 @@ func CmpSuperMapOf(t TestingT, got, model interface{}, expectedEntries MapEntrie
 func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
 	t.Helper()
 	return Cmp(t, got, SuperSetOf(expectedItems...), args...)
+}
+
+// CmpSuperSliceOf is a shortcut for:
+//
+//   td.Cmp(t, got, td.SuperSliceOf(model, expectedEntries), args...)
+//
+// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperSliceOf for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// "args..." are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of "args" is a string and contains a '%' rune then
+// fmt.Fprintf is used to compose the name, else "args" are passed to
+// fmt.Fprint. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpSuperSliceOf(t TestingT, got, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+	t.Helper()
+	return Cmp(t, got, SuperSliceOf(model, expectedEntries), args...)
 }
 
 // CmpTruncTime is a shortcut for:

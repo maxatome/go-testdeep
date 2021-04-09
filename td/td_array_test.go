@@ -25,6 +25,9 @@ func TestArray(t *testing.T) {
 	checkOK(t, [5]int{1, 2, 3},
 		td.Array([5]int{0, 2}, td.ArrayEntries{2: 3, 0: 1}))
 
+	checkOK(t, [5]interface{}{1, 2, nil, 4, nil},
+		td.Array([5]interface{}{nil, 2, nil, 4}, td.ArrayEntries{0: 1, 2: nil}))
+
 	zero, one, two := 0, 1, 2
 	checkOK(t, [5]*int{nil, &zero, &one, &two},
 		td.Array(
@@ -443,4 +446,194 @@ func TestSliceTypeBehind(t *testing.T) {
 	equalTypes(t, td.Slice([]int{}, nil), []int{})
 	equalTypes(t, td.Slice(MySlice{}, nil), MySlice{})
 	equalTypes(t, td.Slice(&MySlice{}, nil), &MySlice{})
+}
+
+func TestSuperSliceOf(t *testing.T) {
+	t.Run("interface array", func(t *testing.T) {
+		got := [5]interface{}{"foo", "bar", nil, 666, 777}
+
+		checkOK(t, got,
+			td.SuperSliceOf([5]interface{}{1: "bar"}, td.ArrayEntries{2: td.Nil()}))
+		checkOK(t, got,
+			td.SuperSliceOf([5]interface{}{1: "bar"}, td.ArrayEntries{2: nil}))
+		checkOK(t, got,
+			td.SuperSliceOf([5]interface{}{1: "bar"}, td.ArrayEntries{3: 666}))
+		checkOK(t, got,
+			td.SuperSliceOf([5]interface{}{1: "bar"}, td.ArrayEntries{3: td.Between(665, 667)}))
+		checkOK(t, &got,
+			td.SuperSliceOf(&[5]interface{}{1: "bar"}, td.ArrayEntries{3: td.Between(665, 667)}))
+
+		checkError(t, got,
+			td.SuperSliceOf([5]interface{}{1: "foo"}, td.ArrayEntries{2: td.Nil()}),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA[1]"),
+				Got:      mustBe(`"bar"`),
+				Expected: mustBe(`"foo"`),
+			})
+		checkError(t, got,
+			td.SuperSliceOf([5]interface{}{1: 666}, td.ArrayEntries{2: td.Nil()}),
+			expectedError{
+				Message:  mustBe("type mismatch"),
+				Path:     mustBe("DATA[1]"),
+				Got:      mustBe("string"),
+				Expected: mustBe("int"),
+			})
+		checkError(t, &got,
+			td.SuperSliceOf([5]interface{}{1: 666}, td.ArrayEntries{2: td.Nil()}),
+			expectedError{
+				Message:  mustBe("type mismatch"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe("*[5]interface {}"),
+				Expected: mustBe("[5]interface {}"),
+			})
+		checkError(t, got,
+			td.SuperSliceOf(&[5]interface{}{1: 666}, td.ArrayEntries{2: td.Nil()}),
+			expectedError{
+				Message:  mustBe("type mismatch"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe("[5]interface {}"),
+				Expected: mustBe("*[5]interface {}"),
+			})
+	})
+
+	t.Run("ints array", func(t *testing.T) {
+		type MyArray [5]int
+
+		checkOK(t, MyArray{}, td.SuperSliceOf(MyArray{}, nil))
+
+		got := MyArray{3: 4}
+		checkOK(t, got, td.SuperSliceOf(MyArray{}, nil))
+		checkOK(t, got, td.SuperSliceOf(MyArray{3: 4}, nil))
+		checkOK(t, got, td.SuperSliceOf(MyArray{}, td.ArrayEntries{3: 4}))
+
+		checkError(t, got,
+			td.SuperSliceOf(MyArray{}, td.ArrayEntries{1: 666}),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA[1]"),
+				Got:      mustBe(`0`),
+				Expected: mustBe(`666`),
+			})
+
+		// Be lax...
+		// Without Lax → error
+		checkError(t, got,
+			td.SuperSliceOf([5]int{}, td.ArrayEntries{3: 4}),
+			expectedError{
+				Message:  mustBe("type mismatch"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe(`td_test.MyArray`),
+				Expected: mustBe(`[5]int`),
+			})
+		checkOK(t, got, td.Lax(td.SuperSliceOf([5]int{}, td.ArrayEntries{3: 4})))
+		checkError(t, [5]int{3: 4},
+			td.SuperSliceOf(MyArray{}, td.ArrayEntries{3: 4}),
+			expectedError{
+				Message:  mustBe("type mismatch"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe(`[5]int`),
+				Expected: mustBe(`td_test.MyArray`),
+			})
+		checkOK(t, [5]int{3: 4},
+			td.Lax(td.SuperSliceOf(MyArray{}, td.ArrayEntries{3: 4})))
+
+		test.CheckPanic(t,
+			func() { td.SuperSliceOf(MyArray{}, td.ArrayEntries{8: 34}) },
+			"array length is 5, so cannot have #8 expected index")
+	})
+
+	t.Run("ints slice", func(t *testing.T) {
+		type MySlice []int
+
+		checkOK(t, MySlice{}, td.SuperSliceOf(MySlice{}, nil))
+		checkOK(t, MySlice(nil), td.SuperSliceOf(MySlice{}, nil))
+
+		got := MySlice{3: 4}
+
+		checkOK(t, got, td.SuperSliceOf(MySlice{}, td.ArrayEntries{3: td.N(5, 1)}))
+		checkOK(t, got, td.SuperSliceOf(MySlice{3: 4}, td.ArrayEntries{2: 0}))
+
+		checkError(t, got,
+			td.SuperSliceOf(MySlice{}, td.ArrayEntries{1: 666}),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA[1]"),
+				Got:      mustBe(`0`),
+				Expected: mustBe(`666`),
+			})
+		checkError(t, got,
+			td.SuperSliceOf(MySlice{}, td.ArrayEntries{3: 0}),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA[3]"),
+				Got:      mustBe(`4`),
+				Expected: mustBe(`0`),
+			})
+		checkError(t, got,
+			td.SuperSliceOf(MySlice{}, td.ArrayEntries{28: 666}),
+			expectedError{
+				Message:  mustBe("expected value out of range"),
+				Path:     mustBe("DATA[28]"),
+				Got:      mustBe(`<non-existent value>`),
+				Expected: mustBe(`666`),
+			})
+		checkError(t, got,
+			td.SuperSliceOf(MySlice{28: 666}, nil),
+			expectedError{
+				Message:  mustBe("expected value out of range"),
+				Path:     mustBe("DATA[28]"),
+				Got:      mustBe(`<non-existent value>`),
+				Expected: mustBe(`666`),
+			})
+
+		// Be lax...
+		// Without Lax → error
+		checkError(t, got,
+			td.SuperSliceOf([]int{}, td.ArrayEntries{3: 4}),
+			expectedError{
+				Message:  mustBe("type mismatch"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe(`td_test.MySlice`),
+				Expected: mustBe(`[]int`),
+			})
+		checkOK(t, got, td.Lax(td.SuperSliceOf([]int{}, td.ArrayEntries{3: 4})))
+		checkError(t, []int{3: 4},
+			td.SuperSliceOf(MySlice{}, td.ArrayEntries{3: 4}),
+			expectedError{
+				Message:  mustBe("type mismatch"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe(`[]int`),
+				Expected: mustBe(`td_test.MySlice`),
+			})
+		checkOK(t, []int{3: 4},
+			td.Lax(td.SuperSliceOf(MySlice{}, td.ArrayEntries{3: 4})))
+	})
+
+	//
+	// Bad usage
+	test.CheckPanic(t, func() { td.SuperSliceOf("test", nil) }, "usage: SuperSliceOf(")
+	test.CheckPanic(t,
+		func() { td.SuperSliceOf(&MyStruct{}, nil) },
+		"usage: SuperSliceOf(")
+	test.CheckPanic(t,
+		func() { td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}) },
+		"type string of #1 expected value differs from slice contents (int)")
+	test.CheckPanic(t,
+		func() { td.SuperSliceOf([]int{12}, td.ArrayEntries{0: 21}) },
+		"non zero #0 entry in model already exists in expectedEntries")
+}
+
+func TestSuperSliceOfTypeBehind(t *testing.T) {
+	type MySlice []int
+
+	equalTypes(t, td.SuperSliceOf([]int{}, nil), []int{})
+	equalTypes(t, td.SuperSliceOf(MySlice{}, nil), MySlice{})
+	equalTypes(t, td.SuperSliceOf(&MySlice{}, nil), &MySlice{})
+
+	type MyArray [12]int
+
+	equalTypes(t, td.SuperSliceOf([12]int{}, nil), [12]int{})
+	equalTypes(t, td.SuperSliceOf(MyArray{}, nil), MyArray{})
+	equalTypes(t, td.SuperSliceOf(&MyArray{}, nil), &MyArray{})
 }

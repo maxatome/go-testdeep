@@ -94,10 +94,20 @@ func ExampleCmpArray_array() {
 
 	ok := td.CmpArray(t, got, [3]int{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks array %v", got)
-	fmt.Println(ok)
+	fmt.Println("Simple array:", ok)
+
+	ok = td.CmpArray(t, &got, &[3]int{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
+		"checks array %v", got)
+	fmt.Println("Array pointer:", ok)
+
+	ok = td.CmpArray(t, &got, (*[3]int)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
+		"checks array %v", got)
+	fmt.Println("Array pointer, nil model:", ok)
 
 	// Output:
-	// true
+	// Simple array: true
+	// Array pointer: true
+	// Array pointer, nil model: true
 }
 
 func ExampleCmpArray_typedArray() {
@@ -109,25 +119,25 @@ func ExampleCmpArray_typedArray() {
 
 	ok := td.CmpArray(t, got, MyArray{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks typed array %v", got)
-	fmt.Println(ok)
+	fmt.Println("Typed array:", ok)
 
 	ok = td.CmpArray(t, &got, &MyArray{42}, td.ArrayEntries{1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
-	fmt.Println(ok)
+	fmt.Println("Pointer on a typed array:", ok)
 
 	ok = td.CmpArray(t, &got, &MyArray{}, td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
-	fmt.Println(ok)
+	fmt.Println("Pointer on a typed array, empty model:", ok)
 
 	ok = td.CmpArray(t, &got, (*MyArray)(nil), td.ArrayEntries{0: 42, 1: 58, 2: td.Ignore()},
 		"checks pointer on typed array %v", got)
-	fmt.Println(ok)
+	fmt.Println("Pointer on a typed array, nil model:", ok)
 
 	// Output:
-	// true
-	// true
-	// true
-	// true
+	// Typed array: true
+	// Pointer on a typed array: true
+	// Pointer on a typed array, empty model: true
+	// Pointer on a typed array, nil model: true
 }
 
 func ExampleCmpArrayEach_array() {
@@ -3103,6 +3113,122 @@ func ExampleCmpSuperSetOf() {
 	// true
 	// true
 	// true
+}
+
+func ExampleCmpSuperSliceOf_array() {
+	t := &testing.T{}
+
+	got := [4]int{42, 58, 26, 666}
+
+	ok := td.CmpSuperSliceOf(t, got, [4]int{1: 58}, td.ArrayEntries{3: td.Gt(660)},
+		"checks array %v", got)
+	fmt.Println("Only check items #1 & #3:", ok)
+
+	ok = td.CmpSuperSliceOf(t, got, [4]int{}, td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3:", ok)
+
+	ok = td.CmpSuperSliceOf(t, &got, &[4]int{}, td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3 of an array pointer:", ok)
+
+	ok = td.CmpSuperSliceOf(t, &got, (*[4]int)(nil), td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3 of an array pointer, using nil model:", ok)
+
+	// Output:
+	// Only check items #1 & #3: true
+	// Only check items #0 & #3: true
+	// Only check items #0 & #3 of an array pointer: true
+	// Only check items #0 & #3 of an array pointer, using nil model: true
+}
+
+func ExampleCmpSuperSliceOf_typedArray() {
+	t := &testing.T{}
+
+	type MyArray [4]int
+
+	got := MyArray{42, 58, 26, 666}
+
+	ok := td.CmpSuperSliceOf(t, got, MyArray{1: 58}, td.ArrayEntries{3: td.Gt(660)},
+		"checks typed array %v", got)
+	fmt.Println("Only check items #1 & #3:", ok)
+
+	ok = td.CmpSuperSliceOf(t, got, MyArray{}, td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3:", ok)
+
+	ok = td.CmpSuperSliceOf(t, &got, &MyArray{}, td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3 of an array pointer:", ok)
+
+	ok = td.CmpSuperSliceOf(t, &got, (*MyArray)(nil), td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3 of an array pointer, using nil model:", ok)
+
+	// Output:
+	// Only check items #1 & #3: true
+	// Only check items #0 & #3: true
+	// Only check items #0 & #3 of an array pointer: true
+	// Only check items #0 & #3 of an array pointer, using nil model: true
+}
+
+func ExampleCmpSuperSliceOf_slice() {
+	t := &testing.T{}
+
+	got := []int{42, 58, 26, 666}
+
+	ok := td.CmpSuperSliceOf(t, got, []int{1: 58}, td.ArrayEntries{3: td.Gt(660)},
+		"checks array %v", got)
+	fmt.Println("Only check items #1 & #3:", ok)
+
+	ok = td.CmpSuperSliceOf(t, got, []int{}, td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3:", ok)
+
+	ok = td.CmpSuperSliceOf(t, &got, &[]int{}, td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3 of a slice pointer:", ok)
+
+	ok = td.CmpSuperSliceOf(t, &got, (*[]int)(nil), td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3 of a slice pointer, using nil model:", ok)
+
+	// Output:
+	// Only check items #1 & #3: true
+	// Only check items #0 & #3: true
+	// Only check items #0 & #3 of a slice pointer: true
+	// Only check items #0 & #3 of a slice pointer, using nil model: true
+}
+
+func ExampleCmpSuperSliceOf_typedSlice() {
+	t := &testing.T{}
+
+	type MySlice []int
+
+	got := MySlice{42, 58, 26, 666}
+
+	ok := td.CmpSuperSliceOf(t, got, MySlice{1: 58}, td.ArrayEntries{3: td.Gt(660)},
+		"checks typed array %v", got)
+	fmt.Println("Only check items #1 & #3:", ok)
+
+	ok = td.CmpSuperSliceOf(t, got, MySlice{}, td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3:", ok)
+
+	ok = td.CmpSuperSliceOf(t, &got, &MySlice{}, td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3 of a slice pointer:", ok)
+
+	ok = td.CmpSuperSliceOf(t, &got, (*MySlice)(nil), td.ArrayEntries{0: 42, 3: td.Between(660, 670)},
+		"checks array %v", got)
+	fmt.Println("Only check items #0 & #3 of a slice pointer, using nil model:", ok)
+
+	// Output:
+	// Only check items #1 & #3: true
+	// Only check items #0 & #3: true
+	// Only check items #0 & #3 of a slice pointer: true
+	// Only check items #0 & #3 of a slice pointer, using nil model: true
 }
 
 func ExampleCmpTruncTime() {
