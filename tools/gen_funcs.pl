@@ -397,7 +397,7 @@ my $rparam =qr/"(?:\\.|[^"]+)*"            # "string"
               |'(?:\\.|[^']+)*'            # 'char'
               |`[^`]*`                     # `string`
               |&[a-zA-Z_]\w*(?:\.\w+)?(?:$rec)? # &Struct{...}, &variable
-              |\[[^][]*\](?:interface\{\}|\w+)$rec # []Array{...}
+              |&?\[[^][]*\](?:interface\{\}|\w+)$rec # []Array{...}
               |\[\]byte\("[^"]+"\)         # []byte("...")
               |map${reb}\w+$rec            # map[...]Type{...}
               |func\([^)]*\)[^{]+$rec      # func fn (...) ... { ... }

@@ -289,6 +289,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 
 [`tdhttp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp
 [`tdsuite`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdsuite
+[`tdutil`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil
 
 [`BeLax` config flag]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig
 [`error`]: https://pkg.go.dev/builtin/#error
@@ -354,6 +355,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`SuperJSONOf`]: https://go-testdeep.zetta.rocks/operators/superjsonof/
 [`SuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/
 [`SuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/
+[`SuperSliceOf`]: https://go-testdeep.zetta.rocks/operators/supersliceof/
 [`Tag`]: https://go-testdeep.zetta.rocks/operators/tag/
 [`TruncTime`]: https://go-testdeep.zetta.rocks/operators/trunctime/
 [`Values`]: https://go-testdeep.zetta.rocks/operators/values/
@@ -413,6 +415,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpSuperJSONOf`]: https://go-testdeep.zetta.rocks/operators/superjsonof/#cmpsuperjsonof-shortcut
 [`CmpSuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/#cmpsupermapof-shortcut
 [`CmpSuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/#cmpsupersetof-shortcut
+[`CmpSuperSliceOf`]: https://go-testdeep.zetta.rocks/operators/supersliceof/#cmpsupersliceof-shortcut
 [`CmpTruncTime`]: https://go-testdeep.zetta.rocks/operators/trunctime/#cmptrunctime-shortcut
 [`CmpValues`]: https://go-testdeep.zetta.rocks/operators/values/#cmpvalues-shortcut
 [`CmpZero`]: https://go-testdeep.zetta.rocks/operators/zero/#cmpzero-shortcut
@@ -471,6 +474,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.SuperJSONOf`]: https://go-testdeep.zetta.rocks/operators/superjsonof/#tsuperjsonof-shortcut
 [`T.SuperMapOf`]: https://go-testdeep.zetta.rocks/operators/supermapof/#tsupermapof-shortcut
 [`T.SuperSetOf`]: https://go-testdeep.zetta.rocks/operators/supersetof/#tsupersetof-shortcut
+[`T.SuperSliceOf`]: https://go-testdeep.zetta.rocks/operators/supersliceof/#tsupersliceof-shortcut
 [`T.TruncTime`]: https://go-testdeep.zetta.rocks/operators/trunctime/#ttrunctime-shortcut
 [`T.Values`]: https://go-testdeep.zetta.rocks/operators/values/#tvalues-shortcut
 [`T.Zero`]: https://go-testdeep.zetta.rocks/operators/zero/#tzero-shortcut
