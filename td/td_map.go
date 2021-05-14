@@ -8,12 +8,14 @@ package td
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -44,7 +46,7 @@ type mapEntryInfo struct {
 // TestDeep operator as well as a zero value.)
 type MapEntries map[interface{}]interface{}
 
-func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
+func newMap(model interface{}, entries MapEntries, kind mapKind) (*tdMap, error) {
 	vmodel := reflect.ValueOf(model)
 
 	m := tdMap{
@@ -64,8 +66,7 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 
 		if vmodel.IsNil() {
 			m.expectedType = vmodel.Type().Elem()
-			m.populateExpectedEntries(entries, reflect.Value{})
-			return &m
+			return &m, m.populateExpectedEntries(entries, reflect.Value{})
 		}
 
 		vmodel = vmodel.Elem()
@@ -73,15 +74,14 @@ func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
 
 	case reflect.Map:
 		m.expectedType = vmodel.Type()
-		m.populateExpectedEntries(entries, vmodel)
-		return &m
+		return &m, m.populateExpectedEntries(entries, vmodel)
 	}
 
-	panic(color.BadUsage(m.GetLocation().Func+"(MAP|&MAP, EXPECTED_ENTRIES)",
+	return nil, errors.New(color.BadUsage(m.GetLocation().Func+"(MAP|&MAP, EXPECTED_ENTRIES)",
 		model, 1, true))
 }
 
-func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflect.Value) {
+func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflect.Value) error {
 	var keysInModel int
 	if expectedModel.IsValid() {
 		keysInModel = expectedModel.Len()
@@ -98,7 +98,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 	for key, expectedValue := range entries {
 		vkey := reflect.ValueOf(key)
 		if !vkey.Type().AssignableTo(keyType) {
-			panic(color.Bad(
+			return errors.New(color.Bad(
 				"%s(): expected key %s type mismatch: %s != model key type (%s)",
 				m.GetLocation().Func,
 				util.ToString(key),
@@ -112,7 +112,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 				reflect.Ptr, reflect.Slice:
 				entryInfo.expected = reflect.Zero(valueType) // change to a typed nil
 			default:
-				panic(color.Bad(
+				return errors.New(color.Bad(
 					"%s(): expected key %s value cannot be nil as entries value type is %s",
 					m.GetLocation().Func,
 					util.ToString(key),
@@ -123,7 +123,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 
 			if _, ok := expectedValue.(TestDeep); !ok {
 				if !entryInfo.expected.Type().AssignableTo(valueType) {
-					panic(color.Bad(
+					return errors.New(color.Bad(
 						"%s(): expected key %s value type mismatch: %s != model key type (%s)",
 						m.GetLocation().Func,
 						util.ToString(key),
@@ -140,23 +140,26 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 
 	// Check entries in model
 	if keysInModel == 0 {
-		return
+		return nil
 	}
 
+	var err error
 	tdutil.MapEach(expectedModel, func(k, v reflect.Value) bool {
 		entryInfo.expected = v
 
 		if checkedEntries[k.Interface()] {
-			panic(color.Bad(
+			err = errors.New(color.Bad(
 				"%s(): %s entry exists in both model & expectedEntries",
 				m.GetLocation().Func,
 				util.ToString(k)))
+			return false
 		}
 
 		entryInfo.key = k
 		m.expectedEntries = append(m.expectedEntries, entryInfo)
 		return true
 	})
+	return err
 }
 
 // summary(Map): compares the contents of a map
@@ -190,7 +193,13 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Map(model interface{}, expectedEntries MapEntries) TestDeep {
-	return newMap(model, expectedEntries, allMap)
+	op, err := newMap(model, expectedEntries, allMap)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 // summary(SubMapOf): compares the contents of a map but with
@@ -234,7 +243,13 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 //
 // TypeBehind method returns the reflect.Type of "model".
 func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
-	return newMap(model, expectedEntries, subMap)
+	op, err := newMap(model, expectedEntries, subMap)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 // summary(SuperMapOf): compares the contents of a map but with
@@ -277,7 +292,13 @@ func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 //
 // TypeBehind method returns the reflect.Type of "model".
 func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
-	return newMap(model, expectedEntries, superMap)
+	op, err := newMap(model, expectedEntries, superMap)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
+	return op
 }
 
 func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {

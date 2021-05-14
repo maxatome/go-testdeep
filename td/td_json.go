@@ -97,7 +97,7 @@ func (u tdJSONUnmarshaler) replaceLocation(tdOp TestDeep, posInJSON json.Positio
 }
 
 // unmarshal unmarshals "expectedJSON" using placeholder parameters "params".
-func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interface{}) interface{} {
+func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interface{}) (interface{}, error) {
 	var (
 		err error
 		b   []byte
@@ -111,7 +111,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 			// It could be a file name, try to read from it
 			b, err = ioutil.ReadFile(data)
 			if err != nil {
-				panic(color.Bad("%s(): JSON file %s cannot be read: %s",
+				return nil, errors.New(color.Bad("%s(): JSON file %s cannot be read: %s",
 					u.Func, data, err))
 			}
 			break
@@ -124,11 +124,11 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 	case io.Reader:
 		b, err = ioutil.ReadAll(data)
 		if err != nil {
-			panic(color.Bad("%s(): JSON read error: %s", u.Func, err))
+			return nil, errors.New(color.Bad("%s(): JSON read error: %s", u.Func, err))
 		}
 
 	default:
-		panic(color.BadUsage(
+		return nil, errors.New(color.BadUsage(
 			u.Func+"(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)",
 			expectedJSON, 1, false))
 	}
@@ -140,7 +140,8 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 		switch op := p.(type) {
 		case *tdTag:
 			if byTag[op.tag] != nil {
-				panic(color.Bad(`%s(): 2 params have the same tag "%s"`, u.Func, op.tag))
+				return nil, errors.New(color.Bad(
+					`%s(): 2 params have the same tag "%s"`, u.Func, op.tag))
 			}
 			if byTag == nil {
 				byTag = map[string]interface{}{}
@@ -165,7 +166,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 				if _, ok := types.AsOperatorNotJSONMarshallableError(err); ok {
 					break
 				}
-				panic(color.Bad(`%s(): param #%d of type %T cannot be JSON marshalled`, u.Func, i+1, p))
+				return nil, errors.New(color.Bad(`%s(): param #%d of type %T cannot be JSON marshalled`, u.Func, i+1, p))
 			}
 			// As Marshal succeeded, Unmarshal in an interface{} cannot fail
 			params[i] = nil
@@ -181,10 +182,10 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 	})
 
 	if err != nil {
-		panic(color.Bad("%s(): JSON unmarshal error: %s", u.Func, err))
+		return nil, errors.New(color.Bad("%s(): JSON unmarshal error: %s", u.Func, err))
 	}
 
-	return final
+	return final, nil
 }
 
 // resolveOp returns a closure usable as json.ParseOpts.OpFn.
@@ -287,24 +288,17 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 			}
 		}
 
-		var (
-			panicArg interface{}
-			tdOp     TestDeep
-		)
-		func() {
-			defer func() { panicArg = recover() }()
+		var tdOp TestDeep
+		err := dark.FatalizerBarrier(func() {
 			tdOp = vfn.Call(in)[0].Interface().(TestDeep)
-		}()
+		})
+		if err != nil {
+			return nil, fmt.Errorf("%s() %v", jop.Name, color.UnBad(err.Error()))
+		}
 
-		if tdOp != nil {
-			// replace the location by the JSON/SubJSONOf/SuperJSONOf one
-			u.replaceLocation(tdOp, posInJSON)
-			return &tdJSONEmbedded{tdOp}, nil
-		}
-		if s, ok := panicArg.(string); ok {
-			panicArg = color.UnBad(s)
-		}
-		return nil, fmt.Errorf("%s() %v", jop.Name, panicArg)
+		// replace the location by the JSON/SubJSONOf/SuperJSONOf one
+		u.replaceLocation(tdOp, posInJSON)
+		return &tdJSONEmbedded{tdOp}, nil
 	}
 }
 
@@ -562,7 +556,12 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 func JSON(expectedJSON interface{}, params ...interface{}) TestDeep {
 	b := newBaseOKNil(3)
 
-	v := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
+	v, err := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
 
 	return &tdJSON{
 		baseOKNil: b,
@@ -745,11 +744,18 @@ var _ TestDeep = &tdMapJSON{}
 func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 	b := newBase(3)
 
-	v := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
+	v, err := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
 
 	_, ok := v.(map[string]interface{})
 	if !ok {
-		panic(color.Bad("SubJSONOf() only accepts JSON objects {…}"))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad("SubJSONOf() only accepts JSON objects {…}"))
 	}
 
 	m := tdMapJSON{
@@ -762,8 +768,8 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 		},
 		expected: reflect.ValueOf(v),
 	}
-	m.populateExpectedEntries(nil, m.expected)
-
+	// As entries is nil, it never returns an error
+	m.populateExpectedEntries(nil, m.expected) //nolint: errcheck
 	return &m
 }
 
@@ -900,11 +906,18 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 	b := newBase(3)
 
-	v := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
+	v, err := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, err)
+	}
 
 	_, ok := v.(map[string]interface{})
 	if !ok {
-		panic(color.Bad("SuperJSONOf() only accepts JSON objects {…}"))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad("SuperJSONOf() only accepts JSON objects {…}"))
 	}
 
 	m := tdMapJSON{
@@ -917,8 +930,8 @@ func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 		},
 		expected: reflect.ValueOf(v),
 	}
-	m.populateExpectedEntries(nil, m.expected)
-
+	// As entries is nil, it never returns an error
+	m.populateExpectedEntries(nil, m.expected) //nolint: errcheck
 	return &m
 }
 

@@ -7,9 +7,11 @@
 package td_test
 
 import (
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -74,13 +76,14 @@ func TestT(tt *testing.T) {
 
 	//
 	// Bad usages
-	test.CheckPanic(tt,
-		func() {
-			td.NewT(tt, td.ContextConfig{}, td.ContextConfig{})
-		},
-		"usage: NewT")
+	ttb := test.NewTestingTB("usage params")
+	ttb.CatchFatal(func() {
+		td.NewT(ttb, td.ContextConfig{}, td.ContextConfig{})
+	})
+	test.IsTrue(tt, ttb.IsFatal)
+	test.IsTrue(tt, strings.Contains(ttb.Messages[0], "usage: NewT("))
 
-	test.CheckPanic(tt, func() { td.NewT(nil) }, "usage: NewT")
+	dark.CheckFatalizerBarrierErr(tt, func() { td.NewT(nil) }, "usage: NewT")
 }
 
 func TestTCmp(tt *testing.T) {
@@ -290,35 +293,35 @@ func TestFailureIsFatal(tt *testing.T) {
 	// Using specific config
 	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt, td.ContextConfig{FailureIsFatal: true})
-	t.True(false) // failure
+	ttt.CatchFatal(func() { t.True(false) }) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using FailureIsFatal()
 	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt).FailureIsFatal()
-	t.True(false) // failure
+	ttt.CatchFatal(func() { t.True(false) }) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using FailureIsFatal(true)
 	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt).FailureIsFatal(true)
-	t.True(false) // failure
+	ttt.CatchFatal(func() { t.True(false) }) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using Require()
 	ttt = test.NewTestingTB(tt.Name())
 	t = td.Require(ttt)
-	t.True(false) // failure
+	ttt.CatchFatal(func() { t.True(false) }) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
 	// Using Require() with specific config (cannot override FailureIsFatal)
 	ttt = test.NewTestingTB(tt.Name())
 	t = td.Require(ttt, td.ContextConfig{FailureIsFatal: false})
-	t.True(false) // failure
+	ttt.CatchFatal(func() { t.True(false) }) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
@@ -362,7 +365,7 @@ func TestFailureIsFatal(tt *testing.T) {
 	// AssertRequire() / require
 	ttt = test.NewTestingTB(tt.Name())
 	_, t = td.AssertRequire(ttt)
-	t.True(false) // failure
+	ttt.CatchFatal(func() { t.True(false) }) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 
@@ -370,7 +373,7 @@ func TestFailureIsFatal(tt *testing.T) {
 	// override FailureIsFatal)
 	ttt = test.NewTestingTB(tt.Name())
 	_, t = td.AssertRequire(ttt, td.ContextConfig{FailureIsFatal: true})
-	t.True(false) // failure
+	ttt.CatchFatal(func() { t.True(false) }) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
 }

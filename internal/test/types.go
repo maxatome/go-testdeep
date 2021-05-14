@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"runtime"
 	"testing"
+
+	"github.com/maxatome/go-testdeep/internal/trace"
 )
 
 // TestingT is a type implementing td.TestingT intended to be used in
@@ -19,6 +21,8 @@ type TestingT struct {
 	IsFatal   bool
 	HasFailed bool
 }
+
+type testingFatal string
 
 // NewTestingT returns a new instance of *TestingT.
 func NewTestingT() *TestingT {
@@ -37,6 +41,29 @@ func (t *TestingT) Fatal(args ...interface{}) {
 	t.Messages = append(t.Messages, fmt.Sprint(args...))
 	t.IsFatal = true
 	t.HasFailed = true
+
+	panic(testingFatal(t.Messages[len(t.Messages)-1]))
+}
+
+func (t *TestingT) CatchFatal(fn func()) (fatalStr string) {
+	panicked := true
+	trace.IgnorePackage()
+	defer func() {
+		trace.UnignorePackage()
+		if panicked {
+			if x := recover(); x != nil {
+				if str, ok := x.(testingFatal); ok {
+					fatalStr = string(str)
+				} else {
+					panic(x) // rethrow
+				}
+			}
+		}
+	}()
+
+	fn()
+	panicked = false
+	return
 }
 
 // Helper mocks testing.T Helper method.

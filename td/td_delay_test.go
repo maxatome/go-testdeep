@@ -9,6 +9,7 @@ package td_test
 import (
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -44,7 +45,7 @@ func TestDelay(t *testing.T) {
 		})
 
 	// Bad usage
-	test.CheckPanic(t, func() { td.Delay(nil) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Delay(nil) },
 		"Delay(DELAYED): DELAYED must be non-nil")
 }
 

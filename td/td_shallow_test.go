@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -136,7 +136,7 @@ func TestShallow(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Shallow(42) }, "usage: Shallow")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Shallow(42) }, "usage: Shallow")
 
 	//
 	//

@@ -14,6 +14,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -97,7 +98,9 @@ var _ TestDeep = &tdJSONPointer{}
 // guessed from a JSON pointer.
 func JSONPointer(pointer string, expectedValue interface{}) TestDeep {
 	if !strings.HasPrefix(pointer, "/") && pointer != "" {
-		panic(color.Bad("JSONPointer(): bad JSON pointer %s", pointer))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad("JSONPointer(): bad JSON pointer %s", pointer))
 	}
 
 	p := tdJSONPointer{

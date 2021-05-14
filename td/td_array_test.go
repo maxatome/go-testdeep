@@ -9,6 +9,7 @@ package td_test
 import (
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -165,21 +166,21 @@ func TestArray(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Array("test", nil) }, "usage: Array(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t, func() { td.Array("test", nil) }, "usage: Array(")
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Array(&MyStruct{}, nil) },
 		"usage: Array(")
-	test.CheckPanic(t, func() { td.Array([]int{}, nil) }, "usage: Array(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t, func() { td.Array([]int{}, nil) }, "usage: Array(")
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Array([1]int{}, td.ArrayEntries{1: 34}) },
 		"array length is 1, so cannot have #1 expected index")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Array([3]int{}, td.ArrayEntries{1: nil}) },
 		"expected value of #1 cannot be nil as items type is int")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Array([3]int{}, td.ArrayEntries{1: "bad"}) },
 		"type string of #1 expected value differs from array contents (int)")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Array([1]int{12}, td.ArrayEntries{0: 21}) },
 		"non zero #0 entry in model already exists in expectedEntries")
 
@@ -406,15 +407,15 @@ func TestSlice(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Slice("test", nil) }, "usage: Slice(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t, func() { td.Slice("test", nil) }, "usage: Slice(")
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Slice(&MyStruct{}, nil) },
 		"usage: Slice(")
-	test.CheckPanic(t, func() { td.Slice([0]int{}, nil) }, "usage: Slice(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t, func() { td.Slice([0]int{}, nil) }, "usage: Slice(")
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Slice([]int{}, td.ArrayEntries{1: "bad"}) },
 		"type string of #1 expected value differs from slice contents (int)")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Slice([]int{12}, td.ArrayEntries{0: 21}) },
 		"non zero #0 entry in model already exists in expectedEntries")
 
@@ -538,7 +539,7 @@ func TestSuperSliceOf(t *testing.T) {
 		checkOK(t, [5]int{3: 4},
 			td.Lax(td.SuperSliceOf(MyArray{}, td.ArrayEntries{3: 4})))
 
-		test.CheckPanic(t,
+		dark.CheckFatalizerBarrierErr(t,
 			func() { td.SuperSliceOf(MyArray{}, td.ArrayEntries{8: 34}) },
 			"array length is 5, so cannot have #8 expected index")
 	})
@@ -612,14 +613,15 @@ func TestSuperSliceOf(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.SuperSliceOf("test", nil) }, "usage: SuperSliceOf(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
+		func() { td.SuperSliceOf("test", nil) }, "usage: SuperSliceOf(")
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SuperSliceOf(&MyStruct{}, nil) },
 		"usage: SuperSliceOf(")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}) },
 		"type string of #1 expected value differs from slice contents (int)")
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SuperSliceOf([]int{12}, td.ArrayEntries{0: 21}) },
 		"non zero #0 entry in model already exists in expectedEntries")
 }

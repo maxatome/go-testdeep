@@ -9,7 +9,7 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -137,10 +137,10 @@ func TestKeysValues(t *testing.T) {
 
 	//
 	t.Run("Bad usage", func(t *testing.T) {
-		test.CheckPanic(t, func() { td.Keys(12) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.Keys(12) },
 			"usage: Keys(TESTDEEP_OPERATOR|SLICE)")
 
-		test.CheckPanic(t, func() { td.Values(12) },
+		dark.CheckFatalizerBarrierErr(t, func() { td.Values(12) },
 			"usage: Values(TESTDEEP_OPERATOR|SLICE)")
 	})
 }

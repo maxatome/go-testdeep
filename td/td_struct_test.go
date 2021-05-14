@@ -238,26 +238,26 @@ func TestStruct(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Struct("test", nil) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Struct("test", nil) },
 		"usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter")
 
 	i := 12
-	test.CheckPanic(t, func() { td.Struct(&i, nil) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Struct(&i, nil) },
 		"usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Struct(&MyStruct{}, td.StructFields{"UnknownField": 123}) },
 		"Struct(): struct td_test.MyStruct has no field `UnknownField'")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Struct(&MyStruct{}, td.StructFields{"ValBool": 123}) },
 		"Struct(): type int of field expected value ValBool differs from struct one (bool)")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Struct(&MyStruct{}, td.StructFields{"ValBool": nil}) },
 		"Struct(): expected value of field ValBool cannot be nil as it is a bool")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() {
 			td.Struct(&MyStruct{
 				MyStructMid: MyStructMid{
@@ -694,26 +694,26 @@ func TestSStruct(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.SStruct("test", nil) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SStruct("test", nil) },
 		"usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter")
 
 	i := 12
-	test.CheckPanic(t, func() { td.SStruct(&i, nil) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.SStruct(&i, nil) },
 		"usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SStruct(&MyStruct{}, td.StructFields{"UnknownField": 123}) },
 		"SStruct(): struct td_test.MyStruct has no field `UnknownField'")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SStruct(&MyStruct{}, td.StructFields{"ValBool": 123}) },
 		"SStruct(): type int of field expected value ValBool differs from struct one (bool)")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SStruct(&MyStruct{}, td.StructFields{"ValBool": nil}) },
 		"SStruct(): expected value of field ValBool cannot be nil as it is a bool")
 
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() {
 			td.SStruct(&MyStruct{
 				MyStructMid: MyStructMid{

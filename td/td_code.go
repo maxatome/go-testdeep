@@ -11,6 +11,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -79,12 +80,16 @@ func Code(fn interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
 	if vfn.Kind() != reflect.Func {
-		panic(color.BadUsage("Code(FUNC)", fn, 1, true))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.BadUsage("Code(FUNC)", fn, 1, true))
 	}
 
 	fnType := vfn.Type()
 	if fnType.IsVariadic() || fnType.NumIn() != 1 {
-		panic(color.Bad("Code(FUNC): FUNC must take only one non-variadic argument"))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad("Code(FUNC): FUNC must take only one non-variadic argument"))
 	}
 
 	switch fnType.NumOut() {
@@ -107,7 +112,10 @@ func Code(fn interface{}) TestDeep {
 		}
 	}
 
-	panic(color.Bad("Code(FUNC): FUNC must return bool or (bool, string) or error"))
+	f := dark.GetFatalizer()
+	f.Helper()
+	dark.Fatal(f, color.Bad("Code(FUNC): FUNC must return bool or (bool, string) or error"))
+	return nil // never reached
 }
 
 func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {

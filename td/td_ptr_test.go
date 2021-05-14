@@ -9,6 +9,7 @@ package td_test
 import (
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -168,11 +169,11 @@ func TestPtr(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Ptr(nil) }, "usage: Ptr(")
-	test.CheckPanic(t, func() { td.Ptr(MyInterface(nil)) }, "usage: Ptr(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Ptr(nil) }, "usage: Ptr(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Ptr(MyInterface(nil)) }, "usage: Ptr(")
 
-	test.CheckPanic(t, func() { td.PPtr(nil) }, "usage: PPtr(")
-	test.CheckPanic(t, func() { td.PPtr(MyInterface(nil)) }, "usage: PPtr(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.PPtr(nil) }, "usage: PPtr(")
+	dark.CheckFatalizerBarrierErr(t, func() { td.PPtr(MyInterface(nil)) }, "usage: PPtr(")
 
 	//
 	// String

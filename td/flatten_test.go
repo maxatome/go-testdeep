@@ -9,6 +9,7 @@ package td_test
 import (
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -28,8 +29,8 @@ func TestFlatten(t *testing.T) {
 		test.EqualInt(t, len(s), 2)
 	}
 
-	test.CheckPanic(t, func() { td.Flatten(nil) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Flatten(nil) },
 		"usage: Flatten(SLICE|ARRAY|MAP), but received nil as 1st parameter")
-	test.CheckPanic(t, func() { td.Flatten(42) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Flatten(42) },
 		"usage: Flatten(SLICE|ARRAY|MAP), but received int as 1st parameter")
 }

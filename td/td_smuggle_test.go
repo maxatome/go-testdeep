@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -305,46 +306,46 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t, func() { td.Smuggle(123, 12) }, "usage: Smuggle")
-	test.CheckPanic(t, func() { td.Smuggle("bad[path", 12) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.Smuggle(123, 12) }, "usage: Smuggle")
+	dark.CheckFatalizerBarrierErr(t, func() { td.Smuggle("bad[path", 12) },
 		`Smuggle(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE): cannot find final ']' in FIELD_PATH "bad[path"`)
 
 	// Bad number of args
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Smuggle(func() int { return 0 }, 12)
 	}, "FUNC must take only one non-variadic argument")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Smuggle(func(x ...int) int { return 0 }, 12)
 	}, "FUNC must take only one non-variadic argument")
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Smuggle(func(a int, b string) int { return 0 }, 12)
 	}, "FUNC must take only one non-variadic argument")
 
 	// Bad number of returned values
 	const errMesg = "FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Smuggle(func(a int) {}, 12)
 	}, errMesg)
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Smuggle(
 			func(a int) (int, bool, string, int) { return 0, false, "", 23 },
 			12)
 	}, errMesg)
 
 	// Bad returned types
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Smuggle(func(a int) (int, int) { return 0, 0 }, 12)
 	}, errMesg)
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12)
 	}, errMesg)
 
-	test.CheckPanic(t, func() {
+	dark.CheckFatalizerBarrierErr(t, func() {
 		td.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12) // nolint: staticcheck
 	}, errMesg)
 

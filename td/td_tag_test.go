@@ -9,6 +9,7 @@ package td_test
 import (
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/internal/util"
 	"github.com/maxatome/go-testdeep/td"
@@ -40,7 +41,7 @@ func TestTag(t *testing.T) {
 
 	//
 	// Bad usage
-	test.CheckPanic(t,
+	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Tag("1badTag", td.Between(9, 13)) },
 		"Tag(): "+util.ErrTagInvalid.Error())
 

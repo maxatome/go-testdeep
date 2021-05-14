@@ -11,7 +11,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -116,12 +116,17 @@ func TestRe(t *testing.T) {
 	//
 	// Bad usage
 	const up = "(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])"
-	test.CheckPanic(t, func() { td.Re(123) },
+
+	dark.CheckFatalizerBarrierErr(t, func() { td.Re(123) },
 		"usage: Re"+up+", but received int as 1st parameter")
-	test.CheckPanic(t, func() { td.Re("bar", []string{}, 1) },
+
+	dark.CheckFatalizerBarrierErr(t, func() { td.Re(123) },
+		"usage: Re"+up+", but received int as 1st parameter")
+
+	dark.CheckFatalizerBarrierErr(t, func() { td.Re("bar", []string{}, 1) },
 		"usage: Re"+up+", too many parameters")
 
-	test.CheckPanic(t, func() { td.ReAll(123, 456) },
+	dark.CheckFatalizerBarrierErr(t, func() { td.ReAll(123, 456) },
 		"usage: ReAll"+up+", but received int as 1st parameter")
 }
 

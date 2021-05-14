@@ -13,6 +13,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -54,7 +55,9 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 	const usage = "TruncTime(time.Time[, time.Duration])"
 
 	if len(trunc) > 1 {
-		panic(color.TooManyParams(usage))
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.TooManyParams(usage))
 	}
 
 	t := tdTruncTime{
@@ -74,14 +77,16 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 		t.expectedTime = expectedTime.(time.Time).Truncate(t.trunc)
 		return &t
 	}
-	if t.expectedType.ConvertibleTo(types.Time) {
-		t.expectedTime = vval.Convert(types.Time).
-			Interface().(time.Time).Truncate(t.trunc)
-		return &t
+	if !t.expectedType.ConvertibleTo(types.Time) {
+		f := dark.GetFatalizer()
+		f.Helper()
+		dark.Fatal(f, color.Bad("usage: %s, 1st parameter must be time.Time or convertible to time.Time, but not %T",
+			usage, expectedTime))
 	}
 
-	panic(color.Bad("usage: %s, 1st parameter must be time.Time or convertible to time.Time, but not %T",
-		usage, expectedTime))
+	t.expectedTime = vval.Convert(types.Time).
+		Interface().(time.Time).Truncate(t.trunc)
+	return &t
 }
 
 func (t *tdTruncTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
