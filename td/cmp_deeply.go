@@ -123,13 +123,14 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	var buf bytes.Buffer
 	color.AppendTestNameOn(&buf)
 	if len(args) == 0 {
-		buf.WriteString(failedTest + "\n")
+		buf.WriteString(failedTest)
 	} else {
 		buf.WriteString(failedTest + " '")
 		tdutil.FbuildTestName(&buf, args...)
-		buf.WriteString("'\n")
+		buf.WriteString("'")
 	}
 	color.AppendTestNameOff(&buf)
+	buf.WriteString("\n")
 
 	err.Append(&buf, "")
 
