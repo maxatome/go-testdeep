@@ -19,7 +19,7 @@ var (
 	SliceInterface  = reflect.TypeOf(([]interface{})(nil))
 	FmtStringer     = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
 	Error           = reflect.TypeOf((*error)(nil)).Elem()
-	JsonUnmarshaler = reflect.TypeOf((*json.Unmarshaler)(nil)).Elem() //nolint: golint
+	JsonUnmarshaler = reflect.TypeOf((*json.Unmarshaler)(nil)).Elem() //nolint: revive
 	Time            = reflect.TypeOf(time.Time{})
 	Int             = reflect.TypeOf(int(0))
 	Uint8           = reflect.TypeOf(uint8(0))
