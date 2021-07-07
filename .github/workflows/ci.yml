@@ -8,9 +8,6 @@ on:
 
 jobs:
   test:
-    env:
-      GO_CURRENT: 1.15.x
-
     strategy:
       matrix:
         go-version: [1.9.x, 1.10.x, 1.11.x, 1.12.x, 1.13.x, 1.14.x, 1.15.x, tip]
@@ -34,7 +31,7 @@ jobs:
         if: matrix.full-tests
         run: |
           wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
-              sh -s -- -b $HOME/go/bin v1.37.1
+              sh -s -- -b $HOME/go/bin v1.41.1
           echo $PATH
           $HOME/go/bin/golangci-lint run --max-issues-per-linter 0 \
                                          --max-same-issues 0 \
@@ -42,8 +39,7 @@ jobs:
                                          -E gocritic \
                                          -E godot \
                                          -E goimports \
-                                         -E golint \
-                                         -E maligned \
+                                         -E revive \
                                          -E misspell \
                                          -E prealloc \
                                          -E unconvert \
@@ -73,9 +69,13 @@ jobs:
           esac
 
           export GORACE="halt_on_error=1"
+          echo "CLASSIC ==========================================="
           go test                  $GO_TEST_FLAGS           ./...
+          echo "SAFE =============================================="
           go test       -tags safe $GO_TEST_SAFE_FLAGS      ./...
+          echo "RACE =============================================="
           go test -race            $GO_TEST_RACE_FLAGS      ./...
+          echo "RACE + SAFE ======================================="
           go test -race -tags safe $GO_TEST_RACE_SAFE_FLAGS ./...
 
       - name: Reporting
