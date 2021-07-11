@@ -471,6 +471,28 @@ func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
 	return cmpNotPanic(newContextWithConfig(t.Config), t, fn, args...)
 }
 
+// Parallel marks this test as runnable in parallel with other parallel tests.
+// If t.TB implements Parallel(), as *testing.T does, it is usually used to
+// mark top-level tests and/or subtests as safe for parallel execution:
+//
+//   func TestCreateRecord(tt *testing.T) {
+//     t := td.NewT(tt)
+//     t.Parallel()
+//
+//     t.Run("no error", func(t *td.T) {
+//       t.Parallel()
+//
+//       // ...
+//     })
+//
+// If t.TB does not implement Parallel(), this method is a no-op.
+func (t *T) Parallel() {
+	p, ok := t.TB.(interface{ Parallel() })
+	if ok {
+		p.Parallel()
+	}
+}
+
 type runtFuncs struct {
 	run reflect.Value
 	fnt reflect.Type
