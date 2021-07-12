@@ -180,3 +180,25 @@ func (t *TestingTB) Skipf(format string, args ...interface{}) {}
 func (t *TestingTB) Skipped() bool {
 	return false
 }
+
+// ParallelTestingTB is a type implementing testing.TB and a Parallel() method
+// intended to be used in tests.
+type ParallelTestingTB struct {
+	IsParallel bool
+	*TestingTB
+}
+
+// NewParallelTestingTB returns a new instance of *ParallelTestingTB.
+func NewParallelTestingTB(name string) *ParallelTestingTB {
+	return &ParallelTestingTB{TestingTB: NewTestingTB(name)}
+}
+
+// Parallel mocks the testing.T Parallel method. Not thread-safe.
+func (t *ParallelTestingTB) Parallel() {
+	if t.IsParallel {
+		// testing.T.Parallel() panics if called multiple times for the
+		// same test.
+		panic("testing: t.Parallel called multiple times")
+	}
+	t.IsParallel = true
+}

@@ -8,6 +8,7 @@ package td_test
 
 import (
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -108,6 +109,51 @@ func TestTCmpDeeply(tt *testing.T) {
 	t = td.NewT(ttt)
 	test.IsFalse(tt, t.CmpDeeply(1, 2))
 	test.IsTrue(tt, ttt.Failed())
+}
+
+func TestParallel(t *testing.T) {
+	t.Run("without Parallel", func(tt *testing.T) {
+		ttt := test.NewTestingTB(tt.Name())
+
+		t := td.NewT(ttt)
+		t.Parallel()
+
+		// has no effect
+	})
+
+	t.Run("with Parallel", func(tt *testing.T) {
+		ttt := test.NewParallelTestingTB(tt.Name())
+
+		t := td.NewT(ttt)
+		t.Parallel()
+
+		test.IsTrue(tt, ttt.IsParallel)
+	})
+
+	t.Run("Run with Parallel", func(tt *testing.T) {
+		// This test verifies that subtests with t.Parallel() are run
+		// in parallel. We use a WaitGroup to make both subtests block
+		// until they're both ready. This test will block forever if
+		// the tests are not run together.
+		var ready sync.WaitGroup
+		ready.Add(2)
+
+		t := td.NewT(tt)
+
+		t.Run("level 1", func(t *td.T) {
+			t.Parallel()
+
+			ready.Done() // I'm ready.
+			ready.Wait() // Are you?
+		})
+
+		t.Run("level 2", func(t *td.T) {
+			t.Parallel()
+
+			ready.Done() // I'm ready.
+			ready.Wait() // Are you?
+		})
+	})
 }
 
 func TestRun(t *testing.T) {
