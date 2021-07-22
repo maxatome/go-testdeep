@@ -153,13 +153,13 @@ func (e *Error) Append(buf *bytes.Buffer, prefix string) {
 		buf.WriteString(color.BadOnBold)
 		buf.WriteString("\t     got: ")
 		buf.WriteString(color.BadOn)
-		util.IndentStringIn(buf, e.GotString(), prefix+"\t          ")
+		util.IndentStringIn(buf, e.GotString(), prefix+"\t          ", color.BadOn, color.BadOff)
 		buf.WriteString(color.BadOff)
 		writeEolPrefix()
 		buf.WriteString(color.OKOnBold)
 		buf.WriteString("\texpected: ")
 		buf.WriteString(color.OKOn)
-		util.IndentStringIn(buf, e.ExpectedString(), prefix+"\t          ")
+		util.IndentStringIn(buf, e.ExpectedString(), prefix+"\t          ", color.OKOn, color.OKOff)
 		buf.WriteString(color.OKOff)
 	}
 

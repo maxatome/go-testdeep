@@ -63,8 +63,8 @@ func TestErrorSummary(t *testing.T) {
 
 		summary = ctxerr.NewSummary("foo\nbar")
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`
-----+foo
-----bar^`))
+----+foo^
+----+bar^`))
 
 		//
 		// ErrorSummaryItem
@@ -73,8 +73,8 @@ func TestErrorSummary(t *testing.T) {
 			Value: "foo\nbar",
 		}
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`
-----*the_label: +foo
-----~           ~bar^`))
+----*the_label: +foo^
+----~           +bar^`))
 
 		summary = ctxerr.ErrorSummaryItem{
 			Label:       "the_label",
@@ -82,10 +82,10 @@ func TestErrorSummary(t *testing.T) {
 			Explanation: "And the\nexplanation...",
 		}
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`
-----*the_label: +foo
-----~           ~bar
-----And the
-----explanation...^`))
+----*the_label: +foo^
+----~           +bar^
+----+And the^
+----+explanation...^`))
 
 		//
 		// ErrorSummaryItems
@@ -105,20 +105,20 @@ func TestErrorSummary(t *testing.T) {
 			},
 		}
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`
-----*  first label: +foo
-----~               ~bar
-----And the
-----explanation...^
-----*    2nd label: +zip
-----~               ~zap^
+----*  first label: +foo^
+----~               +bar^
+----+And the^
+----+explanation...^
+----*    2nd label: +zip^
+----~               +zap^
 ----*3rd big label: +666^`))
 
 		//
 		// NewSummaryReason
 		summary = ctxerr.NewSummaryReason(666, "")
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`
-----*  value: +666
-----~it failed but didn't say why^`))
+----*  value: +666^
+----+it failed but didn't say why^`))
 
 		summary = ctxerr.NewSummaryReason(666, "evil number not accepted!")
 		test.EqualStr(t, errorSummaryToString(summary, "----"), r(`

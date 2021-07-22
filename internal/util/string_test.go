@@ -67,9 +67,18 @@ func TestIndentString(t *testing.T) {
 		{ParamGot: "pipo\nbingo\nzip", Expected: "pipo\n-bingo\n-zip"},
 	} {
 		test.EqualStr(t, util.IndentString(curTest.ParamGot, "-"), curTest.Expected)
+	}
 
+	for _, curTest := range []struct {
+		ParamGot string
+		Expected string
+	}{
+		{ParamGot: "", Expected: ""},
+		{ParamGot: "pipo", Expected: "pipo"},
+		{ParamGot: "pipo\nbingo\nzip", Expected: "pipo>>\n-<<bingo>>\n-<<zip"},
+	} {
 		var buf bytes.Buffer
-		util.IndentStringIn(&buf, curTest.ParamGot, "-")
+		util.IndentStringIn(&buf, curTest.ParamGot, "-", "<<", ">>")
 		test.EqualStr(t, buf.String(), curTest.Expected)
 	}
 }
