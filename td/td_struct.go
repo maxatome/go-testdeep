@@ -11,8 +11,12 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path"
 	"reflect"
+	"regexp"
 	"sort"
+	"strconv"
+	"sync"
 
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
@@ -39,10 +43,83 @@ func (e fieldInfoSlice) Len() int           { return len(e) }
 func (e fieldInfoSlice) Less(i, j int) bool { return e[i].name < e[j].name }
 func (e fieldInfoSlice) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
 
+type fieldMatcher struct {
+	name     string
+	match    func(string) (bool, error)
+	expected interface{}
+	order    int
+	ok       bool
+}
+
+var (
+	reMatcherOnce  sync.Once
+	reMatcher      *regexp.Regexp
+	errNotAMatcher = errors.New("Not a matcher")
+)
+
+// newFieldMatcher checks "name" matches "[NUM] OP PATTERN" where NUM
+// is an optional number used to sort patterns, OP is "=~", "!~", "="
+// or "!" and PATTERN is a regexp (when OP is either "=~" or "!~") or
+// a shell pattern (when OP is either "=" or "!").
+//
+// NUM, OP and PATTERN can be separated by spaces (or not).
+func newFieldMatcher(name string, expected interface{}) (fieldMatcher, error) {
+	reMatcherOnce.Do(func() {
+		reMatcher = regexp.MustCompile(`^\s*(?:(\d+)\s*)?([=!]~?)\s*(.+)`)
+	})
+
+	subs := reMatcher.FindStringSubmatch(name)
+	if subs == nil {
+		return fieldMatcher{}, errNotAMatcher
+	}
+
+	fm := fieldMatcher{
+		name:     name,
+		expected: expected,
+		ok:       subs[2][0] == '=',
+	}
+
+	if subs[1] != "" {
+		fm.order, _ = strconv.Atoi(subs[1]) //nolint: errcheck
+	}
+
+	// Shell pattern
+	if subs[2] == "=" || subs[2] == "!" {
+		pattern := subs[3]
+		fm.match = func(s string) (bool, error) {
+			return path.Match(pattern, s)
+		}
+		return fm, nil
+	}
+
+	// Regexp
+	r, err := regexp.Compile(subs[3])
+	if err != nil {
+		return fieldMatcher{}, fmt.Errorf("bad regexp field %#q: %s", name, err)
+	}
+	fm.match = func(s string) (bool, error) {
+		return r.MatchString(s), nil
+	}
+	return fm, nil
+}
+
+type fieldMatcherSlice []fieldMatcher
+
+func (m fieldMatcherSlice) Len() int { return len(m) }
+func (m fieldMatcherSlice) Less(i, j int) bool {
+	if m[i].order != m[j].order {
+		return m[i].order < m[j].order
+	}
+	return m[i].name < m[j].name
+}
+func (m fieldMatcherSlice) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
+
 // StructFields allows to pass struct fields to check in functions
 // Struct and SStruct. It is a map whose each key is the expected
-// field name and the corresponding value the expected field value
-// (which can be a TestDeep operator as well as a zero value.)
+// field name (or a regexp or a shell pattern matching a field name,
+// see Struct & SStruct docs for details) and the corresponding value
+// the expected field value (which can be a TestDeep operator as well
+// as a zero value.)
 type StructFields map[string]interface{}
 
 func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value, error) {
@@ -92,47 +169,28 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 
 	st.expectedFields = make([]fieldInfo, 0, len(expectedFields))
 	checkedFields := make(map[string]bool, len(expectedFields))
+	var matchers fieldMatcherSlice
 
 	// Check that all given fields are available in model
 	stType := st.expectedType
-	var vexpectedValue reflect.Value
 	for fieldName, expectedValue := range expectedFields {
 		field, found := stType.FieldByName(fieldName)
 		if !found {
-			return nil, errors.New(color.Bad("%s(): struct %s has no field `%s'",
-				st.location.Func, stType, fieldName))
-		}
-
-		if expectedValue == nil {
-			switch field.Type.Kind() {
-			case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
-				reflect.Ptr, reflect.Slice:
-				vexpectedValue = reflect.Zero(field.Type) // change to a typed nil
-			default:
-				return nil, errors.New(color.Bad(
-					"%s(): expected value of field %s cannot be nil as it is a %s",
-					st.location.Func, fieldName, field.Type))
-			}
-		} else {
-			vexpectedValue = reflect.ValueOf(expectedValue)
-
-			if _, ok := expectedValue.(TestDeep); !ok {
-				if !vexpectedValue.Type().AssignableTo(field.Type) {
-					return nil, errors.New(color.Bad(
-						"%s(): type %s of field expected value %s differs from struct one (%s)",
-						st.location.Func,
-						vexpectedValue.Type(),
-						fieldName,
-						field.Type))
+			matcher, err := newFieldMatcher(fieldName, expectedValue)
+			if err != nil {
+				if err == errNotAMatcher {
+					return nil, errors.New(color.Bad("%s(): struct %s has no field %q",
+						st.location.Func, stType, fieldName))
 				}
+				return nil, errors.New(color.Bad("%s(): %s", st.location.Func, err))
 			}
+			matchers = append(matchers, matcher)
+			continue
 		}
 
-		st.expectedFields = append(st.expectedFields, fieldInfo{
-			name:     fieldName,
-			expected: vexpectedValue,
-			index:    field.Index,
-		})
+		if err = st.addExpectedValue(field, expectedValue, ""); err != nil {
+			return nil, err
+		}
 		checkedFields[fieldName] = true
 	}
 
@@ -183,6 +241,38 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 		}
 	}
 
+	// At least one matcher (regexp/shell pattern)
+	if matchers != nil {
+		sort.Sort(matchers) // always process matchers in the same order
+		for _, m := range matchers {
+			for fieldName := range allFields {
+				if checkedFields[fieldName] {
+					continue
+				}
+				field, _ := stType.FieldByName(fieldName)
+				if field.Anonymous {
+					continue
+				}
+
+				ok, err := m.match(fieldName)
+				if err != nil {
+					return nil, errors.New(color.Bad("%s(): bad shell pattern field %#q: %s",
+						st.location.Func, m.name, err))
+				}
+				if ok == m.ok {
+					err = st.addExpectedValue(
+						field, m.expected,
+						fmt.Sprintf(" (from pattern %#q)", m.name),
+					)
+					if err != nil {
+						return nil, err
+					}
+					checkedFields[fieldName] = true
+				}
+			}
+		}
+	}
+
 	// If strict, fill non explicitly expected fields to zero
 	if strict {
 		for fieldName := range allFields {
@@ -208,6 +298,41 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 	return st, nil
 }
 
+func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue interface{}, ctxInfo string) error {
+	var vexpectedValue reflect.Value
+	if expectedValue == nil {
+		switch field.Type.Kind() {
+		case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
+			reflect.Ptr, reflect.Slice:
+			vexpectedValue = reflect.Zero(field.Type) // change to a typed nil
+		default:
+			return errors.New(color.Bad(
+				"%s(): expected value of field %s%s cannot be nil as it is a %s",
+				s.location.Func, field.Name, ctxInfo, field.Type))
+		}
+	} else {
+		vexpectedValue = reflect.ValueOf(expectedValue)
+		if _, ok := expectedValue.(TestDeep); !ok {
+			if !vexpectedValue.Type().AssignableTo(field.Type) {
+				return errors.New(color.Bad(
+					"%s(): type %s of field expected value %s%s differs from struct one (%s)",
+					s.location.Func,
+					vexpectedValue.Type(),
+					field.Name,
+					ctxInfo,
+					field.Type))
+			}
+		}
+	}
+
+	s.expectedFields = append(s.expectedFields, fieldInfo{
+		name:     field.Name,
+		expected: vexpectedValue,
+		index:    field.Index,
+	})
+	return nil
+}
+
 // summary(Struct): compares the contents of a struct or a pointer on
 // a struct
 // input(Struct): struct,ptr(ptr on struct)
@@ -222,13 +347,78 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 // "expectedFields" can be nil, if no zero entries are expected and
 // no TestDeep operators are involved.
 //
-//   td.Cmp(t, td.Struct(
+//   td.Cmp(t, got, td.Struct(
 //     Person{
 //       Name: "John Doe",
 //     },
 //     td.StructFields{
 //       "Age":      td.Between(40, 45),
 //       "Children": 0,
+//     }),
+//   )
+//
+// "expectedFields" can also contain regexps or shell patterns to
+// match multiple fields not explicitly listed in "model" and in
+// "expectedFields". Regexps are prefixed by "=~" or "!~" to
+// respectively match or don't-match. Shell patterns are prefixed by "="
+// or "!" to respectively match or don't-match.
+//
+//   td.Cmp(t, got, td.Struct(
+//     Person{
+//       Name: "John Doe",
+//     },
+//     td.StructFields{
+//       "=*At":     td.Lte(time.Now()), // matches CreatedAt & UpdatedAt fields using shell pattern
+//       "=~^[a-z]": td.Ignore(),        // explicitly ignore private fields using a regexp
+//     }),
+//   )
+//
+// When several patterns can match a same field, it is advised to tell
+// go-testdeep in which order patterns should be tested, as once a
+// pattern matches a field, the other patterns are ignored for this
+// field. To do so, each pattern can be prefixed by a number, as in:
+//
+//   td.Cmp(t, got, td.Struct(
+//     Person{
+//       Name: "John Doe",
+//     },
+//     td.StructFields{
+//       "1=*At":     td.Lte(time.Now()),
+//       "2=~^[a-z]": td.NotNil(),
+//     }),
+//   )
+//
+// This way, "*At" shell pattern is always used before "^[a-z]"
+// regexp, so if a field "createdAt" exists it is tested against
+// time.Now() and never against NotNil. A pattern without a
+// prefix number is the same as specifying "0" as prefix.
+//
+// To make it clearer, some spaces can be added, as well as bigger
+// numbers used:
+//
+//   td.Cmp(t, got, td.Struct(
+//     Person{
+//       Name: "John Doe",
+//     },
+//     td.StructFields{
+//       " 900 =  *At":    td.Lte(time.Now()),
+//       "2000 =~ ^[a-z]": td.NotNil(),
+//     }),
+//   )
+//
+// The following example combines all possibilities:
+//
+//   td.Cmp(t, got, td.Struct(
+//     Person{
+//       NickName: "Joe",
+//     },
+//     td.StructFields{
+//       "Firstname":               td.Any("John", "Johnny"),
+//       "1 =  *[nN]ame":           td.NotEmpty(), // matches LastName, lastname, …
+//       "2 !  [A-Z]*":             td.NotZero(),  // matches all private fields
+//       "3 =~ ^(Crea|Upda)tedAt$": td.Gte(time.Now()),
+//       "4 !~ ^(Dogs|Children)$":  td.Zero(),   // matches all remaining fields except Dogs and Children
+//       "5 =~ .":                  td.NotNil(), // matches all remaining fields (same as "5 = *")
 //     }),
 //   )
 //
@@ -263,13 +453,78 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 // To ignore a field, one has to specify it in "expectedFields" and
 // use the Ignore operator.
 //
-//   td.Cmp(t, td.SStruct(
+//   td.Cmp(t, got, td.SStruct(
 //     Person{
 //       Name: "John Doe",
 //     },
 //     td.StructFields{
 //       "Age":      td.Between(40, 45),
 //       "Children": td.Ignore(),
+//     }),
+//   )
+//
+// "expectedFields" can also contain regexps or shell patterns to
+// match multiple fields not explicitly listed in "model" and in
+// "expectedFields". Regexps are prefixed by "=~" or "!~" to
+// respectively match or don't-match. Shell patterns are prefixed by "="
+// or "!" to respectively match or don't-match.
+//
+//   td.Cmp(t, got, td.SStruct(
+//     Person{
+//       Name: "John Doe",
+//     },
+//     td.StructFields{
+//       "=*At":     td.Lte(time.Now()), // matches CreatedAt & UpdatedAt fields using shell pattern
+//       "=~^[a-z]": td.Ignore(),        // explicitly ignore private fields using a regexp
+//     }),
+//   )
+//
+// When several patterns can match a same field, it is advised to tell
+// go-testdeep in which order patterns should be tested, as once a
+// pattern matches a field, the other patterns are ignored for this
+// field. To do so, each pattern can be prefixed by a number, as in:
+//
+//   td.Cmp(t, got, td.SStruct(
+//     Person{
+//       Name: "John Doe",
+//     },
+//     td.StructFields{
+//       "1=*At":     td.Lte(time.Now()),
+//       "2=~^[a-z]": td.NotNil(),
+//     }),
+//   )
+//
+// This way, "*At" shell pattern is always used before "^[a-z]"
+// regexp, so if a field "createdAt" exists it is tested against
+// time.Now() and never against NotNil. A pattern without a
+// prefix number is the same as specifying "0" as prefix.
+//
+// To make it clearer, some spaces can be added, as well as bigger
+// numbers used:
+//
+//   td.Cmp(t, got, td.SStruct(
+//     Person{
+//       Name: "John Doe",
+//     },
+//     td.StructFields{
+//       " 900 =  *At":    td.Lte(time.Now()),
+//       "2000 =~ ^[a-z]": td.NotNil(),
+//     }),
+//   )
+//
+// The following example combines all possibilities:
+//
+//   td.Cmp(t, got, td.SStruct(
+//     Person{
+//       NickName: "Joe",
+//     },
+//     td.StructFields{
+//       "Firstname":               td.Any("John", "Johnny"),
+//       "1 =  *[nN]ame":           td.NotEmpty(), // matches LastName, lastname, …
+//       "2 !  [A-Z]*":             td.NotZero(),  // matches all private fields
+//       "3 =~ ^(Crea|Upda)tedAt$": td.Gte(time.Now()),
+//       "4 !~ ^(Dogs|Children)$":  td.Zero(),   // matches all remaining fields except Dogs and Children
+//       "5 =~ .":                  td.NotNil(), // matches all remaining fields (same as "5 = *")
 //     }),
 //   )
 //

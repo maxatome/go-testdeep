@@ -247,7 +247,7 @@ func TestStruct(t *testing.T) {
 
 	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Struct(&MyStruct{}, td.StructFields{"UnknownField": 123}) },
-		"Struct(): struct td_test.MyStruct has no field `UnknownField'")
+		`Struct(): struct td_test.MyStruct has no field "UnknownField"`)
 
 	dark.CheckFatalizerBarrierErr(t,
 		func() { td.Struct(&MyStruct{}, td.StructFields{"ValBool": 123}) },
@@ -474,6 +474,121 @@ func TestStructPrivateFields(t *testing.T) {
 			Path:    mustBe("DATA.next.birth"),
 			Summary: mustBe("work on surrounding struct instead"),
 		})
+}
+
+func TestStructPatterns(t *testing.T) {
+	type paAnon struct {
+		alphaNum int
+		betaNum  int
+	}
+	type paTest struct {
+		paAnon
+		Num int
+	}
+
+	got := paTest{
+		paAnon: paAnon{
+			alphaNum: 1000,
+			betaNum:  2000,
+		},
+		Num: 666,
+	}
+
+	t.Run("Shell pattern", func(t *testing.T) {
+		checkOK(t, got,
+			td.Struct(paTest{Num: 666},
+				td.StructFields{
+					"=*Num": td.Gte(1000), // matches alphaNum & betaNum
+				}))
+
+		checkOK(t, got,
+			td.Struct(paTest{Num: 666},
+				td.StructFields{
+					"=a*Num": td.Lt(0),     // no remaining fields to match
+					"=*":     td.Gte(1000), // first, matches alphaNum & betaNum
+					"=b*Num": td.Lt(0),     // no remaining fields to match
+				}),
+			"Default sorting uses patterns")
+
+		checkOK(t, got,
+			td.Struct(paTest{Num: 666},
+				td.StructFields{
+					"1 = a*Num": td.Between(999, 1001), // matches alphaNum
+					"2 = *":     td.Gte(2000),          // matches betaNum
+					"3 = b*Num": td.Gt(3000),           // no remaining fields to match
+				}),
+			"Explicitly sorted")
+
+		checkOK(t, got,
+			td.Struct(paTest{Num: 666},
+				td.StructFields{
+					"1 ! beta*": 1000, // matches alphaNum
+					"2 = *":     2000, // matches betaNum
+				}),
+			"negative shell pattern")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() {
+				td.Struct(paTest{Num: 666}, td.StructFields{"= al[pha": 123})
+			},
+			"Struct(): bad shell pattern field `= al[pha`: ",
+		)
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() {
+				td.Struct(paTest{Num: 666}, td.StructFields{"= alpha*": nil})
+			},
+			"Struct(): expected value of field alphaNum (from pattern `= alpha*`) cannot be nil as it is a int",
+		)
+	})
+
+	t.Run("Regexp", func(t *testing.T) {
+		checkOK(t, got,
+			td.Struct(paTest{Num: 666},
+				td.StructFields{
+					"=~Num$": td.Gte(1000), // matches alphaNum & betaNum
+				}))
+
+		checkOK(t, got,
+			td.Struct(paTest{Num: 666},
+				td.StructFields{
+					"=~^a.*Num$": td.Lt(0),     // no remaining fields to match
+					"=~.":        td.Gte(1000), // first, matches alphaNum & betaNum
+					"=~^b.*Num$": td.Lt(0),     // no remaining fields to match
+				}),
+			"Default sorting uses patterns")
+
+		checkOK(t, got,
+			td.Struct(paTest{Num: 666},
+				td.StructFields{
+					"1 =~ ^a.*Num$": td.Between(999, 1001), // matches alphaNum
+					"2 =~ .":        td.Gte(2000),          // matches betaNum
+					"3 =~ ^b.*Num$": td.Gt(3000),           // no remaining fields to match
+				}),
+			"Explicitly sorted")
+
+		checkOK(t, got,
+			td.Struct(paTest{Num: 666},
+				td.StructFields{
+					"1 !~ ^beta": 1000, // matches alphaNum
+					"2 =~ .":     2000, // matches betaNum
+				}),
+			"negative regexp")
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() {
+				td.Struct(paTest{Num: 666}, td.StructFields{"=~ al(*": 123})
+			},
+			"Struct(): bad regexp field `=~ al(*`: ",
+		)
+
+		dark.CheckFatalizerBarrierErr(t,
+			func() {
+				td.Struct(paTest{Num: 666}, td.StructFields{"=~ alpha": nil})
+			},
+			"Struct(): expected value of field alphaNum (from pattern `=~ alpha`) cannot be nil as it is a int",
+		)
+	})
 }
 
 func TestStructTypeBehind(t *testing.T) {
@@ -703,7 +818,7 @@ func TestSStruct(t *testing.T) {
 
 	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SStruct(&MyStruct{}, td.StructFields{"UnknownField": 123}) },
-		"SStruct(): struct td_test.MyStruct has no field `UnknownField'")
+		`SStruct(): struct td_test.MyStruct has no field "UnknownField"`)
 
 	dark.CheckFatalizerBarrierErr(t,
 		func() { td.SStruct(&MyStruct{}, td.StructFields{"ValBool": 123}) },
@@ -770,6 +885,46 @@ func TestSStruct(t *testing.T) {
   ValInt: 0
   ValStr: ""
 })`)
+}
+
+func TestSStructPattern(t *testing.T) {
+	// Patterns are already fully tested in TestStructPatterns
+
+	type paAnon struct {
+		alphaNum int
+		betaNum  int
+	}
+	type paTest struct {
+		paAnon
+		Num int
+	}
+
+	got := paTest{
+		paAnon: paAnon{
+			alphaNum: 1000,
+			betaNum:  2000,
+		},
+		Num: 666,
+	}
+
+	checkOK(t, got,
+		td.SStruct(paTest{},
+			td.StructFields{
+				"=*Num": td.Gte(666), // matches Num, alphaNum & betaNum
+			}))
+
+	checkOK(t, got,
+		td.SStruct(paTest{},
+			td.StructFields{
+				"=~Num$": td.Gte(666), // matches Num, alphaNum & betaNum
+			}))
+
+	checkOK(t, paTest{Num: 666},
+		td.SStruct(paTest{},
+			td.StructFields{
+				"=~^Num": 666, // only matches Num
+				// remaining fields are tested as 0
+			}))
 }
 
 func TestSStructTypeBehind(t *testing.T) {
