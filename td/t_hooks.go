@@ -31,6 +31,7 @@ import (
 // contents is used to tell the reason of the failure.
 //
 // Cmp hooks are checked before UseEqual feature.
+// Cmp hooks are run just after Smuggle hooks.
 //
 //   func TestCmpHook(tt *testing.T) {
 //     t := td.NewT(tt)
@@ -40,7 +41,7 @@ import (
 //       return td.EqDeeply(got.Interface(), expected.Interface())
 //     })
 //     a, b := 1, 1
-//     t.Cmp(reflect.ValueOf(&a), relect.ValueOf(&b)) // succeeds
+//     t.Cmp(reflect.ValueOf(&a), reflect.ValueOf(&b)) // succeeds
 //
 //     // Test reflect.Type correctly instead of default field/field
 //     t = t.WithCmpHooks(func (got, expected reflect.Type) bool {
@@ -66,7 +67,8 @@ import (
 //   }
 //
 // There is no way to add or remove hooks of an existing *T instance,
-// only create a new one with this method or WithSmuggleHooks to add some.
+// only create a new *T instance with this method or WithSmuggleHooks
+// to add some.
 //
 // WithCmpHooks calls t.Fatal if an item of "fns" is not a function or
 // if its signature does not match the expected ones.
@@ -130,7 +132,7 @@ func (t *T) WithCmpHooks(fns ...interface{}) *T {
 //   }
 //
 // There is no way to add or remove hooks of an existing *T instance,
-// only create a new one with this method or WithCmpHooks to add some.
+// only create a new *T instance with this method or WithCmpHooks to add some.
 //
 // WithSmuggleHooks calls t.Fatal if an item of "fns" is not a
 // function or if its signature does not match the expected ones.
