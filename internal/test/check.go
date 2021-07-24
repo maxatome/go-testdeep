@@ -155,6 +155,6 @@ func Error(t *testing.T, err error, args ...interface{}) bool {
 	}
 
 	t.Helper()
-	EqualErrorMessage(t, nil, err, args...)
+	EqualErrorMessage(t, err, "<non-nil>", args...)
 	return false
 }

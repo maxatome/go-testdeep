@@ -2537,7 +2537,7 @@ func ExampleT_SStruct() {
 		"Age": td.Between(40, 50),
 	},
 		"checks %v is the right Person")
-	fmt.Println(ok)
+	fmt.Println("Foobar is between 40 & 50:", ok)
 
 	// Model can be empty
 	got.NumChildren = 3
@@ -2547,7 +2547,7 @@ func ExampleT_SStruct() {
 		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
-	fmt.Println(ok)
+	fmt.Println("Foobar has some children:", ok)
 
 	// Works with pointers too
 	ok = t.SStruct(&got, &Person{}, td.StructFields{
@@ -2556,7 +2556,7 @@ func ExampleT_SStruct() {
 		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
-	fmt.Println(ok)
+	fmt.Println("Foobar has some children (using pointer):", ok)
 
 	// Model does not need to be instanciated
 	ok = t.SStruct(&got, (*Person)(nil), td.StructFields{
@@ -2565,13 +2565,66 @@ func ExampleT_SStruct() {
 		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
-	fmt.Println(ok)
+	fmt.Println("Foobar has some children (using nil model):", ok)
 
 	// Output:
-	// true
-	// true
-	// true
-	// true
+	// Foobar is between 40 & 50: true
+	// Foobar has some children: true
+	// Foobar has some children (using pointer): true
+	// Foobar has some children (using nil model): true
+}
+
+func ExampleT_SStruct_patterns() {
+	t := td.NewT(&testing.T{})
+
+	type Person struct {
+		Firstname string
+		Lastname  string
+		Surname   string
+		Nickname  string
+		CreatedAt time.Time
+		UpdatedAt time.Time
+		DeletedAt *time.Time
+		id        int64
+		secret    string
+	}
+
+	now := time.Now()
+	got := Person{
+		Firstname: "Maxime",
+		Lastname:  "Foo",
+		Surname:   "Max",
+		Nickname:  "max",
+		CreatedAt: now,
+		UpdatedAt: now,
+		DeletedAt: nil, // not deleted yet
+		id:        2345,
+		secret:    "5ecr3T",
+	}
+
+	ok := t.Cmp(got,
+		td.Struct(Person{Lastname: "Foo"}, td.StructFields{
+			`DeletedAt`: nil,
+			`=  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
+			`=~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
+			`!  [A-Z]*`: td.Ignore(),        // private fields
+		}),
+		"mix shell & regexp patterns")
+	fmt.Println("Patterns match only remaining fields:", ok)
+
+	ok = t.Cmp(got,
+		td.Struct(Person{Lastname: "Foo"}, td.StructFields{
+			`DeletedAt`:   nil,
+			`1 =  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
+			`2 =~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
+			`3 !~ ^[A-Z]`: td.Ignore(),        // private fields
+		}),
+		"ordered patterns")
+	fmt.Println("Ordered patterns match only remaining fields:", ok)
+
+	// Output
+	// Patterns match only remaining fields: true
+	// Ordered patterns match only remaining fields: true
 }
 
 func ExampleT_String() {
@@ -2635,7 +2688,7 @@ func ExampleT_Struct() {
 		"Age": td.Between(40, 50),
 	},
 		"checks %v is the right Person")
-	fmt.Println(ok)
+	fmt.Println("Foobar is between 40 & 50:", ok)
 
 	// Model can be empty
 	ok = t.Struct(got, Person{}, td.StructFields{
@@ -2644,7 +2697,7 @@ func ExampleT_Struct() {
 		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
-	fmt.Println(ok)
+	fmt.Println("Foobar has some children:", ok)
 
 	// Works with pointers too
 	ok = t.Struct(&got, &Person{}, td.StructFields{
@@ -2653,7 +2706,7 @@ func ExampleT_Struct() {
 		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
-	fmt.Println(ok)
+	fmt.Println("Foobar has some children (using pointer):", ok)
 
 	// Model does not need to be instanciated
 	ok = t.Struct(&got, (*Person)(nil), td.StructFields{
@@ -2662,13 +2715,58 @@ func ExampleT_Struct() {
 		"NumChildren": td.Not(0),
 	},
 		"checks %v is the right Person")
-	fmt.Println(ok)
+	fmt.Println("Foobar has some children (using nil model):", ok)
 
 	// Output:
-	// true
-	// true
-	// true
-	// true
+	// Foobar is between 40 & 50: true
+	// Foobar has some children: true
+	// Foobar has some children (using pointer): true
+	// Foobar has some children (using nil model): true
+}
+
+func ExampleT_Struct_patterns() {
+	t := td.NewT(&testing.T{})
+
+	type Person struct {
+		Firstname string
+		Lastname  string
+		Surname   string
+		Nickname  string
+		CreatedAt time.Time
+		UpdatedAt time.Time
+		DeletedAt *time.Time
+	}
+
+	now := time.Now()
+	got := Person{
+		Firstname: "Maxime",
+		Lastname:  "Foo",
+		Surname:   "Max",
+		Nickname:  "max",
+		CreatedAt: now,
+		UpdatedAt: now,
+		DeletedAt: nil, // not deleted yet
+	}
+
+	ok := t.Struct(got, Person{Lastname: "Foo"}, td.StructFields{
+		`DeletedAt`: nil,
+		`=  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
+		`=~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
+	},
+		"mix shell & regexp patterns")
+	fmt.Println("Patterns match only remaining fields:", ok)
+
+	ok = t.Struct(got, Person{Lastname: "Foo"}, td.StructFields{
+		`DeletedAt`:  nil,
+		`1 =  *name`: td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
+		`2 =~ At\z`:  td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
+	},
+		"ordered patterns")
+	fmt.Println("Ordered patterns match only remaining fields:", ok)
+
+	// Output
+	// Patterns match only remaining fields: true
+	// Ordered patterns match only remaining fields: true
 }
 
 func ExampleT_SubBagOf() {
