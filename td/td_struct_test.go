@@ -237,6 +237,35 @@ func TestStruct(t *testing.T) {
 		td.Lax(td.Struct(Struct2{name: "Bob", age: 42}, nil)))
 
 	//
+	// IgnoreUnexported
+	t.Run("IgnoreUnexported", func(tt *testing.T) {
+		type SType struct {
+			Public  int
+			private string
+		}
+		got := SType{Public: 42, private: "test"}
+		expected := td.Struct(SType{Public: 42, private: "zip"}, nil)
+
+		checkError(tt, got, expected,
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA.private"),
+				Got:      mustBe(`"test"`),
+				Expected: mustBe(`"zip"`),
+			})
+
+		// Ignore unexported globally
+		defer func() { td.DefaultContextConfig.IgnoreUnexported = false }()
+		td.DefaultContextConfig.IgnoreUnexported = true
+		checkOK(tt, got, expected)
+		td.DefaultContextConfig.IgnoreUnexported = false
+
+		ttt := test.NewTestingTB(t.Name())
+		t := td.NewT(ttt).IgnoreUnexported(SType{}) // ignore only for SType
+		test.IsTrue(tt, t.Cmp(got, expected))
+	})
+
+	//
 	// Bad usage
 	dark.CheckFatalizerBarrierErr(t, func() { td.Struct("test", nil) },
 		"usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter")
@@ -806,6 +835,35 @@ func TestSStruct(t *testing.T) {
 	checkOK(t,
 		Struct1{name: "Bob", age: 42},
 		td.Lax(td.SStruct(Struct2{name: "Bob", age: 42}, nil)))
+
+	//
+	// IgnoreUnexported
+	t.Run("IgnoreUnexported", func(tt *testing.T) {
+		type SType struct {
+			Public  int
+			private string
+		}
+		got := SType{Public: 42, private: "test"}
+		expected := td.SStruct(SType{Public: 42}, nil)
+
+		checkError(tt, got, expected,
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA.private"),
+				Got:      mustBe(`"test"`),
+				Expected: mustBe(`""`),
+			})
+
+		// Ignore unexported globally
+		defer func() { td.DefaultContextConfig.IgnoreUnexported = false }()
+		td.DefaultContextConfig.IgnoreUnexported = true
+		checkOK(tt, got, expected)
+		td.DefaultContextConfig.IgnoreUnexported = false
+
+		ttt := test.NewTestingTB(t.Name())
+		t := td.NewT(ttt).IgnoreUnexported(SType{}) // ignore only for SType
+		test.IsTrue(tt, t.Cmp(got, expected))
+	})
 
 	//
 	// Bad usage
