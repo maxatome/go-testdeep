@@ -308,6 +308,41 @@ func TestEqualStruct(t *testing.T) {
 			Got:      mustBe("int"),
 			Expected: mustBe("string"),
 		})
+
+	type SType struct {
+		Public  int
+		private string
+	}
+
+	checkOK(t,
+		SType{Public: 42, private: "test"},
+		SType{Public: 42, private: "test"})
+
+	checkError(t,
+		SType{Public: 42, private: "test"},
+		SType{Public: 42},
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.private"),
+			Got:      mustBe(`"test"`),
+			Expected: mustBe(`""`),
+		})
+
+	defer func() { td.DefaultContextConfig.IgnoreUnexported = false }()
+	td.DefaultContextConfig.IgnoreUnexported = true
+
+	checkOK(t,
+		SType{Public: 42, private: "test"},
+		SType{Public: 42})
+
+	// Be careful with structs containing only private fields
+	checkOK(t,
+		ItemProperty{
+			name:  "foo",
+			kind:  12,
+			value: "bar",
+		},
+		ItemProperty{})
 }
 
 //

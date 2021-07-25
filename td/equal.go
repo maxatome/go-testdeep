@@ -155,7 +155,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 	}
 
 	// Look for an Equal() method
-	if ctx.UseEqual {
+	if ctx.UseEqual || ctx.Hooks.UseEqual(got.Type()) {
 		hasEqual, isEqual := isCustomEqual(got, expected)
 		if hasEqual {
 			if isEqual {
@@ -318,8 +318,13 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 	case reflect.Struct:
 		sType := got.Type()
+		ignoreUnexported := ctx.IgnoreUnexported || ctx.Hooks.IgnoreUnexported(sType)
 		for i, n := 0, got.NumField(); i < n; i++ {
-			err = deepValueEqual(ctx.AddField(sType.Field(i).Name),
+			field := sType.Field(i)
+			if ignoreUnexported && field.PkgPath != "" {
+				continue
+			}
+			err = deepValueEqual(ctx.AddField(field.Name),
 				got.Field(i), expected.Field(i))
 			if err != nil {
 				return

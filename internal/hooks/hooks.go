@@ -15,33 +15,27 @@ import (
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
-type hooks map[reflect.Type]reflect.Value
+type properties struct {
+	cmp              reflect.Value
+	smuggle          reflect.Value
+	ignoreUnexported bool
+	useEqual         bool
+}
 
 // Info gathers all hooks information.
 type Info struct {
 	sync.Mutex
-	cmp     hooks
-	smuggle hooks
+	props map[reflect.Type]properties
 }
 
 // NewInfo returns a new instance of *Info.
 func NewInfo() *Info {
-	return &Info{}
+	return &Info{
+		props: map[reflect.Type]properties{},
+	}
 }
 
 var ErrBoolean = errors.New("CmpHook(got, expected) failed")
-
-func copyHooks(from hooks) hooks {
-	if len(from) == 0 {
-		return nil
-	}
-
-	to := make(hooks, len(from))
-	for t, v := range from {
-		to[t] = v
-	}
-	return to
-}
 
 // Copy returns a new instance of *Info with the same hooks as i. As a
 // special case, if i is nil, returned instance is non-nil.
@@ -55,8 +49,14 @@ func (i *Info) Copy() *Info {
 	i.Lock()
 	defer i.Unlock()
 
-	ni.cmp = copyHooks(i.cmp)
-	ni.smuggle = copyHooks(i.smuggle)
+	if len(i.props) == 0 {
+		return ni
+	}
+
+	ni.props = make(map[reflect.Type]properties, len(i.props))
+	for t, p := range i.props {
+		ni.props[t] = p
+	}
 
 	return ni
 }
@@ -90,10 +90,9 @@ func (i *Info) AddCmpHooks(fns []interface{}) error {
 			ft.In(0).Kind() != reflect.Interface &&
 			(ft.Out(0) == types.Bool || ft.Out(0) == types.Error) {
 			i.Lock()
-			if i.cmp == nil {
-				i.cmp = hooks{}
-			}
-			i.cmp[ft.In(0)] = vfn
+			prop := i.props[ft.In(0)]
+			prop.cmp = vfn
+			i.props[ft.In(0)] = prop
 			i.Unlock()
 			continue
 		}
@@ -118,17 +117,17 @@ func (i *Info) Cmp(got, expected reflect.Value) (bool, error) {
 	tg := got.Type()
 
 	i.Lock()
-	vfn, ok := i.cmp[tg]
+	prop, ok := i.props[tg]
 	i.Unlock()
-	if !ok {
+	if !ok || !prop.cmp.IsValid() {
 		return false, nil
 	}
 
-	if !expected.Type().AssignableTo(vfn.Type().In(1)) {
+	if !expected.Type().AssignableTo(prop.cmp.Type().In(1)) {
 		return false, nil
 	}
 
-	res := vfn.Call([]reflect.Value{got, expected})[0]
+	res := prop.cmp.Call([]reflect.Value{got, expected})[0]
 	if res.Kind() == reflect.Bool {
 		if res.Bool() {
 			return true, nil
@@ -169,10 +168,9 @@ func (i *Info) AddSmuggleHooks(fns []interface{}) error {
 			(ft.NumOut() == 1 || (ft.NumOut() == 2 && ft.Out(1) == types.Error)) &&
 			ft.Out(0).Kind() != reflect.Interface {
 			i.Lock()
-			if i.smuggle == nil {
-				i.smuggle = hooks{}
-			}
-			i.smuggle[ft.In(0)] = vfn
+			prop := i.props[ft.In(0)]
+			prop.smuggle = vfn
+			i.props[ft.In(0)] = prop
 			i.Unlock()
 			continue
 		}
@@ -196,13 +194,13 @@ func (i *Info) Smuggle(got *reflect.Value) (bool, error) {
 	tg := got.Type()
 
 	i.Lock()
-	vfn, ok := i.smuggle[tg]
+	prop, ok := i.props[tg]
 	i.Unlock()
-	if !ok {
+	if !ok || !prop.smuggle.IsValid() {
 		return false, nil
 	}
 
-	res := vfn.Call([]reflect.Value{*got})
+	res := prop.smuggle.Call([]reflect.Value{*got})
 	if len(res) == 2 {
 		if err, _ := res[1].Interface().(error); err != nil {
 			return true, err
@@ -211,4 +209,98 @@ func (i *Info) Smuggle(got *reflect.Value) (bool, error) {
 
 	*got = res[0]
 	return true, nil
+}
+
+// AddUseEqual records types of values contained in "ts" as using
+// Equal method. "ts" can also contain reflect.Type instances.
+func (i *Info) AddUseEqual(ts []interface{}) error {
+	if len(ts) == 0 {
+		return nil
+	}
+	for n, typ := range ts {
+		t, ok := typ.(reflect.Type)
+		if !ok {
+			t = reflect.TypeOf(typ)
+			ts[n] = t
+		}
+
+		equal, ok := t.MethodByName("Equal")
+		if !ok {
+			return fmt.Errorf("expects type %s owns an Equal method (@%d)", t, n)
+		}
+
+		ft := equal.Type
+		if ft.IsVariadic() ||
+			ft.NumIn() != 2 ||
+			ft.NumOut() != 1 ||
+			!ft.In(0).AssignableTo(ft.In(1)) ||
+			ft.Out(0) != types.Bool {
+			return fmt.Errorf("expects type %[1]s Equal method signature be Equal(%[1]s) bool (@%[2]d)", t, n)
+		}
+	}
+
+	i.Lock()
+	defer i.Unlock()
+
+	for _, typ := range ts {
+		t := typ.(reflect.Type)
+		prop := i.props[t]
+		prop.useEqual = true
+		i.props[t] = prop
+	}
+	return nil
+}
+
+// UseEqual returns true if the type "t" needs to use its Equal method
+// to be compared.
+func (i *Info) UseEqual(t reflect.Type) bool {
+	if i == nil {
+		return false
+	}
+
+	i.Lock()
+	defer i.Unlock()
+	return i.props[t].useEqual
+}
+
+// AddIgnoreUnexported records types of values contained in "ts" as ignoring
+// unexported struct fields. "ts" can also contain reflect.Type instances.
+func (i *Info) AddIgnoreUnexported(ts []interface{}) error {
+	if len(ts) == 0 {
+		return nil
+	}
+	for n, typ := range ts {
+		t, ok := typ.(reflect.Type)
+		if !ok {
+			t = reflect.TypeOf(typ)
+			ts[n] = t
+		}
+
+		if t.Kind() != reflect.Struct {
+			return fmt.Errorf("expects type %s be a struct, not a %s (@%d)", t, t.Kind(), n)
+		}
+	}
+
+	i.Lock()
+	defer i.Unlock()
+
+	for _, typ := range ts {
+		t := typ.(reflect.Type)
+		prop := i.props[t]
+		prop.ignoreUnexported = true
+		i.props[t] = prop
+	}
+	return nil
+}
+
+// IgnoreUnexported returns true if the unexported fields of the type
+// "t" have to be ignored.
+func (i *Info) IgnoreUnexported(t reflect.Type) bool {
+	if i == nil {
+		return false
+	}
+
+	i.Lock()
+	defer i.Unlock()
+	return i.props[t].ignoreUnexported
 }
