@@ -9,7 +9,7 @@
 //
 // Simply import it, and nothing else:
 //
-//   import _ "github.com/maxatome/go-testdeep/td/helpers/nocolor"
+//   import _ "github.com/maxatome/go-testdeep/helpers/nocolor"
 package nocolor
 
 import "os"
