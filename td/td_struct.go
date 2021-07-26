@@ -32,9 +32,10 @@ type tdStruct struct {
 var _ TestDeep = &tdStruct{}
 
 type fieldInfo struct {
-	name     string
-	expected reflect.Value
-	index    []int
+	name       string
+	expected   reflect.Value
+	index      []int
+	unexported bool
 }
 
 type fieldInfoSlice []fieldInfo
@@ -232,9 +233,10 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 				}
 
 				st.expectedFields = append(st.expectedFields, fieldInfo{
-					name:     fieldName,
-					expected: vfield,
-					index:    field.Index,
+					name:       fieldName,
+					expected:   vfield,
+					index:      field.Index,
+					unexported: field.PkgPath != "",
 				})
 				checkedFields[fieldName] = true
 			}
@@ -286,9 +288,10 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 			}
 
 			st.expectedFields = append(st.expectedFields, fieldInfo{
-				name:     fieldName,
-				expected: reflect.New(field.Type).Elem(), // zero
-				index:    field.Index,
+				name:       fieldName,
+				expected:   reflect.New(field.Type).Elem(), // zero
+				index:      field.Index,
+				unexported: field.PkgPath != "",
 			})
 		}
 	}
@@ -326,9 +329,10 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue int
 	}
 
 	s.expectedFields = append(s.expectedFields, fieldInfo{
-		name:     field.Name,
-		expected: vexpectedValue,
-		index:    field.Index,
+		name:       field.Name,
+		expected:   vexpectedValue,
+		index:      field.Index,
+		unexported: field.PkgPath != "",
 	})
 	return nil
 }
@@ -553,7 +557,12 @@ func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Err
 		return ctx.CollectError(err)
 	}
 
+	ignoreUnexported := ctx.IgnoreUnexported || ctx.Hooks.IgnoreUnexported(got.Type())
+
 	for _, fieldInfo := range s.expectedFields {
+		if ignoreUnexported && fieldInfo.unexported {
+			continue
+		}
 		err = deepValueEqual(ctx.AddField(fieldInfo.name),
 			got.FieldByIndex(fieldInfo.index), fieldInfo.expected)
 		if err != nil {

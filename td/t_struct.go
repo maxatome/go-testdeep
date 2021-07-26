@@ -281,25 +281,61 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 	return &new
 }
 
-// UseEqual allows to use the Equal method on got (if it exists) or
-// on any of its component to compare got and expected values.
+// UseEqual tells go-testdeep to delegate the comparison of items
+// whose type is one of "types" to their Equal() method.
 //
-// The signature should be:
+// The signature this method should be:
 //   (A) Equal(B) bool
 // with B assignable to A.
 //
 // See time.Time as an example of accepted Equal() method.
 //
-// It returns a new instance of *T so does not alter the original t.
+// It always returns a new instance of *T so does not alter the
+// original t.
 //
-// Note that t.UseEqual() acts as t.UseEqual(true).
-func (t *T) UseEqual(enable ...bool) *T {
-	new := *t
-	new.Config.UseEqual = len(enable) == 0 || enable[0]
-	return &new
+//   t = t.UseEqual(time.Time{}, net.IP{})
+//
+// "types" items can also be reflect.Type items. In this case, the
+// target type is the one reflected by the reflect.Type.
+//
+//   t = t.UseEqual(reflect.TypeOf(time.Time{}), reflect.typeOf(net.IP{}))
+//
+// As a special case, calling t.UseEqual() or t.UseEqual(true) returns
+// an instance using the Equal() method globally, for all types owning
+// an Equal() method. Other types fall back to the default comparison
+// mechanism. t.UseEqual(false) returns an instance not using Equal()
+// method anymore, except for types already recorded using a previous
+// UseEqual call.
+func (t *T) UseEqual(types ...interface{}) *T {
+	// special case: UseEqual()
+	if len(types) == 0 {
+		new := *t
+		new.Config.UseEqual = true
+		return &new
+	}
+
+	// special cases: UseEqual(true) or UseEqual(false)
+	if len(types) == 1 {
+		if ignore, ok := types[0].(bool); ok {
+			new := *t
+			new.Config.UseEqual = ignore
+			return &new
+		}
+	}
+
+	// Enable UseEqual only for "types" types
+	t = t.copyWithHooks()
+
+	err := t.Config.hooks.AddUseEqual(types)
+	if err != nil {
+		t.Helper()
+		t.Fatal(color.Bad("UseEqual " + err.Error()))
+	}
+
+	return t
 }
 
-// BeLax allows to to compare different but convertible types. If
+// BeLax allows to compare different but convertible types. If
 // set to false, got and expected types must be the same. If set to
 // true and expected type is convertible to got one, expected is
 // first converted to go type before its comparison. See CmpLax
@@ -313,6 +349,52 @@ func (t *T) BeLax(enable ...bool) *T {
 	new := *t
 	new.Config.BeLax = len(enable) == 0 || enable[0]
 	return &new
+}
+
+// IgnoreUnexported tells go-testdeep to ignore unexported fields of
+// structs whose type is one of "types".
+//
+// It always returns a new instance of *T so does not alter the original t.
+//
+//   t = t.IgnoreUnexported(MyStruct1{}, MyStruct2{})
+//
+// "types" items can also be reflect.Type items. In this case, the
+// target type is the one reflected by the reflect.Type.
+//
+//   t = t.IgnoreUnexported(reflect.TypeOf(MyStruct1{}))
+//
+// As a special case, calling t.IgnoreUnexported() or
+// t.IgnoreUnexported(true) returns an instance ignoring unexported
+// fields globally, for all struct types. t.IgnoreUnexported(false)
+// returns an instance not ignoring unexported fields anymore, except
+// for types already recorded using a previous IgnoreUnexported call.
+func (t *T) IgnoreUnexported(types ...interface{}) *T {
+	// special case: IgnoreUnexported()
+	if len(types) == 0 {
+		new := *t
+		new.Config.IgnoreUnexported = true
+		return &new
+	}
+
+	// special cases: IgnoreUnexported(true) or IgnoreUnexported(false)
+	if len(types) == 1 {
+		if ignore, ok := types[0].(bool); ok {
+			new := *t
+			new.Config.IgnoreUnexported = ignore
+			return &new
+		}
+	}
+
+	// Enable IgnoreUnexported only for "types" types
+	t = t.copyWithHooks()
+
+	err := t.Config.hooks.AddIgnoreUnexported(types)
+	if err != nil {
+		t.Helper()
+		t.Fatal(color.Bad("IgnoreUnexported " + err.Error()))
+	}
+
+	return t
 }
 
 // Cmp is mostly a shortcut for:

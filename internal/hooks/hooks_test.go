@@ -8,10 +8,12 @@ package hooks_test
 
 import (
 	"errors"
+	"net"
 	"reflect"
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/maxatome/go-testdeep/internal/hooks"
 	"github.com/maxatome/go-testdeep/internal/test"
@@ -241,6 +243,93 @@ func TestAddSmuggleHooks(t *testing.T) {
 	}
 }
 
+func TestUseEqual(t *testing.T) {
+	var i *hooks.Info
+
+	test.IsFalse(t, i.UseEqual(reflect.TypeOf(42)))
+
+	i = hooks.NewInfo()
+	test.IsFalse(t, i.UseEqual(reflect.TypeOf(42)))
+
+	test.NoError(t, i.AddUseEqual([]interface{}{}))
+
+	test.NoError(t, i.AddUseEqual([]interface{}{time.Time{}, net.IP{}}))
+	test.IsTrue(t, i.UseEqual(reflect.TypeOf(time.Time{})))
+	test.IsTrue(t, i.UseEqual(reflect.TypeOf(net.IP{})))
+}
+
+func TestAddUseEqual(t *testing.T) {
+	for _, tst := range []struct {
+		name string
+		typ  interface{}
+		err  string
+	}{
+		{
+			name: "no Equal() method",
+			typ:  &testing.T{},
+			err:  "expects type *testing.T owns an Equal method (@1)",
+		},
+		{
+			name: "variadic Equal() method",
+			typ:  badEqualVariadic{},
+			err:  "expects type hooks_test.badEqualVariadic Equal method signature be Equal(hooks_test.badEqualVariadic) bool (@1)",
+		},
+		{
+			name: "bad NumIn Equal() method",
+			typ:  badEqualNumIn{},
+			err:  "expects type hooks_test.badEqualNumIn Equal method signature be Equal(hooks_test.badEqualNumIn) bool (@1)",
+		},
+		{
+			name: "bad NumOut Equal() method",
+			typ:  badEqualNumOut{},
+			err:  "expects type hooks_test.badEqualNumOut Equal method signature be Equal(hooks_test.badEqualNumOut) bool (@1)",
+		},
+		{
+			name: "In(0) not assignable to In(1) Equal() method",
+			typ:  badEqualInAssign{},
+			err:  "expects type hooks_test.badEqualInAssign Equal method signature be Equal(hooks_test.badEqualInAssign) bool (@1)",
+		},
+		{
+			name: "Equal() method don't return bool",
+			typ:  badEqualOutType{},
+			err:  "expects type hooks_test.badEqualOutType Equal method signature be Equal(hooks_test.badEqualOutType) bool (@1)",
+		},
+	} {
+		i := hooks.NewInfo()
+
+		err := i.AddUseEqual([]interface{}{time.Time{}, tst.typ})
+		if test.Error(t, err, tst.name) {
+			if !strings.Contains(err.Error(), tst.err) {
+				t.Errorf("<%s> does not contain <%s> for %s", err, tst.err, tst.name)
+			}
+		}
+	}
+}
+
+func TestIgnoreUnexported(t *testing.T) {
+	var i *hooks.Info
+
+	test.IsFalse(t, i.IgnoreUnexported(reflect.TypeOf(struct{}{})))
+
+	i = hooks.NewInfo()
+	test.IsFalse(t, i.IgnoreUnexported(reflect.TypeOf(struct{}{})))
+
+	test.NoError(t, i.AddIgnoreUnexported([]interface{}{}))
+
+	test.NoError(t, i.AddIgnoreUnexported([]interface{}{testing.T{}, time.Time{}}))
+	test.IsTrue(t, i.IgnoreUnexported(reflect.TypeOf(time.Time{})))
+	test.IsTrue(t, i.IgnoreUnexported(reflect.TypeOf(testing.T{})))
+}
+
+func TestAddIgnoreUnexported(t *testing.T) {
+	i := hooks.NewInfo()
+
+	err := i.AddIgnoreUnexported([]interface{}{time.Time{}, 0})
+	if test.Error(t, err) {
+		test.EqualStr(t, err.Error(), "expects type int be a struct, not a int (@1)")
+	}
+}
+
 func TestCopy(t *testing.T) {
 	var orig *hooks.Info
 
@@ -302,3 +391,23 @@ func TestCopy(t *testing.T) {
 	test.IsTrue(t, handled)
 	test.IsTrue(t, handled)
 }
+
+type badEqualVariadic struct{}
+
+func (badEqualVariadic) Equal(a ...badEqualVariadic) bool { return false }
+
+type badEqualNumIn struct{}
+
+func (badEqualNumIn) Equal(a badEqualNumIn, b badEqualNumIn) bool { return false }
+
+type badEqualNumOut struct{}
+
+func (badEqualNumOut) Equal(a badEqualNumOut) {}
+
+type badEqualInAssign struct{}
+
+func (badEqualInAssign) Equal(a int) bool { return false }
+
+type badEqualOutType struct{}
+
+func (badEqualOutType) Equal(a badEqualOutType) int { return 42 }

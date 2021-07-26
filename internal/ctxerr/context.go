@@ -39,6 +39,8 @@ type Context struct {
 	UseEqual bool
 	// See ContextConfig.BeLax for details.
 	BeLax bool
+	// See ContextConfig.IgnoreUnexported for details.
+	IgnoreUnexported bool
 }
 
 // InitErrors initializes Context *Errors slice, if MaxErrors < 0 or

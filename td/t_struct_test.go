@@ -444,14 +444,24 @@ func TestUseEqual(tt *testing.T) {
 	test.IsFalse(tt, t.Cmp(time1, time2))
 
 	// UseEqual
-	t = td.NewT(ttt).UseEqual()
+	t = td.NewT(ttt).UseEqual() // enable globally
 	test.IsTrue(tt, t.Cmp(time1, time2))
 
-	t = td.NewT(ttt).UseEqual(true)
+	t = td.NewT(ttt).UseEqual(true) // enable globally
 	test.IsTrue(tt, t.Cmp(time1, time2))
 
-	t = td.NewT(ttt).UseEqual(false)
+	t = td.NewT(ttt).UseEqual(false) // disable globally
 	test.IsFalse(tt, t.Cmp(time1, time2))
+
+	t = td.NewT(ttt).UseEqual(time.Time{}) // enable only for time.Time
+	test.IsTrue(tt, t.Cmp(time1, time2))
+
+	t = t.UseEqual().UseEqual(false)     // enable then disable globally
+	test.IsTrue(tt, t.Cmp(time1, time2)) // Equal() still used
+
+	test.EqualStr(tt,
+		ttt.CatchFatal(func() { td.NewT(ttt).UseEqual(42) }),
+		"UseEqual expects type int owns an Equal method (@0)")
 }
 
 func TestBeLax(tt *testing.T) {
@@ -470,4 +480,53 @@ func TestBeLax(tt *testing.T) {
 
 	t = td.NewT(ttt).BeLax(false)
 	test.IsFalse(tt, t.Cmp(int64(123), 123))
+}
+
+func TestIgnoreUnexported(tt *testing.T) {
+	ttt := test.NewTestingTB(tt.Name())
+
+	type SType1 struct {
+		Public  int
+		private string
+	}
+	a1, b1 := SType1{Public: 42, private: "test"}, SType1{Public: 42}
+
+	type SType2 struct {
+		Public  int
+		private string
+	}
+	a2, b2 := SType2{Public: 42, private: "test"}, SType2{Public: 42}
+
+	// Using default config
+	t := td.NewT(ttt)
+	test.IsFalse(tt, t.Cmp(a1, b1))
+
+	// IgnoreUnexported
+	t = td.NewT(ttt).IgnoreUnexported() // ignore unexported globally
+	test.IsTrue(tt, t.Cmp(a1, b1))
+	test.IsTrue(tt, t.Cmp(a2, b2))
+
+	t = td.NewT(ttt).IgnoreUnexported(true) // ignore unexported globally
+	test.IsTrue(tt, t.Cmp(a1, b1))
+	test.IsTrue(tt, t.Cmp(a2, b2))
+
+	t = td.NewT(ttt).IgnoreUnexported(false) // handle unexported globally
+	test.IsFalse(tt, t.Cmp(a1, b1))
+	test.IsFalse(tt, t.Cmp(a2, b2))
+
+	t = td.NewT(ttt).IgnoreUnexported(SType1{}) // ignore only for SType1
+	test.IsTrue(tt, t.Cmp(a1, b1))
+	test.IsFalse(tt, t.Cmp(a2, b2))
+
+	t = t.UseEqual().UseEqual(false) // enable then disable globally
+	test.IsTrue(tt, t.Cmp(a1, b1))
+	test.IsFalse(tt, t.Cmp(a2, b2))
+
+	t = td.NewT(ttt).IgnoreUnexported(SType1{}, SType2{}) // enable for both
+	test.IsTrue(tt, t.Cmp(a1, b1))
+	test.IsTrue(tt, t.Cmp(a2, b2))
+
+	test.EqualStr(tt,
+		ttt.CatchFatal(func() { td.NewT(ttt).IgnoreUnexported(42) }),
+		"IgnoreUnexported expects type int be a struct, not a int (@0)")
 }
