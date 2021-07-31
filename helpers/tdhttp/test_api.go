@@ -189,7 +189,12 @@ func (t *TestAPI) Failed() bool {
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) Get(target string, headers ...interface{}) *TestAPI {
-	return t.Request(Get(target, headers...))
+	req, err := get(target, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // Head sends a HTTP HEAD to the tested API. Any Cmp* or NoBody methods
@@ -199,7 +204,12 @@ func (t *TestAPI) Get(target string, headers ...interface{}) *TestAPI {
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) Head(target string, headers ...interface{}) *TestAPI {
-	return t.Request(Head(target, headers...))
+	req, err := head(target, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // Post sends a HTTP POST to the tested API. Any Cmp* or NoBody methods
@@ -209,11 +219,16 @@ func (t *TestAPI) Head(target string, headers ...interface{}) *TestAPI {
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) Post(target string, body io.Reader, headers ...interface{}) *TestAPI {
-	return t.Request(Post(target, body, headers...))
+	req, err := post(target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // PostForm sends a HTTP POST with data's keys and values URL-encoded
-// as the request body to the tested API.. "Content-Type" header is
+// as the request body to the tested API. "Content-Type" header is
 // automatically set to "application/x-www-form-urlencoded". Any Cmp*
 // or NoBody methods can now be called.
 //
@@ -221,7 +236,43 @@ func (t *TestAPI) Post(target string, body io.Reader, headers ...interface{}) *T
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) PostForm(target string, data url.Values, headers ...interface{}) *TestAPI {
-	return t.Request(PostForm(target, data, headers...))
+	req, err := postForm(target, data, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
+}
+
+// PostMultipartFormData sends a HTTP POST multipart request, like
+// multipart/form-data one for example. See MultipartBody type for
+// details. "Content-Type" header is automatically set depending on
+// data.MediaType (defaults to "multipart/form-data") and data.Boundary
+// (defaults to "go-testdeep-42"). Any Cmp* or NoBody methods can now
+// be called.
+//
+// Note that Failed() status is reset just after this call.
+//
+//   ta.PostMultipartFormData("/data",
+//     &tdhttp.MultipartBody{
+//       // "multipart/form/data" by default
+//       Parts: []*tdhttp.MultipartPart{
+//         tdhttp.NewMultipartPartString("type", "Sales"),
+//         tdhttp.NewMultipartPartFile("report", "report.json", "application/json"),
+//       },
+//     },
+//     "X-Foo", "Foo-value",
+//     "X-Zip", "Zip-value",
+//   )
+//
+// See NewRequest for all possible formats accepted in headers.
+func (t *TestAPI) PostMultipartFormData(target string, data *MultipartBody, headers ...interface{}) *TestAPI {
+	req, err := postMultipartFormData(target, data, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // Put sends a HTTP PUT to the tested API. Any Cmp* or NoBody methods
@@ -231,7 +282,12 @@ func (t *TestAPI) PostForm(target string, data url.Values, headers ...interface{
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) Put(target string, body io.Reader, headers ...interface{}) *TestAPI {
-	return t.Request(Put(target, body, headers...))
+	req, err := put(target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // Patch sends a HTTP PATCH to the tested API. Any Cmp* or NoBody methods
@@ -241,7 +297,12 @@ func (t *TestAPI) Put(target string, body io.Reader, headers ...interface{}) *Te
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) Patch(target string, body io.Reader, headers ...interface{}) *TestAPI {
-	return t.Request(Patch(target, body, headers...))
+	req, err := patch(target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // Delete sends a HTTP DELETE to the tested API. Any Cmp* or NoBody methods
@@ -251,7 +312,12 @@ func (t *TestAPI) Patch(target string, body io.Reader, headers ...interface{}) *
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) Delete(target string, body io.Reader, headers ...interface{}) *TestAPI {
-	return t.Request(Delete(target, body, headers...))
+	req, err := delete(target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // NewJSONRequest sends a HTTP request with body marshaled to
@@ -262,7 +328,12 @@ func (t *TestAPI) Delete(target string, body io.Reader, headers ...interface{}) 
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) NewJSONRequest(method, target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(NewJSONRequest(method, target, body, headers...))
+	req, err := newJSONRequest(method, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // PostJSON sends a HTTP POST with body marshaled to
@@ -273,7 +344,12 @@ func (t *TestAPI) NewJSONRequest(method, target string, body interface{}, header
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) PostJSON(target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(PostJSON(target, body, headers...))
+	req, err := newJSONRequest(http.MethodPost, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // PutJSON sends a HTTP PUT with body marshaled to
@@ -284,7 +360,12 @@ func (t *TestAPI) PostJSON(target string, body interface{}, headers ...interface
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) PutJSON(target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(PutJSON(target, body, headers...))
+	req, err := newJSONRequest(http.MethodPut, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // PatchJSON sends a HTTP PATCH with body marshaled to
@@ -295,7 +376,12 @@ func (t *TestAPI) PutJSON(target string, body interface{}, headers ...interface{
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) PatchJSON(target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(PatchJSON(target, body, headers...))
+	req, err := newJSONRequest(http.MethodPatch, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // DeleteJSON sends a HTTP DELETE with body marshaled to
@@ -306,7 +392,12 @@ func (t *TestAPI) PatchJSON(target string, body interface{}, headers ...interfac
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) DeleteJSON(target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(DeleteJSON(target, body, headers...))
+	req, err := newJSONRequest(http.MethodDelete, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // NewXMLRequest sends a HTTP request with body marshaled to
@@ -317,7 +408,12 @@ func (t *TestAPI) DeleteJSON(target string, body interface{}, headers ...interfa
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) NewXMLRequest(method, target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(NewXMLRequest(method, target, body, headers...))
+	req, err := newXMLRequest(method, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // PostXML sends a HTTP POST with body marshaled to
@@ -328,7 +424,12 @@ func (t *TestAPI) NewXMLRequest(method, target string, body interface{}, headers
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) PostXML(target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(PostXML(target, body, headers...))
+	req, err := newXMLRequest(http.MethodPost, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // PutXML sends a HTTP PUT with body marshaled to
@@ -339,7 +440,12 @@ func (t *TestAPI) PostXML(target string, body interface{}, headers ...interface{
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) PutXML(target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(PutXML(target, body, headers...))
+	req, err := newXMLRequest(http.MethodPut, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // PatchXML sends a HTTP PATCH with body marshaled to
@@ -350,7 +456,12 @@ func (t *TestAPI) PutXML(target string, body interface{}, headers ...interface{}
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) PatchXML(target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(PatchXML(target, body, headers...))
+	req, err := newXMLRequest(http.MethodPatch, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // DeleteXML sends a HTTP DELETE with body marshaled to
@@ -361,7 +472,12 @@ func (t *TestAPI) PatchXML(target string, body interface{}, headers ...interface
 //
 // See NewRequest for all possible formats accepted in headers.
 func (t *TestAPI) DeleteXML(target string, body interface{}, headers ...interface{}) *TestAPI {
-	return t.Request(DeleteXML(target, body, headers...))
+	req, err := newXMLRequest(http.MethodDelete, target, body, headers...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
 }
 
 // CmpStatus tests the last request response status against

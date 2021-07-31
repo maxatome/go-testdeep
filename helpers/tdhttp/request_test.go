@@ -127,6 +127,10 @@ func TestNewRequest(tt *testing.T) {
 			"headers... can only contains string and http.Header, not bool (@ headers[0])")
 
 		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PostMultipartFormData("/path", &tdhttp.MultipartBody{}, true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+
+		dark.CheckFatalizerBarrierErr(t,
 			func() { tdhttp.Patch("/path", nil, true) },
 			"headers... can only contains string and http.Header, not bool (@ headers[0])")
 
@@ -195,6 +199,33 @@ func TestNewRequest(tt *testing.T) {
 					[]byte("param1=val1&param1=val2&param2=zip"),
 				),
 			}))
+
+	// PostMultipartFormData
+	req := tdhttp.PostMultipartFormData("/path",
+		&tdhttp.MultipartBody{
+			Boundary: "BoUnDaRy",
+			Parts: []*tdhttp.MultipartPart{
+				tdhttp.NewMultipartPartString("p1", "body1!"),
+				tdhttp.NewMultipartPartString("p2", "body2!"),
+			},
+		},
+		"Foo", "Bar")
+	t.Cmp(req,
+		td.Struct(
+			&http.Request{
+				Method: "POST",
+				Header: http.Header{
+					"Content-Type": []string{`multipart/form-data; boundary="BoUnDaRy"`},
+					"Foo":          []string{"Bar"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+	if t.CmpNoError(req.ParseMultipartForm(10000)) {
+		t.Cmp(req.PostFormValue("p1"), "body1!")
+		t.Cmp(req.PostFormValue("p2"), "body2!")
+	}
 
 	// Put
 	t.Cmp(tdhttp.Put("/path", nil, "Foo", "Bar"),
