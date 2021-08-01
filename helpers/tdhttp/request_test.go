@@ -17,6 +17,12 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
+func TestBasicAuthHeader(t *testing.T) {
+	td.Cmp(t,
+		tdhttp.BasicAuthHeader("max", "5ecr3T"),
+		http.Header{"Authorization": []string{"Basic bWF4OjVlY3IzVA=="}})
+}
+
 func TestNewRequest(tt *testing.T) {
 	t := td.NewT(tt)
 
@@ -53,6 +59,15 @@ func TestNewRequest(tt *testing.T) {
 			"Foo": []string{"Bar"},
 			"Zip": []string{"Test"},
 		})
+	})
+
+	t.Run("NewRequest header http.Cookie", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			&http.Cookie{Name: "cook1", Value: "val1"},
+			http.Cookie{Name: "cook2", Value: "val2"},
+		)
+
+		t.Cmp(req.Header, http.Header{"Cookie": []string{"cook1=val1; cook2=val2"}})
 	})
 
 	t.Run("NewRequest header flattened", func(t *td.T) {

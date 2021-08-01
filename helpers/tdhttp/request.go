@@ -8,6 +8,7 @@ package tdhttp
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -43,8 +44,15 @@ func addHeaders(req *http.Request, headers []interface{}) (*http.Request, error)
 
 		case http.Header:
 			for k, v := range cur {
+				k = http.CanonicalHeaderKey(k)
 				req.Header[k] = append(req.Header[k], v...)
 			}
+
+		case *http.Cookie:
+			req.AddCookie(cur)
+
+		case http.Cookie:
+			req.AddCookie(&cur)
 
 		default:
 			return nil, errors.New(color.Bad(
@@ -53,6 +61,28 @@ func addHeaders(req *http.Request, headers []interface{}) (*http.Request, error)
 		}
 	}
 	return req, nil
+}
+
+// BasicAuthHeader returns a new http.Header with only Authorization
+// key set, compliant with HTTP Basic Authentication using "username"
+// and "password". It is provided as a facility to build request in
+// one line:
+//
+//   ta.Get("/path", tdhttp.BasicAuthHeader("max", "5ecr3T"))
+//
+// instead of:
+//
+//   req := tdhttp.Get("/path")
+//   req.SetBasicAuth("max", "5ecr3T")
+//   ta.Request(req)
+//
+// See (*net/http.Request).SetBasicAuth() for details.
+func BasicAuthHeader(user, password string) http.Header {
+	return http.Header{
+		"Authorization": []string{
+			"Basic " + base64.StdEncoding.EncodeToString([]byte(user+":"+password)),
+		},
+	}
 }
 
 func get(target string, headers ...interface{}) (*http.Request, error) {
@@ -108,19 +138,38 @@ func delete(target string, body io.Reader, headers ...interface{}) (*http.Reques
 //     http.Header{"Content-type": []string{"application/pdf"}},
 //   )
 //
+// or using BasicAuthHeader() as in:
+//
+//   req := tdhttp.NewRequest("POST", "/pdf", body,
+//     tdhttp.BasicAuthHeader("max", "5ecr3T"),
+//   )
+//
+// or using http.Cookie or *http.Cookie (behind the scene,
+// (*net/http.Request).AddCookie() is used) as in:
+//
+//   req := tdhttp.NewRequest("POST", "/pdf", body,
+//     http.Cookie{Name: "cook1", Value: "val1"},
+//     &http.Cookie{Name: "cook2", Value: "val2"},
+//   )
+//
 // Several header sources are combined:
 //
 //   req := tdhttp.NewRequest("POST", "/pdf", body,
 //     "Content-type", "application/pdf",
 //     http.Header{"X-Test": []string{"value1"}},
 //     "X-Test", "value2",
+//     http.Cookie{Name: "cook1", Value: "val1"},
+//     tdhttp.BasicAuthHeader("max", "5ecr3T"),
+//     &http.Cookie{Name: "cook2", Value: "val2"},
 //   )
 //
 // Produce the following http.Header:
 //
 //   http.Header{
-//     "Content-type": []string{"application/pdf"},
-//     "X-Test":       []string{"value1", "value2"},
+//     "Authorization": []string{"Basic bWF4OjVlY3IzVA=="},
+//     "Content-type":  []string{"application/pdf"},
+//     "Cookie":        []string{"cook1=val1; cook2=val2"},
+//     "X-Test":        []string{"value1", "value2"},
 //   }
 //
 // A string slice or a map can be flatened as well. As NewRequest() expects
@@ -133,12 +182,18 @@ func delete(target string, body io.Reader, headers ...interface{}) (*http.Reques
 //   req := tdhttp.NewRequest("POST", "/pdf", body, td.Flatten(strHeaders))
 //
 // Or combined with forms seen above:
+//
 //   req := tdhttp.NewRequest("POST", "/pdf",
 //     "Content-type", "application/pdf",
 //     http.Header{"X-Test": []string{"value1"}},
 //     td.Flatten(strHeaders),
 //     "X-Test", "value2",
+//     http.Cookie{Name: "cook1", Value: "val1"},
+//     tdhttp.BasicAuthHeader("max", "5ecr3T"),
+//     &http.Cookie{Name: "cook2", Value: "val2"},
 //   )
+//
+// Header keys are always canonicalized using net/http.CanonicalHeaderKey().
 func NewRequest(method, target string, body io.Reader, headers ...interface{}) *http.Request {
 	req, err := addHeaders(httptest.NewRequest(method, target, body), headers)
 	if err != nil {
