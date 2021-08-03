@@ -151,6 +151,31 @@ func TestNewTestAPI(t *testing.T) {
 		mockT = tdutil.NewT("test")
 		td.CmpFalse(t,
 			tdhttp.NewTestAPI(mockT, mux).
+				PostMultipartFormData("/any", &tdhttp.MultipartBody{
+					Boundary: "BoUnDaRy",
+					Parts: []*tdhttp.MultipartPart{
+						tdhttp.NewMultipartPartString("pipo", "bingo"),
+					},
+				}).
+				CmpStatus(200).
+				CmpHeader(containsKey).
+				CmpBody(strings.Replace( //nolint: gocritic
+					`POST!
+---
+--BoUnDaRy%CR
+Content-Disposition: form-data; name="pipo"%CR
+Content-Type: text/plain; charset=utf-8%CR
+%CR
+bingo%CR
+--BoUnDaRy--%CR
+`,
+					"%CR", "\r", -1)).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
 				Put("/any", strings.NewReader("PUT body")).
 				CmpStatus(200).
 				CmpHeader(containsKey).
@@ -565,6 +590,44 @@ func TestNewTestAPI(t *testing.T) {
 		td.CmpContains(t, mockT.LogBuf(), "Failed test 'body should not be empty'")
 		td.CmpContains(t, mockT.LogBuf(), "Response body is empty!")
 		td.CmpContains(t, mockT.LogBuf(), "Body cannot be empty when using CmpXMLBody")
+	})
+
+	t.Run("Request error", func(t *testing.T) {
+		var ta *tdhttp.TestAPI
+		checkFatal := func(fn func()) {
+			mockT := tdutil.NewT("test")
+			td.CmpTrue(t, mockT.CatchFailNow(func() {
+				ta = tdhttp.NewTestAPI(mockT, mux)
+				fn()
+			}))
+			td.Cmp(t,
+				mockT.LogBuf(),
+				td.Contains("headers... can only contains string and http.Header, not bool"),
+			)
+		}
+
+		empty := strings.NewReader("")
+
+		checkFatal(func() { ta.Get("/path", true) })
+		checkFatal(func() { ta.Head("/path", true) })
+		checkFatal(func() { ta.Post("/path", empty, true) })
+		checkFatal(func() { ta.PostForm("/path", nil, true) })
+		checkFatal(func() { ta.PostMultipartFormData("/path", &tdhttp.MultipartBody{}, true) })
+		checkFatal(func() { ta.Put("/path", empty, true) })
+		checkFatal(func() { ta.Patch("/path", empty, true) })
+		checkFatal(func() { ta.Delete("/path", empty, true) })
+
+		checkFatal(func() { ta.NewJSONRequest("ZIP", "/path", nil, true) })
+		checkFatal(func() { ta.PostJSON("/path", nil, true) })
+		checkFatal(func() { ta.PutJSON("/path", nil, true) })
+		checkFatal(func() { ta.PatchJSON("/path", nil, true) })
+		checkFatal(func() { ta.DeleteJSON("/path", nil, true) })
+
+		checkFatal(func() { ta.NewXMLRequest("ZIP", "/path", nil, true) })
+		checkFatal(func() { ta.PostXML("/path", nil, true) })
+		checkFatal(func() { ta.PutXML("/path", nil, true) })
+		checkFatal(func() { ta.PatchXML("/path", nil, true) })
+		checkFatal(func() { ta.DeleteXML("/path", nil, true) })
 	})
 }
 

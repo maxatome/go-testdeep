@@ -1,4 +1,4 @@
-// Copyright (c) 2019, Maxime Soulé
+// Copyright (c) 2019-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -8,6 +8,7 @@ package tdhttp
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -43,8 +44,15 @@ func addHeaders(req *http.Request, headers []interface{}) (*http.Request, error)
 
 		case http.Header:
 			for k, v := range cur {
+				k = http.CanonicalHeaderKey(k)
 				req.Header[k] = append(req.Header[k], v...)
 			}
+
+		case *http.Cookie:
+			req.AddCookie(cur)
+
+		case http.Cookie:
+			req.AddCookie(&cur)
 
 		default:
 			return nil, errors.New(color.Bad(
@@ -55,51 +63,137 @@ func addHeaders(req *http.Request, headers []interface{}) (*http.Request, error)
 	return req, nil
 }
 
+// BasicAuthHeader returns a new http.Header with only Authorization
+// key set, compliant with HTTP Basic Authentication using "username"
+// and "password". It is provided as a facility to build request in
+// one line:
+//
+//   ta.Get("/path", tdhttp.BasicAuthHeader("max", "5ecr3T"))
+//
+// instead of:
+//
+//   req := tdhttp.Get("/path")
+//   req.SetBasicAuth("max", "5ecr3T")
+//   ta.Request(req)
+//
+// See (*net/http.Request).SetBasicAuth() for details.
+func BasicAuthHeader(user, password string) http.Header {
+	return http.Header{
+		"Authorization": []string{
+			"Basic " + base64.StdEncoding.EncodeToString([]byte(user+":"+password)),
+		},
+	}
+}
+
+func get(target string, headers ...interface{}) (*http.Request, error) {
+	return addHeaders(httptest.NewRequest(http.MethodGet, target, nil), headers)
+}
+
+func head(target string, headers ...interface{}) (*http.Request, error) {
+	return addHeaders(httptest.NewRequest(http.MethodHead, target, nil), headers)
+}
+
+func post(target string, body io.Reader, headers ...interface{}) (*http.Request, error) {
+	return addHeaders(httptest.NewRequest(http.MethodPost, target, body), headers)
+}
+
+func postForm(target string, data url.Values, headers ...interface{}) (*http.Request, error) {
+	return addHeaders(
+		httptest.NewRequest(http.MethodPost, target, strings.NewReader(data.Encode())),
+		append(headers, "Content-Type", "application/x-www-form-urlencoded"),
+	)
+}
+
+func postMultipartFormData(target string, data *MultipartBody, headers ...interface{}) (*http.Request, error) {
+	return addHeaders(
+		httptest.NewRequest(http.MethodPost, target, data),
+		append(headers, "Content-Type", data.ContentType()),
+	)
+}
+
+func put(target string, body io.Reader, headers ...interface{}) (*http.Request, error) {
+	return addHeaders(httptest.NewRequest(http.MethodPut, target, body), headers)
+}
+
+func patch(target string, body io.Reader, headers ...interface{}) (*http.Request, error) {
+	return addHeaders(httptest.NewRequest(http.MethodPatch, target, body), headers)
+}
+
+func delete(target string, body io.Reader, headers ...interface{}) (*http.Request, error) {
+	return addHeaders(httptest.NewRequest(http.MethodDelete, target, body), headers)
+}
+
 // NewRequest creates a new HTTP request as
 // net/http/httptest.NewRequest does, with the ability to immediately
 // add some headers using string pairs as in:
 //
-//   req := NewRequest("POST", "/pdf", body,
+//   req := tdhttp.NewRequest("POST", "/pdf", body,
 //     "Content-type", "application/pdf",
 //     "X-Test", "value",
 //   )
 //
 // or using http.Header as in:
 //
-//   req := NewRequest("POST", "/pdf", body,
+//   req := tdhttp.NewRequest("POST", "/pdf", body,
 //     http.Header{"Content-type": []string{"application/pdf"}},
+//   )
+//
+// or using BasicAuthHeader() as in:
+//
+//   req := tdhttp.NewRequest("POST", "/pdf", body,
+//     tdhttp.BasicAuthHeader("max", "5ecr3T"),
+//   )
+//
+// or using http.Cookie or *http.Cookie (behind the scene,
+// (*net/http.Request).AddCookie() is used) as in:
+//
+//   req := tdhttp.NewRequest("POST", "/pdf", body,
+//     http.Cookie{Name: "cook1", Value: "val1"},
+//     &http.Cookie{Name: "cook2", Value: "val2"},
 //   )
 //
 // Several header sources are combined:
 //
-//   req := NewRequest("POST", "/pdf", body,
+//   req := tdhttp.NewRequest("POST", "/pdf", body,
 //     "Content-type", "application/pdf",
 //     http.Header{"X-Test": []string{"value1"}},
 //     "X-Test", "value2",
+//     http.Cookie{Name: "cook1", Value: "val1"},
+//     tdhttp.BasicAuthHeader("max", "5ecr3T"),
+//     &http.Cookie{Name: "cook2", Value: "val2"},
 //   )
 //
 // Produce the following http.Header:
 //
 //   http.Header{
-//     "Content-type": []string{"application/pdf"},
-//     "X-Test":       []string{"value1", "value2"},
+//     "Authorization": []string{"Basic bWF4OjVlY3IzVA=="},
+//     "Content-type":  []string{"application/pdf"},
+//     "Cookie":        []string{"cook1=val1; cook2=val2"},
+//     "X-Test":        []string{"value1", "value2"},
 //   }
 //
 // A string slice or a map can be flatened as well. As NewRequest() expects
 // ...interface{}, td.Flatten() can help here too:
+//
 //   strHeaders := map[string]string{
 //     "X-Length": "666",
 //     "X-Foo":    "bar",
 //   }
-//   req := NewRequest("POST", "/pdf", body, td.Flatten(strHeaders))
+//   req := tdhttp.NewRequest("POST", "/pdf", body, td.Flatten(strHeaders))
 //
 // Or combined with forms seen above:
-//   req := NewRequest("POST", "/pdf",
+//
+//   req := tdhttp.NewRequest("POST", "/pdf",
 //     "Content-type", "application/pdf",
 //     http.Header{"X-Test": []string{"value1"}},
 //     td.Flatten(strHeaders),
 //     "X-Test", "value2",
+//     http.Cookie{Name: "cook1", Value: "val1"},
+//     tdhttp.BasicAuthHeader("max", "5ecr3T"),
+//     &http.Cookie{Name: "cook2", Value: "val2"},
 //   )
+//
+// Header keys are always canonicalized using net/http.CanonicalHeaderKey().
 func NewRequest(method, target string, body io.Reader, headers ...interface{}) *http.Request {
 	req, err := addHeaders(httptest.NewRequest(method, target, body), headers)
 	if err != nil {
@@ -112,11 +206,11 @@ func NewRequest(method, target string, body io.Reader, headers ...interface{}) *
 
 // Get creates a new HTTP GET. It is a shortcut for:
 //
-//   NewRequest(http.MethodGet, target, nil, headers...)
+//   tdhttp.NewRequest(http.MethodGet, target, nil, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func Get(target string, headers ...interface{}) *http.Request {
-	req, err := addHeaders(httptest.NewRequest(http.MethodGet, target, nil), headers)
+	req, err := get(target, headers...)
 	if err != nil {
 		f := dark.GetFatalizer()
 		f.Helper()
@@ -127,11 +221,11 @@ func Get(target string, headers ...interface{}) *http.Request {
 
 // Head creates a new HTTP HEAD. It is a shortcut for:
 //
-//   NewRequest(http.MethodHead, target, nil, headers...)
+//   tdhttp.NewRequest(http.MethodHead, target, nil, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func Head(target string, headers ...interface{}) *http.Request {
-	req, err := addHeaders(httptest.NewRequest(http.MethodHead, target, nil), headers)
+	req, err := head(target, headers...)
 	if err != nil {
 		f := dark.GetFatalizer()
 		f.Helper()
@@ -142,11 +236,11 @@ func Head(target string, headers ...interface{}) *http.Request {
 
 // Post creates a HTTP POST. It is a shortcut for:
 //
-//   NewRequest(http.MethodPost, target, body, headers...)
+//   tdhttp.NewRequest(http.MethodPost, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func Post(target string, body io.Reader, headers ...interface{}) *http.Request {
-	req, err := addHeaders(httptest.NewRequest(http.MethodPost, target, body), headers)
+	req, err := post(target, body, headers...)
 	if err != nil {
 		f := dark.GetFatalizer()
 		f.Helper()
@@ -160,7 +254,7 @@ func Post(target string, body io.Reader, headers ...interface{}) *http.Request {
 // automatically set to "application/x-www-form-urlencoded". Other
 // headers can be added via headers, as in:
 //
-//   req := PostForm("/data",
+//   req := tdhttp.PostForm("/data",
 //     url.Values{
 //       "param1": []string{"val1", "val2"},
 //       "param2": []string{"zip"},
@@ -171,9 +265,51 @@ func Post(target string, body io.Reader, headers ...interface{}) *http.Request {
 //
 // See NewRequest for all possible formats accepted in headers.
 func PostForm(target string, data url.Values, headers ...interface{}) *http.Request {
-	req, err := addHeaders(
-		httptest.NewRequest(http.MethodPost, target, strings.NewReader(data.Encode())),
-		append(headers, "Content-Type", "application/x-www-form-urlencoded"))
+	req, err := postForm(target, data, headers...)
+	if err != nil {
+		f := dark.GetFatalizer()
+		f.Helper()
+		f.Fatal(err)
+	}
+	return req
+}
+
+// PostMultipartFormData creates a HTTP POST multipart request, like
+// multipart/form-data one for example. See MultipartBody type for
+// details. "Content-Type" header is automatically set depending on
+// data.MediaType (defaults to "multipart/form-data") and data.Boundary
+// (defaults to "go-testdeep-42"). Other headers can be added via
+// headers, as in:
+//
+//   req := tdhttp.PostMultipartFormData("/data",
+//     &tdhttp.MultipartBody{
+//       // "multipart/form/data" by default
+//       Parts: []*tdhttp.MultipartPart{
+//         tdhttp.NewMultipartPartString("type", "Sales"),
+//         tdhttp.NewMultipartPartFile("report", report.json", "application/json"),
+//       },
+//     },
+//     "X-Foo", "Foo-value",
+//     "X-Zip", "Zip-value",
+//   )
+//
+// and with a different media type:
+//
+//   req := tdhttp.PostMultipartFormData("/data",
+//     &tdhttp.MultipartBody{
+//       MediaType: "multipart/mixed",
+//       Parts:     []*tdhttp.MultipartPart{
+//         tdhttp.NewMultipartPartString("type", "Sales"),
+//         tdhttp.NewMultipartPartFile("report", "report.json", "application/json"),
+//       },
+//     },
+//     "X-Foo", "Foo-value",
+//     "X-Zip", "Zip-value",
+//   )
+//
+// See NewRequest for all possible formats accepted in headers.
+func PostMultipartFormData(target string, data *MultipartBody, headers ...interface{}) *http.Request {
+	req, err := postMultipartFormData(target, data, headers...)
 	if err != nil {
 		f := dark.GetFatalizer()
 		f.Helper()
@@ -184,11 +320,11 @@ func PostForm(target string, data url.Values, headers ...interface{}) *http.Requ
 
 // Put creates a HTTP PUT. It is a shortcut for:
 //
-//   NewRequest(http.MethodPut, target, body, headers...)
+//   tdhttp.NewRequest(http.MethodPut, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func Put(target string, body io.Reader, headers ...interface{}) *http.Request {
-	req, err := addHeaders(httptest.NewRequest(http.MethodPut, target, body), headers)
+	req, err := put(target, body, headers...)
 	if err != nil {
 		f := dark.GetFatalizer()
 		f.Helper()
@@ -199,11 +335,11 @@ func Put(target string, body io.Reader, headers ...interface{}) *http.Request {
 
 // Patch creates a HTTP PATCH. It is a shortcut for:
 //
-//   NewRequest(http.MethodPatch, target, body, headers...)
+//   tdhttp.NewRequest(http.MethodPatch, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func Patch(target string, body io.Reader, headers ...interface{}) *http.Request {
-	req, err := addHeaders(httptest.NewRequest(http.MethodPatch, target, body), headers)
+	req, err := patch(target, body, headers...)
 	if err != nil {
 		f := dark.GetFatalizer()
 		f.Helper()
@@ -214,11 +350,11 @@ func Patch(target string, body io.Reader, headers ...interface{}) *http.Request 
 
 // Delete creates a HTTP DELETE. It is a shortcut for:
 //
-//   NewRequest(http.MethodDelete, target, body, headers...)
+//   tdhttp.NewRequest(http.MethodDelete, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func Delete(target string, body io.Reader, headers ...interface{}) *http.Request {
-	req, err := addHeaders(httptest.NewRequest(http.MethodDelete, target, body), headers)
+	req, err := delete(target, body, headers...)
 	if err != nil {
 		f := dark.GetFatalizer()
 		f.Helper()
@@ -230,19 +366,28 @@ func Delete(target string, body io.Reader, headers ...interface{}) *http.Request
 func newJSONRequest(method, target string, body interface{}, headers ...interface{}) (*http.Request, error) {
 	b, err := json.Marshal(body)
 	if err != nil {
-		return nil, err
+		if opErr, ok := types.AsOperatorNotJSONMarshallableError(err); ok {
+			var plus string
+			switch op := opErr.Operator(); op {
+			case "JSON", "SubJSONOf", "SuperJSONOf":
+				plus = ", use json.RawMessage() instead"
+			}
+			return nil, errors.New(color.Bad("JSON encoding failed: %s%s", err, plus))
+		}
+		return nil, errors.New(color.Bad("%s", err))
 	}
 
-	return addHeaders(NewRequest(method, target, bytes.NewBuffer(b)),
-		append(headers[:len(headers):len(headers)],
-			"Content-Type", "application/json"))
+	return addHeaders(
+		NewRequest(method, target, bytes.NewBuffer(b)),
+		append(headers, "Content-Type", "application/json"),
+	)
 }
 
 // NewJSONRequest creates a new HTTP request with body marshaled to
 // JSON. "Content-Type" header is automatically set to
 // "application/json". Other headers can be added via headers, as in:
 //
-//   req := NewJSONRequest("POST", "/data", body,
+//   req := tdhttp.NewJSONRequest("POST", "/data", body,
 //     "X-Foo", "Foo-value",
 //     "X-Zip", "Zip-value",
 //   )
@@ -253,14 +398,6 @@ func NewJSONRequest(method, target string, body interface{}, headers ...interfac
 	if err != nil {
 		f := dark.GetFatalizer()
 		f.Helper()
-		if opErr, ok := types.AsOperatorNotJSONMarshallableError(err); ok {
-			var plus string
-			switch op := opErr.Operator(); op {
-			case "JSON", "SubJSONOf", "SuperJSONOf":
-				plus = ", use json.RawMessage() instead"
-			}
-			f.Fatal(color.Bad("JSON encoding failed: %s%s", err, plus))
-		}
 		f.Fatal(color.Bad("%s", err))
 	}
 	return req
@@ -270,7 +407,7 @@ func NewJSONRequest(method, target string, body interface{}, headers ...interfac
 // JSON. "Content-Type" header is automatically set to
 // "application/json". It is a shortcut for:
 //
-//   NewJSONRequest(http.MethodPost, target, body, headers...)
+//   tdhttp.NewJSONRequest(http.MethodPost, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func PostJSON(target string, body interface{}, headers ...interface{}) *http.Request {
@@ -287,7 +424,7 @@ func PostJSON(target string, body interface{}, headers ...interface{}) *http.Req
 // JSON. "Content-Type" header is automatically set to
 // "application/json". It is a shortcut for:
 //
-//   NewJSONRequest(http.MethodPut, target, body, headers...)
+//   tdhttp.NewJSONRequest(http.MethodPut, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func PutJSON(target string, body interface{}, headers ...interface{}) *http.Request {
@@ -304,7 +441,7 @@ func PutJSON(target string, body interface{}, headers ...interface{}) *http.Requ
 // JSON. "Content-Type" header is automatically set to
 // "application/json". It is a shortcut for:
 //
-//   NewJSONRequest(http.MethodPatch, target, body, headers...)
+//   tdhttp.NewJSONRequest(http.MethodPatch, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func PatchJSON(target string, body interface{}, headers ...interface{}) *http.Request {
@@ -321,7 +458,7 @@ func PatchJSON(target string, body interface{}, headers ...interface{}) *http.Re
 // JSON. "Content-Type" header is automatically set to
 // "application/json". It is a shortcut for:
 //
-//   NewJSONRequest(http.MethodDelete, target, body, headers...)
+//   tdhttp.NewJSONRequest(http.MethodDelete, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func DeleteJSON(target string, body interface{}, headers ...interface{}) *http.Request {
@@ -340,16 +477,17 @@ func newXMLRequest(method, target string, body interface{}, headers ...interface
 		return nil, errors.New(color.Bad("XML encoding failed: %s", err))
 	}
 
-	return addHeaders(NewRequest(method, target, bytes.NewBuffer(b)),
-		append(headers[:len(headers):len(headers)],
-			"Content-Type", "application/xml"))
+	return addHeaders(
+		NewRequest(method, target, bytes.NewBuffer(b)),
+		append(headers, "Content-Type", "application/xml"),
+	)
 }
 
 // NewXMLRequest creates a new HTTP request with body marshaled to
 // XML. "Content-Type" header is automatically set to
 // "application/xml". Other headers can be added via headers, as in:
 //
-//   req := NewXMLRequest("POST", "/data", body,
+//   req := tdhttp.NewXMLRequest("POST", "/data", body,
 //     "X-Foo", "Foo-value",
 //     "X-Zip", "Zip-value",
 //   )
@@ -369,7 +507,7 @@ func NewXMLRequest(method, target string, body interface{}, headers ...interface
 // XML. "Content-Type" header is automatically set to
 // "application/xml". It is a shortcut for:
 //
-//   NewXMLRequest(http.MethodPost, target, body, headers...)
+//   tdhttp.NewXMLRequest(http.MethodPost, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func PostXML(target string, body interface{}, headers ...interface{}) *http.Request {
@@ -386,7 +524,7 @@ func PostXML(target string, body interface{}, headers ...interface{}) *http.Requ
 // XML. "Content-Type" header is automatically set to
 // "application/xml". It is a shortcut for:
 //
-//   NewXMLRequest(http.MethodPut, target, body, headers...)
+//   tdhttp.NewXMLRequest(http.MethodPut, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func PutXML(target string, body interface{}, headers ...interface{}) *http.Request {
@@ -403,7 +541,7 @@ func PutXML(target string, body interface{}, headers ...interface{}) *http.Reque
 // XML. "Content-Type" header is automatically set to
 // "application/xml". It is a shortcut for:
 //
-//   NewXMLRequest(http.MethodPatch, target, body, headers...)
+//   tdhttp.NewXMLRequest(http.MethodPatch, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func PatchXML(target string, body interface{}, headers ...interface{}) *http.Request {
@@ -420,7 +558,7 @@ func PatchXML(target string, body interface{}, headers ...interface{}) *http.Req
 // XML. "Content-Type" header is automatically set to
 // "application/xml". It is a shortcut for:
 //
-//   NewXMLRequest(http.MethodDelete, target, body, headers...)
+//   tdhttp.NewXMLRequest(http.MethodDelete, target, body, headers...)
 //
 // See NewRequest for all possible formats accepted in headers.
 func DeleteXML(target string, body interface{}, headers ...interface{}) *http.Request {

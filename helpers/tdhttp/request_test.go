@@ -17,6 +17,12 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
+func TestBasicAuthHeader(t *testing.T) {
+	td.Cmp(t,
+		tdhttp.BasicAuthHeader("max", "5ecr3T"),
+		http.Header{"Authorization": []string{"Basic bWF4OjVlY3IzVA=="}})
+}
+
 func TestNewRequest(tt *testing.T) {
 	t := td.NewT(tt)
 
@@ -53,6 +59,15 @@ func TestNewRequest(tt *testing.T) {
 			"Foo": []string{"Bar"},
 			"Zip": []string{"Test"},
 		})
+	})
+
+	t.Run("NewRequest header http.Cookie", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "/path", nil,
+			&http.Cookie{Name: "cook1", Value: "val1"},
+			http.Cookie{Name: "cook2", Value: "val2"},
+		)
+
+		t.Cmp(req.Header, http.Header{"Cookie": []string{"cook1=val1; cook2=val2"}})
 	})
 
 	t.Run("NewRequest header flattened", func(t *td.T) {
@@ -127,6 +142,10 @@ func TestNewRequest(tt *testing.T) {
 			"headers... can only contains string and http.Header, not bool (@ headers[0])")
 
 		dark.CheckFatalizerBarrierErr(t,
+			func() { tdhttp.PostMultipartFormData("/path", &tdhttp.MultipartBody{}, true) },
+			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+
+		dark.CheckFatalizerBarrierErr(t,
 			func() { tdhttp.Patch("/path", nil, true) },
 			"headers... can only contains string and http.Header, not bool (@ headers[0])")
 
@@ -195,6 +214,33 @@ func TestNewRequest(tt *testing.T) {
 					[]byte("param1=val1&param1=val2&param2=zip"),
 				),
 			}))
+
+	// PostMultipartFormData
+	req := tdhttp.PostMultipartFormData("/path",
+		&tdhttp.MultipartBody{
+			Boundary: "BoUnDaRy",
+			Parts: []*tdhttp.MultipartPart{
+				tdhttp.NewMultipartPartString("p1", "body1!"),
+				tdhttp.NewMultipartPartString("p2", "body2!"),
+			},
+		},
+		"Foo", "Bar")
+	t.Cmp(req,
+		td.Struct(
+			&http.Request{
+				Method: "POST",
+				Header: http.Header{
+					"Content-Type": []string{`multipart/form-data; boundary="BoUnDaRy"`},
+					"Foo":          []string{"Bar"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+	if t.CmpNoError(req.ParseMultipartForm(10000)) {
+		t.Cmp(req.PostFormValue("p1"), "body1!")
+		t.Cmp(req.PostFormValue("p2"), "body2!")
+	}
 
 	// Put
 	t.Cmp(tdhttp.Put("/path", nil, "Foo", "Bar"),
