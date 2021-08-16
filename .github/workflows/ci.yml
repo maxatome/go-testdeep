@@ -10,10 +10,10 @@ jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.9.x, 1.10.x, 1.11.x, 1.12.x, 1.13.x, 1.14.x, 1.15.x, tip]
+        go-version: [1.9.x, 1.10.x, 1.11.x, 1.12.x, 1.13.x, 1.14.x, 1.15.x, 1.16.x, tip]
         full-tests: [false]
         include:
-          - go-version: 1.16.x
+          - go-version: 1.17.x
             full-tests: true
 
     runs-on: ubuntu-latest
@@ -83,8 +83,8 @@ jobs:
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          go get github.com/mattn/goveralls
-          go get github.com/wadey/gocovmerge
+          go install github.com/mattn/goveralls@v0.0.9
+          go install github.com/wadey/gocovmerge@latest
           gocovmerge coverage.out \
                      coverage-safe.out \
                      coverage-race.out \
