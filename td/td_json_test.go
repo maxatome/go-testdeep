@@ -480,6 +480,9 @@ func TestJSONTypeBehind(t *testing.T) {
 	equalTypes(t, td.JSON(`[1,2,3]`), ([]interface{})(nil))
 	equalTypes(t, td.JSON(`{"a":12}`), (map[string]interface{})(nil))
 
+	// operator at the root → delegate it TypeBehind() call
+	equalTypes(t, td.JSON(`SuperMapOf({"x":1})`), (map[string]interface{})(nil))
+
 	nullType := td.JSON(`null`).TypeBehind()
 	if nullType != reflect.TypeOf((*interface{})(nil)).Elem() {
 		t.Errorf("Failed test: got %s intead of interface {}", nullType)
