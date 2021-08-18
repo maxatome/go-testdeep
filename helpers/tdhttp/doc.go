@@ -19,6 +19,7 @@
 //   ta.Get("/person/42", "Accept", "application/xml").
 //     CmpStatus(http.StatusOK).
 //     CmpHeader(td.ContainsKey("X-Custom-Header")).
+//     CmpCookie(td.SuperBagOf(td.Smuggle("Name", "cookie_session"))).
 //     CmpXMLBody(Person{
 //       ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
 //       Name: "Bob",
@@ -27,7 +28,8 @@
 //
 //   ta.Get("/person/42", "Accept", "application/json").
 //     CmpStatus(http.StatusOK).
-//     CmpHeader(td.ContainsKey("X-Custom-Header")).
+//     CmpHeaders(td.ContainsKey("X-Custom-Header")).
+//     CmpCookies(td.SuperBagOf(td.Struct(&http.Cookie{Name: "cookie_session"}, nil))).
 //     CmpJSONBody(td.JSON(`
 //   {
 //     "id":   $1,
