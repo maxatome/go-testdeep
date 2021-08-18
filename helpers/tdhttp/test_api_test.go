@@ -280,7 +280,7 @@ bingo%CR
 		}
 		mockT = tdutil.NewT("test")
 		tt := td.NewT(mockT)
-		td.CmpFalse(tt,
+		td.CmpFalse(t,
 			tdhttp.NewTestAPI(mockT, mux).
 				DeleteJSON("/any/json", requestBody).
 				CmpStatus(200).
@@ -291,6 +291,16 @@ bingo%CR
 						Hey: tt.A(td.Between(120, 130)).(int),
 					},
 				}).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		// JSON and root operator (here SuperMapOf)
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				PostJSON("/any/json", true).
+				CmpStatus(200).
+				CmpJSONBody(td.JSON(`SuperMapOf({"body":Ignore()})`)).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 	})

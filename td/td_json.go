@@ -601,6 +601,10 @@ func jsonStringify(opName string, v reflect.Value) string {
 
 func (j *tdJSON) TypeBehind() reflect.Type {
 	if j.expected.IsValid() {
+		// In case we have an operator at the root, delegate it the call
+		if je, ok := j.expected.Interface().(*tdJSONEmbedded); ok {
+			return je.TypeBehind()
+		}
 		return j.expected.Type()
 	}
 	return types.Interface
