@@ -41,6 +41,13 @@ func TestCmpResponse(tt *testing.T) {
 		fmt.Fprintln(w, "text response")
 	})
 
+	cookie := http.Cookie{Name: "Cookies-Testdeep", Value: "foobar", Raw: "Cookies-Testdeep=foobar"}
+	handlerWithCokies := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("X-TestDeep", "cookies")
+		http.SetCookie(w, &cookie)
+		w.WriteHeader(242)
+	})
+
 	handlerEmpty := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("X-TestDeep", "zip")
 		w.WriteHeader(424)
@@ -171,6 +178,39 @@ func TestCmpResponse(tt *testing.T) {
 \s+Response.Header\["X-Testdeep"\]\[0\]: values differ
 \s+got: "foobar"
 \s+expected: "zzz"`,
+			},
+		},
+		{
+			Name:    "bad cookies",
+			Handler: handlerWithCokies,
+			Success: false,
+			ExpectedResp: tdhttp.Response{
+				Cookies: []*http.Cookie{
+					{Name: "Cookies-Testdeep", Value: "squalala", Raw: "Cookies-Testdeep=squalala"},
+				},
+				Body: td.Empty(),
+			},
+			ExpectedLogs: []string{
+				`~ Failed test 'cookies should match'
+\s+Response.Cookie\[0\]\.Value: values differ
+\s+got: "foobar"
+\s+expected: "squalala"
+\s+Response.Cookie\[0\]\.Raw: values differ
+\s+got: "Cookies-Testdeep=foobar"
+\s+expected: "Cookies-Testdeep=squalala"`,
+			},
+		},
+		{
+			Name:    "good cookies",
+			Handler: handlerWithCokies,
+			Success: true,
+			ExpectedResp: tdhttp.Response{
+				Header: http.Header{
+					"X-Testdeep": []string{"cookies"},
+					"Set-Cookie": []string{cookie.String()},
+				},
+				Cookies: []*http.Cookie{&cookie},
+				Body:    td.Empty(),
 			},
 		},
 		{
@@ -511,6 +551,10 @@ func testTestAPI(t *td.T,
 
 	if curTest.ExpectedResp.Header != nil {
 		ta.CmpHeader(curTest.ExpectedResp.Header)
+	}
+
+	if curTest.ExpectedResp.Cookies != nil {
+		ta.CmpCookies(curTest.ExpectedResp.Cookies)
 	}
 
 	cmpBody(ta, curTest.ExpectedResp.Body)
