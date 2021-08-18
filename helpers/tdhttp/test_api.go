@@ -35,11 +35,12 @@ type TestAPI struct {
 	handler http.Handler
 	name    string
 
-	sentAt       time.Time
-	response     *httptest.ResponseRecorder
-	statusFailed bool
-	headerFailed bool
-	bodyFailed   bool
+	sentAt        time.Time
+	response      *httptest.ResponseRecorder
+	statusFailed  bool
+	headerFailed  bool
+	cookiesFailed bool
+	bodyFailed    bool
 
 	// autoDumpResponse dumps the received response when a test fails.
 	autoDumpResponse bool
@@ -149,6 +150,7 @@ func (t *TestAPI) Request(req *http.Request) *TestAPI {
 
 	t.statusFailed = false
 	t.headerFailed = false
+	t.cookiesFailed = false
 	t.bodyFailed = false
 	t.sentAt = time.Now().Truncate(0)
 	t.responseDumped = false
@@ -179,7 +181,7 @@ func (t *TestAPI) checkRequestSent() bool {
 // Failed returns true if any Cmp* or NoBody method failed since last
 // request sending.
 func (t *TestAPI) Failed() bool {
-	return t.statusFailed || t.headerFailed || t.bodyFailed
+	return t.statusFailed || t.headerFailed || t.cookiesFailed || t.bodyFailed
 }
 
 // Get sends a HTTP GET to the tested API. Any Cmp* or NoBody methods
@@ -562,6 +564,41 @@ func (t *TestAPI) CmpHeader(expectedHeader interface{}) *TestAPI {
 		CmpLax(t.response.Header(), expectedHeader, t.name+"header should match")
 
 	if t.headerFailed && t.autoDumpResponse {
+		t.dumpResponse()
+	}
+
+	return t
+}
+
+// CmpCookies tests the last request response cookies against
+// expectedCookies. expectedCookies can be a []*http.Cookie or a TestDeep
+// operator. Keep in mind that if it is a []*http.Cookie, it has to match
+// exactly the response cookies. Often only the presence of a
+// cookie key is needed:
+//
+//   ta := tdhttp.NewTestAPI(t, mux).
+//     PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
+//     CmdStatus(200).
+//     CmpCookies(td.SuperBagOf(td.Struct(&http.Cookie{Name: "cookie_session"}, nil))).
+//     CmpCookies(td.SuperBagOf(td.Smuggle("Name", "cookie_session")))
+//
+// It fails if no request has been sent yet.
+func (t *TestAPI) CmpCookies(expectedCookies interface{}) *TestAPI {
+	defer t.t.AnchorsPersistTemporarily()()
+
+	t.t.Helper()
+
+	if !t.checkRequestSent() {
+		t.cookiesFailed = true
+		return t
+	}
+
+	if !t.t.RootName("Response.Cookie").
+		CmpLax(t.response.Result().Cookies(), expectedCookies, t.name+"cookies should match") {
+		t.cookiesFailed = true
+	}
+
+	if t.cookiesFailed && t.autoDumpResponse {
 		t.dumpResponse()
 	}
 

@@ -27,9 +27,10 @@ func init() {
 // response match easier. Each field, can be a TestDeep operator as
 // well as the exact expected value.
 type Response struct {
-	Status interface{} // Status is the expected status (ignored if nil)
-	Header interface{} // Header is the expected header (ignored if nil)
-	Body   interface{} // Body is the expected body (expected to be empty if nil)
+	Status  interface{} // Status is the expected status (ignored if nil)
+	Header  interface{} // Header is the expected header (ignored if nil)
+	Cookies interface{} // Cookies are the expected cookies (ignored if nil)
+	Body    interface{} // Body is the expected body (expected to be empty if nil)
 }
 
 func cmpMarshaledResponse(tb testing.TB,
@@ -59,6 +60,11 @@ func cmpMarshaledResponse(tb testing.TB,
 	// Check header, nil = ignore
 	if expectedResp.Header != nil {
 		ta.CmpHeader(expectedResp.Header)
+	}
+
+	// Check cookie, nil = ignore
+	if expectedResp.Cookies != nil {
+		ta.CmpCookies(expectedResp.Cookies)
 	}
 
 	if expectedResp.Body == nil {
