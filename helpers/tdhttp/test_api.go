@@ -503,11 +503,13 @@ func (t *TestAPI) CmpStatus(expectedStatus interface{}) *TestAPI {
 		return t
 	}
 
-	t.statusFailed = !t.t.RootName("Response.Status").
-		CmpLax(t.response.Code, expectedStatus, t.name+"status code should match")
+	if !t.t.RootName("Response.Status").
+		CmpLax(t.response.Code, expectedStatus, t.name+"status code should match") {
+		t.statusFailed = true
 
-	if t.statusFailed && t.autoDumpResponse {
-		t.dumpResponse()
+		if t.autoDumpResponse {
+			t.dumpResponse()
+		}
 	}
 
 	return t
@@ -558,11 +560,13 @@ func (t *TestAPI) CmpHeader(expectedHeader interface{}) *TestAPI {
 		return t
 	}
 
-	t.headerFailed = !t.t.RootName("Response.Header").
-		CmpLax(t.response.Header(), expectedHeader, t.name+"header should match")
+	if !t.t.RootName("Response.Header").
+		CmpLax(t.response.Header(), expectedHeader, t.name+"header should match") {
+		t.headerFailed = true
 
-	if t.headerFailed && t.autoDumpResponse {
-		t.dumpResponse()
+		if t.autoDumpResponse {
+			t.dumpResponse()
+		}
 	}
 
 	return t
@@ -602,7 +606,8 @@ func (t *TestAPI) cmpMarshaledBody(
 
 	t.t.Helper()
 
-	if t.bodyFailed = !t.checkRequestSent(); t.bodyFailed {
+	if !t.checkRequestSent() {
+		t.bodyFailed = true
 		return t
 	}
 
@@ -856,7 +861,7 @@ func (t *TestAPI) NoBody() *TestAPI {
 		return t
 	}
 
-	t.bodyFailed = !t.t.RootName("Response.Body").
+	ok := t.t.RootName("Response.Body").
 		Code(len(t.response.Body.Bytes()) == 0,
 			func(empty bool) error {
 				if empty {
@@ -869,8 +874,10 @@ func (t *TestAPI) NoBody() *TestAPI {
 				}
 			},
 			"body should be empty")
+	if !ok {
+		t.bodyFailed = true
 
-	if t.bodyFailed { // Systematically dump response, no AutoDumpResponse needed
+		// Systematically dump response, no AutoDumpResponse needed
 		t.dumpResponse()
 	}
 

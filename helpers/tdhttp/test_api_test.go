@@ -400,6 +400,17 @@ bingo%CR
 		td.CmpContains(t, mockT.LogBuf(),
 			"Failed test 'status code should match'")
 
+		// Error followed by a success: Failed() should return true anyway
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any").
+				CmpStatus(400). // fails
+				CmpStatus(200). // succeeds
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(),
+			"Failed test 'status code should match'")
+
 		mockT = tdutil.NewT("test")
 		td.CmpTrue(t,
 			tdhttp.NewTestAPI(mockT, mux).
@@ -468,6 +479,17 @@ bingo%CR
 		td.CmpContains(t, mockT.LogBuf(),
 			"Failed test 'header should match'")
 
+		// Error followed by a success: Failed() should return true anyway
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any").
+				CmpHeader(td.Not(containsKey)). // fails
+				CmpHeader(td.Ignore()).         // succeeds
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(),
+			"Failed test 'header should match'")
+
 		mockT = tdutil.NewT("test")
 		td.CmpTrue(t,
 			tdhttp.NewTestAPI(mockT, mux).
@@ -515,6 +537,15 @@ bingo%CR
 		td.CmpContains(t, mockT.LogBuf(), `expected: "xxx"`)
 		td.CmpContains(t, mockT.LogBuf(), `got: "GET!"`)
 
+		// Error followed by a success: Failed() should return true anyway
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any").
+				CmpBody("xxx").       // fails
+				CmpBody(td.Ignore()). // succeeds
+				Failed())
+
 		mockT = tdutil.NewT("test")
 		td.CmpTrue(t,
 			tdhttp.NewTestAPI(mockT, mux).
@@ -559,6 +590,16 @@ bingo%CR
 		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header or body\n")
 		td.CmpNot(t, mockT.LogBuf(), td.Contains("Received response:\n"))
 
+		// Error followed by a success: Failed() should return true anyway
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Name("my test").
+				Head("/any").
+				CmpBody("fail"). // fails
+				NoBody().        // succeeds
+				Failed())
+
 		// No JSON body
 		mockT = tdutil.NewT("test")
 		td.CmpTrue(t,
@@ -572,6 +613,17 @@ bingo%CR
 		td.CmpContains(t, mockT.LogBuf(), "Response body is empty!")
 		td.CmpContains(t, mockT.LogBuf(), "Body cannot be empty when using CmpJSONBody")
 		td.CmpNot(t, mockT.LogBuf(), td.Contains("Received response:\n"))
+
+		// Error followed by a success: Failed() should return true anyway
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/json").
+				CmpStatus(200).
+				CmpHeader(containsKey).
+				CmpJSONBody(json.RawMessage(`{}`)). // fails
+				CmpJSONBody(td.Ignore()).           // succeeds
+				Failed())
 
 		// No JSON body + AutoDumpResponse
 		mockT = tdutil.NewT("test")
