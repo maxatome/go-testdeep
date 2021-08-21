@@ -15,9 +15,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -457,15 +455,19 @@ func buildFieldsPathFn(path string) (func(interface{}) (smuggleValue, error), er
 func Smuggle(fn, expectedValue interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
-	const usage = "Smuggle(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
+	s := tdSmuggle{
+		tdSmugglerBase: newSmugglerBase(expectedValue),
+	}
+
+	const usage = "(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
+	const fullUsage = "Smuggle" + usage
 
 	switch vfn.Kind() {
 	case reflect.String:
 		fn, err := buildFieldsPathFn(vfn.String())
 		if err != nil {
-			f := dark.GetFatalizer()
-			f.Helper()
-			dark.Fatal(f, color.Bad("%s: %s", usage, err))
+			s.err = ctxerr.OpBad("Smuggle", "Smuggle%s: %s", usage, err)
+			return &s
 		}
 		vfn = reflect.ValueOf(fn)
 
@@ -473,16 +475,14 @@ func Smuggle(fn, expectedValue interface{}) TestDeep {
 		// nothing to check
 
 	default:
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.BadUsage(usage, fn, 1, true))
+		s.err = ctxerr.OpBadUsage("Smuggle", usage, fn, 1, true)
+		return &s
 	}
 
 	fnType := vfn.Type()
 	if fnType.IsVariadic() || fnType.NumIn() != 1 {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.Bad(usage+": FUNC must take only one non-variadic argument"))
+		s.err = ctxerr.OpBad("Smuggle", fullUsage+": FUNC must take only one non-variadic argument")
+		return &s
 	}
 
 	switch fnType.NumOut() {
@@ -503,22 +503,23 @@ func Smuggle(fn, expectedValue interface{}) TestDeep {
 		fallthrough
 
 	case 1: // (value)
-		s := tdSmuggle{
-			tdSmugglerBase: newSmugglerBase(expectedValue),
-			function:       vfn,
-			argType:        fnType.In(0),
+		if vfn.IsNil() {
+			s.err = ctxerr.OpBad("Smuggle", "Smuggle(FUNC): FUNC cannot be a nil function")
+			return &s
 		}
+
+		s.argType = fnType.In(0)
+		s.function = vfn
+
 		if !s.isTestDeeper {
 			s.expectedValue = reflect.ValueOf(expectedValue)
 		}
 		return &s
 	}
 
-	f := dark.GetFatalizer()
-	f.Helper()
-	dark.Fatal(f, color.Bad(
-		": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"))
-	return nil // never reached
+	s.err = ctxerr.OpBad("Smuggle",
+		fullUsage+": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)")
+	return &s
 }
 
 func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {
@@ -529,6 +530,10 @@ func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {
 }
 
 func (s *tdSmuggle) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if s.err != nil {
+		return ctx.CollectError(s.err)
+	}
+
 	got, ok := s.laxConvert(got)
 	if !ok {
 		if ctx.BooleanError {
@@ -619,9 +624,15 @@ func (s *tdSmuggle) HandleInvalid() bool {
 }
 
 func (s *tdSmuggle) String() string {
+	if s.err != nil {
+		return s.stringError()
+	}
 	return "Smuggle(" + s.function.Type().String() + ")"
 }
 
 func (s *tdSmuggle) TypeBehind() reflect.Type {
+	if s.err != nil {
+		return nil
+	}
 	return s.argType
 }

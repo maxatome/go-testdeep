@@ -14,7 +14,6 @@ import (
 	"time"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -306,48 +305,109 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Smuggle(123, 12) }, "usage: Smuggle")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Smuggle("bad[path", 12) },
-		`Smuggle(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE): cannot find final ']' in FIELD_PATH "bad[path"`)
+	const usage = "Smuggle(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE): "
+	checkError(t, "never tested",
+		td.Smuggle(nil, 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", but received nil as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Smuggle((func(string) int)(nil), 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Smuggle(FUNC): FUNC cannot be a nil function"),
+		})
+
+	checkError(t, "never tested",
+		td.Smuggle(123, 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", but received int as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Smuggle("bad[path", 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(usage + `cannot find final ']' in FIELD_PATH "bad[path"`),
+		})
 
 	// Bad number of args
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Smuggle(func() int { return 0 }, 12)
-	}, "FUNC must take only one non-variadic argument")
+	checkError(t, "never tested",
+		td.Smuggle(func() int { return 0 }, 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(usage + "FUNC must take only one non-variadic argument"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Smuggle(func(x ...int) int { return 0 }, 12)
-	}, "FUNC must take only one non-variadic argument")
+	checkError(t, "never tested",
+		td.Smuggle(func(x ...int) int { return 0 }, 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(usage + "FUNC must take only one non-variadic argument"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Smuggle(func(a int, b string) int { return 0 }, 12)
-	}, "FUNC must take only one non-variadic argument")
+	checkError(t, "never tested",
+		td.Smuggle(func(a int, b string) int { return 0 }, 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(usage + "FUNC must take only one non-variadic argument"),
+		})
 
 	// Bad number of returned values
-	const errMesg = "FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"
+	const errMesg = usage + "FUNC must return value or (value, bool) or (value, bool, string) or (value, error)"
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Smuggle(func(a int) {}, 12)
-	}, errMesg)
+	checkError(t, "never tested",
+		td.Smuggle(func(a int) {}, 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(errMesg),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
+	checkError(t, "never tested",
 		td.Smuggle(
 			func(a int) (int, bool, string, int) { return 0, false, "", 23 },
-			12)
-	}, errMesg)
+			12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(errMesg),
+		})
 
 	// Bad returned types
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Smuggle(func(a int) (int, int) { return 0, 0 }, 12)
-	}, errMesg)
+	checkError(t, "never tested",
+		td.Smuggle(func(a int) (int, int) { return 0, 0 }, 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(errMesg),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12)
-	}, errMesg)
+	checkError(t, "never tested",
+		td.Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12),
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(errMesg),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12) // nolint: staticcheck
-	}, errMesg)
+	checkError(t, "never tested",
+		td.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12), // nolint: staticcheck
+		expectedError{
+			Message: mustBe("Bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(errMesg),
+		})
 
 	//
 	// String
@@ -367,6 +427,11 @@ func TestSmuggle(t *testing.T) {
 		td.Smuggle(func(n int) (int, MyBool, MyString) { return 23, false, "" }, 12).
 			String(),
 		"Smuggle(func(int) (int, td_test.MyBool, td_test.MyString))")
+
+	// Erroneous op
+	test.EqualStr(t,
+		td.Smuggle((func(int) int)(nil), 12).String(),
+		"Smuggle(<ERROR>)")
 }
 
 func TestSmuggleFieldsPath(t *testing.T) {
@@ -552,4 +617,7 @@ func TestSmuggleTypeBehind(t *testing.T) {
 	equalTypes(t,
 		td.Smuggle("foo.bar", nil),
 		reflect.TypeOf((*interface{})(nil)).Elem())
+
+	// Erroneous op
+	equalTypes(t, td.Smuggle((func(int) int)(nil), 12), nil)
 }

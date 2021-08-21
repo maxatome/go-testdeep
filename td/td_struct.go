@@ -18,7 +18,6 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -123,7 +122,7 @@ func (m fieldMatcherSlice) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
 // as a zero value.)
 type StructFields map[string]interface{}
 
-func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value, error) {
+func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 	vmodel := reflect.ValueOf(model)
 
 	st := tdStruct{
@@ -142,7 +141,7 @@ func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value, error)
 
 		if vmodel.IsNil() {
 			st.expectedType = vmodel.Type().Elem()
-			return &st, reflect.Value{}, nil
+			return &st, reflect.Value{}
 		}
 
 		vmodel = vmodel.Elem()
@@ -150,22 +149,19 @@ func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value, error)
 
 	case reflect.Struct:
 		st.expectedType = vmodel.Type()
-		return &st, vmodel, nil
+		return &st, vmodel
 	}
 
-	var s string
-	if strict {
-		s = "S"
-	}
-	return nil, reflect.Value{},
-		errors.New(color.BadUsage(s+"Struct(STRUCT|&STRUCT, EXPECTED_FIELDS)",
-			model, 1, true))
+	st.err = ctxerr.OpBadUsage(st.location.Func,
+		"(STRUCT|&STRUCT, EXPECTED_FIELDS)",
+		model, 1, true)
+	return &st, reflect.Value{}
 }
 
-func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*tdStruct, error) {
-	st, vmodel, err := newStruct(model, strict)
-	if err != nil {
-		return nil, err
+func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdStruct {
+	st, vmodel := newStruct(model, strict)
+	if st.err != nil {
+		return st
 	}
 
 	st.expectedFields = make([]fieldInfo, 0, len(expectedFields))
@@ -180,17 +176,20 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 			matcher, err := newFieldMatcher(fieldName, expectedValue)
 			if err != nil {
 				if err == errNotAMatcher {
-					return nil, errors.New(color.Bad("%s(): struct %s has no field %q",
-						st.location.Func, stType, fieldName))
+					st.err = ctxerr.OpBad(st.location.Func,
+						"struct %s has no field %q", stType, fieldName)
+				} else {
+					st.err = ctxerr.OpBad(st.location.Func, err.Error())
 				}
-				return nil, errors.New(color.Bad("%s(): %s", st.location.Func, err))
+				return st
 			}
 			matchers = append(matchers, matcher)
 			continue
 		}
 
-		if err = st.addExpectedValue(field, expectedValue, ""); err != nil {
-			return nil, err
+		st.addExpectedValue(field, expectedValue, "")
+		if st.err != nil {
+			return st
 		}
 		checkedFields[fieldName] = true
 	}
@@ -226,10 +225,10 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 			// If non-zero field
 			if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(), fieldIf) {
 				if checkedFields[fieldName] {
-					return nil, errors.New(color.Bad(
-						"%s(): non zero field %s in model already exists in expectedFields",
-						st.location.Func,
-						fieldName))
+					st.err = ctxerr.OpBad(st.location.Func,
+						"non zero field %s in model already exists in expectedFields",
+						fieldName)
+					return st
 				}
 
 				st.expectedFields = append(st.expectedFields, fieldInfo{
@@ -258,16 +257,17 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 
 				ok, err := m.match(fieldName)
 				if err != nil {
-					return nil, errors.New(color.Bad("%s(): bad shell pattern field %#q: %s",
-						st.location.Func, m.name, err))
+					st.err = ctxerr.OpBad(st.location.Func,
+						"bad shell pattern field %#q: %s", m.name, err)
+					return st
 				}
 				if ok == m.ok {
-					err = st.addExpectedValue(
+					st.addExpectedValue(
 						field, m.expected,
 						fmt.Sprintf(" (from pattern %#q)", m.name),
 					)
-					if err != nil {
-						return nil, err
+					if st.err != nil {
+						return st
 					}
 					checkedFields[fieldName] = true
 				}
@@ -298,10 +298,10 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) (*td
 
 	sort.Sort(st.expectedFields)
 
-	return st, nil
+	return st
 }
 
-func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue interface{}, ctxInfo string) error {
+func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue interface{}, ctxInfo string) {
 	var vexpectedValue reflect.Value
 	if expectedValue == nil {
 		switch field.Type.Kind() {
@@ -309,21 +309,22 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue int
 			reflect.Ptr, reflect.Slice:
 			vexpectedValue = reflect.Zero(field.Type) // change to a typed nil
 		default:
-			return errors.New(color.Bad(
-				"%s(): expected value of field %s%s cannot be nil as it is a %s",
-				s.location.Func, field.Name, ctxInfo, field.Type))
+			s.err = ctxerr.OpBad(s.location.Func,
+				"expected value of field %s%s cannot be nil as it is a %s",
+				field.Name, ctxInfo, field.Type)
+			return
 		}
 	} else {
 		vexpectedValue = reflect.ValueOf(expectedValue)
 		if _, ok := expectedValue.(TestDeep); !ok {
 			if !vexpectedValue.Type().AssignableTo(field.Type) {
-				return errors.New(color.Bad(
-					"%s(): type %s of field expected value %s%s differs from struct one (%s)",
-					s.location.Func,
+				s.err = ctxerr.OpBad(s.location.Func,
+					"type %s of field expected value %s%s differs from struct one (%s)",
 					vexpectedValue.Type(),
 					field.Name,
 					ctxInfo,
-					field.Type))
+					field.Type)
+				return
 			}
 		}
 	}
@@ -334,7 +335,6 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue int
 		index:      field.Index,
 		unexported: field.PkgPath != "",
 	})
-	return nil
 }
 
 // summary(Struct): compares the contents of a struct or a pointer on
@@ -431,13 +431,7 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue int
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Struct(model interface{}, expectedFields StructFields) TestDeep {
-	op, err := anyStruct(model, expectedFields, false)
-	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, err)
-	}
-	return op
+	return anyStruct(model, expectedFields, false)
 }
 
 // summary(SStruct): strictly compares the contents of a struct or a
@@ -537,16 +531,14 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 //
 // TypeBehind method returns the reflect.Type of "model".
 func SStruct(model interface{}, expectedFields StructFields) TestDeep {
-	op, err := anyStruct(model, expectedFields, true)
-	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, err)
-	}
-	return op
+	return anyStruct(model, expectedFields, true)
 }
 
 func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
+	if s.err != nil {
+		return ctx.CollectError(s.err)
+	}
+
 	err = s.checkPtr(ctx, &got, false)
 	if err != nil {
 		return ctx.CollectError(err)
@@ -573,6 +565,10 @@ func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Err
 }
 
 func (s *tdStruct) String() string {
+	if s.err != nil {
+		return s.stringError()
+	}
+
 	buf := bytes.NewBufferString(s.location.Func)
 	buf.WriteByte('(')
 

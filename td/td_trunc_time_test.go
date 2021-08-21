@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -137,10 +137,24 @@ func TestTruncTime(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.TruncTime("test") },
-		"usage: TruncTime(time.Time[, time.Duration]), 1st parameter must be time.Time or convertible to time.Time, but not string")
-	dark.CheckFatalizerBarrierErr(t, func() { td.TruncTime(1, 2, 3) },
-		"usage: TruncTime(time.Time[, time.Duration]), too many parameters")
+	checkError(t, "never tested",
+		td.TruncTime("test"),
+		expectedError{
+			Message: mustBe("Bad usage of TruncTime operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: TruncTime(time.Time[, time.Duration]), 1st parameter must be time.Time or convertible to time.Time, but not string"),
+		})
+
+	checkError(t, "never tested",
+		td.TruncTime(1, 2, 3),
+		expectedError{
+			Message: mustBe("Bad usage of TruncTime operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: TruncTime(time.Time[, time.Duration]), too many parameters"),
+		})
+
+	// Erroneous op
+	test.EqualStr(t, td.TruncTime("test").String(), "TruncTime(<ERROR>)")
 }
 
 func TestTruncTimeTypeBehind(t *testing.T) {
@@ -148,4 +162,7 @@ func TestTruncTimeTypeBehind(t *testing.T) {
 
 	equalTypes(t, td.TruncTime(time.Time{}), time.Time{})
 	equalTypes(t, td.TruncTime(MyTime{}), MyTime{})
+
+	// Erroneous op
+	equalTypes(t, td.TruncTime("test"), nil)
 }

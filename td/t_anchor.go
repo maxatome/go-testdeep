@@ -12,7 +12,6 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/anchors"
 	"github.com/maxatome/go-testdeep/internal/color"
-	"github.com/maxatome/go-testdeep/internal/dark"
 )
 
 // Anchors are stored globally by testing.TB.Name().
@@ -46,9 +45,7 @@ var allAnchorsMu sync.Mutex
 func AddAnchorableStructType(fn interface{}) {
 	err := anchors.AddAnchorableStructType(fn)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.Bad(err.Error()))
+		panic(color.Bad(err.Error()))
 	}
 }
 

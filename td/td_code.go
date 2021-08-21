@@ -9,9 +9,7 @@ package td
 import (
 	"reflect"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -79,17 +77,21 @@ var _ TestDeep = &tdCode{}
 func Code(fn interface{}) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
+	c := tdCode{
+		base:     newBase(3),
+		function: vfn,
+	}
+
 	if vfn.Kind() != reflect.Func {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.BadUsage("Code(FUNC)", fn, 1, true))
+		c.err = ctxerr.OpBadUsage("Code", "(FUNC)", fn, 1, true)
+		return &c
 	}
 
 	fnType := vfn.Type()
 	if fnType.IsVariadic() || fnType.NumIn() != 1 {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.Bad("Code(FUNC): FUNC must take only one non-variadic argument"))
+		c.err = ctxerr.OpBad("Code",
+			"Code(FUNC): FUNC must take only one non-variadic argument")
+		return &c
 	}
 
 	switch fnType.NumOut() {
@@ -104,21 +106,25 @@ func Code(fn interface{}) TestDeep {
 		if fnType.Out(0).Kind() == reflect.Bool ||
 			// (*error*)
 			(fnType.NumOut() == 1 && fnType.Out(0) == types.Error) {
-			return &tdCode{
-				base:     newBase(3),
-				function: vfn,
-				argType:  fnType.In(0),
+			if vfn.IsNil() {
+				c.err = ctxerr.OpBad("Code", "Code(FUNC): FUNC cannot be a nil function")
+				return &c
 			}
+			c.argType = fnType.In(0)
+			return &c
 		}
 	}
 
-	f := dark.GetFatalizer()
-	f.Helper()
-	dark.Fatal(f, color.Bad("Code(FUNC): FUNC must return bool or (bool, string) or error"))
-	return nil // never reached
+	c.err = ctxerr.OpBad("Code",
+		"Code(FUNC): FUNC must return bool or (bool, string) or error")
+	return &c
 }
 
 func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if c.err != nil {
+		return ctx.CollectError(c.err)
+	}
+
 	if !got.Type().AssignableTo(c.argType) {
 		if !ctx.BeLax || !got.Type().ConvertibleTo(c.argType) {
 			if ctx.BooleanError {
@@ -178,9 +184,15 @@ func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (c *tdCode) String() string {
+	if c.err != nil {
+		return c.stringError()
+	}
 	return "Code(" + c.function.Type().String() + ")"
 }
 
 func (c *tdCode) TypeBehind() reflect.Type {
+	if c.err != nil {
+		return nil
+	}
 	return c.argType
 }

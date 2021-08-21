@@ -9,7 +9,6 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/internal/util"
 	"github.com/maxatome/go-testdeep/td"
@@ -41,9 +40,13 @@ func TestTag(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Tag("1badTag", td.Between(9, 13)) },
-		"Tag(): "+util.ErrTagInvalid.Error())
+	checkError(t, "never tested",
+		td.Tag("1badTag", td.Between(9, 13)),
+		expectedError{
+			Message: mustBe("Bad usage of Tag operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(util.ErrTagInvalid.Error()),
+		})
 
 	//
 	// String
@@ -52,10 +55,16 @@ func TestTag(t *testing.T) {
 		td.Gt(4).String())
 	test.EqualStr(t, td.Tag("foo", 8).String(), "8")
 	test.EqualStr(t, td.Tag("foo", nil).String(), "nil")
+
+	// Erroneous op
+	test.EqualStr(t, td.Tag("1badTag", 12).String(), "Tag(<ERROR>)")
 }
 
 func TestTagTypeBehind(t *testing.T) {
 	equalTypes(t, td.Tag("foo", 8), 0)
 	equalTypes(t, td.Tag("foo", td.Gt(4)), 0)
 	equalTypes(t, td.Tag("foo", nil), nil)
+
+	// Erroneous op
+	equalTypes(t, td.Tag("1badTag", 12), nil)
 }

@@ -19,7 +19,6 @@ import (
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/color"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/flat"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -197,9 +196,7 @@ func delete(target string, body io.Reader, headers ...interface{}) (*http.Reques
 func NewRequest(method, target string, body io.Reader, headers ...interface{}) *http.Request {
 	req, err := addHeaders(httptest.NewRequest(method, target, body), headers)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -212,9 +209,7 @@ func NewRequest(method, target string, body io.Reader, headers ...interface{}) *
 func Get(target string, headers ...interface{}) *http.Request {
 	req, err := get(target, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -227,9 +222,7 @@ func Get(target string, headers ...interface{}) *http.Request {
 func Head(target string, headers ...interface{}) *http.Request {
 	req, err := head(target, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -242,9 +235,7 @@ func Head(target string, headers ...interface{}) *http.Request {
 func Post(target string, body io.Reader, headers ...interface{}) *http.Request {
 	req, err := post(target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -267,9 +258,7 @@ func Post(target string, body io.Reader, headers ...interface{}) *http.Request {
 func PostForm(target string, data url.Values, headers ...interface{}) *http.Request {
 	req, err := postForm(target, data, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -311,9 +300,7 @@ func PostForm(target string, data url.Values, headers ...interface{}) *http.Requ
 func PostMultipartFormData(target string, data *MultipartBody, headers ...interface{}) *http.Request {
 	req, err := postMultipartFormData(target, data, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -326,9 +313,7 @@ func PostMultipartFormData(target string, data *MultipartBody, headers ...interf
 func Put(target string, body io.Reader, headers ...interface{}) *http.Request {
 	req, err := put(target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -341,9 +326,7 @@ func Put(target string, body io.Reader, headers ...interface{}) *http.Request {
 func Patch(target string, body io.Reader, headers ...interface{}) *http.Request {
 	req, err := patch(target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -356,9 +339,7 @@ func Patch(target string, body io.Reader, headers ...interface{}) *http.Request 
 func Delete(target string, body io.Reader, headers ...interface{}) *http.Request {
 	req, err := delete(target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -396,9 +377,7 @@ func newJSONRequest(method, target string, body interface{}, headers ...interfac
 func NewJSONRequest(method, target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newJSONRequest(method, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(color.Bad("%s", err))
+		panic(err)
 	}
 	return req
 }
@@ -413,9 +392,7 @@ func NewJSONRequest(method, target string, body interface{}, headers ...interfac
 func PostJSON(target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newJSONRequest(http.MethodPost, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -430,9 +407,7 @@ func PostJSON(target string, body interface{}, headers ...interface{}) *http.Req
 func PutJSON(target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newJSONRequest(http.MethodPut, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -447,9 +422,7 @@ func PutJSON(target string, body interface{}, headers ...interface{}) *http.Requ
 func PatchJSON(target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newJSONRequest(http.MethodPatch, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -464,9 +437,7 @@ func PatchJSON(target string, body interface{}, headers ...interface{}) *http.Re
 func DeleteJSON(target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newJSONRequest(http.MethodDelete, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -496,9 +467,7 @@ func newXMLRequest(method, target string, body interface{}, headers ...interface
 func NewXMLRequest(method, target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newXMLRequest(method, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -513,9 +482,7 @@ func NewXMLRequest(method, target string, body interface{}, headers ...interface
 func PostXML(target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newXMLRequest(http.MethodPost, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -530,9 +497,7 @@ func PostXML(target string, body interface{}, headers ...interface{}) *http.Requ
 func PutXML(target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newXMLRequest(http.MethodPut, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -547,9 +512,7 @@ func PutXML(target string, body interface{}, headers ...interface{}) *http.Reque
 func PatchXML(target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newXMLRequest(http.MethodPatch, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }
@@ -564,9 +527,7 @@ func PatchXML(target string, body interface{}, headers ...interface{}) *http.Req
 func DeleteXML(target string, body interface{}, headers ...interface{}) *http.Request {
 	req, err := newXMLRequest(http.MethodDelete, target, body, headers...)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		f.Fatal(err)
+		panic(err)
 	}
 	return req
 }

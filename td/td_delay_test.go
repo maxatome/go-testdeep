@@ -9,7 +9,6 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -45,11 +44,22 @@ func TestDelay(t *testing.T) {
 		})
 
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Delay(nil) },
-		"Delay(DELAYED): DELAYED must be non-nil")
+	checkError(t, "never tested",
+		td.Delay(nil),
+		expectedError{
+			Message: mustBe("Bad usage of Delay operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Delay(DELAYED): DELAYED must be non-nil"),
+		})
+
+	// Erroneous op
+	test.EqualStr(t, td.Delay(nil).String(), "Delay(<ERROR>)")
 }
 
 func TestDelayTypeBehind(t *testing.T) {
 	equalTypes(t, td.Delay(func() td.TestDeep { return td.String("x") }), nil)
 	equalTypes(t, td.Delay(func() td.TestDeep { return td.Gt(16) }), 42)
+
+	// Erroneous op
+	equalTypes(t, td.Delay(nil), nil)
 }

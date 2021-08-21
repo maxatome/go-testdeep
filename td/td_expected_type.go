@@ -72,6 +72,9 @@ func (t *tdExpectedType) checkType(ctx ctxerr.Context, got reflect.Value) *ctxer
 }
 
 func (t *tdExpectedType) TypeBehind() reflect.Type {
+	if t.err != nil {
+		return nil
+	}
 	if t.isPtr {
 		return reflect.New(t.expectedType).Type()
 	}

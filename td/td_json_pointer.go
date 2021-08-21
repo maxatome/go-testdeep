@@ -12,9 +12,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
@@ -97,16 +95,16 @@ var _ TestDeep = &tdJSONPointer{}
 // TypeBehind method always returns nil as the expected type cannot be
 // guessed from a JSON pointer.
 func JSONPointer(pointer string, expectedValue interface{}) TestDeep {
-	if !strings.HasPrefix(pointer, "/") && pointer != "" {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.Bad("JSONPointer(): bad JSON pointer %s", pointer))
-	}
-
 	p := tdJSONPointer{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 		pointer:        pointer,
 	}
+
+	if !strings.HasPrefix(pointer, "/") && pointer != "" {
+		p.err = ctxerr.OpBad("JSONPointer", "bad JSON pointer %q", pointer)
+		return &p
+	}
+
 	if !p.isTestDeeper {
 		p.expectedValue = reflect.ValueOf(expectedValue)
 	}
@@ -114,6 +112,10 @@ func JSONPointer(pointer string, expectedValue interface{}) TestDeep {
 }
 
 func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if p.err != nil {
+		return ctx.CollectError(p.err)
+	}
+
 	vgot, eErr := jsonify(ctx, got)
 	if eErr != nil {
 		return ctx.CollectError(eErr)
@@ -167,6 +169,10 @@ func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 }
 
 func (p *tdJSONPointer) String() string {
+	if p.err != nil {
+		return p.stringError()
+	}
+
 	var expected string
 	switch {
 	case p.isTestDeeper:

@@ -9,7 +9,6 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -42,12 +41,29 @@ func TestCatch(t *testing.T) {
 
 	//
 	// Bad usages
-	dark.CheckFatalizerBarrierErr(t, func() { td.Catch(12, 28) },
-		"usage: Catch(NON_NIL_PTR, EXPECTED_VALUE)")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Catch(nil, 28) },
-		"usage: Catch(NON_NIL_PTR, EXPECTED_VALUE)")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Catch((*int)(nil), 28) },
-		"usage: Catch(NON_NIL_PTR, EXPECTED_VALUE)")
+	checkError(t, "never tested",
+		td.Catch(12, 28),
+		expectedError{
+			Message: mustBe("Bad usage of Catch operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Catch(NON_NIL_PTR, EXPECTED_VALUE), but received int as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Catch(nil, 28),
+		expectedError{
+			Message: mustBe("Bad usage of Catch operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Catch(NON_NIL_PTR, EXPECTED_VALUE), but received nil as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Catch((*int)(nil), 28),
+		expectedError{
+			Message: mustBe("Bad usage of Catch operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Catch(NON_NIL_PTR, EXPECTED_VALUE), but received *int (ptr) as 1st parameter"),
+		})
 
 	//
 	// String
@@ -56,6 +72,9 @@ func TestCatch(t *testing.T) {
 		td.Catch(&num, td.Gt(4)).String(),
 		td.Gt(4).String())
 	test.EqualStr(t, td.Catch(&num, nil).String(), "nil")
+
+	// Erroneous op
+	test.EqualStr(t, td.Catch(nil, 28).String(), "Catch(<ERROR>)")
 }
 
 func TestCatchTypeBehind(t *testing.T) {
@@ -63,4 +82,7 @@ func TestCatchTypeBehind(t *testing.T) {
 	equalTypes(t, td.Catch(&num, 8), 0)
 	equalTypes(t, td.Catch(&num, td.Gt(4)), 0)
 	equalTypes(t, td.Catch(&num, nil), nil)
+
+	// Erroneous op
+	equalTypes(t, td.Catch(nil, 28), nil)
 }

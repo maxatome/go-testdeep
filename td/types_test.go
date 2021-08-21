@@ -104,3 +104,8 @@ func TestSetlocation(t *testing.T) {
 		t.Error("Cmp returned true!")
 	}
 }
+
+func TestError(t *testing.T) {
+	test.NoError(t, td.Re(`x`).Error())
+	test.Error(t, td.Re(123).Error())
+}

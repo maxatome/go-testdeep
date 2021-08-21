@@ -11,7 +11,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -115,21 +115,61 @@ func TestRe(t *testing.T) {
 
 	//
 	// Bad usage
-	const up = "(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])"
+	const (
+		ur = "(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])"
+		ua = "(STRING|*regexp.Regexp, NON_NIL_CAPTURE)"
+	)
 
-	dark.CheckFatalizerBarrierErr(t, func() { td.Re(123) },
-		"usage: Re"+up+", but received int as 1st parameter")
+	checkError(t, "never tested",
+		td.Re(123),
+		expectedError{
+			Message: mustBe("Bad usage of Re operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Re" + ur + ", but received int as 1st parameter"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() { td.Re(123) },
-		"usage: Re"+up+", but received int as 1st parameter")
+	checkError(t, "never tested",
+		td.ReAll(123, nil),
+		expectedError{
+			Message: mustBe("Bad usage of ReAll operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: ReAll" + ua + ", but received int as 1st parameter"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() { td.Re("bar", []string{}, 1) },
-		"usage: Re"+up+", too many parameters")
+	checkError(t, "never tested",
+		td.Re("bar", []string{}, 1),
+		expectedError{
+			Message: mustBe("Bad usage of Re operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Re" + ur + ", too many parameters"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() { td.ReAll(123, 456) },
-		"usage: ReAll"+up+", but received int as 1st parameter")
+	checkError(t, "never tested",
+		td.ReAll(123, 456),
+		expectedError{
+			Message: mustBe("Bad usage of ReAll operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: ReAll" + ua + ", but received int as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.ReAll(`12[3,4`, nil),
+		expectedError{
+			Message: mustBe("Invalid regexp given to ReAll operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("error parsing regexp: "),
+		})
+
+	// Erroneous op
+	test.EqualStr(t, td.Re(123).String(), "Re(<ERROR>)")
+	test.EqualStr(t, td.ReAll(123, nil).String(), "ReAll(<ERROR>)")
 }
 
 func TestReTypeBehind(t *testing.T) {
 	equalTypes(t, td.Re("x"), nil)
+	equalTypes(t, td.ReAll("x", nil), nil)
+
+	// Erroneous op
+	equalTypes(t, td.Re(123), nil)
+	equalTypes(t, td.ReAll(123, nil), nil)
 }

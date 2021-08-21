@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -136,7 +136,13 @@ func TestShallow(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Shallow(42) }, "usage: Shallow")
+	checkError(t, "never tested",
+		td.Shallow(42),
+		expectedError{
+			Message: mustBe("Bad usage of Shallow operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Shallow(CHANNEL|FUNC|MAP|PTR|SLICE|UNSAFE_PTR|STRING), but received int as 1st parameter"),
+		})
 
 	//
 	//
@@ -145,8 +151,14 @@ func TestShallow(t *testing.T) {
 		t.Errorf("Shallow().String() failed\n     got: %s\nexpected: %s",
 			td.Shallow(expectedMap).String(), reg)
 	}
+
+	// Erroneous op
+	test.EqualStr(t, td.Shallow(42).String(), "Shallow(<ERROR>)")
 }
 
 func TestShallowTypeBehind(t *testing.T) {
 	equalTypes(t, td.Shallow(t), nil)
+
+	// Erroneous op
+	equalTypes(t, td.Shallow(42), nil)
 }

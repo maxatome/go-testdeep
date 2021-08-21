@@ -11,7 +11,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -273,6 +272,16 @@ func TestJSONPointer(t *testing.T) {
 	})
 
 	//
+	// Bad usage
+	checkError(t, "never tested",
+		td.JSONPointer("x", 1234),
+		expectedError{
+			Message: mustBe("Bad usage of JSONPointer operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`bad JSON pointer "x"`),
+		})
+
+	//
 	// String
 	test.EqualStr(t, td.JSONPointer("/x", td.Gt(2)).String(),
 		"JSONPointer(/x, > 2)")
@@ -281,12 +290,13 @@ func TestJSONPointer(t *testing.T) {
 	test.EqualStr(t, td.JSONPointer("/x", nil).String(),
 		"JSONPointer(/x, nil)")
 
-	//
-	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.JSONPointer("x", 1234) },
-		"JSONPointer(): bad JSON pointer x")
+	// Erroneous op
+	test.EqualStr(t, td.JSONPointer("x", 1234).String(), "JSONPointer(<ERROR>)")
 }
 
 func TestJSONPointerTypeBehind(t *testing.T) {
 	equalTypes(t, td.JSONPointer("", 42), nil)
+
+	// Erroneous op
+	equalTypes(t, td.JSONPointer("x", 1234), nil)
 }

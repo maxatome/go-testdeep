@@ -13,7 +13,6 @@ import (
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -117,45 +116,45 @@ func TestNewRequest(tt *testing.T) {
 	})
 
 	t.Run("NewRequest header panic", func(t *td.T) {
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.NewRequest("GET", "/path", nil, "H", "V", true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[2])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[2])"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.NewRequest("GET", "/path", nil, "H1", true) },
-			`header "H1" should have a string value, not a bool (@ headers[1])`)
+			td.Contains(`header "H1" should have a string value, not a bool (@ headers[1])`))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.Get("/path", true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[0])"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.Head("/path", true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[0])"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.Post("/path", nil, true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[0])"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.PostForm("/path", nil, true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[0])"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.PostMultipartFormData("/path", &tdhttp.MultipartBody{}, true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[0])"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.Patch("/path", nil, true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[0])"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.Put("/path", nil, true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[0])"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.Delete("/path", nil, true) },
-			"headers... can only contains string and http.Header, not bool (@ headers[0])")
+			td.Contains("headers... can only contains string and http.Header, not bool (@ headers[0])"))
 	})
 
 	// Get
@@ -302,34 +301,34 @@ func TestNewJSONRequest(tt *testing.T) {
 	})
 
 	t.Run("NewJSONRequest panic", func(t *td.T) {
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.NewJSONRequest("GET", "/path", func() {}) },
-			"json: unsupported type: func()")
+			td.Contains("json: unsupported type: func()"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.PostJSON("/path", func() {}) },
-			"json: unsupported type: func()")
+			td.Contains("json: unsupported type: func()"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.PutJSON("/path", func() {}) },
-			"json: unsupported type: func()")
+			td.Contains("json: unsupported type: func()"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.PatchJSON("/path", func() {}) },
-			"json: unsupported type: func()")
+			td.Contains("json: unsupported type: func()"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.DeleteJSON("/path", func() {}) },
-			"json: unsupported type: func()")
+			td.Contains("json: unsupported type: func()"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.NewJSONRequest("GET", "/path", td.JSONPointer("/a", 0)) },
-			"JSON encoding failed: json: error calling MarshalJSON for type *td.tdJSONPointer: JSONPointer TestDeep operator cannot be json.Marshal'led")
+			td.Contains("JSON encoding failed: json: error calling MarshalJSON for type *td.tdJSONPointer: JSONPointer TestDeep operator cannot be json.Marshal'led"))
 
 		// Common user mistake
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.NewJSONRequest("GET", "/path", td.JSON(`{}`)) },
-			`JSON encoding failed: json: error calling MarshalJSON for type *td.tdJSON: JSON TestDeep operator cannot be json.Marshal'led, use json.RawMessage() instead`)
+			td.Contains(`JSON encoding failed: json: error calling MarshalJSON for type *td.tdJSON: JSON TestDeep operator cannot be json.Marshal'led, use json.RawMessage() instead`))
 	})
 
 	// Post
@@ -411,25 +410,25 @@ func TestNewXMLRequest(tt *testing.T) {
 	})
 
 	t.Run("NewXMLRequest panic", func(t *td.T) {
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.NewXMLRequest("GET", "/path", func() {}) },
-			"XML encoding failed")
+			td.Contains("XML encoding failed"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.PostXML("/path", func() {}) },
-			"XML encoding failed")
+			td.Contains("XML encoding failed"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.PutXML("/path", func() {}) },
-			"XML encoding failed")
+			td.Contains("XML encoding failed"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.PatchXML("/path", func() {}) },
-			"XML encoding failed")
+			td.Contains("XML encoding failed"))
 
-		dark.CheckFatalizerBarrierErr(t,
+		t.CmpPanic(
 			func() { tdhttp.DeleteXML("/path", func() {}) },
-			"XML encoding failed")
+			td.Contains("XML encoding failed"))
 	})
 
 	// Post

@@ -10,9 +10,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -74,14 +72,15 @@ var _ TestDeep = &tdLen{}
 func Len(expectedLen interface{}) TestDeep {
 	l := tdLen{}
 	if !l.initLenCapBase(expectedLen) {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.BadUsage("Len(TESTDEEP_OPERATOR|INT)", expectedLen, 1, true))
+		l.err = ctxerr.OpBadUsage("Len", "(TESTDEEP_OPERATOR|INT)", expectedLen, 1, true)
 	}
 	return &l
 }
 
 func (l *tdLen) String() string {
+	if l.err != nil {
+		return l.stringError()
+	}
 	if l.isTestDeeper {
 		return "len: " + l.expectedValue.Interface().(TestDeep).String()
 	}
@@ -89,6 +88,10 @@ func (l *tdLen) String() string {
 }
 
 func (l *tdLen) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if l.err != nil {
+		return ctx.CollectError(l.err)
+	}
+
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Map, reflect.Slice, reflect.String:
 		ret, err := l.isEqual(ctx.AddFunctionCall("len"), got.Len())
@@ -139,14 +142,15 @@ var _ TestDeep = &tdCap{}
 func Cap(expectedCap interface{}) TestDeep {
 	c := tdCap{}
 	if !c.initLenCapBase(expectedCap) {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.BadUsage("Cap(TESTDEEP_OPERATOR|INT)", expectedCap, 1, true))
+		c.err = ctxerr.OpBadUsage("Cap", "(TESTDEEP_OPERATOR|INT)", expectedCap, 1, true)
 	}
 	return &c
 }
 
 func (c *tdCap) String() string {
+	if c.err != nil {
+		return c.stringError()
+	}
 	if c.isTestDeeper {
 		return "cap: " + c.expectedValue.Interface().(TestDeep).String()
 	}
@@ -154,6 +158,10 @@ func (c *tdCap) String() string {
 }
 
 func (c *tdCap) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if c.err != nil {
+		return ctx.CollectError(c.err)
+	}
+
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Slice:
 		ret, err := c.isEqual(ctx.AddFunctionCall("cap"), got.Cap())

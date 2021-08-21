@@ -9,7 +9,6 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -308,44 +307,96 @@ func TestMap(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Map("test", nil) }, "usage: Map(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SuperMapOf("test", nil) },
-		"usage: SuperMapOf(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SubMapOf("test", nil) },
-		"usage: SubMapOf(")
+	checkError(t, "never tested",
+		td.Map("test", nil),
+		expectedError{
+			Message: mustBe("Bad usage of Map operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: Map("),
+		})
+	checkError(t, "never tested",
+		td.SuperMapOf("test", nil),
+		expectedError{
+			Message: mustBe("Bad usage of SuperMapOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: SuperMapOf("),
+		})
+	checkError(t, "never tested",
+		td.SubMapOf("test", nil),
+		expectedError{
+			Message: mustBe("Bad usage of SubMapOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: SubMapOf("),
+		})
 
 	num := 12
-	dark.CheckFatalizerBarrierErr(t, func() { td.Map(&num, nil) }, "usage: Map(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SuperMapOf(&num, nil) },
-		"usage: SuperMapOf(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SubMapOf(&num, nil) },
-		"usage: SubMapOf(")
+	checkError(t, "never tested",
+		td.Map(&num, nil),
+		expectedError{
+			Message: mustBe("Bad usage of Map operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: Map("),
+		})
+	checkError(t, "never tested",
+		td.SuperMapOf(&num, nil),
+		expectedError{
+			Message: mustBe("Bad usage of SuperMapOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: SuperMapOf("),
+		})
+	checkError(t, "never tested",
+		td.SubMapOf(&num, nil),
+		expectedError{
+			Message: mustBe("Bad usage of SubMapOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: SubMapOf("),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Map(&MyMap{}, td.MapEntries{1: 2}) },
-		"Map(): expected key 1 type mismatch: int != model key type (string)")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SuperMapOf(&MyMap{}, td.MapEntries{1: 2}) },
-		"SuperMapOf(): expected key 1 type mismatch: int != model key type (string)")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SubMapOf(&MyMap{}, td.MapEntries{1: 2}) },
-		"SubMapOf(): expected key 1 type mismatch: int != model key type (string)")
+	checkError(t, "never tested",
+		td.Map(&MyMap{}, td.MapEntries{1: 2}),
+		expectedError{
+			Message: mustBe("Bad usage of Map operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("expected key 1 type mismatch: int != model key type (string)"),
+		})
+	checkError(t, "never tested",
+		td.SuperMapOf(&MyMap{}, td.MapEntries{1: 2}),
+		expectedError{
+			Message: mustBe("Bad usage of SuperMapOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("expected key 1 type mismatch: int != model key type (string)"),
+		})
+	checkError(t, "never tested",
+		td.SubMapOf(&MyMap{}, td.MapEntries{1: 2}),
+		expectedError{
+			Message: mustBe("Bad usage of SubMapOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("expected key 1 type mismatch: int != model key type (string)"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Map(&MyMap{}, td.MapEntries{"foo": nil}) },
-		`Map(): expected key "foo" value cannot be nil as entries value type is int`)
+	checkError(t, "never tested",
+		td.Map(&MyMap{}, td.MapEntries{"foo": nil}),
+		expectedError{
+			Message: mustBe("Bad usage of Map operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`expected key "foo" value cannot be nil as entries value type is int`),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Map(&MyMap{}, td.MapEntries{"foo": uint16(2)}) },
-		`Map(): expected key "foo" value type mismatch: uint16 != model key type (int)`)
+	checkError(t, "never tested",
+		td.Map(&MyMap{}, td.MapEntries{"foo": uint16(2)}),
+		expectedError{
+			Message: mustBe("Bad usage of Map operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`expected key "foo" value type mismatch: uint16 != model key type (int)`),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Map(&MyMap{"foo": 1}, td.MapEntries{"foo": 1}) },
-		`Map(): "foo" entry exists in both model & expectedEntries`)
+	checkError(t, "never tested",
+		td.Map(&MyMap{"foo": 1}, td.MapEntries{"foo": 1}),
+		expectedError{
+			Message: mustBe("Bad usage of Map operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`"foo" entry exists in both model & expectedEntries`),
+		})
 
 	//
 	// String
@@ -375,6 +426,11 @@ func TestMap(t *testing.T) {
 		`SuperMapOf(*td_test.MyMap{
   "foo": 2,
 })`)
+
+	// Erroneous op
+	test.EqualStr(t, td.Map(12, nil).String(), "Map(<ERROR>)")
+	test.EqualStr(t, td.SubMapOf(12, nil).String(), "SubMapOf(<ERROR>)")
+	test.EqualStr(t, td.SuperMapOf(12, nil).String(), "SuperMapOf(<ERROR>)")
 }
 
 func TestMapTypeBehind(t *testing.T) {
@@ -394,4 +450,9 @@ func TestMapTypeBehind(t *testing.T) {
 	equalTypes(t, td.SuperMapOf(map[string]int{}, nil), map[string]int{})
 	equalTypes(t, td.SuperMapOf(MyMap{}, nil), MyMap{})
 	equalTypes(t, td.SuperMapOf(&MyMap{}, nil), &MyMap{})
+
+	// Erroneous op
+	equalTypes(t, td.Map(12, nil), nil)
+	equalTypes(t, td.SubMapOf(12, nil), nil)
+	equalTypes(t, td.SuperMapOf(12, nil), nil)
 }

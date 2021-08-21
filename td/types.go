@@ -51,6 +51,9 @@ type TestDeep interface {
 	// is not known. tdhttp helper uses it to know how to unmarshal HTTP
 	// responses bodies before comparing them using the operator.
 	TypeBehind() reflect.Type
+	// Error returns nil if the operator is operational, the
+	// corresponding error otherwise.
+	Error() error
 }
 
 // base is a base type providing some methods needed by the TestDeep
@@ -58,6 +61,7 @@ type TestDeep interface {
 type base struct {
 	types.TestDeepStamp
 	location location.Location
+	err      *ctxerr.Error
 }
 
 func pkgFunc(full string) (string, string) {
@@ -126,6 +130,21 @@ func (t base) HandleInvalid() bool {
 // returned.
 func (t base) TypeBehind() reflect.Type {
 	return nil
+}
+
+// Error returns nil if the operator is operational, the corresponding
+// error otherwise.
+func (t base) Error() error {
+	if t.err == nil {
+		return nil
+	}
+	return t.err
+}
+
+// stringError is a convenience method to call in String()
+// implementations when the operator is in error.
+func (t base) stringError() string {
+	return t.GetLocation().Func + "(<ERROR>)"
 }
 
 // MarshalJSON implements encoding/json.Marshaler only to returns an

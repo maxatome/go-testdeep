@@ -267,37 +267,61 @@ func TestStruct(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Struct("test", nil) },
-		"usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter")
+	checkError(t, "never tested",
+		td.Struct("test", nil),
+		expectedError{
+			Message: mustBe("Bad usage of Struct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter"),
+		})
 
 	i := 12
-	dark.CheckFatalizerBarrierErr(t, func() { td.Struct(&i, nil) },
-		"usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter")
+	checkError(t, "never tested",
+		td.Struct(&i, nil),
+		expectedError{
+			Message: mustBe("Bad usage of Struct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Struct(&MyStruct{}, td.StructFields{"UnknownField": 123}) },
-		`Struct(): struct td_test.MyStruct has no field "UnknownField"`)
+	checkError(t, "never tested",
+		td.Struct(&MyStruct{}, td.StructFields{"UnknownField": 123}),
+		expectedError{
+			Message: mustBe("Bad usage of Struct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`struct td_test.MyStruct has no field "UnknownField"`),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Struct(&MyStruct{}, td.StructFields{"ValBool": 123}) },
-		"Struct(): type int of field expected value ValBool differs from struct one (bool)")
+	checkError(t, "never tested",
+		td.Struct(&MyStruct{}, td.StructFields{"ValBool": 123}),
+		expectedError{
+			Message: mustBe("Bad usage of Struct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("type int of field expected value ValBool differs from struct one (bool)"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Struct(&MyStruct{}, td.StructFields{"ValBool": nil}) },
-		"Struct(): expected value of field ValBool cannot be nil as it is a bool")
+	checkError(t, "never tested",
+		td.Struct(&MyStruct{}, td.StructFields{"ValBool": nil}),
+		expectedError{
+			Message: mustBe("Bad usage of Struct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("expected value of field ValBool cannot be nil as it is a bool"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() {
-			td.Struct(&MyStruct{
-				MyStructMid: MyStructMid{
-					MyStructBase: MyStructBase{
-						ValBool: true,
-					},
+	checkError(t, "never tested",
+		td.Struct(&MyStruct{
+			MyStructMid: MyStructMid{
+				MyStructBase: MyStructBase{
+					ValBool: true,
 				},
 			},
-				td.StructFields{"ValBool": false})
 		},
-		"Struct(): non zero field ValBool in model already exists in expectedFields")
+			td.StructFields{"ValBool": false}),
+		expectedError{
+			Message: mustBe("Bad usage of Struct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("non zero field ValBool in model already exists in expectedFields"),
+		})
 
 	//
 	// String
@@ -336,6 +360,9 @@ func TestStruct(t *testing.T) {
 	test.EqualStr(t,
 		td.Struct(&MyStruct{}, td.StructFields{}).String(),
 		`Struct(*td_test.MyStruct{})`)
+
+	// Erroneous op
+	test.EqualStr(t, td.Struct("test", nil).String(), "Struct(<ERROR>)")
 }
 
 func TestStructPrivateFields(t *testing.T) {
@@ -556,19 +583,20 @@ func TestStructPatterns(t *testing.T) {
 				}),
 			"negative shell pattern")
 
-		dark.CheckFatalizerBarrierErr(t,
-			func() {
-				td.Struct(paTest{Num: 666}, td.StructFields{"= al[pha": 123})
-			},
-			"Struct(): bad shell pattern field `= al[pha`: ",
-		)
+		checkError(t, "never tested",
+			td.Struct(paTest{Num: 666}, td.StructFields{"= al[pha": 123}),
+			expectedError{
+				Message: mustBe("Bad usage of Struct operator"),
+				Path:    mustBe("DATA"),
+				Summary: mustContain("bad shell pattern field `= al[pha`: "),
+			})
 
-		dark.CheckFatalizerBarrierErr(t,
-			func() {
-				td.Struct(paTest{Num: 666}, td.StructFields{"= alpha*": nil})
-			},
-			"Struct(): expected value of field alphaNum (from pattern `= alpha*`) cannot be nil as it is a int",
-		)
+		checkError(t, "never tested",
+			td.Struct(paTest{Num: 666}, td.StructFields{"= alpha*": nil}), expectedError{
+				Message: mustBe("Bad usage of Struct operator"),
+				Path:    mustBe("DATA"),
+				Summary: mustBe("expected value of field alphaNum (from pattern `= alpha*`) cannot be nil as it is a int"),
+			})
 	})
 
 	t.Run("Regexp", func(t *testing.T) {
@@ -604,25 +632,30 @@ func TestStructPatterns(t *testing.T) {
 				}),
 			"negative regexp")
 
-		dark.CheckFatalizerBarrierErr(t,
-			func() {
-				td.Struct(paTest{Num: 666}, td.StructFields{"=~ al(*": 123})
-			},
-			"Struct(): bad regexp field `=~ al(*`: ",
-		)
+		checkError(t, "never tested",
+			td.Struct(paTest{Num: 666}, td.StructFields{"=~ al(*": 123}),
+			expectedError{
+				Message: mustBe("Bad usage of Struct operator"),
+				Path:    mustBe("DATA"),
+				Summary: mustContain("bad regexp field `=~ al(*`: "),
+			})
 
-		dark.CheckFatalizerBarrierErr(t,
-			func() {
-				td.Struct(paTest{Num: 666}, td.StructFields{"=~ alpha": nil})
-			},
-			"Struct(): expected value of field alphaNum (from pattern `=~ alpha`) cannot be nil as it is a int",
-		)
+		checkError(t, "never tested",
+			td.Struct(paTest{Num: 666}, td.StructFields{"=~ alpha": nil}),
+			expectedError{
+				Message: mustBe("Bad usage of Struct operator"),
+				Path:    mustBe("DATA"),
+				Summary: mustBe("expected value of field alphaNum (from pattern `=~ alpha`) cannot be nil as it is a int"),
+			})
 	})
 }
 
 func TestStructTypeBehind(t *testing.T) {
 	equalTypes(t, td.Struct(MyStruct{}, nil), MyStruct{})
 	equalTypes(t, td.Struct(&MyStruct{}, nil), &MyStruct{})
+
+	// Erroneous op
+	equalTypes(t, td.Struct("test", nil), nil)
 }
 
 func TestSStruct(t *testing.T) {
@@ -867,37 +900,61 @@ func TestSStruct(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.SStruct("test", nil) },
-		"usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter")
+	checkError(t, "never tested",
+		td.SStruct("test", nil),
+		expectedError{
+			Message: mustBe("Bad usage of SStruct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter"),
+		})
 
 	i := 12
-	dark.CheckFatalizerBarrierErr(t, func() { td.SStruct(&i, nil) },
-		"usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter")
+	checkError(t, "never tested",
+		td.SStruct(&i, nil),
+		expectedError{
+			Message: mustBe("Bad usage of SStruct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SStruct(&MyStruct{}, td.StructFields{"UnknownField": 123}) },
-		`SStruct(): struct td_test.MyStruct has no field "UnknownField"`)
+	checkError(t, "never tested",
+		td.SStruct(&MyStruct{}, td.StructFields{"UnknownField": 123}),
+		expectedError{
+			Message: mustBe("Bad usage of SStruct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`struct td_test.MyStruct has no field "UnknownField"`),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SStruct(&MyStruct{}, td.StructFields{"ValBool": 123}) },
-		"SStruct(): type int of field expected value ValBool differs from struct one (bool)")
+	checkError(t, "never tested",
+		td.SStruct(&MyStruct{}, td.StructFields{"ValBool": 123}),
+		expectedError{
+			Message: mustBe("Bad usage of SStruct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("type int of field expected value ValBool differs from struct one (bool)"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SStruct(&MyStruct{}, td.StructFields{"ValBool": nil}) },
-		"SStruct(): expected value of field ValBool cannot be nil as it is a bool")
+	checkError(t, "never tested",
+		td.SStruct(&MyStruct{}, td.StructFields{"ValBool": nil}),
+		expectedError{
+			Message: mustBe("Bad usage of SStruct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("expected value of field ValBool cannot be nil as it is a bool"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t,
-		func() {
-			td.SStruct(&MyStruct{
-				MyStructMid: MyStructMid{
-					MyStructBase: MyStructBase{
-						ValBool: true,
-					},
+	checkError(t, "never tested",
+		td.SStruct(&MyStruct{
+			MyStructMid: MyStructMid{
+				MyStructBase: MyStructBase{
+					ValBool: true,
 				},
 			},
-				td.StructFields{"ValBool": false})
 		},
-		"SStruct(): non zero field ValBool in model already exists in expectedFields")
+			td.StructFields{"ValBool": false}),
+		expectedError{
+			Message: mustBe("Bad usage of SStruct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("non zero field ValBool in model already exists in expectedFields"),
+		})
 
 	//
 	// String
@@ -943,6 +1000,9 @@ func TestSStruct(t *testing.T) {
   ValInt: 0
   ValStr: ""
 })`)
+
+	// Erroneous op
+	test.EqualStr(t, td.SStruct("test", nil).String(), "SStruct(<ERROR>)")
 }
 
 func TestSStructPattern(t *testing.T) {
@@ -988,4 +1048,7 @@ func TestSStructPattern(t *testing.T) {
 func TestSStructTypeBehind(t *testing.T) {
 	equalTypes(t, td.SStruct(MyStruct{}, nil), MyStruct{})
 	equalTypes(t, td.SStruct(&MyStruct{}, nil), &MyStruct{})
+
+	// Erroneous op
+	equalTypes(t, td.SStruct("test", nil), nil)
 }

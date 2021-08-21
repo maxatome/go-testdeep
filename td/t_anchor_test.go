@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -136,7 +135,8 @@ func TestAddAnchorableStructType(tt *testing.T) {
 			}))
 
 	// Error
-	dark.CheckFatalizerBarrierErr(tt, func() { td.AddAnchorableStructType(123) },
+	test.CheckPanic(tt,
+		func() { td.AddAnchorableStructType(123) },
 		"usage: AddAnchorableStructType(func (nextAnchor int) STRUCT_TYPE)")
 }
 

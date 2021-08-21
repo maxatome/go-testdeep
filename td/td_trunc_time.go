@@ -11,9 +11,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -52,18 +50,17 @@ var _ TestDeep = &tdTruncTime{}
 //
 // TypeBehind method returns the reflect.Type of "expectedTime".
 func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
-	const usage = "TruncTime(time.Time[, time.Duration])"
-
-	if len(trunc) > 1 {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.TooManyParams(usage))
-	}
+	const usage = "(time.Time[, time.Duration])"
 
 	t := tdTruncTime{
 		tdExpectedType: tdExpectedType{
 			base: newBase(3),
 		},
+	}
+
+	if len(trunc) > 1 {
+		t.err = ctxerr.OpTooManyParams("TruncTime", usage)
+		return &t
 	}
 
 	if len(trunc) == 1 {
@@ -78,10 +75,9 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 		return &t
 	}
 	if !t.expectedType.ConvertibleTo(types.Time) {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.Bad("usage: %s, 1st parameter must be time.Time or convertible to time.Time, but not %T",
-			usage, expectedTime))
+		t.err = ctxerr.OpBad("TruncTime", "usage: TruncTime%s, 1st parameter must be time.Time or convertible to time.Time, but not %T",
+			usage, expectedTime)
+		return &t
 	}
 
 	t.expectedTime = vval.Convert(types.Time).
@@ -90,6 +86,10 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 }
 
 func (t *tdTruncTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if t.err != nil {
+		return ctx.CollectError(t.err)
+	}
+
 	err := t.checkType(ctx, got)
 	if err != nil {
 		return ctx.CollectError(err)
@@ -129,6 +129,10 @@ func (t *tdTruncTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error
 }
 
 func (t *tdTruncTime) String() string {
+	if t.err != nil {
+		return t.stringError()
+	}
+
 	if t.expectedType.Implements(types.FmtStringer) {
 		return reflect.ValueOf(t.expectedTime).Convert(t.expectedType).
 			Interface().(fmt.Stringer).String()
