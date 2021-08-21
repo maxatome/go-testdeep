@@ -16,7 +16,6 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/flat"
@@ -97,7 +96,7 @@ func (u tdJSONUnmarshaler) replaceLocation(tdOp TestDeep, posInJSON json.Positio
 }
 
 // unmarshal unmarshals "expectedJSON" using placeholder parameters "params".
-func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interface{}) (interface{}, error) {
+func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interface{}) (interface{}, *ctxerr.Error) {
 	var (
 		err error
 		b   []byte
@@ -111,8 +110,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 			// It could be a file name, try to read from it
 			b, err = ioutil.ReadFile(data)
 			if err != nil {
-				return nil, errors.New(color.Bad("%s(): JSON file %s cannot be read: %s",
-					u.Func, data, err))
+				return nil, ctxerr.OpBad(u.Func, "JSON file %s cannot be read: %s", data, err)
 			}
 			break
 		}
@@ -124,13 +122,13 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 	case io.Reader:
 		b, err = ioutil.ReadAll(data)
 		if err != nil {
-			return nil, errors.New(color.Bad("%s(): JSON read error: %s", u.Func, err))
+			return nil, ctxerr.OpBad(u.Func, "JSON read error: %s", err)
 		}
 
 	default:
-		return nil, errors.New(color.BadUsage(
-			u.Func+"(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)",
-			expectedJSON, 1, false))
+		return nil, ctxerr.OpBadUsage(
+			u.Func, "(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)",
+			expectedJSON, 1, false)
 	}
 
 	params = flat.Interfaces(params...)
@@ -140,8 +138,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 		switch op := p.(type) {
 		case *tdTag:
 			if byTag[op.tag] != nil {
-				return nil, errors.New(color.Bad(
-					`%s(): 2 params have the same tag "%s"`, u.Func, op.tag))
+				return nil, ctxerr.OpBad(u.Func, `2 params have the same tag "%s"`, op.tag)
 			}
 			if byTag == nil {
 				byTag = map[string]interface{}{}
@@ -166,7 +163,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 				if _, ok := types.AsOperatorNotJSONMarshallableError(err); ok {
 					break
 				}
-				return nil, errors.New(color.Bad(`%s(): param #%d of type %T cannot be JSON marshalled`, u.Func, i+1, p))
+				return nil, ctxerr.OpBad(u.Func, `param #%d of type %T cannot be JSON marshalled`, i+1, p)
 			}
 			// As Marshal succeeded, Unmarshal in an interface{} cannot fail
 			params[i] = nil
@@ -182,7 +179,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 	})
 
 	if err != nil {
-		return nil, errors.New(color.Bad("%s(): JSON unmarshal error: %s", u.Func, err))
+		return nil, ctxerr.OpBad(u.Func, "JSON unmarshal error: %s", err)
 	}
 
 	return final, nil
@@ -288,13 +285,9 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 			}
 		}
 
-		var tdOp TestDeep
-		err := dark.FatalizerBarrier(func() {
-			tdOp = vfn.Call(in)[0].Interface().(TestDeep)
-		})
-		if err != nil {
-			return nil, fmt.Errorf("%s() %v", jop.Name, color.UnBad(err.Error()))
-		}
+		tdOp := vfn.Call(in)[0].Interface().(TestDeep)
+
+		// let erroneous operators (tdOp.err != nil) pass
 
 		// replace the location by the JSON/SubJSONOf/SuperJSONOf one
 		u.replaceLocation(tdOp, posInJSON)
@@ -554,22 +547,25 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 // []interface{}, map[string]interface{} or interface{} in case
 // "expectedJSON" is "null".
 func JSON(expectedJSON interface{}, params ...interface{}) TestDeep {
-	b := newBaseOKNil(3)
+	j := &tdJSON{
+		baseOKNil: newBaseOKNil(3),
+	}
 
-	v, err := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
+	v, err := newJSONUnmarshaler(j.GetLocation()).unmarshal(expectedJSON, params)
 	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, err)
+		j.err = err
+	} else {
+		j.expected = reflect.ValueOf(v)
 	}
 
-	return &tdJSON{
-		baseOKNil: b,
-		expected:  reflect.ValueOf(v),
-	}
+	return j
 }
 
 func (j *tdJSON) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if j.err != nil {
+		return ctx.CollectError(j.err)
+	}
+
 	err := gotViaJSON(ctx, &got)
 	if err != nil {
 		return ctx.CollectError(err)
@@ -581,6 +577,10 @@ func (j *tdJSON) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (j *tdJSON) String() string {
+	if j.err != nil {
+		return j.stringError()
+	}
+
 	return jsonStringify("JSON", j.expected)
 }
 
@@ -600,6 +600,10 @@ func jsonStringify(opName string, v reflect.Value) string {
 }
 
 func (j *tdJSON) TypeBehind() reflect.Type {
+	if j.err != nil {
+		return nil
+	}
+
 	if j.expected.IsValid() {
 		// In case we have an operator at the root, delegate it the call
 		if je, ok := j.expected.Interface().(*tdJSONEmbedded); ok {
@@ -746,35 +750,32 @@ var _ TestDeep = &tdMapJSON{}
 //
 // TypeBehind method returns the map[string]interface{} type.
 func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
-	b := newBase(3)
-
-	v, err := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
-	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, err)
-	}
-
-	_, ok := v.(map[string]interface{})
-	if !ok {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.Bad("SubJSONOf() only accepts JSON objects {…}"))
-	}
-
-	m := tdMapJSON{
+	m := &tdMapJSON{
 		tdMap: tdMap{
 			tdExpectedType: tdExpectedType{
-				base:         b,
+				base:         newBase(3),
 				expectedType: reflect.TypeOf((map[string]interface{})(nil)),
 			},
 			kind: subMap,
 		},
-		expected: reflect.ValueOf(v),
 	}
-	// As entries is nil, it never returns an error
-	m.populateExpectedEntries(nil, m.expected) //nolint: errcheck
-	return &m
+
+	v, err := newJSONUnmarshaler(m.GetLocation()).unmarshal(expectedJSON, params)
+	if err != nil {
+		m.err = err
+		return m
+	}
+
+	_, ok := v.(map[string]interface{})
+	if !ok {
+		m.err = ctxerr.OpBad("SubJSONOf", "SubJSONOf() only accepts JSON objects {…}")
+		return m
+	}
+
+	m.expected = reflect.ValueOf(v)
+
+	m.populateExpectedEntries(nil, m.expected)
+	return m
 }
 
 // summary(SuperJSONOf): compares struct or map against JSON
@@ -908,38 +909,39 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //
 // TypeBehind method returns the map[string]interface{} type.
 func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
-	b := newBase(3)
-
-	v, err := newJSONUnmarshaler(b.GetLocation()).unmarshal(expectedJSON, params)
-	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, err)
-	}
-
-	_, ok := v.(map[string]interface{})
-	if !ok {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.Bad("SuperJSONOf() only accepts JSON objects {…}"))
-	}
-
-	m := tdMapJSON{
+	m := &tdMapJSON{
 		tdMap: tdMap{
 			tdExpectedType: tdExpectedType{
-				base:         b,
+				base:         newBase(3),
 				expectedType: reflect.TypeOf((map[string]interface{})(nil)),
 			},
 			kind: superMap,
 		},
-		expected: reflect.ValueOf(v),
 	}
-	// As entries is nil, it never returns an error
-	m.populateExpectedEntries(nil, m.expected) //nolint: errcheck
-	return &m
+
+	v, err := newJSONUnmarshaler(m.GetLocation()).unmarshal(expectedJSON, params)
+	if err != nil {
+		m.err = err
+		return m
+	}
+
+	_, ok := v.(map[string]interface{})
+	if !ok {
+		m.err = ctxerr.OpBad("SuperJSONOf", "SuperJSONOf() only accepts JSON objects {…}")
+		return m
+	}
+
+	m.expected = reflect.ValueOf(v)
+
+	m.populateExpectedEntries(nil, m.expected)
+	return m
 }
 
 func (m *tdMapJSON) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if m.err != nil {
+		return ctx.CollectError(m.err)
+	}
+
 	err := gotViaJSON(ctx, &got)
 	if err != nil {
 		return ctx.CollectError(err)
@@ -963,6 +965,10 @@ func (m *tdMapJSON) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (m *tdMapJSON) String() string {
+	if m.err != nil {
+		return m.stringError()
+	}
+
 	return jsonStringify(m.GetLocation().Func, m.expected)
 }
 

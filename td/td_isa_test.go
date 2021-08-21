@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -101,17 +100,28 @@ func TestIsa(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Isa(nil) },
-		"Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example")
+	checkError(t, "never tested",
+		td.Isa(nil),
+		expectedError{
+			Message: mustBe("Bad usage of Isa operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example"),
+		})
 
 	//
 	// String
 	test.EqualStr(t, td.Isa((*MyStruct)(nil)).String(),
 		"*td_test.MyStruct")
+
+	// Erroneous op
+	test.EqualStr(t, td.Isa(nil).String(), "Isa(<ERROR>)")
 }
 
 func TestIsaTypeBehind(t *testing.T) {
 	equalTypes(t, td.Isa(([]int)(nil)), []int{})
 
 	equalTypes(t, td.Isa((*fmt.Stringer)(nil)), (*fmt.Stringer)(nil))
+
+	// Erroneous op
+	equalTypes(t, td.Isa(nil), nil)
 }

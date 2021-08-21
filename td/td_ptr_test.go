@@ -9,7 +9,6 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -169,11 +168,37 @@ func TestPtr(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Ptr(nil) }, "usage: Ptr(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Ptr(MyInterface(nil)) }, "usage: Ptr(")
+	checkError(t, "never tested",
+		td.Ptr(nil),
+		expectedError{
+			Message: mustBe("Bad usage of Ptr operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: Ptr("),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() { td.PPtr(nil) }, "usage: PPtr(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.PPtr(MyInterface(nil)) }, "usage: PPtr(")
+	checkError(t, "never tested",
+		td.Ptr(MyInterface(nil)),
+		expectedError{
+			Message: mustBe("Bad usage of Ptr operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: Ptr("),
+		})
+
+	checkError(t, "never tested",
+		td.PPtr(nil),
+		expectedError{
+			Message: mustBe("Bad usage of PPtr operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: PPtr("),
+		})
+
+	checkError(t, "never tested",
+		td.PPtr(MyInterface(nil)),
+		expectedError{
+			Message: mustBe("Bad usage of PPtr operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("usage: PPtr("),
+		})
 
 	//
 	// String
@@ -181,6 +206,10 @@ func TestPtr(t *testing.T) {
 	test.EqualStr(t, td.PPtr(13).String(), "**int")
 	test.EqualStr(t, td.Ptr(td.Ptr(13)).String(), "*<something>")
 	test.EqualStr(t, td.PPtr(td.Ptr(13)).String(), "**<something>")
+
+	// Erroneous op
+	test.EqualStr(t, td.Ptr(nil).String(), "Ptr(<ERROR>)")
+	test.EqualStr(t, td.PPtr(nil).String(), "PPtr(<ERROR>)")
 }
 
 func TestPtrTypeBehind(t *testing.T) {
@@ -191,6 +220,9 @@ func TestPtrTypeBehind(t *testing.T) {
 	var num64 int64
 	equalTypes(t, td.Ptr(td.Between(int64(1), int64(2))), &num64)
 	equalTypes(t, td.Ptr(td.Any(1, 1.2)), nil)
+
+	// Erroneous op
+	equalTypes(t, td.Ptr(nil), nil)
 }
 
 func TestPPtrTypeBehind(t *testing.T) {
@@ -201,4 +233,7 @@ func TestPPtrTypeBehind(t *testing.T) {
 	var pnum64 *int64
 	equalTypes(t, td.PPtr(td.Between(int64(1), int64(2))), &pnum64)
 	equalTypes(t, td.PPtr(td.Any(1, 1.2)), nil)
+
+	// Erroneous op
+	equalTypes(t, td.PPtr(nil), nil)
 }

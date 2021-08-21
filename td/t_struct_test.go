@@ -12,7 +12,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -84,7 +83,7 @@ func TestT(tt *testing.T) {
 	test.IsTrue(tt, ttb.IsFatal)
 	test.IsTrue(tt, strings.Contains(ttb.Messages[0], "usage: NewT("))
 
-	dark.CheckFatalizerBarrierErr(tt, func() { td.NewT(nil) }, "usage: NewT")
+	test.CheckPanic(tt, func() { td.NewT(nil) }, "usage: NewT")
 }
 
 func TestTCmp(tt *testing.T) {

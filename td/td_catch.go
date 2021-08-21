@@ -9,9 +9,7 @@ package td
 import (
 	"reflect"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -60,16 +58,16 @@ var _ TestDeep = &tdCatch{}
 //   }
 func Catch(target, expectedValue interface{}) TestDeep {
 	vt := reflect.ValueOf(target)
-	if vt.Kind() != reflect.Ptr || vt.IsNil() || !vt.Elem().CanSet() {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.BadUsage("Catch(NON_NIL_PTR, EXPECTED_VALUE)", target, 1, true))
-	}
-
 	c := tdCatch{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 		target:         vt,
 	}
+
+	if vt.Kind() != reflect.Ptr || vt.IsNil() || !vt.Elem().CanSet() {
+		c.err = ctxerr.OpBadUsage("Catch", "(NON_NIL_PTR, EXPECTED_VALUE)", target, 1, true)
+		return &c
+	}
+
 	if !c.isTestDeeper {
 		c.expectedValue = reflect.ValueOf(expectedValue)
 	}
@@ -77,6 +75,10 @@ func Catch(target, expectedValue interface{}) TestDeep {
 }
 
 func (c *tdCatch) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if c.err != nil {
+		return ctx.CollectError(c.err)
+	}
+
 	if targetType := c.target.Elem().Type(); !got.Type().AssignableTo(targetType) {
 		if !ctx.BeLax || !got.Type().ConvertibleTo(targetType) {
 			if ctx.BooleanError {
@@ -94,6 +96,10 @@ func (c *tdCatch) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (c *tdCatch) String() string {
+	if c.err != nil {
+		return c.stringError()
+	}
+
 	if c.isTestDeeper {
 		return c.expectedValue.Interface().(TestDeep).String()
 	}
@@ -101,6 +107,10 @@ func (c *tdCatch) String() string {
 }
 
 func (c *tdCatch) TypeBehind() reflect.Type {
+	if c.err != nil {
+		return nil
+	}
+
 	if c.isTestDeeper {
 		return c.expectedValue.Interface().(TestDeep).TypeBehind()
 	}

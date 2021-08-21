@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -116,47 +115,109 @@ func TestCode(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Code("test") }, "usage: Code")
+	checkError(t, "never tested",
+		td.Code(nil),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Code(FUNC), but received nil as 1st parameter"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func() bool { return true })
-	}, "FUNC must take only one non-variadic argument")
+	checkError(t, "never tested",
+		td.Code((func(string) bool)(nil)),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC cannot be a nil function"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(x ...int) bool { return true })
-	}, "FUNC must take only one non-variadic argument")
+	checkError(t, "never tested",
+		td.Code("test"),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Code(FUNC), but received string as 1st parameter"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(a int, b string) bool { return true })
-	}, "FUNC must take only one non-variadic argument")
+	checkError(t, "never tested",
+		td.Code(func() bool { return true }),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must take only one non-variadic argument"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(n int) (bool, int) { return true, 0 })
-	}, "FUNC must return bool or (bool, string) or error")
+	checkError(t, "never tested",
+		td.Code(func(x ...int) bool { return true }),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must take only one non-variadic argument"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(n int) (error, string) { return nil, "" }) // nolint: staticcheck
-	}, "FUNC must return bool or (bool, string) or error")
+	checkError(t, "never tested",
+		td.Code(func(a int, b string) bool { return true }),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must take only one non-variadic argument"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(n int) (int, string) { return 0, "" })
-	}, "FUNC must return bool or (bool, string) or error")
+	checkError(t, "never tested",
+		td.Code(func(n int) (bool, int) { return true, 0 }),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must return bool or (bool, string) or error"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(n int) (string, bool) { return "", true })
-	}, "FUNC must return bool or (bool, string) or error")
+	checkError(t, "never tested",
+		td.Code(func(n int) (error, string) { return nil, "" }), // nolint: staticcheck
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must return bool or (bool, string) or error"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(n int) (bool, string, int) { return true, "", 0 })
-	}, "FUNC must return bool or (bool, string) or error")
+	checkError(t, "never tested",
+		td.Code(func(n int) (int, string) { return 0, "" }),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must return bool or (bool, string) or error"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(n int) {})
-	}, "FUNC must return bool or (bool, string) or error")
+	checkError(t, "never tested",
+		td.Code(func(n int) (string, bool) { return "", true }),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must return bool or (bool, string) or error"),
+		})
 
-	dark.CheckFatalizerBarrierErr(t, func() {
-		td.Code(func(n int) int { return 0 })
-	}, "FUNC must return bool or (bool, string) or error")
+	checkError(t, "never tested",
+		td.Code(func(n int) (bool, string, int) { return true, "", 0 }),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must return bool or (bool, string) or error"),
+		})
+
+	checkError(t, "never tested",
+		td.Code(func(n int) {}),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must return bool or (bool, string) or error"),
+		})
+
+	checkError(t, "never tested",
+		td.Code(func(n int) int { return 0 }),
+		expectedError{
+			Message: mustBe("Bad usage of Code operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Code(FUNC): FUNC must return bool or (bool, string) or error"),
+		})
 
 	//
 	// String
@@ -172,6 +233,9 @@ func TestCode(t *testing.T) {
 	test.EqualStr(t,
 		td.Code(func(n int) (MyBool, MyString) { return false, "" }).String(),
 		"Code(func(int) (td_test.MyBool, td_test.MyString))")
+
+	// Erroneous op
+	test.EqualStr(t, td.Code(nil).String(), "Code(<ERROR>)")
 }
 
 func TestCodeTypeBehind(t *testing.T) {
@@ -184,4 +248,7 @@ func TestCodeTypeBehind(t *testing.T) {
 	equalTypes(t,
 		td.Code(func(t MyTime) bool { return time.Time(t).IsZero() }),
 		MyTime{})
+
+	// Erroneous op
+	equalTypes(t, td.Code(nil), nil)
 }

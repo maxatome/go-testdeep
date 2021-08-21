@@ -9,7 +9,7 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -137,15 +137,33 @@ func TestKeysValues(t *testing.T) {
 
 	//
 	t.Run("Bad usage", func(t *testing.T) {
-		dark.CheckFatalizerBarrierErr(t, func() { td.Keys(12) },
-			"usage: Keys(TESTDEEP_OPERATOR|SLICE)")
+		checkError(t, "never tested",
+			td.Keys(12),
+			expectedError{
+				Message: mustBe("Bad usage of Keys operator"),
+				Path:    mustBe("DATA"),
+				Summary: mustBe("usage: Keys(TESTDEEP_OPERATOR|SLICE), but received int as 1st parameter"),
+			})
 
-		dark.CheckFatalizerBarrierErr(t, func() { td.Values(12) },
-			"usage: Values(TESTDEEP_OPERATOR|SLICE)")
+		checkError(t, "never tested",
+			td.Values(12),
+			expectedError{
+				Message: mustBe("Bad usage of Values operator"),
+				Path:    mustBe("DATA"),
+				Summary: mustBe("usage: Values(TESTDEEP_OPERATOR|SLICE), but received int as 1st parameter"),
+			})
 	})
+
+	// Erroneous op
+	test.EqualStr(t, td.Keys(12).String(), "Keys(<ERROR>)")
+	test.EqualStr(t, td.Values(12).String(), "Values(<ERROR>)")
 }
 
 func TestKeysValuesTypeBehind(t *testing.T) {
 	equalTypes(t, td.Keys([]string{}), nil)
 	equalTypes(t, td.Values([]string{}), nil)
+
+	// Erroneous op
+	equalTypes(t, td.Keys(12), nil)
+	equalTypes(t, td.Values(12), nil)
 }

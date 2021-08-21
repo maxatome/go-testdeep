@@ -9,7 +9,6 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -166,23 +165,61 @@ func TestArray(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Array("test", nil) }, "usage: Array(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Array(&MyStruct{}, nil) },
-		"usage: Array(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Array([]int{}, nil) }, "usage: Array(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Array([1]int{}, td.ArrayEntries{1: 34}) },
-		"array length is 1, so cannot have #1 expected index")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Array([3]int{}, td.ArrayEntries{1: nil}) },
-		"expected value of #1 cannot be nil as items type is int")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Array([3]int{}, td.ArrayEntries{1: "bad"}) },
-		"type string of #1 expected value differs from array contents (int)")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Array([1]int{12}, td.ArrayEntries{0: 21}) },
-		"non zero #0 entry in model already exists in expectedEntries")
+	checkError(t, "never tested",
+		td.Array("test", nil),
+		expectedError{
+			Message: mustBe("Bad usage of Array operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Array(ARRAY|&ARRAY, EXPECTED_ENTRIES), but received string as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Array(&MyStruct{}, nil),
+		expectedError{
+			Message: mustBe("Bad usage of Array operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Array(ARRAY|&ARRAY, EXPECTED_ENTRIES), but received *td_test.MyStruct (ptr) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Array([]int{}, nil),
+		expectedError{
+			Message: mustBe("Bad usage of Array operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Array(ARRAY|&ARRAY, EXPECTED_ENTRIES), but received []int (slice) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Array([1]int{}, td.ArrayEntries{1: 34}),
+		expectedError{
+			Message: mustBe("Bad usage of Array operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("array length is 1, so cannot have #1 expected index"),
+		})
+
+	checkError(t, "never tested",
+		td.Array([3]int{}, td.ArrayEntries{1: nil}),
+		expectedError{
+			Message: mustBe("Bad usage of Array operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("expected value of #1 cannot be nil as items type is int"),
+		})
+
+	checkError(t, "never tested",
+		td.Array([3]int{}, td.ArrayEntries{1: "bad"}),
+		expectedError{
+			Message: mustBe("Bad usage of Array operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("type string of #1 expected value differs from array contents (int)"),
+		})
+
+	checkError(t, "never tested",
+		td.Array([1]int{12}, td.ArrayEntries{0: 21}),
+		expectedError{
+			Message: mustBe("Bad usage of Array operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("non zero #0 entry in model already exists in expectedEntries"),
+		})
 
 	//
 	// String
@@ -208,6 +245,11 @@ func TestArray(t *testing.T) {
 
 	test.EqualStr(t, td.Array([0]int{}, td.ArrayEntries{}).String(),
 		`Array([0]int{})`)
+
+	// Erroneous op
+	test.EqualStr(t,
+		td.Array([3]int{}, td.ArrayEntries{1: "bad"}).String(),
+		"Array(<ERROR>)")
 }
 
 func TestArrayTypeBehind(t *testing.T) {
@@ -216,6 +258,9 @@ func TestArrayTypeBehind(t *testing.T) {
 	equalTypes(t, td.Array([12]int{}, nil), [12]int{})
 	equalTypes(t, td.Array(MyArray{}, nil), MyArray{})
 	equalTypes(t, td.Array(&MyArray{}, nil), &MyArray{})
+
+	// Erroneous op
+	equalTypes(t, td.Array([3]int{}, td.ArrayEntries{1: "bad"}), nil)
 }
 
 func TestSlice(t *testing.T) {
@@ -407,17 +452,45 @@ func TestSlice(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Slice("test", nil) }, "usage: Slice(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Slice(&MyStruct{}, nil) },
-		"usage: Slice(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Slice([0]int{}, nil) }, "usage: Slice(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Slice([]int{}, td.ArrayEntries{1: "bad"}) },
-		"type string of #1 expected value differs from slice contents (int)")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Slice([]int{12}, td.ArrayEntries{0: 21}) },
-		"non zero #0 entry in model already exists in expectedEntries")
+	checkError(t, "never tested",
+		td.Slice("test", nil),
+		expectedError{
+			Message: mustBe("Bad usage of Slice operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES), but received string as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Slice(&MyStruct{}, nil),
+		expectedError{
+			Message: mustBe("Bad usage of Slice operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES), but received *td_test.MyStruct (ptr) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Slice([0]int{}, nil),
+		expectedError{
+			Message: mustBe("Bad usage of Slice operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES), but received [0]int (array) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Slice([]int{}, td.ArrayEntries{1: "bad"}),
+		expectedError{
+			Message: mustBe("Bad usage of Slice operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("type string of #1 expected value differs from slice contents (int)"),
+		})
+
+	checkError(t, "never tested",
+		td.Slice([]int{12}, td.ArrayEntries{0: 21}),
+		expectedError{
+			Message: mustBe("Bad usage of Slice operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("non zero #0 entry in model already exists in expectedEntries"),
+		})
 
 	//
 	// String
@@ -439,6 +512,11 @@ func TestSlice(t *testing.T) {
 
 	test.EqualStr(t, td.Slice(&MySlice{}, td.ArrayEntries{}).String(),
 		`Slice(*td_test.MySlice{})`)
+
+	// Erroneous op
+	test.EqualStr(t,
+		td.Slice([]int{}, td.ArrayEntries{1: "bad"}).String(),
+		"Slice(<ERROR>)")
 }
 
 func TestSliceTypeBehind(t *testing.T) {
@@ -447,6 +525,9 @@ func TestSliceTypeBehind(t *testing.T) {
 	equalTypes(t, td.Slice([]int{}, nil), []int{})
 	equalTypes(t, td.Slice(MySlice{}, nil), MySlice{})
 	equalTypes(t, td.Slice(&MySlice{}, nil), &MySlice{})
+
+	// Erroneous op
+	equalTypes(t, td.Slice([]int{}, td.ArrayEntries{1: "bad"}), nil)
 }
 
 func TestSuperSliceOf(t *testing.T) {
@@ -539,9 +620,13 @@ func TestSuperSliceOf(t *testing.T) {
 		checkOK(t, [5]int{3: 4},
 			td.Lax(td.SuperSliceOf(MyArray{}, td.ArrayEntries{3: 4})))
 
-		dark.CheckFatalizerBarrierErr(t,
-			func() { td.SuperSliceOf(MyArray{}, td.ArrayEntries{8: 34}) },
-			"array length is 5, so cannot have #8 expected index")
+		checkError(t, "never tested",
+			td.SuperSliceOf(MyArray{}, td.ArrayEntries{8: 34}),
+			expectedError{
+				Message: mustBe("Bad usage of SuperSliceOf operator"),
+				Path:    mustBe("DATA"),
+				Summary: mustBe("array length is 5, so cannot have #8 expected index"),
+			})
 	})
 
 	t.Run("ints slice", func(t *testing.T) {
@@ -613,17 +698,42 @@ func TestSuperSliceOf(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SuperSliceOf("test", nil) }, "usage: SuperSliceOf(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SuperSliceOf(&MyStruct{}, nil) },
-		"usage: SuperSliceOf(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}) },
-		"type string of #1 expected value differs from slice contents (int)")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.SuperSliceOf([]int{12}, td.ArrayEntries{0: 21}) },
-		"non zero #0 entry in model already exists in expectedEntries")
+	checkError(t, "never tested",
+		td.SuperSliceOf("test", nil),
+		expectedError{
+			Message: mustBe("Bad usage of SuperSliceOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: SuperSliceOf(ARRAY|&ARRAY|SLICE|&SLICE, EXPECTED_ENTRIES), but received string as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.SuperSliceOf(&MyStruct{}, nil),
+		expectedError{
+			Message: mustBe("Bad usage of SuperSliceOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: SuperSliceOf(ARRAY|&ARRAY|SLICE|&SLICE, EXPECTED_ENTRIES), but received *td_test.MyStruct (ptr) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}),
+		expectedError{
+			Message: mustBe("Bad usage of SuperSliceOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("type string of #1 expected value differs from slice contents (int)"),
+		})
+
+	checkError(t, "never tested",
+		td.SuperSliceOf([]int{12}, td.ArrayEntries{0: 21}),
+		expectedError{
+			Message: mustBe("Bad usage of SuperSliceOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("non zero #0 entry in model already exists in expectedEntries"),
+		})
+
+	// Erroneous op
+	test.EqualStr(t,
+		td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}).String(),
+		"SuperSliceOf(<ERROR>)")
 }
 
 func TestSuperSliceOfTypeBehind(t *testing.T) {
@@ -638,4 +748,7 @@ func TestSuperSliceOfTypeBehind(t *testing.T) {
 	equalTypes(t, td.SuperSliceOf([12]int{}, nil), [12]int{})
 	equalTypes(t, td.SuperSliceOf(MyArray{}, nil), MyArray{})
 	equalTypes(t, td.SuperSliceOf(&MyArray{}, nil), &MyArray{})
+
+	// Erroneous op
+	equalTypes(t, td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}), nil)
 }

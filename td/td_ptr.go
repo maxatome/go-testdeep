@@ -9,9 +9,7 @@ package td
 import (
 	"reflect"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -43,15 +41,14 @@ var _ TestDeep = &tdPtr{}
 // TypeBehind() to the operator and returns the reflect.Type of a
 // pointer on the returned value (if non-nil of course).
 func Ptr(val interface{}) TestDeep {
-	vval := reflect.ValueOf(val)
-	if !vval.IsValid() {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.BadUsage("Ptr(NON_NIL_VALUE)", val, 1, true))
-	}
-
 	p := tdPtr{
 		tdSmugglerBase: newSmugglerBase(val),
+	}
+
+	vval := reflect.ValueOf(val)
+	if !vval.IsValid() {
+		p.err = ctxerr.OpBadUsage("Ptr", "(NON_NIL_VALUE)", val, 1, true)
+		return &p
 	}
 
 	if !p.isTestDeeper {
@@ -62,6 +59,10 @@ func Ptr(val interface{}) TestDeep {
 }
 
 func (p *tdPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if p.err != nil {
+		return ctx.CollectError(p.err)
+	}
+
 	if got.Kind() != reflect.Ptr {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
@@ -80,6 +81,10 @@ func (p *tdPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (p *tdPtr) String() string {
+	if p.err != nil {
+		return p.stringError()
+	}
+
 	if p.isTestDeeper {
 		return "*<something>"
 	}
@@ -87,6 +92,10 @@ func (p *tdPtr) String() string {
 }
 
 func (p *tdPtr) TypeBehind() reflect.Type {
+	if p.err != nil {
+		return nil
+	}
+
 	// If the expected value is a TestDeep operator, delegate TypeBehind to it
 	if p.isTestDeeper {
 		typ := p.expectedValue.Interface().(TestDeep).TypeBehind()
@@ -134,15 +143,14 @@ var _ TestDeep = &tdPPtr{}
 // reflect.Type of a pointer on a pointer on the returned value (if
 // non-nil of course).
 func PPtr(val interface{}) TestDeep {
-	vval := reflect.ValueOf(val)
-	if !vval.IsValid() {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, color.BadUsage("PPtr(NON_NIL_VALUE)", val, 1, true))
-	}
-
 	p := tdPPtr{
 		tdSmugglerBase: newSmugglerBase(val),
+	}
+
+	vval := reflect.ValueOf(val)
+	if !vval.IsValid() {
+		p.err = ctxerr.OpBadUsage("PPtr", "(NON_NIL_VALUE)", val, 1, true)
+		return &p
 	}
 
 	if !p.isTestDeeper {
@@ -156,6 +164,10 @@ func PPtr(val interface{}) TestDeep {
 }
 
 func (p *tdPPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if p.err != nil {
+		return ctx.CollectError(p.err)
+	}
+
 	if got.Kind() != reflect.Ptr || got.Elem().Kind() != reflect.Ptr {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
@@ -174,6 +186,10 @@ func (p *tdPPtr) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (p *tdPPtr) String() string {
+	if p.err != nil {
+		return p.stringError()
+	}
+
 	if p.isTestDeeper {
 		return "**<something>"
 	}
@@ -181,6 +197,10 @@ func (p *tdPPtr) String() string {
 }
 
 func (p *tdPPtr) TypeBehind() reflect.Type {
+	if p.err != nil {
+		return nil
+	}
+
 	// If the expected value is a TestDeep operator, delegate TypeBehind to it
 	if p.isTestDeeper {
 		typ := p.expectedValue.Interface().(TestDeep).TypeBehind()

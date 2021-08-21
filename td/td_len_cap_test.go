@@ -9,7 +9,6 @@ package td_test
 import (
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -56,15 +55,24 @@ func TestLen(t *testing.T) {
 		})
 
 	//
+	// Bad usage
+	checkError(t, "never tested",
+		td.Len(int64(12)),
+		expectedError{
+			Message: mustBe("Bad usage of Len operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Len(TESTDEEP_OPERATOR|INT), but received int64 as 1st parameter"),
+		})
+
+	//
 	// String
 	test.EqualStr(t, td.Len(3).String(), "len=3")
 	test.EqualStr(t,
 		td.Len(td.Between(3, 8)).String(), "len: 3 ≤ got ≤ 8")
 	test.EqualStr(t, td.Len(td.Gt(8)).String(), "len: > 8")
 
-	//
-	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Len(int64(12)) }, "usage: Len(")
+	// Erroneous
+	test.EqualStr(t, td.Len(int64(12)).String(), "Len(<ERROR>)")
 }
 
 func TestCap(t *testing.T) {
@@ -101,18 +109,31 @@ func TestCap(t *testing.T) {
 		})
 
 	//
+	// Bad usage
+	checkError(t, "never tested",
+		td.Cap(int64(12)),
+		expectedError{
+			Message: mustBe("Bad usage of Cap operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Cap(TESTDEEP_OPERATOR|INT), but received int64 as 1st parameter"),
+		})
+
+	//
 	// String
 	test.EqualStr(t, td.Cap(3).String(), "cap=3")
 	test.EqualStr(t,
 		td.Cap(td.Between(3, 8)).String(), "cap: 3 ≤ got ≤ 8")
 	test.EqualStr(t, td.Cap(td.Gt(8)).String(), "cap: > 8")
 
-	//
-	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Cap(int64(12)) }, "usage: Cap(")
+	// Erroneous op
+	test.EqualStr(t, td.Cap(int64(12)).String(), "Cap(<ERROR>)")
 }
 
 func TestLenCapTypeBehind(t *testing.T) {
 	equalTypes(t, td.Cap(3), nil)
 	equalTypes(t, td.Len(3), nil)
+
+	// Erroneous op
+	equalTypes(t, td.Cap(int64(12)), nil)
+	equalTypes(t, td.Len(int64(12)), nil)
 }

@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/maxatome/go-testdeep/internal/dark"
+	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -80,22 +80,49 @@ func TestBetween(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Between([]byte("test"), []byte("test")) },
-		"usage: Between(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Between(12, "test") },
-		"Between(FROM, TO): FROM and TO must have the same type: int ≠ string")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Between("test", 12) },
-		"Between(FROM, TO): FROM and TO must have the same type: string ≠ int")
-	dark.CheckFatalizerBarrierErr(t,
-		func() { td.Between(1, 2, td.BoundsInIn, td.BoundsInOut) },
-		"usage: Between(")
-	dark.CheckFatalizerBarrierErr(t,
-		func() {
-			type notTime struct{}
-			td.Between(notTime{}, notTime{})
-		},
-		"usage: Between(")
+	checkError(t, "never tested",
+		td.Between([]byte("test"), []byte("test")),
+		expectedError{
+			Message: mustBe("Bad usage of Between operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), but received []uint8 (slice) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Between(12, "test"),
+		expectedError{
+			Message: mustBe("Bad usage of Between operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Between(FROM, TO): FROM and TO must have the same type: int ≠ string"),
+		})
+
+	checkError(t, "never tested",
+		td.Between("test", 12),
+		expectedError{
+			Message: mustBe("Bad usage of Between operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Between(FROM, TO): FROM and TO must have the same type: string ≠ int"),
+		})
+
+	checkError(t, "never tested",
+		td.Between(1, 2, td.BoundsInIn, td.BoundsInOut),
+		expectedError{
+			Message: mustBe("Bad usage of Between operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), too many parameters"),
+		})
+
+	type notTime struct{}
+	checkError(t, "never tested",
+		td.Between(notTime{}, notTime{}),
+		expectedError{
+			Message: mustBe("Bad usage of Between operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), but received td_test.notTime (struct) as 1st parameter"),
+		})
+
+	// Erroneous op
+	test.EqualStr(t, td.Between("test", 12).String(), "Between(<ERROR>)")
 }
 
 func TestN(t *testing.T) {
@@ -310,10 +337,32 @@ func TestN(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.N("test") }, "usage: N(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.N(10, 1, 2) }, "usage: N(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.N(10, "test") },
-		"N(NUM, TOLERANCE): NUM and TOLERANCE must have the same type: int ≠ string")
+	checkError(t, "never tested",
+		td.N("test"),
+		expectedError{
+			Message: mustBe("Bad usage of N operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: N({,U}INT{,8,16,32,64}|FLOAT{32,64}[, TOLERANCE]), but received string as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.N(10, 1, 2),
+		expectedError{
+			Message: mustBe("Bad usage of N operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: N({,U}INT{,8,16,32,64}|FLOAT{32,64}[, TOLERANCE]), too many parameters"),
+		})
+
+	checkError(t, "never tested",
+		td.N(10, "test"),
+		expectedError{
+			Message: mustBe("Bad usage of N operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("N(NUM, TOLERANCE): NUM and TOLERANCE must have the same type: int ≠ string"),
+		})
+
+	// Erroneous op
+	test.EqualStr(t, td.N(10, 1, 2).String(), "N(<ERROR>)")
 }
 
 func TestLGt(t *testing.T) {
@@ -417,10 +466,43 @@ func TestLGt(t *testing.T) {
 
 	//
 	// Bad usage
-	dark.CheckFatalizerBarrierErr(t, func() { td.Gt([]byte("test")) }, "usage: Gt(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Gte([]byte("test")) }, "usage: Gte(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Lt([]byte("test")) }, "usage: Lt(")
-	dark.CheckFatalizerBarrierErr(t, func() { td.Lte([]byte("test")) }, "usage: Lte(")
+	checkError(t, "never tested",
+		td.Gt([]byte("test")),
+		expectedError{
+			Message: mustBe("Bad usage of Gt operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Gt(NUM|STRING|TIME), but received []uint8 (slice) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Gte([]byte("test")),
+		expectedError{
+			Message: mustBe("Bad usage of Gte operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Gte(NUM|STRING|TIME), but received []uint8 (slice) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Lt([]byte("test")),
+		expectedError{
+			Message: mustBe("Bad usage of Lt operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Lt(NUM|STRING|TIME), but received []uint8 (slice) as 1st parameter"),
+		})
+
+	checkError(t, "never tested",
+		td.Lte([]byte("test")),
+		expectedError{
+			Message: mustBe("Bad usage of Lte operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: Lte(NUM|STRING|TIME), but received []uint8 (slice) as 1st parameter"),
+		})
+
+	// Erroneous op
+	test.EqualStr(t, td.Gt([]byte("test")).String(), "Gt(<ERROR>)")
+	test.EqualStr(t, td.Gte([]byte("test")).String(), "Gte(<ERROR>)")
+	test.EqualStr(t, td.Lt([]byte("test")).String(), "Lt(<ERROR>)")
+	test.EqualStr(t, td.Lte([]byte("test")).String(), "Lte(<ERROR>)")
 }
 
 func TestBetweenTime(t *testing.T) {
@@ -517,4 +599,12 @@ func TestBetweenTypeBehind(t *testing.T) {
 	equalTypes(t, td.Gte(int32(23)), int32(0))
 	equalTypes(t, td.Lt(int32(23)), int32(0))
 	equalTypes(t, td.Lte(int32(23)), int32(0))
+
+	// Erroneous op
+	equalTypes(t, td.Between("test", 12), nil)
+	equalTypes(t, td.N(10, 1, 2), nil)
+	equalTypes(t, td.Gt([]byte("test")), nil)
+	equalTypes(t, td.Gte([]byte("test")), nil)
+	equalTypes(t, td.Lt([]byte("test")), nil)
+	equalTypes(t, td.Lte([]byte("test")), nil)
 }

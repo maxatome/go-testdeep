@@ -7,12 +7,10 @@
 package td
 
 import (
-	"errors"
 	"fmt"
 	"reflect"
 	"regexp"
 
-	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/types"
@@ -27,12 +25,20 @@ type tdRe struct {
 
 var _ TestDeep = &tdRe{}
 
-func newRe(regIf interface{}, capture ...interface{}) (*tdRe, error) {
+func newRe(regIf interface{}, capture ...interface{}) *tdRe {
 	r := &tdRe{
 		base: newBase(4),
 	}
 
-	const usage = "(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])"
+	const (
+		usageRe    = "(STRING|*regexp.Regexp[, NON_NIL_CAPTURE])"
+		usageReAll = "(STRING|*regexp.Regexp, NON_NIL_CAPTURE)"
+	)
+
+	usage := usageRe
+	if len(r.location.Func) != 2 {
+		usage = usageReAll
+	}
 
 	switch len(capture) {
 	case 0:
@@ -41,18 +47,26 @@ func newRe(regIf interface{}, capture ...interface{}) (*tdRe, error) {
 			r.captures = reflect.ValueOf(capture[0])
 		}
 	default:
-		return nil, errors.New(color.TooManyParams(r.location.Func + usage))
+		r.err = ctxerr.OpTooManyParams(r.location.Func, usage)
+		return r
 	}
 
 	switch reg := regIf.(type) {
 	case *regexp.Regexp:
 		r.re = reg
 	case string:
-		r.re = regexp.MustCompile(reg)
+		var err error
+		r.re, err = regexp.Compile(reg)
+		if err != nil {
+			r.err = &ctxerr.Error{
+				Message: "Invalid regexp given to " + r.location.Func + " operator",
+				Summary: ctxerr.NewSummary(err.Error()),
+			}
+		}
 	default:
-		return nil, errors.New(color.BadUsage(r.location.Func+usage, regIf, 1, false))
+		r.err = ctxerr.OpBadUsage(r.location.Func, usage, regIf, 1, false)
 	}
-	return r, nil
+	return r
 }
 
 // summary(Re): allows to apply a regexp on a string (or convertible),
@@ -78,12 +92,7 @@ func newRe(regIf interface{}, capture ...interface{}) (*tdRe, error) {
 //   td.Cmp(t, "John Doe",
 //     td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
 func Re(reg interface{}, capture ...interface{}) TestDeep {
-	r, err := newRe(reg, capture...)
-	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, err)
-	}
+	r := newRe(reg, capture...)
 	r.numMatches = 1
 	return r
 }
@@ -110,12 +119,7 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 //   td.Cmp(t, "John Doe",
 //     td.ReAll(`(\w+)(?: |\z)`, td.Bag("Doe", "John"))) // succeeds
 func ReAll(reg, capture interface{}) TestDeep {
-	r, err := newRe(reg, capture)
-	if err != nil {
-		f := dark.GetFatalizer()
-		f.Helper()
-		dark.Fatal(f, err)
-	}
+	r := newRe(reg, capture)
 	r.numMatches = -1
 	return r
 }
@@ -209,6 +213,10 @@ func (r *tdRe) doesNotMatch(ctx ctxerr.Context, got interface{}) *ctxerr.Error {
 }
 
 func (r *tdRe) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if r.err != nil {
+		return ctx.CollectError(r.err)
+	}
+
 	var str string
 	switch got.Kind() {
 	case reflect.String:
@@ -267,5 +275,8 @@ func (r *tdRe) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (r *tdRe) String() string {
+	if r.err != nil {
+		return r.stringError()
+	}
 	return r.re.String()
 }
