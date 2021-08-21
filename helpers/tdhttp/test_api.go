@@ -584,7 +584,19 @@ func (t *TestAPI) CmpHeader(expectedHeader interface{}) *TestAPI {
 //     PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
 //     CmdStatus(200).
 //     CmpCookies(td.SuperBagOf(td.Struct(&http.Cookie{Name: "cookie_session"}, nil))).
-//     CmpCookies(td.SuperBagOf(td.Smuggle("Name", "cookie_session")))
+//     CmpCookies(td.SuperBagOf(td.Smuggle("Name", "cookie_session"))) // shorter
+//
+// To make tests easier, Raw and RawExpires fields of each
+// *http.Cookie are zeroed before doing the comparison. So no need to
+// fill them when comparing against a simple literal as in:
+//
+//   ta := tdhttp.NewTestAPI(t, mux).
+//     PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
+//     CmdStatus(200).
+//     CmpCookies([]*http.Cookies{
+//       {Name: "cookieName1", Value: "cookieValue1"},
+//       {Name: "cookieName2", Value: "cookieValue2"},
+//     })
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpCookies(expectedCookies interface{}) *TestAPI {
@@ -597,13 +609,19 @@ func (t *TestAPI) CmpCookies(expectedCookies interface{}) *TestAPI {
 		return t
 	}
 
-	if !t.t.RootName("Response.Cookie").
-		CmpLax(t.response.Result().Cookies(), expectedCookies, t.name+"cookies should match") {
-		t.cookiesFailed = true
+	// Empty Raw* fields to make comparisons easier
+	cookies := t.response.Result().Cookies()
+	for _, c := range cookies {
+		c.RawExpires, c.Raw = "", ""
 	}
 
-	if t.cookiesFailed && t.autoDumpResponse {
-		t.dumpResponse()
+	if !t.t.RootName("Response.Cookie").
+		CmpLax(cookies, expectedCookies, t.name+"cookies should match") {
+		t.cookiesFailed = true
+
+		if t.autoDumpResponse {
+			t.dumpResponse()
+		}
 	}
 
 	return t

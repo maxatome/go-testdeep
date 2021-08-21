@@ -41,7 +41,7 @@ func TestCmpResponse(tt *testing.T) {
 		fmt.Fprintln(w, "text response")
 	})
 
-	cookie := http.Cookie{Name: "Cookies-Testdeep", Value: "foobar", Raw: "Cookies-Testdeep=foobar"}
+	cookie := http.Cookie{Name: "Cookies-Testdeep", Value: "foobar"}
 	handlerWithCokies := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("X-TestDeep", "cookies")
 		http.SetCookie(w, &cookie)
@@ -185,19 +185,14 @@ func TestCmpResponse(tt *testing.T) {
 			Handler: handlerWithCokies,
 			Success: false,
 			ExpectedResp: tdhttp.Response{
-				Cookies: []*http.Cookie{
-					{Name: "Cookies-Testdeep", Value: "squalala", Raw: "Cookies-Testdeep=squalala"},
-				},
-				Body: td.Empty(),
+				Cookies: []*http.Cookie{{Name: "Cookies-Testdeep", Value: "squalala"}},
+				Body:    td.Empty(),
 			},
 			ExpectedLogs: []string{
 				`~ Failed test 'cookies should match'
 \s+Response.Cookie\[0\]\.Value: values differ
 \s+got: "foobar"
-\s+expected: "squalala"
-\s+Response.Cookie\[0\]\.Raw: values differ
-\s+got: "Cookies-Testdeep=foobar"
-\s+expected: "Cookies-Testdeep=squalala"`,
+\s+expected: "squalala"`,
 			},
 		},
 		{

@@ -15,6 +15,7 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/maxatome/go-testdeep/helpers/tdhttp"
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
@@ -77,6 +78,35 @@ func server() *http.ServeMux {
 			io.Copy(w, req.Body) //nolint: errcheck
 		}
 		w.Write([]byte(`</XResp>`)) //nolint: errcheck
+	})
+
+	mux.HandleFunc("/any/cookies", func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Set("X-TestDeep-Method", req.Method)
+		if req.Method == "HEAD" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		w.Header().Set("Content-Type", "text/plain")
+
+		http.SetCookie(w, &http.Cookie{
+			Name:    "first",
+			Value:   "cookie1",
+			MaxAge:  123456,
+			Expires: time.Date(2021, time.August, 12, 11, 22, 33, 0, time.UTC),
+		})
+		http.SetCookie(w, &http.Cookie{
+			Name:   "second",
+			Value:  "cookie2",
+			MaxAge: 654321,
+		})
+
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprintf(w, "%s!", req.Method)
+		if req.ContentLength != 0 {
+			w.Write([]byte("\n---\n")) //nolint: errcheck
+			io.Copy(w, req.Body)       //nolint: errcheck
+		}
 	})
 
 	return mux
@@ -388,6 +418,126 @@ bingo%CR
 				}).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
+	})
+
+	t.Run("Cookies", func(t *testing.T) {
+		mockT := tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/cookies").
+				CmpCookies([]*http.Cookie{
+					{
+						Name:    "first",
+						Value:   "cookie1",
+						MaxAge:  123456,
+						Expires: time.Date(2021, time.August, 12, 11, 22, 33, 0, time.UTC),
+					},
+					{
+						Name:   "second",
+						Value:  "cookie2",
+						MaxAge: 654321,
+					},
+				}).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/cookies").
+				CmpCookies([]*http.Cookie{
+					{
+						Name:    "first",
+						Value:   "cookie1",
+						MaxAge:  123456,
+						Expires: time.Date(2021, time.August, 12, 11, 22, 33, 0, time.UTC),
+					},
+				}).
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(),
+			"Failed test 'cookies should match'")
+		td.CmpContains(t, mockT.LogBuf(),
+			"Response.Cookie: comparing slices, from index #1")
+
+		// 2 cookies are here whatever their order is using Bag
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/cookies").
+				CmpCookies(td.Bag(
+					td.Smuggle("Name", "second"),
+					td.Smuggle("Name", "first"),
+				)).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		// Testing only Name & Value whatever their order is using Bag
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/cookies").
+				CmpCookies(td.Bag(
+					td.Struct(&http.Cookie{Name: "first", Value: "cookie1"}, nil),
+					td.Struct(&http.Cookie{Name: "second", Value: "cookie2"}, nil),
+				)).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		// Testing the presence of only one using SuperBagOf
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/cookies").
+				CmpCookies(td.SuperBagOf(
+					td.Struct(&http.Cookie{Name: "first", Value: "cookie1"}, nil),
+				)).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		// Testing only the number of cookies
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/cookies").
+				CmpCookies(td.Len(2)).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		// Error followed by a success: Failed() should return true anyway
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any").
+				CmpCookies(td.Len(100)). // fails
+				CmpCookies(td.Len(2)).   // succeeds
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(),
+			"Failed test 'cookies should match'")
+
+		// AutoDumpResponse
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				AutoDumpResponse().
+				Get("/any/cookies").
+				Name("my test").
+				CmpCookies(td.Len(100)).
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(),
+			"Failed test 'my test: cookies should match'")
+		td.CmpContains(t, mockT.LogBuf(), "Response.Cookie: bad length")
+		td.Cmp(t, mockT.LogBuf(), td.Contains("Received response:\n"))
+
+		// Request not sent
+		mockT = tdutil.NewT("test")
+		ta := tdhttp.NewTestAPI(mockT, mux).
+			Name("my test").
+			CmpCookies(td.Len(2))
+		td.CmpTrue(t, ta.Failed())
+		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: request is sent'\n")
+		td.CmpContains(t, mockT.LogBuf(), "Request not sent!\n")
+		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header or body\n")
+		td.CmpNot(t, mockT.LogBuf(), td.Contains("No response received yet\n"))
 	})
 
 	t.Run("Status error", func(t *testing.T) {
