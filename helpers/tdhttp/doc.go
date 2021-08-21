@@ -49,9 +49,10 @@
 //     tdhttp.Get("/person/42"),
 //     myAPI.ServeHTTP,
 //     Response{
-//       Status: http.StatusOK,
-//       Header: td.ContainsKey("X-Custom-Header"),
-//       Body:   Person{
+//       Status:  http.StatusOK,
+//       Header:  td.ContainsKey("X-Custom-Header"),
+//       Cookies: td.SuperBagOf(td.Smuggle("Name", "cookie_session")),
+//       Body: Person{
 //         ID:   42,
 //         Name: "Bob",
 //         Age:  26,
