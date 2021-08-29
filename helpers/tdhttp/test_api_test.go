@@ -814,7 +814,7 @@ bingo%CR
 			}))
 			td.Cmp(t,
 				mockT.LogBuf(),
-				td.Contains("headers... can only contains string and http.Header, not bool"),
+				td.Contains("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool"),
 			)
 		}
 
