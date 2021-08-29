@@ -189,9 +189,9 @@ func (t *TestAPI) Failed() bool {
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) Get(target string, headers ...interface{}) *TestAPI {
-	req, err := get(target, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) Get(target string, headersQueryParams ...interface{}) *TestAPI {
+	req, err := get(target, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -204,9 +204,9 @@ func (t *TestAPI) Get(target string, headers ...interface{}) *TestAPI {
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) Head(target string, headers ...interface{}) *TestAPI {
-	req, err := head(target, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) Head(target string, headersQueryParams ...interface{}) *TestAPI {
+	req, err := head(target, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -219,9 +219,9 @@ func (t *TestAPI) Head(target string, headers ...interface{}) *TestAPI {
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) Post(target string, body io.Reader, headers ...interface{}) *TestAPI {
-	req, err := post(target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) Post(target string, body io.Reader, headersQueryParams ...interface{}) *TestAPI {
+	req, err := post(target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -236,9 +236,9 @@ func (t *TestAPI) Post(target string, body io.Reader, headers ...interface{}) *T
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) PostForm(target string, data url.Values, headers ...interface{}) *TestAPI {
-	req, err := postForm(target, data, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) PostForm(target string, data url.Values, headersQueryParams ...interface{}) *TestAPI {
+	req, err := postForm(target, data, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -267,9 +267,9 @@ func (t *TestAPI) PostForm(target string, data url.Values, headers ...interface{
 //     "X-Zip", "Zip-value",
 //   )
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) PostMultipartFormData(target string, data *MultipartBody, headers ...interface{}) *TestAPI {
-	req, err := postMultipartFormData(target, data, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) PostMultipartFormData(target string, data *MultipartBody, headersQueryParams ...interface{}) *TestAPI {
+	req, err := postMultipartFormData(target, data, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -282,9 +282,9 @@ func (t *TestAPI) PostMultipartFormData(target string, data *MultipartBody, head
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) Put(target string, body io.Reader, headers ...interface{}) *TestAPI {
-	req, err := put(target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) Put(target string, body io.Reader, headersQueryParams ...interface{}) *TestAPI {
+	req, err := put(target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -297,9 +297,9 @@ func (t *TestAPI) Put(target string, body io.Reader, headers ...interface{}) *Te
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) Patch(target string, body io.Reader, headers ...interface{}) *TestAPI {
-	req, err := patch(target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) Patch(target string, body io.Reader, headersQueryParams ...interface{}) *TestAPI {
+	req, err := patch(target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -312,9 +312,9 @@ func (t *TestAPI) Patch(target string, body io.Reader, headers ...interface{}) *
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) Delete(target string, body io.Reader, headers ...interface{}) *TestAPI {
-	req, err := delete(target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) Delete(target string, body io.Reader, headersQueryParams ...interface{}) *TestAPI {
+	req, err := del(target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -328,9 +328,9 @@ func (t *TestAPI) Delete(target string, body io.Reader, headers ...interface{}) 
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) NewJSONRequest(method, target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newJSONRequest(method, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) NewJSONRequest(method, target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newJSONRequest(method, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -344,9 +344,9 @@ func (t *TestAPI) NewJSONRequest(method, target string, body interface{}, header
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) PostJSON(target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newJSONRequest(http.MethodPost, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) PostJSON(target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newJSONRequest(http.MethodPost, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -360,9 +360,9 @@ func (t *TestAPI) PostJSON(target string, body interface{}, headers ...interface
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) PutJSON(target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newJSONRequest(http.MethodPut, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) PutJSON(target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newJSONRequest(http.MethodPut, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -376,9 +376,9 @@ func (t *TestAPI) PutJSON(target string, body interface{}, headers ...interface{
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) PatchJSON(target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newJSONRequest(http.MethodPatch, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) PatchJSON(target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newJSONRequest(http.MethodPatch, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -392,9 +392,9 @@ func (t *TestAPI) PatchJSON(target string, body interface{}, headers ...interfac
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) DeleteJSON(target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newJSONRequest(http.MethodDelete, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) DeleteJSON(target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newJSONRequest(http.MethodDelete, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -408,9 +408,9 @@ func (t *TestAPI) DeleteJSON(target string, body interface{}, headers ...interfa
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) NewXMLRequest(method, target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newXMLRequest(method, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) NewXMLRequest(method, target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newXMLRequest(method, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -424,9 +424,9 @@ func (t *TestAPI) NewXMLRequest(method, target string, body interface{}, headers
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) PostXML(target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newXMLRequest(http.MethodPost, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) PostXML(target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newXMLRequest(http.MethodPost, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -440,9 +440,9 @@ func (t *TestAPI) PostXML(target string, body interface{}, headers ...interface{
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) PutXML(target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newXMLRequest(http.MethodPut, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) PutXML(target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newXMLRequest(http.MethodPut, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -456,9 +456,9 @@ func (t *TestAPI) PutXML(target string, body interface{}, headers ...interface{}
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) PatchXML(target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newXMLRequest(http.MethodPatch, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) PatchXML(target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newXMLRequest(http.MethodPatch, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
@@ -472,9 +472,9 @@ func (t *TestAPI) PatchXML(target string, body interface{}, headers ...interface
 //
 // Note that Failed() status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headers.
-func (t *TestAPI) DeleteXML(target string, body interface{}, headers ...interface{}) *TestAPI {
-	req, err := newXMLRequest(http.MethodDelete, target, body, headers...)
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) DeleteXML(target string, body interface{}, headersQueryParams ...interface{}) *TestAPI {
+	req, err := newXMLRequest(http.MethodDelete, target, body, headersQueryParams...)
 	if err != nil {
 		t.t.Helper()
 		t.t.Fatal(err)
