@@ -8,6 +8,7 @@ package td
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
@@ -18,22 +19,57 @@ type tdLenCapBase struct {
 	tdSmugglerBase
 }
 
-func (b *tdLenCapBase) initLenCapBase(val interface{}) bool {
-	vval := reflect.ValueOf(val)
-	if vval.IsValid() {
-		b.tdSmugglerBase = newSmugglerBase(val, 1)
+func (b *tdLenCapBase) initLenCapBase(val interface{}) {
+	b.tdSmugglerBase = newSmugglerBase(val, 1)
 
-		if b.isTestDeeper {
-			return true
-		}
+	// math.MaxInt appeared in go1.17
+	const (
+		maxUint = ^uint(0)
+		maxInt  = int(maxUint >> 1)
+		minInt  = -maxInt - 1
+		usage   = "(TESTDEEP_OPERATOR|INT)"
+	)
 
-		// A len or capacity is always an int
-		if vval.Type() == types.Int {
-			b.expectedValue = vval
-			return true
-		}
+	if val == nil {
+		b.err = ctxerr.OpBadUsage(b.GetLocation().Func, usage, val, 1, true)
+		return
 	}
-	return false
+
+	if b.isTestDeeper {
+		return
+	}
+
+	vval := reflect.ValueOf(val)
+
+	// A len or capacity is always an int, but accept any MinInt ≤ num ≤ MaxInt,
+	// so it can be used in JSON, SubJSONOf and SuperJSONOf as float64
+	switch vval.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		num := vval.Int()
+		if num >= int64(minInt) && num <= int64(maxInt) {
+			b.expectedValue = reflect.ValueOf(int(num))
+			return
+		}
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		num := vval.Uint()
+		if num <= uint64(maxInt) {
+			b.expectedValue = reflect.ValueOf(int(num))
+			return
+		}
+	case reflect.Float32, reflect.Float64:
+		num := vval.Float()
+		if num == math.Trunc(num) && num >= float64(minInt) && num <= float64(maxInt) {
+			b.expectedValue = reflect.ValueOf(int(num))
+			return
+		}
+	default:
+		b.err = ctxerr.OpBadUsage(b.GetLocation().Func, usage, val, 1, true)
+		return
+	}
+
+	op := b.GetLocation().Func
+	b.err = ctxerr.OpBad(op, "usage: "+op+usage+
+		", but received an out of bounds or not integer 1st parameter (%v), should be in int range", val)
 }
 
 func (b *tdLenCapBase) isEqual(ctx ctxerr.Context, got int) (bool, *ctxerr.Error) {
@@ -71,9 +107,7 @@ var _ TestDeep = &tdLen{}
 //   td.Cmp(t, gotSlice, td.Len(td.Between(3, 4)))
 func Len(expectedLen interface{}) TestDeep {
 	l := tdLen{}
-	if !l.initLenCapBase(expectedLen) {
-		l.err = ctxerr.OpBadUsage("Len", "(TESTDEEP_OPERATOR|INT)", expectedLen, 1, true)
-	}
+	l.initLenCapBase(expectedLen)
 	return &l
 }
 
@@ -141,9 +175,7 @@ var _ TestDeep = &tdCap{}
 //   td.Cmp(t, gotSlice, td.Cap(td.Between(3, 4)))
 func Cap(expectedCap interface{}) TestDeep {
 	c := tdCap{}
-	if !c.initLenCapBase(expectedCap) {
-		c.err = ctxerr.OpBadUsage("Cap", "(TESTDEEP_OPERATOR|INT)", expectedCap, 1, true)
-	}
+	c.initLenCapBase(expectedCap)
 	return &c
 }
 

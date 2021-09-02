@@ -120,6 +120,9 @@ func TestJSON(t *testing.T) {
 			td.Tag("age", td.Between(40, 45)),
 			td.Tag("name", td.Re(`^Bob`))))
 
+	// Len
+	checkOK(t, []int{1, 2, 3}, td.JSON(`Len(3)`))
+
 	//
 	// []byte
 	checkOK(t, got,
