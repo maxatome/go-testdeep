@@ -91,5 +91,5 @@ func (a *tdAll) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 }
 
 func (a *tdAll) TypeBehind() reflect.Type {
-	return a.uniqTypeBehind()
+	return uniqTypeBehindSlice(a.items)
 }

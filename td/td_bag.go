@@ -41,6 +41,10 @@ package td
 //   td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3},
 //     td.Bag(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
 //   // = td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3}, td.Bag(5, 1, 1, 3, 8, 42, 3))
+//
+// TypeBehind method can return a non-nil reflect.Type if all items
+// known non-interface types are equal, or if only interface types
+// are found (mostly issued from Isa()) and they are equal.
 func Bag(expectedItems ...interface{}) TestDeep {
 	return newSetBase(allSet, false, expectedItems)
 }
@@ -78,6 +82,10 @@ func Bag(expectedItems ...interface{}) TestDeep {
 //   td.Cmp(t, []int{1, 42, 3},
 //     td.SubBagOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
 //   // = td.Cmp(t, []int{1, 42, 3}, td.SubBagOf(5, 1, 1, 3, 8, 42, 3))
+//
+// TypeBehind method can return a non-nil reflect.Type if all items
+// known non-interface types are equal, or if only interface types
+// are found (mostly issued from Isa()) and they are equal.
 func SubBagOf(expectedItems ...interface{}) TestDeep {
 	return newSetBase(subSet, false, expectedItems)
 }
@@ -115,6 +123,10 @@ func SubBagOf(expectedItems ...interface{}) TestDeep {
 //   td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6},
 //     td.SuperBagOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
 //   // = td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6}, td.SuperBagOf(5, 1, 1, 3, 8, 42))
+//
+// TypeBehind method can return a non-nil reflect.Type if all items
+// known non-interface types are equal, or if only interface types
+// are found (mostly issued from Isa()) and they are equal.
 func SuperBagOf(expectedItems ...interface{}) TestDeep {
 	return newSetBase(superSet, false, expectedItems)
 }

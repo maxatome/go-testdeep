@@ -219,8 +219,44 @@ func TestSet(t *testing.T) {
 }
 
 func TestSetTypeBehind(t *testing.T) {
-	equalTypes(t, td.Set(6), nil)
-	equalTypes(t, td.SubSetOf(6), nil)
-	equalTypes(t, td.SuperSetOf(6), nil)
-	equalTypes(t, td.NotAny(6), nil)
+	equalTypes(t, td.Set(6, 5), ([]int)(nil))
+	equalTypes(t, td.Set(6, "foo"), nil)
+
+	equalTypes(t, td.SubSetOf(6, 5), ([]int)(nil))
+	equalTypes(t, td.SubSetOf(6, "foo"), nil)
+
+	equalTypes(t, td.SuperSetOf(6, 5), ([]int)(nil))
+	equalTypes(t, td.SuperSetOf(6, "foo"), nil)
+
+	equalTypes(t, td.NotAny(6, 5), ([]int)(nil))
+	equalTypes(t, td.NotAny(6, "foo"), nil)
+
+	// Always the same non-interface type (even if we encounter several
+	// interface types)
+	equalTypes(t,
+		td.Set(
+			td.Empty(),
+			5,
+			td.Isa((*error)(nil)), // interface type (in fact pointer to ...)
+			td.All(6, 7),
+			td.Isa((*fmt.Stringer)(nil)), // interface type
+			8),
+		([]int)(nil))
+
+	// Only one interface type
+	equalTypes(t,
+		td.Set(
+			td.Isa((*error)(nil)),
+			td.Isa((*error)(nil)),
+			td.Isa((*error)(nil)),
+		),
+		([]*error)(nil))
+
+	// Several interface types, cannot be sure
+	equalTypes(t,
+		td.Set(
+			td.Isa((*error)(nil)),
+			td.Isa((*fmt.Stringer)(nil)),
+		),
+		nil)
 }

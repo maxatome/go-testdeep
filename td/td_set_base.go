@@ -182,3 +182,11 @@ func (s *tdSetBase) String() string {
 	return util.SliceToBuffer(
 		bytes.NewBufferString(s.GetLocation().Func), s.expectedItems).String()
 }
+
+func (s *tdSetBase) TypeBehind() reflect.Type {
+	typ := uniqTypeBehindSlice(s.expectedItems)
+	if typ == nil {
+		return nil
+	}
+	return reflect.SliceOf(typ)
+}
