@@ -68,5 +68,5 @@ func (a *tdAny) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (a *tdAny) TypeBehind() reflect.Type {
-	return a.uniqTypeBehind()
+	return uniqTypeBehindSlice(a.items)
 }

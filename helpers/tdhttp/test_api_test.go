@@ -64,6 +64,18 @@ func server() *http.ServeMux {
 		json.NewEncoder(w).Encode(m) //nolint: errcheck
 	})
 
+	mux.HandleFunc("/mirror/json", func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Set("X-TestDeep-Method", req.Method)
+		if req.Method == "HEAD" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		io.Copy(w, req.Body) //nolint: errcheck
+	})
+
 	mux.HandleFunc("/any/xml", func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("X-TestDeep-Method", req.Method)
 		if req.Method == "HEAD" {
@@ -331,6 +343,34 @@ bingo%CR
 				PostJSON("/any/json", true).
 				CmpStatus(200).
 				CmpJSONBody(td.JSON(`SuperMapOf({"body":Ignore()})`)).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		// td.Bag+td.JSON
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				PostJSON("/mirror/json",
+					json.RawMessage(`[{"name":"Bob"},{"name":"Alice"}]`)).
+				CmpStatus(200).
+				CmpJSONBody(td.Bag(
+					td.JSON(`{"name":"Alice"}`),
+					td.JSON(`{"name":"Bob"}`),
+				)).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		// td.Bag+literal
+		type People struct {
+			Name string `json:"name"`
+		}
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				PostJSON("/mirror/json",
+					json.RawMessage(`[{"name":"Bob"},{"name":"Alice"}]`)).
+				CmpStatus(200).
+				CmpJSONBody(td.Bag(People{"Alice"}, People{"Bob"})).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 	})
