@@ -13,7 +13,6 @@ import (
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -32,6 +31,8 @@ var _ TestDeep = &tdJSONPointer{}
 // representation of data, gets the value corresponding to the JSON
 // pointer "pointer" (as RFC 6901 specifies it) and compares it to
 // "expectedValue".
+//
+// Lax mode is automatically enabled to simplify numeric tests.
 //
 // JSONPointer does its best to convert back the JSON pointed data to
 // the type of "expectedValue" or to the type behind the
@@ -52,14 +53,14 @@ var _ TestDeep = &tdJSONPointer{}
 //       td.Struct(Item{}, td.StructFields{"Val": td.Gte(3)})),
 //   )
 //
-// It does this conversion only if the expected type is a struct, a
-// struct pointer or implements the encoding/json.Unmarshaler
-// interface. In the case the conversion does not occur, the Lax mode
-// is automatically enabled to simplify numeric tests.
-//
 //   got := map[string]int64{"zzz": 42} // 42 is int64 here
 //   td.Cmp(t, got, td.JSONPointer("/zzz", 42))
 //   td.Cmp(t, got, td.JSONPointer("/zzz", td.Between(40, 45)))
+//
+// Of course, it does this conversion only if the expected type can be
+// guessed. In the case the conversion cannot occur, data is compared
+// as is, in its freshly unmarshalled JSON form (so as bool, float64,
+// string, []interface{} or map[string]interface{}).
 //
 // Note that as any TestDeep operator can be used as "expectedValue",
 // JSON operator works out of the box:
@@ -135,37 +136,40 @@ func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	}
 
 	ctx = jsonPointerContext(ctx, p.pointer)
+	ctx.BeLax = true
 
 	// Here, newGot type is either a bool, float64, string,
-	// []interface{} or a map[string]interface{}
+	// []interface{}, a map[string]interface{} or simply nil
 
-	// Check if we have to transform the new got into something
-	// compatible with the type of expected
-	if expectedType := p.internalTypeBehind(); expectedType != nil &&
-		(expectedType.Implements(types.JsonUnmarshaler) ||
-			reflect.PtrTo(expectedType).Implements(types.JsonUnmarshaler) ||
-			types.IsStruct(expectedType)) {
-		b, _ := json.Marshal(newGot) // No error can occur here
+	expectedType := p.internalTypeBehind()
 
-		got = reflect.New(expectedType)
-		err := json.Unmarshal(b, got.Interface())
-		if err != nil {
-			if ctx.BooleanError {
-				return ctxerr.BooleanError
-			}
-			return ctx.CollectError(&ctxerr.Error{
-				Message: fmt.Sprintf(
-					"an error occurred while unmarshalling JSON into %s", expectedType),
-				Summary: ctxerr.NewSummary(err.Error()),
-			})
-		}
-		got = got.Elem()
-	} else {
-		ctx.BeLax = true
-		got = reflect.ValueOf(newGot)
+	// Unknown expected type (operator with nil TypeBehind() result or
+	// untyped nil), lets deepValueEqual() handles the comparison using
+	// BeLax flag
+	if expectedType == nil {
+		return deepValueEqual(ctx, reflect.ValueOf(newGot), p.expectedValue)
 	}
 
-	return deepValueEqual(ctx, got, p.expectedValue)
+	// Same type for got & expected type, no need to Marshal/Unmarshal
+	if newGot != nil && expectedType == reflect.TypeOf(newGot) {
+		return deepValueEqual(ctx, reflect.ValueOf(newGot), p.expectedValue)
+	}
+
+	// Unmarshal newGot into the expectedType
+	b, _ := json.Marshal(newGot) // No error can occur here
+	got = reflect.New(expectedType)
+	if err = json.Unmarshal(b, got.Interface()); err != nil {
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
+		}
+		return ctx.CollectError(&ctxerr.Error{
+			Message: fmt.Sprintf(
+				"an error occurred while unmarshalling JSON into %s", expectedType),
+			Summary: ctxerr.NewSummary(err.Error()),
+		})
+	}
+
+	return deepValueEqual(ctx, got.Elem(), p.expectedValue)
 }
 
 func (p *tdJSONPointer) String() string {
