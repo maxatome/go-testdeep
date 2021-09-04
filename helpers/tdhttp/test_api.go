@@ -1045,7 +1045,7 @@ func (t *TestAPI) dumpResponse() {
 }
 
 // Anchor returns a typed value allowing to anchor the TestDeep
-// operator "operator" in a go classic litteral like a struct, slice,
+// operator "operator" in a go classic literal like a struct, slice,
 // array or map value.
 //
 //   ta := tdhttp.NewTestAPI(tt, mux)
@@ -1067,7 +1067,7 @@ func (t *TestAPI) Anchor(operator td.TestDeep, model ...interface{}) interface{}
 }
 
 // A is a synonym for Anchor. It returns a typed value allowing to
-// anchor the TestDeep operator "operator" in a go classic litteral
+// anchor the TestDeep operator "operator" in a go classic literal
 // like a struct, slice, array or map value.
 //
 //   ta := tdhttp.NewTestAPI(tt, mux)

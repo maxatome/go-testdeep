@@ -233,7 +233,7 @@ func Example() {
 		Name("POST /person - XML").
 		CmpStatus(201).
 		CmpHeader(contentTypeIs("application/xml")).
-		CmpXMLBody(Person{ // using operator anchoring directly in litteral
+		CmpXMLBody(Person{ // using operator anchoring directly in literal
 			ID:        ta.A(td.Catch(&bobID, td.NotZero()), int64(0)).(int64),
 			Name:      "Bob",
 			Age:       32,
