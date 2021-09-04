@@ -35,6 +35,27 @@ func TestJSONPointer(t *testing.T) {
 	t.Run("nil", func(t *testing.T) {
 		checkOK(t, nil, td.JSONPointer("", nil))
 		checkOK(t, (*int)(nil), td.JSONPointer("", nil))
+
+		// Yes encoding/json succeeds to unmarshal nil into an int
+		checkOK(t, nil, td.JSONPointer("", 0))
+		checkOK(t, (*int)(nil), td.JSONPointer("", 0))
+
+		checkError(t, map[string]int{"foo": 42}, td.JSONPointer("/foo", nil),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA.JSONPointer</foo>"),
+				Got:      mustBe(`(float64) 42`),
+				Expected: mustBe(`nil`),
+			})
+
+		// As encoding/json succeeds to unmarshal nil into an int
+		checkError(t, map[string]interface{}{"foo": nil}, td.JSONPointer("/foo", 1),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA.JSONPointer</foo>"),
+				Got:      mustBe(`0`), // as an int is expected, nil becomes 0
+				Expected: mustBe(`1`),
+			})
 	})
 
 	//
@@ -204,50 +225,26 @@ func TestJSONPointer(t *testing.T) {
 	// Lax cases
 	t.Run("Lax", func(t *testing.T) {
 		t.Run("json.Unmarshaler", func(t *testing.T) {
-			// Lax not enabled when a json.Unmarshaler type is expected
 			got := jsonPtrMap{"x": 123}
 			checkOK(t, got, td.JSONPointer("", jsonPtrMap{"x": float64(123)}))
 			checkOK(t, got, td.JSONPointer("", &jsonPtrMap{"x": float64(123)}))
-
-			checkError(t, got, td.JSONPointer("", got),
-				expectedError{
-					Message:  mustBe("type mismatch"),
-					Path:     mustBe(`DATA.JSONPointer<>["x"]`),
-					Got:      mustBe(`float64`),
-					Expected: mustBe(`int`),
-				})
-			checkError(t, got, td.JSONPointer("", &got),
-				expectedError{
-					Message:  mustBe("type mismatch"),
-					Path:     mustBe(`(*DATA.JSONPointer<>)["x"]`),
-					Got:      mustBe(`float64`),
-					Expected: mustBe(`int`),
-				})
+			checkOK(t, got, td.JSONPointer("", got))
+			checkOK(t, got, td.JSONPointer("", &got))
 		})
 
 		t.Run("struct", func(t *testing.T) {
-			// Lax not enabled when a struct or struct pointer is expected
 			type jpStruct struct {
 				Num interface{}
 			}
 			got := jpStruct{Num: 123}
 			checkOK(t, got, td.JSONPointer("", jpStruct{Num: float64(123)}))
 			checkOK(t, jpStruct{Num: got}, td.JSONPointer("/Num", jpStruct{Num: float64(123)}))
+			checkOK(t, got, td.JSONPointer("", got))
+			checkOK(t, got, td.JSONPointer("", &got))
 
-			checkError(t, got, td.JSONPointer("", got),
-				expectedError{
-					Message:  mustBe("type mismatch"),
-					Path:     mustBe(`DATA.JSONPointer<>.Num`),
-					Got:      mustBe(`float64`),
-					Expected: mustBe(`int`),
-				})
-			checkError(t, got, td.JSONPointer("", &got),
-				expectedError{
-					Message:  mustBe("type mismatch"),
-					Path:     mustBe(`DATA.JSONPointer<>.Num`),
-					Got:      mustBe(`float64`),
-					Expected: mustBe(`int`),
-				})
+			expected := int8(123)
+			checkOK(t, got, td.JSONPointer("/Num", expected))
+			checkOK(t, got, td.JSONPointer("/Num", &expected))
 		})
 	})
 
