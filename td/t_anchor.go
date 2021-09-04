@@ -50,7 +50,7 @@ func AddAnchorableStructType(fn interface{}) {
 }
 
 // Anchor returns a typed value allowing to anchor the TestDeep
-// operator "operator" in a go classic litteral like a struct, slice,
+// operator "operator" in a go classic literal like a struct, slice,
 // array or map value.
 //
 // If the TypeBehind method of "operator" returns non-nil, "model" can
