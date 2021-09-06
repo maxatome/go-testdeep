@@ -88,6 +88,17 @@ func TestJSON(t *testing.T) {
 			td.Tag("age", td.Between(40, 45)),
 			td.Tag("gender", td.NotEmpty())))
 
+	// Tag placeholders + operators are not JSON marshallable
+	checkOK(t, got,
+		td.JSON(`$all`, td.Tag("all", map[string]interface{}{
+			"name":   td.Re(`^Bob`),
+			"age":    42,
+			"gender": td.NotEmpty(),
+		})))
+
+	// Tag placeholders + nil
+	checkOK(t, nil, td.JSON(`$all`, td.Tag("all", nil)))
+
 	// Mixed placeholders + operator shortcut
 	checkOK(t, got,
 		td.JSON(`{"name":"$name","age":$1,"gender":$^NotEmpty}`,
@@ -249,6 +260,14 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("Bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("param #1 of type func() cannot be JSON marshalled"),
+		})
+
+	checkError(t, "never tested",
+		td.JSON(`[$foo]`, td.Tag("foo", func() {})),
+		expectedError{
+			Message: mustBe("Bad usage of JSON operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`param "foo" of type func() cannot be JSON marshalled`),
 		})
 
 	// numeric placeholders
