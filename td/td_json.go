@@ -134,6 +134,21 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 	params = flat.Interfaces(params...)
 	var byTag map[string]interface{}
 
+	paramJSONify := func(p *interface{}) bool {
+		b, err := ejson.Marshal(p)
+		if err != nil {
+			// There is a TestDeep operator into the bowels of this
+			// parameter. Let it untouched and trust the user.
+			// (cannot use errors.As() as we want to support 1.9≤go<1.13)
+			_, ok := types.AsOperatorNotJSONMarshallableError(err)
+			return ok
+		}
+		*p = nil
+		// As Marshal succeeded, Unmarshal in an interface{} cannot fail
+		ejson.Unmarshal(b, p) //nolint: errcheck
+		return true
+	}
+
 	for i, p := range params {
 		switch op := p.(type) {
 		case *tdTag:
@@ -143,10 +158,21 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 			if byTag == nil {
 				byTag = map[string]interface{}{}
 			}
-			byTag[op.tag] = &tdJSONPlaceholder{
-				TestDeep: op,
-				name:     op.tag,
+			if op.isTestDeeper {
+				byTag[op.tag] = &tdJSONPlaceholder{
+					TestDeep: op,
+					name:     op.tag,
+				}
+				break
 			}
+			var val interface{}
+			if op.expectedValue.IsValid() {
+				val = op.expectedValue.Interface()
+			}
+			if ok := paramJSONify(&val); !ok {
+				return nil, ctxerr.OpBad(u.Func, `param %q of type %T cannot be JSON marshalled`, op.tag, val)
+			}
+			byTag[op.tag] = val
 
 		case TestDeep:
 			params[i] = &tdJSONPlaceholder{
@@ -155,19 +181,9 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 			}
 
 		default:
-			bp, err := ejson.Marshal(op)
-			if err != nil {
-				// There is a TestDeep operator into the bowels of this
-				// parameter. Let it untouched and trust the user.
-				// (cannot use errors.As() as we want to support 1.9≤go<1.13)
-				if _, ok := types.AsOperatorNotJSONMarshallableError(err); ok {
-					break
-				}
+			if ok := paramJSONify(&params[i]); !ok {
 				return nil, ctxerr.OpBad(u.Func, `param #%d of type %T cannot be JSON marshalled`, i+1, p)
 			}
-			// As Marshal succeeded, Unmarshal in an interface{} cannot fail
-			params[i] = nil
-			ejson.Unmarshal(bp, &params[i]) //nolint: errcheck
 		}
 	}
 
