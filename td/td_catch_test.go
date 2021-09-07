@@ -81,6 +81,7 @@ func TestCatchTypeBehind(t *testing.T) {
 	var num int
 	equalTypes(t, td.Catch(&num, 8), 0)
 	equalTypes(t, td.Catch(&num, td.Gt(4)), 0)
+	equalTypes(t, td.Catch(&num, td.Ignore()), 0) // fallback on *target
 	equalTypes(t, td.Catch(&num, nil), nil)
 
 	// Erroneous op
