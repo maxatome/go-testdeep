@@ -56,6 +56,11 @@ var _ TestDeep = &tdCatch{}
 //     td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.Ignore()))) {
 //     t.Logf("Created record ID is %d", id)
 //   }
+//
+// TypeBehind method returns the reflect.Type of "expectedValue",
+// except if "expectedValue" is a TestDeep operator. In this case, it
+// delegates TypeBehind() to the operator, but if nil is returned by
+// this call, the dereferenced reflect.Type of "target" is returned.
 func Catch(target, expectedValue interface{}) TestDeep {
 	vt := reflect.ValueOf(target)
 	c := tdCatch{
@@ -112,7 +117,11 @@ func (c *tdCatch) TypeBehind() reflect.Type {
 	}
 
 	if c.isTestDeeper {
-		return c.expectedValue.Interface().(TestDeep).TypeBehind()
+		if typ := c.expectedValue.Interface().(TestDeep).TypeBehind(); typ != nil {
+			return typ
+		}
+		// Operator unknown type behind, fallback on target dereferenced type
+		return c.target.Type().Elem()
 	}
 	if c.expectedValue.IsValid() {
 		return c.expectedValue.Type()
