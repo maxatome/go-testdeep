@@ -711,6 +711,9 @@ func (t *TestAPI) cmpMarshaledBody(
 		}
 	} else {
 		bodyType = reflect.TypeOf(expectedBody)
+		if bodyType == nil {
+			bodyType = types.Interface
+		}
 	}
 
 	// For unmarshaling below, body must be a pointer
