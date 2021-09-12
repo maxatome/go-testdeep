@@ -255,6 +255,16 @@ bingo%CR
 		mockT := tdutil.NewT("test")
 		td.CmpFalse(t,
 			tdhttp.NewTestAPI(mockT, mux).
+				NewJSONRequest("GET", "/mirror/json", json.RawMessage(`null`)).
+				CmpStatus(200).
+				CmpHeader(containsKey).
+				CmpJSONBody(nil).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
 				NewJSONRequest("ZIP", "/any/json", requestBody).
 				CmpStatus(200).
 				CmpHeader(containsKey).
