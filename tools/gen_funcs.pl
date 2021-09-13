@@ -205,7 +205,7 @@ while (readdir $dh)
                 . join(', ', keys %inputs) . "\n";
         }
 
-        if ($contents =~ /^\ttdSmugglerBase/m
+        if ($contents =~ m,^\ttdSmugglerBase(?! // ignored),m
             and $num_smugglers == keys %SMUGGLER_OPERATORS)
         {
             die "$_: this file should contain at least one smuggler operator\n";

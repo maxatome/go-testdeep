@@ -81,7 +81,19 @@ func TestJSON(t *testing.T) {
 			"gender": td.NotEmpty(),
 		}))
 
+	// Placeholder + unmarshal before comparison
+	checkOK(t, json.RawMessage(`[1,2,3]`), td.JSON(`$1`, []int{1, 2, 3}))
+	checkOK(t, json.RawMessage(`{"foo":[1,2,3]}`),
+		td.JSON(`{"foo":$1}`, []int{1, 2, 3}))
+	checkOK(t, json.RawMessage(`[1,2,3]`),
+		td.JSON(`$1`, []interface{}{1, td.Between(1, 3), 3}))
+
 	// Tag placeholders
+	checkOK(t, got,
+		td.JSON(`{"name":"$name","age":$age,"gender":$gender}`,
+			// raw values
+			td.Tag("name", "Bob"), td.Tag("age", 42), td.Tag("gender", "male")))
+
 	checkOK(t, got,
 		td.JSON(`{"name":"$name","age":$age,"gender":"$gender"}`,
 			td.Tag("name", td.Re(`^Bo`)),
@@ -254,20 +266,20 @@ func TestJSON(t *testing.T) {
 			Summary: mustBe(`2 params have the same tag "foo"`),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, []int{42},
 		td.JSON(`[$1]`, func() {}),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("param #1 of type func() cannot be JSON marshalled"),
+			Message: mustBe("an error occurred while unmarshalling JSON into func()"),
+			Path:    mustBe("DATA[0]"),
+			Summary: mustBe("json: cannot unmarshal number into Go value of type func()"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, []int{42},
 		td.JSON(`[$foo]`, td.Tag("foo", func() {})),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe(`param "foo" of type func() cannot be JSON marshalled`),
+			Message: mustBe("an error occurred while unmarshalling JSON into func()"),
+			Path:    mustBe("DATA[0]"),
+			Summary: mustBe("json: cannot unmarshal number into Go value of type func()"),
 		})
 
 	// numeric placeholders
@@ -348,26 +360,28 @@ JSON([
 	test.EqualStr(t, td.JSON(` null `).String(), `JSON(null)`)
 
 	test.EqualStr(t,
-		td.JSON(`[ $1, $name, $2, $^Nil ]`,
+		td.JSON(`[ $1, $name, $2, $^Nil, $nil ]`,
 			td.Between(12, 20),
 			"test",
-			td.Tag("name", td.Code(
-				func(s string) bool { return len(s) > 0 })),
+			td.Tag("name", td.Code(func(s string) bool { return len(s) > 0 })),
+			td.Tag("nil", nil),
 		).String(),
 		`
 JSON([
        "$1" /* 12 ≤ got ≤ 20 */,
        "$name" /* Code(func(string) bool) */,
        "test",
-       "$^Nil"
+       "$^Nil",
+       null
      ])`[1:])
 
 	test.EqualStr(t,
 		td.JSON(`{"label": $value, "zip": $^NotZero}`,
 			td.Tag("value", td.Bag(
-				td.JSON(`{"name": $1,"age":$2}`,
+				td.JSON(`{"name": $1,"age":$2,"surname":$3}`,
 					td.HasPrefix("Bob"),
 					td.Between(12, 24),
+					"captain",
 				),
 				td.JSON(`{"name": $1}`, td.HasPrefix("Alice")),
 			)),
@@ -376,7 +390,8 @@ JSON([
 JSON({
        "label": "$value" /* Bag(JSON({
                                        "age": "$2" /* 12 ≤ got ≤ 24 */,
-                                       "name": "$1" /* HasPrefix("Bob") */
+                                       "name": "$1" /* HasPrefix("Bob") */,
+                                       "surname": "captain"
                                      }),
                                 JSON({
                                        "name": "$1" /* HasPrefix("Alice") */
@@ -450,7 +465,8 @@ func TestJSONInside(t *testing.T) {
 					Path:     mustBe(`DATA["val2"]`),
 					Got:      mustBe("2"),
 					Expected: mustBe("2 < got < 3"),
-				})
+				},
+				"using bounds %q", bounds)
 			checkError(t, got,
 				td.JSON(`{"val1": 1, "val2": Between(1, 2, $1)}`, bounds),
 				expectedError{
@@ -458,7 +474,8 @@ func TestJSONInside(t *testing.T) {
 					Path:     mustBe(`DATA["val2"]`),
 					Got:      mustBe("2"),
 					Expected: mustBe("1 < got < 2"),
-				})
+				},
+				"using bounds %q", bounds)
 		}
 
 		// Bad 3rd parameter

@@ -134,21 +134,6 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 	params = flat.Interfaces(params...)
 	var byTag map[string]interface{}
 
-	paramJSONify := func(p *interface{}) bool {
-		b, err := ejson.Marshal(p)
-		if err != nil {
-			// There is a TestDeep operator into the bowels of this
-			// parameter. Let it untouched and trust the user.
-			// (cannot use errors.As() as we want to support 1.9≤go<1.13)
-			_, ok := types.AsOperatorNotJSONMarshallableError(err)
-			return ok
-		}
-		*p = nil
-		// As Marshal succeeded, Unmarshal in an interface{} cannot fail
-		ejson.Unmarshal(b, p) //nolint: errcheck
-		return true
-	}
-
 	for i, p := range params {
 		switch op := p.(type) {
 		case *tdTag:
@@ -158,32 +143,15 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 			if byTag == nil {
 				byTag = map[string]interface{}{}
 			}
-			if op.isTestDeeper {
-				byTag[op.tag] = &tdJSONPlaceholder{
-					TestDeep: op,
-					name:     op.tag,
-				}
-				break
-			}
-			var val interface{}
+			// Don't keep the tag layer
+			p = nil
 			if op.expectedValue.IsValid() {
-				val = op.expectedValue.Interface()
+				p = op.expectedValue.Interface()
 			}
-			if ok := paramJSONify(&val); !ok {
-				return nil, ctxerr.OpBad(u.Func, `param %q of type %T cannot be JSON marshalled`, op.tag, val)
-			}
-			byTag[op.tag] = val
-
-		case TestDeep:
-			params[i] = &tdJSONPlaceholder{
-				TestDeep: op,
-				num:      uint64(i + 1),
-			}
+			byTag[op.tag] = newJSONNamedPlaceholder(op.tag, p)
 
 		default:
-			if ok := paramJSONify(&params[i]); !ok {
-				return nil, ctxerr.OpBad(u.Func, `param #%d of type %T cannot be JSON marshalled`, i+1, p)
-			}
+			params[i] = newJSONNumPlaceholder(uint64(i+1), p)
 		}
 	}
 
@@ -219,6 +187,13 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 
 		vfn := reflect.ValueOf(op)
 		tfn := vfn.Type()
+
+		// If some parameters contain a placeholder, dereference it
+		for i, p := range jop.Params {
+			if ph, ok := p.(*tdJSONPlaceholder); ok {
+				jop.Params[i] = ph.expectedValue.Interface()
+			}
+		}
 
 		// Special cases
 		var min, max int
@@ -284,7 +259,7 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 			}
 
 			// If the function is variadic, no need to check each param as all
-			// variadic operator is always a ...interface{}
+			// variadic operators have always a ...interface{}
 			numCheck := len(in)
 			if tfn.IsVariadic() {
 				numCheck = tfn.NumIn() - 1
@@ -321,24 +296,76 @@ func (u tdJSONUnmarshaler) resolveOpShortcut() func(string, json.Position) (inte
 			// replace the location by the JSON/SubJSONOf/SuperJSONOf one
 			u.replaceLocation(tdOp, posInJSON)
 
-			return &tdJSONPlaceholder{
-				TestDeep: tdOp,
-				name:     "^" + opName,
-			}, true
+			return newJSONNamedPlaceholder("^"+opName, tdOp), true
 		}
 		return nil, false
 	}
 }
 
-// tdJSONPlaceholder represents a JSON placeholder in an unmarshalled
-// JSON expected data structure.
+// tdJSONPlaceholder is an internal smuggler operator. It represents a
+// JSON placeholder in an unmarshalled JSON expected data
+// structure. It takes the JSON representation of data and compares it
+// to "expectedValue".
+//
+// It does its best to convert back the JSON pointed data to the type
+// of "expectedValue" or to the type behind the "expectedValue".
 type tdJSONPlaceholder struct {
-	TestDeep
-	name string
-	num  uint64
+	tdSmugglerBase // ignored by tools/gen_funcs.pl
+	name           string
+	num            uint64
+}
+
+func newJSONNamedPlaceholder(name string, expectedValue interface{}) TestDeep {
+	p := tdJSONPlaceholder{
+		tdSmugglerBase: newSmugglerBase(expectedValue, 1),
+		name:           name,
+	}
+
+	if !p.isTestDeeper {
+		p.expectedValue = reflect.ValueOf(expectedValue)
+	}
+	return &p
+}
+
+func newJSONNumPlaceholder(num uint64, expectedValue interface{}) TestDeep {
+	p := tdJSONPlaceholder{
+		tdSmugglerBase: newSmugglerBase(expectedValue, 1),
+		num:            num,
+	}
+
+	if !p.isTestDeeper {
+		p.expectedValue = reflect.ValueOf(expectedValue)
+	}
+	return &p
+}
+
+func (p *tdJSONPlaceholder) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	vgot, _ := jsonify(ctx, got) // Cannot fail
+
+	// Here, vgot type is either a bool, float64, string,
+	// []interface{}, a map[string]interface{} or simply nil
+
+	return p.jsonValueEqual(ctx, vgot)
+}
+
+func (p *tdJSONPlaceholder) String() string {
+	// Only called by MarshalJSON(), and so only when p.isTestDeeper
+	return p.expectedValue.Interface().(TestDeep).String()
+}
+
+func (p *tdJSONPlaceholder) HandleInvalid() bool {
+	return true
 }
 
 func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
+	if !p.isTestDeeper {
+		var expected interface{}
+		if p.expectedValue.IsValid() {
+			expected = p.expectedValue.Interface()
+		}
+		return ejson.Marshal(expected)
+	}
+
 	var b bytes.Buffer
 
 	start := b.Len()
@@ -363,6 +390,7 @@ func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
 	return b.Bytes(), nil
 }
 
+// tdJSONEmbedded represents a MarshalJSON'able operator.
 type tdJSONEmbedded struct {
 	TestDeep
 }
@@ -425,11 +453,9 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //
 // "expectedJSON" JSON value can contain placeholders. The "params"
 // are for any placeholder parameters in "expectedJSON". "params" can
-// contain TestDeep operators as well as raw values. Raw values, that
-// do not contain TestDeep operators deeply nested, are first
-// json.Marshal'ed then json.Unmarshal'ed in an interface{}. A
-// placeholder can be numeric like $2 or named like $name and always
-// references an item in "params".
+// contain TestDeep operators as well as raw values. A placeholder can
+// be numeric like $2 or named like $name and always references an
+// item in "params".
 //
 // Numeric placeholders reference the n'th "operators" item (starting
 // at 1). Named placeholders are used with Tag operator as follows:
@@ -453,6 +479,21 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 // problem). It is just a matter of taste, double-quoting placeholders
 // can be preferred when the JSON data has to conform to the JSON
 // specification, like when used in a ".json" file.
+//
+// JSON does its best to convert back the JSON corresponding to a
+// placeholder to the type of the placeholder or, if the placeholder
+// is an operator, to the type behind the operator. Allowing to do
+// things like:
+//
+//   td.Cmp(t, gotValue, td.JSON(`{"foo":$1}`, []int{1, 2, 3, 4}))
+//   td.Cmp(t, gotValue,
+//     td.JSON(`{"foo":$1}`, []interface{}{1, 2, td.Between(2, 4), 4}))
+//   td.Cmp(t, gotValue, td.JSON(`{"foo":$1}`, td.Between(27, 32)))
+//
+// Of course, it does this conversion only if the expected type can be
+// guessed. In the case the conversion cannot occur, data is compared
+// as is, in its freshly unmarshalled JSON form (so as bool, float64,
+// string, []interface{}, map[string]interface{} or simply nil).
 //
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
 //
@@ -697,6 +738,23 @@ var _ TestDeep = &tdMapJSON{}
 // can be preferred when the JSON data has to conform to the JSON
 // specification, like when used in a ".json" file.
 //
+// SubJSONOf does its best to convert back the JSON corresponding to a
+// placeholder to the type of the placeholder or, if the placeholder
+// is an operator, to the type behind the operator. Allowing to do
+// things like:
+//
+//   td.Cmp(t, gotValue,
+//     td.SubJSONOf(`{"foo":$1, "bar": 12}`, []int{1, 2, 3, 4}))
+//   td.Cmp(t, gotValue,
+//     td.SubJSONOf(`{"foo":$1, "bar": 12}`, []interface{}{1, 2, td.Between(2, 4), 4}))
+//   td.Cmp(t, gotValue,
+//     td.SubJSONOf(`{"foo":$1, "bar": 12}`, td.Between(27, 32)))
+//
+// Of course, it does this conversion only if the expected type can be
+// guessed. In the case the conversion cannot occur, data is compared
+// as is, in its freshly unmarshalled JSON form (so as bool, float64,
+// string, []interface{}, map[string]interface{} or simply nil).
+//
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
 //
 //   td.Cmp(t, gotValue, td.SubJSONOf("file.json", td.Between(12, 34)))
@@ -742,18 +800,56 @@ var _ TestDeep = &tdMapJSON{}
 //   - multi-lines comments start with the character sequence /* and stop
 //     with the first subsequent character sequence */.
 //
-// Last but not least, simple operators can be directly embedded in
-// JSON data without requiring any placeholder but using directly
-// $^OperatorName. They are operator shortcuts:
+// Most operators can be directly embedded in SubJSONOf without requiring
+// any placeholder.
 //
-//   td.Cmp(t, gotValue, td.SubJSONOf(`{"id": $1}`, td.NotZero()))
+//   td.Cmp(t, gotValue,
+//     td.SubJSONOf(`
+//   {
+//     "fullname": HasPrefix("Foo"),
+//     "age":      Between(41, 43),
+//     "details":  SuperMapOf({
+//       "address": NotEmpty(),
+//       "car":     Any("Peugeot", "Tesla", "Jeep") // any of these
+//     })
+//   }`))
+//
+// Placeholders can be used anywhere, even in operators parameters as in:
+//
+//   td.Cmp(t, gotValue,
+//     td.SubJSONOf(`{"fullname": HasPrefix($1), "bar": 42}`, "Zip"))
+//
+// A few notes about operators embedding:
+//   - SubMapOf and SuperMapOf take only one parameter, a JSON object;
+//   - the optional 3rd parameter of Between has to be specified as a string
+//     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
+//     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
+//   - not all operators are embeddable only the following are;
+//   - All, Any, ArrayEach, Bag, Between, Contains, ContainsKey, Empty, Gt,
+//     Gte, HasPrefix, HasSuffix, Ignore, JSONPointer, Keys, Len, Lt, Lte,
+//     MapEach, N, NaN, Nil, None, Not, NotAny, NotEmpty, NotNaN, NotNil,
+//     NotZero, Re, ReAll, Set, SubBagOf, SubMapOf, SubSetOf, SuperBagOf,
+//     SuperMapOf, SuperSetOf, Values and Zero.
+//
+// Operators taking no parameters can also be directly embedded in
+// JSON data using $^OperatorName or "$^OperatorName" notation. They
+// are named shortcut operators (they predate the above operators embedding
+// but they subsist for compatibility):
+//
+//   td.Cmp(t, gotValue, td.SubJSONOf(`{"id": $1, "bar": 42}`, td.NotZero()))
 //
 // can be written as:
 //
-//   td.Cmp(t, gotValue, td.SubJSONOf(`{"id": $^NotZero}`))
+//   td.Cmp(t, gotValue, td.SubJSONOf(`{"id": $^NotZero, "bar": 42}`))
 //
-// Unfortunately, only simple operators (in fact those which take no
-// parameters) have shortcuts. They follow:
+// or
+//
+//   td.Cmp(t, gotValue, td.SubJSONOf(`{"id": "$^NotZero", "bar": 42}`))
+//
+// As for placeholders, there is no differences between $^NotZero and
+// "$^NotZero".
+//
+// The allowed shortcut operators follow:
 //   - Empty    → $^Empty
 //   - Ignore   → $^Ignore
 //   - NaN      → $^NaN
@@ -856,6 +952,23 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 // can be preferred when the JSON data has to conform to the JSON
 // specification, like when used in a ".json" file.
 //
+// SuperJSONOf does its best to convert back the JSON corresponding to a
+// placeholder to the type of the placeholder or, if the placeholder
+// is an operator, to the type behind the operator. Allowing to do
+// things like:
+//
+//   td.Cmp(t, gotValue,
+//     td.SuperJSONOf(`{"foo":$1}`, []int{1, 2, 3, 4}))
+//   td.Cmp(t, gotValue,
+//     td.SuperJSONOf(`{"foo":$1}`, []interface{}{1, 2, td.Between(2, 4), 4}))
+//   td.Cmp(t, gotValue,
+//     td.SuperJSONOf(`{"foo":$1}`, td.Between(27, 32)))
+//
+// Of course, it does this conversion only if the expected type can be
+// guessed. In the case the conversion cannot occur, data is compared
+// as is, in its freshly unmarshalled JSON form (so as bool, float64,
+// string, []interface{}, map[string]interface{} or simply nil).
+//
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
 //
 //   td.Cmp(t, gotValue, td.SuperJSONOf("file.json", td.Between(12, 34)))
@@ -901,9 +1014,40 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //   - multi-lines comments start with the character sequence /* and stop
 //     with the first subsequent character sequence */.
 //
-// Last but not least, simple operators can be directly embedded in
-// JSON data without requiring any placeholder but using directly
-// $^OperatorName. They are operator shortcuts:
+// Most operators can be directly embedded in SuperJSONOf without requiring
+// any placeholder.
+//
+//   td.Cmp(t, gotValue,
+//     td.SuperJSONOf(`
+//   {
+//     "fullname": HasPrefix("Foo"),
+//     "age":      Between(41, 43),
+//     "details":  SuperMapOf({
+//       "address": NotEmpty(),
+//       "car":     Any("Peugeot", "Tesla", "Jeep") // any of these
+//     })
+//   }`))
+//
+// Placeholders can be used anywhere, even in operators parameters as in:
+//
+//   td.Cmp(t, gotValue, td.SuperJSONOf(`{"fullname": HasPrefix($1)}`, "Zip"))
+//
+// A few notes about operators embedding:
+//   - SubMapOf and SuperMapOf take only one parameter, a JSON object;
+//   - the optional 3rd parameter of Between has to be specified as a string
+//     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
+//     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
+//   - not all operators are embeddable only the following are;
+//   - All, Any, ArrayEach, Bag, Between, Contains, ContainsKey, Empty, Gt,
+//     Gte, HasPrefix, HasSuffix, Ignore, JSONPointer, Keys, Len, Lt, Lte,
+//     MapEach, N, NaN, Nil, None, Not, NotAny, NotEmpty, NotNaN, NotNil,
+//     NotZero, Re, ReAll, Set, SubBagOf, SubMapOf, SubSetOf, SuperBagOf,
+//     SuperMapOf, SuperSetOf, Values and Zero.
+//
+// Operators taking no parameters can also be directly embedded in
+// JSON data using $^OperatorName or "$^OperatorName" notation. They
+// are named shortcut operators (they predate the above operators embedding
+// but they subsist for compatibility):
 //
 //   td.Cmp(t, gotValue, td.SuperJSONOf(`{"id": $1}`, td.NotZero()))
 //
@@ -911,8 +1055,14 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //
 //   td.Cmp(t, gotValue, td.SuperJSONOf(`{"id": $^NotZero}`))
 //
-// Unfortunately, only simple operators (in fact those which take no
-// parameters) have shortcuts. They follow:
+// or
+//
+//   td.Cmp(t, gotValue, td.SuperJSONOf(`{"id": "$^NotZero"}`))
+//
+// As for placeholders, there is no differences between $^NotZero and
+// "$^NotZero".
+//
+// The allowed shortcut operators follow:
 //   - Empty    → $^Empty
 //   - Ignore   → $^Ignore
 //   - NaN      → $^NaN
