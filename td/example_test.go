@@ -1053,10 +1053,13 @@ func ExampleJSON_basic() {
 func ExampleJSON_placeholders() {
 	t := &testing.T{}
 
-	got := &struct {
-		Fullname string `json:"fullname"`
-		Age      int    `json:"age"`
-	}{
+	type Person struct {
+		Fullname string    `json:"fullname"`
+		Age      int       `json:"age"`
+		Children []*Person `json:"children,omitempty"`
+	}
+
+	got := &Person{
 		Fullname: "Bob Foobar",
 		Age:      42,
 	}
@@ -1082,11 +1085,26 @@ func ExampleJSON_placeholders() {
 			td.Tag("name", td.HasSuffix("Foobar"))))
 	fmt.Println("check got with named placeholders:", ok)
 
+	got.Children = []*Person{
+		{Fullname: "Alice", Age: 28},
+		{Fullname: "Brian", Age: 22},
+	}
+	ok = td.Cmp(t, got,
+		td.JSON(`{"age": $age, "fullname": $name, "children": $children}`,
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("name", td.HasSuffix("Foobar")),
+			td.Tag("children", td.Bag(
+				&Person{Fullname: "Brian", Age: 22},
+				&Person{Fullname: "Alice", Age: 28},
+			))))
+	fmt.Println("check got w/named placeholders, and children w/go structs:", ok)
+
 	// Output:
 	// check got with numeric placeholders without operators: true
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
+	// check got w/named placeholders, and children w/go structs: true
 }
 
 func ExampleJSON_embedding() {

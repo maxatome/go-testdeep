@@ -948,10 +948,13 @@ func ExampleCmpJSON_basic() {
 func ExampleCmpJSON_placeholders() {
 	t := &testing.T{}
 
-	got := &struct {
-		Fullname string `json:"fullname"`
-		Age      int    `json:"age"`
-	}{
+	type Person struct {
+		Fullname string    `json:"fullname"`
+		Age      int       `json:"age"`
+		Children []*Person `json:"children,omitempty"`
+	}
+
+	got := &Person{
 		Fullname: "Bob Foobar",
 		Age:      42,
 	}
@@ -968,11 +971,22 @@ func ExampleCmpJSON_placeholders() {
 	ok = td.CmpJSON(t, got, `{"age": $age, "fullname": $name}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar"))})
 	fmt.Println("check got with named placeholders:", ok)
 
+	got.Children = []*Person{
+		{Fullname: "Alice", Age: 28},
+		{Fullname: "Brian", Age: 22},
+	}
+	ok = td.CmpJSON(t, got, `{"age": $age, "fullname": $name, "children": $children}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("children", td.Bag(
+		&Person{Fullname: "Brian", Age: 22},
+		&Person{Fullname: "Alice", Age: 28},
+	))})
+	fmt.Println("check got w/named placeholders, and children w/go structs:", ok)
+
 	// Output:
 	// check got with numeric placeholders without operators: true
 	// check got with numeric placeholders: true
 	// check got with double-quoted numeric placeholders: true
 	// check got with named placeholders: true
+	// check got w/named placeholders, and children w/go structs: true
 }
 
 func ExampleCmpJSON_embedding() {

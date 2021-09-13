@@ -6,11 +6,14 @@
 
 // Work around https://github.com/golang/go/issues/26995 issue
 // (corrected in go 1.12).
+//go:build go1.12
 // +build go1.12
 
 package td_test
 
 import (
+	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
@@ -108,4 +111,13 @@ func TestSetlocation(t *testing.T) {
 func TestError(t *testing.T) {
 	test.NoError(t, td.Re(`x`).Error())
 	test.Error(t, td.Re(123).Error())
+}
+
+func TestMarshalJSON(t *testing.T) {
+	op := td.String("foo")
+
+	_, err := json.Marshal(op)
+	if test.Error(t, err) {
+		test.IsTrue(t, strings.HasSuffix(err.Error(), "String TestDeep operator cannot be json.Marshal'led"))
+	}
 }

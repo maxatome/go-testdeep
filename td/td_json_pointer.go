@@ -7,7 +7,6 @@
 package td
 
 import (
-	"encoding/json"
 	"fmt"
 	"reflect"
 	"strings"
@@ -60,7 +59,7 @@ var _ TestDeep = &tdJSONPointer{}
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
 // as is, in its freshly unmarshalled JSON form (so as bool, float64,
-// string, []interface{} or map[string]interface{}).
+// string, []interface{}, map[string]interface{} or simply nil).
 //
 // Note that as any TestDeep operator can be used as "expectedValue",
 // JSON operator works out of the box:
@@ -122,7 +121,7 @@ func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 		return ctx.CollectError(eErr)
 	}
 
-	newGot, err := util.JSONPointer(vgot, p.pointer)
+	vgot, err := util.JSONPointer(vgot, p.pointer)
 	if err != nil {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
@@ -135,41 +134,13 @@ func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 		})
 	}
 
+	// Here, vgot type is either a bool, float64, string,
+	// []interface{}, a map[string]interface{} or simply nil
+
 	ctx = jsonPointerContext(ctx, p.pointer)
 	ctx.BeLax = true
 
-	// Here, newGot type is either a bool, float64, string,
-	// []interface{}, a map[string]interface{} or simply nil
-
-	expectedType := p.internalTypeBehind()
-
-	// Unknown expected type (operator with nil TypeBehind() result or
-	// untyped nil), lets deepValueEqual() handles the comparison using
-	// BeLax flag
-	if expectedType == nil {
-		return deepValueEqual(ctx, reflect.ValueOf(newGot), p.expectedValue)
-	}
-
-	// Same type for got & expected type, no need to Marshal/Unmarshal
-	if newGot != nil && expectedType == reflect.TypeOf(newGot) {
-		return deepValueEqual(ctx, reflect.ValueOf(newGot), p.expectedValue)
-	}
-
-	// Unmarshal newGot into the expectedType
-	b, _ := json.Marshal(newGot) // No error can occur here
-	got = reflect.New(expectedType)
-	if err = json.Unmarshal(b, got.Interface()); err != nil {
-		if ctx.BooleanError {
-			return ctxerr.BooleanError
-		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message: fmt.Sprintf(
-				"an error occurred while unmarshalling JSON into %s", expectedType),
-			Summary: ctxerr.NewSummary(err.Error()),
-		})
-	}
-
-	return deepValueEqual(ctx, got.Elem(), p.expectedValue)
+	return p.jsonValueEqual(ctx, vgot)
 }
 
 func (p *tdJSONPointer) String() string {
@@ -187,16 +158,6 @@ func (p *tdJSONPointer) String() string {
 		expected = "nil"
 	}
 	return fmt.Sprintf("JSONPointer(%s, %s)", p.pointer, expected)
-}
-
-func (p *tdJSONPointer) internalTypeBehind() reflect.Type {
-	if p.isTestDeeper {
-		return p.expectedValue.Interface().(TestDeep).TypeBehind()
-	}
-	if p.expectedValue.IsValid() {
-		return p.expectedValue.Type()
-	}
-	return nil
 }
 
 func (p *tdJSONPointer) HandleInvalid() bool {
