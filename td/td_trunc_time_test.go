@@ -140,7 +140,7 @@ func TestTruncTime(t *testing.T) {
 	checkError(t, "never tested",
 		td.TruncTime("test"),
 		expectedError{
-			Message: mustBe("Bad usage of TruncTime operator"),
+			Message: mustBe("bad usage of TruncTime operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: TruncTime(time.Time[, time.Duration]), 1st parameter must be time.Time or convertible to time.Time, but not string"),
 		})
@@ -148,7 +148,7 @@ func TestTruncTime(t *testing.T) {
 	checkError(t, "never tested",
 		td.TruncTime(1, 2, 3),
 		expectedError{
-			Message: mustBe("Bad usage of TruncTime operator"),
+			Message: mustBe("bad usage of TruncTime operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: TruncTime(time.Time[, time.Duration]), too many parameters"),
 		})

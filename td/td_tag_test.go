@@ -43,7 +43,7 @@ func TestTag(t *testing.T) {
 	checkError(t, "never tested",
 		td.Tag("1badTag", td.Between(9, 13)),
 		expectedError{
-			Message: mustBe("Bad usage of Tag operator"),
+			Message: mustBe("bad usage of Tag operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(util.ErrTagInvalid.Error()),
 		})

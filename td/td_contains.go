@@ -247,12 +247,13 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 		// If the type behind the operator is known *and* is not rune,
 		// then no need to go further, but return an explicit error to
 		// help our user to fix his probably bogus code
-		if typeBehind := c.expectedValue.Interface().(TestDeep).TypeBehind(); typeBehind != nil && typeBehind != types.Rune && !ctx.BeLax {
+		op := c.expectedValue.Interface().(TestDeep)
+		if typeBehind := op.TypeBehind(); typeBehind != nil && typeBehind != types.Rune && !ctx.BeLax {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
 			return ctx.CollectError(&ctxerr.Error{
-				Message:  "TestDeep operator can only match rune in string",
+				Message:  op.GetLocation().Func + " operator has to match rune in string, but it does not",
 				Got:      types.RawString(typeBehind.String()),
 				Expected: types.RawString("rune"),
 			})

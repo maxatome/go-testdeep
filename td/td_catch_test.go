@@ -44,7 +44,7 @@ func TestCatch(t *testing.T) {
 	checkError(t, "never tested",
 		td.Catch(12, 28),
 		expectedError{
-			Message: mustBe("Bad usage of Catch operator"),
+			Message: mustBe("bad usage of Catch operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Catch(NON_NIL_PTR, EXPECTED_VALUE), but received int as 1st parameter"),
 		})
@@ -52,7 +52,7 @@ func TestCatch(t *testing.T) {
 	checkError(t, "never tested",
 		td.Catch(nil, 28),
 		expectedError{
-			Message: mustBe("Bad usage of Catch operator"),
+			Message: mustBe("bad usage of Catch operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Catch(NON_NIL_PTR, EXPECTED_VALUE), but received nil as 1st parameter"),
 		})
@@ -60,7 +60,7 @@ func TestCatch(t *testing.T) {
 	checkError(t, "never tested",
 		td.Catch((*int)(nil), 28),
 		expectedError{
-			Message: mustBe("Bad usage of Catch operator"),
+			Message: mustBe("bad usage of Catch operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Catch(NON_NIL_PTR, EXPECTED_VALUE), but received *int (ptr) as 1st parameter"),
 		})

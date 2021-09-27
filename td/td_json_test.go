@@ -227,7 +227,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON("uNkNoWnFiLe.json"),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("JSON file uNkNoWnFiLe.json cannot be read: "),
 		})
@@ -235,7 +235,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(42),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...), but received int as 1st parameter"),
 		})
@@ -243,7 +243,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(errReader{}),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("JSON read error: an error occurred"),
 		})
@@ -251,7 +251,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(`pipo`),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("JSON unmarshal error: "),
 		})
@@ -261,7 +261,7 @@ func TestJSON(t *testing.T) {
 			td.Tag("foo", td.Ignore()),
 			td.Tag("foo", td.Ignore())),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`2 params have the same tag "foo"`),
 		})
@@ -286,7 +286,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(`[1, "$123bad"]`),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`),
 		})
@@ -294,7 +294,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(`[1, $000]`),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`),
 		})
@@ -302,7 +302,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(`[1, $1]`),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$1", but no params given at line 1:4 (pos 4)`),
 		})
@@ -310,7 +310,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(`[1, 2, $3]`, td.Ignore()),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`),
 		})
@@ -319,7 +319,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(`[1, "$^bad%"]`),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`),
 		})
@@ -331,7 +331,7 @@ func TestJSON(t *testing.T) {
   "$bad%"
 ]`),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: bad placeholder "$bad%" at line 3:3 (pos 10)`),
 		})
@@ -339,7 +339,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSON(`[1, $unknown]`),
 		expectedError{
-			Message: mustBe("Bad usage of JSON operator"),
+			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`),
 		})
@@ -484,7 +484,7 @@ func TestJSONInside(t *testing.T) {
   "val2": Between(1, 2, "<>")
 }`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Between() bad 3rd parameter, use "[]", "[[", "]]" or "][" at line 2:10 (pos 12)`),
 			})
@@ -492,7 +492,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`{"val2": Between(1)}`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Between() requires 2 or 3 parameters at line 1:9 (pos 9)`),
 			})
@@ -500,7 +500,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`{"val2": Between(1,2,3,4)}`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Between() requires 2 or 3 parameters at line 1:9 (pos 9)`),
 			})
@@ -516,7 +516,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`{"val2": N()}`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: N() requires 1 or 2 parameters at line 1:9 (pos 9)`),
 			})
@@ -524,7 +524,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`{"val2": N(1,2,3)}`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: N() requires 1 or 2 parameters at line 1:9 (pos 9)`),
 			})
@@ -541,7 +541,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`{"val2": Re()}`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Re() requires 1 or 2 parameters at line 1:9 (pos 9)`),
 			})
@@ -549,7 +549,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`{"val2": Re(1,2,3)}`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Re() requires 1 or 2 parameters at line 1:9 (pos 9)`),
 			})
@@ -564,7 +564,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ SubMapOf() ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: SubMapOf() requires only one parameter at line 1:2 (pos 2)`),
 			})
@@ -572,7 +572,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ SubMapOf(1, 2) ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: SubMapOf() requires only one parameter at line 1:2 (pos 2)`),
 			})
@@ -587,7 +587,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ SuperMapOf() ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: SuperMapOf() requires only one parameter at line 1:2 (pos 2)`),
 			})
@@ -595,7 +595,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ SuperMapOf(1, 2) ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: SuperMapOf() requires only one parameter at line 1:2 (pos 2)`),
 			})
@@ -606,7 +606,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ UnknownOp() ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: unknown operator UnknownOp() at line 1:2 (pos 2)`),
 			})
@@ -614,7 +614,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ Catch() ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Catch() is not usable in JSON() at line 1:2 (pos 2)`),
 			})
@@ -622,7 +622,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ JSON() ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: JSON() is not usable in JSON(), use literal JSON instead at line 1:2 (pos 2)`),
 			})
@@ -630,7 +630,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ All() ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: All() requires at least one parameter at line 1:2 (pos 2)`),
 			})
@@ -638,7 +638,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ Empty(12) ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Empty() requires no parameters at line 1:2 (pos 2)`),
 			})
@@ -646,7 +646,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ HasPrefix() ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: HasPrefix() requires only one parameter at line 1:2 (pos 2)`),
 			})
@@ -654,7 +654,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ JSONPointer(1, 2, 3) ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: JSONPointer() requires 2 parameters at line 1:2 (pos 2)`),
 			})
@@ -662,7 +662,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, "never tested",
 			td.JSON(`[ JSONPointer(1, 2) ]`),
 			expectedError{
-				Message: mustBe("Bad usage of JSON operator"),
+				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: JSONPointer() bad #1 parameter type: string required but float64 received at line 1:2 (pos 2)`),
 			})
@@ -672,7 +672,7 @@ func TestJSONInside(t *testing.T) {
 		checkError(t, json.RawMessage(`"never tested"`),
 			td.JSON(`Re(1)`),
 			expectedError{
-				Message: mustBe("Bad usage of Re operator"),
+				Message: mustBe("bad usage of Re operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`usage: Re(STRING|*regexp.Regexp[, NON_NIL_CAPTURE]), but received float64 as 1st parameter`),
 			})
@@ -784,7 +784,7 @@ func TestSubJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SubJSONOf(`[1, "$123bad"]`),
 		expectedError{
-			Message: mustBe("Bad usage of SubJSONOf operator"),
+			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`),
 		})
@@ -792,7 +792,7 @@ func TestSubJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SubJSONOf(`[1, $000]`),
 		expectedError{
-			Message: mustBe("Bad usage of SubJSONOf operator"),
+			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`),
 		})
@@ -800,7 +800,7 @@ func TestSubJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SubJSONOf(`[1, $1]`),
 		expectedError{
-			Message: mustBe("Bad usage of SubJSONOf operator"),
+			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$1", but no params given at line 1:4 (pos 4)`),
 		})
@@ -808,7 +808,7 @@ func TestSubJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SubJSONOf(`[1, 2, $3]`, td.Ignore()),
 		expectedError{
-			Message: mustBe("Bad usage of SubJSONOf operator"),
+			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`),
 		})
@@ -817,7 +817,7 @@ func TestSubJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SubJSONOf(`[1, "$^bad%"]`),
 		expectedError{
-			Message: mustBe("Bad usage of SubJSONOf operator"),
+			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`),
 		})
@@ -826,7 +826,7 @@ func TestSubJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SubJSONOf(`[1, "$bad%"]`),
 		expectedError{
-			Message: mustBe("Bad usage of SubJSONOf operator"),
+			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: bad placeholder "$bad%" at line 1:5 (pos 5)`),
 		})
@@ -834,7 +834,7 @@ func TestSubJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SubJSONOf(`[1, $unknown]`),
 		expectedError{
-			Message: mustBe("Bad usage of SubJSONOf operator"),
+			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`),
 		})
@@ -842,7 +842,7 @@ func TestSubJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SubJSONOf("null"),
 		expectedError{
-			Message: mustBe("Bad usage of SubJSONOf operator"),
+			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("SubJSONOf() only accepts JSON objects {…}"),
 		})
@@ -980,7 +980,7 @@ func TestSuperJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SuperJSONOf(`[1, "$123bad"]`),
 		expectedError{
-			Message: mustBe("Bad usage of SuperJSONOf operator"),
+			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`),
 		})
@@ -988,7 +988,7 @@ func TestSuperJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SuperJSONOf(`[1, $000]`),
 		expectedError{
-			Message: mustBe("Bad usage of SuperJSONOf operator"),
+			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`),
 		})
@@ -996,7 +996,7 @@ func TestSuperJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SuperJSONOf(`[1, $1]`),
 		expectedError{
-			Message: mustBe("Bad usage of SuperJSONOf operator"),
+			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$1", but no params given at line 1:4 (pos 4)`),
 		})
@@ -1004,7 +1004,7 @@ func TestSuperJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SuperJSONOf(`[1, 2, $3]`, td.Ignore()),
 		expectedError{
-			Message: mustBe("Bad usage of SuperJSONOf operator"),
+			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`),
 		})
@@ -1013,7 +1013,7 @@ func TestSuperJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SuperJSONOf(`[1, "$^bad%"]`),
 		expectedError{
-			Message: mustBe("Bad usage of SuperJSONOf operator"),
+			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`),
 		})
@@ -1022,7 +1022,7 @@ func TestSuperJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SuperJSONOf(`[1, "$bad%"]`),
 		expectedError{
-			Message: mustBe("Bad usage of SuperJSONOf operator"),
+			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: bad placeholder "$bad%" at line 1:5 (pos 5)`),
 		})
@@ -1030,7 +1030,7 @@ func TestSuperJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SuperJSONOf(`[1, $unknown]`),
 		expectedError{
-			Message: mustBe("Bad usage of SuperJSONOf operator"),
+			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`),
 		})
@@ -1038,7 +1038,7 @@ func TestSuperJSONOf(t *testing.T) {
 	checkError(t, "never tested",
 		td.SuperJSONOf("null"),
 		expectedError{
-			Message: mustBe("Bad usage of SuperJSONOf operator"),
+			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("SuperJSONOf() only accepts JSON objects {…}"),
 		})

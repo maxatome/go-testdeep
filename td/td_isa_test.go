@@ -103,7 +103,7 @@ func TestIsa(t *testing.T) {
 	checkError(t, "never tested",
 		td.Isa(nil),
 		expectedError{
-			Message: mustBe("Bad usage of Isa operator"),
+			Message: mustBe("bad usage of Isa operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("Isa(nil) is not allowed. To check an interface, try Isa((*fmt.Stringer)(nil)), for fmt.Stringer for example"),
 		})

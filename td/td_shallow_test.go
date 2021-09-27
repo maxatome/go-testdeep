@@ -139,7 +139,7 @@ func TestShallow(t *testing.T) {
 	checkError(t, "never tested",
 		td.Shallow(42),
 		expectedError{
-			Message: mustBe("Bad usage of Shallow operator"),
+			Message: mustBe("bad usage of Shallow operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Shallow(CHANNEL|FUNC|MAP|PTR|SLICE|UNSAFE_PTR|STRING), but received int as 1st parameter"),
 		})

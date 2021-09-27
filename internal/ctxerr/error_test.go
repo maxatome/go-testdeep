@@ -24,12 +24,12 @@ func TestError(t *testing.T) {
 		Context: ctxerr.Context{
 			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
 		},
-		Message:  "Error message",
+		Message:  "error message",
 		Got:      1,
 		Expected: 2,
 	}
 	test.EqualStr(t, err.Error(),
-		`DATA[12].Field: Error message
+		`DATA[12].Field: error message
 	     got: 1
 	expected: 2`)
 	test.EqualStr(t, err.GotString(), "1")
@@ -58,7 +58,7 @@ func TestError(t *testing.T) {
 		Context: ctxerr.Context{
 			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
 		},
-		Message:  "Error message",
+		Message:  "error message",
 		Got:      1,
 		Expected: 2,
 		Location: location.Location{
@@ -68,7 +68,7 @@ func TestError(t *testing.T) {
 		},
 	}
 	test.EqualStr(t, err.Error(),
-		`DATA[12].Field: Error message
+		`DATA[12].Field: error message
 	     got: 1
 	expected: 2
 [under operator Operator at file.go:23]`)
@@ -77,7 +77,7 @@ func TestError(t *testing.T) {
 		Context: ctxerr.Context{
 			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
 		},
-		Message: "Error message",
+		Message: "error message",
 		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
 			File: "file.go",
@@ -88,7 +88,7 @@ func TestError(t *testing.T) {
 			Context: ctxerr.Context{
 				Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field").AddCustomLevel("<All#1/2>"),
 			},
-			Message: "Origin error message",
+			Message: "origin error message",
 			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
 				File: "file2.go",
@@ -98,10 +98,10 @@ func TestError(t *testing.T) {
 		},
 	}
 	test.EqualStr(t, err.Error(),
-		`DATA[12].Field: Error message
+		`DATA[12].Field: error message
 	666
 Originates from following error:
-	DATA[12].Field<All#1/2>: Origin error message
+	DATA[12].Field<All#1/2>: origin error message
 		42
 	[under operator SubOperator at file2.go:236]
 [under operator Operator at file.go:23]`)
@@ -113,7 +113,7 @@ Originates from following error:
 		Context: ctxerr.Context{
 			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
 		},
-		Message: "Error message",
+		Message: "error message",
 		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
 			File: "file.go",
@@ -124,7 +124,7 @@ Originates from following error:
 			Context: ctxerr.Context{
 				Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field").AddCustomLevel("<All#1/2>"),
 			},
-			Message: "Origin error message",
+			Message: "origin error message",
 			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
 				File: "file2.go",
@@ -137,7 +137,7 @@ Originates from following error:
 			Context: ctxerr.Context{
 				Path: ctxerr.NewPath("DATA").AddArrayIndex(13).AddField("Field"),
 			},
-			Message: "Error message",
+			Message: "error message",
 			Summary: ctxerr.NewSummary("888"),
 			Location: location.Location{
 				File: "file.go",
@@ -147,19 +147,19 @@ Originates from following error:
 		},
 	}
 	test.EqualStr(t, err.Error(),
-		`DATA[12].Field: Error message
+		`DATA[12].Field: error message
 	666
 Originates from following error:
-	DATA[12].Field<All#1/2>: Origin error message
+	DATA[12].Field<All#1/2>: origin error message
 		42
 	[under operator SubOperator at file2.go:236]
-DATA[13].Field: Error message
+DATA[13].Field: error message
 	888
 [under operator Operator at file.go:23]`)
 
 	err = ctxerr.Error{
 		Context: ctxerr.Context{Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field")},
-		Message: "Error message",
+		Message: "error message",
 		Summary: ctxerr.NewSummary("666"),
 		Location: location.Location{
 			File: "file.go",
@@ -170,7 +170,7 @@ DATA[13].Field: Error message
 			Context: ctxerr.Context{
 				Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field").AddCustomLevel("<All#1/2>"),
 			},
-			Message: "Origin error message",
+			Message: "origin error message",
 			Summary: ctxerr.NewSummary("42"),
 			Location: location.Location{
 				File: "file2.go",
@@ -183,7 +183,7 @@ DATA[13].Field: Error message
 			Context: ctxerr.Context{
 				Path: ctxerr.NewPath("DATA").AddArrayIndex(13).AddField("Field"),
 			},
-			Message: "Error message",
+			Message: "error message",
 			Summary: ctxerr.NewSummary("888"),
 			Location: location.Location{
 				File: "file.go",
@@ -193,14 +193,14 @@ DATA[13].Field: Error message
 		},
 	}
 	test.EqualStr(t, err.Error(),
-		`DATA[12].Field: Error message
+		`DATA[12].Field: error message
 	666
 Originates from following error:
-	DATA[12].Field<All#1/2>: Origin error message
+	DATA[12].Field<All#1/2>: origin error message
 		42
 	[under operator SubOperator at file2.go:236]
 [under operator Operator at file.go:23]
-DATA[13].Field: Error message
+DATA[13].Field: error message
 	888
 [under operator Operator at file.go:24]`)
 

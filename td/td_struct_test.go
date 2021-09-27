@@ -270,7 +270,7 @@ func TestStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.Struct("test", nil),
 		expectedError{
-			Message: mustBe("Bad usage of Struct operator"),
+			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter"),
 		})
@@ -279,7 +279,7 @@ func TestStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.Struct(&i, nil),
 		expectedError{
-			Message: mustBe("Bad usage of Struct operator"),
+			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter"),
 		})
@@ -287,7 +287,7 @@ func TestStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.Struct(&MyStruct{}, td.StructFields{"UnknownField": 123}),
 		expectedError{
-			Message: mustBe("Bad usage of Struct operator"),
+			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`struct td_test.MyStruct has no field "UnknownField"`),
 		})
@@ -295,7 +295,7 @@ func TestStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.Struct(&MyStruct{}, td.StructFields{"ValBool": 123}),
 		expectedError{
-			Message: mustBe("Bad usage of Struct operator"),
+			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("type int of field expected value ValBool differs from struct one (bool)"),
 		})
@@ -303,7 +303,7 @@ func TestStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.Struct(&MyStruct{}, td.StructFields{"ValBool": nil}),
 		expectedError{
-			Message: mustBe("Bad usage of Struct operator"),
+			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("expected value of field ValBool cannot be nil as it is a bool"),
 		})
@@ -318,7 +318,7 @@ func TestStruct(t *testing.T) {
 		},
 			td.StructFields{"ValBool": false}),
 		expectedError{
-			Message: mustBe("Bad usage of Struct operator"),
+			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("non zero field ValBool in model already exists in expectedFields"),
 		})
@@ -586,14 +586,14 @@ func TestStructPatterns(t *testing.T) {
 		checkError(t, "never tested",
 			td.Struct(paTest{Num: 666}, td.StructFields{"= al[pha": 123}),
 			expectedError{
-				Message: mustBe("Bad usage of Struct operator"),
+				Message: mustBe("bad usage of Struct operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustContain("bad shell pattern field `= al[pha`: "),
 			})
 
 		checkError(t, "never tested",
 			td.Struct(paTest{Num: 666}, td.StructFields{"= alpha*": nil}), expectedError{
-				Message: mustBe("Bad usage of Struct operator"),
+				Message: mustBe("bad usage of Struct operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("expected value of field alphaNum (from pattern `= alpha*`) cannot be nil as it is a int"),
 			})
@@ -635,7 +635,7 @@ func TestStructPatterns(t *testing.T) {
 		checkError(t, "never tested",
 			td.Struct(paTest{Num: 666}, td.StructFields{"=~ al(*": 123}),
 			expectedError{
-				Message: mustBe("Bad usage of Struct operator"),
+				Message: mustBe("bad usage of Struct operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustContain("bad regexp field `=~ al(*`: "),
 			})
@@ -643,7 +643,7 @@ func TestStructPatterns(t *testing.T) {
 		checkError(t, "never tested",
 			td.Struct(paTest{Num: 666}, td.StructFields{"=~ alpha": nil}),
 			expectedError{
-				Message: mustBe("Bad usage of Struct operator"),
+				Message: mustBe("bad usage of Struct operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("expected value of field alphaNum (from pattern `=~ alpha`) cannot be nil as it is a int"),
 			})
@@ -903,7 +903,7 @@ func TestSStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.SStruct("test", nil),
 		expectedError{
-			Message: mustBe("Bad usage of SStruct operator"),
+			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter"),
 		})
@@ -912,7 +912,7 @@ func TestSStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.SStruct(&i, nil),
 		expectedError{
-			Message: mustBe("Bad usage of SStruct operator"),
+			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter"),
 		})
@@ -920,7 +920,7 @@ func TestSStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.SStruct(&MyStruct{}, td.StructFields{"UnknownField": 123}),
 		expectedError{
-			Message: mustBe("Bad usage of SStruct operator"),
+			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`struct td_test.MyStruct has no field "UnknownField"`),
 		})
@@ -928,7 +928,7 @@ func TestSStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.SStruct(&MyStruct{}, td.StructFields{"ValBool": 123}),
 		expectedError{
-			Message: mustBe("Bad usage of SStruct operator"),
+			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("type int of field expected value ValBool differs from struct one (bool)"),
 		})
@@ -936,7 +936,7 @@ func TestSStruct(t *testing.T) {
 	checkError(t, "never tested",
 		td.SStruct(&MyStruct{}, td.StructFields{"ValBool": nil}),
 		expectedError{
-			Message: mustBe("Bad usage of SStruct operator"),
+			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("expected value of field ValBool cannot be nil as it is a bool"),
 		})
@@ -951,7 +951,7 @@ func TestSStruct(t *testing.T) {
 		},
 			td.StructFields{"ValBool": false}),
 		expectedError{
-			Message: mustBe("Bad usage of SStruct operator"),
+			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("non zero field ValBool in model already exists in expectedFields"),
 		})

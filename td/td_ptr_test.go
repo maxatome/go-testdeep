@@ -171,7 +171,7 @@ func TestPtr(t *testing.T) {
 	checkError(t, "never tested",
 		td.Ptr(nil),
 		expectedError{
-			Message: mustBe("Bad usage of Ptr operator"),
+			Message: mustBe("bad usage of Ptr operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: Ptr("),
 		})
@@ -179,7 +179,7 @@ func TestPtr(t *testing.T) {
 	checkError(t, "never tested",
 		td.Ptr(MyInterface(nil)),
 		expectedError{
-			Message: mustBe("Bad usage of Ptr operator"),
+			Message: mustBe("bad usage of Ptr operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: Ptr("),
 		})
@@ -187,7 +187,7 @@ func TestPtr(t *testing.T) {
 	checkError(t, "never tested",
 		td.PPtr(nil),
 		expectedError{
-			Message: mustBe("Bad usage of PPtr operator"),
+			Message: mustBe("bad usage of PPtr operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: PPtr("),
 		})
@@ -195,7 +195,7 @@ func TestPtr(t *testing.T) {
 	checkError(t, "never tested",
 		td.PPtr(MyInterface(nil)),
 		expectedError{
-			Message: mustBe("Bad usage of PPtr operator"),
+			Message: mustBe("bad usage of PPtr operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: PPtr("),
 		})

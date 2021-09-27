@@ -71,7 +71,7 @@ func TestLen(t *testing.T) {
 	checkError(t, "never tested",
 		td.Len(nil),
 		expectedError{
-			Message: mustBe("Bad usage of Len operator"),
+			Message: mustBe("bad usage of Len operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Len(TESTDEEP_OPERATOR|INT), but received nil as 1st parameter"),
 		})
@@ -79,7 +79,7 @@ func TestLen(t *testing.T) {
 	checkError(t, "never tested",
 		td.Len("12"),
 		expectedError{
-			Message: mustBe("Bad usage of Len operator"),
+			Message: mustBe("bad usage of Len operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Len(TESTDEEP_OPERATOR|INT), but received string as 1st parameter"),
 		})
@@ -88,7 +88,7 @@ func TestLen(t *testing.T) {
 	checkError(t, "never tested",
 		td.Len(uint64(math.MaxUint64)),
 		expectedError{
-			Message: mustBe("Bad usage of Len operator"),
+			Message: mustBe("bad usage of Len operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Len(TESTDEEP_OPERATOR|INT), but received an out of bounds or not integer 1st parameter (18446744073709551615), should be in int range"),
 		})
@@ -96,7 +96,7 @@ func TestLen(t *testing.T) {
 	checkError(t, "never tested",
 		td.Len(float64(math.MaxUint64)),
 		expectedError{
-			Message: mustBe("Bad usage of Len operator"),
+			Message: mustBe("bad usage of Len operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Len(TESTDEEP_OPERATOR|INT), but received an out of bounds or not integer 1st parameter (1.8446744073709552e+19), should be in int range"),
 		})
@@ -104,7 +104,7 @@ func TestLen(t *testing.T) {
 	checkError(t, "never tested",
 		td.Len(float64(-math.MaxUint64)),
 		expectedError{
-			Message: mustBe("Bad usage of Len operator"),
+			Message: mustBe("bad usage of Len operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Len(TESTDEEP_OPERATOR|INT), but received an out of bounds or not integer 1st parameter (-1.8446744073709552e+19), should be in int range"),
 		})
@@ -112,7 +112,7 @@ func TestLen(t *testing.T) {
 	checkError(t, "never tested",
 		td.Len(3.1),
 		expectedError{
-			Message: mustBe("Bad usage of Len operator"),
+			Message: mustBe("bad usage of Len operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Len(TESTDEEP_OPERATOR|INT), but received an out of bounds or not integer 1st parameter (3.1), should be in int range"),
 		})
@@ -177,7 +177,7 @@ func TestCap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Cap(nil),
 		expectedError{
-			Message: mustBe("Bad usage of Cap operator"),
+			Message: mustBe("bad usage of Cap operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Cap(TESTDEEP_OPERATOR|INT), but received nil as 1st parameter"),
 		})
@@ -185,7 +185,7 @@ func TestCap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Cap("12"),
 		expectedError{
-			Message: mustBe("Bad usage of Cap operator"),
+			Message: mustBe("bad usage of Cap operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Cap(TESTDEEP_OPERATOR|INT), but received string as 1st parameter"),
 		})
@@ -194,7 +194,7 @@ func TestCap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Cap(uint64(math.MaxUint64)),
 		expectedError{
-			Message: mustBe("Bad usage of Cap operator"),
+			Message: mustBe("bad usage of Cap operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Cap(TESTDEEP_OPERATOR|INT), but received an out of bounds or not integer 1st parameter (18446744073709551615), should be in int range"),
 		})
@@ -202,7 +202,7 @@ func TestCap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Cap(float64(math.MaxUint64)),
 		expectedError{
-			Message: mustBe("Bad usage of Cap operator"),
+			Message: mustBe("bad usage of Cap operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Cap(TESTDEEP_OPERATOR|INT), but received an out of bounds or not integer 1st parameter (1.8446744073709552e+19), should be in int range"),
 		})
@@ -210,7 +210,7 @@ func TestCap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Cap(float64(-math.MaxUint64)),
 		expectedError{
-			Message: mustBe("Bad usage of Cap operator"),
+			Message: mustBe("bad usage of Cap operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Cap(TESTDEEP_OPERATOR|INT), but received an out of bounds or not integer 1st parameter (-1.8446744073709552e+19), should be in int range"),
 		})
@@ -218,7 +218,7 @@ func TestCap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Cap(3.1),
 		expectedError{
-			Message: mustBe("Bad usage of Cap operator"),
+			Message: mustBe("bad usage of Cap operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Cap(TESTDEEP_OPERATOR|INT), but received an out of bounds or not integer 1st parameter (3.1), should be in int range"),
 		})

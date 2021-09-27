@@ -309,7 +309,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(nil, 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", but received nil as 1st parameter"),
 		})
@@ -317,7 +317,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle((func(string) int)(nil), 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("Smuggle(FUNC): FUNC cannot be a nil function"),
 		})
@@ -325,7 +325,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(123, 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", but received int as 1st parameter"),
 		})
@@ -333,7 +333,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle("bad[path", 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(usage + `cannot find final ']' in FIELD_PATH "bad[path"`),
 		})
@@ -342,7 +342,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(func() int { return 0 }, 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(usage + "FUNC must take only one non-variadic argument"),
 		})
@@ -350,7 +350,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(func(x ...int) int { return 0 }, 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(usage + "FUNC must take only one non-variadic argument"),
 		})
@@ -358,7 +358,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(func(a int, b string) int { return 0 }, 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(usage + "FUNC must take only one non-variadic argument"),
 		})
@@ -369,7 +369,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(func(a int) {}, 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(errMesg),
 		})
@@ -379,7 +379,7 @@ func TestSmuggle(t *testing.T) {
 			func(a int) (int, bool, string, int) { return 0, false, "", 23 },
 			12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(errMesg),
 		})
@@ -388,7 +388,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(func(a int) (int, int) { return 0, 0 }, 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(errMesg),
 		})
@@ -396,7 +396,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(func(a int) (int, bool, int) { return 0, false, 23 }, 12),
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(errMesg),
 		})
@@ -404,7 +404,7 @@ func TestSmuggle(t *testing.T) {
 	checkError(t, "never tested",
 		td.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12), // nolint: staticcheck
 		expectedError{
-			Message: mustBe("Bad usage of Smuggle operator"),
+			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(errMesg),
 		})

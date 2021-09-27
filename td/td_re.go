@@ -59,7 +59,7 @@ func newRe(regIf interface{}, capture ...interface{}) *tdRe {
 		r.re, err = regexp.Compile(reg)
 		if err != nil {
 			r.err = &ctxerr.Error{
-				Message: "Invalid regexp given to " + r.location.Func + " operator",
+				Message: "invalid regexp given to " + r.location.Func + " operator",
 				Summary: ctxerr.NewSummary(err.Error()),
 			}
 		}

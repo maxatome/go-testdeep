@@ -43,7 +43,7 @@ func OpBadUsage(op, usage string, param interface{}, pos int, kind bool) *Error 
 	b.WriteString(" parameter")
 
 	return &Error{
-		Message: "Bad usage of " + op + " operator",
+		Message: "bad usage of " + op + " operator",
 		Summary: NewSummary(b.String()),
 	}
 }
@@ -52,7 +52,7 @@ func OpBadUsage(op, usage string, param interface{}, pos int, kind bool) *Error 
 // variadic operator constructor with too many parameters.
 func OpTooManyParams(op, usage string) *Error {
 	return &Error{
-		Message: "Bad usage of " + op + " operator",
+		Message: "bad usage of " + op + " operator",
 		Summary: NewSummary("usage: " + op + usage + ", too many parameters"),
 	}
 }
@@ -65,7 +65,7 @@ func OpBad(op, s string, args ...interface{}) *Error {
 		s = fmt.Sprintf(s, args...)
 	}
 	return &Error{
-		Message: "Bad usage of " + op + " operator",
+		Message: "bad usage of " + op + " operator",
 		Summary: NewSummary(s),
 	}
 }

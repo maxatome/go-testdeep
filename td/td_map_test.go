@@ -310,21 +310,21 @@ func TestMap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Map("test", nil),
 		expectedError{
-			Message: mustBe("Bad usage of Map operator"),
+			Message: mustBe("bad usage of Map operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: Map("),
 		})
 	checkError(t, "never tested",
 		td.SuperMapOf("test", nil),
 		expectedError{
-			Message: mustBe("Bad usage of SuperMapOf operator"),
+			Message: mustBe("bad usage of SuperMapOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: SuperMapOf("),
 		})
 	checkError(t, "never tested",
 		td.SubMapOf("test", nil),
 		expectedError{
-			Message: mustBe("Bad usage of SubMapOf operator"),
+			Message: mustBe("bad usage of SubMapOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: SubMapOf("),
 		})
@@ -333,21 +333,21 @@ func TestMap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Map(&num, nil),
 		expectedError{
-			Message: mustBe("Bad usage of Map operator"),
+			Message: mustBe("bad usage of Map operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: Map("),
 		})
 	checkError(t, "never tested",
 		td.SuperMapOf(&num, nil),
 		expectedError{
-			Message: mustBe("Bad usage of SuperMapOf operator"),
+			Message: mustBe("bad usage of SuperMapOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: SuperMapOf("),
 		})
 	checkError(t, "never tested",
 		td.SubMapOf(&num, nil),
 		expectedError{
-			Message: mustBe("Bad usage of SubMapOf operator"),
+			Message: mustBe("bad usage of SubMapOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("usage: SubMapOf("),
 		})
@@ -355,21 +355,21 @@ func TestMap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Map(&MyMap{}, td.MapEntries{1: 2}),
 		expectedError{
-			Message: mustBe("Bad usage of Map operator"),
+			Message: mustBe("bad usage of Map operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("expected key 1 type mismatch: int != model key type (string)"),
 		})
 	checkError(t, "never tested",
 		td.SuperMapOf(&MyMap{}, td.MapEntries{1: 2}),
 		expectedError{
-			Message: mustBe("Bad usage of SuperMapOf operator"),
+			Message: mustBe("bad usage of SuperMapOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("expected key 1 type mismatch: int != model key type (string)"),
 		})
 	checkError(t, "never tested",
 		td.SubMapOf(&MyMap{}, td.MapEntries{1: 2}),
 		expectedError{
-			Message: mustBe("Bad usage of SubMapOf operator"),
+			Message: mustBe("bad usage of SubMapOf operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("expected key 1 type mismatch: int != model key type (string)"),
 		})
@@ -377,7 +377,7 @@ func TestMap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Map(&MyMap{}, td.MapEntries{"foo": nil}),
 		expectedError{
-			Message: mustBe("Bad usage of Map operator"),
+			Message: mustBe("bad usage of Map operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`expected key "foo" value cannot be nil as entries value type is int`),
 		})
@@ -385,7 +385,7 @@ func TestMap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Map(&MyMap{}, td.MapEntries{"foo": uint16(2)}),
 		expectedError{
-			Message: mustBe("Bad usage of Map operator"),
+			Message: mustBe("bad usage of Map operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`expected key "foo" value type mismatch: uint16 != model key type (int)`),
 		})
@@ -393,7 +393,7 @@ func TestMap(t *testing.T) {
 	checkError(t, "never tested",
 		td.Map(&MyMap{"foo": 1}, td.MapEntries{"foo": 1}),
 		expectedError{
-			Message: mustBe("Bad usage of Map operator"),
+			Message: mustBe("bad usage of Map operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`"foo" entry exists in both model & expectedEntries`),
 		})

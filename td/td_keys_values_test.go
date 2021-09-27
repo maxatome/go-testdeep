@@ -140,7 +140,7 @@ func TestKeysValues(t *testing.T) {
 		checkError(t, "never tested",
 			td.Keys(12),
 			expectedError{
-				Message: mustBe("Bad usage of Keys operator"),
+				Message: mustBe("bad usage of Keys operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("usage: Keys(TESTDEEP_OPERATOR|SLICE), but received int as 1st parameter"),
 			})
@@ -148,7 +148,7 @@ func TestKeysValues(t *testing.T) {
 		checkError(t, "never tested",
 			td.Values(12),
 			expectedError{
-				Message: mustBe("Bad usage of Values operator"),
+				Message: mustBe("bad usage of Values operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe("usage: Values(TESTDEEP_OPERATOR|SLICE), but received int as 1st parameter"),
 			})

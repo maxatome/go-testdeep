@@ -47,7 +47,7 @@ func TestDelay(t *testing.T) {
 	checkError(t, "never tested",
 		td.Delay(nil),
 		expectedError{
-			Message: mustBe("Bad usage of Delay operator"),
+			Message: mustBe("bad usage of Delay operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("Delay(DELAYED): DELAYED must be non-nil"),
 		})

@@ -123,7 +123,7 @@ func TestRe(t *testing.T) {
 	checkError(t, "never tested",
 		td.Re(123),
 		expectedError{
-			Message: mustBe("Bad usage of Re operator"),
+			Message: mustBe("bad usage of Re operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Re" + ur + ", but received int as 1st parameter"),
 		})
@@ -131,7 +131,7 @@ func TestRe(t *testing.T) {
 	checkError(t, "never tested",
 		td.ReAll(123, nil),
 		expectedError{
-			Message: mustBe("Bad usage of ReAll operator"),
+			Message: mustBe("bad usage of ReAll operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: ReAll" + ua + ", but received int as 1st parameter"),
 		})
@@ -139,7 +139,7 @@ func TestRe(t *testing.T) {
 	checkError(t, "never tested",
 		td.Re("bar", []string{}, 1),
 		expectedError{
-			Message: mustBe("Bad usage of Re operator"),
+			Message: mustBe("bad usage of Re operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Re" + ur + ", too many parameters"),
 		})
@@ -147,7 +147,7 @@ func TestRe(t *testing.T) {
 	checkError(t, "never tested",
 		td.ReAll(123, 456),
 		expectedError{
-			Message: mustBe("Bad usage of ReAll operator"),
+			Message: mustBe("bad usage of ReAll operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: ReAll" + ua + ", but received int as 1st parameter"),
 		})
@@ -155,7 +155,7 @@ func TestRe(t *testing.T) {
 	checkError(t, "never tested",
 		td.ReAll(`12[3,4`, nil),
 		expectedError{
-			Message: mustBe("Invalid regexp given to ReAll operator"),
+			Message: mustBe("invalid regexp given to ReAll operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("error parsing regexp: "),
 		})

@@ -83,7 +83,7 @@ func TestBetween(t *testing.T) {
 	checkError(t, "never tested",
 		td.Between([]byte("test"), []byte("test")),
 		expectedError{
-			Message: mustBe("Bad usage of Between operator"),
+			Message: mustBe("bad usage of Between operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), but received []uint8 (slice) as 1st parameter"),
 		})
@@ -91,7 +91,7 @@ func TestBetween(t *testing.T) {
 	checkError(t, "never tested",
 		td.Between(12, "test"),
 		expectedError{
-			Message: mustBe("Bad usage of Between operator"),
+			Message: mustBe("bad usage of Between operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("Between(FROM, TO): FROM and TO must have the same type: int ≠ string"),
 		})
@@ -99,7 +99,7 @@ func TestBetween(t *testing.T) {
 	checkError(t, "never tested",
 		td.Between("test", 12),
 		expectedError{
-			Message: mustBe("Bad usage of Between operator"),
+			Message: mustBe("bad usage of Between operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("Between(FROM, TO): FROM and TO must have the same type: string ≠ int"),
 		})
@@ -107,7 +107,7 @@ func TestBetween(t *testing.T) {
 	checkError(t, "never tested",
 		td.Between(1, 2, td.BoundsInIn, td.BoundsInOut),
 		expectedError{
-			Message: mustBe("Bad usage of Between operator"),
+			Message: mustBe("bad usage of Between operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), too many parameters"),
 		})
@@ -116,7 +116,7 @@ func TestBetween(t *testing.T) {
 	checkError(t, "never tested",
 		td.Between(notTime{}, notTime{}),
 		expectedError{
-			Message: mustBe("Bad usage of Between operator"),
+			Message: mustBe("bad usage of Between operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), but received td_test.notTime (struct) as 1st parameter"),
 		})
@@ -340,7 +340,7 @@ func TestN(t *testing.T) {
 	checkError(t, "never tested",
 		td.N("test"),
 		expectedError{
-			Message: mustBe("Bad usage of N operator"),
+			Message: mustBe("bad usage of N operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: N({,U}INT{,8,16,32,64}|FLOAT{32,64}[, TOLERANCE]), but received string as 1st parameter"),
 		})
@@ -348,7 +348,7 @@ func TestN(t *testing.T) {
 	checkError(t, "never tested",
 		td.N(10, 1, 2),
 		expectedError{
-			Message: mustBe("Bad usage of N operator"),
+			Message: mustBe("bad usage of N operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: N({,U}INT{,8,16,32,64}|FLOAT{32,64}[, TOLERANCE]), too many parameters"),
 		})
@@ -356,7 +356,7 @@ func TestN(t *testing.T) {
 	checkError(t, "never tested",
 		td.N(10, "test"),
 		expectedError{
-			Message: mustBe("Bad usage of N operator"),
+			Message: mustBe("bad usage of N operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("N(NUM, TOLERANCE): NUM and TOLERANCE must have the same type: int ≠ string"),
 		})
@@ -469,7 +469,7 @@ func TestLGt(t *testing.T) {
 	checkError(t, "never tested",
 		td.Gt([]byte("test")),
 		expectedError{
-			Message: mustBe("Bad usage of Gt operator"),
+			Message: mustBe("bad usage of Gt operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Gt(NUM|STRING|TIME), but received []uint8 (slice) as 1st parameter"),
 		})
@@ -477,7 +477,7 @@ func TestLGt(t *testing.T) {
 	checkError(t, "never tested",
 		td.Gte([]byte("test")),
 		expectedError{
-			Message: mustBe("Bad usage of Gte operator"),
+			Message: mustBe("bad usage of Gte operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Gte(NUM|STRING|TIME), but received []uint8 (slice) as 1st parameter"),
 		})
@@ -485,7 +485,7 @@ func TestLGt(t *testing.T) {
 	checkError(t, "never tested",
 		td.Lt([]byte("test")),
 		expectedError{
-			Message: mustBe("Bad usage of Lt operator"),
+			Message: mustBe("bad usage of Lt operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Lt(NUM|STRING|TIME), but received []uint8 (slice) as 1st parameter"),
 		})
@@ -493,7 +493,7 @@ func TestLGt(t *testing.T) {
 	checkError(t, "never tested",
 		td.Lte([]byte("test")),
 		expectedError{
-			Message: mustBe("Bad usage of Lte operator"),
+			Message: mustBe("bad usage of Lte operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: Lte(NUM|STRING|TIME), but received []uint8 (slice) as 1st parameter"),
 		})

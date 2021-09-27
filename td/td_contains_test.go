@@ -245,7 +245,7 @@ func TestContainsString(t *testing.T) {
 
 	checkError(t, "pipo", td.Contains(td.Code(func(x int) bool { return true })),
 		expectedError{
-			Message:  mustBe("TestDeep operator can only match rune in string"),
+			Message:  mustBe("Code operator has to match rune in string, but it does not"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
 			Expected: mustBe("rune"),

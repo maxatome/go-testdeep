@@ -14,7 +14,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
-const prefix = ": Bad usage of Zzz operator\n\t"
+const prefix = ": bad usage of Zzz operator\n\t"
 
 func TestOpBadUsage(t *testing.T) {
 	defer color.SaveState()()

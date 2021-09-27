@@ -273,7 +273,7 @@ func TestJSONPointer(t *testing.T) {
 	checkError(t, "never tested",
 		td.JSONPointer("x", 1234),
 		expectedError{
-			Message: mustBe("Bad usage of JSONPointer operator"),
+			Message: mustBe("bad usage of JSONPointer operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`bad JSON pointer "x"`),
 		})
