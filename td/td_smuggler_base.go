@@ -54,7 +54,7 @@ func (s *tdSmugglerBase) internalTypeBehind() reflect.Type {
 // []interface{}, a map[string]interface{} or simply nil.
 //
 // If the type behind expectedValue can be determined and is different
-// from "got" type, "got" value is JSON marshalled, then unmarshalled
+// from "got" type, "got" value is JSON marshaled, then unmarshaled
 // in a new value of this type. This new value is then compared to
 // expectedValue.
 //

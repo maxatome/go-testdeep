@@ -752,7 +752,7 @@ func (t *TestAPI) cmpMarshaledBody(
 }
 
 // CmpMarshaledBody tests that the last request response body can be
-// unmarshalled using unmarhsal function and then, that it matches
+// unmarshaled using unmarhsal function and then, that it matches
 // expectedBody. expectedBody can be any type unmarshal function can
 // handle, or a TestDeep operator.
 //

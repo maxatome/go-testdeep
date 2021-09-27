@@ -148,7 +148,7 @@ func (t base) stringError() string {
 }
 
 // MarshalJSON implements encoding/json.Marshaler only to returns an
-// error, as a TestDeep operator should never be JSON marshalled. So
+// error, as a TestDeep operator should never be JSON marshaled. So
 // it is better to tell the user he/she does a mistake.
 func (t base) MarshalJSON() ([]byte, error) {
 	return nil, types.OperatorNotJSONMarshallableError(t.location.Func)

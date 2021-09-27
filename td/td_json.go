@@ -303,7 +303,7 @@ func (u tdJSONUnmarshaler) resolveOpShortcut() func(string, json.Position) (inte
 }
 
 // tdJSONPlaceholder is an internal smuggler operator. It represents a
-// JSON placeholder in an unmarshalled JSON expected data
+// JSON placeholder in an unmarshaled JSON expected data
 // structure. It takes the JSON representation of data and compares it
 // to "expectedValue".
 //
@@ -492,7 +492,7 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
-// as is, in its freshly unmarshalled JSON form (so as bool, float64,
+// as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []interface{}, map[string]interface{} or simply nil).
 //
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
@@ -683,7 +683,7 @@ var _ TestDeep = &tdMapJSON{}
 // input(SubJSONOf): map,struct,ptr(ptr on map/struct)
 
 // SubJSONOf operator allows to compare the JSON representation of
-// data against "expectedJSON". Unlike JSON operator, marshalled data
+// data against "expectedJSON". Unlike JSON operator, marshaled data
 // must be a JSON object/map (aka {…}). "expectedJSON" can be a:
 //
 //   - string containing JSON data like `{"fullname":"Bob","age":42}`
@@ -752,7 +752,7 @@ var _ TestDeep = &tdMapJSON{}
 //
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
-// as is, in its freshly unmarshalled JSON form (so as bool, float64,
+// as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []interface{}, map[string]interface{} or simply nil).
 //
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
@@ -895,7 +895,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 // input(SuperJSONOf): map,struct,ptr(ptr on map/struct)
 
 // SuperJSONOf operator allows to compare the JSON representation of
-// data against "expectedJSON". Unlike JSON operator, marshalled data
+// data against "expectedJSON". Unlike JSON operator, marshaled data
 // must be a JSON object/map (aka {…}). "expectedJSON" can be a:
 //
 //   - string containing JSON data like `{"fullname":"Bob","age":42}`
@@ -966,7 +966,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
-// as is, in its freshly unmarshalled JSON form (so as bool, float64,
+// as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []interface{}, map[string]interface{} or simply nil).
 //
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
