@@ -13,6 +13,7 @@ import (
 	"os"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
@@ -142,6 +143,14 @@ func TestJSON(t *testing.T) {
 }`,
 			td.Tag("age", td.Between(40, 45)),
 			td.Tag("name", td.Re(`^Bob`))))
+
+	before := time.Now()
+	timeGot := map[string]time.Time{"created_at": time.Now()}
+	checkOK(t, timeGot,
+		td.JSON(`{"created_at": Between($1, $2)}`, before, time.Now()))
+
+	checkOK(t, timeGot,
+		td.JSON(`{"created_at": $1}`, td.Between(before, time.Now())))
 
 	// Len
 	checkOK(t, []int{1, 2, 3}, td.JSON(`Len(3)`))
@@ -488,6 +497,15 @@ func TestJSONInside(t *testing.T) {
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Between() bad 3rd parameter, use "[]", "[[", "]]" or "][" at line 2:10 (pos 12)`),
 			})
+		checkError(t, "never tested",
+			td.JSON(`{
+  "val2": Between(1, 2, 125)
+}`),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe("DATA"),
+				Summary: mustBe(`JSON unmarshal error: Between() bad 3rd parameter, use "[]", "[[", "]]" or "][" at line 2:10 (pos 12)`),
+			})
 
 		checkError(t, "never tested",
 			td.JSON(`{"val2": Between(1)}`),
@@ -687,7 +705,10 @@ func TestJSONTypeBehind(t *testing.T) {
 	equalTypes(t, td.JSON(`{"a":12}`), (map[string]interface{})(nil))
 
 	// operator at the root → delegate it TypeBehind() call
+	equalTypes(t, td.JSON(`$1`, td.SuperMapOf(map[string]interface{}{"x": 1}, nil)), (map[string]interface{})(nil))
 	equalTypes(t, td.JSON(`SuperMapOf({"x":1})`), (map[string]interface{})(nil))
+
+	equalTypes(t, td.JSON(`$1`, 123), 42)
 
 	nullType := td.JSON(`null`).TypeBehind()
 	if nullType != reflect.TypeOf((*interface{})(nil)).Elem() {

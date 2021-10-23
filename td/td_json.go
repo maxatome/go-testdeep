@@ -202,16 +202,29 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 		case "Between":
 			min, max = 2, 3
 			if len(jop.Params) == 3 {
-				switch s, _ := jop.Params[2].(string); s {
-				case "[]", "BoundsInIn":
-					jop.Params[2] = BoundsInIn
-				case "[[", "BoundsInOut":
-					jop.Params[2] = BoundsInOut
-				case "]]", "BoundsOutIn":
-					jop.Params[2] = BoundsOutIn
-				case "][", "BoundsOutOut":
-					jop.Params[2] = BoundsOutOut
+				bad := false
+				switch tp := jop.Params[2].(type) {
+				case BoundsKind:
+					// Special case, accept numeric values of Bounds*
+					// constants, for the case:
+					//   td.JSON(`Between(40, 42, $1)`, td.BoundsInOut)
+				case string:
+					switch tp {
+					case "[]", "BoundsInIn":
+						jop.Params[2] = BoundsInIn
+					case "[[", "BoundsInOut":
+						jop.Params[2] = BoundsInOut
+					case "]]", "BoundsOutIn":
+						jop.Params[2] = BoundsOutIn
+					case "][", "BoundsOutOut":
+						jop.Params[2] = BoundsOutOut
+					default:
+						bad = true
+					}
 				default:
+					bad = true
+				}
+				if bad {
 					return nil, errors.New(`Between() bad 3rd parameter, use "[]", "[[", "]]" or "]["`)
 				}
 			}
@@ -282,7 +295,7 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 
 		// replace the location by the JSON/SubJSONOf/SuperJSONOf one
 		u.replaceLocation(tdOp, posInJSON)
-		return &tdJSONEmbedded{tdOp}, nil
+		return newJSONEmbedded(tdOp), nil
 	}
 }
 
@@ -302,23 +315,54 @@ func (u tdJSONUnmarshaler) resolveOpShortcut() func(string, json.Position) (inte
 	}
 }
 
+// tdJSONSmuggler is the base type for tdJSONPlaceholder & tdJSONEmbedded.
+type tdJSONSmuggler struct {
+	tdSmugglerBase // ignored by tools/gen_funcs.pl
+}
+
+func (s *tdJSONSmuggler) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	vgot, _ := jsonify(ctx, got) // Cannot fail
+
+	// Here, vgot type is either a bool, float64, string,
+	// []interface{}, a map[string]interface{} or simply nil
+
+	return s.jsonValueEqual(ctx, vgot)
+}
+
+func (s *tdJSONSmuggler) String() string {
+	// Only called by MarshalJSON(), and so only when p.isTestDeeper
+	return s.expectedValue.Interface().(TestDeep).String()
+}
+
+func (s *tdJSONSmuggler) HandleInvalid() bool {
+	return true
+}
+
+func (s *tdJSONSmuggler) TypeBehind() reflect.Type {
+	return s.internalTypeBehind()
+}
+
 // tdJSONPlaceholder is an internal smuggler operator. It represents a
-// JSON placeholder in an unmarshaled JSON expected data
-// structure. It takes the JSON representation of data and compares it
-// to "expectedValue".
+// JSON placeholder in an unmarshaled JSON expected data structure. As $1 in:
+//   td.JSON(`{"foo": $1}`, td.Between(12, 34))
+//
+// It takes the JSON representation of data and compares it to
+// "expectedValue".
 //
 // It does its best to convert back the JSON pointed data to the type
 // of "expectedValue" or to the type behind the "expectedValue".
 type tdJSONPlaceholder struct {
-	tdSmugglerBase // ignored by tools/gen_funcs.pl
-	name           string
-	num            uint64
+	tdJSONSmuggler
+	name string
+	num  uint64
 }
 
 func newJSONNamedPlaceholder(name string, expectedValue interface{}) TestDeep {
 	p := tdJSONPlaceholder{
-		tdSmugglerBase: newSmugglerBase(expectedValue, 1),
-		name:           name,
+		tdJSONSmuggler: tdJSONSmuggler{
+			tdSmugglerBase: newSmugglerBase(expectedValue, 1),
+		},
+		name: name,
 	}
 
 	if !p.isTestDeeper {
@@ -329,32 +373,16 @@ func newJSONNamedPlaceholder(name string, expectedValue interface{}) TestDeep {
 
 func newJSONNumPlaceholder(num uint64, expectedValue interface{}) TestDeep {
 	p := tdJSONPlaceholder{
-		tdSmugglerBase: newSmugglerBase(expectedValue, 1),
-		num:            num,
+		tdJSONSmuggler: tdJSONSmuggler{
+			tdSmugglerBase: newSmugglerBase(expectedValue, 1),
+		},
+		num: num,
 	}
 
 	if !p.isTestDeeper {
 		p.expectedValue = reflect.ValueOf(expectedValue)
 	}
 	return &p
-}
-
-func (p *tdJSONPlaceholder) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
-	vgot, _ := jsonify(ctx, got) // Cannot fail
-
-	// Here, vgot type is either a bool, float64, string,
-	// []interface{}, a map[string]interface{} or simply nil
-
-	return p.jsonValueEqual(ctx, vgot)
-}
-
-func (p *tdJSONPlaceholder) String() string {
-	// Only called by MarshalJSON(), and so only when p.isTestDeeper
-	return p.expectedValue.Interface().(TestDeep).String()
-}
-
-func (p *tdJSONPlaceholder) HandleInvalid() bool {
-	return true
 }
 
 func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
@@ -390,15 +418,32 @@ func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
 	return b.Bytes(), nil
 }
 
-// tdJSONEmbedded represents a MarshalJSON'able operator.
+// tdJSONEmbedded represents a MarshalJSON'able operator. As Between() in:
+//   td.JSON(`{"foo": Between(12, 34)}`)
+//
+// tdSmugglerBase always contains a TestDeep operator, newJSONEmbedded()
+// ensures that.
+//
+// It does its best to convert back the JSON pointed data to the type
+// of the type behind the "expectedValue" (which is always a TestDeep
+// operator).
 type tdJSONEmbedded struct {
-	TestDeep
+	tdJSONSmuggler
+}
+
+func newJSONEmbedded(tdOp TestDeep) TestDeep {
+	return &tdJSONEmbedded{
+		tdJSONSmuggler: tdJSONSmuggler{
+			tdSmugglerBase: newSmugglerBase(tdOp, 1),
+		},
+	}
 }
 
 func (e *tdJSONEmbedded) MarshalJSON() ([]byte, error) {
 	return []byte(e.String()), nil
 }
 
+// tdJSON is the JSON operator.
 type tdJSON struct {
 	baseOKNil
 	expected reflect.Value
@@ -663,8 +708,8 @@ func (j *tdJSON) TypeBehind() reflect.Type {
 
 	if j.expected.IsValid() {
 		// In case we have an operator at the root, delegate it the call
-		if je, ok := j.expected.Interface().(*tdJSONEmbedded); ok {
-			return je.TypeBehind()
+		if tdOp, ok := j.expected.Interface().(TestDeep); ok {
+			return tdOp.TypeBehind()
 		}
 		return j.expected.Type()
 	}
