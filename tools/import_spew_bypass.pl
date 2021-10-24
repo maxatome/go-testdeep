@@ -9,6 +9,7 @@
 use strict;
 use warnings;
 use autodie;
+use 5.014;
 
 use HTTP::Tiny;
 
@@ -25,13 +26,17 @@ foreach my $file (qw(bypass.go bypasssafe.go))
         die "'package spew' line not found in $file!\n";
     }
 
-    open(my $fh, '>', $file);
+    open(my $fh, '>', "internal/dark/$file");
 
     say $fh <<EOH;
 // DO NOT EDIT!!! AUTOMATICALLY COPIED FROM
 // https://github.com/davecgh/go-spew/blob/master/spew/$file
 EOH
 
+    my %ops = (',' => ' && ', ' ' => ' || ');
+    $resp->{content} =~
+        s{^(?=// \+build (.*))}
+         {"//go:build " . ($1 =~ s!([ ,])!$ops{$1}!gr) . "\n"}em;
     print $fh $resp->{content};
 
     close $fh;
