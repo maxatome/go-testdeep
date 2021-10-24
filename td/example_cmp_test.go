@@ -2508,7 +2508,7 @@ func ExampleCmpSmuggle_interface() {
 	}, "2018-05-23 12:13:14 +0000 UTC")
 	fmt.Println("stringified MyTime OK:", ok)
 
-	// Output
+	// Output:
 	// stringified time.Time OK: true
 	// stringified MyTime OK: false
 }
@@ -2682,7 +2682,7 @@ func ExampleCmpSStruct_patterns() {
 		"ordered patterns")
 	fmt.Println("Ordered patterns match only remaining fields:", ok)
 
-	// Output
+	// Output:
 	// Patterns match only remaining fields: true
 	// Ordered patterns match only remaining fields: true
 }
@@ -2824,7 +2824,7 @@ func ExampleCmpStruct_patterns() {
 		"ordered patterns")
 	fmt.Println("Ordered patterns match only remaining fields:", ok)
 
-	// Output
+	// Output:
 	// Patterns match only remaining fields: true
 	// Ordered patterns match only remaining fields: true
 }
