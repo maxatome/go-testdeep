@@ -85,7 +85,7 @@ func TestBetween(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of Between operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), but received []uint8 (slice) as 1st parameter"),
+			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME/DURATION[, BOUNDS_KIND]), but received []uint8 (slice) as 1st parameter"),
 		})
 
 	checkError(t, "never tested",
@@ -109,7 +109,7 @@ func TestBetween(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of Between operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), too many parameters"),
+			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME/DURATION[, BOUNDS_KIND]), too many parameters"),
 		})
 
 	type notTime struct{}
@@ -118,7 +118,7 @@ func TestBetween(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of Between operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND]), but received td_test.notTime (struct) as 1st parameter"),
+			Summary: mustBe("usage: Between(NUM|STRING|TIME, NUM|STRING|TIME/DURATION[, BOUNDS_KIND]), but received td_test.notTime (struct) as 1st parameter"),
 		})
 
 	// Erroneous op
@@ -514,10 +514,24 @@ func TestBetweenTime(t *testing.T) {
 	checkOK(t, now, td.Between(now.Add(-time.Second), now.Add(time.Second)))
 	checkOK(t, now, td.Between(now.Add(time.Second), now.Add(-time.Second)))
 
+	// (TIME, DURATION)
+	checkOK(t, now, td.Between(now.Add(-time.Second), 2*time.Second))
+	checkOK(t, now, td.Between(now.Add(time.Second), -2*time.Second))
+
 	checkOK(t, MyTime(now),
 		td.Between(
 			MyTime(now.Add(-time.Second)),
 			MyTime(now.Add(time.Second))))
+
+	// (TIME, DURATION)
+	checkOK(t, MyTime(now),
+		td.Between(
+			MyTime(now.Add(-time.Second)),
+			2*time.Second))
+	checkOK(t, MyTime(now),
+		td.Between(
+			MyTime(now.Add(time.Second)),
+			-2*time.Second))
 
 	// Lax mode
 	checkOK(t, MyTime(now),
@@ -528,6 +542,14 @@ func TestBetweenTime(t *testing.T) {
 		td.Lax(td.Between(
 			MyTime(now.Add(time.Second)),
 			MyTime(now.Add(-time.Second)))))
+	checkOK(t, MyTime(now),
+		td.Lax(td.Between(
+			now.Add(-time.Second),
+			2*time.Second)))
+	checkOK(t, now,
+		td.Lax(td.Between(
+			MyTime(now.Add(-time.Second)),
+			2*time.Second)))
 
 	date := time.Date(2018, time.March, 4, 0, 0, 0, 0, time.UTC)
 	checkError(t, date,
@@ -579,6 +601,22 @@ func TestBetweenTime(t *testing.T) {
 			Path:     mustBe("DATA"),
 			Got:      mustBe("string"),
 			Expected: mustBe("td_test.MyTime"),
+		})
+
+	checkError(t, "never tested",
+		td.Between(date, 12), // (Time, Time) or (Time, Duration)
+		expectedError{
+			Message: mustBe("bad usage of Between operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Between(FROM, TO): when FROM type is time.Time, TO must have the same type or time.Duration: int ≠ time.Time|time.Duration"),
+		})
+
+	checkError(t, "never tested",
+		td.Between(MyTime(date), 12), // (MyTime, MyTime) or (MyTime, Duration)
+		expectedError{
+			Message: mustBe("bad usage of Between operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Between(FROM, TO): when FROM type is td_test.MyTime, TO must have the same type or time.Duration: int ≠ td_test.MyTime|time.Duration"),
 		})
 
 	checkOK(t, now, td.Gt(now.Add(-time.Second)))

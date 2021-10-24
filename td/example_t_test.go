@@ -318,6 +318,37 @@ func ExampleT_Between_string() {
 	// false
 }
 
+func ExampleT_Between_time() {
+	t := td.NewT(&testing.T{})
+
+	before := time.Now()
+	occurredAt := time.Now()
+	after := time.Now()
+
+	ok := t.Between(occurredAt, before, after, td.BoundsInIn)
+	fmt.Println("It occurred between before and after:", ok)
+
+	type MyTime time.Time
+	ok = t.Between(MyTime(occurredAt), MyTime(before), MyTime(after), td.BoundsInIn)
+	fmt.Println("Same for convertible MyTime type:", ok)
+
+	ok = t.Between(MyTime(occurredAt), before, after, td.BoundsInIn)
+	fmt.Println("MyTime vs time.Time:", ok)
+
+	ok = t.Between(occurredAt, before, 10*time.Second, td.BoundsInIn)
+	fmt.Println("Using a time.Duration as TO:", ok)
+
+	ok = t.Between(MyTime(occurredAt), MyTime(before), 10*time.Second, td.BoundsInIn)
+	fmt.Println("Using MyTime as FROM and time.Duration as TO:", ok)
+
+	// Output:
+	// It occurred between before and after: true
+	// Same for convertible MyTime type: true
+	// MyTime vs time.Time: false
+	// Using a time.Duration as TO: true
+	// Using MyTime as FROM and time.Duration as TO: true
+}
+
 func ExampleT_Cap() {
 	t := td.NewT(&testing.T{})
 
