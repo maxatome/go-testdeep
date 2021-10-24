@@ -228,13 +228,9 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 					return nil, errors.New(`Between() bad 3rd parameter, use "[]", "[[", "]]" or "]["`)
 				}
 			}
-		case "N":
+		case "N", "Re":
 			min, max = 1, 2
-		case "Re":
-			min, max = 1, 2
-		case "SubMapOf":
-			min, max, addNilParam = 1, 1, true
-		case "SuperMapOf":
+		case "SubMapOf", "SuperMapOf":
 			min, max, addNilParam = 1, 1, true
 		default:
 			min = tfn.NumIn()
