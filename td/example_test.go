@@ -448,6 +448,37 @@ func ExampleBetween_string() {
 	// false
 }
 
+func ExampleBetween_time() {
+	t := &testing.T{}
+
+	before := time.Now()
+	occurredAt := time.Now()
+	after := time.Now()
+
+	ok := td.Cmp(t, occurredAt, td.Between(before, after))
+	fmt.Println("It occurred between before and after:", ok)
+
+	type MyTime time.Time
+	ok = td.Cmp(t, MyTime(occurredAt), td.Between(MyTime(before), MyTime(after)))
+	fmt.Println("Same for convertible MyTime type:", ok)
+
+	ok = td.Cmp(t, MyTime(occurredAt), td.Between(before, after))
+	fmt.Println("MyTime vs time.Time:", ok)
+
+	ok = td.Cmp(t, occurredAt, td.Between(before, 10*time.Second))
+	fmt.Println("Using a time.Duration as TO:", ok)
+
+	ok = td.Cmp(t, MyTime(occurredAt), td.Between(MyTime(before), 10*time.Second))
+	fmt.Println("Using MyTime as FROM and time.Duration as TO:", ok)
+
+	// Output:
+	// It occurred between before and after: true
+	// Same for convertible MyTime type: true
+	// MyTime vs time.Time: false
+	// Using a time.Duration as TO: true
+	// Using MyTime as FROM and time.Duration as TO: true
+}
+
 func ExampleCap() {
 	t := &testing.T{}
 

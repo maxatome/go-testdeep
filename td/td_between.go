@@ -65,9 +65,10 @@ var _ TestDeep = &tdBetweenTime{}
 // Between operator checks that data is between "from" and
 // "to". "from" and "to" can be any numeric, string or time.Time (or
 // assignable) value. "from" and "to" must be the same kind as the
-// compared value if numeric, and the same type if string or time.Time (or
-// assignable). "bounds" allows to specify whether bounds are included
-// or not:
+// compared value if numeric, and the same type if string or time.Time
+// (or assignable). time.Duration type is accepted as "to" when "from"
+// is time.Time or convertible. "bounds" allows to specify whether
+// bounds are included or not:
 //   - BoundsInIn (default): between "from" and "to" both included
 //   - BoundsInOut: between "from" included and "to" excluded
 //   - BoundsOutIn: between "from" excluded and "to" included
@@ -88,7 +89,7 @@ func Between(from, to interface{}, bounds ...BoundsKind) TestDeep {
 		expectedMax: reflect.ValueOf(to),
 	}
 
-	const usage = "(NUM|STRING|TIME, NUM|STRING|TIME[, BOUNDS_KIND])"
+	const usage = "(NUM|STRING|TIME, NUM|STRING|TIME/DURATION[, BOUNDS_KIND])"
 
 	if len(bounds) > 0 {
 		if len(bounds) > 1 {
@@ -112,16 +113,40 @@ func Between(from, to interface{}, bounds ...BoundsKind) TestDeep {
 		b.maxBound = boundIn
 	}
 
-	if b.expectedMax.Type() != b.expectedMin.Type() {
+	if b.expectedMax.Type() == b.expectedMin.Type() {
+		return b.initBetween(usage)
+	}
+
+	// Special case for (TIME, DURATION)
+	ok, convertible := types.IsTypeOrConvertible(b.expectedMin, types.Time)
+	if ok {
+		if d, ok := to.(time.Duration); ok {
+			if convertible {
+				b.expectedMax = reflect.ValueOf(
+					b.expectedMin.
+						Convert(types.Time).
+						Interface().(time.Time).
+						Add(d)).
+					Convert(b.expectedMin.Type())
+			} else {
+				b.expectedMax = reflect.ValueOf(from.(time.Time).Add(d))
+			}
+			return b.initBetween(usage)
+		}
 		b.err = ctxerr.OpBad("Between",
-			"Between(FROM, TO): FROM and TO must have the same type: %s ≠ %s",
+			"Between(FROM, TO): when FROM type is %[1]s, TO must have the same type or time.Duration: %[2]s ≠ %[1]s|time.Duration",
 			b.expectedMin.Type(),
 			b.expectedMax.Type(),
 		)
 		return &b
 	}
 
-	return b.initBetween(usage)
+	b.err = ctxerr.OpBad("Between",
+		"Between(FROM, TO): FROM and TO must have the same type: %s ≠ %s",
+		b.expectedMin.Type(),
+		b.expectedMax.Type(),
+	)
+	return &b
 }
 
 func (b *tdBetween) initBetween(usage string) TestDeep {
@@ -155,13 +180,13 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 		return b
 
 	case reflect.Struct:
+		ok, convertible := types.IsTypeOrConvertible(b.expectedMin, types.Time)
+		if !ok {
+			break
+		}
+
 		var bt tdBetweenTime
-		if b.expectedMin.Type() == types.Time { //nolint: gocritic
-			bt = tdBetweenTime{
-				tdBetween:    *b,
-				expectedType: types.Time,
-			}
-		} else if b.expectedMin.Type().ConvertibleTo(types.Time) {
+		if convertible {
 			bt = tdBetweenTime{
 				tdBetween:    *b,
 				expectedType: b.expectedMin.Type(),
@@ -170,11 +195,14 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 			bt.expectedMin = b.expectedMin.Convert(types.Time)
 			bt.expectedMax = b.expectedMax.Convert(types.Time)
 		} else {
-			break
+			bt = tdBetweenTime{
+				tdBetween:    *b,
+				expectedType: types.Time,
+			}
 		}
 
-		if bt.expectedMin.Interface().(time.Time).After(
-			bt.expectedMax.Interface().(time.Time)) {
+		if bt.expectedMin.Interface().(time.Time).
+			After(bt.expectedMax.Interface().(time.Time)) {
 			bt.expectedMin, bt.expectedMax = bt.expectedMax, bt.expectedMin
 		}
 
@@ -494,7 +522,7 @@ func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	if got.Type() != b.expectedMin.Type() {
-		if ctx.BeLax && b.expectedMin.Type().ConvertibleTo(got.Type()) {
+		if ctx.BeLax && types.IsConvertible(b.expectedMin, got.Type()) {
 			nb := *b
 			nb.expectedMin = b.expectedMin.Convert(got.Type())
 			nb.expectedMax = b.expectedMax.Convert(got.Type())
@@ -611,7 +639,7 @@ func (b *tdBetweenTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	// built, there is never an error
 
 	if got.Type() != b.expectedType {
-		if ctx.BeLax && got.Type().ConvertibleTo(b.expectedType) {
+		if ctx.BeLax && types.IsConvertible(got, b.expectedType) {
 			got = got.Convert(b.expectedType)
 		} else {
 			if ctx.BooleanError {
