@@ -74,7 +74,7 @@ func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
 		t.expectedTime = expectedTime.(time.Time).Truncate(t.trunc)
 		return &t
 	}
-	if !t.expectedType.ConvertibleTo(types.Time) {
+	if !t.expectedType.ConvertibleTo(types.Time) { // 1.17 ok as time.Time is a struct
 		t.err = ctxerr.OpBad("TruncTime", "usage: TruncTime%s, 1st parameter must be time.Time or convertible to time.Time, but not %T",
 			usage, expectedTime)
 		return &t

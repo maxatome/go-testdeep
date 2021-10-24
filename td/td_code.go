@@ -126,7 +126,7 @@ func (c *tdCode) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	if !got.Type().AssignableTo(c.argType) {
-		if !ctx.BeLax || !got.Type().ConvertibleTo(c.argType) {
+		if !ctx.BeLax || !types.IsConvertible(got, c.argType) {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}

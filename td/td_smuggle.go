@@ -523,7 +523,7 @@ func Smuggle(fn, expectedValue interface{}) TestDeep {
 }
 
 func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {
-	if got.IsValid() && got.Type().ConvertibleTo(s.argType) {
+	if got.IsValid() && types.IsConvertible(got, s.argType) {
 		return got.Convert(s.argType), true
 	}
 	return got, false
