@@ -10,6 +10,7 @@ import (
 	"reflect"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -85,7 +86,7 @@ func (c *tdCatch) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	if targetType := c.target.Elem().Type(); !got.Type().AssignableTo(targetType) {
-		if !ctx.BeLax || !got.Type().ConvertibleTo(targetType) {
+		if !ctx.BeLax || !types.IsConvertible(got, targetType) {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}

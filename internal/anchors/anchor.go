@@ -138,7 +138,7 @@ sw:
 		if typ.Comparable() {
 			// Check for anchorable types. No need of 2 passes here.
 			for _, at := range AnchorableTypes {
-				if typ == at.typ || at.typ.ConvertibleTo(typ) {
+				if typ == at.typ || at.typ.ConvertibleTo(typ) { // 1.17 ok as struct here
 					key = v.Interface()
 					break sw
 				}

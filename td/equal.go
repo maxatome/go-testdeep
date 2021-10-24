@@ -191,7 +191,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 		// "expected" is not a TestDeep operator
 
-		if ctx.BeLax && expected.Type().ConvertibleTo(got.Type()) {
+		if ctx.BeLax && types.IsConvertible(expected, got.Type()) {
 			return deepValueEqual(ctx, got, expected.Convert(got.Type()))
 		}
 
