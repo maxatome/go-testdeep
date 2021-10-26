@@ -2734,6 +2734,27 @@ func ExampleSmuggle_auto_unmarshal() {
 	// JSON contents is OK: true
 }
 
+func ExampleSmuggle_cast() {
+	t := &testing.T{}
+
+	// A string containing JSON
+	got := `{ "foo": 123 }`
+
+	// Automatically cast a string to a json.RawMessage so td.JSON can operate
+	ok := td.Cmp(t, got,
+		td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":123}`)))
+	fmt.Println("JSON contents in string is OK:", ok)
+
+	// Automatically read from io.Reader to a json.RawMessage
+	ok = td.Cmp(t, bytes.NewReader([]byte(got)),
+		td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":123}`)))
+	fmt.Println("JSON contents just read is OK:", ok)
+
+	// Output:
+	// JSON contents in string is OK: true
+	// JSON contents just read is OK: true
+}
+
 func ExampleSmuggle_complex() {
 	t := &testing.T{}
 

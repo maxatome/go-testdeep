@@ -9,9 +9,11 @@ package td
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"reflect"
 	"strconv"
 	"strings"
+	"sync"
 	"unicode"
 	"unicode/utf8"
 
@@ -28,8 +30,15 @@ type SmuggledGot struct {
 
 const smuggled = "<smuggled>"
 
-// strconv.ParseComplex only exists from go1.15.
-var parseComplex func(string, int) (complex128, error)
+var (
+	// strconv.ParseComplex only exists from go1.15.
+	parseComplex func(string, int) (complex128, error)
+
+	smuggleFnsMu sync.Mutex
+	smuggleFns   = map[interface{}]reflect.Value{}
+
+	nilError = reflect.New(types.Error).Elem()
+)
 
 func (s SmuggledGot) contextAndGot(ctx ctxerr.Context) (ctxerr.Context, reflect.Value) {
 	// If the Name starts with a Letter, prefix it by a "."
@@ -268,6 +277,145 @@ func buildFieldsPathFn(path string) (func(interface{}) (smuggleValue, error), er
 	}, nil
 }
 
+func getFieldsPathFn(fieldPath string) (reflect.Value, error) {
+	smuggleFnsMu.Lock()
+	defer smuggleFnsMu.Unlock()
+
+	if vfn, ok := smuggleFns[fieldPath]; ok {
+		return vfn, nil
+	}
+
+	fn, err := buildFieldsPathFn(fieldPath)
+	if err != nil {
+		return reflect.Value{}, err
+	}
+
+	vfn := reflect.ValueOf(fn)
+	smuggleFns[fieldPath] = vfn
+	return vfn, err
+}
+
+func getCaster(outType reflect.Type) reflect.Value {
+	smuggleFnsMu.Lock()
+	defer smuggleFnsMu.Unlock()
+
+	if vfn, ok := smuggleFns[outType]; ok {
+		return vfn
+	}
+
+	var fn reflect.Value
+
+	switch outType.Kind() {
+	case reflect.String:
+		fn = buildCaster(outType, true)
+
+	case reflect.Slice:
+		if outType.Elem().Kind() == reflect.Uint8 {
+			// Special case for slices of bytes: falls back on io.Reader if not []byte
+			fn = buildCaster(outType, false)
+			break
+		}
+		fallthrough
+
+	default:
+		// For all other types, take the received param and return
+		// it. Smuggle already converted got to the type of param, so the
+		// work is done.
+		inOut := []reflect.Type{outType}
+		fn = reflect.MakeFunc(
+			reflect.FuncOf(inOut, inOut, false),
+			func(args []reflect.Value) []reflect.Value { return args },
+		)
+	}
+
+	smuggleFns[outType] = fn
+	return fn
+}
+
+// Needed for go≤1.12
+// From go1.13, reflect.ValueOf(&ctxerr.Error{…}) works as expected.
+func errorInterface(err error) reflect.Value {
+	return reflect.ValueOf(&err).Elem()
+}
+
+// buildCaster returns a function:
+//   func(in interface{}) (out outType, err error)
+//
+// dynamically checks…
+//   - if useString is false, as "outType" is a slice of bytes:
+//     - "in" is a []byte or convertible to []byte
+//     - "in" implements io.Reader
+//   - if useString is true, as "outType" is a string:
+//     - "in" is a []byte or convertible to string
+//     - "in" implements io.Reader
+func buildCaster(outType reflect.Type, useString bool) reflect.Value {
+	zeroRet := reflect.New(outType).Elem()
+
+	return reflect.MakeFunc(
+		reflect.FuncOf(
+			[]reflect.Type{types.Interface},
+			[]reflect.Type{outType, types.Error},
+			false,
+		),
+		func(args []reflect.Value) []reflect.Value {
+			if args[0].IsNil() {
+				return []reflect.Value{
+					zeroRet,
+					errorInterface(&ctxerr.Error{
+						Message:  "incompatible parameter type",
+						Got:      types.RawString("nil"),
+						Expected: types.RawString(outType.String() + " or convertible or io.Reader"),
+					}),
+				}
+			}
+
+			// 1st & only arg is always an interface
+			args[0] = args[0].Elem()
+
+			if ok, convertible := types.IsTypeOrConvertible(args[0], outType); ok {
+				if convertible {
+					return []reflect.Value{args[0].Convert(outType), nilError}
+				}
+				return []reflect.Value{args[0], nilError}
+			}
+
+			// Our caller encures Interface() can be called safely
+			switch ta := args[0].Interface().(type) {
+			case io.Reader:
+				var b bytes.Buffer // as we still support go1.9
+				if _, err := b.ReadFrom(ta); err != nil {
+					return []reflect.Value{
+						zeroRet,
+						errorInterface(&ctxerr.Error{
+							Message: "an error occurred while reading from io.Reader",
+							Summary: ctxerr.NewSummary(err.Error()),
+						}),
+					}
+				}
+				var buf interface{}
+				if useString {
+					buf = b.String()
+				} else {
+					buf = b.Bytes()
+				}
+				return []reflect.Value{
+					reflect.ValueOf(buf).Convert(outType),
+					nilError,
+				}
+
+			default:
+				return []reflect.Value{
+					zeroRet,
+					errorInterface(&ctxerr.Error{
+						Message:  "incompatible parameter type",
+						Got:      types.RawString(args[0].Type().String()),
+						Expected: types.RawString(outType.String() + " or convertible or io.Reader"),
+					}),
+				}
+			}
+		})
+}
+
 // summary(Smuggle): changes data contents or mutates it into another
 // type via a custom function or a struct fields-path before stepping
 // down in favor of generic comparison process
@@ -277,9 +425,11 @@ func buildFieldsPathFn(path string) (func(interface{}) (smuggleValue, error), er
 // another type before stepping down in favor of generic comparison
 // process. Of course it is a smuggler operator. So "fn" is a function
 // that must take one parameter whose type must be convertible to the
-// type of the compared value (as a convenient shortcut, "fn" can be a
-// string specifying a fields-path through structs, see below for
-// details).
+// type of the compared value.
+//
+// As convenient shortcuts, "fn" can be a string specifying a
+// fields-path through structs, maps & slices, or any other type, in
+// this case a simple cast is done (see below for details).
 //
 // "fn" must return at least one value. These value will be compared as is
 // to "expectedValue", here integer 28:
@@ -439,44 +589,93 @@ func buildFieldsPathFn(path string) (func(interface{}) (smuggleValue, error), er
 //   pnum := &num
 //   td.Cmp(t, A{N: &pnum}, td.Smuggle("N", 12))
 //
+// Last but not least, a simple type can be passed as "fn" to operate
+// a cast, handling specifically strings and slices of bytes:
+//
+//   td.Cmp(t, `{"foo":1}`, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
+//   // or equally
+//   td.Cmp(t, `{"foo":1}`, td.Smuggle((json.RawMessage)(nil), td.JSON(`{"foo":1}`)))
+//
+// converts on the fly a string to a json.RawMessage so JSON operator
+// can parse it as JSON. This is mostly a shortcut for:
+//
+//   td.Cmp(t, `{"foo":1}`, td.Smuggle(
+//     func(r json.RawMessage) json.RawMessage { return r },
+//     td.JSON(`{"foo":1}`)))
+//
+// except that for strings and slices of bytes (like here), it accepts
+// io.Reader interface too:
+//
+//   var body io.Reader
+//   // …
+//   td.Cmp(t, body, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
+//   // or equally
+//   td.Cmp(t, body, td.Smuggle((json.RawMessage)(nil), td.JSON(`{"foo":1}`)))
+//
+// This last example allows to easily inject body content into JSON
+// operator.
+//
 // The difference between Smuggle and Code operators is that Code is
 // used to do a final comparison while Smuggle transforms the data and
 // then steps down in favor of generic comparison process. Moreover,
 // the type accepted as input for the function is more lax to
-// facilitate the tests writing (e.g. the function can accept a float64
-// and the got value be an int). See examples. On the other hand, the
-// output type is strict and must match exactly the expected value
-// type. The fields-path string "fn" shortcut is not available with
-// Code operator.
+// facilitate the writing of tests (e.g. the function can accept a
+// float64 and the got value be an int). See examples. On the other
+// hand, the output type is strict and must match exactly the expected
+// value type. The fields-path string "fn" shortcut and the cast
+// feature are not available with Code operator.
 //
 // TypeBehind method returns the reflect.Type of only parameter of
 // "fn". For the case where "fn" is a fields-path, it is always
 // interface{}, as the type can not be known in advance.
 func Smuggle(fn, expectedValue interface{}) TestDeep {
-	vfn := reflect.ValueOf(fn)
-
 	s := tdSmuggle{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 	}
 
-	const usage = "(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
+	const usage = "(FUNC|FIELDS_PATH|ANY_TYPE, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
 	const fullUsage = "Smuggle" + usage
 
-	switch vfn.Kind() {
-	case reflect.String:
-		fn, err := buildFieldsPathFn(vfn.String())
+	var vfn reflect.Value
+
+	switch rfn := fn.(type) {
+	case reflect.Type:
+		switch rfn.Kind() {
+		case reflect.Func, reflect.Invalid, reflect.Interface:
+			s.err = ctxerr.OpBad("Smuggle",
+				"usage: Smuggle%s, ANY_TYPE reflect.Type cannot be Func nor Interface", usage)
+			return &s
+
+		default:
+			vfn = getCaster(rfn)
+		}
+
+	case string:
+		if rfn == "" {
+			vfn = getCaster(reflect.TypeOf(fn))
+			break
+		}
+		var err error
+		vfn, err = getFieldsPathFn(rfn)
 		if err != nil {
 			s.err = ctxerr.OpBad("Smuggle", "Smuggle%s: %s", usage, err)
 			return &s
 		}
-		vfn = reflect.ValueOf(fn)
-
-	case reflect.Func:
-		// nothing to check
 
 	default:
-		s.err = ctxerr.OpBadUsage("Smuggle", usage, fn, 1, true)
-		return &s
+		vfn = reflect.ValueOf(fn)
+		switch vfn.Kind() {
+		case reflect.Func:
+			// nothing to check
+
+		case reflect.Invalid, reflect.Interface:
+			s.err = ctxerr.OpBad("Smuggle",
+				"usage: Smuggle%s, ANY_TYPE cannot be nil nor Interface", usage)
+			return &s
+
+		default:
+			vfn = getCaster(vfn.Type())
+		}
 	}
 
 	fnType := vfn.Type()
@@ -523,8 +722,13 @@ func Smuggle(fn, expectedValue interface{}) TestDeep {
 }
 
 func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {
-	if got.IsValid() && types.IsConvertible(got, s.argType) {
-		return got.Convert(s.argType), true
+	if got.IsValid() {
+		if types.IsConvertible(got, s.argType) {
+			return got.Convert(s.argType), true
+		}
+	} else if s.argType == types.Interface {
+		// nil only accepted if interface{} expected
+		return reflect.New(types.Interface).Elem(), true
 	}
 	return got, false
 }
