@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -7,8 +7,11 @@
 package td_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"reflect"
 	"testing"
 	"time"
@@ -17,6 +20,26 @@ import (
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
+
+// reArmReader is a bytes.Reader that re-arms when an error occurs,
+// typically on EOF.
+type reArmReader bytes.Reader
+
+var _ io.Reader = (*reArmReader)(nil)
+
+func newReArmReader(b []byte) *reArmReader {
+	return (*reArmReader)(bytes.NewReader(b))
+}
+
+func (r *reArmReader) Read(b []byte) (n int, err error) {
+	n, err = (*bytes.Reader)(r).Read(b)
+	if err != nil {
+		(*bytes.Reader)(r).Seek(0, io.SeekStart) //nolint: errcheck
+	}
+	return
+}
+
+func (r *reArmReader) String() string { return "<no string here>" }
 
 func TestSmuggle(t *testing.T) {
 	num := 42
@@ -168,6 +191,107 @@ func TestSmuggle(t *testing.T) {
 		td.Smuggle(func(t fmt.Stringer) string { return t.String() },
 			"2018-05-23 12:13:14 +0000 UTC"))
 
+	checkOK(t, []byte("{}"),
+		td.Smuggle(
+			func(x json.RawMessage) json.RawMessage { return x },
+			td.JSON(`{}`)))
+
+	//
+	// bytes slice caster variations
+	checkOK(t, []byte(`{"foo":1}`),
+		td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
+
+	checkOK(t, []byte(`{"foo":1}`),
+		td.Smuggle((json.RawMessage)(nil), td.JSON(`{"foo":1}`)))
+
+	checkOK(t, []byte(`{"foo":1}`),
+		td.Smuggle(reflect.TypeOf((json.RawMessage)(nil)), td.JSON(`{"foo":1}`)))
+
+	checkOK(t, `{"foo":1}`,
+		td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
+
+	checkOK(t, newReArmReader([]byte(`{"foo":1}`)), // io.Reader first
+		td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
+
+	checkError(t, nil,
+		td.Smuggle(json.RawMessage{}, td.JSON(`{}`)),
+		expectedError{
+			Message:  mustBe("incompatible parameter type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("json.RawMessage or convertible or io.Reader"),
+		})
+
+	checkError(t, MyStruct{},
+		td.Smuggle(json.RawMessage{}, td.JSON(`{}`)),
+		expectedError{
+			Message:  mustBe("incompatible parameter type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("td_test.MyStruct"),
+			Expected: mustBe("json.RawMessage or convertible or io.Reader"),
+		})
+
+	checkError(t, errReader{}, // erroneous io.Reader
+		td.Smuggle(json.RawMessage{}, td.JSON(`{}`)),
+		expectedError{
+			Message: mustBe("an error occurred while reading from io.Reader"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("an error occurred"),
+		})
+
+	//
+	// strings caster variations
+	type myString string
+	checkOK(t, `pipo bingo`,
+		td.Smuggle("", td.HasSuffix("bingo")))
+
+	checkOK(t, []byte(`pipo bingo`),
+		td.Smuggle(myString(""), td.HasSuffix("bingo")))
+
+	checkOK(t, []byte(`pipo bingo`),
+		td.Smuggle(reflect.TypeOf(myString("")), td.HasSuffix("bingo")))
+
+	checkOK(t, newReArmReader([]byte(`pipo bingo`)), // io.Reader first
+		td.Smuggle(myString(""), td.HasSuffix("bingo")))
+
+	checkError(t, nil,
+		td.Smuggle("", "bingo"),
+		expectedError{
+			Message:  mustBe("incompatible parameter type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("nil"),
+			Expected: mustBe("string or convertible or io.Reader"),
+		})
+
+	checkError(t, MyStruct{},
+		td.Smuggle(myString(""), "bingo"),
+		expectedError{
+			Message:  mustBe("incompatible parameter type"),
+			Path:     mustBe("DATA"),
+			Got:      mustBe("td_test.MyStruct"),
+			Expected: mustBe("td_test.myString or convertible or io.Reader"),
+		})
+
+	checkError(t, errReader{}, // erroneous io.Reader
+		td.Smuggle("", "bingo"),
+		expectedError{
+			Message: mustBe("an error occurred while reading from io.Reader"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("an error occurred"),
+		})
+
+	//
+	// Any other caster variations
+	checkOK(t, `pipo bingo`,
+		td.Smuggle([]rune{}, td.Contains([]rune(`bing`))))
+	checkOK(t, `pipo bingo`,
+		td.Smuggle(([]rune)(nil), td.Contains([]rune(`bing`))))
+	checkOK(t, `pipo bingo`,
+		td.Smuggle(reflect.TypeOf([]rune{}), td.Contains([]rune(`bing`))))
+
+	checkOK(t, 123.456, td.Smuggle(int64(0), int64(123)))
+	checkOK(t, 123.456, td.Smuggle(reflect.TypeOf(int64(0)), int64(123)))
+
 	//
 	// Errors
 	checkError(t, "123",
@@ -305,13 +429,29 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Bad usage
-	const usage = "Smuggle(FUNC|FIELDS_PATH, TESTDEEP_OPERATOR|EXPECTED_VALUE): "
+	const usage = "Smuggle(FUNC|FIELDS_PATH|ANY_TYPE, TESTDEEP_OPERATOR|EXPECTED_VALUE): "
 	checkError(t, "never tested",
 		td.Smuggle(nil, 12),
 		expectedError{
 			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", but received nil as 1st parameter"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE cannot be nil nor Interface"),
+		})
+
+	checkError(t, nil,
+		td.Smuggle(reflect.TypeOf((*fmt.Stringer)(nil)).Elem(), 1234),
+		expectedError{
+			Message: mustBe("bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE reflect.Type cannot be Func nor Interface"),
+		})
+
+	checkError(t, nil,
+		td.Smuggle(reflect.TypeOf(func() {}), 1234),
+		expectedError{
+			Message: mustBe("bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE reflect.Type cannot be Func nor Interface"),
 		})
 
 	checkError(t, "never tested",
@@ -320,14 +460,6 @@ func TestSmuggle(t *testing.T) {
 			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("Smuggle(FUNC): FUNC cannot be a nil function"),
-		})
-
-	checkError(t, "never tested",
-		td.Smuggle(123, 12),
-		expectedError{
-			Message: mustBe("bad usage of Smuggle operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", but received int as 1st parameter"),
 		})
 
 	checkError(t, "never tested",
