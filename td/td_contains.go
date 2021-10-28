@@ -208,7 +208,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 					return c.doesNotContainErr(ctx, got)
 				}
 
-				for i := 0; i < gotLen-expectedLen; i++ {
+				for i := 0; i <= gotLen-expectedLen; i++ {
 					if deepValueEqualOK(got.Slice(i, i+expectedLen), c.expectedValue) {
 						return nil
 					}

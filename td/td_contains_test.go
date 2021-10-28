@@ -163,8 +163,14 @@ func TestContainsString(t *testing.T) {
 	} {
 		testName := fmt.Sprintf("#%d: got=%v", idx, got)
 
+		checkOK(t, got, td.Contains("pipo"), testName)
 		checkOK(t, got, td.Contains("po bi"), testName)
+		checkOK(t, got, td.Contains("bingo"), testName)
+
+		checkOK(t, got, td.Contains([]byte("pipo")), testName)
 		checkOK(t, got, td.Contains([]byte("po bi")), testName)
+		checkOK(t, got, td.Contains([]byte("bingo")), testName)
+
 		checkOK(t, got, td.Contains('o'), testName)
 		checkOK(t, got, td.Contains(byte('o')), testName)
 
@@ -277,7 +283,10 @@ func TestContainsSlice(t *testing.T) {
 			Expected: mustContain(`Contains(([]int) (len=6 `),
 		})
 
+	checkOK(t, got, td.Contains([]int{1, 2, 3}))
 	checkOK(t, got, td.Contains([]int{3, 4, 5}))
+	checkOK(t, got, td.Contains([]int{4, 5, 6}))
+
 	checkError(t, got, td.Contains([]int{8, 8, 8}),
 		expectedError{
 			Message:  mustBe("does not contain"),
