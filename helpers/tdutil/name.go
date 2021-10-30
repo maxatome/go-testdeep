@@ -38,10 +38,10 @@ func FbuildTestName(w io.Writer, args ...interface{}) {
 
 	str, ok := args[0].(string)
 	if ok && len(args) > 1 && strings.ContainsRune(str, '%') {
-		fmt.Fprintf(w, str, args[1:]...) // nolint: errcheck
+		fmt.Fprintf(w, str, args[1:]...) //nolint: errcheck
 	} else {
 		// create a new slice to fool govet and avoid "call has possible
 		// formatting directive" errors
-		fmt.Fprint(w, args[:]...) // nolint: errcheck,gocritic
+		fmt.Fprint(w, args[:]...) //nolint: errcheck,gocritic
 	}
 }

@@ -2677,7 +2677,7 @@ func ExampleSmuggle_convert() {
 
 	ok = td.Cmp(t, "123",
 		td.Smuggle(
-			func(numStr string) (int, error) { // nolint: gocritic
+			func(numStr string) (int, error) { //nolint: gocritic
 				return strconv.Atoi(numStr)
 			},
 			td.Between(120, 130)),

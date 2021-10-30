@@ -444,7 +444,7 @@ func TestEqualChannel(t *testing.T) {
 //
 // Others.
 func TestEqualOthers(t *testing.T) {
-	type Private struct { // nolint: maligned
+	type Private struct { //nolint: maligned
 		num   int
 		num8  int8
 		num16 int16

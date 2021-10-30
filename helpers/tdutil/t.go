@@ -46,7 +46,7 @@ func (t *T) Name() string {
 // LogBuf is an ugly hack allowing to access internal testing.T log
 // buffer. Keep cool, it is only used for internal unit tests.
 func (t *T) LogBuf() string {
-	return string(reflect.ValueOf(t.T).FieldByName("output").Bytes()) // nolint: govet
+	return string(reflect.ValueOf(t.T).FieldByName("output").Bytes()) //nolint: govet
 }
 
 // FailNow simulates the original (*testing.T).FailNow using

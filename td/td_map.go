@@ -411,7 +411,7 @@ func (m *tdMap) String() string {
 		buf.WriteString("{\n")
 
 		for _, entryInfo := range m.expectedEntries {
-			fmt.Fprintf(buf, "  %s: %s,\n", // nolint: errcheck
+			fmt.Fprintf(buf, "  %s: %s,\n", //nolint: errcheck
 				util.ToString(entryInfo.key),
 				util.ToString(entryInfo.expected))
 		}
