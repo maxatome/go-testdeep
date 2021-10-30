@@ -419,7 +419,7 @@ func (a *tdArray) String() string {
 		buf.WriteString("{\n")
 
 		for index, expectedValue := range a.expectedEntries {
-			fmt.Fprintf(buf, "  %d: %s\n", // nolint: errcheck
+			fmt.Fprintf(buf, "  %d: %s\n", //nolint: errcheck
 				index, util.ToString(expectedValue))
 		}
 

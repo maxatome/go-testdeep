@@ -172,7 +172,7 @@ func TestCode(t *testing.T) {
 		})
 
 	checkError(t, "never tested",
-		td.Code(func(n int) (error, string) { return nil, "" }), // nolint: staticcheck
+		td.Code(func(n int) (error, string) { return nil, "" }), //nolint: staticcheck
 		expectedError{
 			Message: mustBe("bad usage of Code operator"),
 			Path:    mustBe("DATA"),

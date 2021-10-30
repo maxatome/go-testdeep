@@ -86,16 +86,16 @@ func Init() {
 func SaveState(on ...bool) func() {
 	colorState, set := os.LookupEnv(EnvColor)
 	if len(on) == 0 || !on[0] {
-		os.Setenv(EnvColor, "off") // nolint: errcheck
+		os.Setenv(EnvColor, "off") //nolint: errcheck
 	} else {
-		os.Setenv(EnvColor, "on") // nolint: errcheck
+		os.Setenv(EnvColor, "on") //nolint: errcheck
 	}
 	initOnce = sync.Once{}
 	return func() {
 		if set {
-			os.Setenv(EnvColor, colorState) // nolint: errcheck
+			os.Setenv(EnvColor, colorState) //nolint: errcheck
 		} else {
-			os.Unsetenv(EnvColor) // nolint: errcheck
+			os.Unsetenv(EnvColor) //nolint: errcheck
 		}
 		initOnce = sync.Once{}
 	}

@@ -215,7 +215,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 			fieldIf, ok := dark.GetInterface(vfield, true)
 			if !ok {
 				// Probably in an environment where "unsafe" package is forbidden… :(
-				fmt.Fprintf(os.Stderr, // nolint: errcheck
+				fmt.Fprintf(os.Stderr, //nolint: errcheck
 					"%s(): field %s is unexported and cannot be overridden, skip it from model.\n",
 					st.location.Func,
 					fieldName)
@@ -584,7 +584,7 @@ func (s *tdStruct) String() string {
 		buf.WriteString("{\n")
 
 		for _, fieldInfo := range s.expectedFields {
-			fmt.Fprintf(buf, "  %s: %s\n", // nolint: errcheck
+			fmt.Fprintf(buf, "  %s: %s\n", //nolint: errcheck
 				fieldInfo.name, util.ToString(fieldInfo.expected))
 		}
 

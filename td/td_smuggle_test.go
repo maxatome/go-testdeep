@@ -534,7 +534,7 @@ func TestSmuggle(t *testing.T) {
 		})
 
 	checkError(t, "never tested",
-		td.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12), // nolint: staticcheck
+		td.Smuggle(func(a int) (int, error, string) { return 0, nil, "" }, 12), //nolint: staticcheck
 		expectedError{
 			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),

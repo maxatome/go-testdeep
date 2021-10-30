@@ -15,7 +15,7 @@ import (
 
 func TestGetInterface(t *testing.T) {
 	type Private struct {
-		private *Private // nolint: megacheck
+		private *Private //nolint: megacheck
 		privInt int
 	}
 
