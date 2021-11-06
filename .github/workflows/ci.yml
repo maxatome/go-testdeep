@@ -31,10 +31,11 @@ jobs:
         if: matrix.full-tests
         run: |
           wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
-              sh -s -- -b $HOME/go/bin v1.41.1
+              sh -s -- -b $HOME/go/bin v1.43.0
           echo $PATH
           $HOME/go/bin/golangci-lint run --max-issues-per-linter 0 \
                                          --max-same-issues 0 \
+                                         -E bidichk \
                                          -E exportloopref \
                                          -E gocritic \
                                          -E godot \
