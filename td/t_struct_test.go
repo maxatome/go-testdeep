@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2021, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -7,12 +7,14 @@
 package td_test
 
 import (
+	"regexp"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/maxatome/go-testdeep/internal/test"
+	"github.com/maxatome/go-testdeep/internal/trace"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -528,4 +530,136 @@ func TestIgnoreUnexported(tt *testing.T) {
 	test.EqualStr(tt,
 		ttt.CatchFatal(func() { td.NewT(ttt).IgnoreUnexported(42) }),
 		"IgnoreUnexported expects type int be a struct, not a int (@0)")
+}
+
+func TestLogTrace(tt *testing.T) {
+	ttt := test.NewTestingTB(tt.Name())
+
+	t := td.NewT(ttt)
+
+//line td/t_struct_test.go:600
+	t.LogTrace()
+	test.EqualStr(tt, ttt.LastMessage(), `Stack trace:
+	TestLogTrace() td/t_struct_test.go:600`)
+	test.IsFalse(tt, ttt.HasFailed)
+	test.IsFalse(tt, ttt.IsFatal)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:610
+	t.LogTrace("This is the %s:", "stack")
+	test.EqualStr(tt, ttt.LastMessage(), `This is the stack:
+	TestLogTrace() td/t_struct_test.go:610`)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:620
+	t.LogTrace("This is the %s:\n", "stack")
+	test.EqualStr(tt, ttt.LastMessage(), `This is the stack:
+	TestLogTrace() td/t_struct_test.go:620`)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:630
+	t.LogTrace("This is the ", "stack")
+	test.EqualStr(tt, ttt.LastMessage(), `This is the stack
+	TestLogTrace() td/t_struct_test.go:630`)
+	ttt.ResetMessages()
+
+	trace.IgnorePackage()
+	defer trace.UnignorePackage()
+//line td/t_struct_test.go:640
+	t.LogTrace("Stack:\n")
+	test.EqualStr(tt, ttt.LastMessage(), `Stack:
+	Empty stack trace`)
+}
+
+func TestErrorTrace(tt *testing.T) {
+	ttt := test.NewTestingTB(tt.Name())
+
+	t := td.NewT(ttt)
+
+//line td/t_struct_test.go:700
+	t.ErrorTrace()
+	test.EqualStr(tt, ttt.LastMessage(), `Stack trace:
+	TestErrorTrace() td/t_struct_test.go:700`)
+	test.IsTrue(tt, ttt.HasFailed)
+	test.IsFalse(tt, ttt.IsFatal)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:710
+	t.ErrorTrace("This is the %s:", "stack")
+	test.EqualStr(tt, ttt.LastMessage(), `This is the stack:
+	TestErrorTrace() td/t_struct_test.go:710`)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:720
+	t.ErrorTrace("This is the %s:\n", "stack")
+	test.EqualStr(tt, ttt.LastMessage(), `This is the stack:
+	TestErrorTrace() td/t_struct_test.go:720`)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:730
+	t.ErrorTrace("This is the ", "stack")
+	test.EqualStr(tt, ttt.LastMessage(), `This is the stack
+	TestErrorTrace() td/t_struct_test.go:730`)
+	ttt.ResetMessages()
+
+	trace.IgnorePackage()
+	defer trace.UnignorePackage()
+//line td/t_struct_test.go:740
+	t.ErrorTrace("Stack:\n")
+	test.EqualStr(tt, ttt.LastMessage(), `Stack:
+	Empty stack trace`)
+}
+
+func TestFatalTrace(tt *testing.T) {
+	ttt := test.NewTestingTB(tt.Name())
+
+	t := td.NewT(ttt)
+
+	match := func(got, expectedRe string) {
+		tt.Helper()
+		re := regexp.MustCompile(expectedRe)
+		if !re.MatchString(got) {
+			test.EqualErrorMessage(tt, got, expectedRe)
+		}
+	}
+
+//line td/t_struct_test.go:800
+	match(ttt.CatchFatal(func() { t.FatalTrace() }), `Stack trace:
+	TestFatalTrace\.func\d\(\)   td/t_struct_test\.go:800
+	\(\*TestingT\)\.CatchFatal\(\) internal/test/types\.go:\d+
+	TestFatalTrace\(\)         td/t_struct_test\.go:800`)
+	test.IsTrue(tt, ttt.HasFailed)
+	test.IsTrue(tt, ttt.IsFatal)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:810
+	match(ttt.CatchFatal(func() { t.FatalTrace("This is the %s:", "stack") }),
+		`This is the stack:
+	TestFatalTrace\.func\d\(\)   td/t_struct_test\.go:810
+	\(\*TestingT\)\.CatchFatal\(\) internal/test/types\.go:\d+
+	TestFatalTrace\(\)         td/t_struct_test\.go:810`)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:820
+	match(ttt.CatchFatal(func() { t.FatalTrace("This is the %s:\n", "stack") }),
+		`This is the stack:
+	TestFatalTrace\.func\d\(\)   td/t_struct_test\.go:820
+	\(\*TestingT\)\.CatchFatal\(\) internal/test/types\.go:\d+
+	TestFatalTrace\(\)         td/t_struct_test\.go:820`)
+	ttt.ResetMessages()
+
+//line td/t_struct_test.go:830
+	match(ttt.CatchFatal(func() { t.FatalTrace("This is the ", "stack") }),
+		`This is the stack
+	TestFatalTrace\.func\d\(\)   td/t_struct_test\.go:830
+	\(\*TestingT\)\.CatchFatal\(\) internal/test/types\.go:\d+
+	TestFatalTrace\(\)         td/t_struct_test\.go:830`)
+	ttt.ResetMessages()
+
+	trace.IgnorePackage()
+	defer trace.UnignorePackage()
+//line td/t_struct_test.go:840
+	test.EqualStr(tt, ttt.CatchFatal(func() { t.FatalTrace("Stack:\n") }),
+		`Stack:
+	Empty stack trace`)
 }

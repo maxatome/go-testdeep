@@ -7,11 +7,14 @@
 package td
 
 import (
+	"bytes"
 	"reflect"
 	"sync"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/color"
+	"github.com/maxatome/go-testdeep/internal/trace"
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
@@ -723,4 +726,60 @@ func (t *T) RunAssertRequire(name string, f func(assert, require *T)) bool {
 func (t *T) RunT(name string, f func(t *T)) bool {
 	t.Helper()
 	return t.Run(name, f)
+}
+
+func getTrace(args ...interface{}) string {
+	var b bytes.Buffer
+	tdutil.FbuildTestName(&b, args...)
+
+	if b.Len() == 0 {
+		b.WriteString("Stack trace:\n")
+	} else if !bytes.HasSuffix(b.Bytes(), []byte{'\n'}) {
+		b.WriteByte('\n')
+	}
+
+	s := stripTrace(trace.Retrieve(1, "testing.tRunner"))
+	if len(s) == 0 {
+		b.WriteString("\tEmpty stack trace")
+		return b.String()
+	}
+
+	s.Dump(&b)
+	return b.String()
+}
+
+// LogTrace uses t.TB.Log() to log a stack trace.
+//
+// "args..." are optional and allow to prefix the trace by a
+// message. If empty, this message defaults to "Stack trace:\n". If
+// this message does not end with a "\n", one is automatically
+// added. If len(args) > 1 and the first item of "args" is a string
+// and contains a '%' rune then fmt.Fprintf is used to compose the
+// name, else "args" are passed to fmt.Fprint.
+func (t *T) LogTrace(args ...interface{}) {
+	t.Log(getTrace(args...))
+}
+
+// ErrorTrace uses t.TB.Error() to log a stack trace.
+//
+// "args..." are optional and allow to prefix the trace by a
+// message. If empty, this message defaults to "Stack trace:\n". If
+// this message does not end with a "\n", one is automatically
+// added. If len(args) > 1 and the first item of "args" is a string
+// and contains a '%' rune then fmt.Fprintf is used to compose the
+// name, else "args" are passed to fmt.Fprint.
+func (t *T) ErrorTrace(args ...interface{}) {
+	t.Error(getTrace(args...))
+}
+
+// FatalTrace uses t.TB.Fatal() to log a stack trace.
+//
+// "args..." are optional and allow to prefix the trace by a
+// message. If empty, this message defaults to "Stack trace:\n". If
+// this message does not end with a "\n", one is automatically
+// added. If len(args) > 1 and the first item of "args" is a string
+// and contains a '%' rune then fmt.Fprintf is used to compose the
+// name, else "args" are passed to fmt.Fprint.
+func (t *T) FatalTrace(args ...interface{}) {
+	t.Fatal(getTrace(args...))
 }
