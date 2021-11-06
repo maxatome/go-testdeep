@@ -8,7 +8,6 @@ package td
 
 import (
 	"bytes"
-	"fmt"
 	"reflect"
 	"strings"
 
@@ -27,7 +26,7 @@ func init() {
 // stripTrace removes go-testdeep useless calls in a trace returned by
 // trace.Retrieve() to make it clearer for the reader.
 func stripTrace(s trace.Stack) trace.Stack {
-	if len(s) <= 1 {
+	if len(s) == 0 {
 		return s
 	}
 
@@ -135,22 +134,9 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	err.Append(&buf, "")
 
 	// Stask trace
-	if s := stripTrace(trace.Retrieve(0, "testing.tRunner")); len(s) > 1 {
+	if s := stripTrace(trace.Retrieve(0, "testing.tRunner")); s.IsRelevant() {
 		buf.WriteString("\nThis is how we got here:\n")
-
-		fnMaxLen := 0
-		for _, level := range s {
-			if len(level.Func) > fnMaxLen {
-				fnMaxLen = len(level.Func)
-			}
-		}
-		fnMaxLen += 2
-
-		nl := ""
-		for _, level := range s {
-			fmt.Fprintf(&buf, "%s\t%-*s %s", nl, fnMaxLen, level.Func+"()", level.FileLine)
-			nl = "\n"
-		}
+		s.Dump(&buf)
 	}
 
 	if isFatal {

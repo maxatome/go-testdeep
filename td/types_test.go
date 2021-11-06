@@ -22,7 +22,7 @@ import (
 )
 
 func TestSetlocation(t *testing.T) {
-//line /go-testdeep/types_test.go:10
+//line types_test.go:10
 	tt := &tdutil.T{}
 	ok := td.Cmp(tt, 12, 13)
 	if !ok {
@@ -35,7 +35,7 @@ func TestSetlocation(t *testing.T) {
 		t.Error("Cmp returned true!")
 	}
 
-//line /go-testdeep/types_test.go:20
+//line types_test.go:20
 	tt = &tdutil.T{}
 	ok = td.Cmp(tt,
 		12,
@@ -53,7 +53,7 @@ func TestSetlocation(t *testing.T) {
 		t.Error("Cmp returned true!")
 	}
 
-//line /go-testdeep/types_test.go:30
+//line types_test.go:30
 	tt = &tdutil.T{}
 	ok = td.CmpAny(tt,
 		12,
@@ -70,7 +70,7 @@ func TestSetlocation(t *testing.T) {
 		t.Error("CmpAny returned true!")
 	}
 
-//line /go-testdeep/types_test.go:40
+//line types_test.go:40
 	tt = &tdutil.T{}
 	ttt := td.NewT(tt)
 	ok = ttt.Cmp(
@@ -89,7 +89,7 @@ func TestSetlocation(t *testing.T) {
 		t.Error("Cmp returned true!")
 	}
 
-//line /go-testdeep/types_test.go:50
+//line types_test.go:50
 	tt = &tdutil.T{}
 	ttt = td.NewT(tt)
 	ok = ttt.Any(
@@ -103,6 +103,26 @@ func TestSetlocation(t *testing.T) {
         	              14,
         	              15)
 `)
+	} else {
+		t.Error("Cmp returned true!")
+	}
+
+//line /a/full/path/types_test.go:50
+	tt = &tdutil.T{}
+	ttt = td.NewT(tt)
+	ok = ttt.Any(
+		12,
+		[]interface{}{13, 14, 15})
+	if !ok {
+		test.EqualStr(t, tt.LogBuf(), `    types_test.go:52: Failed test
+        DATA: comparing with Any
+        	     got: 12
+        	expected: Any(13,
+        	              14,
+        	              15)
+        This is how we got here:
+        	TestSetlocation() /a/full/path/types_test.go:52
+`) // at least one '/' in file name → "This is how we got here"
 	} else {
 		t.Error("Cmp returned true!")
 	}

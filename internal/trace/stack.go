@@ -7,6 +7,8 @@
 package trace
 
 import (
+	"fmt"
+	"io"
 	"strings"
 )
 
@@ -54,4 +56,27 @@ func (s Stack) Match(i int, pkg string, anyFunc ...string) bool {
 		}
 	}
 	return false
+}
+
+// IsRelevant returns true if the stack contains more than one level,
+// or if the single level has a path with at least one directory.
+func (s Stack) IsRelevant() bool {
+	return len(s) > 1 || (len(s) > 0 && strings.ContainsAny(s[0].FileLine, `/\`))
+}
+
+// Dump writes the stack to "w".
+func (s Stack) Dump(w io.Writer) {
+	fnMaxLen := 0
+	for _, level := range s {
+		if len(level.Func) > fnMaxLen {
+			fnMaxLen = len(level.Func)
+		}
+	}
+	fnMaxLen += 2
+
+	nl := ""
+	for _, level := range s {
+		fmt.Fprintf(w, "%s\t%-*s %s", nl, fnMaxLen, level.Func+"()", level.FileLine)
+		nl = "\n"
+	}
 }
