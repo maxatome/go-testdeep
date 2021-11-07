@@ -293,9 +293,9 @@ func TestRunT(t *testing.T) {
 
 		runPassed := false
 
-		ok := t.RunT("Test level1",
+		ok := t.RunT("Test level1", //nolint: staticcheck
 			func(t *td.T) {
-				ok := t.RunT("Test level2",
+				ok := t.RunT("Test level2", //nolint: staticcheck
 					func(t *td.T) {
 						runPassed = t.True(true) // test succeeds!
 					})
@@ -312,9 +312,9 @@ func TestRunT(t *testing.T) {
 
 		runPassed := false
 
-		ok := t.RunT("Test level1",
+		ok := t.RunT("Test level1", //nolint: staticcheck
 			func(t *td.T) {
-				ok := t.RunT("Test level2",
+				ok := t.RunT("Test level2", //nolint: staticcheck
 					func(t *td.T) {
 						runPassed = t.True(true) // test succeeds!
 					})
@@ -537,35 +537,35 @@ func TestLogTrace(tt *testing.T) {
 
 	t := td.NewT(ttt)
 
-//line td/t_struct_test.go:600
+//line /t_struct_test.go:100
 	t.LogTrace()
 	test.EqualStr(tt, ttt.LastMessage(), `Stack trace:
-	TestLogTrace() td/t_struct_test.go:600`)
+	TestLogTrace() /t_struct_test.go:100`)
 	test.IsFalse(tt, ttt.HasFailed)
 	test.IsFalse(tt, ttt.IsFatal)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:610
+//line /t_struct_test.go:110
 	t.LogTrace("This is the %s:", "stack")
 	test.EqualStr(tt, ttt.LastMessage(), `This is the stack:
-	TestLogTrace() td/t_struct_test.go:610`)
+	TestLogTrace() /t_struct_test.go:110`)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:620
+//line /t_struct_test.go:120
 	t.LogTrace("This is the %s:\n", "stack")
 	test.EqualStr(tt, ttt.LastMessage(), `This is the stack:
-	TestLogTrace() td/t_struct_test.go:620`)
+	TestLogTrace() /t_struct_test.go:120`)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:630
+//line /t_struct_test.go:130
 	t.LogTrace("This is the ", "stack")
 	test.EqualStr(tt, ttt.LastMessage(), `This is the stack
-	TestLogTrace() td/t_struct_test.go:630`)
+	TestLogTrace() /t_struct_test.go:130`)
 	ttt.ResetMessages()
 
 	trace.IgnorePackage()
 	defer trace.UnignorePackage()
-//line td/t_struct_test.go:640
+//line /t_struct_test.go:140
 	t.LogTrace("Stack:\n")
 	test.EqualStr(tt, ttt.LastMessage(), `Stack:
 	Empty stack trace`)
@@ -576,35 +576,35 @@ func TestErrorTrace(tt *testing.T) {
 
 	t := td.NewT(ttt)
 
-//line td/t_struct_test.go:700
+//line /t_struct_test.go:200
 	t.ErrorTrace()
 	test.EqualStr(tt, ttt.LastMessage(), `Stack trace:
-	TestErrorTrace() td/t_struct_test.go:700`)
+	TestErrorTrace() /t_struct_test.go:200`)
 	test.IsTrue(tt, ttt.HasFailed)
 	test.IsFalse(tt, ttt.IsFatal)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:710
+//line /t_struct_test.go:210
 	t.ErrorTrace("This is the %s:", "stack")
 	test.EqualStr(tt, ttt.LastMessage(), `This is the stack:
-	TestErrorTrace() td/t_struct_test.go:710`)
+	TestErrorTrace() /t_struct_test.go:210`)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:720
+//line /t_struct_test.go:220
 	t.ErrorTrace("This is the %s:\n", "stack")
 	test.EqualStr(tt, ttt.LastMessage(), `This is the stack:
-	TestErrorTrace() td/t_struct_test.go:720`)
+	TestErrorTrace() /t_struct_test.go:220`)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:730
+//line /t_struct_test.go:230
 	t.ErrorTrace("This is the ", "stack")
 	test.EqualStr(tt, ttt.LastMessage(), `This is the stack
-	TestErrorTrace() td/t_struct_test.go:730`)
+	TestErrorTrace() /t_struct_test.go:230`)
 	ttt.ResetMessages()
 
 	trace.IgnorePackage()
 	defer trace.UnignorePackage()
-//line td/t_struct_test.go:740
+//line /t_struct_test.go:240
 	t.ErrorTrace("Stack:\n")
 	test.EqualStr(tt, ttt.LastMessage(), `Stack:
 	Empty stack trace`)
@@ -623,42 +623,42 @@ func TestFatalTrace(tt *testing.T) {
 		}
 	}
 
-//line td/t_struct_test.go:800
+//line /t_struct_test.go:300
 	match(ttt.CatchFatal(func() { t.FatalTrace() }), `Stack trace:
-	TestFatalTrace\.func\d\(\)   td/t_struct_test\.go:800
+	TestFatalTrace\.func\d\(\)   /t_struct_test\.go:300
 	\(\*TestingT\)\.CatchFatal\(\) internal/test/types\.go:\d+
-	TestFatalTrace\(\)         td/t_struct_test\.go:800`)
+	TestFatalTrace\(\)         /t_struct_test\.go:300`)
 	test.IsTrue(tt, ttt.HasFailed)
 	test.IsTrue(tt, ttt.IsFatal)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:810
+//line /t_struct_test.go:310
 	match(ttt.CatchFatal(func() { t.FatalTrace("This is the %s:", "stack") }),
 		`This is the stack:
-	TestFatalTrace\.func\d\(\)   td/t_struct_test\.go:810
+	TestFatalTrace\.func\d\(\)   /t_struct_test\.go:310
 	\(\*TestingT\)\.CatchFatal\(\) internal/test/types\.go:\d+
-	TestFatalTrace\(\)         td/t_struct_test\.go:810`)
+	TestFatalTrace\(\)         /t_struct_test\.go:310`)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:820
+//line /t_struct_test.go:320
 	match(ttt.CatchFatal(func() { t.FatalTrace("This is the %s:\n", "stack") }),
 		`This is the stack:
-	TestFatalTrace\.func\d\(\)   td/t_struct_test\.go:820
+	TestFatalTrace\.func\d\(\)   /t_struct_test\.go:320
 	\(\*TestingT\)\.CatchFatal\(\) internal/test/types\.go:\d+
-	TestFatalTrace\(\)         td/t_struct_test\.go:820`)
+	TestFatalTrace\(\)         /t_struct_test\.go:320`)
 	ttt.ResetMessages()
 
-//line td/t_struct_test.go:830
+//line /t_struct_test.go:330
 	match(ttt.CatchFatal(func() { t.FatalTrace("This is the ", "stack") }),
 		`This is the stack
-	TestFatalTrace\.func\d\(\)   td/t_struct_test\.go:830
+	TestFatalTrace\.func\d\(\)   /t_struct_test\.go:330
 	\(\*TestingT\)\.CatchFatal\(\) internal/test/types\.go:\d+
-	TestFatalTrace\(\)         td/t_struct_test\.go:830`)
+	TestFatalTrace\(\)         /t_struct_test\.go:330`)
 	ttt.ResetMessages()
 
 	trace.IgnorePackage()
 	defer trace.UnignorePackage()
-//line td/t_struct_test.go:840
+//line /t_struct_test.go:340
 	test.EqualStr(tt, ttt.CatchFatal(func() { t.FatalTrace("Stack:\n") }),
 		`Stack:
 	Empty stack trace`)

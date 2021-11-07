@@ -40,9 +40,9 @@ jobs:
                                          -E gocritic \
                                          -E godot \
                                          -E goimports \
-                                         -E revive \
                                          -E misspell \
                                          -E prealloc \
+                                         -E revive \
                                          -E unconvert \
                                          -E whitespace \
                                          ./...

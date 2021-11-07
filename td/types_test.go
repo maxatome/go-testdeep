@@ -22,6 +22,7 @@ import (
 )
 
 func TestSetlocation(t *testing.T) {
+	//nolint: gocritic
 //line types_test.go:10
 	tt := &tdutil.T{}
 	ok := td.Cmp(tt, 12, 13)
@@ -35,6 +36,7 @@ func TestSetlocation(t *testing.T) {
 		t.Error("Cmp returned true!")
 	}
 
+	//nolint: gocritic
 //line types_test.go:20
 	tt = &tdutil.T{}
 	ok = td.Cmp(tt,
@@ -53,6 +55,7 @@ func TestSetlocation(t *testing.T) {
 		t.Error("Cmp returned true!")
 	}
 
+	//nolint: gocritic
 //line types_test.go:30
 	tt = &tdutil.T{}
 	ok = td.CmpAny(tt,
@@ -70,6 +73,7 @@ func TestSetlocation(t *testing.T) {
 		t.Error("CmpAny returned true!")
 	}
 
+	//nolint: gocritic
 //line types_test.go:40
 	tt = &tdutil.T{}
 	ttt := td.NewT(tt)
@@ -89,6 +93,7 @@ func TestSetlocation(t *testing.T) {
 		t.Error("Cmp returned true!")
 	}
 
+	//nolint: gocritic
 //line types_test.go:50
 	tt = &tdutil.T{}
 	ttt = td.NewT(tt)
