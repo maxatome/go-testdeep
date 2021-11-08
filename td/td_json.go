@@ -22,6 +22,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/json"
 	"github.com/maxatome/go-testdeep/internal/location"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 // forbiddenOpsInJSON contains operators forbidden inside JSON,
@@ -326,8 +327,7 @@ func (s *tdJSONSmuggler) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Er
 }
 
 func (s *tdJSONSmuggler) String() string {
-	// Only called by MarshalJSON(), and so only when p.isTestDeeper
-	return s.expectedValue.Interface().(TestDeep).String()
+	return util.ToString(s.expectedValue.Interface())
 }
 
 func (s *tdJSONSmuggler) HandleInvalid() bool {

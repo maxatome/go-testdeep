@@ -231,6 +231,25 @@ func TestJSON(t *testing.T) {
 			Summary: mustContain("json: unsupported type"),
 		})
 
+	checkError(t, map[string]string{"zip": "pipo"},
+		td.All(td.JSON(`SuperMapOf({"zip":$1})`, "bingo")),
+		expectedError{
+			Path:    mustBe(`DATA`),
+			Message: mustBe("compared (part 1 of 1)"),
+			Got: mustBe(`(map[string]string) (len=1) {
+ (string) (len=3) "zip": (string) (len=4) "pipo"
+}`),
+			Expected: mustBe(`JSON(SuperMapOf(map[string]interface {}{
+       "zip": "bingo",
+     }))`),
+			Origin: &expectedError{
+				Path:     mustBe(`DATA<All#1/1>["zip"]`),
+				Message:  mustBe(`values differ`),
+				Got:      mustBe(`"pipo"`),
+				Expected: mustBe(`"bingo"`),
+			},
+		})
+
 	//
 	// Fatal errors
 	checkError(t, "never tested",
