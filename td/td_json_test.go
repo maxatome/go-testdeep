@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021, Maxime Soulé
+// Copyright (c) 2019-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -436,7 +436,7 @@ JSON({
 		`
 JSON({
        "label": {
-                  "age": 12 ≤ got ≤ 24,
+                  "age": 12.0 ≤ got ≤ 24.0,
                   "name": HasPrefix("Bob")
                 },
        "zip": NotZero()
@@ -461,8 +461,8 @@ func TestJSONInside(t *testing.T) {
 				expectedError{
 					Message:  mustBe("values differ"),
 					Path:     mustBe(`DATA["val2"]`),
-					Got:      mustBe("2"),
-					Expected: mustBe("1 ≤ got < 2"),
+					Got:      mustBe("2.0"),
+					Expected: mustBe("1.0 ≤ got < 2.0"),
 				})
 		}
 
@@ -481,8 +481,8 @@ func TestJSONInside(t *testing.T) {
 				expectedError{
 					Message:  mustBe("values differ"),
 					Path:     mustBe(`DATA["val2"]`),
-					Got:      mustBe("2"),
-					Expected: mustBe("2 < got ≤ 3"),
+					Got:      mustBe("2.0"),
+					Expected: mustBe("2.0 < got ≤ 3.0"),
 				})
 		}
 		for _, bounds := range []string{"][", "BoundsOutOut"} {
@@ -491,8 +491,8 @@ func TestJSONInside(t *testing.T) {
 				expectedError{
 					Message:  mustBe("values differ"),
 					Path:     mustBe(`DATA["val2"]`),
-					Got:      mustBe("2"),
-					Expected: mustBe("2 < got < 3"),
+					Got:      mustBe("2.0"),
+					Expected: mustBe("2.0 < got < 3.0"),
 				},
 				"using bounds %q", bounds)
 			checkError(t, got,
@@ -500,8 +500,8 @@ func TestJSONInside(t *testing.T) {
 				expectedError{
 					Message:  mustBe("values differ"),
 					Path:     mustBe(`DATA["val2"]`),
-					Got:      mustBe("2"),
-					Expected: mustBe("1 < got < 2"),
+					Got:      mustBe("2.0"),
+					Expected: mustBe("1.0 < got < 2.0"),
 				},
 				"using bounds %q", bounds)
 		}

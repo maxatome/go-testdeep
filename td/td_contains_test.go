@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -61,7 +61,7 @@ func TestContains(t *testing.T) {
 				Message:  mustBe("does not contain"),
 				Path:     mustBe("DATA"),
 				Got:      mustContain(`"foobar"`), // as well as other items in fact...
-				Expected: mustBe(fmt.Sprintf("Contains(%d ≤ got ≤ %d)", 'y', 'z')),
+				Expected: mustBe(fmt.Sprintf("Contains((int32) %d ≤ got ≤ (int32) %d)", 'y', 'z')),
 			}, testName)
 	}
 }
