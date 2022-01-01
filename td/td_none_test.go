@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -38,7 +38,7 @@ func TestNone(t *testing.T) {
 		expectedError{
 			Message:  mustBe("comparing with None (part 1 of 2 is OK)"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(float64) 6"),
+			Got:      mustBe("6.0"),
 			Expected: mustBe("None(6,\n     7)"),
 		})
 

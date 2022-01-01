@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -594,8 +594,8 @@ func TestEqualOthers(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA.numf64"),
-			Got:      mustBe("(float64) 1"),
-			Expected: mustBe("(float64) 2"),
+			Got:      mustBe("1.0"),
+			Expected: mustBe("2.0"),
 		})
 
 	checkError(t, Private{numc64: complex(1, 2)}, Private{numc64: complex(2, 1)},

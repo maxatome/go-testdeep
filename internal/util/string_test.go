@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -8,6 +8,7 @@ package util_test
 
 import (
 	"bytes"
+	"math"
 	"reflect"
 	"runtime"
 	"strings"
@@ -52,6 +53,12 @@ func TestToString(t *testing.T) {
 		{paramGot: true, expected: "true"},
 		{paramGot: false, expected: "false"},
 		{paramGot: int64(42), expected: "(int64) 42"},
+		{paramGot: float64(42), expected: "42.0"},
+		{paramGot: float64(42.56), expected: "42.56"},
+		{paramGot: float64(4e56), expected: "4e+56"},
+		{paramGot: math.Inf(1), expected: "+Inf"},
+		{paramGot: math.Inf(-1), expected: "-Inf"},
+		{paramGot: math.NaN(), expected: "NaN"},
 	} {
 		test.EqualStr(t, util.ToString(curTest.paramGot), curTest.expected)
 	}

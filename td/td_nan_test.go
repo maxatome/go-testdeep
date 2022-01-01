@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -28,7 +28,7 @@ func TestNaN(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(float64) 12"),
+			Got:      mustBe("12.0"),
 			Expected: mustBe("NaN"),
 		})
 
@@ -56,7 +56,7 @@ func TestNotNaN(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(float64) NaN"),
+			Got:      mustBe("NaN"),
 			Expected: mustBe("not NaN"),
 		})
 
