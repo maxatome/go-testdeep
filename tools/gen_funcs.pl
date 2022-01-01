@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Copyright (c) 2018, Maxime Soulé
+# Copyright (c) 2018-2022, Maxime Soulé
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -511,7 +511,9 @@ foreach my $go_file (do { opendir(my $dh, $DIR);
     {
         my($comment, $func, $params) = ($1, $2, $3);
 
-        next if $func eq '(t *T) CmpDeeply' or $func eq 'CmpDeeply';
+        next if ($func eq '(t *T) CmpDeeply'
+                 or $func eq 'CmpDeeply'
+                 or $func =~ /^\(t \*T\) (?:Log|Error|Fatal)Trace\z/);
 
         if ($params =~ /\Qargs ...interface{})\E\z/)
         {
@@ -1055,7 +1057,20 @@ sub go_format
 
     my $pid = open2(my $fmt_out, my $fmt_in, 'gofmt', '-s');
 
-    print $fmt_in <<EOM;
+    my $root;
+    if ($code =~ /^func/)
+    {
+        $root = 1;
+        print $fmt_in <<EOM;
+package x
+
+//line $operator->{name}.go:1
+$code
+EOM
+    }
+    else
+    {
+        print $fmt_in <<EOM;
 package x
 
 //line $operator->{name}.go:1
@@ -1063,11 +1078,18 @@ func x() {
 $code
 }
 EOM
+    }
     close $fmt_in;
 
-    (my $new_code = do { local $/; <$fmt_out> }) =~ s/[^\t]+//;
-    $new_code =~ s/\n\}\n\z//;
-    $new_code =~ s/^\t//gm;
+    my $new_code = do { <$fmt_out>; <$fmt_out>; <$fmt_out>; # skip 1st 3 lines
+                        local $/; <$fmt_out> };
+    chomp($new_code);
+    unless ($root)
+    {
+        $new_code =~ s/[^\t]+//;
+        $new_code =~ s/\n\}\z//;
+        $new_code =~ s/^\t//gm;
+    }
 
     waitpid $pid, 0;
     if ($? != 0)

@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -58,17 +58,27 @@ type tdBetweenTime struct {
 
 var _ TestDeep = &tdBetweenTime{}
 
+type tdBetweenCmp struct {
+	tdBetween
+	expectedType reflect.Type
+	cmp          func(a, b reflect.Value) int
+}
+
 // summary(Between): checks that a number, string or time.Time is
 // between two bounds
 // input(Between): str,int,float,cplx(todo),struct(time.Time)
 
 // Between operator checks that data is between "from" and
-// "to". "from" and "to" can be any numeric, string or time.Time (or
-// assignable) value. "from" and "to" must be the same kind as the
-// compared value if numeric, and the same type if string or time.Time
-// (or assignable). time.Duration type is accepted as "to" when "from"
-// is time.Time or convertible. "bounds" allows to specify whether
-// bounds are included or not:
+// "to". "from" and "to" can be any numeric, string, time.Time (or
+// assignable) value or implement at least one of the two following
+// methods:
+//   func (a T) Less(b T) bool   // returns true if a < b
+//   func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
+//
+// "from" and "to" must be the same type as the compared value, except
+// if BeLax config flag is true. time.Duration type is accepted as
+// "to" when "from" is time.Time or convertible. "bounds" allows to
+// specify whether bounds are included or not:
 //   - BoundsInIn (default): between "from" and "to" both included
 //   - BoundsInOut: between "from" included and "to" excluded
 //   - BoundsOutIn: between "from" excluded and "to" included
@@ -80,6 +90,9 @@ var _ TestDeep = &tdBetweenTime{}
 //   tc.Cmp(t, 17, td.Between(10, 17, BoundsInOut))  // fails
 //   tc.Cmp(t, 17, td.Between(10, 17, BoundsOutIn))  // succeeds
 //   tc.Cmp(t, 17, td.Between(17, 20, BoundsOutOut)) // fails
+//   tc.Cmp(t,                                       // succeeds
+//     netip.MustParse("127.0.0.1"),
+//     td.Between(netip.MustParse("127.0.0.0"), netip.MustParse("127.255.255.255")))
 //
 // TypeBehind method returns the reflect.Type of "from" (same as the "to" one.)
 func Between(from, to interface{}, bounds ...BoundsKind) TestDeep {
@@ -152,6 +165,22 @@ func Between(from, to interface{}, bounds ...BoundsKind) TestDeep {
 func (b *tdBetween) initBetween(usage string) TestDeep {
 	if !b.expectedMax.IsValid() {
 		b.expectedMax = b.expectedMin
+	}
+
+	// Is any of:
+	// (T) Compare(T) int
+	// or
+	// (T) Less(T) bool
+	// available?
+	if cmp := types.NewOrder(b.expectedMin.Type()); cmp != nil {
+		if order := cmp(b.expectedMin, b.expectedMax); order > 0 {
+			b.expectedMin, b.expectedMax = b.expectedMax, b.expectedMin
+		}
+		return &tdBetweenCmp{
+			tdBetween:    *b,
+			expectedType: b.expectedMin.Type(),
+			cmp:          cmp,
+		}
 	}
 
 	switch b.expectedMin.Kind() {
@@ -275,7 +304,8 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 
 // N operator compares a numeric data against "num" ± "tolerance". If
 // "tolerance" is missing, it defaults to 0. "num" and "tolerance"
-// must be the same kind as the compared value.
+// must be the same type as the compared value, except if BeLax config
+// flag is true.
 //
 //   td.Cmp(t, 12.2, td.N(12., 0.3)) // succeeds
 //   td.Cmp(t, 12.2, td.N(12., 0.1)) // fails
@@ -337,10 +367,14 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 // input(Gt): str,int,float,cplx(todo),struct(time.Time)
 
 // Gt operator checks that data is greater than
-// "minExpectedValue". "minExpectedValue" can be any numeric or
-// time.Time (or assignable) value. "minExpectedValue" must be the
-// same kind as the compared value if numeric, and the same type if
-// time.Time (or assignable).
+// "minExpectedValue". "minExpectedValue" can be any numeric, string,
+// time.Time (or assignable) value or implements at least one of the
+// two following methods:
+//   func (a T) Less(b T) bool   // returns true if a < b
+//   func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
+//
+// "minExpectedValue" must be the same type as the compared value,
+// except if BeLax config flag is true.
 //
 //   td.Cmp(t, 17, td.Gt(15))
 //   before := time.Now()
@@ -361,10 +395,14 @@ func Gt(minExpectedValue interface{}) TestDeep {
 // input(Gte): str,int,float,cplx(todo),struct(time.Time)
 
 // Gte operator checks that data is greater or equal than
-// "minExpectedValue". "minExpectedValue" can be any numeric or
-// time.Time (or assignable) value. "minExpectedValue" must be the
-// same kind as the compared value if numeric, and the same type if
-// time.Time (or assignable).
+// "minExpectedValue". "minExpectedValue" can be any numeric, string,
+// time.Time (or assignable) value or implements at least one of the
+// two following methods:
+//   func (a T) Less(b T) bool   // returns true if a < b
+//   func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
+//
+// "minExpectedValue" must be the same type as the compared value,
+// except if BeLax config flag is true.
 //
 //   td.Cmp(t, 17, td.Gte(17))
 //   before := time.Now()
@@ -385,10 +423,14 @@ func Gte(minExpectedValue interface{}) TestDeep {
 // input(Lt): str,int,float,cplx(todo),struct(time.Time)
 
 // Lt operator checks that data is lesser than
-// "maxExpectedValue". "maxExpectedValue" can be any numeric or
-// time.Time (or assignable) value. "maxExpectedValue" must be the
-// same kind as the compared value if numeric, and the same type if
-// time.Time (or assignable).
+// "maxExpectedValue". "maxExpectedValue" can be any numeric, string,
+// time.Time (or assignable) value or implements at least one of the
+// two following methods:
+//   func (a T) Less(b T) bool   // returns true if a < b
+//   func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
+//
+// "maxExpectedValue" must be the same type as the compared value,
+// except if BeLax config flag is true.
 //
 //   td.Cmp(t, 17, td.Lt(19))
 //   before := time.Now()
@@ -409,10 +451,14 @@ func Lt(maxExpectedValue interface{}) TestDeep {
 // input(Lte): str,int,float,cplx(todo),struct(time.Time)
 
 // Lte operator checks that data is lesser or equal than
-// "maxExpectedValue". "maxExpectedValue" can be any numeric or
-// time.Time (or assignable) value. "maxExpectedValue" must be the
-// same kind as the compared value if numeric, and the same type if
-// time.Time (or assignable).
+// "maxExpectedValue". "maxExpectedValue" can be any numeric, string,
+// time.Time (or assignable) value or implements at least one of the
+// two following methods:
+//   func (a T) Less(b T) bool   // returns true if a < b
+//   func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
+//
+// "maxExpectedValue" must be the same type as the compared value,
+// except if BeLax config flag is true.
 //
 //   td.Cmp(t, 17, td.Lte(17))
 //   before := time.Now()
@@ -559,16 +605,9 @@ func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		return ctxerr.BooleanError
 	}
 
-	var gotStr types.RawString
-	if got.Kind() == reflect.String {
-		gotStr = types.RawString(util.ToString(got))
-	} else {
-		gotStr = types.RawString(fmt.Sprintf("%v", got))
-	}
-
 	return ctx.CollectError(&ctxerr.Error{
 		Message:  "values differ",
-		Got:      gotStr,
+		Got:      got,
 		Expected: types.RawString(b.String()),
 	})
 }
@@ -585,43 +624,27 @@ func (b *tdBetween) String() string {
 
 	if b.minBound != boundNone {
 		min = b.expectedMin.Interface()
-
-		// We want strings be double-quoted
-		if b.expectedMin.Kind() == reflect.String {
-			minStr = util.ToString(min)
-		} else {
-			minStr = fmt.Sprintf("%v", min)
-		}
+		minStr = util.ToString(min)
 	}
 	if b.maxBound != boundNone {
 		max = b.expectedMax.Interface()
-
-		// We want strings be double-quoted
-		if b.expectedMax.Kind() == reflect.String {
-			maxStr = util.ToString(max)
-		} else {
-			maxStr = fmt.Sprintf("%v", max)
-		}
-	}
-
-	if min == max {
-		return minStr
+		maxStr = util.ToString(max)
 	}
 
 	if min != nil {
 		if max != nil {
-			return fmt.Sprintf("%v %c got %c %v",
+			return fmt.Sprintf("%s %c got %c %s",
 				minStr,
 				util.TernRune(b.minBound == boundIn, '≤', '<'),
 				util.TernRune(b.maxBound == boundIn, '≤', '<'),
 				maxStr)
 		}
 
-		return fmt.Sprintf("%c %v",
+		return fmt.Sprintf("%c %s",
 			util.TernRune(b.minBound == boundIn, '≥', '>'), minStr)
 	}
 
-	return fmt.Sprintf("%c %v",
+	return fmt.Sprintf("%c %s",
 		util.TernRune(b.maxBound == boundIn, '≤', '<'), maxStr)
 }
 
@@ -686,13 +709,71 @@ func (b *tdBetweenTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	}
 	return ctx.CollectError(&ctxerr.Error{
 		Message:  "values differ",
-		Got:      types.RawString(fmt.Sprintf("%v", got.Interface())),
+		Got:      got,
 		Expected: types.RawString(b.String()),
 	})
 }
 
 func (b *tdBetweenTime) TypeBehind() reflect.Type {
 	// b.err != nil is not possible here, as when a *tdBetweenTime is
+	// built, there is never an error
+	return b.expectedType
+}
+
+var _ TestDeep = &tdBetweenCmp{}
+
+func (b *tdBetweenCmp) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	// b.err != nil is not possible here, as when a *tdBetweenCmp is
+	// built, there is never an error
+
+	if got.Type() != b.expectedType {
+		if ctx.BeLax && types.IsConvertible(got, b.expectedType) {
+			got = got.Convert(b.expectedType)
+		} else {
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+			return ctx.CollectError(ctxerr.TypeMismatch(got.Type(), b.expectedType))
+		}
+	}
+
+	var ok bool
+	if b.minBound != boundNone {
+		order := b.cmp(got, b.expectedMin)
+		if b.minBound == boundIn {
+			ok = order >= 0
+		} else {
+			ok = order > 0
+		}
+	} else {
+		ok = true
+	}
+
+	if ok && b.maxBound != boundNone {
+		order := b.cmp(got, b.expectedMax)
+		if b.maxBound == boundIn {
+			ok = order <= 0
+		} else {
+			ok = order < 0
+		}
+	}
+
+	if ok {
+		return nil
+	}
+
+	if ctx.BooleanError {
+		return ctxerr.BooleanError
+	}
+	return ctx.CollectError(&ctxerr.Error{
+		Message:  "values differ",
+		Got:      got,
+		Expected: types.RawString(b.String()),
+	})
+}
+
+func (b *tdBetweenCmp) TypeBehind() reflect.Type {
+	// b.err != nil is not possible here, as when a *tdBetweenCmp is
 	// built, there is never an error
 	return b.expectedType
 }

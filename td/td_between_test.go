@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -189,8 +189,8 @@ func TestN(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
-			Got:     mustBe("0"),
-			Expected: mustBe(fmt.Sprintf("%v ≤ got ≤ %v",
+			Got:     mustBe("(uint64) 0"),
+			Expected: mustBe(fmt.Sprintf("(uint64) %v ≤ got ≤ (uint64) %v",
 				uint64(math.MaxUint64)-2, uint64(math.MaxUint64))),
 		})
 
@@ -199,8 +199,8 @@ func TestN(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe(fmt.Sprintf("%v", uint64(math.MaxUint64))),
-			Expected: mustBe("0 ≤ got ≤ 2"),
+			Got:      mustBe(fmt.Sprintf("(uint64) %v", uint64(math.MaxUint64))),
+			Expected: mustBe("(uint64) 0 ≤ got ≤ (uint64) 2"),
 		})
 
 	//
@@ -221,7 +221,7 @@ func TestN(t *testing.T) {
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("10"),
-			Expected: mustBe("12"),
+			Expected: mustBe("12 ≤ got ≤ 12"),
 		})
 
 	checkOK(t, int8(12), td.N(int8(12)))
@@ -273,8 +273,8 @@ func TestN(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
-			Got:     mustBe("0"),
-			Expected: mustBe(fmt.Sprintf("%v ≤ got ≤ %v",
+			Got:     mustBe("(int64) 0"),
+			Expected: mustBe(fmt.Sprintf("(int64) %v ≤ got ≤ (int64) %v",
 				int64(math.MaxInt64)-2, int64(math.MaxInt64))),
 		})
 
@@ -283,8 +283,8 @@ func TestN(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
-			Got:     mustBe("0"),
-			Expected: mustBe(fmt.Sprintf("%v ≤ got ≤ %v",
+			Got:     mustBe("(int64) 0"),
+			Expected: mustBe(fmt.Sprintf("(int64) %v ≤ got ≤ (int64) %v",
 				int64(math.MinInt64), int64(math.MinInt64)+2)),
 		})
 
@@ -319,7 +319,7 @@ func TestN(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
-			Got:     mustBe("0"),
+			Got:     mustBe("0.0"),
 			Expected: mustBe(fmt.Sprintf("%v ≤ got ≤ +Inf",
 				float64(math.MaxFloat64)-floatTol)),
 		})
@@ -330,7 +330,7 @@ func TestN(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
-			Got:     mustBe("0"),
+			Got:     mustBe("0.0"),
 			Expected: mustBe(fmt.Sprintf("-Inf ≤ got ≤ %v",
 				-float64(math.MaxFloat64)+floatTol)),
 		})
@@ -453,15 +453,15 @@ func TestLGt(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("2018-03-04 01:02:03 +0000 UTC"),
-			Expected: mustBe("> 2018-03-04 01:02:03 +0000 UTC"),
+			Got:      mustBe("(time.Time) 2018-03-04 01:02:03 +0000 UTC"),
+			Expected: mustBe("> (time.Time) 2018-03-04 01:02:03 +0000 UTC"),
 		})
 	checkError(t, gotDate, td.Lt(expectedDate),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("2018-03-04 01:02:03 +0000 UTC"),
-			Expected: mustBe("< 2018-03-04 01:02:03 +0000 UTC"),
+			Got:      mustBe("(time.Time) 2018-03-04 01:02:03 +0000 UTC"),
+			Expected: mustBe("< (time.Time) 2018-03-04 01:02:03 +0000 UTC"),
 		})
 
 	//
@@ -557,10 +557,10 @@ func TestBetweenTime(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
-			Got:     mustBe("2018-03-04 00:00:00 +0000 UTC"),
-			Expected: mustBe("2018-03-03 23:59:58 +0000 UTC" +
+			Got:     mustBe("(time.Time) 2018-03-04 00:00:00 +0000 UTC"),
+			Expected: mustBe("(time.Time) 2018-03-03 23:59:58 +0000 UTC" +
 				" ≤ got ≤ " +
-				"2018-03-03 23:59:59 +0000 UTC"),
+				"(time.Time) 2018-03-03 23:59:59 +0000 UTC"),
 		})
 
 	checkError(t, date,
@@ -568,10 +568,10 @@ func TestBetweenTime(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
-			Got:     mustBe("2018-03-04 00:00:00 +0000 UTC"),
-			Expected: mustBe("2018-03-03 23:59:58 +0000 UTC" +
+			Got:     mustBe("(time.Time) 2018-03-04 00:00:00 +0000 UTC"),
+			Expected: mustBe("(time.Time) 2018-03-03 23:59:58 +0000 UTC" +
 				" ≤ got < " +
-				"2018-03-04 00:00:00 +0000 UTC"),
+				"(time.Time) 2018-03-04 00:00:00 +0000 UTC"),
 		})
 
 	checkError(t, date,
@@ -579,10 +579,10 @@ func TestBetweenTime(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 			Path:    mustBe("DATA"),
-			Got:     mustBe("2018-03-04 00:00:00 +0000 UTC"),
-			Expected: mustBe("2018-03-04 00:00:00 +0000 UTC" +
+			Got:     mustBe("(time.Time) 2018-03-04 00:00:00 +0000 UTC"),
+			Expected: mustBe("(time.Time) 2018-03-04 00:00:00 +0000 UTC" +
 				" < got ≤ " +
-				"2018-03-04 00:00:02 +0000 UTC"),
+				"(time.Time) 2018-03-04 00:00:02 +0000 UTC"),
 		})
 
 	checkError(t, "string",
@@ -623,20 +623,173 @@ func TestBetweenTime(t *testing.T) {
 	checkOK(t, now, td.Lt(now.Add(time.Second)))
 }
 
-func TestBetweenTypeBehind(t *testing.T) {
-	equalTypes(t, td.Between(0, 10), 23)
-	equalTypes(t, td.Between(int64(0), int64(10)), int64(23))
+type compareType int
 
+func (i compareType) Compare(j compareType) int {
+	if i < j {
+		return -1
+	}
+	if i > j {
+		return 1
+	}
+	return 0
+}
+
+type lessType int
+
+func (i lessType) Less(j lessType) bool {
+	return i < j
+}
+
+func TestBetweenCmp(t *testing.T) {
+	t.Run("compareType", func(t *testing.T) {
+		checkOK(t, compareType(5), td.Between(compareType(4), compareType(6)))
+		checkOK(t, compareType(5), td.Between(compareType(6), compareType(4)))
+		checkOK(t, compareType(5), td.Between(compareType(5), compareType(6)))
+		checkOK(t, compareType(5), td.Between(compareType(4), compareType(5)))
+
+		checkOK(t, compareType(5),
+			td.Between(compareType(4), compareType(6), td.BoundsOutOut))
+		checkError(t, compareType(5),
+			td.Between(compareType(5), compareType(6), td.BoundsOutIn),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe("(td_test.compareType) 5"),
+				Expected: mustBe("(td_test.compareType) 5 < got ≤ (td_test.compareType) 6"),
+			})
+		checkError(t, compareType(5),
+			td.Between(compareType(4), compareType(5), td.BoundsInOut),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe("(td_test.compareType) 5"),
+				Expected: mustBe("(td_test.compareType) 4 ≤ got < (td_test.compareType) 5"),
+			})
+
+		// Other between forms
+		checkOK(t, compareType(5), td.Gt(compareType(4)))
+		checkOK(t, compareType(5), td.Gte(compareType(5)))
+		checkOK(t, compareType(5), td.Lt(compareType(6)))
+		checkOK(t, compareType(5), td.Lte(compareType(5)))
+
+		// BeLax or not BeLax
+		for i, op := range []td.TestDeep{
+			td.Between(compareType(4), compareType(6)),
+			td.Gt(compareType(4)),
+			td.Gte(compareType(5)),
+			td.Lt(compareType(6)),
+			td.Lte(compareType(5)),
+		} {
+			// Type mismatch if BeLax not enabled
+			checkError(t, 5, op,
+				expectedError{
+					Message:  mustBe("type mismatch"),
+					Path:     mustBe("DATA"),
+					Got:      mustBe("int"),
+					Expected: mustBe("td_test.compareType"),
+				},
+				"Op #%d", i)
+
+			// BeLax enabled is OK
+			checkOK(t, 5, td.Lax(op), "Op #%d", i)
+		}
+
+		// In a private field
+		type private struct {
+			num compareType
+		}
+		checkOK(t, private{num: 5},
+			td.Struct(private{},
+				td.StructFields{
+					"num": td.Between(compareType(4), compareType(6)),
+				}))
+	})
+
+	t.Run("lessType", func(t *testing.T) {
+		checkOK(t, lessType(5), td.Between(lessType(4), lessType(6)))
+		checkOK(t, lessType(5), td.Between(lessType(6), lessType(4)))
+		checkOK(t, lessType(5), td.Between(lessType(5), lessType(6)))
+		checkOK(t, lessType(5), td.Between(lessType(4), lessType(5)))
+
+		checkOK(t, lessType(5),
+			td.Between(lessType(4), lessType(6), td.BoundsOutOut))
+		checkError(t, lessType(5),
+			td.Between(lessType(5), lessType(6), td.BoundsOutIn),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe("(td_test.lessType) 5"),
+				Expected: mustBe("(td_test.lessType) 5 < got ≤ (td_test.lessType) 6"),
+			})
+		checkError(t, lessType(5),
+			td.Between(lessType(4), lessType(5), td.BoundsInOut),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA"),
+				Got:      mustBe("(td_test.lessType) 5"),
+				Expected: mustBe("(td_test.lessType) 4 ≤ got < (td_test.lessType) 5"),
+			})
+
+		// Other between forms
+		checkOK(t, lessType(5), td.Gt(lessType(4)))
+		checkOK(t, lessType(5), td.Gte(lessType(5)))
+		checkOK(t, lessType(5), td.Lt(lessType(6)))
+		checkOK(t, lessType(5), td.Lte(lessType(5)))
+
+		// BeLax or not BeLax
+		for i, op := range []td.TestDeep{
+			td.Between(lessType(4), lessType(6)),
+			td.Gt(lessType(4)),
+			td.Gte(lessType(5)),
+			td.Lt(lessType(6)),
+			td.Lte(lessType(5)),
+		} {
+			// Type mismatch if BeLax not enabled
+			checkError(t, 5, op,
+				expectedError{
+					Message:  mustBe("type mismatch"),
+					Path:     mustBe("DATA"),
+					Got:      mustBe("int"),
+					Expected: mustBe("td_test.lessType"),
+				},
+				"Op #%d", i)
+
+			// BeLax enabled is OK
+			checkOK(t, 5, td.Lax(op), "Op #%d", i)
+		}
+
+		// In a private field
+		type private struct {
+			num lessType
+		}
+		checkOK(t, private{num: 5},
+			td.Struct(private{},
+				td.StructFields{
+					"num": td.Between(lessType(4), lessType(6)),
+				}))
+	})
+}
+
+func TestBetweenTypeBehind(t *testing.T) {
 	type MyTime time.Time
 
-	equalTypes(t, td.Between(time.Time{}, time.Time{}), time.Time{})
-	equalTypes(t, td.Between(MyTime{}, MyTime{}), MyTime{})
-
+	for _, typ := range []interface{}{
+		10,
+		int64(23),
+		int32(23),
+		time.Time{},
+		MyTime{},
+		compareType(0),
+		lessType(0),
+	} {
+		equalTypes(t, td.Between(typ, typ), typ)
+		equalTypes(t, td.Gt(typ), typ)
+		equalTypes(t, td.Gte(typ), typ)
+		equalTypes(t, td.Lt(typ), typ)
+		equalTypes(t, td.Lte(typ), typ)
+	}
 	equalTypes(t, td.N(int64(23), int64(5)), int64(0))
-	equalTypes(t, td.Gt(int32(23)), int32(0))
-	equalTypes(t, td.Gte(int32(23)), int32(0))
-	equalTypes(t, td.Lt(int32(23)), int32(0))
-	equalTypes(t, td.Lte(int32(23)), int32(0))
 
 	// Erroneous op
 	equalTypes(t, td.Between("test", 12), nil)
