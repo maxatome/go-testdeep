@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -46,8 +46,8 @@ func TestZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(float64) 12"),
-			Expected: mustBe("(float64) 0"),
+			Got:      mustBe("12.0"),
+			Expected: mustBe("0.0"),
 		})
 	checkError(t, map[string]int{}, td.Zero(),
 		expectedError{
@@ -136,7 +136,7 @@ func TestNotZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("zero value"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("(float64) 0"),
+			Got:      mustBe("0.0"),
 			Expected: mustBe("NotZero()"),
 		})
 	checkError(t, (map[string]int)(nil), td.NotZero(),

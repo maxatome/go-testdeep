@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -135,7 +135,7 @@ func TestSet(t *testing.T) {
 			expectedError{
 				Message: mustBe("comparing %% as a NotAny"),
 				Path:    mustBe("DATA"),
-				Summary: mustBe("Extra item: ((float64) 3)"),
+				Summary: mustBe("Extra item: (3.0)"),
 			},
 			testName)
 	}

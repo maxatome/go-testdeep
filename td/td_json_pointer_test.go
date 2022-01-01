@@ -1,4 +1,4 @@
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -44,7 +44,7 @@ func TestJSONPointer(t *testing.T) {
 			expectedError{
 				Message:  mustBe("values differ"),
 				Path:     mustBe("DATA.JSONPointer</foo>"),
-				Got:      mustBe(`(float64) 42`),
+				Got:      mustBe(`42.0`),
 				Expected: mustBe(`nil`),
 			})
 

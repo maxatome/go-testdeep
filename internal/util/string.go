@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -45,7 +45,15 @@ func ToString(val interface{}) string {
 	case int:
 		return strconv.Itoa(tval)
 
-		// no "(bool)" prefix for booleans
+		// no "(float64) " prefix for float64s
+	case float64:
+		s := strconv.FormatFloat(tval, 'g', -1, 64)
+		if strings.ContainsAny(s, "e.IN") { // I for Inf, N for NaN
+			return s
+		}
+		return s + ".0" // to distinguish from ints
+
+		// no "(bool) " prefix for booleans
 	case bool:
 		return TernStr(tval, "true", "false")
 
