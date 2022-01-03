@@ -259,7 +259,7 @@ func (i *Info) build(typ reflect.Type) (reflect.Value, interface{}, error) {
 		return nvm, nvm.Pointer(), nil
 
 	case reflect.Slice:
-		nvm := reflect.MakeSlice(typ, 0, 0)
+		nvm := reflect.MakeSlice(typ, 0, 1) // cap=1 to avoid same ptr below
 		return nvm, nvm.Pointer(), nil
 
 	case reflect.Ptr:
