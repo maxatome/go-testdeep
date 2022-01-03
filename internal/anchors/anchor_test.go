@@ -32,12 +32,22 @@ func TestBuildResolveAnchor(t *testing.T) {
 
 	checkResolveAnchor := func(t *testing.T, val interface{}, opName string) {
 		t.Helper()
-		v, err := i.AddAnchor(reflect.TypeOf(val), reflect.ValueOf(opName))
-		if test.NoError(t, err) {
-			op, found := i.ResolveAnchor(v)
-			test.IsTrue(t, found)
-			test.EqualStr(t, op.String(), opName)
+		v1, err := i.AddAnchor(reflect.TypeOf(val), reflect.ValueOf(opName+" (1)"))
+		if !test.NoError(t, err, "first anchor") {
+			return
 		}
+		v2, err := i.AddAnchor(reflect.TypeOf(val), reflect.ValueOf(opName+" (2)"))
+		if !test.NoError(t, err, "second anchor") {
+			return
+		}
+
+		op, found := i.ResolveAnchor(v1)
+		test.IsTrue(t, found, "first anchor found")
+		test.EqualStr(t, op.String(), opName+" (1)", "first anchor operator OK")
+
+		op, found = i.ResolveAnchor(v2)
+		test.IsTrue(t, found, "second anchor found")
+		test.EqualStr(t, op.String(), opName+" (2)", "second anchor operator OK")
 	}
 
 	t.Run("AddAnchor basic types", func(t *testing.T) {
