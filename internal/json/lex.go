@@ -10,6 +10,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math/big"
 	"strconv"
 	"strings"
 	"unicode"
@@ -198,7 +199,8 @@ func (j *json) nextToken(lval *yySymType) int {
 			return FALSE
 		}
 
-	case '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+	case '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'+', '.': // '+' & '.' are not normally accepted by JSON spec
 		n, ok := j.parseNumber()
 		if !ok {
 			return 0
@@ -337,21 +339,72 @@ str:
 	return "", false
 }
 
-func (j *json) parseNumber() (float64, bool) {
-	// j.buf[j.pos.bpos] == '[0-9]' → caller responsibility
+const (
+	numInt = 1 << iota
+	numFloat
+	numGoExt
+)
 
+var numBytes = [...]uint8{
+	'+': numInt, '-': numInt,
+	'0': numInt,
+	'1': numInt,
+	'2': numInt,
+	'3': numInt,
+	'4': numInt,
+	'5': numInt,
+	'6': numInt,
+	'7': numInt,
+	'8': numInt,
+	'9': numInt,
+	'_': numGoExt,
+	// bases 2, 8, 16
+	'b': numInt, 'B': numInt, 'o': numInt, 'O': numInt, 'x': numInt, 'X': numInt,
+	'a': numInt, 'A': numInt,
+	'c': numInt, 'C': numInt,
+	'd': numInt, 'D': numInt,
+	'e': numInt | numFloat, 'E': numInt | numFloat,
+	'f': numInt, 'F': numInt,
+	// floats
+	'.': numFloat, 'p': numFloat, 'P': numFloat,
+}
+
+func (j *json) parseNumber() (float64, bool) {
+	// j.buf[j.pos.bpos] == '[-+0-9.]' → caller responsibility
+
+	numKind := numBytes[j.buf[j.pos.bpos]]
 	i := j.pos.bpos + 1
-	l := len(j.buf)
-num:
-	for ; i < l; i++ {
-		switch j.buf[i] {
-		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'e', 'E', '+', '-':
-		default:
-			break num
+	for l := len(j.buf); i < l; i++ {
+		b := int(j.buf[i])
+		if b >= len(numBytes) || numBytes[b] == 0 {
+			break
+		}
+		numKind |= numBytes[b]
+	}
+
+	s := string(j.buf[j.pos.bpos:i])
+
+	var (
+		f   float64
+		err error
+	)
+	// Differentiate float/int parsing to accept old octal notation:
+	// 0600 → 384 as int64, but 600 as float64
+	if (numKind & numFloat) != 0 {
+		// strconv.ParseFloat does not handle "_"
+		var bf *big.Float
+		bf, _, err = new(big.Float).Parse(s, 0)
+		if err == nil {
+			f, _ = bf.Float64()
+		}
+	} else { // numInt and/or numGoExt
+		var int int64
+		int, err = strconv.ParseInt(s, 0, 64)
+		if err == nil {
+			f = float64(int)
 		}
 	}
 
-	f, err := strconv.ParseFloat(string(j.buf[j.pos.bpos:i]), 64)
 	if err != nil {
 		j.fatal("invalid number")
 		return 0, false

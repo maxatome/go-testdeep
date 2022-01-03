@@ -581,6 +581,11 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //   - multi-lines comments start with the character sequence /* and stop
 //     with the first subsequent character sequence */.
 //
+// Other JSON divergences:
+//   - ',' can precede a '}' or a ']' (as in go);
+//   - int_lit & float_lit numbers as defined in go spec are accepted;
+//   - numbers can be prefixed by '+'.
+//
 // Most operators can be directly embedded in JSON without requiring
 // any placeholder.
 //
@@ -841,6 +846,11 @@ var _ TestDeep = &tdMapJSON{}
 //   - multi-lines comments start with the character sequence /* and stop
 //     with the first subsequent character sequence */.
 //
+// Other JSON divergences:
+//   - ',' can precede a '}' or a ']' (as in go);
+//   - int_lit & float_lit numbers as defined in go spec are accepted;
+//   - numbers can be prefixed by '+'.
+//
 // Most operators can be directly embedded in SubJSONOf without requiring
 // any placeholder.
 //
@@ -1054,6 +1064,11 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //     end of the line.
 //   - multi-lines comments start with the character sequence /* and stop
 //     with the first subsequent character sequence */.
+//
+// Other JSON divergences:
+//   - ',' can precede a '}' or a ']' (as in go);
+//   - int_lit & float_lit numbers as defined in go spec are accepted;
+//   - numbers can be prefixed by '+'.
 //
 // Most operators can be directly embedded in SuperJSONOf without requiring
 // any placeholder.
