@@ -1,4 +1,4 @@
-// Copyright (c) 2020, 2021, Maxime Soulé
+// Copyright (c) 2020-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -18,6 +18,28 @@ import (
 	"github.com/maxatome/go-testdeep/internal/json"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
+
+func checkJSON(t *testing.T, gotJSON, expectedJSON string) {
+	t.Helper()
+
+	var expected interface{}
+	err := ejson.Unmarshal([]byte(expectedJSON), &expected)
+	if err != nil {
+		t.Fatalf("bad JSON: %s", err)
+	}
+
+	got, err := json.Parse([]byte(gotJSON))
+	if !test.NoError(t, err, "json.Parse succeeds") {
+		return
+	}
+	if !reflect.DeepEqual(got, expected) {
+		test.EqualErrorMessage(t,
+			strings.TrimRight(spew.Sdump(got), "\n"),
+			strings.TrimRight(spew.Sdump(expected), "\n"),
+			"got matches expected",
+		)
+	}
+}
 
 func TestJSON(t *testing.T) {
 	t.Run("Basics", func(t *testing.T) {
@@ -83,31 +105,29 @@ func TestJSON(t *testing.T) {
 	})
 
 	t.Run("JSON spec infringements", func(t *testing.T) {
-		check := func(gotJSON, expectedJSON string) {
-			t.Helper()
-			var expected interface{}
-			err := ejson.Unmarshal([]byte(expectedJSON), &expected)
-			if err != nil {
-				t.Fatalf("bad JSON: %s", err)
-			}
-
-			got, err := json.Parse([]byte(gotJSON))
-			if !test.NoError(t, err, "json.Parse succeeds") {
-				return
-			}
-			if !reflect.DeepEqual(got, expected) {
-				test.EqualErrorMessage(t,
-					strings.TrimRight(spew.Sdump(got), "\n"),
-					strings.TrimRight(spew.Sdump(expected), "\n"),
-					"got matches expected",
-				)
-			}
-		}
 		// "," is accepted just before non-empty "}" or "]"
-		check(`{"foo": "bar", }`, `{"foo":"bar"}`)
-		check(`{"foo":"bar",}`, `{"foo":"bar"}`)
-		check(`[ 1, 2, 3, ]`, `[1,2,3]`)
-		check(`[ 1,2,3,]`, `[1,2,3]`)
+		checkJSON(t, `{"foo": "bar", }`, `{"foo":"bar"}`)
+		checkJSON(t, `{"foo":"bar",}`, `{"foo":"bar"}`)
+		checkJSON(t, `[ 1, 2, 3, ]`, `[1,2,3]`)
+		checkJSON(t, `[ 1,2,3,]`, `[1,2,3]`)
+
+		// Extend to golang accepted numbers
+		// as int64
+		checkJSON(t, `+42`, `42`)
+
+		checkJSON(t, `0600`, `384`)
+		checkJSON(t, `-0600`, `-384`)
+		checkJSON(t, `+0600`, `384`)
+
+		checkJSON(t, `0xBadFace`, `195951310`)
+		checkJSON(t, `-0xBadFace`, `-195951310`)
+		checkJSON(t, `+0xBadFace`, `195951310`)
+
+		// as float64
+		checkJSON(t, `0600.123`, `600.123`) // float64 can not be an octal number
+		checkJSON(t, `0600.`, `600`)        // float64 can not be an octal number
+		checkJSON(t, `.25`, `0.25`)
+		checkJSON(t, `+123.`, `123`)
 	})
 
 	t.Run("Special string cases", func(t *testing.T) {
