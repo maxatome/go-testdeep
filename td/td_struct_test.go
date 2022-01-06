@@ -39,6 +39,20 @@ func TestStruct(t *testing.T) {
 		}))
 
 	checkOK(t, &gotStruct,
+		td.Struct(
+			&MyStruct{
+				MyStructMid: MyStructMid{
+					ValStr: "zip",
+				},
+				ValInt: 666,
+			},
+			td.StructFields{
+				"ValBool":  true,
+				"> ValStr": "foobar",
+				">ValInt":  123,
+			}))
+
+	checkOK(t, &gotStruct,
 		td.Struct((*MyStruct)(nil), td.StructFields{
 			"ValBool": true,
 			"ValStr":  "foobar",
@@ -138,6 +152,20 @@ func TestStruct(t *testing.T) {
 			"ValStr":  "foobar",
 			"ValInt":  123,
 		}))
+
+	checkOK(t, gotStruct,
+		td.Struct(
+			MyStruct{
+				MyStructMid: MyStructMid{
+					ValStr: "zip",
+				},
+				ValInt: 666,
+			},
+			td.StructFields{
+				"ValBool":  true,
+				"> ValStr": "foobar",
+				">ValInt":  123,
+			}))
 
 	checkError(t, 123, td.Struct(MyStruct{}, td.StructFields{}),
 		expectedError{
@@ -293,11 +321,27 @@ func TestStruct(t *testing.T) {
 		})
 
 	checkError(t, "never tested",
+		td.Struct(&MyStruct{}, td.StructFields{">\tUnknownField": 123}),
+		expectedError{
+			Message: mustBe("bad usage of Struct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`struct td_test.MyStruct has no field "UnknownField" (from ">\tUnknownField")`),
+		})
+
+	checkError(t, "never tested",
 		td.Struct(&MyStruct{}, td.StructFields{"ValBool": 123}),
 		expectedError{
 			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("type int of field expected value ValBool differs from struct one (bool)"),
+		})
+
+	checkError(t, "never tested",
+		td.Struct(&MyStruct{}, td.StructFields{">ValBool": 123}),
+		expectedError{
+			Message: mustBe("bad usage of Struct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`type int of field expected value ValBool (from ">ValBool") differs from struct one (bool)`),
 		})
 
 	checkError(t, "never tested",
@@ -680,6 +724,20 @@ func TestSStruct(t *testing.T) {
 		}))
 
 	checkOK(t, &gotStruct,
+		td.SStruct(
+			&MyStruct{
+				MyStructMid: MyStructMid{
+					ValStr: "zip",
+				},
+				ValInt: 666,
+			},
+			td.StructFields{
+				"ValBool":  true,
+				"> ValStr": "foobar",
+				">ValInt":  123,
+			}))
+
+	checkOK(t, &gotStruct,
 		td.SStruct((*MyStruct)(nil), td.StructFields{
 			"ValBool": true,
 			"ValStr":  "foobar",
@@ -775,6 +833,20 @@ func TestSStruct(t *testing.T) {
 			"ValStr":  "foobar",
 			"ValInt":  123,
 		}))
+
+	checkOK(t, gotStruct,
+		td.SStruct(
+			MyStruct{
+				MyStructMid: MyStructMid{
+					ValStr: "zip",
+				},
+				ValInt: 666,
+			},
+			td.StructFields{
+				"ValBool":  true,
+				"> ValStr": "foobar",
+				">ValInt":  123,
+			}))
 
 	checkError(t, 123, td.SStruct(MyStruct{}, td.StructFields{}),
 		expectedError{
@@ -926,11 +998,27 @@ func TestSStruct(t *testing.T) {
 		})
 
 	checkError(t, "never tested",
+		td.SStruct(&MyStruct{}, td.StructFields{">\tUnknownField": 123}),
+		expectedError{
+			Message: mustBe("bad usage of SStruct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`struct td_test.MyStruct has no field "UnknownField" (from ">\tUnknownField")`),
+		})
+
+	checkError(t, "never tested",
 		td.SStruct(&MyStruct{}, td.StructFields{"ValBool": 123}),
 		expectedError{
 			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("type int of field expected value ValBool differs from struct one (bool)"),
+		})
+
+	checkError(t, "never tested",
+		td.SStruct(&MyStruct{}, td.StructFields{">ValBool": 123}),
+		expectedError{
+			Message: mustBe("bad usage of SStruct operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`type int of field expected value ValBool (from ">ValBool") differs from struct one (bool)`),
 		})
 
 	checkError(t, "never tested",

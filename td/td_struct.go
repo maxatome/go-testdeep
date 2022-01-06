@@ -16,6 +16,7 @@ import (
 	"regexp"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
@@ -166,32 +167,53 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 
 	st.expectedFields = make([]fieldInfo, 0, len(expectedFields))
 	checkedFields := make(map[string]bool, len(expectedFields))
-	var matchers fieldMatcherSlice
+	var matchers fieldMatcherSlice //nolint: prealloc
 
 	// Check that all given fields are available in model
 	stType := st.expectedType
 	for fieldName, expectedValue := range expectedFields {
 		field, found := stType.FieldByName(fieldName)
-		if !found {
-			matcher, err := newFieldMatcher(fieldName, expectedValue)
-			if err != nil {
-				if err == errNotAMatcher {
-					st.err = ctxerr.OpBad(st.location.Func,
-						"struct %s has no field %q", stType, fieldName)
-				} else {
-					st.err = ctxerr.OpBad(st.location.Func, err.Error())
-				}
+		if found {
+			st.addExpectedValue(field, expectedValue, "")
+			if st.err != nil {
 				return st
 			}
-			matchers = append(matchers, matcher)
+			checkedFields[fieldName] = false
 			continue
 		}
 
-		st.addExpectedValue(field, expectedValue, "")
-		if st.err != nil {
+		// overwrite model field: ">fieldName", "> fieldName"
+		if strings.HasPrefix(fieldName, ">") {
+			name := strings.TrimSpace(fieldName[1:])
+			field, found = stType.FieldByName(name)
+			if !found {
+				st.err = ctxerr.OpBad(st.location.Func,
+					"struct %s has no field %q (from %q)", stType, name, fieldName)
+				return st
+			}
+			st.addExpectedValue(
+				field, expectedValue,
+				fmt.Sprintf(" (from %q)", fieldName),
+			)
+			if st.err != nil {
+				return st
+			}
+			checkedFields[name] = true
+			continue
+		}
+
+		// matcher: "=~At$", "!~At$", "=*At", "!*At"
+		matcher, err := newFieldMatcher(fieldName, expectedValue)
+		if err != nil {
+			if err == errNotAMatcher {
+				st.err = ctxerr.OpBad(st.location.Func,
+					"struct %s has no field %q", stType, fieldName)
+			} else {
+				st.err = ctxerr.OpBad(st.location.Func, err.Error())
+			}
 			return st
 		}
-		checkedFields[fieldName] = true
+		matchers = append(matchers, matcher)
 	}
 
 	// Get all field names
@@ -204,6 +226,11 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 	// Check initialized fields in model
 	if vmodel.IsValid() {
 		for fieldName := range allFields {
+			overwrite, alreadySet := checkedFields[fieldName]
+			if overwrite {
+				continue
+			}
+
 			field, _ := stType.FieldByName(fieldName)
 			if field.Anonymous {
 				continue
@@ -224,7 +251,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 
 			// If non-zero field
 			if !reflect.DeepEqual(reflect.Zero(field.Type).Interface(), fieldIf) {
-				if checkedFields[fieldName] {
+				if alreadySet {
 					st.err = ctxerr.OpBad(st.location.Func,
 						"non zero field %s in model already exists in expectedFields",
 						fieldName)
@@ -247,7 +274,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 		sort.Sort(matchers) // always process matchers in the same order
 		for _, m := range matchers {
 			for fieldName := range allFields {
-				if checkedFields[fieldName] {
+				if _, ok := checkedFields[fieldName]; ok {
 					continue
 				}
 				field, _ := stType.FieldByName(fieldName)
@@ -278,7 +305,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 	// If strict, fill non explicitly expected fields to zero
 	if strict {
 		for fieldName := range allFields {
-			if checkedFields[fieldName] {
+			if _, ok := checkedFields[fieldName]; ok {
 				continue
 			}
 
@@ -358,6 +385,25 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue int
 //     td.StructFields{
 //       "Age":      td.Between(40, 45),
 //       "Children": 0,
+//     }),
+//   )
+//
+// It is an error to set a non-zero field in "model" AND to set the
+// same field in "expectedFields", as in such cases the Struct
+// operator does not know if the user wants to override the non-zero
+// "model" field value or if it is an error. To explicitly override a
+// non-zero "model" in "expectedFields", just prefix its name with a
+// ">" (followed by some optional spaces), as in:
+//
+//   td.Cmp(t, got, td.Struct(
+//     Person{
+//       Name:     "John Doe",
+//       Age:      23,
+//       Children: 4,
+//     },
+//     td.StructFields{
+//       "> Age":     td.Between(40, 45),
+//       ">Children": 0, // spaces after ">" are optional
 //     }),
 //   )
 //
@@ -458,6 +504,25 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 //     td.StructFields{
 //       "Age":      td.Between(40, 45),
 //       "Children": td.Ignore(),
+//     }),
+//   )
+//
+// It is an error to set a non-zero field in "model" AND to set the
+// same field in "expectedFields", as in such cases the SStruct
+// operator does not know if the user wants to override the non-zero
+// "model" field value or if it is an error. To explicitly override a
+// non-zero "model" in "expectedFields", just prefix its name with a
+// ">" (followed by some optional spaces), as in:
+//
+//   td.Cmp(t, got, td.SStruct(
+//     Person{
+//       Name:     "John Doe",
+//       Age:      23,
+//       Children: 4,
+//     },
+//     td.StructFields{
+//       "> Age":     td.Between(40, 45),
+//       ">Children": 0, // spaces after ">" are optional
 //     }),
 //   )
 //
