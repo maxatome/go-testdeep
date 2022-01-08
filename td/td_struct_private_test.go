@@ -7,11 +7,69 @@
 package td
 
 import (
+	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/test"
 )
+
+func TestCanonStructField(t *testing.T) {
+	for _, tst := range []struct{ got, expected string }{
+		{"", ""},
+		{"pipo", "pipo"},
+		{">pipo", ">pipo"},
+		{">    pipo  ", ">pipo"},
+		{"123=~.*", "123=~.*"},
+		{"  123  =~  .*   ", "123=~.*"},
+		{"&badField", "&badField"},
+	} {
+		test.EqualStr(t, canonStructField(tst.got), tst.expected)
+	}
+}
+
+func TestMergeStructFields(t *testing.T) {
+	sfs := mergeStructFields()
+	if sfs != nil {
+		t.Errorf("not nil")
+	}
+
+	x := StructFields{}
+	sfs = mergeStructFields(x)
+	if reflect.ValueOf(sfs).Pointer() != reflect.ValueOf(x).Pointer() {
+		t.Errorf("not x")
+	}
+
+	a := StructFields{"pipo": 1}
+	b := StructFields{"pipo": 2}
+	c := StructFields{"pipo": 3}
+	sfs = mergeStructFields(a, b, c)
+	if reflect.ValueOf(sfs).Pointer() == reflect.ValueOf(c).Pointer() {
+		t.Errorf("is c")
+	}
+	test.EqualInt(t, len(sfs), 1)
+	test.EqualInt(t, sfs["pipo"].(int), 3)
+
+	a = StructFields{">pipo": 1}
+	b = StructFields{">  pipo": 2}
+	c = StructFields{">pipo  ": 3}
+	sfs = mergeStructFields(a, b, c)
+	if reflect.ValueOf(sfs).Pointer() == reflect.ValueOf(c).Pointer() {
+		t.Errorf("is c")
+	}
+	test.EqualInt(t, len(sfs), 1)
+	test.EqualInt(t, sfs[">pipo  "].(int), 3)
+
+	a = StructFields{"1=~pipo": 1}
+	b = StructFields{"  1  =~ pipo  ": 2}
+	c = StructFields{"1\t=~\tpipo": 3}
+	sfs = mergeStructFields(a, b, c)
+	if reflect.ValueOf(sfs).Pointer() == reflect.ValueOf(c).Pointer() {
+		t.Errorf("is c")
+	}
+	test.EqualInt(t, len(sfs), 1)
+	test.EqualInt(t, sfs["1\t=~\tpipo"].(int), 3)
+}
 
 func TestFieldMatcher(t *testing.T) {
 	_, err := newFieldMatcher("pipo", 123)

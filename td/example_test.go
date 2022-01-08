@@ -3092,6 +3092,52 @@ func ExampleStruct() {
 	// Foobar has some children (using nil model): true
 }
 
+func ExampleStruct_overwrite_model() {
+	t := &testing.T{}
+
+	type Person struct {
+		Name        string
+		Age         int
+		NumChildren int
+	}
+
+	got := Person{
+		Name:        "Foobar",
+		Age:         42,
+		NumChildren: 3,
+	}
+
+	ok := td.Cmp(t, got,
+		td.Struct(
+			Person{
+				Name: "Foobar",
+				Age:  53,
+			},
+			td.StructFields{
+				">Age":        td.Between(40, 50), // ">" to overwrite Age:53 in model
+				"NumChildren": td.Gt(2),
+			}),
+		"checks %v is the right Person")
+	fmt.Println("Foobar is between 40 & 50:", ok)
+
+	ok = td.Cmp(t, got,
+		td.Struct(
+			Person{
+				Name: "Foobar",
+				Age:  53,
+			},
+			td.StructFields{
+				"> Age":       td.Between(40, 50), // same, ">" can be followed by spaces
+				"NumChildren": td.Gt(2),
+			}),
+		"checks %v is the right Person")
+	fmt.Println("Foobar is between 40 & 50:", ok)
+
+	// Output:
+	// Foobar is between 40 & 50: true
+	// Foobar is between 40 & 50: true
+}
+
 func ExampleStruct_patterns() {
 	t := &testing.T{}
 
@@ -3137,6 +3183,46 @@ func ExampleStruct_patterns() {
 	// Output:
 	// Patterns match only remaining fields: true
 	// Ordered patterns match only remaining fields: true
+}
+
+func ExampleStruct_struct_fields() { // only operator
+	t := &testing.T{}
+
+	type Person struct {
+		Name        string
+		Age         int
+		NumChildren int
+	}
+
+	got := Person{
+		Name:        "Foobar",
+		Age:         42,
+		NumChildren: 3,
+	}
+
+	ok := td.Cmp(t, got, td.Struct(Person{Name: "Foobar"}), "no StructFields")
+	fmt.Println("Without any StructFields:", ok)
+
+	ok = td.Cmp(t, got,
+		td.Struct(Person{Name: "Bingo"},
+			td.StructFields{
+				"> Name": "pipo",
+				"Age":    42,
+			},
+			td.StructFields{
+				"> Name":      "bingo",
+				"NumChildren": 10,
+			},
+			td.StructFields{
+				">Name":       "Foobar",
+				"NumChildren": 3,
+			}),
+		"merge several StructFields")
+	fmt.Println("Merge several StructFields:", ok)
+
+	// Output:
+	// Without any StructFields: true
+	// Merge several StructFields: true
 }
 
 func ExampleSStruct() {
@@ -3200,6 +3286,52 @@ func ExampleSStruct() {
 	// Foobar has some children (using nil model): true
 }
 
+func ExampleSStruct_overwrite_model() {
+	t := &testing.T{}
+
+	type Person struct {
+		Name        string
+		Age         int
+		NumChildren int
+	}
+
+	got := Person{
+		Name:        "Foobar",
+		Age:         42,
+		NumChildren: 3,
+	}
+
+	ok := td.Cmp(t, got,
+		td.SStruct(
+			Person{
+				Name: "Foobar",
+				Age:  53,
+			},
+			td.StructFields{
+				">Age":        td.Between(40, 50), // ">" to overwrite Age:53 in model
+				"NumChildren": td.Gt(2),
+			}),
+		"checks %v is the right Person")
+	fmt.Println("Foobar is between 40 & 50:", ok)
+
+	ok = td.Cmp(t, got,
+		td.SStruct(
+			Person{
+				Name: "Foobar",
+				Age:  53,
+			},
+			td.StructFields{
+				"> Age":       td.Between(40, 50), // same, ">" can be followed by spaces
+				"NumChildren": td.Gt(2),
+			}),
+		"checks %v is the right Person")
+	fmt.Println("Foobar is between 40 & 50:", ok)
+
+	// Output:
+	// Foobar is between 40 & 50: true
+	// Foobar is between 40 & 50: true
+}
+
 func ExampleSStruct_patterns() {
 	t := &testing.T{}
 
@@ -3251,6 +3383,53 @@ func ExampleSStruct_patterns() {
 	// Output:
 	// Patterns match only remaining fields: true
 	// Ordered patterns match only remaining fields: true
+}
+
+func ExampleSStruct_struct_fields() { // only operator
+	t := &testing.T{}
+
+	type Person struct {
+		Name        string
+		Age         int
+		NumChildren int
+	}
+
+	got := Person{
+		Name:        "Foobar",
+		Age:         42,
+		NumChildren: 3,
+	}
+
+	// No added value here, but it works
+	ok := td.Cmp(t, got,
+		td.SStruct(Person{
+			Name:        "Foobar",
+			Age:         42,
+			NumChildren: 3,
+		}),
+		"no StructFields")
+	fmt.Println("Without any StructFields:", ok)
+
+	ok = td.Cmp(t, got,
+		td.SStruct(Person{Name: "Bingo"},
+			td.StructFields{
+				"> Name": "pipo",
+				"Age":    42,
+			},
+			td.StructFields{
+				"> Name":      "bingo",
+				"NumChildren": 10,
+			},
+			td.StructFields{
+				">Name":       "Foobar",
+				"NumChildren": 3,
+			}),
+		"merge several StructFields")
+	fmt.Println("Merge several StructFields:", ok)
+
+	// Output:
+	// Without any StructFields: true
+	// Merge several StructFields: true
 }
 
 func ExampleSubBagOf() {
