@@ -18,6 +18,8 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/dark"
@@ -58,6 +60,19 @@ var (
 	errNotAMatcher = errors.New("Not a matcher")
 )
 
+// parseMatcher parses " [NUM] OP PATTERN " and returns 3 strings
+// corresponding to each part or nil if "s" is not a matcher.
+func parseMatcher(s string) []string {
+	reMatcherOnce.Do(func() {
+		reMatcher = regexp.MustCompile(`^(?:(\d+)\s*)?([=!]~?)\s*(.+)`)
+	})
+	subs := reMatcher.FindStringSubmatch(strings.TrimSpace(s))
+	if subs != nil {
+		subs = subs[1:]
+	}
+	return subs
+}
+
 // newFieldMatcher checks "name" matches "[NUM] OP PATTERN" where NUM
 // is an optional number used to sort patterns, OP is "=~", "!~", "="
 // or "!" and PATTERN is a regexp (when OP is either "=~" or "!~") or
@@ -65,11 +80,7 @@ var (
 //
 // NUM, OP and PATTERN can be separated by spaces (or not).
 func newFieldMatcher(name string, expected interface{}) (fieldMatcher, error) {
-	reMatcherOnce.Do(func() {
-		reMatcher = regexp.MustCompile(`^\s*(?:(\d+)\s*)?([=!]~?)\s*(.+)`)
-	})
-
-	subs := reMatcher.FindStringSubmatch(name)
+	subs := parseMatcher(name)
 	if subs == nil {
 		return fieldMatcher{}, errNotAMatcher
 	}
@@ -77,16 +88,16 @@ func newFieldMatcher(name string, expected interface{}) (fieldMatcher, error) {
 	fm := fieldMatcher{
 		name:     name,
 		expected: expected,
-		ok:       subs[2][0] == '=',
+		ok:       subs[1][0] == '=',
 	}
 
-	if subs[1] != "" {
-		fm.order, _ = strconv.Atoi(subs[1]) //nolint: errcheck
+	if subs[0] != "" {
+		fm.order, _ = strconv.Atoi(subs[0]) //nolint: errcheck
 	}
 
 	// Shell pattern
-	if subs[2] == "=" || subs[2] == "!" {
-		pattern := subs[3]
+	if subs[1] == "=" || subs[1] == "!" {
+		pattern := subs[2]
 		fm.match = func(s string) (bool, error) {
 			return path.Match(pattern, s)
 		}
@@ -94,7 +105,7 @@ func newFieldMatcher(name string, expected interface{}) (fieldMatcher, error) {
 	}
 
 	// Regexp
-	r, err := regexp.Compile(subs[3])
+	r, err := regexp.Compile(subs[2])
 	if err != nil {
 		return fieldMatcher{}, fmt.Errorf("bad regexp field %#q: %s", name, err)
 	}
@@ -122,6 +133,72 @@ func (m fieldMatcherSlice) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
 // the expected field value (which can be a TestDeep operator as well
 // as a zero value.)
 type StructFields map[string]interface{}
+
+// canonStructField canonicalizes "name", a key in a StructFields map,
+// so it can be compared with other keys during a mergeStructFields().
+//   - "name"                 → "name"
+//   - ">  name  "            → ">name"
+//   - "  22 =~ [A-Z].*At$  " → "22=~[A-Z].*At$"
+func canonStructField(name string) string {
+	r, _ := utf8.DecodeRuneInString(name)
+	if r == utf8.RuneError || unicode.IsLetter(r) {
+		return name // shortcut
+	}
+
+	// Overwrite a field
+	if strings.HasPrefix(name, ">") {
+		new := strings.TrimSpace(name[1:])
+		if 1+len(new) == len(name) {
+			return name // already canonicalized
+		}
+		return ">" + new
+	}
+
+	// Matcher
+	if subs := parseMatcher(name); subs != nil {
+		if len(subs[0])+len(subs[1])+len(subs[2]) == len(name) {
+			return name // already canonicalized
+		}
+		return subs[0] + subs[1] + subs[2]
+	}
+
+	// Will probably raise an error later as it cannot be a field, not
+	// an overwritter and not a matcher
+	return name
+}
+
+// mergeStructFields merges all "sfs" items into one StructFields and
+// returns it.
+func mergeStructFields(sfs ...StructFields) StructFields {
+	switch len(sfs) {
+	case 0:
+		return nil
+
+	case 1:
+		return sfs[0]
+
+	default:
+		// Do a smart merge so ">  pipo" replaces ">pipo  " for example.
+		canon2field := map[string]string{}
+		ret := make(StructFields, len(sfs[0]))
+		for _, sf := range sfs {
+			for field, value := range sf {
+				canon := canonStructField(field)
+				if prevField, ok := canon2field[canon]; ok {
+					delete(ret, prevField)
+					delete(canon2field, canon)
+				} else {
+					delete(ret, canon)
+				}
+				if canon != field {
+					canon2field[canon] = field
+				}
+				ret[field] = value
+			}
+		}
+		return ret
+	}
+}
 
 func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 	vmodel := reflect.ValueOf(model)
@@ -375,16 +452,21 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue int
 //
 // "model" must be the same type as compared data.
 //
-// "expectedFields" can be nil, if no zero entries are expected and
-// no TestDeep operators are involved.
+// "expectedFields" can be omitted, if no zero entries are expected
+// and no TestDeep operators are involved. If "expectedFields"
+// contains more than one item, all items are merged before their use,
+// from left to right.
 //
 //   td.Cmp(t, got, td.Struct(
 //     Person{
 //       Name: "John Doe",
 //     },
 //     td.StructFields{
+//       "Children": 4,
+//     },
+//     td.StructFields{
 //       "Age":      td.Between(40, 45),
-//       "Children": 0,
+//       "Children": 0, // overwrite 4
 //     }),
 //   )
 //
@@ -476,8 +558,8 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue int
 // succeed. Non-expected fields are ignored.
 //
 // TypeBehind method returns the reflect.Type of "model".
-func Struct(model interface{}, expectedFields StructFields) TestDeep {
-	return anyStruct(model, expectedFields, false)
+func Struct(model interface{}, expectedFields ...StructFields) TestDeep {
+	return anyStruct(model, mergeStructFields(expectedFields...), false)
 }
 
 // summary(SStruct): strictly compares the contents of a struct or a
@@ -492,7 +574,9 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 //
 // "model" must be the same type as compared data.
 //
-// "expectedFields" can be nil, if no TestDeep operators are involved.
+// "expectedFields" can be omitted, if no TestDeep operators are
+// involved. If "expectedFields" contains more than one item, all
+// items are merged before their use, from left to right.
 //
 // To ignore a field, one has to specify it in "expectedFields" and
 // use the Ignore operator.
@@ -502,8 +586,11 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 //       Name: "John Doe",
 //     },
 //     td.StructFields{
+//       "Children": 4,
+//     },
+//     td.StructFields{
 //       "Age":      td.Between(40, 45),
-//       "Children": td.Ignore(),
+//       "Children": td.Ignore(), // overwrite 4
 //     }),
 //   )
 //
@@ -595,8 +682,8 @@ func Struct(model interface{}, expectedFields StructFields) TestDeep {
 // succeed.
 //
 // TypeBehind method returns the reflect.Type of "model".
-func SStruct(model interface{}, expectedFields StructFields) TestDeep {
-	return anyStruct(model, expectedFields, true)
+func SStruct(model interface{}, expectedFields ...StructFields) TestDeep {
+	return anyStruct(model, mergeStructFields(expectedFields...), true)
 }
 
 func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {

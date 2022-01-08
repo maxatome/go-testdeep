@@ -2653,6 +2653,46 @@ func ExampleCmpSStruct() {
 	// Foobar has some children (using nil model): true
 }
 
+func ExampleCmpSStruct_overwrite_model() {
+	t := &testing.T{}
+
+	type Person struct {
+		Name        string
+		Age         int
+		NumChildren int
+	}
+
+	got := Person{
+		Name:        "Foobar",
+		Age:         42,
+		NumChildren: 3,
+	}
+
+	ok := td.CmpSStruct(t, got, Person{
+		Name: "Foobar",
+		Age:  53,
+	}, td.StructFields{
+		">Age":        td.Between(40, 50), // ">" to overwrite Age:53 in model
+		"NumChildren": td.Gt(2),
+	},
+		"checks %v is the right Person")
+	fmt.Println("Foobar is between 40 & 50:", ok)
+
+	ok = td.CmpSStruct(t, got, Person{
+		Name: "Foobar",
+		Age:  53,
+	}, td.StructFields{
+		"> Age":       td.Between(40, 50), // same, ">" can be followed by spaces
+		"NumChildren": td.Gt(2),
+	},
+		"checks %v is the right Person")
+	fmt.Println("Foobar is between 40 & 50:", ok)
+
+	// Output:
+	// Foobar is between 40 & 50: true
+	// Foobar is between 40 & 50: true
+}
+
 func ExampleCmpSStruct_patterns() {
 	t := &testing.T{}
 
@@ -2801,6 +2841,46 @@ func ExampleCmpStruct() {
 	// Foobar has some children: true
 	// Foobar has some children (using pointer): true
 	// Foobar has some children (using nil model): true
+}
+
+func ExampleCmpStruct_overwrite_model() {
+	t := &testing.T{}
+
+	type Person struct {
+		Name        string
+		Age         int
+		NumChildren int
+	}
+
+	got := Person{
+		Name:        "Foobar",
+		Age:         42,
+		NumChildren: 3,
+	}
+
+	ok := td.CmpStruct(t, got, Person{
+		Name: "Foobar",
+		Age:  53,
+	}, td.StructFields{
+		">Age":        td.Between(40, 50), // ">" to overwrite Age:53 in model
+		"NumChildren": td.Gt(2),
+	},
+		"checks %v is the right Person")
+	fmt.Println("Foobar is between 40 & 50:", ok)
+
+	ok = td.CmpStruct(t, got, Person{
+		Name: "Foobar",
+		Age:  53,
+	}, td.StructFields{
+		"> Age":       td.Between(40, 50), // same, ">" can be followed by spaces
+		"NumChildren": td.Gt(2),
+	},
+		"checks %v is the right Person")
+	fmt.Println("Foobar is between 40 & 50:", ok)
+
+	// Output:
+	// Foobar is between 40 & 50: true
+	// Foobar is between 40 & 50: true
 }
 
 func ExampleCmpStruct_patterns() {

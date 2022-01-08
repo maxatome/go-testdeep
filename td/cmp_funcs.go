@@ -914,6 +914,10 @@ func CmpSmuggle(t TestingT, got, fn, expectedValue interface{}, args ...interfac
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SStruct for details.
 //
+// SStruct() optional parameter "expectedFields" is here mandatory.
+// nil value should be passed to mimic its absence in
+// original SStruct() call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -951,6 +955,10 @@ func CmpString(t TestingT, got interface{}, expected string, args ...interface{}
 //   td.Cmp(t, got, td.Struct(model, expectedFields), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Struct for details.
+//
+// Struct() optional parameter "expectedFields" is here mandatory.
+// nil value should be passed to mimic its absence in
+// original Struct() call.
 //
 // Returns true if the test is OK, false if it fails.
 //

@@ -847,6 +847,10 @@ func (t *T) Smuggle(got, fn, expectedValue interface{}, args ...interface{}) boo
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SStruct for details.
 //
+// SStruct() optional parameter "expectedFields" is here mandatory.
+// nil value should be passed to mimic its absence in
+// original SStruct() call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // "args..." are optional and allow to name the test. This name is
@@ -884,6 +888,10 @@ func (t *T) String(got interface{}, expected string, args ...interface{}) bool {
 //   t.Cmp(got, td.Struct(model, expectedFields), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Struct for details.
+//
+// Struct() optional parameter "expectedFields" is here mandatory.
+// nil value should be passed to mimic its absence in
+// original Struct() call.
 //
 // Returns true if the test is OK, false if it fails.
 //

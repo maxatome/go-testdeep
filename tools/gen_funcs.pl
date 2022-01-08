@@ -63,7 +63,11 @@ my $ARGS_COMMENT_MD = doc2md($args_comment_src);
 my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        N         => 0,
                        Re        => 'nil',
-                       TruncTime => 0);
+                       TruncTime => 0,
+                       # These operators accept several StructFields,
+                       # but we want only one here
+                       Struct    => 'nil',
+                       SStruct   => 'nil');
 
 # Smuggler operators (automatically filled)
 my %SMUGGLER_OPERATORS;
