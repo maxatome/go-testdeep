@@ -202,10 +202,10 @@ func TestSmuggle(t *testing.T) {
 		td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
 
 	checkOK(t, []byte(`{"foo":1}`),
-		td.Smuggle((json.RawMessage)(nil), td.JSON(`{"foo":1}`)))
+		td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
 
 	checkOK(t, []byte(`{"foo":1}`),
-		td.Smuggle(reflect.TypeOf((json.RawMessage)(nil)), td.JSON(`{"foo":1}`)))
+		td.Smuggle(reflect.TypeOf(json.RawMessage(nil)), td.JSON(`{"foo":1}`)))
 
 	checkOK(t, `{"foo":1}`,
 		td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
