@@ -757,6 +757,7 @@ func getTrace(args ...interface{}) string {
 // and contains a '%' rune then fmt.Fprintf is used to compose the
 // name, else "args" are passed to fmt.Fprint.
 func (t *T) LogTrace(args ...interface{}) {
+	t.Helper()
 	t.Log(getTrace(args...))
 }
 
@@ -769,6 +770,7 @@ func (t *T) LogTrace(args ...interface{}) {
 // and contains a '%' rune then fmt.Fprintf is used to compose the
 // name, else "args" are passed to fmt.Fprint.
 func (t *T) ErrorTrace(args ...interface{}) {
+	t.Helper()
 	t.Error(getTrace(args...))
 }
 
@@ -781,5 +783,6 @@ func (t *T) ErrorTrace(args ...interface{}) {
 // and contains a '%' rune then fmt.Fprintf is used to compose the
 // name, else "args" are passed to fmt.Fprint.
 func (t *T) FatalTrace(args ...interface{}) {
+	t.Helper()
 	t.Fatal(getTrace(args...))
 }
