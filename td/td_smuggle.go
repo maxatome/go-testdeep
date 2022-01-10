@@ -594,7 +594,7 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //
 //   td.Cmp(t, `{"foo":1}`, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
 //   // or equally
-//   td.Cmp(t, `{"foo":1}`, td.Smuggle((json.RawMessage)(nil), td.JSON(`{"foo":1}`)))
+//   td.Cmp(t, `{"foo":1}`, td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
 //
 // converts on the fly a string to a json.RawMessage so JSON operator
 // can parse it as JSON. This is mostly a shortcut for:
@@ -610,7 +610,7 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //   // …
 //   td.Cmp(t, body, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
 //   // or equally
-//   td.Cmp(t, body, td.Smuggle((json.RawMessage)(nil), td.JSON(`{"foo":1}`)))
+//   td.Cmp(t, body, td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
 //
 // This last example allows to easily inject body content into JSON
 // operator.
