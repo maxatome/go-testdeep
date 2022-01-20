@@ -157,6 +157,14 @@ func Run(tb testing.TB, suite interface{}, config ...td.ContextConfig) bool {
 
 	typ := reflect.TypeOf(suite)
 
+	// The suite is not a pointer and in its pointer version it has
+	// access to more method. Check the user isn't making a mistake by
+	// not passing a pointer
+	if possibleMistakes := diffWithPtrMethods(typ); len(possibleMistakes) > 0 {
+		t.Logf("Run(): several methods are not accessible as suite is not a pointer but %T: %s",
+			suite, strings.Join(possibleMistakes, ", "))
+	}
+
 	var methods []int
 	for i, num := 0, typ.NumMethod(); i < num; i++ {
 		m := typ.Method(i)
@@ -349,4 +357,44 @@ func run(t *td.T, suite interface{}, methods []int) {
 			}
 		}
 	}
+}
+
+func diffWithPtrMethods(typ reflect.Type) []string {
+	if typ.Kind() == reflect.Ptr {
+		return nil
+	}
+
+	ptyp := reflect.PtrTo(typ)
+	if typ.NumMethod() == ptyp.NumMethod() {
+		return nil
+	}
+
+	keep := func(m reflect.Method) bool {
+		switch m.Name {
+		case "Setup", "PreTest", "PostTest", "BetweenTests", "Destroy":
+			return true
+		default:
+			return isTest(m.Name)
+		}
+	}
+
+	var nonPtrMethods []string
+	for i, num := 0, typ.NumMethod(); i < num; i++ {
+		if m := typ.Method(i); keep(m) {
+			nonPtrMethods = append(nonPtrMethods, m.Name)
+		}
+	}
+
+	var onlyPtrMethods []string
+	for ni, pi, num := 0, 0, ptyp.NumMethod(); pi < num; pi++ {
+		if m := ptyp.Method(pi); keep(m) {
+			if ni >= len(nonPtrMethods) || nonPtrMethods[ni] != m.Name {
+				onlyPtrMethods = append(onlyPtrMethods, m.Name)
+			} else {
+				ni++
+			}
+		}
+	}
+
+	return onlyPtrMethods
 }
