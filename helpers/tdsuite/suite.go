@@ -140,8 +140,12 @@ func shouldContinue(t *td.T, testName string, ret []reflect.Value) bool {
 //
 // Run returns true if all the tests succeeded, false otherwise.
 //
-// Note that if "suite" is not empty struct, it should probably be a
-// pointer, and so the hooks and tests should have a pointer receiver.
+// Note that if "suite" is not an empty struct, it should be a pointer
+// if its contents has to be altered by hooks & tests methods.
+//
+// If "suite" is a pointer, it has access to non-pointer & pointer
+// methods hooks & tests. If "suite" is not a pointer, it only has
+// access to non-pointer methods hooks & tests.
 func Run(tb testing.TB, suite interface{}, config ...td.ContextConfig) bool {
 	t := td.NewT(tb, config...)
 
