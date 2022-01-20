@@ -37,6 +37,10 @@ func (b *base) rec(plus ...string) {
 	b.calls = append(b.calls, name)
 }
 
+func (b *base) clean() {
+	b.calls = b.calls[:0]
+}
+
 // Mini has only tests, no hooks.
 type Mini struct{ base }
 
@@ -58,7 +62,7 @@ func (f *Full) Destroy(t *td.T) error { f.rec(); return nil }
 func (f *Full) Test1(t *td.T)                     { f.rec() }
 func (f *Full) Test2(assert *td.T, require *td.T) { f.rec() }
 func (f *Full) Test3(t *td.T)                     { f.rec() }
-func (f *Full) Testimony(t *td.T)                 {} // not a test method
+func (f *Full) Testimony(t *td.T)                 { f.rec() } // not a test method
 
 var (
 	_ tdsuite.Setup        = (*Full)(nil)
@@ -79,6 +83,25 @@ func (*FullBrokenHooks) BetweenTests(t *td.T, prev, next *string) error { return
 func (*FullBrokenHooks) Destroy(t *td.T)                                {}
 
 func (*FullBrokenHooks) Test1(_ *td.T) {}
+
+// FullNoPtr has hooks & tests as non-pointer & pointer methods.
+type FullNoPtr struct{}
+
+var traceFullNoPtr base
+
+func (f FullNoPtr) Setup(t *td.T) error                { traceFullNoPtr.rec(); return nil }
+func (f FullNoPtr) PreTest(t *td.T, tn string) error   { traceFullNoPtr.rec(tn); return nil }
+func (f *FullNoPtr) PostTest(t *td.T, tn string) error { traceFullNoPtr.rec(tn); return nil }
+func (f FullNoPtr) BetweenTests(t *td.T, prev, next string) error {
+	traceFullNoPtr.rec(prev, next)
+	return nil
+}
+func (f FullNoPtr) Destroy(t *td.T) error { traceFullNoPtr.rec(); return nil }
+
+func (f FullNoPtr) Test1(t *td.T)                      { traceFullNoPtr.rec() }
+func (f *FullNoPtr) Test2(assert *td.T, require *td.T) { traceFullNoPtr.rec() }
+func (f FullNoPtr) Test3(t *td.T)                      { traceFullNoPtr.rec() }
+func (f FullNoPtr) Testimony(t *td.T)                  { traceFullNoPtr.rec() } // not a test method
 
 // ErrNone has no tests.
 type ErrNone struct{}
@@ -122,7 +145,7 @@ func TestRun(t *testing.T) {
 		td.Cmp(t, suite.calls, []string{"Test1", "Test2"})
 	})
 
-	t.Run("Full", func(t *testing.T) {
+	t.Run("Full ptr", func(t *testing.T) {
 		suite := Full{}
 		td.CmpTrue(t, tdsuite.Run(t, &suite))
 		ok := td.Cmp(t, suite.calls, []string{
@@ -142,6 +165,70 @@ func TestRun(t *testing.T) {
 		})
 		if !ok {
 			for _, c := range suite.calls {
+				switch c[0] {
+				case 'S', 'B', 'D':
+					t.Log(c)
+				default:
+					t.Log("  ", c)
+				}
+			}
+		}
+	})
+
+	t.Run("Without ptr: only non-ptr methods", func(t *testing.T) {
+		defer traceFullNoPtr.clean()
+		suite := FullNoPtr{}
+		td.CmpTrue(t, tdsuite.Run(t, suite)) // non-ptr
+		ok := td.Cmp(t, traceFullNoPtr.calls, []string{
+			"Setup",
+			/**/ "PreTest+Test1",
+			/**/ "Test1",
+			// /**/ "PostTest+Test1", // PostTest is a ptr method
+			// Test2 is a ptr method
+			// "BetweenTests+Test1+Test2",
+			// /**/ "PreTest+Test2",
+			// /**/ "Test2",
+			// /**/ "PostTest+Test2",
+			// "BetweenTests+Test2+Test3",
+			"BetweenTests+Test1+Test3",
+			/**/ "PreTest+Test3",
+			/**/ "Test3",
+			// /**/ "PostTest+Test3", // PostTest is a ptr method
+			"Destroy",
+		})
+		if !ok {
+			for _, c := range traceFullNoPtr.calls {
+				switch c[0] {
+				case 'S', 'B', 'D':
+					t.Log(c)
+				default:
+					t.Log("  ", c)
+				}
+			}
+		}
+	})
+
+	t.Run("With ptr: all ptr & non-ptr methods", func(t *testing.T) {
+		defer traceFullNoPtr.clean()
+		suite := FullNoPtr{}
+		td.CmpTrue(t, tdsuite.Run(t, &suite)) // ptr
+		ok := td.Cmp(t, traceFullNoPtr.calls, []string{
+			"Setup",
+			/**/ "PreTest+Test1",
+			/**/ "Test1",
+			/**/ "PostTest+Test1",
+			"BetweenTests+Test1+Test2",
+			/**/ "PreTest+Test2",
+			/**/ "Test2",
+			/**/ "PostTest+Test2",
+			"BetweenTests+Test2+Test3",
+			/**/ "PreTest+Test3",
+			/**/ "Test3",
+			/**/ "PostTest+Test3",
+			"Destroy",
+		})
+		if !ok {
+			for _, c := range traceFullNoPtr.calls {
 				switch c[0] {
 				case 'S', 'B', 'D':
 					t.Log(c)
