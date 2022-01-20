@@ -68,6 +68,18 @@ var (
 	_ tdsuite.Destroy      = (*Full)(nil)
 )
 
+// FullBrokenHooks has all possible hooks, but wrongly defined, as they don't
+// match the hook interfaces.
+type FullBrokenHooks struct{}
+
+func (*FullBrokenHooks) Setup() error                                   { return nil }
+func (*FullBrokenHooks) PreTest(t *td.T, testName *string) error        { return nil }
+func (*FullBrokenHooks) PostTest(t *td.T, testName string)              {}
+func (*FullBrokenHooks) BetweenTests(t *td.T, prev, next *string) error { return nil }
+func (*FullBrokenHooks) Destroy(t *td.T)                                {}
+
+func (*FullBrokenHooks) Test1(_ *td.T) {}
+
 // ErrNone has no tests.
 type ErrNone struct{}
 
@@ -422,6 +434,21 @@ func TestRunErrors(t *testing.T) {
 		td.Cmp(t, tb.Messages, []string{
 			"++++ Test1Bool",
 			"Test1Bool / Test1BoolError between-tests error: BetweenTests error",
+		})
+	})
+
+	t.Run("InvalidHooks", func(t *testing.T) {
+		tb := test.NewTestingTB("TestError")
+		td.CmpFalse(t, tdsuite.Run(tb, &FullBrokenHooks{}))
+		td.CmpFalse(t, tb.IsFatal)
+		name := "*tdsuite_test.FullBrokenHooks"
+		td.Cmp(t, tb.Messages, []string{
+			name + " suite has a Setup method but it does not match Setup(t *td.T) error",
+			name + " suite has a Destroy method but it does not match Destroy(t *td.T) error",
+			name + " suite has a PreTest method but it does not match PreTest(t *td.T, testName string) error",
+			name + " suite has a PostTest method but it does not match PostTest(t *td.T, testName string) error",
+			name + " suite has a BetweenTests method but it does not match BetweenTests(t *td.T, previousTestName, nextTestName string) error",
+			"++++ Test1",
 		})
 	})
 
