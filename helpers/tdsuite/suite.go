@@ -245,35 +245,48 @@ func Run(tb testing.TB, suite interface{}, config ...td.ContextConfig) bool {
 func run(t *td.T, suite interface{}, methods []int) {
 	t.Helper()
 
+	suiteType := reflect.TypeOf(suite)
+
 	// setup
 	if s, ok := suite.(Setup); ok {
 		if err := s.Setup(t); err != nil {
 			t.Errorf("%T suite setup error: %s", suite, err)
 			return
 		}
+	} else if _, exists := suiteType.MethodByName("Setup"); exists {
+		t.Errorf("%T suite has a Setup method but it does not match Setup(t *td.T) error", suite)
 	}
-	defer func() {
-		// destroy
-		if s, ok := suite.(Destroy); ok {
+
+	// destroy
+	if s, ok := suite.(Destroy); ok {
+		defer func() {
 			if err := s.Destroy(t); err != nil {
 				t.Errorf("%T suite destroy error: %s", suite, err)
 			}
-		}
-	}()
+		}()
+	} else if _, exists := suiteType.MethodByName("Destroy"); exists {
+		t.Errorf("%T suite has a Destroy method but it does not match Destroy(t *td.T) error", suite)
+	}
 
 	preTest := emptyPrePostTest
 	if s, ok := suite.(PreTest); ok {
 		preTest = s.PreTest
+	} else if _, exists := suiteType.MethodByName("PreTest"); exists {
+		t.Errorf("%T suite has a PreTest method but it does not match PreTest(t *td.T, testName string) error", suite)
 	}
 
 	postTest := emptyPrePostTest
 	if s, ok := suite.(PostTest); ok {
 		postTest = s.PostTest
+	} else if _, exists := suiteType.MethodByName("PostTest"); exists {
+		t.Errorf("%T suite has a PostTest method but it does not match PostTest(t *td.T, testName string) error", suite)
 	}
 
 	between := emptyBetweenTests
 	if s, ok := suite.(BetweenTests); ok {
 		between = s.BetweenTests
+	} else if _, exists := suiteType.MethodByName("BetweenTests"); exists {
+		t.Errorf("%T suite has a BetweenTests method but it does not match BetweenTests(t *td.T, previousTestName, nextTestName string) error", suite)
 	}
 
 	vs := reflect.ValueOf(suite)
