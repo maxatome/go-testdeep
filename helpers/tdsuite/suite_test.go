@@ -101,7 +101,7 @@ func (f FullNoPtr) Destroy(t *td.T) error { traceFullNoPtr.rec(); return nil }
 func (f FullNoPtr) Test1(t *td.T)                      { traceFullNoPtr.rec() }
 func (f *FullNoPtr) Test2(assert *td.T, require *td.T) { traceFullNoPtr.rec() }
 func (f FullNoPtr) Test3(t *td.T)                      { traceFullNoPtr.rec() }
-func (f FullNoPtr) Testimony(t *td.T)                  { traceFullNoPtr.rec() } // not a test method
+func (f *FullNoPtr) Testimony(t *td.T)                 { traceFullNoPtr.rec() } // not a test method
 
 // ErrNone has no tests.
 type ErrNone struct{}
@@ -206,6 +206,9 @@ func TestRun(t *testing.T) {
 				}
 			}
 		}
+		// Yes it is a bit ugly
+		td.Cmp(t, t, td.Smuggle("output",
+			td.Contains("Run(): several methods are not accessible as suite is not a pointer but tdsuite_test.FullNoPtr: PostTest, Test2")))
 	})
 
 	t.Run("With ptr: all ptr & non-ptr methods", func(t *testing.T) {
@@ -252,6 +255,17 @@ func TestRun(t *testing.T) {
 		tb.CatchFatal(func() { tdsuite.Run(tb, suite) })
 		td.CmpTrue(t, tb.IsFatal)
 		td.Cmp(t, tb.LastMessage(), "Run(): no test methods found for type tdsuite_test.ErrNone")
+	})
+
+	t.Run("Full-no-ptr", func(t *testing.T) {
+		suite := Full{}
+		tb := test.NewTestingTB("Full-no-ptr")
+		tb.CatchFatal(func() { tdsuite.Run(tb, suite) })
+		td.CmpTrue(t, tb.IsFatal)
+		td.Cmp(t, tb.Messages, []string{
+			"Run(): several methods are not accessible as suite is not a pointer but tdsuite_test.Full: BetweenTests, Destroy, PostTest, PreTest, Setup, Test1, Test2, Test3",
+			"Run(): no test methods found for type tdsuite_test.Full",
+		})
 	})
 
 	t.Run("ErrOut1", func(t *testing.T) {
