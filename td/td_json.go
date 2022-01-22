@@ -162,7 +162,6 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 		OpShortcutFn:       u.resolveOpShortcut(),
 		OpFn:               u.resolveOp(),
 	})
-
 	if err != nil {
 		return nil, ctxerr.OpBad(u.Func, "JSON unmarshal error: %s", err)
 	}

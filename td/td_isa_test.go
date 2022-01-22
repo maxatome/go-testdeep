@@ -16,7 +16,7 @@ import (
 )
 
 func TestIsa(t *testing.T) {
-	var gotStruct = MyStruct{
+	gotStruct := MyStruct{
 		MyStructMid: MyStructMid{
 			MyStructBase: MyStructBase{
 				ValBool: true,

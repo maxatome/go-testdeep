@@ -342,6 +342,7 @@ func (e *Error) Setup(t *td.T) error {
 	}
 	return nil
 }
+
 func (e *Error) PreTest(t *td.T, tn string) error {
 	if e.preTest > 0 {
 		e.preTest--
@@ -351,6 +352,7 @@ func (e *Error) PreTest(t *td.T, tn string) error {
 	}
 	return nil
 }
+
 func (e *Error) PostTest(t *td.T, tn string) error {
 	if e.postTest > 0 {
 		e.postTest--
@@ -360,12 +362,14 @@ func (e *Error) PostTest(t *td.T, tn string) error {
 	}
 	return nil
 }
+
 func (e *Error) BetweenTests(t *td.T, prev, next string) error {
 	if e.betweenTests {
 		return errors.New("BetweenTests error")
 	}
 	return nil
 }
+
 func (e *Error) Destroy(t *td.T) error {
 	if e.destroy {
 		return errors.New("Destroy error")
@@ -378,6 +382,7 @@ func (e *Error) Test1Bool(t *td.T) bool {
 	e.rec()
 	return !e.testBool[0]
 }
+
 func (e *Error) Test1Error(t *td.T) error {
 	e.rec()
 	if e.testError[0] {
@@ -385,6 +390,7 @@ func (e *Error) Test1Error(t *td.T) error {
 	}
 	return nil
 }
+
 func (e *Error) Test1BoolError(t *td.T) (b bool, err error) {
 	e.rec()
 	b = !e.testBoolErrorBool[0]
@@ -400,6 +406,7 @@ func (e *Error) Test2Bool(assert, require *td.T) bool {
 	e.rec()
 	return !e.testBool[1]
 }
+
 func (e *Error) Test2Error(assert, require *td.T) error {
 	e.rec()
 	if e.testError[1] {
@@ -407,6 +414,7 @@ func (e *Error) Test2Error(assert, require *td.T) error {
 	}
 	return nil
 }
+
 func (e *Error) Test2BoolError(assert, require *td.T) (b bool, err error) {
 	e.rec()
 	b = !e.testBoolErrorBool[1]

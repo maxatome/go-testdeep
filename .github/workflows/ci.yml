@@ -35,7 +35,9 @@ jobs:
           echo $PATH
           $HOME/go/bin/golangci-lint run --max-issues-per-linter 0 \
                                          --max-same-issues 0 \
+                                         -E asciicheck \
                                          -E bidichk \
+                                         -E durationcheck \
                                          -E exportloopref \
                                          -E gocritic \
                                          -E godot \

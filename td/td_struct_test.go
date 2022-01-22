@@ -18,7 +18,7 @@ import (
 )
 
 func TestStruct(t *testing.T) {
-	var gotStruct = MyStruct{
+	gotStruct := MyStruct{
 		MyStructMid: MyStructMid{
 			MyStructBase: MyStructBase{
 				ValBool: true,
@@ -703,7 +703,7 @@ func TestStructTypeBehind(t *testing.T) {
 }
 
 func TestSStruct(t *testing.T) {
-	var gotStruct = MyStruct{
+	gotStruct := MyStruct{
 		MyStructMid: MyStructMid{
 			MyStructBase: MyStructBase{
 				ValBool: true,
