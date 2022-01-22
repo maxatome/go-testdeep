@@ -25,11 +25,13 @@ func (f *FullCleanup) PreTest(t *td.T, tn string) error {
 	t.Cleanup(func() { f.rec(tn) })
 	return nil
 }
+
 func (f *FullCleanup) PostTest(t *td.T, tn string) error {
 	f.rec(tn)
 	t.Cleanup(func() { f.rec(tn) })
 	return nil
 }
+
 func (f *FullCleanup) BetweenTests(t *td.T, prev, next string) error {
 	f.rec(prev, next)
 	return nil
@@ -40,10 +42,12 @@ func (f *FullCleanup) Test1(t *td.T) {
 	f.rec()
 	t.Cleanup(func() { f.rec() })
 }
+
 func (f *FullCleanup) Test2(assert *td.T, require *td.T) {
 	f.rec()
 	assert.Cleanup(func() { f.rec() })
 }
+
 func (f *FullCleanup) Test3(t *td.T) {
 	f.rec()
 	t.Cleanup(func() { f.rec() })

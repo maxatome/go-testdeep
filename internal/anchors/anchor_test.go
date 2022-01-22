@@ -79,7 +79,7 @@ func TestBuildResolveAnchor(t *testing.T) {
 	})
 
 	t.Run("AddAnchor", func(t *testing.T) {
-		var oldAnchorableTypes = anchors.AnchorableTypes
+		oldAnchorableTypes := anchors.AnchorableTypes
 		defer func() { anchors.AnchorableTypes = oldAnchorableTypes }()
 
 		type ok struct{ index int }

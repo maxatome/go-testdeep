@@ -14,8 +14,10 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
-type MyTime time.Time
-type MyTimeStr time.Time
+type (
+	MyTime    time.Time
+	MyTimeStr time.Time
+)
 
 func (t MyTimeStr) String() string {
 	return "<<" + time.Time(t).Format(time.RFC3339Nano) + ">>"
