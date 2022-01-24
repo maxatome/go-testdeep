@@ -42,7 +42,7 @@ func init() {
 // TYPE is the struct type to make anchorable and "nextAnchor" is an
 // index to allow to differentiate several instances of the same type.
 //
-// For example, the time.Time type which is anchrorable by default,
+// For example, the time.Time type which is anchorable by default,
 // is declared as:
 //
 //   AddAnchorableStructType(func (nextAnchor int) time.Time {
