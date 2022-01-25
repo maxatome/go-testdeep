@@ -178,6 +178,8 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 //   assert := NewT(t).FailureIsFatal(false)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
+//
+// See also Require and AssertRequire.
 func Assert(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal(false)
 }
@@ -192,6 +194,8 @@ func Assert(t testing.TB, config ...ContextConfig) *T {
 //   require := NewT(t).FailureIsFatal(true)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
+//
+// See also Assert and AssertRequire.
 func Require(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal()
 }
@@ -207,9 +211,10 @@ func Require(t testing.TB, config ...ContextConfig) *T {
 //   assert, require := Assert(t), Require(t)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
-func AssertRequire(t testing.TB, config ...ContextConfig) (*T, *T) {
-	assert := Assert(t, config...)
-	return assert, assert.FailureIsFatal()
+func AssertRequire(t testing.TB, config ...ContextConfig) (assert, require *T) {
+	assert = Assert(t, config...)
+	require = assert.FailureIsFatal()
+	return
 }
 
 // RootName changes the name of the got data. By default it is
