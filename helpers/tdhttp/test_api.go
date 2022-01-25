@@ -257,7 +257,7 @@ func (t *TestAPI) PostForm(target string, data url.Values, headersQueryParams ..
 //
 //   ta.PostMultipartFormData("/data",
 //     &tdhttp.MultipartBody{
-//       // "multipart/form/data" by default
+//       // "multipart/form-data" by default
 //       Parts: []*tdhttp.MultipartPart{
 //         tdhttp.NewMultipartPartString("type", "Sales"),
 //         tdhttp.NewMultipartPartFile("report", "report.json", "application/json"),
