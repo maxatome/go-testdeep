@@ -2467,10 +2467,10 @@ func ExampleCmpSmuggle_complex() {
 	// Checks that end date is between 17th and 19th February both at 0h
 	// for each of these durations in hours
 
-	for _, duration := range []time.Duration{48, 72, 96} {
+	for _, duration := range []time.Duration{48 * time.Hour, 72 * time.Hour, 96 * time.Hour} {
 		got := StartDuration{
 			StartDate: time.Date(2018, time.February, 14, 12, 13, 14, 0, time.UTC),
-			Duration:  duration * time.Hour,
+			Duration:  duration,
 		}
 
 		// Simplest way, but in case of Between() failure, error will be bound
