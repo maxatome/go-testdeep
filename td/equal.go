@@ -464,7 +464,7 @@ func EqDeeply(got, expected interface{}) bool {
 //     // …
 //   }
 func EqDeeplyError(got, expected interface{}) error {
-	err := deepValueEqualFinal(newContext(),
+	err := deepValueEqualFinal(newContext(nil),
 		reflect.ValueOf(got), reflect.ValueOf(expected))
 	if err == nil {
 		return nil

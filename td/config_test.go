@@ -10,14 +10,39 @@ import (
 	"os"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
 func TestContext(t *testing.T) {
-	test.EqualStr(t, newContext().Path.String(), "DATA")
-	test.EqualStr(t, newBooleanContext().Path.String(), "")
+	nctx := newContext(nil)
+	test.EqualStr(t, nctx.Path.String(), "DATA")
+	if nctx.OriginalTB != nil {
+		t.Error("OriginalTB should be nil")
+	}
 
-	if newContextWithConfig(ContextConfig{MaxErrors: -1}).CollectError(nil) != nil {
+	nctx = newContext(t)
+	test.EqualStr(t, nctx.Path.String(), "DATA")
+	if nctxt, ok := nctx.OriginalTB.(*testing.T); test.IsTrue(t, ok, "%T", nctx.OriginalTB) {
+		if nctxt != t {
+			t.Errorf("OriginalTB, got=%p expected=%p", nctxt, t)
+		}
+	}
+
+	nctx = newContext(Require(t).UseEqual())
+	_, ok := nctx.OriginalTB.(*T)
+	test.IsTrue(t, ok)
+	test.IsTrue(t, nctx.FailureIsFatal)
+	test.IsTrue(t, nctx.UseEqual)
+	test.EqualStr(t, nctx.Path.String(), "DATA")
+
+	nctx = newBooleanContext()
+	test.EqualStr(t, nctx.Path.String(), "")
+	if nctx.OriginalTB != nil {
+		t.Error("OriginalTB should be nil")
+	}
+
+	if newContextWithConfig(nil, ContextConfig{MaxErrors: -1}).CollectError(nil) != nil {
 		t.Errorf("ctx.CollectError(nil) should return nil")
 	}
 
@@ -29,6 +54,14 @@ func TestContext(t *testing.T) {
 	if !ctx.Equal(DefaultContextConfig) {
 		t.Errorf("Sanitized empty ContextConfig should be = to DefaultContextConfig")
 	}
+
+	ctx.RootName = "PIPO"
+	test.EqualStr(t, ctx.OriginalPath(), "PIPO")
+
+	nctx = newContext(t)
+	nctx.Path = ctxerr.NewPath("BINGO[0].Zip")
+	ctx.forkedFromCtx = &nctx
+	test.EqualStr(t, ctx.OriginalPath(), "BINGO[0].Zip")
 }
 
 func TestGetMaxErrorsFromEnv(t *testing.T) {

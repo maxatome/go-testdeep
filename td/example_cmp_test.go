@@ -438,6 +438,27 @@ func ExampleCmpCode() {
 	// true
 }
 
+func ExampleCmpCode_custom() {
+	t := &testing.T{}
+
+	got := 123
+
+	ok := td.CmpCode(t, got, func(t *td.T, num int) {
+		t.Cmp(num, 123)
+	})
+	fmt.Println("with one *td.T:", ok)
+
+	ok = td.CmpCode(t, got, func(assert, require *td.T, num int) {
+		assert.Cmp(num, 123)
+		require.Cmp(num, 123)
+	})
+	fmt.Println("with assert & require *td.T:", ok)
+
+	// Output:
+	// with one *td.T: true
+	// with assert & require *td.T: true
+}
+
 func ExampleCmpContains_arraySlice() {
 	t := &testing.T{}
 

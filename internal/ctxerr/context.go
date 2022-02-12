@@ -7,6 +7,8 @@
 package ctxerr
 
 import (
+	"testing"
+
 	"github.com/maxatome/go-testdeep/internal/anchors"
 	"github.com/maxatome/go-testdeep/internal/hooks"
 	"github.com/maxatome/go-testdeep/internal/location"
@@ -25,10 +27,11 @@ type Context struct {
 	// MaxErrors > 1 stops when MaxErrors'th error encoutered (with a
 	// last "Too many errors" error);
 	// < 0 do not stop until comparison ends.
-	MaxErrors int
-	Errors    *[]*Error
-	Anchors   *anchors.Info
-	Hooks     *hooks.Info
+	MaxErrors  int
+	Errors     *[]*Error
+	Anchors    *anchors.Info
+	Hooks      *hooks.Info
+	OriginalTB testing.TB // only used by Code operator
 	// If true, the contents of the returned *Error will not be
 	// checked. Can be used to avoid filling Error{} with expensive
 	// computations.

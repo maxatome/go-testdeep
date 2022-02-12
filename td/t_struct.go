@@ -418,8 +418,7 @@ func (t *T) IgnoreUnexported(types ...interface{}) *T {
 func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	defer t.resetNonPersistentAnchors()
-	return cmpDeeply(newContextWithConfig(t.Config),
-		t.TB, got, expected, args...)
+	return cmpDeeply(newContext(t), t.TB, got, expected, args...)
 }
 
 // CmpDeeply works the same as Cmp and is still available for
@@ -427,8 +426,7 @@ func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
 func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	defer t.resetNonPersistentAnchors()
-	return cmpDeeply(newContextWithConfig(t.Config),
-		t.TB, got, expected, args...)
+	return cmpDeeply(newContext(t), t.TB, got, expected, args...)
 }
 
 // True is shortcut for:
@@ -484,7 +482,7 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 // reason of a potential failure.
 func (t *T) CmpError(got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpError(newContextWithConfig(t.Config), t.TB, got, args...)
+	return cmpError(newContext(t), t.TB, got, args...)
 }
 
 // CmpNoError checks that "got" is nil error.
@@ -504,7 +502,7 @@ func (t *T) CmpError(got error, args ...interface{}) bool {
 // reason of a potential failure.
 func (t *T) CmpNoError(got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpNoError(newContextWithConfig(t.Config), t.TB, got, args...)
+	return cmpNoError(newContext(t), t.TB, got, args...)
 }
 
 // CmpPanic calls "fn" and checks a panic() occurred with the
@@ -533,7 +531,7 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool {
 	t.Helper()
 	defer t.resetNonPersistentAnchors()
-	return cmpPanic(newContextWithConfig(t.Config), t, fn, expected, args...)
+	return cmpPanic(newContext(t), t, fn, expected, args...)
 }
 
 // CmpNotPanic calls "fn" and checks no panic() occurred. If a panic()
@@ -555,7 +553,7 @@ func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool 
 // reason of a potential failure.
 func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
 	t.Helper()
-	return cmpNotPanic(newContextWithConfig(t.Config), t, fn, args...)
+	return cmpNotPanic(newContext(t), t, fn, args...)
 }
 
 // Parallel marks this test as runnable in parallel with other parallel tests.

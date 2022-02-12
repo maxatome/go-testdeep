@@ -332,7 +332,11 @@ EOF
 
 Returns true if the test is OK, false if it fails.
 EOF
+    my $method_comment = $func_comment;
+    $func_comment .= <<EOF;
 
+If "t" is a *T then its Config is inherited.
+EOF
     $operators{$func}{cmp}{name} = "Cmp$func";
     $operators{$func}{cmp}{doc} = $cmp_doc . $func_comment . $ARGS_COMMENT_MD;
     $operators{$func}{cmp}{signature} = my $cmp_sig =
@@ -346,11 +350,11 @@ $cmp_sig {
 EOF
 
     $operators{$func}{t}{name} = $method_name;
-    $operators{$func}{t}{doc} = $t_doc . $func_comment . $ARGS_COMMENT_MD;
+    $operators{$func}{t}{doc} = $t_doc . $method_comment . $ARGS_COMMENT_MD;
     $operators{$func}{t}{signature} = my $t_sig =
         "func (t *T) $method_name($cmp_args, args ...interface{}) bool";
     $operators{$func}{t}{args} = \@cmpt_args;
-    $t_contents .= go_comment($func_comment . $ARGS_COMMENT_GD) . <<EOF;
+    $t_contents .= go_comment($method_comment . $ARGS_COMMENT_GD) . <<EOF;
 $t_sig {
 \tt.Helper()
 \treturn t.Cmp(got, $func($call_args), args...)
@@ -944,7 +948,7 @@ sub process_doc
 
     my($inEx, $inBul);
     $doc =~ s{^(?:(\n?\S)
-                 |(\n?)(\s+)(\S?))}
+                 |(\n?)(\s+)(\S+))}
              <
                 if (defined $1)
                 {
@@ -954,10 +958,12 @@ sub process_doc
                 }
                 else
                 {
-                    if ($inEx)        { $2 . substr($3, length($inEx)) . $4 }
-                    elsif ($inBul)    { $2 . substr($3, length($inBul)) . $4 }
-                    elsif ($4 eq '-') { $inBul = $3; "\n-" }
-                    else              { $inEx = $3; "$2```go\n$4" }
+                    my($nl, $indent, $beg) = ($2, $3, $4);
+                    if ($inEx) { $nl . substr($indent, length($inEx)) . $beg }
+                    elsif ($inBul) { $nl . substr($indent, length($inBul)) . $beg }
+                    elsif ($beg =~ /^---/) { $inEx = $indent; "$nl```\n$beg" }
+                    elsif ($beg =~ /^-/)   { $inBul = $indent; "\n-" }
+                    else                   { $inEx = $indent; "$nl```go\n$beg" }
                 }
              >gemx;
     $doc .= "```\n" if $inEx;

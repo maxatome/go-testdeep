@@ -40,7 +40,7 @@ func TestGetTime(t *testing.T) {
 	} {
 		testName := fmt.Sprintf("Test #%d: ", idx)
 
-		tm, err := getTime(newContext(),
+		tm, err := getTime(newContext(nil),
 			reflect.ValueOf(curTest.ParamGot), curTest.ParamMustConvert)
 
 		if !tm.Equal(curTest.ExpectedTime) {
@@ -62,7 +62,7 @@ func TestGetTime(t *testing.T) {
 	}
 
 	// Error cases
-	for idx, ctx := range []ctxerr.Context{newContext(), newBooleanContext()} {
+	for idx, ctx := range []ctxerr.Context{newContext(nil), newBooleanContext()} {
 		testName := fmt.Sprintf("Test #%d: ", idx)
 
 		tm, err := getTime(ctx, reflect.ValueOf(oneTime), false)

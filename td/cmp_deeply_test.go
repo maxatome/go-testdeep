@@ -194,7 +194,7 @@ func TestStripTrace(t *testing.T) {
 
 func TestFormatError(t *testing.T) {
 	err := &ctxerr.Error{
-		Context: newContext(),
+		Context: newContext(nil),
 		Message: "test error message",
 		Summary: ctxerr.NewSummary("test error summary"),
 	}
