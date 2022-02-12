@@ -105,7 +105,7 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) 
 // reason of a potential failure.
 func CmpError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpError(newContext(), t, got, args...)
+	return cmpError(newContext(t), t, got, args...)
 }
 
 // CmpNoError checks that "got" is nil error.
@@ -123,7 +123,7 @@ func CmpError(t TestingT, got error, args ...interface{}) bool {
 // reason of a potential failure.
 func CmpNoError(t TestingT, got error, args ...interface{}) bool {
 	t.Helper()
-	return cmpNoError(newContext(), t, got, args...)
+	return cmpNoError(newContext(t), t, got, args...)
 }
 
 func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, args ...interface{}) bool {
@@ -235,7 +235,7 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 	args ...interface{}) bool {
 	t.Helper()
-	return cmpPanic(newContext(), t, fn, expectedPanic, args...)
+	return cmpPanic(newContext(t), t, fn, expectedPanic, args...)
 }
 
 // CmpNotPanic calls "fn" and checks no panic() occurred. If a panic()
@@ -257,5 +257,5 @@ func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 // reason of a potential failure.
 func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool {
 	t.Helper()
-	return cmpNotPanic(newContext(), t, fn, args...)
+	return cmpNotPanic(newContext(t), t, fn, args...)
 }

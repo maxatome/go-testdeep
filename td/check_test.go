@@ -286,6 +286,33 @@ func checkErrorForEach(t *testing.T,
 	return
 }
 
+// customCheckOK calls chk twice. The first time with the same
+// parameters, the second time in an interface{} context.
+func customCheckOK(t *testing.T,
+	chk func(t *testing.T, got, expected interface{}, args ...interface{}) bool,
+	got, expected interface{},
+	args ...interface{},
+) bool {
+	t.Helper()
+
+	if ok := chk(t, got, expected, args...); !ok {
+		return false
+	}
+
+	type tmpStruct struct {
+		Iface interface{}
+	}
+
+	// Dirty hack to force got be passed as an interface kind
+	return chk(t, tmpStruct{Iface: got},
+		td.Struct(
+			tmpStruct{},
+			td.StructFields{
+				"Iface": expected,
+			}),
+		args...)
+}
+
 func _checkOK(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
 	t.Helper()
@@ -315,23 +342,7 @@ func _checkOK(t *testing.T, got, expected interface{},
 func checkOK(t *testing.T, got, expected interface{},
 	args ...interface{}) bool {
 	t.Helper()
-
-	if ok := _checkOK(t, got, expected, args...); !ok {
-		return false
-	}
-
-	type tmpStruct struct {
-		Iface interface{}
-	}
-
-	// Dirty hack to force got be passed as an interface kind
-	return _checkOK(t, tmpStruct{Iface: got},
-		td.Struct(
-			tmpStruct{},
-			td.StructFields{
-				"Iface": expected,
-			}),
-		args...)
+	return customCheckOK(t, _checkOK, got, expected, args...)
 }
 
 func checkOKOrPanicIfUnsafeDisabled(t *testing.T, got, expected interface{},

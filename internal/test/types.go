@@ -9,6 +9,7 @@ package test
 import (
 	"fmt"
 	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/trace"
@@ -64,6 +65,27 @@ func (t *TestingT) CatchFatal(fn func()) (fatalStr string) {
 	fn()
 	panicked = false
 	return
+}
+
+// ContainsMessages checks expectedMsgs are all present in Messages, in
+// this order. It stops when a message is not found and returns the
+// remaining messages.
+func (t *TestingT) ContainsMessages(expectedMsgs ...string) []string {
+	curExp := 0
+	for _, msg := range t.Messages {
+		for {
+			if curExp == len(expectedMsgs) {
+				return nil
+			}
+			pos := strings.Index(msg, expectedMsgs[curExp])
+			if pos < 0 {
+				break
+			}
+			msg = msg[pos+len(expectedMsgs[curExp]):]
+			curExp++
+		}
+	}
+	return expectedMsgs[curExp:]
 }
 
 // Helper mocks testing.T Helper method.

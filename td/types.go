@@ -17,6 +17,7 @@ import (
 )
 
 var (
+	tType              = reflect.TypeOf((*T)(nil))
 	testDeeper         = reflect.TypeOf((*TestDeep)(nil)).Elem()
 	smuggledGotType    = reflect.TypeOf(SmuggledGot{})
 	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
