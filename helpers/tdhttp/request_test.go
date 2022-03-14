@@ -150,6 +150,10 @@ func TestNewRequest(tt *testing.T) {
 			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
+			func() { tdhttp.Options("/path", nil, true) },
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+
+		t.CmpPanic(
 			func() { tdhttp.Post("/path", nil, true) },
 			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
@@ -200,6 +204,17 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "HEAD",
+				Header: http.Header{"Foo": []string{"Bar"}},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+			}))
+
+	// Options
+	t.Cmp(tdhttp.Options("/path", nil, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "OPTIONS",
 				Header: http.Header{"Foo": []string{"Bar"}},
 			},
 			td.StructFields{

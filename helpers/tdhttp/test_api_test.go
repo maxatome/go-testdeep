@@ -173,6 +173,16 @@ func TestNewTestAPI(t *testing.T) {
 		mockT = tdutil.NewT("test")
 		td.CmpFalse(t,
 			tdhttp.NewTestAPI(mockT, mux).
+				Options("/any", strings.NewReader("OPTIONS body")).
+				CmpStatus(200).
+				CmpHeader(containsKey).
+				CmpBody("OPTIONS!\n---\nOPTIONS body").
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
 				Post("/any", strings.NewReader("POST body")).
 				CmpStatus(200).
 				CmpHeader(containsKey).
@@ -872,6 +882,7 @@ bingo%CR
 
 		checkFatal(func() { ta.Get("/path", true) })
 		checkFatal(func() { ta.Head("/path", true) })
+		checkFatal(func() { ta.Options("/path", empty, true) })
 		checkFatal(func() { ta.Post("/path", empty, true) })
 		checkFatal(func() { ta.PostForm("/path", nil, true) })
 		checkFatal(func() { ta.PostMultipartFormData("/path", &tdhttp.MultipartBody{}, true) })
