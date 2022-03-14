@@ -133,6 +133,10 @@ func head(target string, headersQueryParams ...interface{}) (*http.Request, erro
 	return newRequest(http.MethodHead, target, nil, headersQueryParams)
 }
 
+func options(target string, body io.Reader, headersQueryParams ...interface{}) (*http.Request, error) {
+	return newRequest(http.MethodOptions, target, body, headersQueryParams)
+}
+
 func post(target string, body io.Reader, headersQueryParams ...interface{}) (*http.Request, error) {
 	return newRequest(http.MethodPost, target, body, headersQueryParams)
 }
@@ -301,6 +305,19 @@ func Get(target string, headersQueryParams ...interface{}) *http.Request {
 // See NewRequest for all possible formats accepted in headersQueryParams.
 func Head(target string, headersQueryParams ...interface{}) *http.Request {
 	req, err := head(target, headersQueryParams...)
+	if err != nil {
+		panic(err)
+	}
+	return req
+}
+
+// Options creates a HTTP OPTIONS. It is a shortcut for:
+//
+//   tdhttp.NewRequest(http.MethodOptions, target, body, headersQueryParams...)
+//
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func Options(target string, body io.Reader, headersQueryParams ...interface{}) *http.Request {
+	req, err := options(target, body, headersQueryParams...)
 	if err != nil {
 		panic(err)
 	}

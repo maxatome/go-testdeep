@@ -214,6 +214,21 @@ func (t *TestAPI) Head(target string, headersQueryParams ...interface{}) *TestAP
 	return t.Request(req)
 }
 
+// Options sends a HTTP OPTIONS to the tested API. Any Cmp* or NoBody methods
+// can now be called.
+//
+// Note that Failed() status is reset just after this call.
+//
+// See NewRequest for all possible formats accepted in headersQueryParams.
+func (t *TestAPI) Options(target string, body io.Reader, headersQueryParams ...interface{}) *TestAPI {
+	req, err := options(target, body, headersQueryParams...)
+	if err != nil {
+		t.t.Helper()
+		t.t.Fatal(err)
+	}
+	return t.Request(req)
+}
+
 // Post sends a HTTP POST to the tested API. Any Cmp* or NoBody methods
 // can now be called.
 //
