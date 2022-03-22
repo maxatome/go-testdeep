@@ -73,7 +73,7 @@ func TestQ(t *testing.T) {
 
 	// Auto deref interfaces
 	q = tdhttp.Q{
-		"all": []interface{}{
+		"all": []any{
 			"string",
 			-1,
 			int8(-2),
@@ -128,7 +128,7 @@ func TestQ(t *testing.T) {
 		"nil3": nil,
 		"nil4": []*int{nil, nil},
 		"nil5": ([]int)(nil),
-		"nil6": []interface{}{nil, nil},
+		"nil6": []any{nil, nil},
 	}
 	td.Cmp(t, q.Values(), url.Values{})
 
@@ -145,6 +145,6 @@ func TestQ(t *testing.T) {
 		td.Contains(`don't know how to add type tdhttp_test.qTest2 (struct) to param "panic"`))
 
 	td.CmpPanic(t,
-		func() { (tdhttp.Q{"panic": []interface{}{[]int{}}}).Values() },
+		func() { (tdhttp.Q{"panic": []any{[]int{}}}).Values() },
 		td.Contains(`slice is only allowed at the root level for param "panic"`))
 }

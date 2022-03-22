@@ -20,7 +20,7 @@ type ItemPropertyKind uint8
 type ItemProperty struct {
 	name  string
 	kind  ItemPropertyKind
-	value interface{}
+	value any
 }
 
 //
@@ -229,10 +229,10 @@ func TestEqualSlice(t *testing.T) {
 //
 // Interface.
 func TestEqualInterface(t *testing.T) {
-	checkOK(t, []interface{}{1, "foo"}, []interface{}{1, "foo"})
-	checkOK(t, []interface{}{1, nil}, []interface{}{1, nil})
+	checkOK(t, []any{1, "foo"}, []any{1, "foo"})
+	checkOK(t, []any{1, nil}, []any{1, nil})
 
-	checkError(t, []interface{}{1, nil}, []interface{}{1, "foo"},
+	checkError(t, []any{1, nil}, []any{1, "foo"},
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
@@ -240,7 +240,7 @@ func TestEqualInterface(t *testing.T) {
 			Expected: mustBe(`"foo"`),
 		})
 
-	checkError(t, []interface{}{1, "foo"}, []interface{}{1, nil},
+	checkError(t, []any{1, "foo"}, []any{1, nil},
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[1]"),
@@ -248,7 +248,7 @@ func TestEqualInterface(t *testing.T) {
 			Expected: mustBe("nil"),
 		})
 
-	checkError(t, []interface{}{1, "foo"}, []interface{}{1, 12},
+	checkError(t, []any{1, "foo"}, []any{1, 12},
 		expectedError{
 			Message:  mustBe("type mismatch"),
 			Path:     mustBe("DATA[1]"),
@@ -666,7 +666,7 @@ func TestEqualRecursPtr(t *testing.T) {
 }
 
 func TestEqualRecursMap(t *testing.T) { // issue #101
-	gen := func() interface{} {
+	gen := func() any {
 		type S struct {
 			Map map[int]S
 		}

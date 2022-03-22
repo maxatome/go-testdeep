@@ -35,9 +35,9 @@ func (e *JSONPointerError) Error() string {
 
 // JSONPointer returns the value corresponding to JSON pointer
 // "pointer" in "v" as RFC 6901 specifies it. To be searched, "v" has
-// to contains map[string]interface{} or []interface{} values. All
+// to contains map[string]any or []any values. All
 // other types fail to be searched.
-func JSONPointer(v interface{}, pointer string) (interface{}, error) {
+func JSONPointer(v any, pointer string) (any, error) {
 	if !strings.HasPrefix(pointer, "/") {
 		if pointer == "" {
 			return v, nil
@@ -51,7 +51,7 @@ func JSONPointer(v interface{}, pointer string) (interface{}, error) {
 		part = jsonPointerEsc.Replace(part)
 
 		switch tv := v.(type) {
-		case map[string]interface{}:
+		case map[string]any:
 			var ok bool
 			v, ok = tv[part]
 			if !ok {
@@ -61,7 +61,7 @@ func JSONPointer(v interface{}, pointer string) (interface{}, error) {
 				}
 			}
 
-		case []interface{}:
+		case []any:
 			i, err := strconv.Atoi(part)
 			if err != nil || i < 0 {
 				return nil, &JSONPointerError{

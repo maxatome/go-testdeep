@@ -146,7 +146,7 @@ func shouldContinue(t *td.T, testName string, ret []reflect.Value) bool {
 // If "suite" is a pointer, it has access to non-pointer & pointer
 // methods hooks & tests. If "suite" is not a pointer, it only has
 // access to non-pointer methods hooks & tests.
-func Run(tb testing.TB, suite interface{}, config ...td.ContextConfig) bool {
+func Run(tb testing.TB, suite any, config ...td.ContextConfig) bool {
 	t := td.NewT(tb, config...)
 
 	t.Helper()
@@ -254,7 +254,7 @@ func Run(tb testing.TB, suite interface{}, config ...td.ContextConfig) bool {
 	return !t.Failed()
 }
 
-func run(t *td.T, suite interface{}, methods []int) {
+func run(t *td.T, suite any, methods []int) {
 	t.Helper()
 
 	suiteType := reflect.TypeOf(suite)

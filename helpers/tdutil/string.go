@@ -50,6 +50,6 @@ func FormatString(s string) string {
 }
 
 // SpewString uses github.com/davecgh/go-spew/spew.Sdump() to format val.
-func SpewString(val interface{}) string {
+func SpewString(val any) string {
 	return strings.TrimRight(spew.Sdump(val), "\n")
 }

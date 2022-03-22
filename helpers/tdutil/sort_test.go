@@ -15,7 +15,7 @@ import (
 )
 
 func TestSortCmp(t *testing.T) {
-	checkCmp := func(a, b interface{}, expected int) {
+	checkCmp := func(a, b any, expected int) {
 		t.Helper()
 		got := cmp(visited.NewVisited(), reflect.ValueOf(a), reflect.ValueOf(b))
 		if got != expected {
@@ -129,12 +129,12 @@ func TestSortCmp(t *testing.T) {
 	checkCmp([]byte{1, 2, 3, 4}, []byte{1, 2, 3}, 1)
 
 	// interface
-	checkCmp([]interface{}{1}, []interface{}{3}, -1)
-	checkCmp([]interface{}{3}, []interface{}{1}, 1)
-	checkCmp([]interface{}{1}, []interface{}{1}, 0)
-	checkCmp([]interface{}{nil}, []interface{}{nil}, 0)
-	checkCmp([]interface{}{nil}, []interface{}{1}, -1)
-	checkCmp([]interface{}{1}, []interface{}{nil}, 1)
+	checkCmp([]any{1}, []any{3}, -1)
+	checkCmp([]any{3}, []any{1}, 1)
+	checkCmp([]any{1}, []any{1}, 0)
+	checkCmp([]any{nil}, []any{nil}, 0)
+	checkCmp([]any{nil}, []any{1}, -1)
+	checkCmp([]any{1}, []any{nil}, 1)
 
 	// struct
 	type myStruct struct {

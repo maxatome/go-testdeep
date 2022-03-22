@@ -62,12 +62,12 @@ func TestCompat(tt *testing.T) {
 
 	tt.Run("All", func(t *testing.T) {
 		td.Cmp(t, 1, td.All(1))
-		td.CmpAll(t, 1, []interface{}{1})
+		td.CmpAll(t, 1, []any{1})
 	})
 
 	tt.Run("Any", func(t *testing.T) {
 		td.Cmp(t, 1, td.Any(3, 2, 1))
-		td.CmpAny(t, 1, []interface{}{3, 2, 1})
+		td.CmpAny(t, 1, []any{3, 2, 1})
 	})
 
 	tt.Run("Array", func(t *testing.T) {
@@ -84,7 +84,7 @@ func TestCompat(tt *testing.T) {
 	tt.Run("Bag", func(t *testing.T) {
 		got := []int{1, 2}
 		td.Cmp(t, got, td.Bag(1, 2))
-		td.CmpBag(t, got, []interface{}{1, 2})
+		td.CmpBag(t, got, []any{1, 2})
 	})
 
 	tt.Run("Between", func(t *testing.T) {
@@ -159,7 +159,7 @@ func TestCompat(tt *testing.T) {
 
 	tt.Run("JSON", func(t *testing.T) {
 		td.Cmp(t, []int{1, 2}, td.JSON(`[1,$val]`, td.Tag("val", 2)))
-		td.CmpJSON(t, []int{1, 2}, `[1,$val]`, []interface{}{td.Tag("val", 2)})
+		td.CmpJSON(t, []int{1, 2}, `[1,$val]`, []any{td.Tag("val", 2)})
 	})
 
 	tt.Run("Keys", func(t *testing.T) {
@@ -218,7 +218,7 @@ func TestCompat(tt *testing.T) {
 
 	tt.Run("None", func(t *testing.T) {
 		td.Cmp(t, 28, td.None(3, 4, 5))
-		td.CmpNone(t, 28, []interface{}{3, 4, 5})
+		td.CmpNone(t, 28, []any{3, 4, 5})
 	})
 
 	tt.Run("Not", func(t *testing.T) {
@@ -229,7 +229,7 @@ func TestCompat(tt *testing.T) {
 	tt.Run("NotAny", func(t *testing.T) {
 		got := []int{5}
 		td.Cmp(t, got, td.NotAny(1, 2, 3))
-		td.CmpNotAny(t, got, []interface{}{1, 2, 3})
+		td.CmpNotAny(t, got, []any{1, 2, 3})
 	})
 
 	tt.Run("NotEmpty", func(t *testing.T) {
@@ -278,7 +278,7 @@ func TestCompat(tt *testing.T) {
 	tt.Run("Set", func(t *testing.T) {
 		got := []int{1, 1, 2}
 		td.Cmp(t, got, td.Set(2, 1))
-		td.CmpSet(t, got, []interface{}{2, 1})
+		td.CmpSet(t, got, []any{2, 1})
 	})
 
 	tt.Run("Shallow", func(t *testing.T) {
@@ -326,7 +326,7 @@ func TestCompat(tt *testing.T) {
 	tt.Run("SubBagOf", func(t *testing.T) {
 		got := []int{1}
 		td.Cmp(t, got, td.SubBagOf(1, 1, 2))
-		td.CmpSubBagOf(t, got, []interface{}{1, 1, 2})
+		td.CmpSubBagOf(t, got, []any{1, 1, 2})
 	})
 
 	tt.Run("SubJSONOf", func(t *testing.T) {
@@ -337,7 +337,7 @@ func TestCompat(tt *testing.T) {
 		td.Cmp(t, got,
 			td.SubJSONOf(`{"num":42,"str":$str,"zip":45600}`, td.Tag("str", "foo")))
 		td.CmpSubJSONOf(t, got,
-			`{"num":42,"str":$str,"zip":45600}`, []interface{}{td.Tag("str", "foo")})
+			`{"num":42,"str":$str,"zip":45600}`, []any{td.Tag("str", "foo")})
 	})
 
 	tt.Run("SubMapOf", func(t *testing.T) {
@@ -350,13 +350,13 @@ func TestCompat(tt *testing.T) {
 	tt.Run("SubSetOf", func(t *testing.T) {
 		got := []int{1, 1}
 		td.Cmp(t, got, td.SubSetOf(1, 2))
-		td.CmpSubSetOf(t, got, []interface{}{1, 2})
+		td.CmpSubSetOf(t, got, []any{1, 2})
 	})
 
 	tt.Run("SuperBagOf", func(t *testing.T) {
 		got := []int{1, 1, 2}
 		td.Cmp(t, got, td.SuperBagOf(1))
-		td.CmpSuperBagOf(t, got, []interface{}{1})
+		td.CmpSuperBagOf(t, got, []any{1})
 	})
 
 	tt.Run("SuperJSONOf", func(t *testing.T) {
@@ -365,7 +365,7 @@ func TestCompat(tt *testing.T) {
 			Str: "foo",
 		}
 		td.Cmp(t, got, td.SuperJSONOf(`{"str":$str}`, td.Tag("str", "foo")))
-		td.CmpSuperJSONOf(t, got, `{"str":$str}`, []interface{}{td.Tag("str", "foo")})
+		td.CmpSuperJSONOf(t, got, `{"str":$str}`, []any{td.Tag("str", "foo")})
 	})
 
 	tt.Run("SuperMapOf", func(t *testing.T) {
@@ -377,7 +377,7 @@ func TestCompat(tt *testing.T) {
 	tt.Run("SuperSetOf", func(t *testing.T) {
 		got := []int{1, 1, 2}
 		td.Cmp(t, got, td.SuperSetOf(1))
-		td.CmpSuperSetOf(t, got, []interface{}{1})
+		td.CmpSuperSetOf(t, got, []any{1})
 	})
 
 	tt.Run("TruncTime", func(t *testing.T) {

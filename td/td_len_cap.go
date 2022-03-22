@@ -19,7 +19,7 @@ type tdLenCapBase struct {
 	tdSmugglerBase
 }
 
-func (b *tdLenCapBase) initLenCapBase(val interface{}) {
+func (b *tdLenCapBase) initLenCapBase(val any) {
 	b.tdSmugglerBase = newSmugglerBase(val, 1)
 
 	// math.MaxInt appeared in go1.17
@@ -105,7 +105,7 @@ var _ TestDeep = &tdLen{}
 // as well as an other operator:
 //
 //   td.Cmp(t, gotSlice, td.Len(td.Between(3, 4)))
-func Len(expectedLen interface{}) TestDeep {
+func Len(expectedLen any) TestDeep {
 	l := tdLen{}
 	l.initLenCapBase(expectedLen)
 	return &l
@@ -173,7 +173,7 @@ var _ TestDeep = &tdCap{}
 // as well as an other operator:
 //
 //   td.Cmp(t, gotSlice, td.Cap(td.Between(3, 4)))
-func Cap(expectedCap interface{}) TestDeep {
+func Cap(expectedCap any) TestDeep {
 	c := tdCap{}
 	c.initLenCapBase(expectedCap)
 	return &c

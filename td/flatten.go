@@ -14,11 +14,11 @@ import (
 )
 
 // Flatten allows to flatten any slice, array or map in parameters of
-// operators expecting ...interface{}.
+// operators expecting ...any.
 //
 // For example the Set operator is defined as:
 //
-//   func Set(expectedItems ...interface{}) TestDeep
+//   func Set(expectedItems ...any) TestDeep
 //
 // so when comparing to a []int slice, we usually do:
 //
@@ -26,18 +26,18 @@ import (
 //   td.Cmp(t, got, td.Set(22, 42, 66))
 //
 // it works but if the expected items are already in a []int, we have
-// to copy them in a []interface{} as it can not be flattened directly
+// to copy them in a []any as it can not be flattened directly
 // in Set parameters:
 //
 //   expected := []int{22, 42, 66}
-//   expectedIf := make([]interface{}, len(expected))
+//   expectedIf := make([]any, len(expected))
 //   for i, item := range expected {
 //     expectedIf[i] = item
 //   }
 //   td.Cmp(t, got, td.Set(expectedIf...))
 //
 // but it is a bit boring and less efficient, as Set does not keep the
-// []interface{} behind the scene.
+// []any behind the scene.
 //
 // The same with Flatten follows:
 //
@@ -67,7 +67,7 @@ import (
 //
 //   td.Cmp(t, got,
 //     td.Set(
-//       td.Flatten([]interface{}{
+//       td.Flatten([]any{
 //         11,
 //         td.Flatten([]int{22, 33}),
 //         td.Flatten([]int{44, 55, 66}),
@@ -84,7 +84,7 @@ import (
 //   td.Flatten(map[int]int{1: 2, 3: 4})
 //
 // is flattened as 1, 2, 3, 4 or 3, 4, 1, 2.
-func Flatten(sliceOrMap interface{}) flat.Slice {
+func Flatten(sliceOrMap any) flat.Slice {
 	switch reflect.ValueOf(sliceOrMap).Kind() {
 	case reflect.Slice, reflect.Array, reflect.Map:
 		return flat.Slice{Slice: sliceOrMap}

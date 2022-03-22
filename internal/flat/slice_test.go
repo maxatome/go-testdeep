@@ -14,27 +14,27 @@ import (
 )
 
 func TestLen(t *testing.T) {
-	num, flattened := flat.Len([]interface{}{1, 2, 3, 4})
+	num, flattened := flat.Len([]any{1, 2, 3, 4})
 	test.EqualInt(t, num, 4)
 	test.IsTrue(t, flattened)
 
-	num, flattened = flat.Len([]interface{}{
+	num, flattened = flat.Len([]any{
 		1, 2,
 		flat.Slice{Slice: []int{3, 4, 5, 6}},
 		flat.Slice{Slice: map[int]int{-1: -2, -3: -4}},
 		7,
 		flat.Slice{
-			Slice: []interface{}{
+			Slice: []any{
 				flat.Slice{Slice: []int{8, 9}},
 				flat.Slice{Slice: []int{10, 11}},
-				flat.Slice{Slice: map[int]interface{}{
+				flat.Slice{Slice: map[int]any{
 					-5: -6,
 					-7: flat.Slice{Slice: []int{-8, -9, -10}},
 				}},
 			},
 		},
 		12,
-		flat.Slice{Slice: map[interface{}]interface{}{
+		flat.Slice{Slice: map[any]any{
 			-11: flat.Slice{Slice: []int{-12, -13}},
 		}},
 	})
@@ -47,27 +47,27 @@ func TestValues(t *testing.T) {
 	test.IsTrue(t, sv != nil)
 	test.EqualInt(t, len(sv), 0)
 
-	sv = flat.Values([]interface{}{1, 2})
+	sv = flat.Values([]any{1, 2})
 	if test.EqualInt(t, len(sv), 2) {
 		test.EqualInt(t, int(sv[0].Int()), 1)
 		test.EqualInt(t, int(sv[1].Int()), 2)
 	}
 
-	sv = flat.Values([]interface{}{
+	sv = flat.Values([]any{
 		1, 2,
 		flat.Slice{Slice: []int{3, 4, 5, 6}},
 		7,
 		flat.Slice{
-			Slice: []interface{}{
+			Slice: []any{
 				flat.Slice{Slice: []int{8, 9}},
-				flat.Slice{Slice: []interface{}{10, 11}},
+				flat.Slice{Slice: []any{10, 11}},
 				12,
 				13,
 			},
 		},
 		14,
 		flat.Slice{
-			Slice: map[int]interface{}{
+			Slice: map[int]any{
 				15: flat.Slice{Slice: map[int]int{16: 17}},
 			},
 		},
@@ -94,16 +94,16 @@ func TestInterfaces(t *testing.T) {
 		flat.Slice{Slice: []int{3, 4, 5, 6}},
 		7,
 		flat.Slice{
-			Slice: []interface{}{
+			Slice: []any{
 				flat.Slice{Slice: []int{8, 9}},
-				flat.Slice{Slice: []interface{}{10, 11}},
+				flat.Slice{Slice: []any{10, 11}},
 				12,
 				13,
 			},
 		},
 		14,
 		flat.Slice{
-			Slice: map[int]interface{}{
+			Slice: map[int]any{
 				15: flat.Slice{Slice: map[int]int{16: 17}},
 			},
 		},

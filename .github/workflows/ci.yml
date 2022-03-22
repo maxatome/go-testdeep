@@ -30,6 +30,10 @@ jobs:
       - name: Linting
         if: matrix.full-tests
         run: |
+          if fgrep 'interface{}' $(find . -name '*.go' -not -name any.go -not -name any_test.go); then
+              echo '*** At least one interface{} occurrence found. Use any instead.'
+              false
+          fi
           curl -sL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
               sh -s -- -b $HOME/go/bin v1.45.0
           echo $PATH

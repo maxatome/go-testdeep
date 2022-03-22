@@ -12,6 +12,8 @@ go-testdeep
 
 **Extremely flexible golang deep comparison, extends the go testing package.**
 
+Currently supports go 1.9 → 1.18.
+
 - [Latest news](#latest-news)
 - [Synopsis](#synopsis)
 - [Description](#description)

@@ -27,19 +27,19 @@ func init() {
 // response match easier. Each field, can be a TestDeep operator as
 // well as the exact expected value.
 type Response struct {
-	Status  interface{} // Status is the expected status (ignored if nil)
-	Header  interface{} // Header is the expected header (ignored if nil)
-	Cookies interface{} // Cookies are the expected cookies (ignored if nil)
-	Body    interface{} // Body is the expected body (expected to be empty if nil)
+	Status  any // Status is the expected status (ignored if nil)
+	Header  any // Header is the expected header (ignored if nil)
+	Cookies any // Cookies are the expected cookies (ignored if nil)
+	Body    any // Body is the expected body (expected to be empty if nil)
 }
 
 func cmpMarshaledResponse(tb testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	acceptEmptyBody bool,
-	unmarshal func([]byte, interface{}) error,
+	unmarshal func([]byte, any) error,
 	expectedResp Response,
-	args ...interface{},
+	args ...any,
 ) bool {
 	tb.Helper()
 
@@ -92,9 +92,9 @@ func cmpMarshaledResponse(tb testing.TB,
 func CmpMarshaledResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
-	unmarshal func([]byte, interface{}) error,
+	unmarshal func([]byte, any) error,
 	expectedResp Response,
-	args ...interface{},
+	args ...any,
 ) bool {
 	t.Helper()
 	return cmpMarshaledResponse(t, req, handler, false, unmarshal, expectedResp, args...)
@@ -133,19 +133,19 @@ func CmpResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,
-	args ...interface{}) bool {
+	args ...any) bool {
 	t.Helper()
 	return cmpMarshaledResponse(t,
 		req,
 		handler,
 		true,
-		func(body []byte, target interface{}) error {
+		func(body []byte, target any) error {
 			switch t := target.(type) {
 			case *string:
 				*t = string(body)
 			case *[]byte:
 				*t = body
-			case *interface{}:
+			case *any:
 				*t = body
 			default:
 				// cmpMarshaledBody (behind cmpMarshaledResponse) always calls
@@ -202,7 +202,7 @@ func CmpJSONResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,
-	args ...interface{},
+	args ...any,
 ) bool {
 	t.Helper()
 	return CmpMarshaledResponse(t,
@@ -255,7 +255,7 @@ func CmpXMLResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response,
-	args ...interface{},
+	args ...any,
 ) bool {
 	t.Helper()
 	return CmpMarshaledResponse(t,
@@ -284,7 +284,7 @@ func CmpXMLResponse(t testing.TB,
 // See TestAPI type and its methods for more flexible tests.
 func CmpMarshaledResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
-	unmarshal func([]byte, interface{}) error,
+	unmarshal func([]byte, any) error,
 	expectedResp Response) func(t *testing.T) {
 	return func(t *testing.T) {
 		t.Helper()

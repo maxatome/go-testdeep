@@ -21,7 +21,7 @@ func TestIsStruct(t *testing.T) {
 	m := map[string]struct{}{}
 
 	for i, test := range []struct {
-		val interface{}
+		val any
 		ok  bool
 	}{
 		{val: s, ok: true},

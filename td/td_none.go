@@ -34,7 +34,7 @@ var _ TestDeep = &tdNone{}
 //   prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
 //   even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
 //   td.Cmp(t, 9, td.None(prime, even)) // succeeds
-func None(notExpectedValues ...interface{}) TestDeep {
+func None(notExpectedValues ...any) TestDeep {
 	return &tdNone{
 		tdList: newList(notExpectedValues...),
 	}
@@ -52,7 +52,7 @@ func None(notExpectedValues ...interface{}) TestDeep {
 //
 //   td.Cmp(t, 12, td.Not(10)) // succeeds
 //   td.Cmp(t, 12, td.Not(12)) // fails
-func Not(notExpected interface{}) TestDeep {
+func Not(notExpected any) TestDeep {
 	return &tdNone{
 		tdList: newList(notExpected),
 	}

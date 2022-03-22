@@ -33,7 +33,7 @@ var _ TestDeep = &tdMapEach{}
 //   got := map[string]string{"test": "foo", "buzz": "bar"}
 //   td.Cmp(t, got, td.MapEach("bar"))     // fails, coz "foo" ≠ "bar"
 //   td.Cmp(t, got, td.MapEach(td.Len(3))) // succeeds as values are 3 chars long
-func MapEach(expectedValue interface{}) TestDeep {
+func MapEach(expectedValue any) TestDeep {
 	return &tdMapEach{
 		baseOKNil: newBaseOKNil(3),
 		expected:  reflect.ValueOf(expectedValue),

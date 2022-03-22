@@ -95,7 +95,7 @@ type tdBetweenCmp struct {
 //     td.Between(netip.MustParse("127.0.0.0"), netip.MustParse("127.255.255.255")))
 //
 // TypeBehind method returns the reflect.Type of "from" (same as the "to" one.)
-func Between(from, to interface{}, bounds ...BoundsKind) TestDeep {
+func Between(from, to any, bounds ...BoundsKind) TestDeep {
 	b := tdBetween{
 		base:        newBase(3),
 		expectedMin: reflect.ValueOf(from),
@@ -311,7 +311,7 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 //   td.Cmp(t, 12.2, td.N(12., 0.1)) // fails
 //
 // TypeBehind method returns the reflect.Type of "num".
-func N(num interface{}, tolerance ...interface{}) TestDeep {
+func N(num any, tolerance ...any) TestDeep {
 	n := tdBetween{
 		base:        newBase(3),
 		expectedMin: reflect.ValueOf(num),
@@ -381,7 +381,7 @@ func N(num interface{}, tolerance ...interface{}) TestDeep {
 //   td.Cmp(t, time.Now(), td.Gt(before))
 //
 // TypeBehind method returns the reflect.Type of "minExpectedValue".
-func Gt(minExpectedValue interface{}) TestDeep {
+func Gt(minExpectedValue any) TestDeep {
 	b := &tdBetween{
 		base:        newBase(3),
 		expectedMin: reflect.ValueOf(minExpectedValue),
@@ -409,7 +409,7 @@ func Gt(minExpectedValue interface{}) TestDeep {
 //   td.Cmp(t, time.Now(), td.Gte(before))
 //
 // TypeBehind method returns the reflect.Type of "minExpectedValue".
-func Gte(minExpectedValue interface{}) TestDeep {
+func Gte(minExpectedValue any) TestDeep {
 	b := &tdBetween{
 		base:        newBase(3),
 		expectedMin: reflect.ValueOf(minExpectedValue),
@@ -437,7 +437,7 @@ func Gte(minExpectedValue interface{}) TestDeep {
 //   td.Cmp(t, before, td.Lt(time.Now()))
 //
 // TypeBehind method returns the reflect.Type of "maxExpectedValue".
-func Lt(maxExpectedValue interface{}) TestDeep {
+func Lt(maxExpectedValue any) TestDeep {
 	b := &tdBetween{
 		base:        newBase(3),
 		expectedMin: reflect.ValueOf(maxExpectedValue),
@@ -465,7 +465,7 @@ func Lt(maxExpectedValue interface{}) TestDeep {
 //   td.Cmp(t, before, td.Lt(time.Now()))
 //
 // TypeBehind method returns the reflect.Type of "maxExpectedValue".
-func Lte(maxExpectedValue interface{}) TestDeep {
+func Lte(maxExpectedValue any) TestDeep {
 	b := &tdBetween{
 		base:        newBase(3),
 		expectedMin: reflect.ValueOf(maxExpectedValue),
@@ -618,7 +618,7 @@ func (b *tdBetween) String() string {
 	}
 
 	var (
-		min, max       interface{}
+		min, max       any
 		minStr, maxStr string
 	)
 

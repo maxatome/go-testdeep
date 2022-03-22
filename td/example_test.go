@@ -163,7 +163,7 @@ func ExampleAll() {
 
 	// When some operators or values have to be reused and mixed between
 	// several calls, Flatten can be used to avoid boring and
-	// inefficient []interface{} copies:
+	// inefficient []any copies:
 	regOps := td.Flatten([]td.TestDeep{td.Re("o/b"), td.Re(`^fo`), td.Re(`ar$`)})
 	ok = td.Cmp(t,
 		got,
@@ -196,7 +196,7 @@ func ExampleAny() {
 
 	// When some operators or values have to be reused and mixed between
 	// several calls, Flatten can be used to avoid boring and
-	// inefficient []interface{} copies:
+	// inefficient []any copies:
 	regOps := td.Flatten([]td.TestDeep{td.Re("a/c"), td.Re(`^xx`), td.Re(`ar$`)})
 	ok = td.Cmp(t,
 		got,
@@ -364,9 +364,9 @@ func ExampleBag() {
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3, 5}
 	ok = td.Cmp(t, got, td.Bag(td.Flatten(expected), td.Gt(7)),
 		"checks all expected items are present, in any order")
@@ -1294,8 +1294,8 @@ func ExampleJSONPointer_rfc6901() {
    "m~n":  8
 }`)
 
-	expected := map[string]interface{}{
-		"foo": []interface{}{"bar", "baz"},
+	expected := map[string]any{
+		"foo": []any{"bar", "baz"},
 		"":    0,
 		"a/b": 1,
 		"c%d": 2,
@@ -1309,7 +1309,7 @@ func ExampleJSONPointer_rfc6901() {
 	ok := td.Cmp(t, got, td.JSONPointer("", expected))
 	fmt.Println("Empty JSON pointer means all:", ok)
 
-	ok = td.Cmp(t, got, td.JSONPointer(`/foo`, []interface{}{"bar", "baz"}))
+	ok = td.Cmp(t, got, td.JSONPointer(`/foo`, []any{"bar", "baz"}))
 	fmt.Println("Extract `foo` key:", ok)
 
 	ok = td.Cmp(t, got, td.JSONPointer(`/foo/0`, "bar"))
@@ -1900,9 +1900,9 @@ func ExampleNotAny() {
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using notExpected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	notExpected := []int{3, 6, 8, 41, 43}
 	ok = td.Cmp(t, got, td.NotAny(td.Flatten(notExpected)),
 		"checks %v contains no item listed in notExpected", got)
@@ -2400,9 +2400,9 @@ func ExampleSet() {
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3, 5, 8}
 	ok = td.Cmp(t, got, td.Set(td.Flatten(expected)),
 		"checks all expected items are present, in any order")
@@ -2868,7 +2868,7 @@ func ExampleSmuggle_field_path() {
 
 	type Body struct {
 		Name  string
-		Value interface{}
+		Value any
 	}
 	type Request struct {
 		Body *Body
@@ -2915,8 +2915,8 @@ func ExampleSmuggle_field_path() {
 	fmt.Println("check Num using an other fields-path:", ok)
 
 	// Note that maps and array/slices are supported
-	got.Request.Body.Value = map[string]interface{}{
-		"foo": []interface{}{
+	got.Request.Body.Value = map[string]any{
+		"foo": []any{
 			3: map[int]string{666: "bar"},
 		},
 	}
@@ -3479,9 +3479,9 @@ func ExampleSubBagOf() {
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3, 5, 9, 8}
 	ok = td.Cmp(t, got, td.SubBagOf(td.Flatten(expected)),
 		"checks at least all expected items are present, in any order")
@@ -3692,9 +3692,9 @@ func ExampleSubSetOf() {
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3, 4, 5, 6, 7, 8}
 	ok = td.Cmp(t, got, td.SubSetOf(td.Flatten(expected)),
 		"checks at least all expected items are present, in any order, ignoring duplicates")
@@ -3719,9 +3719,9 @@ func ExampleSuperBagOf() {
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{8, 5, 8}
 	ok = td.Cmp(t, got, td.SuperBagOf(td.Flatten(expected)),
 		"checks the expected items are present, in any order")
@@ -3942,9 +3942,9 @@ func ExampleSuperSetOf() {
 		"checks at least 2 items of %v match ignoring duplicates", got)
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3}
 	ok = td.Cmp(t, got, td.SuperSetOf(td.Flatten(expected)),
 		"checks the expected items are present, in any order and ignoring duplicates")

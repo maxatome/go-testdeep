@@ -22,7 +22,7 @@ import (
 func checkJSON(t *testing.T, gotJSON, expectedJSON string) {
 	t.Helper()
 
-	var expected interface{}
+	var expected any
 	err := ejson.Unmarshal([]byte(expectedJSON), &expected)
 	if err != nil {
 		t.Fatalf("bad JSON: %s", err)
@@ -83,7 +83,7 @@ func TestJSON(t *testing.T) {
 		} {
 			js := []byte(js)
 
-			var expected interface{}
+			var expected any
 			err := ejson.Unmarshal(js, &expected)
 			if err != nil {
 				t.Fatalf("#%d, bad JSON: %s", i, err)
@@ -170,8 +170,8 @@ func TestJSON(t *testing.T) {
 			` "$héhé" `,
 		} {
 			got, err := json.Parse([]byte(js), json.ParseOpts{
-				Placeholders: []interface{}{"foo", "bar"},
-				PlaceholdersByName: map[string]interface{}{
+				Placeholders: []any{"foo", "bar"},
+				PlaceholdersByName: map[string]any{
 					"ph":   "bar",
 					"héhé": "bar",
 				},
@@ -368,7 +368,7 @@ syntax error: unexpected EOF at line 1:6 (pos 6)`,
 
 		_, err := json.Parse(
 			[]byte(`[$2]`),
-			json.ParseOpts{Placeholders: []interface{}{1}},
+			json.ParseOpts{Placeholders: []any{1}},
 		)
 		if test.Error(t, err) {
 			test.EqualStr(t, err.Error(),
@@ -377,7 +377,7 @@ syntax error: unexpected EOF at line 1:6 (pos 6)`,
 
 		_, err = json.Parse(
 			[]byte(`[$3]`),
-			json.ParseOpts{Placeholders: []interface{}{1, 2}},
+			json.ParseOpts{Placeholders: []any{1, 2}},
 		)
 		if test.Error(t, err) {
 			test.EqualStr(t, err.Error(),
@@ -387,7 +387,7 @@ syntax error: unexpected EOF at line 1:6 (pos 6)`,
 		var anyOpPos json.Position
 		_, err = json.Parse([]byte(`  KnownOp(  AnyOp()  )`),
 			json.ParseOpts{
-				OpFn: func(op json.Operator, pos json.Position) (interface{}, error) {
+				OpFn: func(op json.Operator, pos json.Position) (any, error) {
 					if op.Name == "KnownOp" {
 						return "OK", nil
 					}
@@ -409,7 +409,7 @@ syntax error: unexpected EOF at line 1:6 (pos 6)`,
 		} {
 			_, err := json.Parse([]byte(js),
 				json.ParseOpts{
-					OpShortcutFn: func(name string, pos json.Position) (interface{}, bool) {
+					OpShortcutFn: func(name string, pos json.Position) (any, bool) {
 						if name == "KnownOp" {
 							return "OK", true
 						}

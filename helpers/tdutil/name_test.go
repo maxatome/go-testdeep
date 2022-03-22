@@ -14,31 +14,31 @@ import (
 
 func TestBuildTestName(t *testing.T) {
 	for i, curTest := range []struct {
-		params   []interface{}
+		params   []any
 		expected string
 	}{
 		{
-			params:   []interface{}{},
+			params:   []any{},
 			expected: "",
 		},
 		{
-			params:   []interface{}{"foobar"},
+			params:   []any{"foobar"},
 			expected: "foobar",
 		},
 		{
-			params:   []interface{}{"foo", "bar"},
+			params:   []any{"foo", "bar"},
 			expected: "foobar",
 		},
 		{
-			params:   []interface{}{123, "zip"},
+			params:   []any{123, "zip"},
 			expected: "123zip",
 		},
 		{
-			params:   []interface{}{123, 456},
+			params:   []any{123, 456},
 			expected: "123 456",
 		},
 		{
-			params:   []interface{}{"foo(%d) bar(%s)", 123, "zip"},
+			params:   []any{"foo(%d) bar(%s)", 123, "zip"},
 			expected: "foo(123) bar(zip)",
 		},
 	} {

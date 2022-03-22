@@ -26,8 +26,8 @@ var (
 // TestingT is the minimal interface used by Cmp to report errors. It
 // is commonly implemented by *testing.T and *testing.B.
 type TestingT interface {
-	Error(args ...interface{})
-	Fatal(args ...interface{})
+	Error(args ...any)
+	Fatal(args ...any)
 	Helper()
 }
 

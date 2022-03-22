@@ -72,7 +72,7 @@ import (
 //
 // WithCmpHooks calls t.Fatal if an item of "fns" is not a function or
 // if its signature does not match the expected ones.
-func (t *T) WithCmpHooks(fns ...interface{}) *T {
+func (t *T) WithCmpHooks(fns ...any) *T {
 	t = t.copyWithHooks()
 
 	err := t.Config.hooks.AddCmpHooks(fns)
@@ -136,7 +136,7 @@ func (t *T) WithCmpHooks(fns ...interface{}) *T {
 //
 // WithSmuggleHooks calls t.Fatal if an item of "fns" is not a
 // function or if its signature does not match the expected ones.
-func (t *T) WithSmuggleHooks(fns ...interface{}) *T {
+func (t *T) WithSmuggleHooks(fns ...any) *T {
 	t = t.copyWithHooks()
 
 	err := t.Config.hooks.AddSmuggleHooks(fns)

@@ -25,7 +25,7 @@ import (
 // transformed / returned value.
 type SmuggledGot struct {
 	Name string
-	Got  interface{}
+	Got  any
 }
 
 const smuggled = "<smuggled>"
@@ -35,7 +35,7 @@ var (
 	parseComplex func(string, int) (complex128, error)
 
 	smuggleFnsMu sync.Mutex
-	smuggleFns   = map[interface{}]reflect.Value{}
+	smuggleFns   = map[any]reflect.Value{}
 
 	nilError = reflect.New(types.Error).Elem()
 )
@@ -146,13 +146,13 @@ func nilFieldErr(path []smuggleField) error {
 	return fmt.Errorf("field %q is nil", joinFieldsPath(path))
 }
 
-func buildFieldsPathFn(path string) (func(interface{}) (smuggleValue, error), error) {
+func buildFieldsPathFn(path string) (func(any) (smuggleValue, error), error) {
 	parts, err := splitFieldsPath(path)
 	if err != nil {
 		return nil, err
 	}
 
-	return func(got interface{}) (smuggleValue, error) {
+	return func(got any) (smuggleValue, error) {
 		vgot := reflect.ValueOf(got)
 
 		for idxPart, field := range parts {
@@ -339,7 +339,7 @@ func errorInterface(err error) reflect.Value {
 }
 
 // buildCaster returns a function:
-//   func(in interface{}) (out outType, err error)
+//   func(in any) (out outType, err error)
 //
 // dynamically checks…
 //   - if useString is false, as "outType" is a slice of bytes:
@@ -392,7 +392,7 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 						}),
 					}
 				}
-				var buf interface{}
+				var buf any
 				if useString {
 					buf = b.String()
 				} else {
@@ -584,7 +584,7 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 // auto-dereference interfaces and pointers, even on several levels,
 // like in:
 //
-//   type A struct{ N interface{} }
+//   type A struct{ N any }
 //   num := 12
 //   pnum := &num
 //   td.Cmp(t, A{N: &pnum}, td.Smuggle("N", 12))
@@ -627,8 +627,8 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //
 // TypeBehind method returns the reflect.Type of only parameter of
 // "fn". For the case where "fn" is a fields-path, it is always
-// interface{}, as the type can not be known in advance.
-func Smuggle(fn, expectedValue interface{}) TestDeep {
+// any, as the type can not be known in advance.
+func Smuggle(fn, expectedValue any) TestDeep {
 	s := tdSmuggle{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 	}
@@ -727,7 +727,7 @@ func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {
 			return got.Convert(s.argType), true
 		}
 	} else if s.argType == types.Interface {
-		// nil only accepted if interface{} expected
+		// nil only accepted if any expected
 		return reflect.New(types.Interface).Elem(), true
 	}
 	return got, false

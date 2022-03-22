@@ -18,7 +18,7 @@ func TestBag(t *testing.T) {
 	type MyArray [5]int
 	type MySlice []int
 
-	for idx, got := range []interface{}{
+	for idx, got := range []any{
 		[]int{1, 3, 4, 4, 5},
 		[...]int{1, 3, 4, 4, 5},
 		MySlice{1, 3, 4, 4, 5},
@@ -110,11 +110,11 @@ func TestBag(t *testing.T) {
 		checkOK(t, got, td.Lax(td.SuperBagOf(float64(5), 4, 1, 4, 3)), testName)
 	}
 
-	checkOK(t, []interface{}{123, "foo", nil, "bar", nil},
+	checkOK(t, []any{123, "foo", nil, "bar", nil},
 		td.Bag("foo", "bar", 123, nil, nil))
 
 	var nilSlice MySlice
-	for idx, got := range []interface{}{([]int)(nil), &nilSlice} {
+	for idx, got := range []any{([]int)(nil), &nilSlice} {
 		testName := fmt.Sprintf("Test #%d", idx)
 
 		checkOK(t, got, td.Bag(), testName)

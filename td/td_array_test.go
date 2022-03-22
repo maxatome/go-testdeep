@@ -25,8 +25,8 @@ func TestArray(t *testing.T) {
 	checkOK(t, [5]int{1, 2, 3},
 		td.Array([5]int{0, 2}, td.ArrayEntries{2: 3, 0: 1}))
 
-	checkOK(t, [5]interface{}{1, 2, nil, 4, nil},
-		td.Array([5]interface{}{nil, 2, nil, 4}, td.ArrayEntries{0: 1, 2: nil}))
+	checkOK(t, [5]any{1, 2, nil, 4, nil},
+		td.Array([5]any{nil, 2, nil, 4}, td.ArrayEntries{0: 1, 2: nil}))
 
 	zero, one, two := 0, 1, 2
 	checkOK(t, [5]*int{nil, &zero, &one, &two},
@@ -532,21 +532,21 @@ func TestSliceTypeBehind(t *testing.T) {
 
 func TestSuperSliceOf(t *testing.T) {
 	t.Run("interface array", func(t *testing.T) {
-		got := [5]interface{}{"foo", "bar", nil, 666, 777}
+		got := [5]any{"foo", "bar", nil, 666, 777}
 
 		checkOK(t, got,
-			td.SuperSliceOf([5]interface{}{1: "bar"}, td.ArrayEntries{2: td.Nil()}))
+			td.SuperSliceOf([5]any{1: "bar"}, td.ArrayEntries{2: td.Nil()}))
 		checkOK(t, got,
-			td.SuperSliceOf([5]interface{}{1: "bar"}, td.ArrayEntries{2: nil}))
+			td.SuperSliceOf([5]any{1: "bar"}, td.ArrayEntries{2: nil}))
 		checkOK(t, got,
-			td.SuperSliceOf([5]interface{}{1: "bar"}, td.ArrayEntries{3: 666}))
+			td.SuperSliceOf([5]any{1: "bar"}, td.ArrayEntries{3: 666}))
 		checkOK(t, got,
-			td.SuperSliceOf([5]interface{}{1: "bar"}, td.ArrayEntries{3: td.Between(665, 667)}))
+			td.SuperSliceOf([5]any{1: "bar"}, td.ArrayEntries{3: td.Between(665, 667)}))
 		checkOK(t, &got,
-			td.SuperSliceOf(&[5]interface{}{1: "bar"}, td.ArrayEntries{3: td.Between(665, 667)}))
+			td.SuperSliceOf(&[5]any{1: "bar"}, td.ArrayEntries{3: td.Between(665, 667)}))
 
 		checkError(t, got,
-			td.SuperSliceOf([5]interface{}{1: "foo"}, td.ArrayEntries{2: td.Nil()}),
+			td.SuperSliceOf([5]any{1: "foo"}, td.ArrayEntries{2: td.Nil()}),
 			expectedError{
 				Message:  mustBe("values differ"),
 				Path:     mustBe("DATA[1]"),
@@ -554,7 +554,7 @@ func TestSuperSliceOf(t *testing.T) {
 				Expected: mustBe(`"foo"`),
 			})
 		checkError(t, got,
-			td.SuperSliceOf([5]interface{}{1: 666}, td.ArrayEntries{2: td.Nil()}),
+			td.SuperSliceOf([5]any{1: 666}, td.ArrayEntries{2: td.Nil()}),
 			expectedError{
 				Message:  mustBe("type mismatch"),
 				Path:     mustBe("DATA[1]"),
@@ -562,7 +562,7 @@ func TestSuperSliceOf(t *testing.T) {
 				Expected: mustBe("int"),
 			})
 		checkError(t, &got,
-			td.SuperSliceOf([5]interface{}{1: 666}, td.ArrayEntries{2: td.Nil()}),
+			td.SuperSliceOf([5]any{1: 666}, td.ArrayEntries{2: td.Nil()}),
 			expectedError{
 				Message:  mustBe("type mismatch"),
 				Path:     mustBe("DATA"),
@@ -570,7 +570,7 @@ func TestSuperSliceOf(t *testing.T) {
 				Expected: mustBe("[5]interface {}"),
 			})
 		checkError(t, got,
-			td.SuperSliceOf(&[5]interface{}{1: 666}, td.ArrayEntries{2: td.Nil()}),
+			td.SuperSliceOf(&[5]any{1: 666}, td.ArrayEntries{2: td.Nil()}),
 			expectedError{
 				Message:  mustBe("type mismatch"),
 				Path:     mustBe("DATA"),

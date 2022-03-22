@@ -60,7 +60,7 @@ func stringPointer(s string) uintptr {
 //   a := []int{1, 2, 3, 4, 5, 6}
 //   b := a[:2]                    // aka []int{1, 2}
 //   td.Cmp(t, &a, td.Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
-func Shallow(expectedPtr interface{}) TestDeep {
+func Shallow(expectedPtr any) TestDeep {
 	vptr := reflect.ValueOf(expectedPtr)
 
 	shallow := tdShallow{

@@ -121,7 +121,7 @@ func NewSummary(s string) ErrorSummary {
 //
 //     value: the_got_value
 //   it failed but didn't say why
-func NewSummaryReason(got interface{}, reason string) ErrorSummary {
+func NewSummaryReason(got any, reason string) ErrorSummary {
 	if reason == "" {
 		return ErrorSummaryItem{
 			Label:       "  value", // keep 2 indent spaces

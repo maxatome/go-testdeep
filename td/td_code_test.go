@@ -22,7 +22,7 @@ import (
 func TestCode(t *testing.T) {
 	checkOK(t, 12, td.Code(func(n int) bool { return n >= 10 && n < 20 }))
 
-	checkOK(t, 12, td.Code(func(val interface{}) bool {
+	checkOK(t, 12, td.Code(func(val any) bool {
 		num, ok := val.(int)
 		return ok && num == 12
 	}))
@@ -284,7 +284,7 @@ func TestCodeCustom(t *testing.T) {
 	// Specific _checkOK func as td.Code(FUNC) with FUNC(t,arg) or
 	// FUNC(assert,require,arg) works in non-boolean context but cannot
 	// work in boolean context as there is no initial testing.TB instance
-	_customCheckOK := func(t *testing.T, got, expected interface{}, args ...interface{}) bool {
+	_customCheckOK := func(t *testing.T, got, expected any, args ...any) bool {
 		t.Helper()
 		if !td.Cmp(t, got, expected, args...) {
 			return false

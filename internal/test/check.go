@@ -22,8 +22,8 @@ import (
 //   Failed test
 //          got: got_value
 //     expected: expected_value
-func EqualErrorMessage(t *testing.T, got, expected interface{},
-	args ...interface{}) {
+func EqualErrorMessage(t *testing.T, got, expected any,
+	args ...any) {
 	t.Helper()
 
 	testName := tdutil.BuildTestName(args...)
@@ -47,7 +47,7 @@ func spewIfNeeded(s string) string {
 }
 
 // EqualStr checks that got equals expected.
-func EqualStr(t *testing.T, got, expected string, args ...interface{}) bool {
+func EqualStr(t *testing.T, got, expected string, args ...any) bool {
 	if got == expected {
 		return true
 	}
@@ -58,7 +58,7 @@ func EqualStr(t *testing.T, got, expected string, args ...interface{}) bool {
 }
 
 // EqualInt checks that got equals expected.
-func EqualInt(t *testing.T, got, expected int, args ...interface{}) bool {
+func EqualInt(t *testing.T, got, expected int, args ...any) bool {
 	if got == expected {
 		return true
 	}
@@ -69,7 +69,7 @@ func EqualInt(t *testing.T, got, expected int, args ...interface{}) bool {
 }
 
 // EqualBool checks that got equals expected.
-func EqualBool(t *testing.T, got, expected bool, args ...interface{}) bool {
+func EqualBool(t *testing.T, got, expected bool, args ...any) bool {
 	if got == expected {
 		return true
 	}
@@ -80,7 +80,7 @@ func EqualBool(t *testing.T, got, expected bool, args ...interface{}) bool {
 }
 
 // IsTrue checks that got is true.
-func IsTrue(t *testing.T, got bool, args ...interface{}) bool {
+func IsTrue(t *testing.T, got bool, args ...any) bool {
 	if got {
 		return true
 	}
@@ -91,7 +91,7 @@ func IsTrue(t *testing.T, got bool, args ...interface{}) bool {
 }
 
 // IsFalse checks that got is false.
-func IsFalse(t *testing.T, got bool, args ...interface{}) bool {
+func IsFalse(t *testing.T, got bool, args ...any) bool {
 	if !got {
 		return true
 	}
@@ -108,7 +108,7 @@ func CheckPanic(t *testing.T, fn func(), contains string) bool {
 
 	var (
 		panicked   bool
-		panicParam interface{}
+		panicParam any
 	)
 
 	func() {
@@ -138,7 +138,7 @@ func CheckPanic(t *testing.T, fn func(), contains string) bool {
 }
 
 // NoError checks that err is nil.
-func NoError(t *testing.T, err error, args ...interface{}) bool {
+func NoError(t *testing.T, err error, args ...any) bool {
 	if err == nil {
 		return true
 	}
@@ -149,7 +149,7 @@ func NoError(t *testing.T, err error, args ...interface{}) bool {
 }
 
 // Error checks that err is non-nil.
-func Error(t *testing.T, err error, args ...interface{}) bool {
+func Error(t *testing.T, err error, args ...any) bool {
 	if err != nil {
 		return true
 	}

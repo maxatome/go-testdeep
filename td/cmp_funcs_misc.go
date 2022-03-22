@@ -28,7 +28,7 @@ import (
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpTrue(t TestingT, got bool, args ...interface{}) bool {
+func CmpTrue(t TestingT, got bool, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, true, args...)
 }
@@ -47,12 +47,12 @@ func CmpTrue(t TestingT, got bool, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpFalse(t TestingT, got bool, args ...interface{}) bool {
+func CmpFalse(t TestingT, got bool, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, false, args...)
 }
 
-func cmpError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) bool {
+func cmpError(ctx ctxerr.Context, t TestingT, got error, args ...any) bool {
 	if got != nil {
 		return true
 	}
@@ -72,7 +72,7 @@ func cmpError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) bo
 	return false
 }
 
-func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) bool {
+func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...any) bool {
 	if got == nil {
 		return true
 	}
@@ -103,7 +103,7 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...interface{}) 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpError(t TestingT, got error, args ...interface{}) bool {
+func CmpError(t TestingT, got error, args ...any) bool {
 	t.Helper()
 	return cmpError(newContext(t), t, got, args...)
 }
@@ -121,12 +121,12 @@ func CmpError(t TestingT, got error, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNoError(t TestingT, got error, args ...interface{}) bool {
+func CmpNoError(t TestingT, got error, args ...any) bool {
 	t.Helper()
 	return cmpNoError(newContext(t), t, got, args...)
 }
 
-func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, args ...interface{}) bool {
+func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected any, args ...any) bool {
 	t.Helper()
 
 	if ctx.Path.Len() == 1 && ctx.Path.String() == contextDefaultRootName {
@@ -135,7 +135,7 @@ func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, a
 
 	var (
 		panicked   bool
-		panicParam interface{}
+		panicParam any
 	)
 
 	func() {
@@ -160,7 +160,7 @@ func cmpPanic(ctx ctxerr.Context, t TestingT, fn func(), expected interface{}, a
 	return cmpDeeply(ctx.AddCustomLevel("→panic()"), t, panicParam, expected, args...)
 }
 
-func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{}) bool {
+func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...any) bool {
 	var (
 		panicked   bool
 		stackTrace types.RawString
@@ -232,8 +232,8 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...interface{})
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
-	args ...interface{}) bool {
+func CmpPanic(t TestingT, fn func(), expectedPanic any,
+	args ...any) bool {
 	t.Helper()
 	return cmpPanic(newContext(t), t, fn, expectedPanic, args...)
 }
@@ -255,7 +255,7 @@ func CmpPanic(t TestingT, fn func(), expectedPanic interface{},
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNotPanic(t TestingT, fn func(), args ...interface{}) bool {
+func CmpNotPanic(t TestingT, fn func(), args ...any) bool {
 	t.Helper()
 	return cmpNotPanic(newContext(t), t, fn, args...)
 }

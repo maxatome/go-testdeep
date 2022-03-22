@@ -121,9 +121,9 @@ func clearComment(buf []byte, slash int64, origErr error) error {
 // json.SyntaxError errors detected before any memory allocation. So
 // the performance should not be too bad, avoiding to implement our
 // own JSON parser...
-func UnmarshalJSON(buf []byte, target interface{}) error {
+func UnmarshalJSON(buf []byte, target any) error {
 	jsonErrorMesgOnce.Do(func() {
-		var dummy interface{}
+		var dummy any
 		err := json.Unmarshal([]byte(`$x`), &dummy)
 		if jerr, ok := err.(*json.SyntaxError); ok {
 			jsonErrPlaceholder = jerr.Error()

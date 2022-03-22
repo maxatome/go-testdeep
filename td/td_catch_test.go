@@ -30,12 +30,12 @@ func TestCatch(t *testing.T) {
 	test.EqualInt(t, int(num64), 12)
 
 	// Lax not needed for interfaces
-	var any interface{}
-	if checkOK(t, 12, td.Catch(&any, 12)) {
-		if n, ok := any.(int); ok {
+	var val any
+	if checkOK(t, 12, td.Catch(&val, 12)) {
+		if n, ok := val.(int); ok {
 			test.EqualInt(t, n, 12)
 		} else {
-			t.Errorf("any is not an int but a %T", any)
+			t.Errorf("val is not an int but a %T", val)
 		}
 	}
 

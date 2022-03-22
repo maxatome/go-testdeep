@@ -97,7 +97,7 @@ func (u tdJSONUnmarshaler) replaceLocation(tdOp TestDeep, posInJSON json.Positio
 }
 
 // unmarshal unmarshals "expectedJSON" using placeholder parameters "params".
-func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interface{}) (interface{}, *ctxerr.Error) {
+func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxerr.Error) {
 	var (
 		err error
 		b   []byte
@@ -133,7 +133,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 	}
 
 	params = flat.Interfaces(params...)
-	var byTag map[string]interface{}
+	var byTag map[string]any
 
 	for i, p := range params {
 		switch op := p.(type) {
@@ -142,7 +142,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 				return nil, ctxerr.OpBad(u.Func, `2 params have the same tag "%s"`, op.tag)
 			}
 			if byTag == nil {
-				byTag = map[string]interface{}{}
+				byTag = map[string]any{}
 			}
 			// Don't keep the tag layer
 			p = nil
@@ -170,8 +170,8 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON interface{}, params []interfac
 }
 
 // resolveOp returns a closure usable as json.ParseOpts.OpFn.
-func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (interface{}, error) {
-	return func(jop json.Operator, posInJSON json.Position) (interface{}, error) {
+func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, error) {
+	return func(jop json.Operator, posInJSON json.Position) (any, error) {
 		op, exists := allOperators[jop.Name]
 		if !exists {
 			return nil, fmt.Errorf("unknown operator %s()", jop.Name)
@@ -235,7 +235,7 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 		default:
 			min = tfn.NumIn()
 			if tfn.IsVariadic() {
-				// for All(expected ...interface{}) → min == 1, as All() is a non-sense
+				// for All(expected ...any) → min == 1, as All() is a non-sense
 				max = -1
 			} else {
 				max = min
@@ -268,7 +268,7 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 			}
 
 			// If the function is variadic, no need to check each param as all
-			// variadic operators have always a ...interface{}
+			// variadic operators have always a ...any
 			numCheck := len(in)
 			if tfn.IsVariadic() {
 				numCheck = tfn.NumIn() - 1
@@ -296,8 +296,8 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (inter
 }
 
 // resolveOpShortcut returns a closure usable as json.ParseOpts.OpShortcutFn.
-func (u tdJSONUnmarshaler) resolveOpShortcut() func(string, json.Position) (interface{}, bool) {
-	return func(opName string, posInJSON json.Position) (interface{}, bool) {
+func (u tdJSONUnmarshaler) resolveOpShortcut() func(string, json.Position) (any, bool) {
+	return func(opName string, posInJSON json.Position) (any, bool) {
 		opFn := jsonOpShortcuts[opName]
 		if opFn != nil {
 			tdOp := opFn()
@@ -320,7 +320,7 @@ func (s *tdJSONSmuggler) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Er
 	vgot, _ := jsonify(ctx, got) // Cannot fail
 
 	// Here, vgot type is either a bool, float64, string,
-	// []interface{}, a map[string]interface{} or simply nil
+	// []any, a map[string]any or simply nil
 
 	return s.jsonValueEqual(ctx, vgot)
 }
@@ -352,7 +352,7 @@ type tdJSONPlaceholder struct {
 	num  uint64
 }
 
-func newJSONNamedPlaceholder(name string, expectedValue interface{}) TestDeep {
+func newJSONNamedPlaceholder(name string, expectedValue any) TestDeep {
 	p := tdJSONPlaceholder{
 		tdJSONSmuggler: tdJSONSmuggler{
 			tdSmugglerBase: newSmugglerBase(expectedValue, 1),
@@ -366,7 +366,7 @@ func newJSONNamedPlaceholder(name string, expectedValue interface{}) TestDeep {
 	return &p
 }
 
-func newJSONNumPlaceholder(num uint64, expectedValue interface{}) TestDeep {
+func newJSONNumPlaceholder(num uint64, expectedValue any) TestDeep {
 	p := tdJSONPlaceholder{
 		tdJSONSmuggler: tdJSONSmuggler{
 			tdSmugglerBase: newSmugglerBase(expectedValue, 1),
@@ -382,7 +382,7 @@ func newJSONNumPlaceholder(num uint64, expectedValue interface{}) TestDeep {
 
 func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
 	if !p.isTestDeeper {
-		var expected interface{}
+		var expected any
 		if p.expectedValue.IsValid() {
 			expected = p.expectedValue.Interface()
 		}
@@ -455,7 +455,7 @@ func gotViaJSON(ctx ctxerr.Context, pGot *reflect.Value) *ctxerr.Error {
 	return nil
 }
 
-func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error) {
+func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 	gotIf, ok := dark.GetInterface(got, true)
 	if !ok {
 		return nil, ctx.CannotCompareError()
@@ -472,8 +472,8 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 		}
 	}
 
-	// As Marshal succeeded, Unmarshal in an interface{} cannot fail
-	var vgot interface{}
+	// As Marshal succeeded, Unmarshal in an any cannot fail
+	var vgot any
 	ejson.Unmarshal(b, &vgot) //nolint: errcheck
 	return vgot, nil
 }
@@ -527,13 +527,13 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //
 //   td.Cmp(t, gotValue, td.JSON(`{"foo":$1}`, []int{1, 2, 3, 4}))
 //   td.Cmp(t, gotValue,
-//     td.JSON(`{"foo":$1}`, []interface{}{1, 2, td.Between(2, 4), 4}))
+//     td.JSON(`{"foo":$1}`, []any{1, 2, td.Between(2, 4), 4}))
 //   td.Cmp(t, gotValue, td.JSON(`{"foo":$1}`, td.Between(27, 32)))
 //
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
-// string, []interface{}, map[string]interface{} or simply nil).
+// string, []any, map[string]any or simply nil).
 //
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
 //
@@ -646,9 +646,9 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (interface{}, *ctxerr.Error)
 //
 // TypeBehind method returns the reflect.Type of the "expectedJSON"
 // json.Unmarshal'ed. So it can be bool, string, float64,
-// []interface{}, map[string]interface{} or interface{} in case
+// []any, map[string]any or any in case
 // "expectedJSON" is "null".
-func JSON(expectedJSON interface{}, params ...interface{}) TestDeep {
+func JSON(expectedJSON any, params ...any) TestDeep {
 	j := &tdJSON{
 		baseOKNil: newBaseOKNil(3),
 	}
@@ -791,14 +791,14 @@ var _ TestDeep = &tdMapJSON{}
 //   td.Cmp(t, gotValue,
 //     td.SubJSONOf(`{"foo":$1, "bar": 12}`, []int{1, 2, 3, 4}))
 //   td.Cmp(t, gotValue,
-//     td.SubJSONOf(`{"foo":$1, "bar": 12}`, []interface{}{1, 2, td.Between(2, 4), 4}))
+//     td.SubJSONOf(`{"foo":$1, "bar": 12}`, []any{1, 2, td.Between(2, 4), 4}))
 //   td.Cmp(t, gotValue,
 //     td.SubJSONOf(`{"foo":$1, "bar": 12}`, td.Between(27, 32)))
 //
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
-// string, []interface{}, map[string]interface{} or simply nil).
+// string, []any, map[string]any or simply nil).
 //
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
 //
@@ -910,13 +910,13 @@ var _ TestDeep = &tdMapJSON{}
 //   - NotZero  → $^NotZero
 //   - Zero     → $^Zero
 //
-// TypeBehind method returns the map[string]interface{} type.
-func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
+// TypeBehind method returns the map[string]any type.
+func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 	m := &tdMapJSON{
 		tdMap: tdMap{
 			tdExpectedType: tdExpectedType{
 				base:         newBase(3),
-				expectedType: reflect.TypeOf((map[string]interface{})(nil)),
+				expectedType: reflect.TypeOf((map[string]any)(nil)),
 			},
 			kind: subMap,
 		},
@@ -928,7 +928,7 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 		return m
 	}
 
-	_, ok := v.(map[string]interface{})
+	_, ok := v.(map[string]any)
 	if !ok {
 		m.err = ctxerr.OpBad("SubJSONOf", "SubJSONOf() only accepts JSON objects {…}")
 		return m
@@ -1010,14 +1010,14 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //   td.Cmp(t, gotValue,
 //     td.SuperJSONOf(`{"foo":$1}`, []int{1, 2, 3, 4}))
 //   td.Cmp(t, gotValue,
-//     td.SuperJSONOf(`{"foo":$1}`, []interface{}{1, 2, td.Between(2, 4), 4}))
+//     td.SuperJSONOf(`{"foo":$1}`, []any{1, 2, td.Between(2, 4), 4}))
 //   td.Cmp(t, gotValue,
 //     td.SuperJSONOf(`{"foo":$1}`, td.Between(27, 32)))
 //
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
-// string, []interface{}, map[string]interface{} or simply nil).
+// string, []any, map[string]any or simply nil).
 //
 // Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
 //
@@ -1128,13 +1128,13 @@ func SubJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 //   - NotZero  → $^NotZero
 //   - Zero     → $^Zero
 //
-// TypeBehind method returns the map[string]interface{} type.
-func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
+// TypeBehind method returns the map[string]any type.
+func SuperJSONOf(expectedJSON any, params ...any) TestDeep {
 	m := &tdMapJSON{
 		tdMap: tdMap{
 			tdExpectedType: tdExpectedType{
 				base:         newBase(3),
-				expectedType: reflect.TypeOf((map[string]interface{})(nil)),
+				expectedType: reflect.TypeOf((map[string]any)(nil)),
 			},
 			kind: superMap,
 		},
@@ -1146,7 +1146,7 @@ func SuperJSONOf(expectedJSON interface{}, params ...interface{}) TestDeep {
 		return m
 	}
 
-	_, ok := v.(map[string]interface{})
+	_, ok := v.(map[string]any)
 	if !ok {
 		m.err = ctxerr.OpBad("SuperJSONOf", "SuperJSONOf() only accepts JSON objects {…}")
 		return m

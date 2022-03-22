@@ -45,7 +45,7 @@ var _ TestDeep = &tdArrayEach{}
 //       Age: td.Between(20, 45),
 //     })),
 //   ) // succeeds, each Person has Age field between 20 and 45
-func ArrayEach(expectedValue interface{}) TestDeep {
+func ArrayEach(expectedValue any) TestDeep {
 	return &tdArrayEach{
 		baseOKNil: newBaseOKNil(3),
 		expected:  reflect.ValueOf(expectedValue),

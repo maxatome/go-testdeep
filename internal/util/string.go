@@ -20,7 +20,7 @@ import (
 )
 
 // ToString does its best to stringify val.
-func ToString(val interface{}) string {
+func ToString(val any) string {
 	if val == nil {
 		return "nil"
 	}

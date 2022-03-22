@@ -40,7 +40,7 @@ var _ TestDeep = &tdPtr{}
 // except if "val" is a TestDeep operator. In this case, it delegates
 // TypeBehind() to the operator and returns the reflect.Type of a
 // pointer on the returned value (if non-nil of course).
-func Ptr(val interface{}) TestDeep {
+func Ptr(val any) TestDeep {
 	p := tdPtr{
 		tdSmugglerBase: newSmugglerBase(val),
 	}
@@ -142,7 +142,7 @@ var _ TestDeep = &tdPPtr{}
 // case, it delegates TypeBehind() to the operator and returns the
 // reflect.Type of a pointer on a pointer on the returned value (if
 // non-nil of course).
-func PPtr(val interface{}) TestDeep {
+func PPtr(val any) TestDeep {
 	p := tdPPtr{
 		tdSmugglerBase: newSmugglerBase(val),
 	}

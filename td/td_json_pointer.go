@@ -59,7 +59,7 @@ var _ TestDeep = &tdJSONPointer{}
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
-// string, []interface{}, map[string]interface{} or simply nil).
+// string, []any, map[string]any or simply nil).
 //
 // Note that as any TestDeep operator can be used as "expectedValue",
 // JSON operator works out of the box:
@@ -94,7 +94,7 @@ var _ TestDeep = &tdJSONPointer{}
 //
 // TypeBehind method always returns nil as the expected type cannot be
 // guessed from a JSON pointer.
-func JSONPointer(pointer string, expectedValue interface{}) TestDeep {
+func JSONPointer(pointer string, expectedValue any) TestDeep {
 	p := tdJSONPointer{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 		pointer:        pointer,
@@ -135,7 +135,7 @@ func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	}
 
 	// Here, vgot type is either a bool, float64, string,
-	// []interface{}, a map[string]interface{} or simply nil
+	// []any, a map[string]any or simply nil
 
 	ctx = jsonPointerContext(ctx, p.pointer)
 	ctx.BeLax = true

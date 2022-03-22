@@ -29,7 +29,7 @@ package td
 //     Person{Name: "Alice", Age: 26},
 //   ))
 //
-// To flatten a non-[]interface{} slice/array, use Flatten function
+// To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
 //   expected := []int{1, 2, 1}
@@ -45,7 +45,7 @@ package td
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
-func Bag(expectedItems ...interface{}) TestDeep {
+func Bag(expectedItems ...any) TestDeep {
 	return newSetBase(allSet, false, expectedItems)
 }
 
@@ -70,7 +70,7 @@ func Bag(expectedItems ...interface{}) TestDeep {
 //     Person{Name: "Alice", Age: 26},
 //   ))
 //
-// To flatten a non-[]interface{} slice/array, use Flatten function
+// To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
 //   expected := []int{1, 2, 1}
@@ -86,7 +86,7 @@ func Bag(expectedItems ...interface{}) TestDeep {
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
-func SubBagOf(expectedItems ...interface{}) TestDeep {
+func SubBagOf(expectedItems ...any) TestDeep {
 	return newSetBase(subSet, false, expectedItems)
 }
 
@@ -111,7 +111,7 @@ func SubBagOf(expectedItems ...interface{}) TestDeep {
 //     Person{Name: "Alice", Age: 26},
 //   ))
 //
-// To flatten a non-[]interface{} slice/array, use Flatten function
+// To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
 //   expected := []int{1, 2, 1}
@@ -127,6 +127,6 @@ func SubBagOf(expectedItems ...interface{}) TestDeep {
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
-func SuperBagOf(expectedItems ...interface{}) TestDeep {
+func SuperBagOf(expectedItems ...any) TestDeep {
 	return newSetBase(superSet, false, expectedItems)
 }

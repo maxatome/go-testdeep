@@ -39,7 +39,7 @@ var _ TestDeep = &tdTag{}
 // TypeBehind method is delegated to "expectedValue" one if
 // "expectedValue" is a TestDeep operator, otherwise it returns the
 // type of "expectedValue" (or nil if it is originally untyped nil).
-func Tag(tag string, expectedValue interface{}) TestDeep {
+func Tag(tag string, expectedValue any) TestDeep {
 	t := tdTag{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 		tag:            tag,

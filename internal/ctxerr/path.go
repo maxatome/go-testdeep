@@ -109,7 +109,7 @@ func (p Path) AddArrayIndex(index int) Path {
 }
 
 // AddMapKey adds a level corresponding to a map key.
-func (p Path) AddMapKey(key interface{}) Path {
+func (p Path) AddMapKey(key any) Path {
 	if p == nil {
 		return nil
 	}

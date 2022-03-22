@@ -138,7 +138,7 @@ var _ TestDeep = &tdCode{}
 //             expected: 126
 //
 // TypeBehind method returns the reflect.Type of last parameter of "fn".
-func Code(fn interface{}) TestDeep {
+func Code(fn any) TestDeep {
 	vfn := reflect.ValueOf(fn)
 
 	c := tdCode{

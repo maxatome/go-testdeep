@@ -81,7 +81,7 @@ func TestBuildFieldsPathFn(t *testing.T) {
 		Field struct {
 			Path string
 		}
-		Iface interface{}
+		Iface any
 	}
 
 	fn, err := buildFieldsPathFn("Field.Path.Bad")

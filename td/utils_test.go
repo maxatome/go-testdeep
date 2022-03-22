@@ -24,7 +24,7 @@ func TestGetTime(t *testing.T) {
 
 	// OK cases
 	for idx, curTest := range []struct {
-		ParamGot         interface{}
+		ParamGot         any
 		ParamMustConvert bool
 		ExpectedTime     time.Time
 	}{
@@ -57,7 +57,7 @@ func TestGetTime(t *testing.T) {
 	// Simulate error return from dark.GetInterface
 	oldGetInterface := dark.GetInterface
 	defer func() { dark.GetInterface = oldGetInterface }()
-	dark.GetInterface = func(val reflect.Value, force bool) (interface{}, bool) {
+	dark.GetInterface = func(val reflect.Value, force bool) (any, bool) {
 		return nil, false
 	}
 

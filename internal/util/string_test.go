@@ -29,7 +29,7 @@ func (m myTestDeepStringer) String() string {
 
 func TestToString(t *testing.T) {
 	for _, curTest := range []struct {
-		paramGot interface{}
+		paramGot any
 		expected string
 	}{
 		{paramGot: nil, expected: "nil"},
@@ -95,21 +95,21 @@ func TestIndentString(t *testing.T) {
 func TestSliceToBuffer(t *testing.T) {
 	for _, curTest := range []struct {
 		BufInit  string
-		Items    []interface{}
+		Items    []any
 		Expected string
 	}{
 		{BufInit: ">", Items: nil, Expected: ">()"},
-		{BufInit: ">", Items: []interface{}{"pipo"}, Expected: `>("pipo")`},
+		{BufInit: ">", Items: []any{"pipo"}, Expected: `>("pipo")`},
 		{
 			BufInit: ">",
-			Items:   []interface{}{"pipo", "bingo", "zip"},
+			Items:   []any{"pipo", "bingo", "zip"},
 			Expected: `>("pipo",
   "bingo",
   "zip")`,
 		},
 		{
 			BufInit: "List\n  of\nitems:\n>",
-			Items:   []interface{}{"pipo", "bingo", "zip"},
+			Items:   []any{"pipo", "bingo", "zip"},
 			Expected: `List
   of
 items:
@@ -191,6 +191,6 @@ func TestTypeFullName(t *testing.T) {
 		"chan []int")
 
 	test.EqualStr(t,
-		util.TypeFullName(reflect.TypeOf((*interface{})(nil))),
+		util.TypeFullName(reflect.TypeOf((*any)(nil))),
 		"*interface {}")
 }

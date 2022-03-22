@@ -49,7 +49,7 @@ var _ TestDeep = &tdTruncTime{}
 //   td.Cmp(t, gotDate, td.TruncTime(expected, time.Second)) // succeeds
 //
 // TypeBehind method returns the reflect.Type of "expectedTime".
-func TruncTime(expectedTime interface{}, trunc ...time.Duration) TestDeep {
+func TruncTime(expectedTime any, trunc ...time.Duration) TestDeep {
 	const usage = "(time.Time[, time.Duration])"
 
 	t := tdTruncTime{

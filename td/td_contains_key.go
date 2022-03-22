@@ -48,7 +48,7 @@ var _ TestDeep = &tdContainsKey{}
 //   td.Cmp(t, hnum, td.ContainsKey(td.Nil()))    // succeeds
 //   // But...
 //   td.Cmp(t, hnum, td.ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
-func ContainsKey(expectedValue interface{}) TestDeep {
+func ContainsKey(expectedValue any) TestDeep {
 	c := tdContainsKey{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 	}
@@ -118,7 +118,7 @@ func (c *tdContainsKey) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
-	var expectedType interface{}
+	var expectedType any
 	if c.expectedValue.IsValid() {
 		expectedType = types.RawString(c.expectedValue.Type().String())
 	} else {

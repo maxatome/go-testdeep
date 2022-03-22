@@ -21,7 +21,7 @@ func TestAddAnchorableStructType(t *testing.T) {
 	type notComparable struct{ s []int } //nolint: structcheck,unused
 
 	// Usage error cases
-	for i, fn := range []interface{}{
+	for i, fn := range []any{
 		12,
 		func(x ...int) {},
 		func(x, y int) {},

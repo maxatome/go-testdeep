@@ -16,7 +16,7 @@ import (
 func TestContainsKey(t *testing.T) {
 	type MyMap map[int]string
 
-	for idx, got := range []interface{}{
+	for idx, got := range []any{
 		map[int]string{12: "foo", 34: "bar", 28: "zip"},
 		MyMap{12: "foo", 34: "bar", 28: "zip"},
 	} {
@@ -46,7 +46,7 @@ func TestContainsKeyNil(t *testing.T) {
 	type MyPtrMap map[*int]int
 
 	num := 12345642
-	for idx, got := range []interface{}{
+	for idx, got := range []any{
 		map[*int]int{&num: 42, nil: 666},
 		MyPtrMap{&num: 42, nil: 666},
 	} {

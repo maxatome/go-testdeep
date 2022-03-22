@@ -774,7 +774,7 @@ func TestBetweenCmp(t *testing.T) {
 func TestBetweenTypeBehind(t *testing.T) {
 	type MyTime time.Time
 
-	for _, typ := range []interface{}{
+	for _, typ := range []any{
 		10,
 		int64(23),
 		int32(23),

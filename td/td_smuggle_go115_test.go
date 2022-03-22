@@ -18,13 +18,13 @@ import (
 
 func TestSmuggleFieldsPath_go115(t *testing.T) {
 	type C struct {
-		Iface interface{}
+		Iface any
 	}
 
 	got := C{
-		Iface: []interface{}{
-			map[complex64]interface{}{complex(42, 0): []string{"pipo"}},
-			map[complex128]interface{}{complex(42, 0): []string{"pipo"}},
+		Iface: []any{
+			map[complex64]any{complex(42, 0): []string{"pipo"}},
+			map[complex128]any{complex(42, 0): []string{"pipo"}},
 		},
 	}
 

@@ -153,7 +153,7 @@ func (c Context) AddArrayIndex(index int) (new Context) {
 
 // AddMapKey creates a new Context from current one plus a map
 // dereference for key key.
-func (c Context) AddMapKey(key interface{}) (new Context) {
+func (c Context) AddMapKey(key any) (new Context) {
 	new = c
 	new.Path = new.Path.AddMapKey(key)
 	new.Depth++

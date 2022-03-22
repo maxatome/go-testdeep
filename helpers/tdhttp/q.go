@@ -33,9 +33,9 @@ import (
 //  - uint, uint8, uint16, uint32, uint64
 //  - float32, float64
 //  - bool
-//  - slice or array of any type above, plus interface{}
-//  - pointer on any type above, plus interface{} or any other pointer
-type Q map[string]interface{}
+//  - slice or array of any type above, plus any
+//  - pointer on any type above, plus any or any other pointer
+type Q map[string]any
 
 // AddTo adds the q contents to qp.
 func (q Q) AddTo(qp url.Values) error {

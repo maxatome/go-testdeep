@@ -17,7 +17,7 @@ func TestMapEach(t *testing.T) {
 	type MyMap map[string]int
 
 	checkOKForEach(t,
-		[]interface{}{
+		[]any{
 			map[string]int{"foo": 1, "bar": 1},
 			&map[string]int{"foo": 1, "bar": 1},
 			MyMap{"foo": 1, "bar": 1},
@@ -26,14 +26,14 @@ func TestMapEach(t *testing.T) {
 		td.MapEach(1))
 
 	checkOKForEach(t,
-		[]interface{}{
+		[]any{
 			map[int]string{1: "foo", 2: "bar"},
 			&map[int]string{1: "foo", 2: "bar"},
 		},
 		td.MapEach(td.Len(3)))
 
 	checkOKForEach(t,
-		[]interface{}{
+		[]any{
 			map[string]int{},
 			&map[string]int{},
 			MyMap{},
@@ -52,7 +52,7 @@ func TestMapEach(t *testing.T) {
 		})
 
 	checkOKForEach(t,
-		[]interface{}{
+		[]any{
 			map[string]int{"foo": 20, "bar": 22, "test": 29},
 			&map[string]int{"foo": 20, "bar": 22, "test": 29},
 			MyMap{"foo": 20, "bar": 22, "test": 29},
@@ -69,7 +69,7 @@ func TestMapEach(t *testing.T) {
 		})
 
 	checkErrorForEach(t,
-		[]interface{}{
+		[]any{
 			map[string]int{"foo": 4, "bar": 5, "test": 4},
 			&map[string]int{"foo": 4, "bar": 5, "test": 4},
 			MyMap{"foo": 4, "bar": 5, "test": 4},
@@ -99,10 +99,10 @@ func TestMapEach(t *testing.T) {
 			Expected: mustBe("Map OR *Map"),
 		})
 
-	checkOK(t, map[string]interface{}{"a": nil, "b": nil, "c": nil},
+	checkOK(t, map[string]any{"a": nil, "b": nil, "c": nil},
 		td.MapEach(nil))
 	checkError(t,
-		map[string]interface{}{"a": nil, "b": nil, "c": nil, "d": 66},
+		map[string]any{"a": nil, "b": nil, "c": nil, "d": 66},
 		td.MapEach(nil),
 		expectedError{
 			Message:  mustBe("values differ"),

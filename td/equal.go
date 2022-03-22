@@ -197,7 +197,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 		// If "got" is an interface, try to see what is behind before failing
 		// Used by Set/Bag Match method in such cases:
-		//     []interface{}{123, "foo"}  →  Bag("foo", 123)
+		//     []any{123, "foo"}  →  Bag("foo", 123)
 		//    Interface kind -^-----^   but String-^ and ^- Int kinds
 		if got.Kind() == reflect.Interface {
 			return deepValueEqual(ctx, got.Elem(), expected)
@@ -354,7 +354,7 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		}
 
 		var notFoundKeys []reflect.Value
-		foundKeys := map[interface{}]bool{}
+		foundKeys := map[any]bool{}
 
 		for _, vkey := range tdutil.MapSortedKeys(expected) {
 			gotValue := got.MapIndex(vkey)
@@ -447,7 +447,7 @@ func deepValueEqualOK(got, expected reflect.Value) bool {
 //   got := "foobar"
 //   td.EqDeeply(got, "foobar")            // returns true
 //   td.EqDeeply(got, td.HasPrefix("foo")) // returns true
-func EqDeeply(got, expected interface{}) bool {
+func EqDeeply(got, expected any) bool {
 	return deepValueEqualOK(reflect.ValueOf(got), reflect.ValueOf(expected))
 }
 
@@ -463,7 +463,7 @@ func EqDeeply(got, expected interface{}) bool {
 //   if err := td.EqDeeplyError(got, td.HasPrefix("foo")); err != nil {
 //     // …
 //   }
-func EqDeeplyError(got, expected interface{}) error {
+func EqDeeplyError(got, expected any) error {
 	err := deepValueEqualFinal(newContext(nil),
 		reflect.ValueOf(got), reflect.ValueOf(expected))
 	if err == nil {

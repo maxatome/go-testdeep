@@ -14,7 +14,7 @@ import (
 
 // allOperators lists the 62 operators.
 // nil means not usable in JSON().
-var allOperators = map[string]interface{}{
+var allOperators = map[string]any{
 	"All":          All,
 	"Any":          Any,
 	"Array":        nil,
@@ -95,7 +95,7 @@ var allOperators = map[string]interface{}{
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpAll(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+func CmpAll(t TestingT, got any, expectedValues []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, All(expectedValues...), args...)
 }
@@ -116,7 +116,7 @@ func CmpAll(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpAny(t TestingT, got interface{}, expectedValues []interface{}, args ...interface{}) bool {
+func CmpAny(t TestingT, got any, expectedValues []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Any(expectedValues...), args...)
 }
@@ -137,7 +137,7 @@ func CmpAny(t TestingT, got interface{}, expectedValues []interface{}, args ...i
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpArray(t TestingT, got, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+func CmpArray(t TestingT, got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Array(model, expectedEntries), args...)
 }
@@ -158,7 +158,7 @@ func CmpArray(t TestingT, got, model interface{}, expectedEntries ArrayEntries, 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpArrayEach(t TestingT, got, expectedValue interface{}, args ...interface{}) bool {
+func CmpArrayEach(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, ArrayEach(expectedValue), args...)
 }
@@ -179,7 +179,7 @@ func CmpArrayEach(t TestingT, got, expectedValue interface{}, args ...interface{
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpBag(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+func CmpBag(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Bag(expectedItems...), args...)
 }
@@ -204,7 +204,7 @@ func CmpBag(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpBetween(t TestingT, got, from, to interface{}, bounds BoundsKind, args ...interface{}) bool {
+func CmpBetween(t TestingT, got, from, to any, bounds BoundsKind, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Between(from, to, bounds), args...)
 }
@@ -225,7 +225,7 @@ func CmpBetween(t TestingT, got, from, to interface{}, bounds BoundsKind, args .
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpCap(t TestingT, got, expectedCap interface{}, args ...interface{}) bool {
+func CmpCap(t TestingT, got, expectedCap any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Cap(expectedCap), args...)
 }
@@ -246,7 +246,7 @@ func CmpCap(t TestingT, got, expectedCap interface{}, args ...interface{}) bool 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpCode(t TestingT, got, fn interface{}, args ...interface{}) bool {
+func CmpCode(t TestingT, got, fn any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Code(fn), args...)
 }
@@ -267,7 +267,7 @@ func CmpCode(t TestingT, got, fn interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpContains(t TestingT, got, expectedValue interface{}, args ...interface{}) bool {
+func CmpContains(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Contains(expectedValue), args...)
 }
@@ -288,7 +288,7 @@ func CmpContains(t TestingT, got, expectedValue interface{}, args ...interface{}
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpContainsKey(t TestingT, got, expectedValue interface{}, args ...interface{}) bool {
+func CmpContainsKey(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, ContainsKey(expectedValue), args...)
 }
@@ -309,7 +309,7 @@ func CmpContainsKey(t TestingT, got, expectedValue interface{}, args ...interfac
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpEmpty(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpEmpty(t TestingT, got any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Empty(), args...)
 }
@@ -330,7 +330,7 @@ func CmpEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpGt(t TestingT, got, minExpectedValue interface{}, args ...interface{}) bool {
+func CmpGt(t TestingT, got, minExpectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Gt(minExpectedValue), args...)
 }
@@ -351,7 +351,7 @@ func CmpGt(t TestingT, got, minExpectedValue interface{}, args ...interface{}) b
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpGte(t TestingT, got, minExpectedValue interface{}, args ...interface{}) bool {
+func CmpGte(t TestingT, got, minExpectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Gte(minExpectedValue), args...)
 }
@@ -372,7 +372,7 @@ func CmpGte(t TestingT, got, minExpectedValue interface{}, args ...interface{}) 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpHasPrefix(t TestingT, got interface{}, expected string, args ...interface{}) bool {
+func CmpHasPrefix(t TestingT, got any, expected string, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, HasPrefix(expected), args...)
 }
@@ -393,7 +393,7 @@ func CmpHasPrefix(t TestingT, got interface{}, expected string, args ...interfac
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interface{}) bool {
+func CmpHasSuffix(t TestingT, got any, expected string, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, HasSuffix(expected), args...)
 }
@@ -414,7 +414,7 @@ func CmpHasSuffix(t TestingT, got interface{}, expected string, args ...interfac
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpIsa(t TestingT, got, model interface{}, args ...interface{}) bool {
+func CmpIsa(t TestingT, got, model any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Isa(model), args...)
 }
@@ -435,7 +435,7 @@ func CmpIsa(t TestingT, got, model interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpJSON(t TestingT, got, expectedJSON interface{}, params []interface{}, args ...interface{}) bool {
+func CmpJSON(t TestingT, got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, JSON(expectedJSON, params...), args...)
 }
@@ -456,7 +456,7 @@ func CmpJSON(t TestingT, got, expectedJSON interface{}, params []interface{}, ar
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpJSONPointer(t TestingT, got interface{}, pointer string, expectedValue interface{}, args ...interface{}) bool {
+func CmpJSONPointer(t TestingT, got any, pointer string, expectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, JSONPointer(pointer, expectedValue), args...)
 }
@@ -477,7 +477,7 @@ func CmpJSONPointer(t TestingT, got interface{}, pointer string, expectedValue i
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpKeys(t TestingT, got, val interface{}, args ...interface{}) bool {
+func CmpKeys(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Keys(val), args...)
 }
@@ -498,7 +498,7 @@ func CmpKeys(t TestingT, got, val interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpLax(t TestingT, got, expectedValue interface{}, args ...interface{}) bool {
+func CmpLax(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Lax(expectedValue), args...)
 }
@@ -519,7 +519,7 @@ func CmpLax(t TestingT, got, expectedValue interface{}, args ...interface{}) boo
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpLen(t TestingT, got, expectedLen interface{}, args ...interface{}) bool {
+func CmpLen(t TestingT, got, expectedLen any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Len(expectedLen), args...)
 }
@@ -540,7 +540,7 @@ func CmpLen(t TestingT, got, expectedLen interface{}, args ...interface{}) bool 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpLt(t TestingT, got, maxExpectedValue interface{}, args ...interface{}) bool {
+func CmpLt(t TestingT, got, maxExpectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Lt(maxExpectedValue), args...)
 }
@@ -561,7 +561,7 @@ func CmpLt(t TestingT, got, maxExpectedValue interface{}, args ...interface{}) b
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpLte(t TestingT, got, maxExpectedValue interface{}, args ...interface{}) bool {
+func CmpLte(t TestingT, got, maxExpectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Lte(maxExpectedValue), args...)
 }
@@ -582,7 +582,7 @@ func CmpLte(t TestingT, got, maxExpectedValue interface{}, args ...interface{}) 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpMap(t TestingT, got, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+func CmpMap(t TestingT, got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Map(model, expectedEntries), args...)
 }
@@ -603,7 +603,7 @@ func CmpMap(t TestingT, got, model interface{}, expectedEntries MapEntries, args
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpMapEach(t TestingT, got, expectedValue interface{}, args ...interface{}) bool {
+func CmpMapEach(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, MapEach(expectedValue), args...)
 }
@@ -628,7 +628,7 @@ func CmpMapEach(t TestingT, got, expectedValue interface{}, args ...interface{})
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpN(t TestingT, got, num, tolerance interface{}, args ...interface{}) bool {
+func CmpN(t TestingT, got, num, tolerance any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, N(num, tolerance), args...)
 }
@@ -649,7 +649,7 @@ func CmpN(t TestingT, got, num, tolerance interface{}, args ...interface{}) bool
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNaN(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpNaN(t TestingT, got any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, NaN(), args...)
 }
@@ -670,7 +670,7 @@ func CmpNaN(t TestingT, got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNil(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpNil(t TestingT, got any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Nil(), args...)
 }
@@ -691,7 +691,7 @@ func CmpNil(t TestingT, got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNone(t TestingT, got interface{}, notExpectedValues []interface{}, args ...interface{}) bool {
+func CmpNone(t TestingT, got any, notExpectedValues []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, None(notExpectedValues...), args...)
 }
@@ -712,7 +712,7 @@ func CmpNone(t TestingT, got interface{}, notExpectedValues []interface{}, args 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNot(t TestingT, got, notExpected interface{}, args ...interface{}) bool {
+func CmpNot(t TestingT, got, notExpected any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Not(notExpected), args...)
 }
@@ -733,7 +733,7 @@ func CmpNot(t TestingT, got, notExpected interface{}, args ...interface{}) bool 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNotAny(t TestingT, got interface{}, notExpectedItems []interface{}, args ...interface{}) bool {
+func CmpNotAny(t TestingT, got any, notExpectedItems []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, NotAny(notExpectedItems...), args...)
 }
@@ -754,7 +754,7 @@ func CmpNotAny(t TestingT, got interface{}, notExpectedItems []interface{}, args
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNotEmpty(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpNotEmpty(t TestingT, got any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, NotEmpty(), args...)
 }
@@ -775,7 +775,7 @@ func CmpNotEmpty(t TestingT, got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNotNaN(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpNotNaN(t TestingT, got any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, NotNaN(), args...)
 }
@@ -796,7 +796,7 @@ func CmpNotNaN(t TestingT, got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpNotNil(t TestingT, got any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, NotNil(), args...)
 }
@@ -817,7 +817,7 @@ func CmpNotNil(t TestingT, got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpNotZero(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpNotZero(t TestingT, got any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, NotZero(), args...)
 }
@@ -838,7 +838,7 @@ func CmpNotZero(t TestingT, got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpPPtr(t TestingT, got, val interface{}, args ...interface{}) bool {
+func CmpPPtr(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, PPtr(val), args...)
 }
@@ -859,7 +859,7 @@ func CmpPPtr(t TestingT, got, val interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpPtr(t TestingT, got, val interface{}, args ...interface{}) bool {
+func CmpPtr(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Ptr(val), args...)
 }
@@ -884,7 +884,7 @@ func CmpPtr(t TestingT, got, val interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpRe(t TestingT, got, reg, capture interface{}, args ...interface{}) bool {
+func CmpRe(t TestingT, got, reg, capture any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Re(reg, capture), args...)
 }
@@ -905,7 +905,7 @@ func CmpRe(t TestingT, got, reg, capture interface{}, args ...interface{}) bool 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpReAll(t TestingT, got, reg, capture interface{}, args ...interface{}) bool {
+func CmpReAll(t TestingT, got, reg, capture any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, ReAll(reg, capture), args...)
 }
@@ -926,7 +926,7 @@ func CmpReAll(t TestingT, got, reg, capture interface{}, args ...interface{}) bo
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSet(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+func CmpSet(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Set(expectedItems...), args...)
 }
@@ -947,7 +947,7 @@ func CmpSet(t TestingT, got interface{}, expectedItems []interface{}, args ...in
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpShallow(t TestingT, got, expectedPtr interface{}, args ...interface{}) bool {
+func CmpShallow(t TestingT, got, expectedPtr any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Shallow(expectedPtr), args...)
 }
@@ -968,7 +968,7 @@ func CmpShallow(t TestingT, got, expectedPtr interface{}, args ...interface{}) b
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSlice(t TestingT, got, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+func CmpSlice(t TestingT, got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Slice(model, expectedEntries), args...)
 }
@@ -989,7 +989,7 @@ func CmpSlice(t TestingT, got, model interface{}, expectedEntries ArrayEntries, 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSmuggle(t TestingT, got, fn, expectedValue interface{}, args ...interface{}) bool {
+func CmpSmuggle(t TestingT, got, fn, expectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Smuggle(fn, expectedValue), args...)
 }
@@ -1014,7 +1014,7 @@ func CmpSmuggle(t TestingT, got, fn, expectedValue interface{}, args ...interfac
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSStruct(t TestingT, got, model interface{}, expectedFields StructFields, args ...interface{}) bool {
+func CmpSStruct(t TestingT, got, model any, expectedFields StructFields, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SStruct(model, expectedFields), args...)
 }
@@ -1035,7 +1035,7 @@ func CmpSStruct(t TestingT, got, model interface{}, expectedFields StructFields,
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpString(t TestingT, got interface{}, expected string, args ...interface{}) bool {
+func CmpString(t TestingT, got any, expected string, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, String(expected), args...)
 }
@@ -1060,7 +1060,7 @@ func CmpString(t TestingT, got interface{}, expected string, args ...interface{}
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpStruct(t TestingT, got, model interface{}, expectedFields StructFields, args ...interface{}) bool {
+func CmpStruct(t TestingT, got, model any, expectedFields StructFields, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Struct(model, expectedFields), args...)
 }
@@ -1081,7 +1081,7 @@ func CmpStruct(t TestingT, got, model interface{}, expectedFields StructFields, 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+func CmpSubBagOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SubBagOf(expectedItems...), args...)
 }
@@ -1102,7 +1102,7 @@ func CmpSubBagOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSubJSONOf(t TestingT, got, expectedJSON interface{}, params []interface{}, args ...interface{}) bool {
+func CmpSubJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SubJSONOf(expectedJSON, params...), args...)
 }
@@ -1123,7 +1123,7 @@ func CmpSubJSONOf(t TestingT, got, expectedJSON interface{}, params []interface{
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSubMapOf(t TestingT, got, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+func CmpSubMapOf(t TestingT, got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SubMapOf(model, expectedEntries), args...)
 }
@@ -1144,7 +1144,7 @@ func CmpSubMapOf(t TestingT, got, model interface{}, expectedEntries MapEntries,
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+func CmpSubSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SubSetOf(expectedItems...), args...)
 }
@@ -1165,7 +1165,7 @@ func CmpSubSetOf(t TestingT, got interface{}, expectedItems []interface{}, args 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+func CmpSuperBagOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SuperBagOf(expectedItems...), args...)
 }
@@ -1186,7 +1186,7 @@ func CmpSuperBagOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSuperJSONOf(t TestingT, got, expectedJSON interface{}, params []interface{}, args ...interface{}) bool {
+func CmpSuperJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SuperJSONOf(expectedJSON, params...), args...)
 }
@@ -1207,7 +1207,7 @@ func CmpSuperJSONOf(t TestingT, got, expectedJSON interface{}, params []interfac
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSuperMapOf(t TestingT, got, model interface{}, expectedEntries MapEntries, args ...interface{}) bool {
+func CmpSuperMapOf(t TestingT, got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SuperMapOf(model, expectedEntries), args...)
 }
@@ -1228,7 +1228,7 @@ func CmpSuperMapOf(t TestingT, got, model interface{}, expectedEntries MapEntrie
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, args ...interface{}) bool {
+func CmpSuperSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SuperSetOf(expectedItems...), args...)
 }
@@ -1249,7 +1249,7 @@ func CmpSuperSetOf(t TestingT, got interface{}, expectedItems []interface{}, arg
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpSuperSliceOf(t TestingT, got, model interface{}, expectedEntries ArrayEntries, args ...interface{}) bool {
+func CmpSuperSliceOf(t TestingT, got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, SuperSliceOf(model, expectedEntries), args...)
 }
@@ -1274,7 +1274,7 @@ func CmpSuperSliceOf(t TestingT, got, model interface{}, expectedEntries ArrayEn
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpTruncTime(t TestingT, got, expectedTime interface{}, trunc time.Duration, args ...interface{}) bool {
+func CmpTruncTime(t TestingT, got, expectedTime any, trunc time.Duration, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, TruncTime(expectedTime, trunc), args...)
 }
@@ -1295,7 +1295,7 @@ func CmpTruncTime(t TestingT, got, expectedTime interface{}, trunc time.Duration
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpValues(t TestingT, got, val interface{}, args ...interface{}) bool {
+func CmpValues(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Values(val), args...)
 }
@@ -1316,7 +1316,7 @@ func CmpValues(t TestingT, got, val interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpZero(t TestingT, got interface{}, args ...interface{}) bool {
+func CmpZero(t TestingT, got any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Zero(), args...)
 }

@@ -22,7 +22,7 @@ import (
 func TestAddCmpHooks(t *testing.T) {
 	for _, tst := range []struct {
 		name string
-		cmp  interface{}
+		cmp  any
 		err  string
 	}{
 		{
@@ -52,7 +52,7 @@ func TestAddCmpHooks(t *testing.T) {
 		},
 		{
 			name: "interface",
-			cmp:  func(a, b interface{}) bool { return true },
+			cmp:  func(a, b any) bool { return true },
 			err:  "expects: func (T, T) bool|error not func(interface {}, interface {}) bool (@1)",
 		},
 		{
@@ -63,7 +63,7 @@ func TestAddCmpHooks(t *testing.T) {
 	} {
 		i := hooks.NewInfo()
 
-		err := i.AddCmpHooks([]interface{}{
+		err := i.AddCmpHooks([]any{
 			func(a, b bool) bool { return true },
 			tst.cmp,
 		})
@@ -85,7 +85,7 @@ func TestCmp(t *testing.T) {
 
 		i = hooks.NewInfo()
 
-		err = i.AddCmpHooks([]interface{}{func(a, b int) bool { return a == b }})
+		err = i.AddCmpHooks([]any{func(a, b int) bool { return a == b }})
 		test.NoError(t, err)
 
 		handled, err = i.Cmp(reflect.ValueOf(12), reflect.ValueOf(12))
@@ -116,7 +116,7 @@ func TestCmp(t *testing.T) {
 
 		diffErr := errors.New("a≠b")
 
-		err := i.AddCmpHooks([]interface{}{
+		err := i.AddCmpHooks([]any{
 			func(a, b int) error {
 				if a == b {
 					return nil
@@ -148,7 +148,7 @@ func TestSmuggle(t *testing.T) {
 
 	i = hooks.NewInfo()
 
-	err = i.AddSmuggleHooks([]interface{}{func(a int) bool { return a != 0 }})
+	err = i.AddSmuggleHooks([]any{func(a int) bool { return a != 0 }})
 	test.NoError(t, err)
 
 	got = reflect.ValueOf(123)
@@ -165,7 +165,7 @@ func TestSmuggle(t *testing.T) {
 	test.IsFalse(t, handled)
 	test.EqualStr(t, got.String(), "biz")
 
-	err = i.AddSmuggleHooks([]interface{}{strconv.Atoi})
+	err = i.AddSmuggleHooks([]any{strconv.Atoi})
 	test.NoError(t, err)
 
 	got = reflect.ValueOf("123")
@@ -185,7 +185,7 @@ func TestSmuggle(t *testing.T) {
 func TestAddSmuggleHooks(t *testing.T) {
 	for _, tst := range []struct {
 		name    string
-		smuggle interface{}
+		smuggle any
 		err     string
 	}{
 		{
@@ -205,7 +205,7 @@ func TestAddSmuggleHooks(t *testing.T) {
 		},
 		{
 			name:    "interface",
-			smuggle: func(a interface{}) bool { return true },
+			smuggle: func(a any) bool { return true },
 			err:     "expects: func (A) (B[, error]) not func(interface {}) bool (@1)",
 		},
 		{
@@ -220,18 +220,18 @@ func TestAddSmuggleHooks(t *testing.T) {
 		},
 		{
 			name:    "return interface",
-			smuggle: func(a int) interface{} { return 0 },
+			smuggle: func(a int) any { return 0 },
 			err:     "expects: func (A) (B[, error]) not func(int) interface {} (@1)",
 		},
 		{
 			name:    "return interface, error",
-			smuggle: func(a int) (interface{}, error) { return 0, nil },
+			smuggle: func(a int) (any, error) { return 0, nil },
 			err:     "expects: func (A) (B[, error]) not func(int) (interface {}, error) (@1)",
 		},
 	} {
 		i := hooks.NewInfo()
 
-		err := i.AddSmuggleHooks([]interface{}{
+		err := i.AddSmuggleHooks([]any{
 			func(a int) bool { return true },
 			tst.smuggle,
 		})
@@ -251,9 +251,9 @@ func TestUseEqual(t *testing.T) {
 	i = hooks.NewInfo()
 	test.IsFalse(t, i.UseEqual(reflect.TypeOf(42)))
 
-	test.NoError(t, i.AddUseEqual([]interface{}{}))
+	test.NoError(t, i.AddUseEqual([]any{}))
 
-	test.NoError(t, i.AddUseEqual([]interface{}{time.Time{}, net.IP{}}))
+	test.NoError(t, i.AddUseEqual([]any{time.Time{}, net.IP{}}))
 	test.IsTrue(t, i.UseEqual(reflect.TypeOf(time.Time{})))
 	test.IsTrue(t, i.UseEqual(reflect.TypeOf(net.IP{})))
 }
@@ -261,7 +261,7 @@ func TestUseEqual(t *testing.T) {
 func TestAddUseEqual(t *testing.T) {
 	for _, tst := range []struct {
 		name string
-		typ  interface{}
+		typ  any
 		err  string
 	}{
 		{
@@ -297,7 +297,7 @@ func TestAddUseEqual(t *testing.T) {
 	} {
 		i := hooks.NewInfo()
 
-		err := i.AddUseEqual([]interface{}{time.Time{}, tst.typ})
+		err := i.AddUseEqual([]any{time.Time{}, tst.typ})
 		if test.Error(t, err, tst.name) {
 			if !strings.Contains(err.Error(), tst.err) {
 				t.Errorf("<%s> does not contain <%s> for %s", err, tst.err, tst.name)
@@ -314,9 +314,9 @@ func TestIgnoreUnexported(t *testing.T) {
 	i = hooks.NewInfo()
 	test.IsFalse(t, i.IgnoreUnexported(reflect.TypeOf(struct{}{})))
 
-	test.NoError(t, i.AddIgnoreUnexported([]interface{}{}))
+	test.NoError(t, i.AddIgnoreUnexported([]any{}))
 
-	test.NoError(t, i.AddIgnoreUnexported([]interface{}{testing.T{}, time.Time{}}))
+	test.NoError(t, i.AddIgnoreUnexported([]any{testing.T{}, time.Time{}}))
 	test.IsTrue(t, i.IgnoreUnexported(reflect.TypeOf(time.Time{})))
 	test.IsTrue(t, i.IgnoreUnexported(reflect.TypeOf(testing.T{})))
 }
@@ -324,7 +324,7 @@ func TestIgnoreUnexported(t *testing.T) {
 func TestAddIgnoreUnexported(t *testing.T) {
 	i := hooks.NewInfo()
 
-	err := i.AddIgnoreUnexported([]interface{}{time.Time{}, 0})
+	err := i.AddIgnoreUnexported([]any{time.Time{}, 0})
 	if test.Error(t, err) {
 		test.EqualStr(t, err.Error(), "expects type int be a struct, not a int (@1)")
 	}
@@ -344,7 +344,7 @@ func TestCopy(t *testing.T) {
 		t.Errorf("Copy should never return nil")
 	}
 	hookedBool := false
-	test.NoError(t, copy1.AddSmuggleHooks([]interface{}{
+	test.NoError(t, copy1.AddSmuggleHooks([]any{
 		func(in bool) bool { hookedBool = true; return in },
 	}))
 
@@ -366,7 +366,7 @@ func TestCopy(t *testing.T) {
 		t.Errorf("Copy should never return nil")
 	}
 	hookedInt := false
-	test.NoError(t, copy2.AddSmuggleHooks([]interface{}{
+	test.NoError(t, copy2.AddSmuggleHooks([]any{
 		func(in int) int { hookedInt = true; return in },
 	}))
 
