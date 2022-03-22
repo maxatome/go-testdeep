@@ -15,8 +15,8 @@ import (
 
 var (
 	Bool            = reflect.TypeOf(false)
-	Interface       = reflect.TypeOf((*interface{})(nil)).Elem()
-	SliceInterface  = reflect.TypeOf(([]interface{})(nil))
+	Interface       = reflect.TypeOf((*any)(nil)).Elem()
+	SliceInterface  = reflect.TypeOf(([]any)(nil))
 	FmtStringer     = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
 	Error           = reflect.TypeOf((*error)(nil)).Elem()
 	JsonUnmarshaler = reflect.TypeOf((*json.Unmarshaler)(nil)).Elem() //nolint: revive

@@ -24,9 +24,9 @@ type Error struct {
 	// Message describes the error
 	Message string
 	// Got value
-	Got interface{}
+	Got any
 	// Expected value
-	Expected interface{}
+	Expected any
 	// If not nil, Summary is used to display summary instead of using
 	// Got + Expected fields
 	Summary ErrorSummary

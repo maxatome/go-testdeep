@@ -104,7 +104,7 @@ func TestStringifyPlaceholder(t *testing.T) {
 }
 
 func TestUnmarshalJSON(t *testing.T) {
-	var target interface{}
+	var target any
 
 	t.Run("clearComment", func(t *testing.T) {
 		origErr := errors.New("orig error")
@@ -177,9 +177,9 @@ func TestUnmarshalJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("UnmarshalJSON failed: %s", err)
 	}
-	if !reflect.DeepEqual(target, map[string]interface{}{
-		"numeric_placeholders": []interface{}{"$1", "$2", "$3"},
-		"named_placeholders":   []interface{}{"$foo", "$^bar", "$zip"},
+	if !reflect.DeepEqual(target, map[string]any{
+		"numeric_placeholders": []any{"$1", "$2", "$3"},
+		"named_placeholders":   []any{"$foo", "$^bar", "$zip"},
 	}) {
 		t.Errorf("UnmarshalJSON mismatch: %#+v", target)
 	}

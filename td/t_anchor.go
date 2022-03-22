@@ -42,7 +42,7 @@ var allAnchorsMu sync.Mutex
 //
 // It panics if the provided "fn" is not a function or if it has not
 // the expected signature (see above).
-func AddAnchorableStructType(fn interface{}) {
+func AddAnchorableStructType(fn any) {
 	err := anchors.AddAnchorableStructType(fn)
 	if err != nil {
 		panic(color.Bad(err.Error()))
@@ -128,7 +128,7 @@ func AddAnchorableStructType(fn interface{}) {
 // see SetAnchorsPersist and AnchorsPersistTemporarily methods.
 //
 // See A method for a shorter synonym of Anchor.
-func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
+func (t *T) Anchor(operator TestDeep, model ...any) any {
 	if operator == nil {
 		t.Helper()
 		t.Fatal(color.Bad("Cannot anchor a nil TestDeep operator"))
@@ -194,7 +194,7 @@ func (t *T) Anchor(operator TestDeep, model ...interface{}) interface{} {
 //       },
 //     })
 //   }
-func (t *T) A(operator TestDeep, model ...interface{}) interface{} {
+func (t *T) A(operator TestDeep, model ...any) any {
 	t.Helper()
 	return t.Anchor(operator, model...)
 }

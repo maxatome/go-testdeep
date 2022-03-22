@@ -74,7 +74,7 @@ func (i *Info) Copy() *Info {
 //
 // It returns an error if an item of "fns" is not a function or if its
 // signature does not match the expected ones.
-func (i *Info) AddCmpHooks(fns []interface{}) error {
+func (i *Info) AddCmpHooks(fns []any) error {
 	for n, fn := range fns {
 		vfn := reflect.ValueOf(fn)
 
@@ -153,7 +153,7 @@ func (i *Info) Cmp(got, expected reflect.Value) (bool, error) {
 //
 // It returns an error if an item of "fns" is not a function or if its
 // signature does not match the expected ones.
-func (i *Info) AddSmuggleHooks(fns []interface{}) error {
+func (i *Info) AddSmuggleHooks(fns []any) error {
 	for n, fn := range fns {
 		vfn := reflect.ValueOf(fn)
 
@@ -213,7 +213,7 @@ func (i *Info) Smuggle(got *reflect.Value) (bool, error) {
 
 // AddUseEqual records types of values contained in "ts" as using
 // Equal method. "ts" can also contain reflect.Type instances.
-func (i *Info) AddUseEqual(ts []interface{}) error {
+func (i *Info) AddUseEqual(ts []any) error {
 	if len(ts) == 0 {
 		return nil
 	}
@@ -265,7 +265,7 @@ func (i *Info) UseEqual(t reflect.Type) bool {
 
 // AddIgnoreUnexported records types of values contained in "ts" as ignoring
 // unexported struct fields. "ts" can also contain reflect.Type instances.
-func (i *Info) AddIgnoreUnexported(ts []interface{}) error {
+func (i *Info) AddIgnoreUnexported(ts []any) error {
 	if len(ts) == 0 {
 		return nil
 	}

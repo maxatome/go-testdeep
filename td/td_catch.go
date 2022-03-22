@@ -62,7 +62,7 @@ var _ TestDeep = &tdCatch{}
 // except if "expectedValue" is a TestDeep operator. In this case, it
 // delegates TypeBehind() to the operator, but if nil is returned by
 // this call, the dereferenced reflect.Type of "target" is returned.
-func Catch(target, expectedValue interface{}) TestDeep {
+func Catch(target, expectedValue any) TestDeep {
 	vt := reflect.ValueOf(target)
 	c := tdCatch{
 		tdSmugglerBase: newSmugglerBase(expectedValue),

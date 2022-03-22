@@ -41,9 +41,9 @@ type mapEntryInfo struct {
 // is a map whose each key is the expected entry key and the
 // corresponding value the expected entry value (which can be a
 // TestDeep operator as well as a zero value.)
-type MapEntries map[interface{}]interface{}
+type MapEntries map[any]any
 
-func newMap(model interface{}, entries MapEntries, kind mapKind) *tdMap {
+func newMap(model any, entries MapEntries, kind mapKind) *tdMap {
 	vmodel := reflect.ValueOf(model)
 
 	m := tdMap{
@@ -89,7 +89,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 	}
 
 	m.expectedEntries = make([]mapEntryInfo, 0, keysInModel+len(entries))
-	checkedEntries := make(map[interface{}]bool, len(entries))
+	checkedEntries := make(map[any]bool, len(entries))
 
 	keyType := m.expectedType.Key()
 	valueType := m.expectedType.Elem()
@@ -194,7 +194,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 //   ) // succeeds
 //
 // TypeBehind method returns the reflect.Type of "model".
-func Map(model interface{}, expectedEntries MapEntries) TestDeep {
+func Map(model any, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, allMap)
 }
 
@@ -238,7 +238,7 @@ func Map(model interface{}, expectedEntries MapEntries) TestDeep {
 //   ) // fails, extra {"foo": "test"} in got
 //
 // TypeBehind method returns the reflect.Type of "model".
-func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
+func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, subMap)
 }
 
@@ -281,7 +281,7 @@ func SubMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
 //   ) // fails, missing {"biz": …} in got
 //
 // TypeBehind method returns the reflect.Type of "model".
-func SuperMapOf(model interface{}, expectedEntries MapEntries) TestDeep {
+func SuperMapOf(model any, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, superMap)
 }
 
@@ -305,7 +305,7 @@ func (m *tdMap) match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 	}
 
 	var notFoundKeys []reflect.Value
-	foundKeys := map[interface{}]bool{}
+	foundKeys := map[any]bool{}
 
 	for _, entryInfo := range m.expectedEntries {
 		gotValue := got.MapIndex(entryInfo.key)

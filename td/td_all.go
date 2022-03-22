@@ -56,7 +56,7 @@ var _ TestDeep = &tdAll{}
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
-func All(expectedValues ...interface{}) TestDeep {
+func All(expectedValues ...any) TestDeep {
 	return &tdAll{
 		tdList: newList(expectedValues...),
 	}

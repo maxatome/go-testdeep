@@ -41,7 +41,7 @@ func TestFailNow(t *testing.T) {
 	// No FailNow() but panic()
 	var (
 		panicked, failNowOccurred bool
-		panicParam                interface{}
+		panicParam                any
 	)
 	func() {
 		defer func() { panicParam = recover() }()

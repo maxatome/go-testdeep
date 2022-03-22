@@ -47,7 +47,7 @@ var _ TestDeep = &tdIsa{}
 // it implements fmt.Stringer or not).
 //
 // TypeBehind method returns the reflect.Type of "model".
-func Isa(model interface{}) TestDeep {
+func Isa(model any) TestDeep {
 	modelType := reflect.TypeOf(model)
 	i := tdIsa{
 		tdExpectedType: tdExpectedType{

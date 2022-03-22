@@ -234,7 +234,7 @@ EOH
 $funcs_contents .= <<EOV;
 // allOperators lists the ${\scalar(keys(%funcs) + keys %ONLY_OPERATORS)} operators.
 // nil means not usable in JSON().
-var allOperators = map[string]interface{}{
+var allOperators = map[string]any{
   ${\join('', map
               { qq("$_": ) . (exists $forbiddenOpsInJSON{$_} ? 'nil' : $_) . ",\n" }
               sort keys(%funcs), keys %ONLY_OPERATORS)}
@@ -256,9 +256,9 @@ foreach my $func (@sorted_funcs)
         {
             if (defined $arg->{type})
             {
-                if ($arg->{type} ne 'interface{}' or $arg->{variadic})
+                if ($arg->{type} ne 'any' or $arg->{variadic})
                 {
-                    $cmp_args .= ' interface{}';
+                    $cmp_args .= ' any';
                 }
                 last
             }
@@ -266,7 +266,7 @@ foreach my $func (@sorted_funcs)
     }
     else
     {
-        $cmp_args .= ' interface{}';
+        $cmp_args .= ' any';
     }
 
     my $call_args = '';
@@ -340,7 +340,7 @@ EOF
     $operators{$func}{cmp}{name} = "Cmp$func";
     $operators{$func}{cmp}{doc} = $cmp_doc . $func_comment . $ARGS_COMMENT_MD;
     $operators{$func}{cmp}{signature} = my $cmp_sig =
-        "func Cmp$func(t TestingT, $cmp_args, args ...interface{}) bool";
+        "func Cmp$func(t TestingT, $cmp_args, args ...any) bool";
     $operators{$func}{cmp}{args} = \@cmpt_args;
     $funcs_contents .= go_comment($func_comment . $ARGS_COMMENT_GD) . <<EOF;
 $cmp_sig {
@@ -352,7 +352,7 @@ EOF
     $operators{$func}{t}{name} = $method_name;
     $operators{$func}{t}{doc} = $t_doc . $method_comment . $ARGS_COMMENT_MD;
     $operators{$func}{t}{signature} = my $t_sig =
-        "func (t *T) $method_name($cmp_args, args ...interface{}) bool";
+        "func (t *T) $method_name($cmp_args, args ...any) bool";
     $operators{$func}{t}{args} = \@cmpt_args;
     $t_contents .= go_comment($method_comment . $ARGS_COMMENT_GD) . <<EOF;
 $t_sig {
@@ -405,7 +405,7 @@ my $rparam =qr/"(?:\\.|[^"]+)*"            # "string"
               |'(?:\\.|[^']+)*'            # 'char'
               |`[^`]*`                     # `string`
               |&[a-zA-Z_]\w*(?:\.\w+)?(?:$rec)? # &Struct{...}, &variable
-              |&?\[[^][]*\](?:interface\{\}|\w+)$rec # []Array{...}
+              |&?\[[^][]*\](?:any|\w+)$rec # []Array{...}
               |\[\]byte\("[^"]+"\)         # []byte("...")
               |map${reb}\w+$rec            # map[...]Type{...}
               |func\([^)]*\)[^{]+$rec      # func fn (...) ... { ... }
@@ -523,7 +523,7 @@ foreach my $go_file (do { opendir(my $dh, $DIR);
                  or $func eq 'CmpDeeply'
                  or $func =~ /^\(t \*T\) (?:Log|Error|Fatal)Trace\z/);
 
-        if ($params =~ /\Qargs ...interface{})\E\z/)
+        if ($params =~ /\Qargs ...any)\E\z/)
         {
             #chomp $comment;
             if (substr($comment, - length($ARGS_COMMENT_GD)) ne $ARGS_COMMENT_GD)
@@ -983,9 +983,9 @@ sub process_doc
                                |string\b
                                |rune\b
                                |byte\b
-                               |interface\{\})
+                               |any)
         |\(\*byte\)\(nil\)
-        |\bmap\[string\]interface\{\}
+        |\bmap\[string\]any
         |\b(?:len|cap)\(\)
         |\bnil\b
         |\$(?:\d+|[a-zA-Z_]\w*))           # $4

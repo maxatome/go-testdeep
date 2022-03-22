@@ -88,7 +88,7 @@ func TestAnyTypeBehind(t *testing.T) {
 
 	equalTypes(t,
 		td.Any(
-			td.Code(func(x interface{}) bool { return true }),
+			td.Code(func(x any) bool { return true }),
 			td.Code(func(y int) bool { return true }),
 		),
 		12)

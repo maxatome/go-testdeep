@@ -60,7 +60,7 @@ func TestSetlocation(t *testing.T) {
 	tt = &tdutil.T{}
 	ok = td.CmpAny(tt,
 		12,
-		[]interface{}{13, 14, 15})
+		[]any{13, 14, 15})
 	if !ok {
 		test.EqualStr(t, tt.LogBuf(), `    types_test.go:31: Failed test
         DATA: comparing with Any
@@ -99,7 +99,7 @@ func TestSetlocation(t *testing.T) {
 	ttt = td.NewT(tt)
 	ok = ttt.Any(
 		12,
-		[]interface{}{13, 14, 15})
+		[]any{13, 14, 15})
 	if !ok {
 		test.EqualStr(t, tt.LogBuf(), `    types_test.go:52: Failed test
         DATA: comparing with Any
@@ -117,7 +117,7 @@ func TestSetlocation(t *testing.T) {
 	ttt = td.NewT(tt)
 	ok = ttt.Any(
 		12,
-		[]interface{}{13, 14, 15})
+		[]any{13, 14, 15})
 	if !ok {
 		test.EqualStr(t, tt.LogBuf(), `    types_test.go:52: Failed test
         DATA: comparing with Any

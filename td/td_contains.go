@@ -114,7 +114,7 @@ var _ TestDeep = &tdContains{}
 //   td.Cmp(t, hash, td.Contains(nil))         // succeeds → (*int)(nil)
 //   td.Cmp(t, hash, td.Contains((*int)(nil))) // succeeds
 //   td.Cmp(t, hash, td.Contains(td.Nil()))    // succeeds
-func Contains(expectedValue interface{}) TestDeep {
+func Contains(expectedValue any) TestDeep {
 	c := tdContains{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 	}
@@ -125,7 +125,7 @@ func Contains(expectedValue interface{}) TestDeep {
 	return &c
 }
 
-func (c *tdContains) doesNotContainErr(ctx ctxerr.Context, got interface{}) *ctxerr.Error {
+func (c *tdContains) doesNotContainErr(ctx ctxerr.Context, got any) *ctxerr.Error {
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
@@ -292,7 +292,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		var expectedType interface{}
+		var expectedType any
 		if c.expectedValue.IsValid() {
 			expectedType = types.RawString(c.expectedValue.Type().String())
 		} else {

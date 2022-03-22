@@ -52,7 +52,7 @@ func Example() {
 	var lastID int64
 
 	// reply is a helper to send responses.
-	reply := func(w http.ResponseWriter, status int, contentType string, body interface{}) {
+	reply := func(w http.ResponseWriter, status int, contentType string, body any) {
 		if body == nil {
 			w.WriteHeader(status)
 			return

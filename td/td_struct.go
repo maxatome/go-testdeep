@@ -49,7 +49,7 @@ func (e fieldInfoSlice) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
 type fieldMatcher struct {
 	name     string
 	match    func(string) (bool, error)
-	expected interface{}
+	expected any
 	order    int
 	ok       bool
 }
@@ -79,7 +79,7 @@ func parseMatcher(s string) []string {
 // a shell pattern (when OP is either "=" or "!").
 //
 // NUM, OP and PATTERN can be separated by spaces (or not).
-func newFieldMatcher(name string, expected interface{}) (fieldMatcher, error) {
+func newFieldMatcher(name string, expected any) (fieldMatcher, error) {
 	subs := parseMatcher(name)
 	if subs == nil {
 		return fieldMatcher{}, errNotAMatcher
@@ -132,7 +132,7 @@ func (m fieldMatcherSlice) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
 // see Struct & SStruct docs for details) and the corresponding value
 // the expected field value (which can be a TestDeep operator as well
 // as a zero value.)
-type StructFields map[string]interface{}
+type StructFields map[string]any
 
 // canonStructField canonicalizes "name", a key in a StructFields map,
 // so it can be compared with other keys during a mergeStructFields().
@@ -200,7 +200,7 @@ func mergeStructFields(sfs ...StructFields) StructFields {
 	}
 }
 
-func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
+func newStruct(model any, strict bool) (*tdStruct, reflect.Value) {
 	vmodel := reflect.ValueOf(model)
 
 	st := tdStruct{
@@ -236,7 +236,7 @@ func newStruct(model interface{}, strict bool) (*tdStruct, reflect.Value) {
 	return &st, reflect.Value{}
 }
 
-func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdStruct {
+func anyStruct(model any, expectedFields StructFields, strict bool) *tdStruct {
 	st, vmodel := newStruct(model, strict)
 	if st.err != nil {
 		return st
@@ -405,7 +405,7 @@ func anyStruct(model interface{}, expectedFields StructFields, strict bool) *tdS
 	return st
 }
 
-func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue interface{}, ctxInfo string) {
+func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any, ctxInfo string) {
 	var vexpectedValue reflect.Value
 	if expectedValue == nil {
 		switch field.Type.Kind() {
@@ -558,7 +558,7 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue int
 // succeed. Non-expected fields are ignored.
 //
 // TypeBehind method returns the reflect.Type of "model".
-func Struct(model interface{}, expectedFields ...StructFields) TestDeep {
+func Struct(model any, expectedFields ...StructFields) TestDeep {
 	return anyStruct(model, mergeStructFields(expectedFields...), false)
 }
 
@@ -682,7 +682,7 @@ func Struct(model interface{}, expectedFields ...StructFields) TestDeep {
 // succeed.
 //
 // TypeBehind method returns the reflect.Type of "model".
-func SStruct(model interface{}, expectedFields ...StructFields) TestDeep {
+func SStruct(model any, expectedFields ...StructFields) TestDeep {
 	return anyStruct(model, mergeStructFields(expectedFields...), true)
 }
 

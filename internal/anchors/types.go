@@ -55,7 +55,7 @@ func init() {
 //
 // It returns an error if the provided "fn" is not a function or if it
 // has not the expected signature (see above).
-func AddAnchorableStructType(fn interface{}) error {
+func AddAnchorableStructType(fn any) error {
 	vfn := reflect.ValueOf(fn)
 
 	if vfn.Kind() == reflect.Func {

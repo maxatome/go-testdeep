@@ -19,7 +19,7 @@ type tdKVBase struct {
 	tdSmugglerBase
 }
 
-func (b *tdKVBase) initKVBase(val interface{}) bool {
+func (b *tdKVBase) initKVBase(val any) bool {
 	b.tdSmugglerBase = newSmugglerBase(val, 1)
 
 	if vval := reflect.ValueOf(val); vval.IsValid() {
@@ -58,7 +58,7 @@ var _ TestDeep = &tdKeys{}
 //
 //   got := map[string]bool{"c": true, "a": false, "b": true}
 //   td.Cmp(t, got, td.Keys(td.Bag("c", "a", "b"))) // succeeds
-func Keys(val interface{}) TestDeep {
+func Keys(val any) TestDeep {
 	k := tdKeys{}
 	if !k.initKVBase(val) {
 		k.err = ctxerr.OpBadUsage("Keys", "(TESTDEEP_OPERATOR|SLICE)", val, 1, true)
@@ -124,7 +124,7 @@ var _ TestDeep = &tdValues{}
 //
 //   got := map[int]string{3: "c", 1: "a", 2: "b"}
 //   td.Cmp(t, got, td.Values(td.Bag("c", "a", "b"))) // succeeds
-func Values(val interface{}) TestDeep {
+func Values(val any) TestDeep {
 	v := tdValues{}
 	if !v.initKVBase(val) {
 		v.err = ctxerr.OpBadUsage("Values", "(TESTDEEP_OPERATOR|SLICE)", val, 1, true)

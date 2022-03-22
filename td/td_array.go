@@ -29,7 +29,7 @@ var _ TestDeep = &tdArray{}
 // functions Array, Slice and SuperSliceOf. It is a map whose each key
 // is the item index and the corresponding value the expected item
 // value (which can be a TestDeep operator as well as a zero value).
-type ArrayEntries map[int]interface{}
+type ArrayEntries map[int]any
 
 const (
 	arrayArray uint = iota
@@ -37,7 +37,7 @@ const (
 	arraySuper
 )
 
-func newArray(kind uint, model interface{}, expectedEntries ArrayEntries) *tdArray {
+func newArray(kind uint, model any, expectedEntries ArrayEntries) *tdArray {
 	vmodel := reflect.ValueOf(model)
 
 	a := tdArray{
@@ -121,7 +121,7 @@ func newArray(kind uint, model interface{}, expectedEntries ArrayEntries) *tdArr
 //     td.Array(&[3]int{0, 14}, td.ArrayEntries{0: td.Gt(10), 2: td.Gt(15)})) // succeeds
 //
 // TypeBehind method returns the reflect.Type of "model".
-func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
+func Array(model any, expectedEntries ArrayEntries) TestDeep {
 	return newArray(arrayArray, model, expectedEntries)
 }
 
@@ -148,7 +148,7 @@ func Array(model interface{}, expectedEntries ArrayEntries) TestDeep {
 //     td.Slice(&[]int{0, 14}, td.ArrayEntries{0: td.Gt(10), 2: td.Gt(15)})) // succeeds
 //
 // TypeBehind method returns the reflect.Type of "model".
-func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
+func Slice(model any, expectedEntries ArrayEntries) TestDeep {
 	return newArray(arraySlice, model, expectedEntries)
 }
 
@@ -187,7 +187,7 @@ func Slice(model interface{}, expectedEntries ArrayEntries) TestDeep {
 //   td.Cmp(t, got, td.SuperSliceOf([5]int{12}, nil))                                // succeeds
 //   td.Cmp(t, got, td.SuperSliceOf([5]int{12}, td.ArrayEntries{2: 17}))             // succeeds
 //   td.Cmp(t, &got, td.SuperSliceOf(&[5]int{0, 14}, td.ArrayEntries{2: td.Gt(16)})) // succeeds
-func SuperSliceOf(model interface{}, expectedEntries ArrayEntries) TestDeep {
+func SuperSliceOf(model any, expectedEntries ArrayEntries) TestDeep {
 	return newArray(arraySuper, model, expectedEntries)
 }
 

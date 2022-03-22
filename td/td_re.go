@@ -25,7 +25,7 @@ type tdRe struct {
 
 var _ TestDeep = &tdRe{}
 
-func newRe(regIf interface{}, capture ...interface{}) *tdRe {
+func newRe(regIf any, capture ...any) *tdRe {
 	r := &tdRe{
 		base: newBase(4),
 	}
@@ -91,7 +91,7 @@ func newRe(regIf interface{}, capture ...interface{}) *tdRe {
 //     td.Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
 //   td.Cmp(t, "John Doe",
 //     td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
-func Re(reg interface{}, capture ...interface{}) TestDeep {
+func Re(reg any, capture ...any) TestDeep {
 	r := newRe(reg, capture...)
 	r.numMatches = 1
 	return r
@@ -118,7 +118,7 @@ func Re(reg interface{}, capture ...interface{}) TestDeep {
 //     td.ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
 //   td.Cmp(t, "John Doe",
 //     td.ReAll(`(\w+)(?: |\z)`, td.Bag("Doe", "John"))) // succeeds
-func ReAll(reg, capture interface{}) TestDeep {
+func ReAll(reg, capture any) TestDeep {
 	r := newRe(reg, capture)
 	r.numMatches = -1
 	return r
@@ -140,9 +140,9 @@ func (r *tdRe) matchByteCaptures(ctx ctxerr.Context, got []byte, result [][][]by
 
 	// Not perfect but cast captured groups to string
 
-	// Special case to accepted expected []interface{} type
+	// Special case to accepted expected []any type
 	if r.captures.Type() == types.SliceInterface {
-		captures := make([]interface{}, 0, num)
+		captures := make([]any, 0, num)
 		for _, set := range result {
 			for _, match := range set[1:] {
 				captures = append(captures, string(match))
@@ -170,9 +170,9 @@ func (r *tdRe) matchStringCaptures(ctx ctxerr.Context, got string, result [][]st
 		num += len(set) - 1
 	}
 
-	// Special case to accepted expected []interface{} type
+	// Special case to accepted expected []any type
 	if r.captures.Type() == types.SliceInterface {
-		captures := make([]interface{}, 0, num)
+		captures := make([]any, 0, num)
 		for _, set := range result {
 			for _, match := range set[1:] {
 				captures = append(captures, match)
@@ -188,20 +188,20 @@ func (r *tdRe) matchStringCaptures(ctx ctxerr.Context, got string, result [][]st
 	return r.matchCaptures(ctx, captures)
 }
 
-func (r *tdRe) matchCaptures(ctx ctxerr.Context, captures interface{}) (err *ctxerr.Error) {
+func (r *tdRe) matchCaptures(ctx ctxerr.Context, captures any) (err *ctxerr.Error) {
 	return deepValueEqual(
 		ctx.ResetPath("("+ctx.Path.String()+" =~ "+r.String()+")"),
 		reflect.ValueOf(captures), r.captures)
 }
 
-func (r *tdRe) matchBool(ctx ctxerr.Context, got interface{}, result bool) *ctxerr.Error {
+func (r *tdRe) matchBool(ctx ctxerr.Context, got any, result bool) *ctxerr.Error {
 	if result {
 		return nil
 	}
 	return r.doesNotMatch(ctx, got)
 }
 
-func (r *tdRe) doesNotMatch(ctx ctxerr.Context, got interface{}) *ctxerr.Error {
+func (r *tdRe) doesNotMatch(ctx ctxerr.Context, got any) *ctxerr.Error {
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}

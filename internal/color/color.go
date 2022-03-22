@@ -197,7 +197,7 @@ func AppendTestNameOff(b *bytes.Buffer) {
 // s and args are given to fmt.Sprintf.
 //
 // Typically used in panic() when the user made a mistake.
-func Bad(s string, args ...interface{}) string {
+func Bad(s string, args ...any) string {
 	Init()
 	if len(args) == 0 {
 		return BadOnBold + s + BadOff
@@ -208,7 +208,7 @@ func Bad(s string, args ...interface{}) string {
 // BadUsage returns a string surrounded by BAD color to notice the
 // user he passes a bad parameter to a function. Typically used in a
 // panic().
-func BadUsage(usage string, param interface{}, pos int, kind bool) string {
+func BadUsage(usage string, param any, pos int, kind bool) string {
 	Init()
 
 	var b bytes.Buffer

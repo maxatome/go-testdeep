@@ -21,10 +21,10 @@ func (j jsonPtrTest) UnmarshalJSON(b []byte) error {
 	return errors.New("jsonPtrTest unmarshal custom error")
 }
 
-type jsonPtrMap map[string]interface{}
+type jsonPtrMap map[string]any
 
 func (j *jsonPtrMap) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, (*map[string]interface{})(j))
+	return json.Unmarshal(b, (*map[string]any)(j))
 }
 
 var _ = []json.Unmarshaler{jsonPtrTest(0), &jsonPtrMap{}}
@@ -49,7 +49,7 @@ func TestJSONPointer(t *testing.T) {
 			})
 
 		// As encoding/json succeeds to unmarshal nil into an int
-		checkError(t, map[string]interface{}{"foo": nil}, td.JSONPointer("/foo", 1),
+		checkError(t, map[string]any{"foo": nil}, td.JSONPointer("/foo", 1),
 			expectedError{
 				Message:  mustBe("values differ"),
 				Path:     mustBe("DATA.JSONPointer</foo>"),
@@ -92,10 +92,10 @@ func TestJSONPointer(t *testing.T) {
 
 		// No filter, should match got or its map representation
 		checkOK(t, got, td.JSONPointer("",
-			map[string]interface{}{
-				"slice": []interface{}{"bar", "baz"},
-				"map": map[string]interface{}{
-					"test": map[string]interface{}{
+			map[string]any{
+				"slice": []any{"bar", "baz"},
+				"map": map[string]any{
+					"test": map[string]any{
 						"num":  2,
 						"str":  "level2",
 						"bool": false,
@@ -154,7 +154,7 @@ func TestJSONPointer(t *testing.T) {
 			})
 
 		// A struct behind a specific field
-		checkOK(t, got, td.JSONPointer("/map/test", map[string]interface{}{
+		checkOK(t, got, td.JSONPointer("/map/test", map[string]any{
 			"num":  2,
 			"str":  "level2",
 			"bool": false,
@@ -234,7 +234,7 @@ func TestJSONPointer(t *testing.T) {
 
 		t.Run("struct", func(t *testing.T) {
 			type jpStruct struct {
-				Num interface{}
+				Num any
 			}
 			got := jpStruct{Num: 123}
 			checkOK(t, got, td.JSONPointer("", jpStruct{Num: float64(123)}))

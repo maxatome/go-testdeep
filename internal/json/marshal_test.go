@@ -27,7 +27,7 @@ func (m marshalTest) MarshalJSON() ([]byte, error) {
 
 func TestMarshal(t *testing.T) {
 	for i, tst := range []struct {
-		in       interface{}
+		in       any
 		expected string
 	}{
 		{
@@ -67,23 +67,23 @@ func TestMarshal(t *testing.T) {
 			expected: `null`,
 		},
 		{
-			in:       (map[string]interface{})(nil),
+			in:       (map[string]any)(nil),
 			expected: `null`,
 		},
 		{
-			in:       map[string]interface{}{},
+			in:       map[string]any{},
 			expected: `{}`,
 		},
 		{
-			in: map[string]interface{}{"z": float64(123), "a": float64(890)},
+			in: map[string]any{"z": float64(123), "a": float64(890)},
 			expected: `{
   "a": 890,
   "z": 123
 }`,
 		},
 		{
-			in: map[string]interface{}{
-				"label": map[string]interface{}{"age": float64(12), "name": "Bob"},
+			in: map[string]any{
+				"label": map[string]any{"age": float64(12), "name": "Bob"},
 				"zip":   float64(456),
 			},
 			expected: `{
@@ -95,15 +95,15 @@ func TestMarshal(t *testing.T) {
 }`,
 		},
 		{
-			in:       ([]interface{})(nil),
+			in:       ([]any)(nil),
 			expected: `null`,
 		},
 		{
-			in:       []interface{}{},
+			in:       []any{},
 			expected: `[]`,
 		},
 		{
-			in: []interface{}{"a", float64(123)},
+			in: []any{"a", float64(123)},
 			expected: `[
   "a",
   123
@@ -114,7 +114,7 @@ func TestMarshal(t *testing.T) {
 			expected: "marshal\ntest",
 		},
 		{
-			in: []interface{}{float64(1), marshalTest(true), float64(3)},
+			in: []any{float64(1), marshalTest(true), float64(3)},
 			expected: `[
   1,
   marshal
@@ -128,10 +128,10 @@ func TestMarshal(t *testing.T) {
 		test.EqualStr(t, string(b), tst.expected, "#%d", i)
 	}
 
-	for i, in := range []interface{}{
+	for i, in := range []any{
 		marshalTest(false),
-		map[string]interface{}{"z": float64(123), "a": marshalTest(false)},
-		[]interface{}{"a", marshalTest(false)},
+		map[string]any{"z": float64(123), "a": marshalTest(false)},
+		[]any{"a", marshalTest(false)},
 	} {
 		_, err := json.Marshal(in, 0)
 		if test.Error(t, err, "#%d", i) {

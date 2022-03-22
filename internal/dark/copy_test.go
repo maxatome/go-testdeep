@@ -15,7 +15,7 @@ import (
 )
 
 func checkFieldValueOK(t *testing.T,
-	s reflect.Value, fieldName string, value interface{}) {
+	s reflect.Value, fieldName string, value any) {
 	t.Helper()
 
 	testName := "field " + fieldName
@@ -61,11 +61,11 @@ func TestCopyValue(t *testing.T) {
 		cplx     complex128
 		flt      float64
 		str      string
-		array    [3]interface{}
-		slice    []interface{}
-		hash     map[interface{}]interface{}
+		array    [3]any
+		slice    []any
+		hash     map[any]any
 		pint     *int
-		iface    interface{}
+		iface    any
 		fn       func()
 	}
 
@@ -78,9 +78,9 @@ func TestCopyValue(t *testing.T) {
 		cplx:    complex(2, -2),
 		flt:     1.234,
 		str:     "foobar",
-		array:   [3]interface{}{1, 2, SubPublic{Public: 3}},
-		slice:   append(make([]interface{}, 0, 10), 4, 5, SubPublic{Public: 6}),
-		hash: map[interface{}]interface{}{
+		array:   [3]any{1, 2, SubPublic{Public: 3}},
+		slice:   append(make([]any, 0, 10), 4, 5, SubPublic{Public: 6}),
+		hash: map[any]any{
 			"foo":                 &SubPublic{Public: 34},
 			SubPublic{Public: 78}: 42,
 		},
@@ -104,9 +104,9 @@ func TestCopyValue(t *testing.T) {
 	//
 	// Not able to copy...
 	private = Private{
-		array: [3]interface{}{1, 2, SubPrivate{}},
-		slice: append(make([]interface{}, 0, 10), &SubPrivate{}, &SubPrivate{}),
-		hash:  map[interface{}]interface{}{"foo": &SubPrivate{}},
+		array: [3]any{1, 2, SubPrivate{}},
+		slice: append(make([]any, 0, 10), &SubPrivate{}, &SubPrivate{}),
+		hash:  map[any]any{"foo": &SubPrivate{}},
 		iface: &SubPrivate{},
 		fn:    func() {},
 	}
@@ -118,7 +118,7 @@ func TestCopyValue(t *testing.T) {
 	checkFieldValueNOK(t, privateStruct, "iface")
 	checkFieldValueNOK(t, privateStruct, "fn")
 
-	private.hash = map[interface{}]interface{}{SubPrivate{}: 123}
+	private.hash = map[any]any{SubPrivate{}: 123}
 	privateStruct = reflect.ValueOf(private)
 	checkFieldValueNOK(t, privateStruct, "hash")
 

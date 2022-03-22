@@ -587,18 +587,18 @@ func TestSmuggleFieldsPath(t *testing.T) {
 		A      A
 		PA1    *A
 		PA2    *A
-		Iface1 interface{}
-		Iface2 interface{}
-		Iface3 interface{}
-		Iface4 interface{}
+		Iface1 any
+		Iface2 any
+		Iface3 any
+		Iface4 any
 	}
 	type B struct {
 		A      A
 		PA     *A
 		PppA   ***A
-		Iface  interface{}
-		Iface2 interface{}
-		Iface3 interface{}
+		Iface  any
+		Iface2 any
+		Iface3 any
 		C      *C
 	}
 	pa := &A{Num: 3, Str: "three"}
@@ -634,7 +634,7 @@ func TestSmuggleFieldsPath(t *testing.T) {
 	checkOK(t, b, td.Smuggle("PA.Num", 2))
 	checkOK(t, b, td.Smuggle("PppA.Num", 3))
 
-	// OK with interface{}
+	// OK with any
 	checkOK(t, b, td.Smuggle("Iface.Num", 4))
 	checkOK(t, b, td.Smuggle("Iface2.Num", 3))
 	checkOK(t, b, td.Smuggle("C.Iface1.Num", 7))
@@ -694,24 +694,24 @@ func TestSmuggleFieldsPath(t *testing.T) {
 
 	// Referencing maps and array/slices
 	x := B{
-		Iface: map[string]interface{}{
+		Iface: map[string]any{
 			"test": []int{2, 3, 4},
 		},
 		C: &C{
-			Iface1: []interface{}{
-				map[int]interface{}{42: []string{"pipo"}, 66: [2]string{"foo", "bar"}},
-				map[int8]interface{}{42: []string{"pipo"}},
-				map[int16]interface{}{42: []string{"pipo"}},
-				map[int32]interface{}{42: []string{"pipo"}},
-				map[int64]interface{}{42: []string{"pipo"}},
-				map[uint]interface{}{42: []string{"pipo"}},
-				map[uint8]interface{}{42: []string{"pipo"}},
-				map[uint16]interface{}{42: []string{"pipo"}},
-				map[uint32]interface{}{42: []string{"pipo"}},
-				map[uint64]interface{}{42: []string{"pipo"}},
-				map[uintptr]interface{}{42: []string{"pipo"}},
-				map[float32]interface{}{42: []string{"pipo"}},
-				map[float64]interface{}{42: []string{"pipo"}},
+			Iface1: []any{
+				map[int]any{42: []string{"pipo"}, 66: [2]string{"foo", "bar"}},
+				map[int8]any{42: []string{"pipo"}},
+				map[int16]any{42: []string{"pipo"}},
+				map[int32]any{42: []string{"pipo"}},
+				map[int64]any{42: []string{"pipo"}},
+				map[uint]any{42: []string{"pipo"}},
+				map[uint8]any{42: []string{"pipo"}},
+				map[uint16]any{42: []string{"pipo"}},
+				map[uint32]any{42: []string{"pipo"}},
+				map[uint64]any{42: []string{"pipo"}},
+				map[uintptr]any{42: []string{"pipo"}},
+				map[float32]any{42: []string{"pipo"}},
+				map[float64]any{42: []string{"pipo"}},
 			},
 		},
 	}
@@ -743,12 +743,12 @@ func TestSmuggleTypeBehind(t *testing.T) {
 		MyTime{})
 
 	equalTypes(t,
-		td.Smuggle(func(from interface{}) interface{} { return from }, nil),
-		reflect.TypeOf((*interface{})(nil)).Elem())
+		td.Smuggle(func(from any) any { return from }, nil),
+		reflect.TypeOf((*any)(nil)).Elem())
 
 	equalTypes(t,
 		td.Smuggle("foo.bar", nil),
-		reflect.TypeOf((*interface{})(nil)).Elem())
+		reflect.TypeOf((*any)(nil)).Elem())
 
 	// Erroneous op
 	equalTypes(t, td.Smuggle((func(int) int)(nil), 12), nil)

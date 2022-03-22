@@ -50,11 +50,11 @@ func server() *http.ServeMux {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		m := map[string]interface{}{
+		m := map[string]any{
 			"method": req.Method,
 		}
 		if req.ContentLength != 0 {
-			var body interface{}
+			var body any
 			if err := json.NewDecoder(req.Body).Decode(&body); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -257,7 +257,7 @@ bingo%CR
 	})
 
 	t.Run("No JSON error", func(t *testing.T) {
-		requestBody := map[string]interface{}{"hey": 123}
+		requestBody := map[string]any{"hey": 123}
 		expectedBody := func(m string) td.TestDeep {
 			return td.JSON(`{"method": $1, "body": {"hey": 123}}`, m)
 		}
@@ -939,7 +939,7 @@ func TestOr(t *testing.T) {
 
 	t.Run("Success", func(t *testing.T) {
 		var orCalled bool
-		for i, fn := range []interface{}{
+		for i, fn := range []any{
 			func(body string) { orCalled = true },
 			func(t *td.T, body string) { orCalled = true },
 			func(body []byte) { orCalled = true },
@@ -961,7 +961,7 @@ func TestOr(t *testing.T) {
 
 	t.Run("No request sent", func(t *testing.T) {
 		var ok, orCalled bool
-		for i, fn := range []interface{}{
+		for i, fn := range []any{
 			func(body string) { orCalled = true; ok = body == "" },
 			func(t *td.T, body string) { orCalled = true; ok = t != nil && body == "" },
 			func(body []byte) { orCalled = true; ok = body == nil },
@@ -983,7 +983,7 @@ func TestOr(t *testing.T) {
 
 	t.Run("Empty bodies", func(t *testing.T) {
 		var ok, orCalled bool
-		for i, fn := range []interface{}{
+		for i, fn := range []any{
 			func(body string) { orCalled = true; ok = body == "" },
 			func(t *td.T, body string) { orCalled = true; ok = t != nil && body == "" },
 			func(body []byte) { orCalled = true; ok = body == nil },
@@ -1009,7 +1009,7 @@ func TestOr(t *testing.T) {
 
 	t.Run("Body", func(t *testing.T) {
 		var ok, orCalled bool
-		for i, fn := range []interface{}{
+		for i, fn := range []any{
 			func(body string) { orCalled = true; ok = body == "GET!" },
 			func(t *td.T, body string) { orCalled = true; ok = t != nil && body == "GET!" },
 			func(body []byte) { orCalled = true; ok = string(body) == "GET!" },

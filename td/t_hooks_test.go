@@ -25,8 +25,8 @@ func TestWithCmpHooks(tt *testing.T) {
 
 	for _, tst := range []struct {
 		name          string
-		cmp           interface{}
-		got, expected interface{}
+		cmp           any
+		got, expected any
 	}{
 		{
 			name: "reflect.Value",
@@ -105,7 +105,7 @@ func TestWithCmpHooks(tt *testing.T) {
 
 	for _, tst := range []struct {
 		name  string
-		cmp   interface{}
+		cmp   any
 		fatal string
 	}{
 		{
@@ -136,8 +136,8 @@ func TestWithCmpHooks(tt *testing.T) {
 func TestWithSmuggleHooks(tt *testing.T) {
 	for _, tst := range []struct {
 		name          string
-		cmp           interface{}
-		got, expected interface{}
+		cmp           any
+		got, expected any
 	}{
 		{
 			name: "abs",
@@ -192,7 +192,7 @@ func TestWithSmuggleHooks(tt *testing.T) {
 
 	for _, tst := range []struct {
 		name  string
-		cmp   interface{}
+		cmp   any
 		fatal string
 	}{
 		{

@@ -43,7 +43,7 @@ var _ TestDeep = &tdLax{}
 // uint*, float*, complex*, string), the reflect.Type of
 // "expectedValue" otherwise, except if "expectedValue" is a TestDeep
 // operator. In this case, it delegates TypeBehind() to the operator.
-func Lax(expectedValue interface{}) TestDeep {
+func Lax(expectedValue any) TestDeep {
 	c := tdLax{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 	}

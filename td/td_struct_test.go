@@ -427,7 +427,7 @@ func TestStructPrivateFields(t *testing.T) {
 		name       string
 		nameb      []byte
 		err        error
-		iface      interface{}
+		iface      any
 		properties []int
 		birth      time.Time
 		birth2     MyTime

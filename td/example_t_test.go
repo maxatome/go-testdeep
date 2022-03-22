@@ -32,21 +32,21 @@ func ExampleT_All() {
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "foo/bar" string
-	ok := t.All(got, []interface{}{td.Re("o/b"), td.HasSuffix("bar"), "foo/bar"},
+	ok := t.All(got, []any{td.Re("o/b"), td.HasSuffix("bar"), "foo/bar"},
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "o/b" regexp *AND* "bar" suffix *AND* exact "fooX/Ybar" string
-	ok = t.All(got, []interface{}{td.Re("o/b"), td.HasSuffix("bar"), "fooX/Ybar"},
+	ok = t.All(got, []any{td.Re("o/b"), td.HasSuffix("bar"), "fooX/Ybar"},
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// When some operators or values have to be reused and mixed between
 	// several calls, Flatten can be used to avoid boring and
-	// inefficient []interface{} copies:
+	// inefficient []any copies:
 	regOps := td.Flatten([]td.TestDeep{td.Re("o/b"), td.Re(`^fo`), td.Re(`ar$`)})
-	ok = t.All(got, []interface{}{td.HasPrefix("foo"), regOps, td.HasSuffix("bar")},
+	ok = t.All(got, []any{td.HasPrefix("foo"), regOps, td.HasSuffix("bar")},
 		"checks all operators against value %s", got)
 	fmt.Println(ok)
 
@@ -63,21 +63,21 @@ func ExampleT_Any() {
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "bar" suffix
-	ok := t.Any(got, []interface{}{td.Re("zip"), td.HasSuffix("bar")},
+	ok := t.Any(got, []any{td.Re("zip"), td.HasSuffix("bar")},
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// Checks got string against:
 	//   "zip" regexp *OR* "foo" suffix
-	ok = t.Any(got, []interface{}{td.Re("zip"), td.HasSuffix("foo")},
+	ok = t.Any(got, []any{td.Re("zip"), td.HasSuffix("foo")},
 		"checks value %s", got)
 	fmt.Println(ok)
 
 	// When some operators or values have to be reused and mixed between
 	// several calls, Flatten can be used to avoid boring and
-	// inefficient []interface{} copies:
+	// inefficient []any copies:
 	regOps := td.Flatten([]td.TestDeep{td.Re("a/c"), td.Re(`^xx`), td.Re(`ar$`)})
-	ok = t.Any(got, []interface{}{td.HasPrefix("xxx"), regOps, td.HasSuffix("zip")},
+	ok = t.Any(got, []any{td.HasPrefix("xxx"), regOps, td.HasSuffix("zip")},
 		"check at least one operator matches value %s", got)
 	fmt.Println(ok)
 
@@ -212,33 +212,33 @@ func ExampleT_Bag() {
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are present
-	ok := t.Bag(got, []interface{}{1, 1, 2, 3, 5, 8, 8},
+	ok := t.Bag(got, []any{1, 1, 2, 3, 5, 8, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Does not match as got contains 2 times 1 and 8, and these
 	// duplicates are not expected
-	ok = t.Bag(got, []interface{}{1, 2, 3, 5, 8},
+	ok = t.Bag(got, []any{1, 2, 3, 5, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	got = []int{1, 3, 5, 8, 2}
 
 	// Duplicates of 1 and 8 are expected but not present in got
-	ok = t.Bag(got, []interface{}{1, 1, 2, 3, 5, 8, 8},
+	ok = t.Bag(got, []any{1, 1, 2, 3, 5, 8, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Matches as all items are present
-	ok = t.Bag(got, []interface{}{1, 2, 3, 5, td.Gt(7)},
+	ok = t.Bag(got, []any{1, 2, 3, 5, td.Gt(7)},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3, 5}
-	ok = t.Bag(got, []interface{}{td.Flatten(expected), td.Gt(7)},
+	ok = t.Bag(got, []any{td.Flatten(expected), td.Gt(7)},
 		"checks all expected items are present, in any order")
 	fmt.Println(ok)
 
@@ -1011,29 +1011,29 @@ func ExampleT_JSON_placeholders() {
 		Age:      42,
 	}
 
-	ok := t.JSON(got, `{"age": $1, "fullname": $2}`, []interface{}{42, "Bob Foobar"})
+	ok := t.JSON(got, `{"age": $1, "fullname": $2}`, []any{42, "Bob Foobar"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = t.JSON(got, `{"age": $1, "fullname": $2}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar")})
+	ok = t.JSON(got, `{"age": $1, "fullname": $2}`, []any{td.Between(40, 45), td.HasSuffix("Foobar")})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = t.JSON(got, `{"age": "$1", "fullname": "$2"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar")})
+	ok = t.JSON(got, `{"age": "$1", "fullname": "$2"}`, []any{td.Between(40, 45), td.HasSuffix("Foobar")})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = t.JSON(got, `{"age": $age, "fullname": $name}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar"))})
+	ok = t.JSON(got, `{"age": $age, "fullname": $name}`, []any{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar"))})
 	fmt.Println("check got with named placeholders:", ok)
 
 	got.Children = []*Person{
 		{Fullname: "Alice", Age: 28},
 		{Fullname: "Brian", Age: 22},
 	}
-	ok = t.JSON(got, `{"age": $age, "fullname": $name, "children": $children}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("children", td.Bag(
+	ok = t.JSON(got, `{"age": $age, "fullname": $name, "children": $children}`, []any{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("children", td.Bag(
 		&Person{Fullname: "Brian", Age: 22},
 		&Person{Fullname: "Alice", Age: 28},
 	))})
 	fmt.Println("check got w/named placeholders, and children w/go structs:", ok)
 
-	ok = t.JSON(got, `{"age": Between($1, $2), "fullname": HasSuffix($suffix), "children": Len(2)}`, []interface{}{40, 45, td.Tag("suffix", "Foobar")})
+	ok = t.JSON(got, `{"age": Between($1, $2), "fullname": HasSuffix($suffix), "children": Len(2)}`, []any{40, 45, td.Tag("suffix", "Foobar")})
 	fmt.Println("check got w/num & named placeholders:", ok)
 
 	// Output:
@@ -1089,7 +1089,7 @@ func ExampleT_JSON_embedding() {
     HasPrefix($4),
     HasSuffix("bar")  // ← comma is optional here
   )
-}`, []interface{}{40, 42, td.BoundsOutIn, "Bob"})
+}`, []any{40, 42, td.BoundsOutIn, "Bob"})
 	fmt.Println("check got with complex operators, w/placeholder args:", ok)
 
 	// Output:
@@ -1130,7 +1130,7 @@ func ExampleT_JSON_file() {
 	}
 
 	// OK let's test with this file
-	ok := t.JSON(got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
+	ok := t.JSON(got, filename, []any{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -1138,7 +1138,7 @@ func ExampleT_JSON_file() {
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = t.JSON(got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
+	ok = t.JSON(got, file, []any{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -1163,8 +1163,8 @@ func ExampleT_JSONPointer_rfc6901() {
    "m~n":  8
 }`)
 
-	expected := map[string]interface{}{
-		"foo": []interface{}{"bar", "baz"},
+	expected := map[string]any{
+		"foo": []any{"bar", "baz"},
 		"":    0,
 		"a/b": 1,
 		"c%d": 2,
@@ -1178,7 +1178,7 @@ func ExampleT_JSONPointer_rfc6901() {
 	ok := t.JSONPointer(got, "", expected)
 	fmt.Println("Empty JSON pointer means all:", ok)
 
-	ok = t.JSONPointer(got, `/foo`, []interface{}{"bar", "baz"})
+	ok = t.JSONPointer(got, `/foo`, []any{"bar", "baz"})
 	fmt.Println("Extract `foo` key:", ok)
 
 	ok = t.JSONPointer(got, `/foo/0`, "bar")
@@ -1710,26 +1710,26 @@ func ExampleT_None() {
 
 	got := 18
 
-	ok := t.None(got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
+	ok := t.None(got, []any{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 20
 
-	ok = t.None(got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
+	ok = t.None(got, []any{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	got = 142
 
-	ok = t.None(got, []interface{}{0, 10, 20, 30, td.Between(100, 199)},
+	ok = t.None(got, []any{0, 10, 20, 30, td.Between(100, 199)},
 		"checks %v is non-null, and ≠ 10, 20 & 30, and not in [100-199]", got)
 	fmt.Println(ok)
 
 	prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
 	even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
 	for _, got := range [...]int{9, 3, 8, 15} {
-		ok = t.None(got, []interface{}{prime, even, td.Gt(14)},
+		ok = t.None(got, []any{prime, even, td.Gt(14)},
 			"checks %v is not prime number, nor an even number and not > 14")
 		fmt.Printf("%d → %t\n", got, ok)
 	}
@@ -1772,19 +1772,19 @@ func ExampleT_NotAny() {
 
 	got := []int{4, 5, 9, 42}
 
-	ok := t.NotAny(got, []interface{}{3, 6, 8, 41, 43},
+	ok := t.NotAny(got, []any{3, 6, 8, 41, 43},
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
-	ok = t.NotAny(got, []interface{}{3, 6, 8, 42, 43},
+	ok = t.NotAny(got, []any{3, 6, 8, 42, 43},
 		"checks %v contains no item listed in NotAny()", got)
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using notExpected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	notExpected := []int{3, 6, 8, 41, 43}
-	ok = t.NotAny(got, []interface{}{td.Flatten(notExpected)},
+	ok = t.NotAny(got, []any{td.Flatten(notExpected)},
 		"checks %v contains no item listed in notExpected", got)
 	fmt.Println(ok)
 
@@ -2238,26 +2238,26 @@ func ExampleT_Set() {
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are present, ignoring duplicates
-	ok := t.Set(got, []interface{}{1, 2, 3, 5, 8},
+	ok := t.Set(got, []any{1, 2, 3, 5, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Duplicates are ignored in a Set
-	ok = t.Set(got, []interface{}{1, 2, 2, 2, 2, 2, 3, 5, 8},
+	ok = t.Set(got, []any{1, 2, 2, 2, 2, 2, 3, 5, 8},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several Set entries
-	ok = t.Set(got, []interface{}{td.Between(1, 4), 3, td.Between(2, 10)},
+	ok = t.Set(got, []any{td.Between(1, 4), 3, td.Between(2, 10)},
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3, 5, 8}
-	ok = t.Set(got, []interface{}{td.Flatten(expected)},
+	ok = t.Set(got, []any{td.Flatten(expected)},
 		"checks all expected items are present, in any order")
 	fmt.Println(ok)
 
@@ -2558,7 +2558,7 @@ func ExampleT_Smuggle_field_path() {
 
 	type Body struct {
 		Name  string
-		Value interface{}
+		Value any
 	}
 	type Request struct {
 		Body *Body
@@ -2602,8 +2602,8 @@ func ExampleT_Smuggle_field_path() {
 	fmt.Println("check Num using an other fields-path:", ok)
 
 	// Note that maps and array/slices are supported
-	got.Request.Body.Value = map[string]interface{}{
-		"foo": []interface{}{
+	got.Request.Body.Value = map[string]any{
+		"foo": []any{
 			3: map[int]string{666: "bar"},
 		},
 	}
@@ -2954,26 +2954,26 @@ func ExampleT_SubBagOf() {
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := t.SubBagOf(got, []interface{}{0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 9, 9},
+	ok := t.SubBagOf(got, []any{0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 9, 9},
 		"checks at least all items are present, in any order")
 	fmt.Println(ok)
 
 	// got contains one 8 too many
-	ok = t.SubBagOf(got, []interface{}{0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 9, 9},
+	ok = t.SubBagOf(got, []any{0, 0, 1, 1, 2, 2, 3, 3, 5, 5, 8, 9, 9},
 		"checks at least all items are present, in any order")
 	fmt.Println(ok)
 
 	got = []int{1, 3, 5, 2}
 
-	ok = t.SubBagOf(got, []interface{}{td.Between(0, 3), td.Between(0, 3), td.Between(0, 3), td.Between(0, 3), td.Gt(4), td.Gt(4)},
+	ok = t.SubBagOf(got, []any{td.Between(0, 3), td.Between(0, 3), td.Between(0, 3), td.Between(0, 3), td.Gt(4), td.Gt(4)},
 		"checks at least all items match, in any order with TestDeep operators")
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3, 5, 9, 8}
-	ok = t.SubBagOf(got, []interface{}{td.Flatten(expected)},
+	ok = t.SubBagOf(got, []any{td.Flatten(expected)},
 		"checks at least all expected items are present, in any order")
 	fmt.Println(ok)
 
@@ -3034,16 +3034,16 @@ func ExampleT_SubJSONOf_placeholders() {
 		Age:      42,
 	}
 
-	ok := t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
+	ok := t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []any{42, "Bob Foobar", "male"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
+	ok = t.SubJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []any{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = t.SubJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
+	ok = t.SubJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []any{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = t.SubJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("gender", td.NotEmpty())})
+	ok = t.SubJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []any{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("gender", td.NotEmpty())})
 	fmt.Println("check got with named placeholders:", ok)
 
 	ok = t.SubJSONOf(got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
@@ -3091,7 +3091,7 @@ func ExampleT_SubJSONOf_file() {
 	}
 
 	// OK let's test with this file
-	ok := t.SubJSONOf(got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
+	ok := t.SubJSONOf(got, filename, []any{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -3099,7 +3099,7 @@ func ExampleT_SubJSONOf_file() {
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = t.SubJSONOf(got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
+	ok = t.SubJSONOf(got, file, []any{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -3146,21 +3146,21 @@ func ExampleT_SubSetOf() {
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
 	// Matches as all items are expected, ignoring duplicates
-	ok := t.SubSetOf(got, []interface{}{1, 2, 3, 4, 5, 6, 7, 8},
+	ok := t.SubSetOf(got, []any{1, 2, 3, 4, 5, 6, 7, 8},
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
 	// Tries its best to not raise an error when a value can be matched
 	// by several SubSetOf entries
-	ok = t.SubSetOf(got, []interface{}{td.Between(1, 4), 3, td.Between(2, 10), td.Gt(100)},
+	ok = t.SubSetOf(got, []any{td.Between(1, 4), 3, td.Between(2, 10), td.Gt(100)},
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3, 4, 5, 6, 7, 8}
-	ok = t.SubSetOf(got, []interface{}{td.Flatten(expected)},
+	ok = t.SubSetOf(got, []any{td.Flatten(expected)},
 		"checks at least all expected items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
@@ -3175,19 +3175,19 @@ func ExampleT_SuperBagOf() {
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := t.SuperBagOf(got, []interface{}{8, 5, 8},
+	ok := t.SuperBagOf(got, []any{8, 5, 8},
 		"checks the items are present, in any order")
 	fmt.Println(ok)
 
-	ok = t.SuperBagOf(got, []interface{}{td.Gt(5), td.Lte(2)},
+	ok = t.SuperBagOf(got, []any{td.Gt(5), td.Lte(2)},
 		"checks at least 2 items of %v match", got)
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{8, 5, 8}
-	ok = t.SuperBagOf(got, []interface{}{td.Flatten(expected)},
+	ok = t.SuperBagOf(got, []any{td.Flatten(expected)},
 		"checks the expected items are present, in any order")
 	fmt.Println(ok)
 
@@ -3259,16 +3259,16 @@ func ExampleT_SuperJSONOf_placeholders() {
 		Zip:      666,
 	}
 
-	ok := t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{42, "Bob Foobar", "male"})
+	ok := t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []any{42, "Bob Foobar", "male"})
 	fmt.Println("check got with numeric placeholders without operators:", ok)
 
-	ok = t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
+	ok = t.SuperJSONOf(got, `{"age": $1, "fullname": $2, "gender": $3}`, []any{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with numeric placeholders:", ok)
 
-	ok = t.SuperJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []interface{}{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
+	ok = t.SuperJSONOf(got, `{"age": "$1", "fullname": "$2", "gender": "$3"}`, []any{td.Between(40, 45), td.HasSuffix("Foobar"), td.NotEmpty()})
 	fmt.Println("check got with double-quoted numeric placeholders:", ok)
 
-	ok = t.SuperJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []interface{}{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("gender", td.NotEmpty())})
+	ok = t.SuperJSONOf(got, `{"age": $age, "fullname": $name, "gender": $gender}`, []any{td.Tag("age", td.Between(40, 45)), td.Tag("name", td.HasSuffix("Foobar")), td.Tag("gender", td.NotEmpty())})
 	fmt.Println("check got with named placeholders:", ok)
 
 	ok = t.SuperJSONOf(got, `{"age": $^NotZero, "fullname": $^NotEmpty, "gender": $^NotEmpty}`, nil)
@@ -3316,7 +3316,7 @@ func ExampleT_SuperJSONOf_file() {
 	}
 
 	// OK let's test with this file
-	ok := t.SuperJSONOf(got, filename, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
+	ok := t.SuperJSONOf(got, filename, []any{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from file name:", ok)
 
 	// When the file is already open
@@ -3324,7 +3324,7 @@ func ExampleT_SuperJSONOf_file() {
 	if err != nil {
 		t.Fatal(err)
 	}
-	ok = t.SuperJSONOf(got, file, []interface{}{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
+	ok = t.SuperJSONOf(got, file, []any{td.Tag("name", td.HasPrefix("Bob")), td.Tag("age", td.Between(40, 45)), td.Tag("gender", td.Re(`^(male|female)\z`))})
 	fmt.Println("Full match from io.Reader:", ok)
 
 	// Output:
@@ -3371,19 +3371,19 @@ func ExampleT_SuperSetOf() {
 
 	got := []int{1, 3, 5, 8, 8, 1, 2}
 
-	ok := t.SuperSetOf(got, []interface{}{1, 2, 3},
+	ok := t.SuperSetOf(got, []any{1, 2, 3},
 		"checks the items are present, in any order and ignoring duplicates")
 	fmt.Println(ok)
 
-	ok = t.SuperSetOf(got, []interface{}{td.Gt(5), td.Lte(2)},
+	ok = t.SuperSetOf(got, []any{td.Gt(5), td.Lte(2)},
 		"checks at least 2 items of %v match ignoring duplicates", got)
 	fmt.Println(ok)
 
-	// When expected is already a non-[]interface{} slice, it cannot be
+	// When expected is already a non-[]any slice, it cannot be
 	// flattened directly using expected... without copying it to a new
-	// []interface{} slice, then use td.Flatten!
+	// []any slice, then use td.Flatten!
 	expected := []int{1, 2, 3}
-	ok = t.SuperSetOf(got, []interface{}{td.Flatten(expected)},
+	ok = t.SuperSetOf(got, []any{td.Flatten(expected)},
 		"checks the expected items are present, in any order and ignoring duplicates")
 	fmt.Println(ok)
 

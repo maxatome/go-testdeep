@@ -28,7 +28,7 @@ package td
 //     Person{Name: "Alice", Age: 26},
 //   ))
 //
-// To flatten a non-[]interface{} slice/array, use Flatten function
+// To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
 //   expected := []int{2, 1}
@@ -44,7 +44,7 @@ package td
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
-func Set(expectedItems ...interface{}) TestDeep {
+func Set(expectedItems ...any) TestDeep {
 	return newSetBase(allSet, true, expectedItems)
 }
 
@@ -70,7 +70,7 @@ func Set(expectedItems ...interface{}) TestDeep {
 //     Person{Name: "Alice", Age: 26},
 //   ))
 //
-// To flatten a non-[]interface{} slice/array, use Flatten function
+// To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
 //   expected := []int{2, 1}
@@ -86,7 +86,7 @@ func Set(expectedItems ...interface{}) TestDeep {
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
-func SubSetOf(expectedItems ...interface{}) TestDeep {
+func SubSetOf(expectedItems ...any) TestDeep {
 	return newSetBase(subSet, true, expectedItems)
 }
 
@@ -112,7 +112,7 @@ func SubSetOf(expectedItems ...interface{}) TestDeep {
 //     Person{Name: "Alice", Age: 26},
 //   ))
 //
-// To flatten a non-[]interface{} slice/array, use Flatten function
+// To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
 //   expected := []int{2, 1}
@@ -128,7 +128,7 @@ func SubSetOf(expectedItems ...interface{}) TestDeep {
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
-func SuperSetOf(expectedItems ...interface{}) TestDeep {
+func SuperSetOf(expectedItems ...any) TestDeep {
 	return newSetBase(superSet, true, expectedItems)
 }
 
@@ -148,7 +148,7 @@ func SuperSetOf(expectedItems ...interface{}) TestDeep {
 //     Person{Name: "Alice", Age: 26},
 //   ))
 //
-// To flatten a non-[]interface{} slice/array, use Flatten function
+// To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
 //   notExpected := []int{2, 1}
@@ -167,6 +167,6 @@ func SuperSetOf(expectedItems ...interface{}) TestDeep {
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
-func NotAny(notExpectedItems ...interface{}) TestDeep {
+func NotAny(notExpectedItems ...any) TestDeep {
 	return newSetBase(noneSet, true, notExpectedItems)
 }

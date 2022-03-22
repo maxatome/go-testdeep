@@ -23,8 +23,8 @@ func TestNil(t *testing.T) {
 	checkOK(t, (chan int)(nil), td.Nil())
 	checkOK(t, nil, td.Nil())
 	checkOK(t,
-		map[string]interface{}{"foo": nil},
-		map[string]interface{}{"foo": td.Nil()},
+		map[string]any{"foo": nil},
+		map[string]any{"foo": td.Nil()},
 	)
 
 	var got fmt.Stringer = (*bytes.Buffer)(nil)

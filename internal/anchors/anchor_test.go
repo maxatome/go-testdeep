@@ -30,7 +30,7 @@ func TestInfo(t *testing.T) {
 func TestBuildResolveAnchor(t *testing.T) {
 	var i anchors.Info
 
-	checkResolveAnchor := func(t *testing.T, val interface{}, opName string) {
+	checkResolveAnchor := func(t *testing.T, val any, opName string) {
 		t.Helper()
 		v1, err := i.AddAnchor(reflect.TypeOf(val), reflect.ValueOf(opName+" (1)"))
 		if !test.NoError(t, err, "first anchor") {

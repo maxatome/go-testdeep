@@ -112,7 +112,7 @@ func stripTrace(s trace.Stack) trace.Stack {
 	return s
 }
 
-func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{}) {
+func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...any) {
 	t.Helper()
 
 	const failedTest = "Failed test"
@@ -146,8 +146,8 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...interface{
 	}
 }
 
-func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected interface{},
-	args ...interface{}) bool {
+func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected any,
+	args ...any) bool {
 	err := deepValueEqualFinal(ctx,
 		reflect.ValueOf(got), reflect.ValueOf(expected))
 	if err == nil {
@@ -183,7 +183,7 @@ func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected interface{},
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool {
+func Cmp(t TestingT, got, expected any, args ...any) bool {
 	t.Helper()
 	return cmpDeeply(newContext(t), t, got, expected, args...)
 }
@@ -194,7 +194,7 @@ func Cmp(t TestingT, got, expected interface{}, args ...interface{}) bool {
 //   got := "foobar"
 //   td.CmpDeeply(t, got, "foobar")            // succeeds
 //   td.CmpDeeply(t, got, td.HasPrefix("foo")) // succeeds
-func CmpDeeply(t TestingT, got, expected interface{}, args ...interface{}) bool {
+func CmpDeeply(t TestingT, got, expected any, args ...any) bool {
 	t.Helper()
 	return cmpDeeply(newContext(t), t, got, expected, args...)
 }

@@ -19,7 +19,7 @@ func TestArrayEach(t *testing.T) {
 	type MySlice []int
 
 	checkOKForEach(t,
-		[]interface{}{
+		[]any{
 			[...]int{4, 4, 4},
 			[]int{4, 4, 4},
 			&[...]int{4, 4, 4},
@@ -33,7 +33,7 @@ func TestArrayEach(t *testing.T) {
 
 	// Empty slice/array
 	checkOKForEach(t,
-		[]interface{}{
+		[]any{
 			[0]int{},
 			[]int{},
 			&[0]int{},
@@ -64,7 +64,7 @@ func TestArrayEach(t *testing.T) {
 		})
 
 	checkOKForEach(t,
-		[]interface{}{
+		[]any{
 			[...]int{20, 22, 29},
 			[]int{20, 22, 29},
 			MyArray{20, 22, 29},
@@ -83,7 +83,7 @@ func TestArrayEach(t *testing.T) {
 		})
 
 	checkErrorForEach(t,
-		[]interface{}{
+		[]any{
 			[...]int{4, 5, 4},
 			[]int{4, 5, 4},
 			MyArray{4, 5, 4},
@@ -115,8 +115,8 @@ func TestArrayEach(t *testing.T) {
 			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
 		})
 
-	checkOK(t, []interface{}{nil, nil, nil}, td.ArrayEach(nil))
-	checkError(t, []interface{}{nil, nil, nil, 66}, td.ArrayEach(nil),
+	checkOK(t, []any{nil, nil, nil}, td.ArrayEach(nil))
+	checkError(t, []any{nil, nil, nil, 66}, td.ArrayEach(nil),
 		expectedError{
 			Message:  mustBe("values differ"),
 			Path:     mustBe("DATA[3]"),

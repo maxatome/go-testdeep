@@ -311,7 +311,7 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 // mechanism. t.UseEqual(false) returns an instance not using Equal()
 // method anymore, except for types already recorded using a previous
 // UseEqual call.
-func (t *T) UseEqual(types ...interface{}) *T {
+func (t *T) UseEqual(types ...any) *T {
 	// special case: UseEqual()
 	if len(types) == 0 {
 		new := *t
@@ -373,7 +373,7 @@ func (t *T) BeLax(enable ...bool) *T {
 // fields globally, for all struct types. t.IgnoreUnexported(false)
 // returns an instance not ignoring unexported fields anymore, except
 // for types already recorded using a previous IgnoreUnexported call.
-func (t *T) IgnoreUnexported(types ...interface{}) *T {
+func (t *T) IgnoreUnexported(types ...any) *T {
 	// special case: IgnoreUnexported()
 	if len(types) == 0 {
 		new := *t
@@ -415,7 +415,7 @@ func (t *T) IgnoreUnexported(types ...interface{}) *T {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
+func (t *T) Cmp(got, expected any, args ...any) bool {
 	t.Helper()
 	defer t.resetNonPersistentAnchors()
 	return cmpDeeply(newContext(t), t.TB, got, expected, args...)
@@ -423,7 +423,7 @@ func (t *T) Cmp(got, expected interface{}, args ...interface{}) bool {
 
 // CmpDeeply works the same as Cmp and is still available for
 // compatibility purpose. Use shorter Cmp in new code.
-func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
+func (t *T) CmpDeeply(got, expected any, args ...any) bool {
 	t.Helper()
 	defer t.resetNonPersistentAnchors()
 	return cmpDeeply(newContext(t), t.TB, got, expected, args...)
@@ -443,7 +443,7 @@ func (t *T) CmpDeeply(got, expected interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) True(got interface{}, args ...interface{}) bool {
+func (t *T) True(got any, args ...any) bool {
 	t.Helper()
 	return t.Cmp(got, true, args...)
 }
@@ -462,7 +462,7 @@ func (t *T) True(got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) False(got interface{}, args ...interface{}) bool {
+func (t *T) False(got any, args ...any) bool {
 	t.Helper()
 	return t.Cmp(got, false, args...)
 }
@@ -480,7 +480,7 @@ func (t *T) False(got interface{}, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) CmpError(got error, args ...interface{}) bool {
+func (t *T) CmpError(got error, args ...any) bool {
 	t.Helper()
 	return cmpError(newContext(t), t.TB, got, args...)
 }
@@ -500,7 +500,7 @@ func (t *T) CmpError(got error, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) CmpNoError(got error, args ...interface{}) bool {
+func (t *T) CmpNoError(got error, args ...any) bool {
 	t.Helper()
 	return cmpNoError(newContext(t), t.TB, got, args...)
 }
@@ -528,7 +528,7 @@ func (t *T) CmpNoError(got error, args ...interface{}) bool {
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool {
+func (t *T) CmpPanic(fn func(), expected any, args ...any) bool {
 	t.Helper()
 	defer t.resetNonPersistentAnchors()
 	return cmpPanic(newContext(t), t, fn, expected, args...)
@@ -551,7 +551,7 @@ func (t *T) CmpPanic(fn func(), expected interface{}, args ...interface{}) bool 
 // fmt.Fprintf is used to compose the name, else "args" are passed to
 // fmt.Fprint. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) CmpNotPanic(fn func(), args ...interface{}) bool {
+func (t *T) CmpNotPanic(fn func(), args ...any) bool {
 	t.Helper()
 	return cmpNotPanic(newContext(t), t, fn, args...)
 }
@@ -731,7 +731,7 @@ func (t *T) RunT(name string, f func(t *T)) bool {
 	return t.Run(name, f)
 }
 
-func getTrace(args ...interface{}) string {
+func getTrace(args ...any) string {
 	var b bytes.Buffer
 	tdutil.FbuildTestName(&b, args...)
 
@@ -759,7 +759,7 @@ func getTrace(args ...interface{}) string {
 // added. If len(args) > 1 and the first item of "args" is a string
 // and contains a '%' rune then fmt.Fprintf is used to compose the
 // name, else "args" are passed to fmt.Fprint.
-func (t *T) LogTrace(args ...interface{}) {
+func (t *T) LogTrace(args ...any) {
 	t.Helper()
 	t.Log(getTrace(args...))
 }
@@ -772,7 +772,7 @@ func (t *T) LogTrace(args ...interface{}) {
 // added. If len(args) > 1 and the first item of "args" is a string
 // and contains a '%' rune then fmt.Fprintf is used to compose the
 // name, else "args" are passed to fmt.Fprint.
-func (t *T) ErrorTrace(args ...interface{}) {
+func (t *T) ErrorTrace(args ...any) {
 	t.Helper()
 	t.Error(getTrace(args...))
 }
@@ -785,7 +785,7 @@ func (t *T) ErrorTrace(args ...interface{}) {
 // added. If len(args) > 1 and the first item of "args" is a string
 // and contains a '%' rune then fmt.Fprintf is used to compose the
 // name, else "args" are passed to fmt.Fprint.
-func (t *T) FatalTrace(args ...interface{}) {
+func (t *T) FatalTrace(args ...any) {
 	t.Helper()
 	t.Fatal(getTrace(args...))
 }

@@ -102,7 +102,7 @@ func TestVisited(t *testing.T) {
 	t.Run("interface", func(t *testing.T) {
 		v := visited.NewVisited()
 
-		type vIf struct{ i interface{} }
+		type vIf struct{ i any }
 		a, b := &vIf{i: 42}, &vIf{i: 24}
 
 		f := func(vm *vIf) reflect.Value {

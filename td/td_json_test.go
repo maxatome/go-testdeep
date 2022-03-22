@@ -76,7 +76,7 @@ func TestJSON(t *testing.T) {
 
 	// Operators are not JSON marshallable
 	checkOK(t, got,
-		td.JSON(`$1`, map[string]interface{}{
+		td.JSON(`$1`, map[string]any{
 			"name":   td.Re(`^Bob`),
 			"age":    42,
 			"gender": td.NotEmpty(),
@@ -87,7 +87,7 @@ func TestJSON(t *testing.T) {
 	checkOK(t, json.RawMessage(`{"foo":[1,2,3]}`),
 		td.JSON(`{"foo":$1}`, []int{1, 2, 3}))
 	checkOK(t, json.RawMessage(`[1,2,3]`),
-		td.JSON(`$1`, []interface{}{1, td.Between(1, 3), 3}))
+		td.JSON(`$1`, []any{1, td.Between(1, 3), 3}))
 
 	// Tag placeholders
 	checkOK(t, got,
@@ -103,7 +103,7 @@ func TestJSON(t *testing.T) {
 
 	// Tag placeholders + operators are not JSON marshallable
 	checkOK(t, got,
-		td.JSON(`$all`, td.Tag("all", map[string]interface{}{
+		td.JSON(`$all`, td.Tag("all", map[string]any{
 			"name":   td.Re(`^Bob`),
 			"age":    42,
 			"gender": td.NotEmpty(),
@@ -720,17 +720,17 @@ func TestJSONTypeBehind(t *testing.T) {
 	equalTypes(t, td.JSON(`false`), true)
 	equalTypes(t, td.JSON(`"foo"`), "")
 	equalTypes(t, td.JSON(`42`), float64(0))
-	equalTypes(t, td.JSON(`[1,2,3]`), ([]interface{})(nil))
-	equalTypes(t, td.JSON(`{"a":12}`), (map[string]interface{})(nil))
+	equalTypes(t, td.JSON(`[1,2,3]`), ([]any)(nil))
+	equalTypes(t, td.JSON(`{"a":12}`), (map[string]any)(nil))
 
 	// operator at the root → delegate it TypeBehind() call
-	equalTypes(t, td.JSON(`$1`, td.SuperMapOf(map[string]interface{}{"x": 1}, nil)), (map[string]interface{})(nil))
-	equalTypes(t, td.JSON(`SuperMapOf({"x":1})`), (map[string]interface{})(nil))
+	equalTypes(t, td.JSON(`$1`, td.SuperMapOf(map[string]any{"x": 1}, nil)), (map[string]any)(nil))
+	equalTypes(t, td.JSON(`SuperMapOf({"x":1})`), (map[string]any)(nil))
 
 	equalTypes(t, td.JSON(`$1`, 123), 42)
 
 	nullType := td.JSON(`null`).TypeBehind()
-	if nullType != reflect.TypeOf((*interface{})(nil)).Elem() {
+	if nullType != reflect.TypeOf((*any)(nil)).Elem() {
 		t.Errorf("Failed test: got %s intead of interface {}", nullType)
 	}
 
@@ -804,9 +804,9 @@ func TestSubJSONOf(t *testing.T) {
 			Summary: mustContain("json: unsupported type"),
 		})
 
-	for i, n := range []interface{}{
+	for i, n := range []any{
 		nil,
-		(map[string]interface{})(nil),
+		(map[string]any)(nil),
 		(map[string]bool)(nil),
 		([]int)(nil),
 	} {
@@ -925,7 +925,7 @@ SubJSONOf({
 }
 
 func TestSubJSONOfTypeBehind(t *testing.T) {
-	equalTypes(t, td.SubJSONOf(`{"a":12}`), (map[string]interface{})(nil))
+	equalTypes(t, td.SubJSONOf(`{"a":12}`), (map[string]any)(nil))
 
 	// Erroneous op
 	equalTypes(t, td.SubJSONOf(`123`), nil)
@@ -1000,9 +1000,9 @@ func TestSuperJSONOf(t *testing.T) {
 			Summary: mustContain("json: unsupported type"),
 		})
 
-	for i, n := range []interface{}{
+	for i, n := range []any{
 		nil,
-		(map[string]interface{})(nil),
+		(map[string]any)(nil),
 		(map[string]bool)(nil),
 		([]int)(nil),
 	} {
@@ -1121,7 +1121,7 @@ SuperJSONOf({
 }
 
 func TestSuperJSONOfTypeBehind(t *testing.T) {
-	equalTypes(t, td.SuperJSONOf(`{"a":12}`), (map[string]interface{})(nil))
+	equalTypes(t, td.SuperJSONOf(`{"a":12}`), (map[string]any)(nil))
 
 	// Erroneous op
 	equalTypes(t, td.SuperJSONOf(`123`), nil)

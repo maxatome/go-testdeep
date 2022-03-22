@@ -57,14 +57,14 @@ func (t *T) FailNow() {
 }
 
 // Fatal simulates the original (*testing.T).Fatal.
-func (t *T) Fatal(args ...interface{}) {
+func (t *T) Fatal(args ...any) {
 	t.Helper()
 	t.Error(args...)
 	t.FailNow()
 }
 
 // Fatal simulates the original (*testing.T).Fatalf.
-func (t *T) Fatalf(format string, args ...interface{}) {
+func (t *T) Fatalf(format string, args ...any) {
 	t.Helper()
 	t.Errorf(format, args...)
 	t.FailNow()

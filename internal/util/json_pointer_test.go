@@ -15,7 +15,7 @@ import (
 )
 
 func TestJSONPointer(t *testing.T) {
-	var ref interface{}
+	var ref any
 	err := json.Unmarshal([]byte(`
 {
    "foo": ["bar", "baz"],
@@ -34,7 +34,7 @@ func TestJSONPointer(t *testing.T) {
 		t.Fatalf("json.Unmarshal failed: %s", err)
 	}
 
-	checkOK := func(pointer string, expected interface{}) {
+	checkOK := func(pointer string, expected any) {
 		t.Helper()
 
 		got, err := util.JSONPointer(ref, pointer)
@@ -61,7 +61,7 @@ func TestJSONPointer(t *testing.T) {
 	}
 
 	checkOK(``, ref)
-	checkOK(`/foo`, []interface{}{"bar", "baz"})
+	checkOK(`/foo`, []any{"bar", "baz"})
 	checkOK(`/foo/0`, "bar")
 	checkOK(`/`, float64(0))
 	checkOK(`/a~1b`, float64(1))

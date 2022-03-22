@@ -23,7 +23,7 @@ func TestContains(t *testing.T) {
 		MyString string
 	)
 
-	for idx, got := range []interface{}{
+	for idx, got := range []any{
 		[]int{12, 34, 28},
 		MySlice{12, 34, 28},
 		[...]int{12, 34, 28},
@@ -48,7 +48,7 @@ func TestContains(t *testing.T) {
 		checkOK(t, got, td.Lax(td.Contains(float64(34))), testName)
 	}
 
-	for idx, got := range []interface{}{
+	for idx, got := range []any{
 		"foobar",
 		MyString("foobar"),
 	} {
@@ -75,7 +75,7 @@ func TestContainsNil(t *testing.T) {
 	)
 
 	num := 12345642
-	for idx, got := range []interface{}{
+	for idx, got := range []any{
 		[]*int{&num, nil},
 		MyPtrSlice{&num, nil},
 		[...]*int{&num, nil},
@@ -99,14 +99,14 @@ func TestContainsNil(t *testing.T) {
 			}, testName)
 	}
 
-	for idx, got := range []interface{}{
-		[]interface{}{nil, 12345642},
+	for idx, got := range []any{
+		[]any{nil, 12345642},
 		[]func(){nil, func() {}},
 		[][]int{{}, nil},
-		[...]interface{}{nil, 12345642},
+		[...]any{nil, 12345642},
 		[...]func(){nil, func() {}},
 		[...][]int{{}, nil},
-		map[bool]interface{}{true: nil, false: 12345642},
+		map[bool]any{true: nil, false: 12345642},
 		map[bool]func(){true: nil, false: func() {}},
 		map[bool][]int{true: {}, false: nil},
 	} {
@@ -117,7 +117,7 @@ func TestContainsNil(t *testing.T) {
 		checkOK(t, got, td.Contains(td.NotNil()), testName)
 	}
 
-	for idx, got := range []interface{}{
+	for idx, got := range []any{
 		[]int{1, 2, 3},
 		[...]int{1, 2, 3},
 		map[string]int{"foo": 12, "bar": 34, "zip": 28},
@@ -154,7 +154,7 @@ func TestContainsNil(t *testing.T) {
 func TestContainsString(t *testing.T) {
 	type MyString string
 
-	for idx, got := range []interface{}{
+	for idx, got := range []any{
 		"pipo bingo",
 		MyString("pipo bingo"),
 		[]byte("pipo bingo"),

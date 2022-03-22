@@ -511,7 +511,7 @@ func testLogs(t *td.T, mockT *tdutil.T, curTest CmpResponseTest) {
 }
 
 func testCmpResponse(t *td.T,
-	cmp func(testing.TB, *http.Request, func(http.ResponseWriter, *http.Request), tdhttp.Response, ...interface{}) bool,
+	cmp func(testing.TB, *http.Request, func(http.ResponseWriter, *http.Request), tdhttp.Response, ...any) bool,
 	cmpName string,
 	curTest CmpResponseTest,
 ) {
@@ -529,7 +529,7 @@ func testCmpResponse(t *td.T,
 }
 
 func testTestAPI(t *td.T,
-	cmpBody func(*tdhttp.TestAPI, interface{}) *tdhttp.TestAPI,
+	cmpBody func(*tdhttp.TestAPI, any) *tdhttp.TestAPI,
 	cmpName string,
 	curTest CmpResponseTest,
 ) {
@@ -631,7 +631,7 @@ func TestMux(t *testing.T) {
 		t.Run("/text route via CmpMarshaledResponseFunc", tdhttp.CmpMarshaledResponseFunc(
 			tdhttp.NewRequest("GET", "/text", nil),
 			mux.ServeHTTP,
-			func(body []byte, target interface{}) error {
+			func(body []byte, target any) error {
 				*target.(*string) = string(body)
 				return nil
 			},

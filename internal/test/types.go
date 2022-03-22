@@ -31,14 +31,14 @@ func NewTestingT() *TestingT {
 }
 
 // Error mocks testing.T Error method.
-func (t *TestingT) Error(args ...interface{}) {
+func (t *TestingT) Error(args ...any) {
 	t.Messages = append(t.Messages, fmt.Sprint(args...))
 	t.IsFatal = false
 	t.HasFailed = true
 }
 
 // Fatal mocks testing.T Fatal method.
-func (t *TestingT) Fatal(args ...interface{}) {
+func (t *TestingT) Fatal(args ...any) {
 	t.Messages = append(t.Messages, fmt.Sprint(args...))
 	t.IsFatal = true
 	t.HasFailed = true
@@ -134,12 +134,12 @@ func (t *TestingTB) Cleanup(fn func()) {
 }
 
 // Fatal mocks testing.T Error method.
-func (t *TestingTB) Error(args ...interface{}) {
+func (t *TestingTB) Error(args ...any) {
 	t.TestingT.Error(args...)
 }
 
 // Errorf mocks testing.T Errorf method.
-func (t *TestingTB) Errorf(format string, args ...interface{}) {
+func (t *TestingTB) Errorf(format string, args ...any) {
 	t.TestingT.Error(fmt.Sprintf(format, args...))
 }
 
@@ -160,12 +160,12 @@ func (t *TestingTB) Failed() bool {
 }
 
 // Fatal mocks testing.T Fatal method.
-func (t *TestingTB) Fatal(args ...interface{}) {
+func (t *TestingTB) Fatal(args ...any) {
 	t.TestingT.Fatal(args...)
 }
 
 // Fatalf mocks testing.T Fatalf method.
-func (t *TestingTB) Fatalf(format string, args ...interface{}) {
+func (t *TestingTB) Fatalf(format string, args ...any) {
 	t.TestingT.Fatal(fmt.Sprintf(format, args...))
 }
 
@@ -175,12 +175,12 @@ func (t *TestingTB) Helper() {
 }
 
 // Log mocks testing.T Log method.
-func (t *TestingTB) Log(args ...interface{}) {
+func (t *TestingTB) Log(args ...any) {
 	t.Messages = append(t.Messages, fmt.Sprint(args...))
 }
 
 // Logf mocks testing.T Logf method.
-func (t *TestingTB) Logf(format string, args ...interface{}) {
+func (t *TestingTB) Logf(format string, args ...any) {
 	t.Log(fmt.Sprintf(format, args...))
 }
 
@@ -190,13 +190,13 @@ func (t *TestingTB) Name() string {
 }
 
 // Skip mocks testing.T Skip method.
-func (t *TestingTB) Skip(args ...interface{}) {}
+func (t *TestingTB) Skip(args ...any) {}
 
 // SkipNow mocks testing.T SkipNow method.
 func (t *TestingTB) SkipNow() {}
 
 // Skipf mocks testing.T Skipf method.
-func (t *TestingTB) Skipf(format string, args ...interface{}) {}
+func (t *TestingTB) Skipf(format string, args ...any) {}
 
 // Skipped mocks testing.T Skipped method.
 func (t *TestingTB) Skipped() bool {
