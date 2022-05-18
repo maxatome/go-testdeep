@@ -127,7 +127,7 @@ func server() *http.ServeMux {
 func TestNewTestAPI(t *testing.T) {
 	mux := server()
 
-	containsKey := td.ContainsKey(td.Smuggle(http.CanonicalHeaderKey, "X-Testdeep-Method"))
+	containsKey := td.ContainsKey("X-Testdeep-Method")
 
 	t.Run("No error", func(t *testing.T) {
 		mockT := tdutil.NewT("test")
@@ -136,6 +136,9 @@ func TestNewTestAPI(t *testing.T) {
 				Head("/any").
 				CmpStatus(200).
 				CmpHeader(containsKey).
+				CmpHeader(td.SuperMapOf(http.Header{}, td.MapEntries{
+					"X-Testdeep-Method": td.Bag(td.Re(`(?i)^head\z`)),
+				})).
 				NoBody().
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
