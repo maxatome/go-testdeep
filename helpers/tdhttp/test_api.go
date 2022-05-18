@@ -550,7 +550,7 @@ func (t *TestAPI) CmpStatus(expectedStatus any) *TestAPI {
 //       "X-Account": []string{"Bob"},
 //     },
 //     td.MapEntries{
-//       "X-Token": td.Re(`^[a-z0-9-]{32}\z`),
+//       "X-Token": td.Bag(td.Re(`^[a-z0-9-]{32}\z`)),
 //     }),
 //   )
 //
