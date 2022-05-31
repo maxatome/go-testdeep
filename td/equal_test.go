@@ -731,7 +731,7 @@ type BadEqual5 int
 
 func (b BadEqual5) Equal(o BadEqual5) int { return 1 } // Out=bool
 
-func TestUseEqualGlobalt(t *testing.T) {
+func TestUseEqualGlobal(t *testing.T) {
 	defer func() { td.DefaultContextConfig.UseEqual = false }()
 	td.DefaultContextConfig.UseEqual = true
 
@@ -831,6 +831,28 @@ func TestUseEqualGlobalt(t *testing.T) {
 		expectedError{
 			Message: mustBe("values differ"),
 		})
+}
+
+func TestUseEqualGlobalVsAnchor(t *testing.T) {
+	defer func() { td.DefaultContextConfig.UseEqual = false }()
+	td.DefaultContextConfig.UseEqual = true
+
+	tt := test.NewTestingTB(t.Name())
+
+	assert := td.Assert(tt)
+
+	type timeAnchored struct {
+		Time time.Time
+	}
+	td.CmpTrue(t,
+		assert.Cmp(
+			timeAnchored{Time: timeParse(t, "2022-05-31T06:00:00Z")},
+			timeAnchored{
+				Time: assert.A(td.Between(
+					timeParse(t, "2022-05-31T00:00:00Z"),
+					timeParse(t, "2022-05-31T12:00:00Z"),
+				)).(time.Time),
+			}))
 }
 
 func TestBeLaxGlobalt(t *testing.T) {

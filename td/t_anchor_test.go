@@ -14,16 +14,16 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
-func TestAnchor(tt *testing.T) {
-	timeParse := func(s string) time.Time {
-		dt, err := time.Parse(time.RFC3339Nano, s)
-		if err != nil {
-			tt.Helper()
-			tt.Fatalf("Cannot parse `%s`: %s", s, err)
-		}
-		return dt
+func timeParse(t *testing.T, s string) time.Time {
+	dt, err := time.Parse(time.RFC3339Nano, s)
+	if err != nil {
+		t.Helper()
+		t.Fatalf("Cannot parse `%s`: %s", s, err)
 	}
+	return dt
+}
 
+func TestAnchor(tt *testing.T) {
 	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
 	type MyStruct struct {
@@ -39,7 +39,7 @@ func TestAnchor(tt *testing.T) {
 		PNum: &n,
 		Num:  136,
 		Str:  "Pipo bingo",
-		Time: timeParse("2019-01-02T11:22:33.123456Z"),
+		Time: timeParse(tt, "2019-01-02T11:22:33.123456Z"),
 	}
 
 	// Using T.Anchor()
@@ -48,7 +48,7 @@ func TestAnchor(tt *testing.T) {
 			PNum: t.Anchor(td.Ptr(td.Between(40, 45))).(*int),
 			Num:  t.Anchor(td.Between(int64(135), int64(137))).(int64),
 			Str:  t.Anchor(td.HasPrefix("Pipo"), "").(string),
-			Time: t.Anchor(td.TruncTime(timeParse("2019-01-02T11:22:00Z"), time.Minute)).(time.Time),
+			Time: t.Anchor(td.TruncTime(timeParse(tt, "2019-01-02T11:22:00Z"), time.Minute)).(time.Time),
 		}))
 
 	// Using T.A()
@@ -57,7 +57,7 @@ func TestAnchor(tt *testing.T) {
 			PNum: t.A(td.Ptr(td.Between(40, 45))).(*int),
 			Num:  t.A(td.Between(int64(135), int64(137))).(int64),
 			Str:  t.A(td.HasPrefix("Pipo"), "").(string),
-			Time: t.A(td.TruncTime(timeParse("2019-01-02T11:22:00Z"), time.Minute)).(time.Time),
+			Time: t.A(td.TruncTime(timeParse(tt, "2019-01-02T11:22:00Z"), time.Minute)).(time.Time),
 		}))
 
 	// Testing persistence
