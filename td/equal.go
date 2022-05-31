@@ -115,11 +115,25 @@ func isCustomEqual(a, b reflect.Value) (bool, bool) {
 	return false, false
 }
 
+// resolveAnchor does the same as ctx.Anchors.ResolveAnchor but checks
+// whether v is valid and not already a TestDeep operator first.
+func resolveAnchor(ctx ctxerr.Context, v reflect.Value) (reflect.Value, bool) {
+	if !v.IsValid() || v.Type().Implements(testDeeper) {
+		return v, false
+	}
+	return ctx.Anchors.ResolveAnchor(v)
+}
+
 func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxerr.Error) {
 	// "got" must not implement testDeeper
 	if got.IsValid() && got.Type().Implements(testDeeper) {
 		panic(color.Bad("Found a TestDeep operator in got param, " +
 			"can only use it in expected one!"))
+	}
+
+	// Try to see if a TestDeep operator is anchored in expected
+	if op, ok := resolveAnchor(ctx, expected); ok {
+		expected = op
 	}
 
 	if !got.IsValid() || !expected.IsValid() {
@@ -197,8 +211,8 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 		// If "got" is an interface, try to see what is behind before failing
 		// Used by Set/Bag Match method in such cases:
-		//     []any{123, "foo"}  →  Bag("foo", 123)
-		//    Interface kind -^-----^   but String-^ and ^- Int kinds
+		//           []any{123, "foo"}  →  Bag("foo", 123)
+		// Interface kind -^-----^   but String-^ and ^- Int kinds
 		if got.Kind() == reflect.Interface {
 			return deepValueEqual(ctx, got.Elem(), expected)
 		}
@@ -214,11 +228,6 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 	// Avoid looping forever on cyclic references
 	if ctx.Visited.Record(got, expected) {
 		return
-	}
-
-	// Try to see if a TestDeep operator is anchored in expected
-	if op, ok := ctx.Anchors.ResolveAnchor(expected); ok {
-		return deepValueEqual(ctx, got, op)
 	}
 
 	switch got.Kind() {
