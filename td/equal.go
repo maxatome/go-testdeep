@@ -406,9 +406,9 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			Sort:    true,
 		}
 
-		for _, k := range tdutil.MapSortedKeys(got) {
-			if !foundKeys[k.Interface()] {
-				res.Extra = append(res.Extra, k)
+		for _, vkey := range tdutil.MapSortedKeys(got) {
+			if !foundKeys[dark.MustGetInterface(vkey)] {
+				res.Extra = append(res.Extra, vkey)
 			}
 		}
 
