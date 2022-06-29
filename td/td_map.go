@@ -13,6 +13,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
+	"github.com/maxatome/go-testdeep/internal/dark"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -139,7 +140,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 
 		entryInfo.key = vkey
 		m.expectedEntries = append(m.expectedEntries, entryInfo)
-		checkedEntries[vkey.Interface()] = true
+		checkedEntries[dark.MustGetInterface(vkey)] = true
 	}
 
 	// Check entries in model
@@ -150,7 +151,7 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 	tdutil.MapEach(expectedModel, func(k, v reflect.Value) bool {
 		entryInfo.expected = v
 
-		if checkedEntries[k.Interface()] {
+		if checkedEntries[dark.MustGetInterface(k)] {
 			m.err = ctxerr.OpBad(
 				m.GetLocation().Func,
 				"%s entry exists in both model & expectedEntries",
@@ -319,7 +320,7 @@ func (m *tdMap) match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		if err != nil {
 			return err
 		}
-		foundKeys[entryInfo.key.Interface()] = true
+		foundKeys[dark.MustGetInterface(entryInfo.key)] = true
 	}
 
 	const errorMessage = "comparing hash keys of %%"
@@ -380,7 +381,7 @@ func (m *tdMap) match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 	}
 
 	for _, k := range tdutil.MapSortedKeys(got) {
-		if !foundKeys[k.Interface()] {
+		if !foundKeys[dark.MustGetInterface(k)] {
 			res.Extra = append(res.Extra, k)
 		}
 	}
