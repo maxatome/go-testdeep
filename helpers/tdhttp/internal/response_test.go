@@ -103,6 +103,6 @@ lines
 	tb.ResetMessages()
 	internal.DumpResponse(tb, newResponse("\x7f"))
 	td.Cmp(t, tb.LastMessage(),
-		`Received response:
-"HTTP/1.0 200 OK\r\nA: foo\r\nB: bar\r\n\r\n\u007f"`)
+		td.Re(`Received response:
+"HTTP/1.0 200 OK\\r\\nA: foo\\r\\nB: bar\\r\\n\\r\\n(\\u007f|\\x7f)"`))
 }
