@@ -25,15 +25,15 @@ var _ TestDeep = &tdNone{}
 // None operator compares data against several not expected
 // values. During a match, none of them have to match to succeed.
 //
-//   td.Cmp(t, 12, td.None(8, 10, 14))     // succeeds
-//   td.Cmp(t, 12, td.None(8, 10, 12, 14)) // fails
+//	td.Cmp(t, 12, td.None(8, 10, 14))     // succeeds
+//	td.Cmp(t, 12, td.None(8, 10, 12, 14)) // fails
 //
 // Note Flatten function can be used to group or reuse some values or
 // operators and so avoid boring and inefficient copies:
 //
-//   prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
-//   even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
-//   td.Cmp(t, 9, td.None(prime, even)) // succeeds
+//	prime := td.Flatten([]int{1, 2, 3, 5, 7, 11, 13})
+//	even := td.Flatten([]int{2, 4, 6, 8, 10, 12, 14})
+//	td.Cmp(t, 9, td.None(prime, even)) // succeeds
 func None(notExpectedValues ...any) TestDeep {
 	return &tdNone{
 		tdList: newList(notExpectedValues...),
@@ -50,8 +50,8 @@ func None(notExpectedValues ...any) TestDeep {
 // provided as a more readable function when only one argument is
 // needed.
 //
-//   td.Cmp(t, 12, td.Not(10)) // succeeds
-//   td.Cmp(t, 12, td.Not(12)) // fails
+//	td.Cmp(t, 12, td.Not(10)) // succeeds
+//	td.Cmp(t, 12, td.Not(12)) // fails
 func Not(notExpected any) TestDeep {
 	return &tdNone{
 		tdList: newList(notExpected),

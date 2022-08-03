@@ -37,7 +37,7 @@ func init() {
 //
 // "fn" has to have the following signature:
 //
-//   func (nextAnchor int) TYPE
+//	func (nextAnchor int) TYPE
 //
 // TYPE is the struct type to make anchorable and "nextAnchor" is an
 // index to allow to differentiate several instances of the same type.
@@ -45,9 +45,9 @@ func init() {
 // For example, the time.Time type which is anchorable by default,
 // is declared as:
 //
-//   AddAnchorableStructType(func (nextAnchor int) time.Time {
-//     return time.Unix(math.MaxInt64-1000424443-int64(nextAnchor), 42)
-//   })
+//	AddAnchorableStructType(func (nextAnchor int) time.Time {
+//	  return time.Unix(math.MaxInt64-1000424443-int64(nextAnchor), 42)
+//	})
 //
 // Just as a note, the 1000424443 constant allows to avoid to flirt
 // with the math.MaxInt64 extreme limit and so avoid possible

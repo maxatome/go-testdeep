@@ -25,12 +25,12 @@ type ErrorSummary interface {
 //
 // With explanation set:
 //
-//   Label: value
-//   Explanation
+//	Label: value
+//	Explanation
 //
 // With an empty explantion:
 //
-//   Label: value
+//	Label: value
 type ErrorSummaryItem struct {
 	Label       string
 	Value       string
@@ -65,8 +65,8 @@ func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
 // ErrorSummaryItems implements the ErrorSummary interface and allows
 // to render summaries with several labeled values. For example:
 //
-//   Missing 6 items: the 6 items...
-//     Extra 2 items: the 2 items...
+//	Missing 6 items: the 6 items...
+//	  Extra 2 items: the 2 items...
 type ErrorSummaryItems []ErrorSummaryItem
 
 var _ ErrorSummary = (ErrorSummaryItems)(nil)
@@ -114,13 +114,13 @@ func NewSummary(s string) ErrorSummary {
 //
 // With a given reason "it is not nil", the generated summary will be:
 //
-//           value: the_got_value
-//   it failed coz: it is not nil
+//	        value: the_got_value
+//	it failed coz: it is not nil
 //
 // If reason is empty, the generated summary will be:
 //
-//     value: the_got_value
-//   it failed but didn't say why
+//	  value: the_got_value
+//	it failed but didn't say why
 func NewSummaryReason(got any, reason string) ErrorSummary {
 	if reason == "" {
 		return ErrorSummaryItem{

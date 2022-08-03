@@ -100,11 +100,11 @@ var _ TestDeep = &tdLen{}
 //
 // "expectedLen" can be an int value:
 //
-//   td.Cmp(t, gotSlice, td.Len(12))
+//	td.Cmp(t, gotSlice, td.Len(12))
 //
 // as well as an other operator:
 //
-//   td.Cmp(t, gotSlice, td.Len(td.Between(3, 4)))
+//	td.Cmp(t, gotSlice, td.Len(td.Between(3, 4)))
 func Len(expectedLen any) TestDeep {
 	l := tdLen{}
 	l.initLenCapBase(expectedLen)
@@ -168,11 +168,11 @@ var _ TestDeep = &tdCap{}
 //
 // "expectedCap" can be an int value:
 //
-//   td.Cmp(t, gotSlice, td.Cap(12))
+//	td.Cmp(t, gotSlice, td.Cap(12))
 //
 // as well as an other operator:
 //
-//   td.Cmp(t, gotSlice, td.Cap(td.Between(3, 4)))
+//	td.Cmp(t, gotSlice, td.Cap(td.Between(3, 4)))
 func Cap(expectedCap any) TestDeep {
 	c := tdCap{}
 	c.initLenCapBase(expectedCap)

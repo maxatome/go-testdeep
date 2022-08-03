@@ -17,30 +17,30 @@ package td
 // array/slice, and each array/slice item should be matched by an
 // expected item to succeed.
 //
-//   td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 1, 2))    // succeeds
-//   td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1))    // succeeds
-//   td.Cmp(t, []int{1, 1, 2}, td.Bag(2, 1, 1))    // succeeds
-//   td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2))       // fails, one 1 is missing
-//   td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1, 3)) // fails, 3 is missing
+//	td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 1, 2))    // succeeds
+//	td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1))    // succeeds
+//	td.Cmp(t, []int{1, 1, 2}, td.Bag(2, 1, 1))    // succeeds
+//	td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2))       // fails, one 1 is missing
+//	td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1, 3)) // fails, 3 is missing
 //
-//   // works with slices/arrays of any type
-//   td.Cmp(t, personSlice, td.Bag(
-//     Person{Name: "Bob", Age: 32},
-//     Person{Name: "Alice", Age: 26},
-//   ))
+//	// works with slices/arrays of any type
+//	td.Cmp(t, personSlice, td.Bag(
+//	  Person{Name: "Bob", Age: 32},
+//	  Person{Name: "Alice", Age: 26},
+//	))
 //
 // To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
-//   expected := []int{1, 2, 1}
-//   td.Cmp(t, []int{1, 1, 2}, td.Bag(td.Flatten(expected))) // succeeds
-//   // = td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1))
+//	expected := []int{1, 2, 1}
+//	td.Cmp(t, []int{1, 1, 2}, td.Bag(td.Flatten(expected))) // succeeds
+//	// = td.Cmp(t, []int{1, 1, 2}, td.Bag(1, 2, 1))
 //
-//   exp1 := []int{5, 1, 1}
-//   exp2 := []int{8, 42, 3}
-//   td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3},
-//     td.Bag(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
-//   // = td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3}, td.Bag(5, 1, 1, 3, 8, 42, 3))
+//	exp1 := []int{5, 1, 1}
+//	exp2 := []int{8, 42, 3}
+//	td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3},
+//	  td.Bag(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
+//	// = td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3}, td.Bag(5, 1, 1, 3, 8, 42, 3))
 //
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
@@ -61,27 +61,27 @@ func Bag(expectedItems ...any) TestDeep {
 // expected item to succeed. But some expected items can be missing
 // from the compared array/slice.
 //
-//   td.Cmp(t, []int{1}, td.SubBagOf(1, 1, 2))       // succeeds
-//   td.Cmp(t, []int{1, 1, 1}, td.SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
+//	td.Cmp(t, []int{1}, td.SubBagOf(1, 1, 2))       // succeeds
+//	td.Cmp(t, []int{1, 1, 1}, td.SubBagOf(1, 1, 2)) // fails, one 1 is an extra item
 //
-//   // works with slices/arrays of any type
-//   td.Cmp(t, personSlice, td.SubBagOf(
-//     Person{Name: "Bob", Age: 32},
-//     Person{Name: "Alice", Age: 26},
-//   ))
+//	// works with slices/arrays of any type
+//	td.Cmp(t, personSlice, td.SubBagOf(
+//	  Person{Name: "Bob", Age: 32},
+//	  Person{Name: "Alice", Age: 26},
+//	))
 //
 // To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
-//   expected := []int{1, 2, 1}
-//   td.Cmp(t, []int{1}, td.SubBagOf(td.Flatten(expected))) // succeeds
-//   // = td.Cmp(t, []int{1}, td.SubBagOf(1, 2, 1))
+//	expected := []int{1, 2, 1}
+//	td.Cmp(t, []int{1}, td.SubBagOf(td.Flatten(expected))) // succeeds
+//	// = td.Cmp(t, []int{1}, td.SubBagOf(1, 2, 1))
 //
-//   exp1 := []int{5, 1, 1}
-//   exp2 := []int{8, 42, 3}
-//   td.Cmp(t, []int{1, 42, 3},
-//     td.SubBagOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
-//   // = td.Cmp(t, []int{1, 42, 3}, td.SubBagOf(5, 1, 1, 3, 8, 42, 3))
+//	exp1 := []int{5, 1, 1}
+//	exp2 := []int{8, 42, 3}
+//	td.Cmp(t, []int{1, 42, 3},
+//	  td.SubBagOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
+//	// = td.Cmp(t, []int{1, 42, 3}, td.SubBagOf(5, 1, 1, 3, 8, 42, 3))
 //
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types
@@ -102,27 +102,27 @@ func SubBagOf(expectedItems ...any) TestDeep {
 // array/slice. But some items in the compared array/slice may not be
 // expected.
 //
-//   td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1))       // succeeds
-//   td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1, 1, 1)) // fails, one 1 is missing
+//	td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1))       // succeeds
+//	td.Cmp(t, []int{1, 1, 2}, td.SuperBagOf(1, 1, 1)) // fails, one 1 is missing
 //
-//   // works with slices/arrays of any type
-//   td.Cmp(t, personSlice, td.SuperBagOf(
-//     Person{Name: "Bob", Age: 32},
-//     Person{Name: "Alice", Age: 26},
-//   ))
+//	// works with slices/arrays of any type
+//	td.Cmp(t, personSlice, td.SuperBagOf(
+//	  Person{Name: "Bob", Age: 32},
+//	  Person{Name: "Alice", Age: 26},
+//	))
 //
 // To flatten a non-[]any slice/array, use Flatten function
 // and so avoid boring and inefficient copies:
 //
-//   expected := []int{1, 2, 1}
-//   td.Cmp(t, []int{1}, td.SuperBagOf(td.Flatten(expected))) // succeeds
-//   // = td.Cmp(t, []int{1}, td.SuperBagOf(1, 2, 1))
+//	expected := []int{1, 2, 1}
+//	td.Cmp(t, []int{1}, td.SuperBagOf(td.Flatten(expected))) // succeeds
+//	// = td.Cmp(t, []int{1}, td.SuperBagOf(1, 2, 1))
 //
-//   exp1 := []int{5, 1, 1}
-//   exp2 := []int{8, 42}
-//   td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6},
-//     td.SuperBagOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
-//   // = td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6}, td.SuperBagOf(5, 1, 1, 3, 8, 42))
+//	exp1 := []int{5, 1, 1}
+//	exp2 := []int{8, 42}
+//	td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6},
+//	  td.SuperBagOf(td.Flatten(exp1), 3, td.Flatten(exp2))) // succeeds
+//	// = td.Cmp(t, []int{1, 5, 1, 8, 42, 3, 3, 6}, td.SuperBagOf(5, 1, 1, 3, 8, 42))
 //
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types

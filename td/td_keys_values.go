@@ -49,15 +49,15 @@ var _ TestDeep = &tdKeys{}
 //
 // "val" can be a slice of items of the same type as the map keys:
 //
-//   got := map[string]bool{"c": true, "a": false, "b": true}
-//   td.Cmp(t, got, td.Keys([]string{"a", "b", "c"})) // succeeds, keys sorted
-//   td.Cmp(t, got, td.Keys([]string{"c", "a", "b"})) // fails as not sorted
+//	got := map[string]bool{"c": true, "a": false, "b": true}
+//	td.Cmp(t, got, td.Keys([]string{"a", "b", "c"})) // succeeds, keys sorted
+//	td.Cmp(t, got, td.Keys([]string{"c", "a", "b"})) // fails as not sorted
 //
 // as well as an other operator as Bag, for example, to test keys in
 // an unsorted manner:
 //
-//   got := map[string]bool{"c": true, "a": false, "b": true}
-//   td.Cmp(t, got, td.Keys(td.Bag("c", "a", "b"))) // succeeds
+//	got := map[string]bool{"c": true, "a": false, "b": true}
+//	td.Cmp(t, got, td.Keys(td.Bag("c", "a", "b"))) // succeeds
 func Keys(val any) TestDeep {
 	k := tdKeys{}
 	if !k.initKVBase(val) {
@@ -115,15 +115,15 @@ var _ TestDeep = &tdValues{}
 //
 // "val" can be a slice of items of the same type as the map values:
 //
-//   got := map[int]string{3: "c", 1: "a", 2: "b"}
-//   td.Cmp(t, got, td.Values([]string{"a", "b", "c"})) // succeeds, values sorted
-//   td.Cmp(t, got, td.Values([]string{"c", "a", "b"})) // fails as not sorted
+//	got := map[int]string{3: "c", 1: "a", 2: "b"}
+//	td.Cmp(t, got, td.Values([]string{"a", "b", "c"})) // succeeds, values sorted
+//	td.Cmp(t, got, td.Values([]string{"c", "a", "b"})) // fails as not sorted
 //
 // as well as an other operator as Bag, for example, to test values in
 // an unsorted manner:
 //
-//   got := map[int]string{3: "c", 1: "a", 2: "b"}
-//   td.Cmp(t, got, td.Values(td.Bag("c", "a", "b"))) // succeeds
+//	got := map[int]string{3: "c", 1: "a", 2: "b"}
+//	td.Cmp(t, got, td.Values(td.Bag("c", "a", "b"))) // succeeds
 func Values(val any) TestDeep {
 	v := tdValues{}
 	if !v.initKVBase(val) {

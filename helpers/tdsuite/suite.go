@@ -121,9 +121,9 @@ func shouldContinue(t *td.T, testName string, ret []reflect.Value) bool {
 // Run runs the tests suite "suite" using "tb" as base testing
 // framework. "tb" is typically a *testing.T as in:
 //
-//   func TestSuite(t *testing.T) {
-//     tdsuite.Run(t, &Suite{})
-//   }
+//	func TestSuite(t *testing.T) {
+//	  tdsuite.Run(t, &Suite{})
+//	}
 //
 // but it can also be a *td.T of course.
 //
@@ -131,12 +131,12 @@ func shouldContinue(t *td.T, testName string, ret []reflect.Value) bool {
 // https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig
 // for detailed options, as:
 //
-//   func TestSuite(t *testing.T) {
-//     tdsuite.Run(t, &Suite{}, td.ContextConfig{
-//       UseEqual: true, // use the Equal method to compare if available
-//       BeLax:    true, // able to compare different but convertible types
-//     })
-//   }
+//	func TestSuite(t *testing.T) {
+//	  tdsuite.Run(t, &Suite{}, td.ContextConfig{
+//	    UseEqual: true, // use the Equal method to compare if available
+//	    BeLax:    true, // able to compare different but convertible types
+//	  })
+//	}
 //
 // Run returns true if all the tests succeeded, false otherwise.
 //

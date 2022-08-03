@@ -24,15 +24,15 @@ type tdIgnore struct {
 // for example. Or comparing a struct with SStruct and wanting to
 // ignore some fields:
 //
-//   td.Cmp(t, got, td.SStruct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       Age:      td.Between(40, 45),
-//       Children: td.Ignore(),
-//     }),
-//   )
+//	td.Cmp(t, got, td.SStruct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    Age:      td.Between(40, 45),
+//	    Children: td.Ignore(),
+//	  }),
+//	)
 func Ignore() TestDeep {
 	return &tdIgnore{
 		baseOKNil: newBaseOKNil(3),

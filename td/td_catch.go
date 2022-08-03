@@ -32,31 +32,31 @@ var _ TestDeep = &tdCatch{}
 // (and so JSON) operator, data should be convertible to its pointer
 // type.
 //
-//   var id int64
-//   if td.Cmp(t, CreateRecord("test"),
-//     td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.NotZero()))) {
-//     t.Logf("Created record ID is %d", id)
-//   }
+//	var id int64
+//	if td.Cmp(t, CreateRecord("test"),
+//	  td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.NotZero()))) {
+//	  t.Logf("Created record ID is %d", id)
+//	}
 //
 // It is really useful when used with JSON operator and/or tdhttp helper.
 //
-//   var id int64
-//   ta := tdhttp.NewTestAPI(t, api.Handler).
-//     PostJSON("/item", `{"name":"foo"}`).
-//     CmpStatus(http.StatusCreated).
-//     CmpJSONBody(td.JSON(`{"id": $1, "name": "foo"}`, td.Catch(&id, td.Gt(0))))
-//   if !ta.Failed() {
-//     t.Logf("Created record ID is %d", id)
-//   }
+//	var id int64
+//	ta := tdhttp.NewTestAPI(t, api.Handler).
+//	  PostJSON("/item", `{"name":"foo"}`).
+//	  CmpStatus(http.StatusCreated).
+//	  CmpJSONBody(td.JSON(`{"id": $1, "name": "foo"}`, td.Catch(&id, td.Gt(0))))
+//	if !ta.Failed() {
+//	  t.Logf("Created record ID is %d", id)
+//	}
 //
 // If you need to only catch data without comparing it, use Ignore
 // operator as "expectedValue" as in:
 //
-//   var id int64
-//   if td.Cmp(t, CreateRecord("test"),
-//     td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.Ignore()))) {
-//     t.Logf("Created record ID is %d", id)
-//   }
+//	var id int64
+//	if td.Cmp(t, CreateRecord("test"),
+//	  td.JSON(`{"id": $1, "name": "test"}`, td.Catch(&id, td.Ignore()))) {
+//	  t.Logf("Created record ID is %d", id)
+//	}
 //
 // TypeBehind method returns the reflect.Type of "expectedValue",
 // except if "expectedValue" is a TestDeep operator. In this case, it

@@ -212,11 +212,12 @@ func Retrieve(skip int, endFunction string) Stack {
 
 // SplitPackageFunc splits a fully qualified function name into its
 // package and function parts:
-//   "foo/bar/test.fn"            → "foo/bar/test", "fn"
-//   "foo/bar/test.X.fn"          → "foo/bar/test", "X.fn"
-//   "foo/bar/test.(*X).fn"       → "foo/bar/test", "(*X).fn"
-//   "foo/bar/test.(*X).fn.func1" → "foo/bar/test", "(*X).fn.func1"
-//   "weird"                      → "", "weird"
+//
+//	"foo/bar/test.fn"            → "foo/bar/test", "fn"
+//	"foo/bar/test.X.fn"          → "foo/bar/test", "X.fn"
+//	"foo/bar/test.(*X).fn"       → "foo/bar/test", "(*X).fn"
+//	"foo/bar/test.(*X).fn.func1" → "foo/bar/test", "(*X).fn.func1"
+//	"weird"                      → "", "weird"
 func SplitPackageFunc(fn string) (string, string) {
 	sp := strings.LastIndexByte(fn, '/')
 	if sp < 0 {

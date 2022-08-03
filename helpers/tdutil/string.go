@@ -14,7 +14,7 @@ import (
 )
 
 // FormatString formats s to a printable string, trying to enclose it
-// in "" or `` and defaulting to using SpewString.
+// in double-quotes or back-quotes and defaulting to using SpewString.
 func FormatString(s string) string {
 	var unquotable, unbackquotable bool
 	for _, chr := range s {

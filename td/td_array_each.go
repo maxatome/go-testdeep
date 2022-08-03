@@ -30,21 +30,21 @@ var _ TestDeep = &tdArrayEach{}
 // against "expectedValue". During a match, all items have to match to
 // succeed.
 //
-//   got := [3]string{"foo", "bar", "biz"}
-//   td.Cmp(t, got, td.ArrayEach(td.Len(3)))         // succeeds
-//   td.Cmp(t, got, td.ArrayEach(td.HasPrefix("b"))) // fails coz "foo"
+//	got := [3]string{"foo", "bar", "biz"}
+//	td.Cmp(t, got, td.ArrayEach(td.Len(3)))         // succeeds
+//	td.Cmp(t, got, td.ArrayEach(td.HasPrefix("b"))) // fails coz "foo"
 //
 // Works on slices as well:
 //
-//   got := []Person{
-//     {Name: "Bob", Age: 42},
-//     {Name: "Alice", Age: 24},
-//   }
-//   td.Cmp(t, got, td.ArrayEach(
-//     td.Struct(Person{}, td.StructFields{
-//       Age: td.Between(20, 45),
-//     })),
-//   ) // succeeds, each Person has Age field between 20 and 45
+//	got := []Person{
+//	  {Name: "Bob", Age: 42},
+//	  {Name: "Alice", Age: 24},
+//	}
+//	td.Cmp(t, got, td.ArrayEach(
+//	  td.Struct(Person{}, td.StructFields{
+//	    Age: td.Between(20, 45),
+//	  })),
+//	) // succeeds, each Person has Age field between 20 and 45
 func ArrayEach(expectedValue any) TestDeep {
 	return &tdArrayEach{
 		baseOKNil: newBaseOKNil(3),

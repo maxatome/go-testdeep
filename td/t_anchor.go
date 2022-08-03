@@ -24,7 +24,7 @@ var allAnchorsMu sync.Mutex
 //
 // "fn" has to have the following signature:
 //
-//   func (nextAnchor int) TYPE
+//	func (nextAnchor int) TYPE
 //
 // TYPE is the struct type to make anchorable and "nextAnchor" is an
 // index to allow to differentiate several instances of the same type.
@@ -32,9 +32,9 @@ var allAnchorsMu sync.Mutex
 // For example, the time.Time type which is anchorable by default,
 // could be declared as:
 //
-//   AddAnchorableStructType(func (nextAnchor int) time.Time {
-//     return time.Unix(int64(math.MaxInt64-1000424443-nextAnchor), 42)
-//   })
+//	AddAnchorableStructType(func (nextAnchor int) time.Time {
+//	  return time.Unix(int64(math.MaxInt64-1000424443-nextAnchor), 42)
+//	})
 //
 // Just as a note, the 1000424443 constant allows to avoid to flirt
 // with the math.MaxInt64 extreme limit and so avoid possible
@@ -63,24 +63,24 @@ func AddAnchorableStructType(fn any) {
 // It returns a typed value ready to be embed in a go data structure to
 // be compared using T.Cmp or T.CmpLax:
 //
-//   import (
-//     "testing"
+//	import (
+//	  "testing"
 //
-//     "github.com/maxatome/go-testdeep/td"
-//   )
+//	  "github.com/maxatome/go-testdeep/td"
+//	)
 //
-//   func TestFunc(tt *testing.T) {
-//     got := Func()
+//	func TestFunc(tt *testing.T) {
+//	  got := Func()
 //
-//     t := td.NewT(tt)
-//     t.Cmp(got, &MyStruct{
-//       Name:    "Bob",
-//       Details: &MyDetails{
-//         Nick: t.Anchor(td.HasPrefix("Bobby"), "").(string),
-//         Age:  t.Anchor(td.Between(40, 50)).(int),
-//       },
-//     })
-//   }
+//	  t := td.NewT(tt)
+//	  t.Cmp(got, &MyStruct{
+//	    Name:    "Bob",
+//	    Details: &MyDetails{
+//	      Nick: t.Anchor(td.HasPrefix("Bobby"), "").(string),
+//	      Age:  t.Anchor(td.Between(40, 50)).(int),
+//	    },
+//	  })
+//	}
 //
 // In this example:
 //
@@ -100,25 +100,25 @@ func AddAnchorableStructType(fn any) {
 // Without operator anchoring feature, the previous example would have
 // been:
 //
-//   import (
-//     "testing"
+//	import (
+//	  "testing"
 //
-//     "github.com/maxatome/go-testdeep/td"
-//   )
+//	  "github.com/maxatome/go-testdeep/td"
+//	)
 //
-//   func TestFunc(tt *testing.T) {
-//     got := Func()
+//	func TestFunc(tt *testing.T) {
+//	  got := Func()
 //
-//     t := td.NewT(tt)
-//     t.Cmp(got, td.Struct(&MyStruct{Name: "Bob"},
-//       td.StructFields{
-//       "Details": td.Struct(&MyDetails{},
-//         td.StructFields{
-//           "Nick": td.HasPrefix("Bobby"),
-//           "Age":  td.Between(40, 50),
-//         }),
-//     }))
-//   }
+//	  t := td.NewT(tt)
+//	  t.Cmp(got, td.Struct(&MyStruct{Name: "Bob"},
+//	    td.StructFields{
+//	    "Details": td.Struct(&MyDetails{},
+//	      td.StructFields{
+//	        "Nick": td.HasPrefix("Bobby"),
+//	        "Age":  td.Between(40, 50),
+//	      }),
+//	  }))
+//	}
 //
 // using two times the Struct operator to work around the strict type
 // checking of golang.
@@ -176,24 +176,24 @@ func (t *T) Anchor(operator TestDeep, model ...any) any {
 
 // A is a synonym for Anchor.
 //
-//   import (
-//     "testing"
+//	import (
+//	  "testing"
 //
-//     "github.com/maxatome/go-testdeep/td"
-//   )
+//	  "github.com/maxatome/go-testdeep/td"
+//	)
 //
-//   func TestFunc(tt *testing.T) {
-//     got := Func()
+//	func TestFunc(tt *testing.T) {
+//	  got := Func()
 //
-//     t := td.NewT(tt)
-//     t.Cmp(got, &MyStruct{
-//       Name:    "Bob",
-//       Details: &MyDetails{
-//         Nick: t.A(td.HasPrefix("Bobby"), "").(string),
-//         Age:  t.A(td.Between(40, 50)).(int),
-//       },
-//     })
-//   }
+//	  t := td.NewT(tt)
+//	  t.Cmp(got, &MyStruct{
+//	    Name:    "Bob",
+//	    Details: &MyDetails{
+//	      Nick: t.A(td.HasPrefix("Bobby"), "").(string),
+//	      Age:  t.A(td.Between(40, 50)).(int),
+//	    },
+//	  })
+//	}
 func (t *T) A(operator TestDeep, model ...any) any {
 	t.Helper()
 	return t.Anchor(operator, model...)
@@ -220,7 +220,8 @@ func (t *T) ResetAnchors() {
 // otherwise).
 //
 // Typically used as:
-//   defer t.AnchorsPersistTemporarily()()
+//
+//	defer t.AnchorsPersistTemporarily()()
 func (t *T) AnchorsPersistTemporarily() func() {
 	// If already persistent, do nothing on defer
 	if t.DoAnchorsPersist() {

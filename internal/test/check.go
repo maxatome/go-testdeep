@@ -18,10 +18,10 @@ import (
 
 // EqualErrorMessage prints a test error message of the form:
 //
-//   Message
-//   Failed test
-//          got: got_value
-//     expected: expected_value
+//	Message
+//	Failed test
+//	       got: got_value
+//	  expected: expected_value
 func EqualErrorMessage(t *testing.T, got, expected any,
 	args ...any) {
 	t.Helper()

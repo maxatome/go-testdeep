@@ -30,95 +30,95 @@ var _ testing.TB = T{}
 
 // NewT returns a new *T instance. Typically used as:
 //
-//   import (
-//     "testing"
+//	import (
+//	  "testing"
 //
-//     "github.com/maxatome/go-testdeep/td"
-//   )
+//	  "github.com/maxatome/go-testdeep/td"
+//	)
 //
-//   type Record struct {
-//     Id        uint64
-//     Name      string
-//     Age       int
-//     CreatedAt time.Time
-//   }
+//	type Record struct {
+//	  Id        uint64
+//	  Name      string
+//	  Age       int
+//	  CreatedAt time.Time
+//	}
 //
-//   func TestCreateRecord(tt *testing.T) {
-//     t := NewT(tt, ContextConfig{
-//       MaxErrors: 3, // in case of failure, will dump up to 3 errors
-//     })
+//	func TestCreateRecord(tt *testing.T) {
+//	  t := NewT(tt, ContextConfig{
+//	    MaxErrors: 3, // in case of failure, will dump up to 3 errors
+//	  })
 //
-//     before := time.Now()
-//     record, err := CreateRecord()
+//	  before := time.Now()
+//	  record, err := CreateRecord()
 //
-//     if t.CmpNoError(err) {
-//       t.Log("No error, can now check struct contents")
+//	  if t.CmpNoError(err) {
+//	    t.Log("No error, can now check struct contents")
 //
-//       ok := t.Struct(record,
-//         &Record{
-//           Name: "Bob",
-//           Age:  23,
-//         },
-//         td.StructFields{
-//           "Id":        td.NotZero(),
-//           "CreatedAt": td.Between(before, time.Now()),
-//         },
-//         "Newly created record")
-//       if ok {
-//         t.Log(Record created successfully!")
-//       }
-//     }
-//   }
+//	    ok := t.Struct(record,
+//	      &Record{
+//	        Name: "Bob",
+//	        Age:  23,
+//	      },
+//	      td.StructFields{
+//	        "Id":        td.NotZero(),
+//	        "CreatedAt": td.Between(before, time.Now()),
+//	      },
+//	      "Newly created record")
+//	    if ok {
+//	      t.Log(Record created successfully!")
+//	    }
+//	  }
+//	}
 //
 // "config" is an optional argument and, if passed, must be unique. It
 // allows to configure how failures will be rendered during the
 // lifetime of the returned instance.
 //
-//   t := NewT(tt)
-//   t.Cmp(
-//     Record{Age: 12, Name: "Bob", Id: 12},  // got
-//     Record{Age: 21, Name: "John", Id: 28}) // expected
+//	t := NewT(tt)
+//	t.Cmp(
+//	  Record{Age: 12, Name: "Bob", Id: 12},  // got
+//	  Record{Age: 21, Name: "John", Id: 28}) // expected
 //
 // will produce:
 //
-//   === RUN   TestFoobar
-//   --- FAIL: TestFoobar (0.00s)
-//           foobar_test.go:88: Failed test
-//                   DATA.Id: values differ
-//                                got: (uint64) 12
-//                           expected: (uint64) 28
-//                   DATA.Name: values differ
-//                                got: "Bob"
-//                           expected: "John"
-//                   DATA.Age: values differ
-//                                got: 12
-//                           expected: 28
-//   FAIL
+//	=== RUN   TestFoobar
+//	--- FAIL: TestFoobar (0.00s)
+//	        foobar_test.go:88: Failed test
+//	                DATA.Id: values differ
+//	                             got: (uint64) 12
+//	                        expected: (uint64) 28
+//	                DATA.Name: values differ
+//	                             got: "Bob"
+//	                        expected: "John"
+//	                DATA.Age: values differ
+//	                             got: 12
+//	                        expected: 28
+//	FAIL
 //
 // Now with a special configuration:
 //
-//   t := NewT(tt, ContextConfig{
-//       RootName:  "RECORD", // got data named "RECORD" instead of "DATA"
-//       MaxErrors: 2,        // stops after 2 errors instead of default 10
-//     })
-//   t.Cmp(
-//     Record{Age: 12, Name: "Bob", Id: 12},  // got
-//     Record{Age: 21, Name: "John", Id: 28}, // expected
-//   )
+//	t := NewT(tt, ContextConfig{
+//	    RootName:  "RECORD", // got data named "RECORD" instead of "DATA"
+//	    MaxErrors: 2,        // stops after 2 errors instead of default 10
+//	  })
+//	t.Cmp(
+//	  Record{Age: 12, Name: "Bob", Id: 12},  // got
+//	  Record{Age: 21, Name: "John", Id: 28}, // expected
+//	)
 //
 // will produce:
 //
-//   === RUN   TestFoobar
-//   --- FAIL: TestFoobar (0.00s)
-//           foobar_test.go:96: Failed test
-//                   RECORD.Id: values differ
-//                                got: (uint64) 12
-//                           expected: (uint64) 28
-//                   RECORD.Name: values differ
-//                                got: "Bob"
-//                           expected: "John"
-//                   Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)
-//   FAIL
+//	=== RUN   TestFoobar
+//	--- FAIL: TestFoobar (0.00s)
+//	        foobar_test.go:96: Failed test
+//	                RECORD.Id: values differ
+//	                             got: (uint64) 12
+//	                        expected: (uint64) 28
+//	                RECORD.Name: values differ
+//	                             got: "Bob"
+//	                        expected: "John"
+//	                Too many errors (use TESTDEEP_MAX_ERRORS=-1 to see all)
+//	FAIL
 //
 // See RootName method to configure RootName in a more specific fashion.
 //
@@ -171,11 +171,11 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 // Assert return a new *T instance with FailureIsFatal flag set to
 // false.
 //
-//   assert := Assert(t)
+//	assert := Assert(t)
 //
 // is roughly equivalent to:
 //
-//   assert := NewT(t).FailureIsFatal(false)
+//	assert := NewT(t).FailureIsFatal(false)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
 //
@@ -187,11 +187,11 @@ func Assert(t testing.TB, config ...ContextConfig) *T {
 // Require return a new *T instance with FailureIsFatal flag set to
 // true.
 //
-//   require := Require(t)
+//	require := Require(t)
 //
 // is roughly equivalent to:
 //
-//   require := NewT(t).FailureIsFatal(true)
+//	require := NewT(t).FailureIsFatal(true)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
 //
@@ -204,11 +204,11 @@ func Require(t testing.TB, config ...ContextConfig) *T {
 // "assert" with FailureIsFatal flag set to false, and the second
 // called "require" with FailureIsFatal flag set to true.
 //
-//   assert, require := AssertRequire(t)
+//	assert, require := AssertRequire(t)
 //
 // is roughly equivalent to:
 //
-//   assert, require := Assert(t), Require(t)
+//	assert, require := Assert(t), Require(t)
 //
 // See NewT documentation for usefulness of "config" optional parameter.
 func AssertRequire(t testing.TB, config ...ContextConfig) (assert, require *T) {
@@ -223,25 +223,25 @@ func AssertRequire(t testing.TB, config ...ContextConfig) (assert, require *T) {
 // It returns a new instance of *T so does not alter the original t
 // and used as follows:
 //
-//   t.RootName("RECORD").
-//     Struct(record,
-//       &Record{
-//         Name: "Bob",
-//         Age:  23,
-//       },
-//       td.StructFields{
-//         "Id":        td.NotZero(),
-//         "CreatedAt": td.Between(before, time.Now()),
-//       },
-//       "Newly created record")
+//	t.RootName("RECORD").
+//	  Struct(record,
+//	    &Record{
+//	      Name: "Bob",
+//	      Age:  23,
+//	    },
+//	    td.StructFields{
+//	      "Id":        td.NotZero(),
+//	      "CreatedAt": td.Between(before, time.Now()),
+//	    },
+//	    "Newly created record")
 //
 // In case of error for the field Age, the failure message will contain:
 //
-//   RECORD.Age: values differ
+//	RECORD.Age: values differ
 //
 // Which is more readable than the generic:
 //
-//   DATA.Age: values differ
+//	DATA.Age: values differ
 //
 // If "" is passed the name is set to "DATA", the default value.
 func (t *T) RootName(rootName string) *T {
@@ -263,21 +263,21 @@ func (t *T) RootName(rootName string) *T {
 // It returns a new instance of *T so does not alter the original t
 // and used as follows:
 //
-//   // Following t.Cmp() will call Fatal() if failure
-//   t = t.FailureIsFatal()
-//   t.Cmp(...)
-//   t.Cmp(...)
-//   // Following t.Cmp() won't call Fatal() if failure
-//   t = t.FailureIsFatal(false)
-//   t.Cmp(...)
+//	// Following t.Cmp() will call Fatal() if failure
+//	t = t.FailureIsFatal()
+//	t.Cmp(...)
+//	t.Cmp(...)
+//	// Following t.Cmp() won't call Fatal() if failure
+//	t = t.FailureIsFatal(false)
+//	t.Cmp(...)
 //
 // or, if only one call is critic:
 //
-//   // This Cmp() call will call Fatal() if failure
-//   t.FailureIsFatal().Cmp(...)
-//   // Following t.Cmp() won't call Fatal() if failure
-//   t.Cmp(...)
-//   t.Cmp(...)
+//	// This Cmp() call will call Fatal() if failure
+//	t.FailureIsFatal().Cmp(...)
+//	// Following t.Cmp() won't call Fatal() if failure
+//	t.Cmp(...)
+//	t.Cmp(...)
 //
 // Note that t.FailureIsFatal() acts as t.FailureIsFatal(true).
 func (t *T) FailureIsFatal(enable ...bool) *T {
@@ -290,7 +290,9 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 // whose type is one of "types" to their Equal() method.
 //
 // The signature this method should be:
-//   (A) Equal(B) bool
+//
+//	(A) Equal(B) bool
+//
 // with B assignable to A.
 //
 // See time.Time as an example of accepted Equal() method.
@@ -298,12 +300,12 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 // It always returns a new instance of *T so does not alter the
 // original t.
 //
-//   t = t.UseEqual(time.Time{}, net.IP{})
+//	t = t.UseEqual(time.Time{}, net.IP{})
 //
 // "types" items can also be reflect.Type items. In this case, the
 // target type is the one reflected by the reflect.Type.
 //
-//   t = t.UseEqual(reflect.TypeOf(time.Time{}), reflect.typeOf(net.IP{}))
+//	t = t.UseEqual(reflect.TypeOf(time.Time{}), reflect.typeOf(net.IP{}))
 //
 // As a special case, calling t.UseEqual() or t.UseEqual(true) returns
 // an instance using the Equal() method globally, for all types owning
@@ -361,12 +363,12 @@ func (t *T) BeLax(enable ...bool) *T {
 //
 // It always returns a new instance of *T so does not alter the original t.
 //
-//   t = t.IgnoreUnexported(MyStruct1{}, MyStruct2{})
+//	t = t.IgnoreUnexported(MyStruct1{}, MyStruct2{})
 //
 // "types" items can also be reflect.Type items. In this case, the
 // target type is the one reflected by the reflect.Type.
 //
-//   t = t.IgnoreUnexported(reflect.TypeOf(MyStruct1{}))
+//	t = t.IgnoreUnexported(reflect.TypeOf(MyStruct1{}))
 //
 // As a special case, calling t.IgnoreUnexported() or
 // t.IgnoreUnexported(true) returns an instance ignoring unexported
@@ -404,7 +406,7 @@ func (t *T) IgnoreUnexported(types ...any) *T {
 
 // Cmp is mostly a shortcut for:
 //
-//   Cmp(t.TB, got, expected, args...)
+//	Cmp(t.TB, got, expected, args...)
 //
 // with the exception that t.Config is used to configure the test
 // Context.
@@ -431,11 +433,11 @@ func (t *T) CmpDeeply(got, expected any, args ...any) bool {
 
 // True is shortcut for:
 //
-//   t.Cmp(got, true, args...)
+//	t.Cmp(got, true, args...)
 //
 // Returns true if the test is OK, false if it fails.
 //
-//   t.True(IsAvailable(x), "x should be available")
+//	t.True(IsAvailable(x), "x should be available")
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -450,11 +452,11 @@ func (t *T) True(got any, args ...any) bool {
 
 // False is shortcut for:
 //
-//   t.Cmp(got, false, args...)
+//	t.Cmp(got, false, args...)
 //
 // Returns true if the test is OK, false if it fails.
 //
-//   t.False(IsAvailable(x), "x should not be available")
+//	t.False(IsAvailable(x), "x should not be available")
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -469,8 +471,8 @@ func (t *T) False(got any, args ...any) bool {
 
 // CmpError checks that "got" is non-nil error.
 //
-//   _, err := MyFunction(1, 2, 3)
-//   t.CmpError(err, "MyFunction(1, 2, 3) should return an error")
+//	_, err := MyFunction(1, 2, 3)
+//	t.CmpError(err, "MyFunction(1, 2, 3) should return an error")
 //
 // CmpError and not Error to avoid collision with t.TB.Error method.
 //
@@ -487,10 +489,10 @@ func (t *T) CmpError(got error, args ...any) bool {
 
 // CmpNoError checks that "got" is nil error.
 //
-//   value, err := MyFunction(1, 2, 3)
-//   if t.CmpNoError(err) {
-//     // one can now check value...
-//   }
+//	value, err := MyFunction(1, 2, 3)
+//	if t.CmpNoError(err) {
+//	  // one can now check value...
+//	}
 //
 // CmpNoError and not NoError to be consistent with CmpError method.
 //
@@ -512,15 +514,15 @@ func (t *T) CmpNoError(got error, args ...any) bool {
 // Note that calling panic(nil) in "fn" body is detected as a panic
 // (in this case "expectedPanic" has to be nil).
 //
-//   t.CmpPanic(func() { panic("I am panicking!") },
-//     "I am panicking!",
-//     "The function should panic with the right string")
+//	t.CmpPanic(func() { panic("I am panicking!") },
+//	  "I am panicking!",
+//	  "The function should panic with the right string")
 //
-//   t.CmpPanic(func() { panic("I am panicking!") },
-//     Contains("panicking!"),
-//     "The function should panic with a string containing `panicking!`")
+//	t.CmpPanic(func() { panic("I am panicking!") },
+//	  Contains("panicking!"),
+//	  "The function should panic with a string containing `panicking!`")
 //
-//   t.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)")
+//	t.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)")
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -540,10 +542,10 @@ func (t *T) CmpPanic(fn func(), expected any, args ...any) bool {
 //
 // Note that calling panic(nil) in "fn" body is detected as a panic.
 //
-//   t.CmpNotPanic(func() {}) // succeeds as function does not panic
+//	t.CmpNotPanic(func() {}) // succeeds as function does not panic
 //
-//   t.CmpNotPanic(func() { panic("I am panicking!") }) // fails
-//   t.CmpNotPanic(func() { panic(nil) })               // fails too
+//	t.CmpNotPanic(func() { panic("I am panicking!") }) // fails
+//	t.CmpNotPanic(func() { panic(nil) })               // fails too
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -560,15 +562,15 @@ func (t *T) CmpNotPanic(fn func(), args ...any) bool {
 // If t.TB implements Parallel(), as *testing.T does, it is usually used to
 // mark top-level tests and/or subtests as safe for parallel execution:
 //
-//   func TestCreateRecord(tt *testing.T) {
-//     t := td.NewT(tt)
-//     t.Parallel()
+//	func TestCreateRecord(tt *testing.T) {
+//	  t := td.NewT(tt)
+//	  t.Parallel()
 //
-//     t.Run("no error", func(t *td.T) {
-//       t.Parallel()
+//	  t.Run("no error", func(t *td.T) {
+//	    t.Parallel()
 //
-//       // ...
-//     })
+//	    // ...
+//	  })
 //
 // If t.TB does not implement Parallel(), this method is a no-op.
 func (t *T) Parallel() {
@@ -626,7 +628,7 @@ func (t *T) getRunFunc() (runtFuncs, bool) {
 //
 // If t.TB implement a method with the following signature:
 //
-//   (X) Run(string, func(X)) bool
+//	(X) Run(string, func(X)) bool
 //
 // it calls it with a function of its own in which it creates a new
 // instance of *T on the fly before calling "f" with it.
@@ -674,7 +676,7 @@ func (t *T) Run(name string, f func(t *T)) bool {
 //
 // If t.TB implement a method with the following signature:
 //
-//   (X) Run(string, func(X)) bool
+//	(X) Run(string, func(X)) bool
 //
 // it calls it with a function of its own in which it creates two new
 // instances of *T using AssertRequire() on the fly before calling "f"
