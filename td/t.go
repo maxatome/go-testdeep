@@ -114,7 +114,7 @@ func (t *T) Bag(got any, expectedItems []any, args ...any) bool {
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Between for details.
 //
 // Between() optional parameter "bounds" is here mandatory.
-// td.BoundsInIn value should be passed to mimic its absence in
+// [BoundsInIn] value should be passed to mimic its absence in
 // original Between() call.
 //
 // Returns true if the test is OK, false if it fails.

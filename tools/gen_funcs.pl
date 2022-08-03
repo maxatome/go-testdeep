@@ -320,10 +320,12 @@ EOF
     my $last_arg = $funcs{$func}{args}[-1];
     if (exists $last_arg->{default})
     {
+        my $default = $last_arg->{default};
+        $default = "[$1]" if $default =~ /^td\.(.+)/ and exists $consts{$1};
         $func_comment .= <<EOF;
 
 $func() optional parameter "$last_arg->{name}" is here mandatory.
-$last_arg->{default} value should be passed to mimic its absence in
+$default value should be passed to mimic its absence in
 original $func() call.
 EOF
     }
@@ -553,7 +555,7 @@ my $common_links = do
                qw(tdhttp tdsuite tdutil))
         . "\n\n"
         # Specific links
-        . "[`BeLax` config flag]: $td_url#ContextConfig\n"
+        . "[`BeLax` config flag]: $td_url#ContextConfig.BeLax\n"
         . "[`error`]: https://pkg.go.dev/builtin/#error\n"
         . "\n\n"
         # Foreign types
@@ -1007,7 +1009,7 @@ sub process_doc
         |\bioutil\.Read(?:All|File))\b     # $5
       | (\berror\b)                        # $6
       | (\bTypeBehind(?:\(\)|\b))          # $7
-      | \b(${\join('|', keys %consts)})\b  # $8
+      | \[(${\join('|', keys %consts)})\]  # $8
       | \b(smuggler\s+operator)\b          # $9
       | \b(TestDeep\s+operators?)\b        # $10
       | (?|\*?(SmuggledGot)|(Flatten))\b   # $11
@@ -1041,7 +1043,7 @@ sub process_doc
            }
            elsif ($8)
            {
-               "[`$8`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#BoundsKind)"
+               "[`$8`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$8)"
            }
            elsif ($9)
            {

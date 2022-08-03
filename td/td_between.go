@@ -80,12 +80,12 @@ type tdBetweenCmp struct {
 // if BeLax config flag is true. time.Duration type is accepted as
 // "to" when "from" is time.Time or convertible. "bounds" allows to
 // specify whether bounds are included or not:
-//   - BoundsInIn (default): between "from" and "to" both included
-//   - BoundsInOut: between "from" included and "to" excluded
-//   - BoundsOutIn: between "from" excluded and "to" included
-//   - BoundsOutOut: between "from" and "to" both excluded
+//   - [BoundsInIn] (default): between "from" and "to" both included
+//   - [BoundsInOut]: between "from" included and "to" excluded
+//   - [BoundsOutIn]: between "from" excluded and "to" included
+//   - [BoundsOutOut]: between "from" and "to" both excluded
 //
-// If "bounds" is missing, it defaults to BoundsInIn.
+// If "bounds" is missing, it defaults to [BoundsInIn].
 //
 //	tc.Cmp(t, 17, td.Between(17, 20))               // succeeds, BoundsInIn by default
 //	tc.Cmp(t, 17, td.Between(10, 17, BoundsInOut))  // fails
