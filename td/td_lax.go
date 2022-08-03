@@ -29,14 +29,15 @@ var _ TestDeep = &tdLax{}
 // could be used when, for example, an operator is constructed once
 // but applied to different, but compatible types as in:
 //
-//   bw := td.Between(20, 30)
-//   intValue := 21
-//   floatValue := 21.89
-//   td.Cmp(t, intValue, bw)           // no need to be lax here: same int types
-//   td.Cmp(t, floatValue, td.Lax(bw)) // be lax please, as float64 ≠ int
+//	bw := td.Between(20, 30)
+//	intValue := 21
+//	floatValue := 21.89
+//	td.Cmp(t, intValue, bw)           // no need to be lax here: same int types
+//	td.Cmp(t, floatValue, td.Lax(bw)) // be lax please, as float64 ≠ int
 //
 // Note that in the latter case, CmpLax() could be used as well:
-//   td.CmpLax(t, floatValue, bw)
+//
+//	td.CmpLax(t, floatValue, bw)
 //
 // TypeBehind method returns the greatest convertible or more common
 // reflect.Type of "expectedValue" if it is a base type (bool, int*,

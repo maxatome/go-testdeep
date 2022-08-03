@@ -66,8 +66,8 @@ func (b *MultipartBody) Read(p []byte) (n int, err error) {
 // default the media type is multipart/form-data but it can be
 // overridden using the MediaType field.
 //
-//   m.MediaType = "multipart/mixed"
-//   ct := m.ContentType()
+//	m.MediaType = "multipart/mixed"
+//	ct := m.ContentType()
 func (b *MultipartBody) ContentType() string {
 	mt := b.MediaType
 	if mt == "" {

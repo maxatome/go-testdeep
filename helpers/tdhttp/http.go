@@ -113,15 +113,15 @@ func CmpMarshaledResponse(t testing.TB,
 //
 // It returns true if the tests succeed, false otherwise.
 //
-//   ok := tdhttp.CmpResponse(t,
-//     tdhttp.Get("/test"),
-//     myAPI.ServeHTTP,
-//     Response{
-//       Status: http.StatusOK,
-//       Header: td.ContainsKey("X-Custom-Header"),
-//       Body:   "OK!\n",
-//     },
-//     "/test route")
+//	ok := tdhttp.CmpResponse(t,
+//	  tdhttp.Get("/test"),
+//	  myAPI.ServeHTTP,
+//	  Response{
+//	    Status: http.StatusOK,
+//	    Header: td.ContainsKey("X-Custom-Header"),
+//	    Body:   "OK!\n",
+//	  },
+//	  "/test route")
 //
 // Status, Header and Body fields of Response struct can all be
 // TestDeep operators as it is for Header field here. Otherwise,
@@ -172,19 +172,19 @@ func CmpResponse(t testing.TB,
 //
 // It returns true if the tests succeed, false otherwise.
 //
-//   ok := tdhttp.CmpJSONResponse(t,
-//     tdhttp.Get("/person/42"),
-//     myAPI.ServeHTTP,
-//     Response{
-//       Status: http.StatusOK,
-//       Header: td.ContainsKey("X-Custom-Header"),
-//       Body:   Person{
-//         ID:   42,
-//         Name: "Bob",
-//         Age:  26,
-//       },
-//     },
-//     "/person/{id} route")
+//	ok := tdhttp.CmpJSONResponse(t,
+//	  tdhttp.Get("/person/42"),
+//	  myAPI.ServeHTTP,
+//	  Response{
+//	    Status: http.StatusOK,
+//	    Header: td.ContainsKey("X-Custom-Header"),
+//	    Body:   Person{
+//	      ID:   42,
+//	      Name: "Bob",
+//	      Age:  26,
+//	    },
+//	  },
+//	  "/person/{id} route")
 //
 // Status, Header and Body fields of Response struct can all be
 // TestDeep operators as it is for Header field here. Otherwise,
@@ -225,19 +225,19 @@ func CmpJSONResponse(t testing.TB,
 //
 // It returns true if the tests succeed, false otherwise.
 //
-//   ok := tdhttp.CmpXMLResponse(t,
-//     tdhttp.Get("/person/42"),
-//     myAPI.ServeHTTP,
-//     Response{
-//       Status: http.StatusOK,
-//       Header: td.ContainsKey("X-Custom-Header"),
-//       Body:   Person{
-//         ID:   42,
-//         Name: "Bob",
-//         Age:  26,
-//       },
-//     },
-//     "/person/{id} route")
+//	ok := tdhttp.CmpXMLResponse(t,
+//	  tdhttp.Get("/person/42"),
+//	  myAPI.ServeHTTP,
+//	  Response{
+//	    Status: http.StatusOK,
+//	    Header: td.ContainsKey("X-Custom-Header"),
+//	    Body:   Person{
+//	      ID:   42,
+//	      Name: "Bob",
+//	      Age:  26,
+//	    },
+//	  },
+//	  "/person/{id} route")
 //
 // Status, Header and Body fields of Response struct can all be
 // TestDeep operators as it is for Header field here. Otherwise,
@@ -272,12 +272,12 @@ func CmpXMLResponse(t testing.TB,
 // names the sub-test, the test name part (args...) is voluntary
 // omitted.
 //
-//   t.Run("Subtest name", tdhttp.CmpMarshaledResponseFunc(
-//     tdhttp.Get("/text"),
-//     mux.ServeHTTP,
-//     tdhttp.Response{
-//       Status: http.StatusOK,
-//     }))
+//	t.Run("Subtest name", tdhttp.CmpMarshaledResponseFunc(
+//	  tdhttp.Get("/text"),
+//	  mux.ServeHTTP,
+//	  tdhttp.Response{
+//	    Status: http.StatusOK,
+//	  }))
 //
 // See CmpMarshaledResponse documentation for details.
 //
@@ -297,12 +297,12 @@ func CmpMarshaledResponseFunc(req *http.Request,
 // intended to be used in conjunction with testing.Run() which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
-//   t.Run("Subtest name", tdhttp.CmpResponseFunc(
-//     tdhttp.Get("/text"),
-//     mux.ServeHTTP,
-//     tdhttp.Response{
-//       Status: http.StatusOK,
-//     }))
+//	t.Run("Subtest name", tdhttp.CmpResponseFunc(
+//	  tdhttp.Get("/text"),
+//	  mux.ServeHTTP,
+//	  tdhttp.Response{
+//	    Status: http.StatusOK,
+//	  }))
 //
 // See CmpResponse documentation for details.
 //
@@ -321,13 +321,13 @@ func CmpResponseFunc(req *http.Request,
 // intended to be used in conjunction with testing.Run() which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
-//   t.Run("Subtest name", tdhttp.CmpJSONResponseFunc(
-//     tdhttp.Get("/json"),
-//     mux.ServeHTTP,
-//     tdhttp.Response{
-//       Status: http.StatusOK,
-//       Body:   JResp{Comment: "expected comment!"},
-//     }))
+//	t.Run("Subtest name", tdhttp.CmpJSONResponseFunc(
+//	  tdhttp.Get("/json"),
+//	  mux.ServeHTTP,
+//	  tdhttp.Response{
+//	    Status: http.StatusOK,
+//	    Body:   JResp{Comment: "expected comment!"},
+//	  }))
 //
 // See CmpJSONResponse documentation for details.
 //
@@ -346,13 +346,13 @@ func CmpJSONResponseFunc(req *http.Request,
 // intended to be used in conjunction with testing.Run() which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
-//   t.Run("Subtest name", tdhttp.CmpXMLResponseFunc(
-//     tdhttp.Get("/xml"),
-//     mux.ServeHTTP,
-//     tdhttp.Response{
-//       Status: http.StatusOK,
-//       Body:   JResp{Comment: "expected comment!"},
-//     }))
+//	t.Run("Subtest name", tdhttp.CmpXMLResponseFunc(
+//	  tdhttp.Get("/xml"),
+//	  mux.ServeHTTP,
+//	  tdhttp.Response{
+//	    Status: http.StatusOK,
+//	    Body:   JResp{Comment: "expected comment!"},
+//	  }))
 //
 // See CmpXMLResponse documentation for details.
 //

@@ -185,7 +185,7 @@ while (readdir $dh)
 
 	    $funcs{$func}{args} = \@args unless $ONLY_OPERATORS{$func};
 
-            die "TAB detected in $func operator documentation" if $doc =~ /\t/;
+            die "TAB detected in $func operator documentation\n" if $doc =~ m,(?<!^//)\t,m;
 
             $operators{$func} = {
                 name      => $func,
@@ -292,7 +292,7 @@ foreach my $func (@sorted_funcs)
     my $cmp_doc = <<EOF;
 Cmp$func is a shortcut for:
 
-  td.Cmp(t, got, td.$func($call_args), args...)
+\ttd.Cmp(t, got, td.$func($call_args), args...)
 
 EOF
 
@@ -306,7 +306,7 @@ EOF
     my $t_doc = <<EOF;
 $method_name is a shortcut for:
 
-  t.Cmp(got, td.$func($call_args), args...)
+\tt.Cmp(got, td.$func($call_args), args...)
 
 EOF
     $t_contents .= "\n" . go_comment($t_doc) . <<EOF;
@@ -894,9 +894,17 @@ $2>rs or die "tdhttp example not found in $md_file!";
 }
 
 
+# ""      → "//"
+# "\txxx" → "//\txxx"
+# "xxx"   → "// xxx"
 sub go_comment
 {
-    shift =~ s,^(.?),$1 ne '' ? "// $1" : '//',egmr
+    shift =~ s{^(.?)}
+              {
+                  $1 eq ''
+                  ? '//'
+                  : substr($1, 0, 1) eq "\t" ? "//$1" : "// $1"
+              }egmr
 }
 
 sub doc2godoc

@@ -25,21 +25,21 @@ var _ TestDeep = &tdAny{}
 // a match, at least one of them has to match to succeed. Consider it
 // as a "OR" logical operator.
 //
-//   td.Cmp(t, "foo", td.Any("bar", "foo", "zip")) // succeeds
-//   td.Cmp(t, "foo", td.Any(
-//     td.Len(4),
-//     td.HasPrefix("f"),
-//     td.HasSuffix("z"),
-//   )) // succeeds coz "f" prefix
+//	td.Cmp(t, "foo", td.Any("bar", "foo", "zip")) // succeeds
+//	td.Cmp(t, "foo", td.Any(
+//	  td.Len(4),
+//	  td.HasPrefix("f"),
+//	  td.HasSuffix("z"),
+//	)) // succeeds coz "f" prefix
 //
 // Note Flatten function can be used to group or reuse some values or
 // operators and so avoid boring and inefficient copies:
 //
-//   stringOps := td.Flatten([]td.TestDeep{td.HasPrefix("f"), td.HasSuffix("z")})
-//   td.Cmp(t, "foobar", td.All(
-//     td.Len(4),
-//     stringOps,
-//   )) // succeeds coz "f" prefix
+//	stringOps := td.Flatten([]td.TestDeep{td.HasPrefix("f"), td.HasSuffix("z")})
+//	td.Cmp(t, "foobar", td.All(
+//	  td.Len(4),
+//	  stringOps,
+//	)) // succeeds coz "f" prefix
 //
 // TypeBehind method can return a non-nil reflect.Type if all items
 // known non-interface types are equal, or if only interface types

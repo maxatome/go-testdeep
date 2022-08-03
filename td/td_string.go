@@ -75,11 +75,11 @@ var _ TestDeep = &tdString{}
 // (or convertible), error or fmt.Stringer interface (error interface
 // is tested before fmt.Stringer).
 //
-//   err := errors.New("error!")
-//   td.Cmp(t, err, td.String("error!")) // succeeds
+//	err := errors.New("error!")
+//	td.Cmp(t, err, td.String("error!")) // succeeds
 //
-//   bstr := bytes.NewBufferString("fmt.Stringer!")
-//   td.Cmp(t, bstr, td.String("fmt.Stringer!")) // succeeds
+//	bstr := bytes.NewBufferString("fmt.Stringer!")
+//	td.Cmp(t, bstr, td.String("fmt.Stringer!")) // succeeds
 func String(expected string) TestDeep {
 	return &tdString{
 		tdStringBase: newStringBase(expected),
@@ -123,16 +123,16 @@ var _ TestDeep = &tdHasPrefix{}
 // convertible), []byte (or convertible), error or fmt.Stringer
 // interface (error interface is tested before fmt.Stringer).
 //
-//   td.Cmp(t, []byte("foobar"), td.HasPrefix("foo")) // succeeds
+//	td.Cmp(t, []byte("foobar"), td.HasPrefix("foo")) // succeeds
 //
-//   type Foobar string
-//   td.Cmp(t, Foobar("foobar"), td.HasPrefix("foo")) // succeeds
+//	type Foobar string
+//	td.Cmp(t, Foobar("foobar"), td.HasPrefix("foo")) // succeeds
 //
-//   err := errors.New("error!")
-//   td.Cmp(t, err, td.HasPrefix("err")) // succeeds
+//	err := errors.New("error!")
+//	td.Cmp(t, err, td.HasPrefix("err")) // succeeds
 //
-//   bstr := bytes.NewBufferString("fmt.Stringer!")
-//   td.Cmp(t, bstr, td.HasPrefix("fmt")) // succeeds
+//	bstr := bytes.NewBufferString("fmt.Stringer!")
+//	td.Cmp(t, bstr, td.HasPrefix("fmt")) // succeeds
 func HasPrefix(expected string) TestDeep {
 	return &tdHasPrefix{
 		tdStringBase: newStringBase(expected),
@@ -176,16 +176,16 @@ var _ TestDeep = &tdHasSuffix{}
 // convertible), []byte (or convertible), error or fmt.Stringer
 // interface (error interface is tested before fmt.Stringer).
 //
-//   td.Cmp(t, []byte("foobar"), td.HasSuffix("bar")) // succeeds
+//	td.Cmp(t, []byte("foobar"), td.HasSuffix("bar")) // succeeds
 //
-//   type Foobar string
-//   td.Cmp(t, Foobar("foobar"), td.HasSuffix("bar")) // succeeds
+//	type Foobar string
+//	td.Cmp(t, Foobar("foobar"), td.HasSuffix("bar")) // succeeds
 //
-//   err := errors.New("error!")
-//   td.Cmp(t, err, td.HasSuffix("!")) // succeeds
+//	err := errors.New("error!")
+//	td.Cmp(t, err, td.HasSuffix("!")) // succeeds
 //
-//   bstr := bytes.NewBufferString("fmt.Stringer!")
-//   td.Cmp(t, bstr, td.HasSuffix("!")) // succeeds
+//	bstr := bytes.NewBufferString("fmt.Stringer!")
+//	td.Cmp(t, bstr, td.HasSuffix("!")) // succeeds
 func HasSuffix(expected string) TestDeep {
 	return &tdHasSuffix{
 		tdStringBase: newStringBase(expected),

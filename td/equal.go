@@ -453,9 +453,9 @@ func deepValueEqualOK(got, expected reflect.Value) bool {
 // EqDeeply returns true if "got" matches "expected". "expected" can
 // be the same type as "got" is, or contains some TestDeep operators.
 //
-//   got := "foobar"
-//   td.EqDeeply(got, "foobar")            // returns true
-//   td.EqDeeply(got, td.HasPrefix("foo")) // returns true
+//	got := "foobar"
+//	td.EqDeeply(got, "foobar")            // returns true
+//	td.EqDeeply(got, td.HasPrefix("foo")) // returns true
 func EqDeeply(got, expected any) bool {
 	return deepValueEqualOK(reflect.ValueOf(got), reflect.ValueOf(expected))
 }
@@ -465,13 +465,13 @@ func EqDeeply(got, expected any) bool {
 // operators. If "got" does not match "expected", the returned *ctxerr.Error
 // contains the reason of the first mismatch detected.
 //
-//   got := "foobar"
-//   if err := td.EqDeeplyError(got, "foobar"); err != nil {
-//     // …
-//   }
-//   if err := td.EqDeeplyError(got, td.HasPrefix("foo")); err != nil {
-//     // …
-//   }
+//	got := "foobar"
+//	if err := td.EqDeeplyError(got, "foobar"); err != nil {
+//	  // …
+//	}
+//	if err := td.EqDeeplyError(got, td.HasPrefix("foo")); err != nil {
+//	  // …
+//	}
 func EqDeeplyError(got, expected any) error {
 	err := deepValueEqualFinal(newContext(nil),
 		reflect.ValueOf(got), reflect.ValueOf(expected))

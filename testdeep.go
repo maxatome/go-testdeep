@@ -27,11 +27,11 @@
 // functions and types of github.com/maxatome/go-testdeep/td
 // package. They are only here for compatibility purpose as
 //
-//   import "github.com/maxatome/go-testdeep/td"
+//	import "github.com/maxatome/go-testdeep/td"
 //
 // should now be used, in preference of older, but still supported:
 //
-//   import td "github.com/maxatome/go-testdeep"
+//	import td "github.com/maxatome/go-testdeep"
 //
 // For easy HTTP API testing, see
 // https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp

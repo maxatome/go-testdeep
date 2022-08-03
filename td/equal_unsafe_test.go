@@ -13,7 +13,6 @@ import (
 	"testing"
 )
 
-//
 // Map, unsafe access is mandatory here.
 func TestEqualMapUnsafe(t *testing.T) {
 	type key struct{ k string } //nolint: structcheck

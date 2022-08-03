@@ -81,7 +81,7 @@ var allOperators = map[string]any{
 
 // CmpAll is a shortcut for:
 //
-//   td.Cmp(t, got, td.All(expectedValues...), args...)
+//	td.Cmp(t, got, td.All(expectedValues...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#All for details.
 //
@@ -102,7 +102,7 @@ func CmpAll(t TestingT, got any, expectedValues []any, args ...any) bool {
 
 // CmpAny is a shortcut for:
 //
-//   td.Cmp(t, got, td.Any(expectedValues...), args...)
+//	td.Cmp(t, got, td.Any(expectedValues...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Any for details.
 //
@@ -123,7 +123,7 @@ func CmpAny(t TestingT, got any, expectedValues []any, args ...any) bool {
 
 // CmpArray is a shortcut for:
 //
-//   td.Cmp(t, got, td.Array(model, expectedEntries), args...)
+//	td.Cmp(t, got, td.Array(model, expectedEntries), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Array for details.
 //
@@ -144,7 +144,7 @@ func CmpArray(t TestingT, got, model any, expectedEntries ArrayEntries, args ...
 
 // CmpArrayEach is a shortcut for:
 //
-//   td.Cmp(t, got, td.ArrayEach(expectedValue), args...)
+//	td.Cmp(t, got, td.ArrayEach(expectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ArrayEach for details.
 //
@@ -165,7 +165,7 @@ func CmpArrayEach(t TestingT, got, expectedValue any, args ...any) bool {
 
 // CmpBag is a shortcut for:
 //
-//   td.Cmp(t, got, td.Bag(expectedItems...), args...)
+//	td.Cmp(t, got, td.Bag(expectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Bag for details.
 //
@@ -186,7 +186,7 @@ func CmpBag(t TestingT, got any, expectedItems []any, args ...any) bool {
 
 // CmpBetween is a shortcut for:
 //
-//   td.Cmp(t, got, td.Between(from, to, bounds), args...)
+//	td.Cmp(t, got, td.Between(from, to, bounds), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Between for details.
 //
@@ -211,7 +211,7 @@ func CmpBetween(t TestingT, got, from, to any, bounds BoundsKind, args ...any) b
 
 // CmpCap is a shortcut for:
 //
-//   td.Cmp(t, got, td.Cap(expectedCap), args...)
+//	td.Cmp(t, got, td.Cap(expectedCap), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cap for details.
 //
@@ -232,7 +232,7 @@ func CmpCap(t TestingT, got, expectedCap any, args ...any) bool {
 
 // CmpCode is a shortcut for:
 //
-//   td.Cmp(t, got, td.Code(fn), args...)
+//	td.Cmp(t, got, td.Code(fn), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Code for details.
 //
@@ -253,7 +253,7 @@ func CmpCode(t TestingT, got, fn any, args ...any) bool {
 
 // CmpContains is a shortcut for:
 //
-//   td.Cmp(t, got, td.Contains(expectedValue), args...)
+//	td.Cmp(t, got, td.Contains(expectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Contains for details.
 //
@@ -274,7 +274,7 @@ func CmpContains(t TestingT, got, expectedValue any, args ...any) bool {
 
 // CmpContainsKey is a shortcut for:
 //
-//   td.Cmp(t, got, td.ContainsKey(expectedValue), args...)
+//	td.Cmp(t, got, td.ContainsKey(expectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContainsKey for details.
 //
@@ -295,7 +295,7 @@ func CmpContainsKey(t TestingT, got, expectedValue any, args ...any) bool {
 
 // CmpEmpty is a shortcut for:
 //
-//   td.Cmp(t, got, td.Empty(), args...)
+//	td.Cmp(t, got, td.Empty(), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Empty for details.
 //
@@ -316,7 +316,7 @@ func CmpEmpty(t TestingT, got any, args ...any) bool {
 
 // CmpGt is a shortcut for:
 //
-//   td.Cmp(t, got, td.Gt(minExpectedValue), args...)
+//	td.Cmp(t, got, td.Gt(minExpectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Gt for details.
 //
@@ -337,7 +337,7 @@ func CmpGt(t TestingT, got, minExpectedValue any, args ...any) bool {
 
 // CmpGte is a shortcut for:
 //
-//   td.Cmp(t, got, td.Gte(minExpectedValue), args...)
+//	td.Cmp(t, got, td.Gte(minExpectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Gte for details.
 //
@@ -358,7 +358,7 @@ func CmpGte(t TestingT, got, minExpectedValue any, args ...any) bool {
 
 // CmpHasPrefix is a shortcut for:
 //
-//   td.Cmp(t, got, td.HasPrefix(expected), args...)
+//	td.Cmp(t, got, td.HasPrefix(expected), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#HasPrefix for details.
 //
@@ -379,7 +379,7 @@ func CmpHasPrefix(t TestingT, got any, expected string, args ...any) bool {
 
 // CmpHasSuffix is a shortcut for:
 //
-//   td.Cmp(t, got, td.HasSuffix(expected), args...)
+//	td.Cmp(t, got, td.HasSuffix(expected), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#HasSuffix for details.
 //
@@ -400,7 +400,7 @@ func CmpHasSuffix(t TestingT, got any, expected string, args ...any) bool {
 
 // CmpIsa is a shortcut for:
 //
-//   td.Cmp(t, got, td.Isa(model), args...)
+//	td.Cmp(t, got, td.Isa(model), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Isa for details.
 //
@@ -421,7 +421,7 @@ func CmpIsa(t TestingT, got, model any, args ...any) bool {
 
 // CmpJSON is a shortcut for:
 //
-//   td.Cmp(t, got, td.JSON(expectedJSON, params...), args...)
+//	td.Cmp(t, got, td.JSON(expectedJSON, params...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#JSON for details.
 //
@@ -442,7 +442,7 @@ func CmpJSON(t TestingT, got, expectedJSON any, params []any, args ...any) bool 
 
 // CmpJSONPointer is a shortcut for:
 //
-//   td.Cmp(t, got, td.JSONPointer(pointer, expectedValue), args...)
+//	td.Cmp(t, got, td.JSONPointer(pointer, expectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#JSONPointer for details.
 //
@@ -463,7 +463,7 @@ func CmpJSONPointer(t TestingT, got any, pointer string, expectedValue any, args
 
 // CmpKeys is a shortcut for:
 //
-//   td.Cmp(t, got, td.Keys(val), args...)
+//	td.Cmp(t, got, td.Keys(val), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Keys for details.
 //
@@ -484,7 +484,7 @@ func CmpKeys(t TestingT, got, val any, args ...any) bool {
 
 // CmpLax is a shortcut for:
 //
-//   td.Cmp(t, got, td.Lax(expectedValue), args...)
+//	td.Cmp(t, got, td.Lax(expectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lax for details.
 //
@@ -505,7 +505,7 @@ func CmpLax(t TestingT, got, expectedValue any, args ...any) bool {
 
 // CmpLen is a shortcut for:
 //
-//   td.Cmp(t, got, td.Len(expectedLen), args...)
+//	td.Cmp(t, got, td.Len(expectedLen), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Len for details.
 //
@@ -526,7 +526,7 @@ func CmpLen(t TestingT, got, expectedLen any, args ...any) bool {
 
 // CmpLt is a shortcut for:
 //
-//   td.Cmp(t, got, td.Lt(maxExpectedValue), args...)
+//	td.Cmp(t, got, td.Lt(maxExpectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lt for details.
 //
@@ -547,7 +547,7 @@ func CmpLt(t TestingT, got, maxExpectedValue any, args ...any) bool {
 
 // CmpLte is a shortcut for:
 //
-//   td.Cmp(t, got, td.Lte(maxExpectedValue), args...)
+//	td.Cmp(t, got, td.Lte(maxExpectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lte for details.
 //
@@ -568,7 +568,7 @@ func CmpLte(t TestingT, got, maxExpectedValue any, args ...any) bool {
 
 // CmpMap is a shortcut for:
 //
-//   td.Cmp(t, got, td.Map(model, expectedEntries), args...)
+//	td.Cmp(t, got, td.Map(model, expectedEntries), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Map for details.
 //
@@ -589,7 +589,7 @@ func CmpMap(t TestingT, got, model any, expectedEntries MapEntries, args ...any)
 
 // CmpMapEach is a shortcut for:
 //
-//   td.Cmp(t, got, td.MapEach(expectedValue), args...)
+//	td.Cmp(t, got, td.MapEach(expectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#MapEach for details.
 //
@@ -610,7 +610,7 @@ func CmpMapEach(t TestingT, got, expectedValue any, args ...any) bool {
 
 // CmpN is a shortcut for:
 //
-//   td.Cmp(t, got, td.N(num, tolerance), args...)
+//	td.Cmp(t, got, td.N(num, tolerance), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#N for details.
 //
@@ -635,7 +635,7 @@ func CmpN(t TestingT, got, num, tolerance any, args ...any) bool {
 
 // CmpNaN is a shortcut for:
 //
-//   td.Cmp(t, got, td.NaN(), args...)
+//	td.Cmp(t, got, td.NaN(), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NaN for details.
 //
@@ -656,7 +656,7 @@ func CmpNaN(t TestingT, got any, args ...any) bool {
 
 // CmpNil is a shortcut for:
 //
-//   td.Cmp(t, got, td.Nil(), args...)
+//	td.Cmp(t, got, td.Nil(), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Nil for details.
 //
@@ -677,7 +677,7 @@ func CmpNil(t TestingT, got any, args ...any) bool {
 
 // CmpNone is a shortcut for:
 //
-//   td.Cmp(t, got, td.None(notExpectedValues...), args...)
+//	td.Cmp(t, got, td.None(notExpectedValues...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#None for details.
 //
@@ -698,7 +698,7 @@ func CmpNone(t TestingT, got any, notExpectedValues []any, args ...any) bool {
 
 // CmpNot is a shortcut for:
 //
-//   td.Cmp(t, got, td.Not(notExpected), args...)
+//	td.Cmp(t, got, td.Not(notExpected), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Not for details.
 //
@@ -719,7 +719,7 @@ func CmpNot(t TestingT, got, notExpected any, args ...any) bool {
 
 // CmpNotAny is a shortcut for:
 //
-//   td.Cmp(t, got, td.NotAny(notExpectedItems...), args...)
+//	td.Cmp(t, got, td.NotAny(notExpectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotAny for details.
 //
@@ -740,7 +740,7 @@ func CmpNotAny(t TestingT, got any, notExpectedItems []any, args ...any) bool {
 
 // CmpNotEmpty is a shortcut for:
 //
-//   td.Cmp(t, got, td.NotEmpty(), args...)
+//	td.Cmp(t, got, td.NotEmpty(), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotEmpty for details.
 //
@@ -761,7 +761,7 @@ func CmpNotEmpty(t TestingT, got any, args ...any) bool {
 
 // CmpNotNaN is a shortcut for:
 //
-//   td.Cmp(t, got, td.NotNaN(), args...)
+//	td.Cmp(t, got, td.NotNaN(), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotNaN for details.
 //
@@ -782,7 +782,7 @@ func CmpNotNaN(t TestingT, got any, args ...any) bool {
 
 // CmpNotNil is a shortcut for:
 //
-//   td.Cmp(t, got, td.NotNil(), args...)
+//	td.Cmp(t, got, td.NotNil(), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotNil for details.
 //
@@ -803,7 +803,7 @@ func CmpNotNil(t TestingT, got any, args ...any) bool {
 
 // CmpNotZero is a shortcut for:
 //
-//   td.Cmp(t, got, td.NotZero(), args...)
+//	td.Cmp(t, got, td.NotZero(), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotZero for details.
 //
@@ -824,7 +824,7 @@ func CmpNotZero(t TestingT, got any, args ...any) bool {
 
 // CmpPPtr is a shortcut for:
 //
-//   td.Cmp(t, got, td.PPtr(val), args...)
+//	td.Cmp(t, got, td.PPtr(val), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#PPtr for details.
 //
@@ -845,7 +845,7 @@ func CmpPPtr(t TestingT, got, val any, args ...any) bool {
 
 // CmpPtr is a shortcut for:
 //
-//   td.Cmp(t, got, td.Ptr(val), args...)
+//	td.Cmp(t, got, td.Ptr(val), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Ptr for details.
 //
@@ -866,7 +866,7 @@ func CmpPtr(t TestingT, got, val any, args ...any) bool {
 
 // CmpRe is a shortcut for:
 //
-//   td.Cmp(t, got, td.Re(reg, capture), args...)
+//	td.Cmp(t, got, td.Re(reg, capture), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Re for details.
 //
@@ -891,7 +891,7 @@ func CmpRe(t TestingT, got, reg, capture any, args ...any) bool {
 
 // CmpReAll is a shortcut for:
 //
-//   td.Cmp(t, got, td.ReAll(reg, capture), args...)
+//	td.Cmp(t, got, td.ReAll(reg, capture), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ReAll for details.
 //
@@ -912,7 +912,7 @@ func CmpReAll(t TestingT, got, reg, capture any, args ...any) bool {
 
 // CmpSet is a shortcut for:
 //
-//   td.Cmp(t, got, td.Set(expectedItems...), args...)
+//	td.Cmp(t, got, td.Set(expectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Set for details.
 //
@@ -933,7 +933,7 @@ func CmpSet(t TestingT, got any, expectedItems []any, args ...any) bool {
 
 // CmpShallow is a shortcut for:
 //
-//   td.Cmp(t, got, td.Shallow(expectedPtr), args...)
+//	td.Cmp(t, got, td.Shallow(expectedPtr), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Shallow for details.
 //
@@ -954,7 +954,7 @@ func CmpShallow(t TestingT, got, expectedPtr any, args ...any) bool {
 
 // CmpSlice is a shortcut for:
 //
-//   td.Cmp(t, got, td.Slice(model, expectedEntries), args...)
+//	td.Cmp(t, got, td.Slice(model, expectedEntries), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Slice for details.
 //
@@ -975,7 +975,7 @@ func CmpSlice(t TestingT, got, model any, expectedEntries ArrayEntries, args ...
 
 // CmpSmuggle is a shortcut for:
 //
-//   td.Cmp(t, got, td.Smuggle(fn, expectedValue), args...)
+//	td.Cmp(t, got, td.Smuggle(fn, expectedValue), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Smuggle for details.
 //
@@ -996,7 +996,7 @@ func CmpSmuggle(t TestingT, got, fn, expectedValue any, args ...any) bool {
 
 // CmpSStruct is a shortcut for:
 //
-//   td.Cmp(t, got, td.SStruct(model, expectedFields), args...)
+//	td.Cmp(t, got, td.SStruct(model, expectedFields), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SStruct for details.
 //
@@ -1021,7 +1021,7 @@ func CmpSStruct(t TestingT, got, model any, expectedFields StructFields, args ..
 
 // CmpString is a shortcut for:
 //
-//   td.Cmp(t, got, td.String(expected), args...)
+//	td.Cmp(t, got, td.String(expected), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#String for details.
 //
@@ -1042,7 +1042,7 @@ func CmpString(t TestingT, got any, expected string, args ...any) bool {
 
 // CmpStruct is a shortcut for:
 //
-//   td.Cmp(t, got, td.Struct(model, expectedFields), args...)
+//	td.Cmp(t, got, td.Struct(model, expectedFields), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Struct for details.
 //
@@ -1067,7 +1067,7 @@ func CmpStruct(t TestingT, got, model any, expectedFields StructFields, args ...
 
 // CmpSubBagOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SubBagOf(expectedItems...), args...)
+//	td.Cmp(t, got, td.SubBagOf(expectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubBagOf for details.
 //
@@ -1088,7 +1088,7 @@ func CmpSubBagOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 
 // CmpSubJSONOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SubJSONOf(expectedJSON, params...), args...)
+//	td.Cmp(t, got, td.SubJSONOf(expectedJSON, params...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubJSONOf for details.
 //
@@ -1109,7 +1109,7 @@ func CmpSubJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any) 
 
 // CmpSubMapOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SubMapOf(model, expectedEntries), args...)
+//	td.Cmp(t, got, td.SubMapOf(model, expectedEntries), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubMapOf for details.
 //
@@ -1130,7 +1130,7 @@ func CmpSubMapOf(t TestingT, got, model any, expectedEntries MapEntries, args ..
 
 // CmpSubSetOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SubSetOf(expectedItems...), args...)
+//	td.Cmp(t, got, td.SubSetOf(expectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubSetOf for details.
 //
@@ -1151,7 +1151,7 @@ func CmpSubSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 
 // CmpSuperBagOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SuperBagOf(expectedItems...), args...)
+//	td.Cmp(t, got, td.SuperBagOf(expectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperBagOf for details.
 //
@@ -1172,7 +1172,7 @@ func CmpSuperBagOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 
 // CmpSuperJSONOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SuperJSONOf(expectedJSON, params...), args...)
+//	td.Cmp(t, got, td.SuperJSONOf(expectedJSON, params...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperJSONOf for details.
 //
@@ -1193,7 +1193,7 @@ func CmpSuperJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any
 
 // CmpSuperMapOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SuperMapOf(model, expectedEntries), args...)
+//	td.Cmp(t, got, td.SuperMapOf(model, expectedEntries), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperMapOf for details.
 //
@@ -1214,7 +1214,7 @@ func CmpSuperMapOf(t TestingT, got, model any, expectedEntries MapEntries, args 
 
 // CmpSuperSetOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SuperSetOf(expectedItems...), args...)
+//	td.Cmp(t, got, td.SuperSetOf(expectedItems...), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperSetOf for details.
 //
@@ -1235,7 +1235,7 @@ func CmpSuperSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 
 // CmpSuperSliceOf is a shortcut for:
 //
-//   td.Cmp(t, got, td.SuperSliceOf(model, expectedEntries), args...)
+//	td.Cmp(t, got, td.SuperSliceOf(model, expectedEntries), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperSliceOf for details.
 //
@@ -1256,7 +1256,7 @@ func CmpSuperSliceOf(t TestingT, got, model any, expectedEntries ArrayEntries, a
 
 // CmpTruncTime is a shortcut for:
 //
-//   td.Cmp(t, got, td.TruncTime(expectedTime, trunc), args...)
+//	td.Cmp(t, got, td.TruncTime(expectedTime, trunc), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TruncTime for details.
 //
@@ -1281,7 +1281,7 @@ func CmpTruncTime(t TestingT, got, expectedTime any, trunc time.Duration, args .
 
 // CmpValues is a shortcut for:
 //
-//   td.Cmp(t, got, td.Values(val), args...)
+//	td.Cmp(t, got, td.Values(val), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Values for details.
 //
@@ -1302,7 +1302,7 @@ func CmpValues(t TestingT, got, val any, args ...any) bool {
 
 // CmpZero is a shortcut for:
 //
-//   td.Cmp(t, got, td.Zero(), args...)
+//	td.Cmp(t, got, td.Zero(), args...)
 //
 // See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Zero for details.
 //

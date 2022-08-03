@@ -457,18 +457,18 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 // contains more than one item, all items are merged before their use,
 // from left to right.
 //
-//   td.Cmp(t, got, td.Struct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       "Children": 4,
-//     },
-//     td.StructFields{
-//       "Age":      td.Between(40, 45),
-//       "Children": 0, // overwrite 4
-//     }),
-//   )
+//	td.Cmp(t, got, td.Struct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    "Children": 4,
+//	  },
+//	  td.StructFields{
+//	    "Age":      td.Between(40, 45),
+//	    "Children": 0, // overwrite 4
+//	  }),
+//	)
 //
 // It is an error to set a non-zero field in "model" AND to set the
 // same field in "expectedFields", as in such cases the Struct
@@ -477,17 +477,17 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 // non-zero "model" in "expectedFields", just prefix its name with a
 // ">" (followed by some optional spaces), as in:
 //
-//   td.Cmp(t, got, td.Struct(
-//     Person{
-//       Name:     "John Doe",
-//       Age:      23,
-//       Children: 4,
-//     },
-//     td.StructFields{
-//       "> Age":     td.Between(40, 45),
-//       ">Children": 0, // spaces after ">" are optional
-//     }),
-//   )
+//	td.Cmp(t, got, td.Struct(
+//	  Person{
+//	    Name:     "John Doe",
+//	    Age:      23,
+//	    Children: 4,
+//	  },
+//	  td.StructFields{
+//	    "> Age":     td.Between(40, 45),
+//	    ">Children": 0, // spaces after ">" are optional
+//	  }),
+//	)
 //
 // "expectedFields" can also contain regexps or shell patterns to
 // match multiple fields not explicitly listed in "model" and in
@@ -495,30 +495,30 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 // respectively match or don't-match. Shell patterns are prefixed by "="
 // or "!" to respectively match or don't-match.
 //
-//   td.Cmp(t, got, td.Struct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       "=*At":     td.Lte(time.Now()), // matches CreatedAt & UpdatedAt fields using shell pattern
-//       "=~^[a-z]": td.Ignore(),        // explicitly ignore private fields using a regexp
-//     }),
-//   )
+//	td.Cmp(t, got, td.Struct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    "=*At":     td.Lte(time.Now()), // matches CreatedAt & UpdatedAt fields using shell pattern
+//	    "=~^[a-z]": td.Ignore(),        // explicitly ignore private fields using a regexp
+//	  }),
+//	)
 //
 // When several patterns can match a same field, it is advised to tell
 // go-testdeep in which order patterns should be tested, as once a
 // pattern matches a field, the other patterns are ignored for this
 // field. To do so, each pattern can be prefixed by a number, as in:
 //
-//   td.Cmp(t, got, td.Struct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       "1=*At":     td.Lte(time.Now()),
-//       "2=~^[a-z]": td.NotNil(),
-//     }),
-//   )
+//	td.Cmp(t, got, td.Struct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    "1=*At":     td.Lte(time.Now()),
+//	    "2=~^[a-z]": td.NotNil(),
+//	  }),
+//	)
 //
 // This way, "*At" shell pattern is always used before "^[a-z]"
 // regexp, so if a field "createdAt" exists it is tested against
@@ -528,31 +528,31 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 // To make it clearer, some spaces can be added, as well as bigger
 // numbers used:
 //
-//   td.Cmp(t, got, td.Struct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       " 900 =  *At":    td.Lte(time.Now()),
-//       "2000 =~ ^[a-z]": td.NotNil(),
-//     }),
-//   )
+//	td.Cmp(t, got, td.Struct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    " 900 =  *At":    td.Lte(time.Now()),
+//	    "2000 =~ ^[a-z]": td.NotNil(),
+//	  }),
+//	)
 //
 // The following example combines all possibilities:
 //
-//   td.Cmp(t, got, td.Struct(
-//     Person{
-//       NickName: "Joe",
-//     },
-//     td.StructFields{
-//       "Firstname":               td.Any("John", "Johnny"),
-//       "1 =  *[nN]ame":           td.NotEmpty(), // matches LastName, lastname, …
-//       "2 !  [A-Z]*":             td.NotZero(),  // matches all private fields
-//       "3 =~ ^(Crea|Upda)tedAt$": td.Gte(time.Now()),
-//       "4 !~ ^(Dogs|Children)$":  td.Zero(),   // matches all remaining fields except Dogs and Children
-//       "5 =~ .":                  td.NotNil(), // matches all remaining fields (same as "5 = *")
-//     }),
-//   )
+//	td.Cmp(t, got, td.Struct(
+//	  Person{
+//	    NickName: "Joe",
+//	  },
+//	  td.StructFields{
+//	    "Firstname":               td.Any("John", "Johnny"),
+//	    "1 =  *[nN]ame":           td.NotEmpty(), // matches LastName, lastname, …
+//	    "2 !  [A-Z]*":             td.NotZero(),  // matches all private fields
+//	    "3 =~ ^(Crea|Upda)tedAt$": td.Gte(time.Now()),
+//	    "4 !~ ^(Dogs|Children)$":  td.Zero(),   // matches all remaining fields except Dogs and Children
+//	    "5 =~ .":                  td.NotNil(), // matches all remaining fields (same as "5 = *")
+//	  }),
+//	)
 //
 // During a match, all expected fields must be found to
 // succeed. Non-expected fields are ignored.
@@ -581,18 +581,18 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 // To ignore a field, one has to specify it in "expectedFields" and
 // use the Ignore operator.
 //
-//   td.Cmp(t, got, td.SStruct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       "Children": 4,
-//     },
-//     td.StructFields{
-//       "Age":      td.Between(40, 45),
-//       "Children": td.Ignore(), // overwrite 4
-//     }),
-//   )
+//	td.Cmp(t, got, td.SStruct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    "Children": 4,
+//	  },
+//	  td.StructFields{
+//	    "Age":      td.Between(40, 45),
+//	    "Children": td.Ignore(), // overwrite 4
+//	  }),
+//	)
 //
 // It is an error to set a non-zero field in "model" AND to set the
 // same field in "expectedFields", as in such cases the SStruct
@@ -601,17 +601,17 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 // non-zero "model" in "expectedFields", just prefix its name with a
 // ">" (followed by some optional spaces), as in:
 //
-//   td.Cmp(t, got, td.SStruct(
-//     Person{
-//       Name:     "John Doe",
-//       Age:      23,
-//       Children: 4,
-//     },
-//     td.StructFields{
-//       "> Age":     td.Between(40, 45),
-//       ">Children": 0, // spaces after ">" are optional
-//     }),
-//   )
+//	td.Cmp(t, got, td.SStruct(
+//	  Person{
+//	    Name:     "John Doe",
+//	    Age:      23,
+//	    Children: 4,
+//	  },
+//	  td.StructFields{
+//	    "> Age":     td.Between(40, 45),
+//	    ">Children": 0, // spaces after ">" are optional
+//	  }),
+//	)
 //
 // "expectedFields" can also contain regexps or shell patterns to
 // match multiple fields not explicitly listed in "model" and in
@@ -619,30 +619,30 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 // respectively match or don't-match. Shell patterns are prefixed by "="
 // or "!" to respectively match or don't-match.
 //
-//   td.Cmp(t, got, td.SStruct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       "=*At":     td.Lte(time.Now()), // matches CreatedAt & UpdatedAt fields using shell pattern
-//       "=~^[a-z]": td.Ignore(),        // explicitly ignore private fields using a regexp
-//     }),
-//   )
+//	td.Cmp(t, got, td.SStruct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    "=*At":     td.Lte(time.Now()), // matches CreatedAt & UpdatedAt fields using shell pattern
+//	    "=~^[a-z]": td.Ignore(),        // explicitly ignore private fields using a regexp
+//	  }),
+//	)
 //
 // When several patterns can match a same field, it is advised to tell
 // go-testdeep in which order patterns should be tested, as once a
 // pattern matches a field, the other patterns are ignored for this
 // field. To do so, each pattern can be prefixed by a number, as in:
 //
-//   td.Cmp(t, got, td.SStruct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       "1=*At":     td.Lte(time.Now()),
-//       "2=~^[a-z]": td.NotNil(),
-//     }),
-//   )
+//	td.Cmp(t, got, td.SStruct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    "1=*At":     td.Lte(time.Now()),
+//	    "2=~^[a-z]": td.NotNil(),
+//	  }),
+//	)
 //
 // This way, "*At" shell pattern is always used before "^[a-z]"
 // regexp, so if a field "createdAt" exists it is tested against
@@ -652,31 +652,31 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 // To make it clearer, some spaces can be added, as well as bigger
 // numbers used:
 //
-//   td.Cmp(t, got, td.SStruct(
-//     Person{
-//       Name: "John Doe",
-//     },
-//     td.StructFields{
-//       " 900 =  *At":    td.Lte(time.Now()),
-//       "2000 =~ ^[a-z]": td.NotNil(),
-//     }),
-//   )
+//	td.Cmp(t, got, td.SStruct(
+//	  Person{
+//	    Name: "John Doe",
+//	  },
+//	  td.StructFields{
+//	    " 900 =  *At":    td.Lte(time.Now()),
+//	    "2000 =~ ^[a-z]": td.NotNil(),
+//	  }),
+//	)
 //
 // The following example combines all possibilities:
 //
-//   td.Cmp(t, got, td.SStruct(
-//     Person{
-//       NickName: "Joe",
-//     },
-//     td.StructFields{
-//       "Firstname":               td.Any("John", "Johnny"),
-//       "1 =  *[nN]ame":           td.NotEmpty(), // matches LastName, lastname, …
-//       "2 !  [A-Z]*":             td.NotZero(),  // matches all private fields
-//       "3 =~ ^(Crea|Upda)tedAt$": td.Gte(time.Now()),
-//       "4 !~ ^(Dogs|Children)$":  td.Zero(),   // matches all remaining fields except Dogs and Children
-//       "5 =~ .":                  td.NotNil(), // matches all remaining fields (same as "5 = *")
-//     }),
-//   )
+//	td.Cmp(t, got, td.SStruct(
+//	  Person{
+//	    NickName: "Joe",
+//	  },
+//	  td.StructFields{
+//	    "Firstname":               td.Any("John", "Johnny"),
+//	    "1 =  *[nN]ame":           td.NotEmpty(), // matches LastName, lastname, …
+//	    "2 !  [A-Z]*":             td.NotZero(),  // matches all private fields
+//	    "3 =~ ^(Crea|Upda)tedAt$": td.Gte(time.Now()),
+//	    "4 !~ ^(Dogs|Children)$":  td.Zero(),   // matches all remaining fields except Dogs and Children
+//	    "5 =~ .":                  td.NotNil(), // matches all remaining fields (same as "5 = *")
+//	  }),
+//	)
 //
 // During a match, all expected and zero fields must be found to
 // succeed.

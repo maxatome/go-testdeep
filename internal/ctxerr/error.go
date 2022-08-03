@@ -61,25 +61,25 @@ var (
 // case reflect does not allow us to retrieve the package from which
 // each type comes.
 //
-//   package foo // in a/
-//   var Foo struct { a int }
+//	package foo // in a/
+//	var Foo struct { a int }
 //
-//   package foo // in b/
-//   var Foo struct { a int }
+//	package foo // in b/
+//	var Foo struct { a int }
 //
-//   package ctxerr
-//   import(
-//     a_foo "a/foo"
-//     b_foo "b/foo"
-//   )
-//   …
-//   TypeMismatch(reflect.TypeOf(a_foo.Foo), reflect.TypeOf(b_foo.Foo))
+//	package ctxerr
+//	import(
+//	  a_foo "a/foo"
+//	  b_foo "b/foo"
+//	)
+//	…
+//	TypeMismatch(reflect.TypeOf(a_foo.Foo), reflect.TypeOf(b_foo.Foo))
 //
 // returns an error producing:
 //
-//   type mismatch
-//        got: struct { a int }
-//   expected: struct { a int }
+//	type mismatch
+//	     got: struct { a int }
+//	expected: struct { a int }
 func TypeMismatch(got, expected reflect.Type) *Error {
 	gs, es := got.String(), expected.String()
 	if gs == es {

@@ -38,23 +38,23 @@ var _ TestDeep = &tdJSONPointer{}
 // "expectedValue" operator, if it is an operator. Allowing to do
 // things like:
 //
-//   type Item struct {
-//     Val  int   `json:"val"`
-//     Next *Item `json:"next"`
-//   }
-//   got := Item{Val: 1, Next: &Item{Val: 2, Next: &Item{Val: 3}}}
+//	type Item struct {
+//	  Val  int   `json:"val"`
+//	  Next *Item `json:"next"`
+//	}
+//	got := Item{Val: 1, Next: &Item{Val: 2, Next: &Item{Val: 3}}}
 //
-//   td.Cmp(t, got, td.JSONPointer("/next/next", Item{Val: 3}))
-//   td.Cmp(t, got, td.JSONPointer("/next/next", &Item{Val: 3}))
-//   td.Cmp(t,
-//     got,
-//     td.JSONPointer("/next/next",
-//       td.Struct(Item{}, td.StructFields{"Val": td.Gte(3)})),
-//   )
+//	td.Cmp(t, got, td.JSONPointer("/next/next", Item{Val: 3}))
+//	td.Cmp(t, got, td.JSONPointer("/next/next", &Item{Val: 3}))
+//	td.Cmp(t,
+//	  got,
+//	  td.JSONPointer("/next/next",
+//	    td.Struct(Item{}, td.StructFields{"Val": td.Gte(3)})),
+//	)
 //
-//   got := map[string]int64{"zzz": 42} // 42 is int64 here
-//   td.Cmp(t, got, td.JSONPointer("/zzz", 42))
-//   td.Cmp(t, got, td.JSONPointer("/zzz", td.Between(40, 45)))
+//	got := map[string]int64{"zzz": 42} // 42 is int64 here
+//	td.Cmp(t, got, td.JSONPointer("/zzz", 42))
+//	td.Cmp(t, got, td.JSONPointer("/zzz", td.Between(40, 45)))
 //
 // Of course, it does this conversion only if the expected type can be
 // guessed. In the case the conversion cannot occur, data is compared
@@ -64,19 +64,19 @@ var _ TestDeep = &tdJSONPointer{}
 // Note that as any TestDeep operator can be used as "expectedValue",
 // JSON operator works out of the box:
 //
-//   got := json.RawMessage(`{"foo":{"bar": {"zip": true}}}`)
-//   td.Cmp(t, got, td.JSONPointer("/foo/bar", td.JSON(`{"zip": true}`)))
+//	got := json.RawMessage(`{"foo":{"bar": {"zip": true}}}`)
+//	td.Cmp(t, got, td.JSONPointer("/foo/bar", td.JSON(`{"zip": true}`)))
 //
 // It can be used with structs lacking json tags. In this case, fields
 // names have to be used in JSON pointer:
 //
-//   type Item struct {
-//     Val  int
-//     Next *Item
-//   }
-//   got := Item{Val: 1, Next: &Item{Val: 2, Next: &Item{Val: 3}}}
+//	type Item struct {
+//	  Val  int
+//	  Next *Item
+//	}
+//	got := Item{Val: 1, Next: &Item{Val: 2, Next: &Item{Val: 3}}}
 //
-//   td.Cmp(t, got, td.JSONPointer("/Next/Next", Item{Val: 3}))
+//	td.Cmp(t, got, td.JSONPointer("/Next/Next", Item{Val: 3}))
 //
 // Contrary to Smuggle operator and its fields-path feature, only
 // public fields can be followed, as private ones are never (un)marshaled.
@@ -84,13 +84,13 @@ var _ TestDeep = &tdJSONPointer{}
 // There is no JSONHas nor JSONHasnt operators to only check a JSON
 // pointer exists or not, but they can easily be emulated:
 //
-//   JSONHas := func(pointer string) td.TestDeep {
-//     return td.JSONPointer(pointer, td.Ignore())
-//   }
+//	JSONHas := func(pointer string) td.TestDeep {
+//	  return td.JSONPointer(pointer, td.Ignore())
+//	}
 //
-//   JSONHasnt := func(pointer string) td.TestDeep {
-//     return td.Not(td.JSONPointer(pointer, td.Ignore()))
-//   }
+//	JSONHasnt := func(pointer string) td.TestDeep {
+//	  return td.Not(td.JSONPointer(pointer, td.Ignore()))
+//	}
 //
 // TypeBehind method always returns nil as the expected type cannot be
 // guessed from a JSON pointer.

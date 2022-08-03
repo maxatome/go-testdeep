@@ -339,15 +339,16 @@ func errorInterface(err error) reflect.Value {
 }
 
 // buildCaster returns a function:
-//   func(in any) (out outType, err error)
+//
+//	func(in any) (out outType, err error)
 //
 // dynamically checks…
 //   - if useString is false, as "outType" is a slice of bytes:
-//     - "in" is a []byte or convertible to []byte
-//     - "in" implements io.Reader
+//   - "in" is a []byte or convertible to []byte
+//   - "in" implements io.Reader
 //   - if useString is true, as "outType" is a string:
-//     - "in" is a []byte or convertible to string
-//     - "in" implements io.Reader
+//   - "in" is a []byte or convertible to string
+//   - "in" implements io.Reader
 func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 	zeroRet := reflect.New(outType).Elem()
 
@@ -434,80 +435,80 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 // "fn" must return at least one value. These value will be compared as is
 // to "expectedValue", here integer 28:
 //
-//   td.Cmp(t, "0028",
-//     td.Smuggle(func(value string) int {
-//       num, _ := strconv.Atoi(value)
-//       return num
-//     }, 28),
-//   )
+//	td.Cmp(t, "0028",
+//	  td.Smuggle(func(value string) int {
+//	    num, _ := strconv.Atoi(value)
+//	    return num
+//	  }, 28),
+//	)
 //
 // or using an other TestDeep operator, here Between(28, 30):
 //
-//   td.Cmp(t, "0029",
-//     td.Smuggle(func(value string) int {
-//       num, _ := strconv.Atoi(value)
-//       return num
-//     }, td.Between(28, 30)),
-//   )
+//	td.Cmp(t, "0029",
+//	  td.Smuggle(func(value string) int {
+//	    num, _ := strconv.Atoi(value)
+//	    return num
+//	  }, td.Between(28, 30)),
+//	)
 //
 // "fn" can return a second boolean value, used to tell that a problem
 // occurred and so stop the comparison:
 //
-//   td.Cmp(t, "0029",
-//     td.Smuggle(func(value string) (int, bool) {
-//       num, err := strconv.Atoi(value)
-//       return num, err == nil
-//     }, td.Between(28, 30)),
-//   )
+//	td.Cmp(t, "0029",
+//	  td.Smuggle(func(value string) (int, bool) {
+//	    num, err := strconv.Atoi(value)
+//	    return num, err == nil
+//	  }, td.Between(28, 30)),
+//	)
 //
 // "fn" can return a third string value which is used to describe the
 // test when a problem occurred (false second boolean value):
 //
-//   td.Cmp(t, "0029",
-//     td.Smuggle(func(value string) (int, bool, string) {
-//       num, err := strconv.Atoi(value)
-//       if err != nil {
-//         return 0, false, "string must contain a number"
-//       }
-//       return num, true, ""
-//     }, td.Between(28, 30)),
-//   )
+//	td.Cmp(t, "0029",
+//	  td.Smuggle(func(value string) (int, bool, string) {
+//	    num, err := strconv.Atoi(value)
+//	    if err != nil {
+//	      return 0, false, "string must contain a number"
+//	    }
+//	    return num, true, ""
+//	  }, td.Between(28, 30)),
+//	)
 //
 // Instead of returning (X, bool) or (X, bool, string), "fn" can
 // return (X, error). When a problem occurs, the returned error is
 // non-nil, as in:
 //
-//   td.Cmp(t, "0029",
-//     td.Smuggle(func(value string) (int, error) {
-//       num, err := strconv.Atoi(value)
-//       return num, err
-//     }, td.Between(28, 30)),
-//   )
+//	td.Cmp(t, "0029",
+//	  td.Smuggle(func(value string) (int, error) {
+//	    num, err := strconv.Atoi(value)
+//	    return num, err
+//	  }, td.Between(28, 30)),
+//	)
 //
 // Which can be simplified to:
 //
-//   td.Cmp(t, "0029", td.Smuggle(strconv.Atoi, td.Between(28, 30)))
+//	td.Cmp(t, "0029", td.Smuggle(strconv.Atoi, td.Between(28, 30)))
 //
 // Imagine you want to compare that the Year of a date is between 2010
 // and 2020:
 //
-//   td.Cmp(t, time.Date(2015, time.May, 1, 1, 2, 3, 0, time.UTC),
-//     td.Smuggle(func(date time.Time) int { return date.Year() },
-//       td.Between(2010, 2020)),
-//   )
+//	td.Cmp(t, time.Date(2015, time.May, 1, 1, 2, 3, 0, time.UTC),
+//	  td.Smuggle(func(date time.Time) int { return date.Year() },
+//	    td.Between(2010, 2020)),
+//	)
 //
 // In this case the data location forwarded to next test will be
 // something like "DATA.MyTimeField<smuggled>", but you can act on it
 // too by returning a SmuggledGot struct (by value or by address):
 //
-//   td.Cmp(t, time.Date(2015, time.May, 1, 1, 2, 3, 0, time.UTC),
-//     td.Smuggle(func(date time.Time) SmuggledGot {
-//       return SmuggledGot{
-//         Name: "Year",
-//         Got:  date.Year(),
-//       }
-//     }, td.Between(2010, 2020)),
-//   )
+//	td.Cmp(t, time.Date(2015, time.May, 1, 1, 2, 3, 0, time.UTC),
+//	  td.Smuggle(func(date time.Time) SmuggledGot {
+//	    return SmuggledGot{
+//	      Name: "Year",
+//	      Got:  date.Year(),
+//	    }
+//	  }, td.Between(2010, 2020)),
+//	)
 //
 // then the data location forwarded to next test will be something like
 // "DATA.MyTimeField.Year". The "."  between the current path (here
@@ -520,58 +521,58 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //
 // Of course, all cases can go together:
 //
-//   // Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
-//   // whether this date is contained between 2 hours before now and now.
-//   td.Cmp(t, "2020-01-25 12:13:14",
-//     td.Smuggle(func(date string) (*SmuggledGot, bool, string) {
-//       date, err := time.Parse("2006/01/02 15:04:05", date)
-//       if err != nil {
-//         return nil, false, `date must conform to "YYYY/mm/DD HH:MM:SS" format`
-//       }
-//       return &SmuggledGot{
-//         Name: "Date",
-//         Got:  date,
-//       }, true, ""
-//     }, td.Between(time.Now().Add(-2*time.Hour), time.Now())),
-//   )
+//	// Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
+//	// whether this date is contained between 2 hours before now and now.
+//	td.Cmp(t, "2020-01-25 12:13:14",
+//	  td.Smuggle(func(date string) (*SmuggledGot, bool, string) {
+//	    date, err := time.Parse("2006/01/02 15:04:05", date)
+//	    if err != nil {
+//	      return nil, false, `date must conform to "YYYY/mm/DD HH:MM:SS" format`
+//	    }
+//	    return &SmuggledGot{
+//	      Name: "Date",
+//	      Got:  date,
+//	    }, true, ""
+//	  }, td.Between(time.Now().Add(-2*time.Hour), time.Now())),
+//	)
 //
 // or:
 //
-//   // Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
-//   // whether this date is contained between 2 hours before now and now.
-//   td.Cmp(t, "2020-01-25 12:13:14",
-//     td.Smuggle(func(date string) (*SmuggledGot, error) {
-//       date, err := time.Parse("2006/01/02 15:04:05", date)
-//       if err != nil {
-//         return nil, err
-//       }
-//       return &SmuggledGot{
-//         Name: "Date",
-//         Got:  date,
-//       }, nil
-//     }, td.Between(time.Now().Add(-2*time.Hour), time.Now())),
-//   )
+//	// Accepts a "YYYY/mm/DD HH:MM:SS" string to produce a time.Time and tests
+//	// whether this date is contained between 2 hours before now and now.
+//	td.Cmp(t, "2020-01-25 12:13:14",
+//	  td.Smuggle(func(date string) (*SmuggledGot, error) {
+//	    date, err := time.Parse("2006/01/02 15:04:05", date)
+//	    if err != nil {
+//	      return nil, err
+//	    }
+//	    return &SmuggledGot{
+//	      Name: "Date",
+//	      Got:  date,
+//	    }, nil
+//	  }, td.Between(time.Now().Add(-2*time.Hour), time.Now())),
+//	)
 //
 // Smuggle can also be used to access a struct field embedded in
 // several struct layers.
 //
-//   type A struct{ Num int }
-//   type B struct{ As map[string]*A }
-//   type C struct{ B B }
-//   got := C{B: B{As: map[string]*A{"foo": {Num: 12}}}}
+//	type A struct{ Num int }
+//	type B struct{ As map[string]*A }
+//	type C struct{ B B }
+//	got := C{B: B{As: map[string]*A{"foo": {Num: 12}}}}
 //
-//   // Tests that got.B.A.Num is 12
-//   td.Cmp(t, got,
-//     td.Smuggle(func(c C) int {
-//       return c.B.As["foo"].Num
-//     }, 12))
+//	// Tests that got.B.A.Num is 12
+//	td.Cmp(t, got,
+//	  td.Smuggle(func(c C) int {
+//	    return c.B.As["foo"].Num
+//	  }, 12))
 //
 // As brought up above, a fields-path can be passed as "fn" value
 // instead of a function pointer. Using this feature, the Cmp
 // call in the above example can be rewritten as follows:
 //
-//   // Tests that got.B.As["foo"].Num is 12
-//   td.Cmp(t, got, td.Smuggle("B.As[foo].Num", 12))
+//	// Tests that got.B.As["foo"].Num is 12
+//	td.Cmp(t, got, td.Smuggle("B.As[foo].Num", 12))
 //
 // Contrary to JSONPointer operator, private fields can be
 // followed. Arrays, slices and maps work using the index/key inside
@@ -584,33 +585,33 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 // auto-dereference interfaces and pointers, even on several levels,
 // like in:
 //
-//   type A struct{ N any }
-//   num := 12
-//   pnum := &num
-//   td.Cmp(t, A{N: &pnum}, td.Smuggle("N", 12))
+//	type A struct{ N any }
+//	num := 12
+//	pnum := &num
+//	td.Cmp(t, A{N: &pnum}, td.Smuggle("N", 12))
 //
 // Last but not least, a simple type can be passed as "fn" to operate
 // a cast, handling specifically strings and slices of bytes:
 //
-//   td.Cmp(t, `{"foo":1}`, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
-//   // or equally
-//   td.Cmp(t, `{"foo":1}`, td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
+//	td.Cmp(t, `{"foo":1}`, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
+//	// or equally
+//	td.Cmp(t, `{"foo":1}`, td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
 //
 // converts on the fly a string to a json.RawMessage so JSON operator
 // can parse it as JSON. This is mostly a shortcut for:
 //
-//   td.Cmp(t, `{"foo":1}`, td.Smuggle(
-//     func(r json.RawMessage) json.RawMessage { return r },
-//     td.JSON(`{"foo":1}`)))
+//	td.Cmp(t, `{"foo":1}`, td.Smuggle(
+//	  func(r json.RawMessage) json.RawMessage { return r },
+//	  td.JSON(`{"foo":1}`)))
 //
 // except that for strings and slices of bytes (like here), it accepts
 // io.Reader interface too:
 //
-//   var body io.Reader
-//   // …
-//   td.Cmp(t, body, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
-//   // or equally
-//   td.Cmp(t, body, td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
+//	var body io.Reader
+//	// …
+//	td.Cmp(t, body, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
+//	// or equally
+//	td.Cmp(t, body, td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
 //
 // This last example allows to easily inject body content into JSON
 // operator.

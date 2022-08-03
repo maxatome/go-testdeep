@@ -179,20 +179,20 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 // During a match, all expected entries must be found and all data
 // entries must be expected to succeed.
 //
-//   got := map[string]string{
-//     "foo": "test",
-//     "bar": "wizz",
-//     "zip": "buzz",
-//   }
-//   td.Cmp(t, got, td.Map(
-//     map[string]string{
-//       "foo": "test",
-//       "bar": "wizz",
-//     },
-//     td.MapEntries{
-//       "zip": td.HasSuffix("zz"),
-//     }),
-//   ) // succeeds
+//	got := map[string]string{
+//	  "foo": "test",
+//	  "bar": "wizz",
+//	  "zip": "buzz",
+//	}
+//	td.Cmp(t, got, td.Map(
+//	  map[string]string{
+//	    "foo": "test",
+//	    "bar": "wizz",
+//	  },
+//	  td.MapEntries{
+//	    "zip": td.HasSuffix("zz"),
+//	  }),
+//	) // succeeds
 //
 // TypeBehind method returns the reflect.Type of "model".
 func Map(model any, expectedEntries MapEntries) TestDeep {
@@ -215,28 +215,28 @@ func Map(model any, expectedEntries MapEntries) TestDeep {
 // entry to succeed. But some expected entries can be missing from the
 // compared map.
 //
-//   got := map[string]string{
-//     "foo": "test",
-//     "zip": "buzz",
-//   }
-//   td.Cmp(t, got, td.SubMapOf(
-//     map[string]string{
-//       "foo": "test",
-//       "bar": "wizz",
-//     },
-//     td.MapEntries{
-//       "zip": td.HasSuffix("zz"),
-//     }),
-//   ) // succeeds
+//	got := map[string]string{
+//	  "foo": "test",
+//	  "zip": "buzz",
+//	}
+//	td.Cmp(t, got, td.SubMapOf(
+//	  map[string]string{
+//	    "foo": "test",
+//	    "bar": "wizz",
+//	  },
+//	  td.MapEntries{
+//	    "zip": td.HasSuffix("zz"),
+//	  }),
+//	) // succeeds
 //
-//   td.Cmp(t, got, td.SubMapOf(
-//     map[string]string{
-//       "bar": "wizz",
-//     },
-//     td.MapEntries{
-//       "zip": td.HasSuffix("zz"),
-//     }),
-//   ) // fails, extra {"foo": "test"} in got
+//	td.Cmp(t, got, td.SubMapOf(
+//	  map[string]string{
+//	    "bar": "wizz",
+//	  },
+//	  td.MapEntries{
+//	    "zip": td.HasSuffix("zz"),
+//	  }),
+//	) // fails, extra {"foo": "test"} in got
 //
 // TypeBehind method returns the reflect.Type of "model".
 func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
@@ -258,28 +258,28 @@ func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
 // During a match, each expected entry should match in the compared
 // map. But some entries in the compared map may not be expected.
 //
-//   got := map[string]string{
-//     "foo": "test",
-//     "bar": "wizz",
-//     "zip": "buzz",
-//   }
-//   td.Cmp(t, got, td.SuperMapOf(
-//     map[string]string{
-//       "foo": "test",
-//     },
-//     td.MapEntries{
-//       "zip": td.HasSuffix("zz"),
-//     }),
-//   ) // succeeds
+//	got := map[string]string{
+//	  "foo": "test",
+//	  "bar": "wizz",
+//	  "zip": "buzz",
+//	}
+//	td.Cmp(t, got, td.SuperMapOf(
+//	  map[string]string{
+//	    "foo": "test",
+//	  },
+//	  td.MapEntries{
+//	    "zip": td.HasSuffix("zz"),
+//	  }),
+//	) // succeeds
 //
-//   td.Cmp(t, got, td.SuperMapOf(
-//     map[string]string{
-//       "foo": "test",
-//     },
-//     td.MapEntries{
-//       "biz": td.HasSuffix("zz"),
-//     }),
-//   ) // fails, missing {"biz": …} in got
+//	td.Cmp(t, got, td.SuperMapOf(
+//	  map[string]string{
+//	    "foo": "test",
+//	  },
+//	  td.MapEntries{
+//	    "biz": td.HasSuffix("zz"),
+//	  }),
+//	) // fails, missing {"biz": …} in got
 //
 // TypeBehind method returns the reflect.Type of "model".
 func SuperMapOf(model any, expectedEntries MapEntries) TestDeep {

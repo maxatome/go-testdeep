@@ -32,38 +32,38 @@ var _ TestDeep = &tdCode{}
 // "fn" can return a single bool kind value, telling that yes or no
 // the custom test is successful:
 //
-//   td.Cmp(t, gotTime,
-//     td.Code(func(date time.Time) bool {
-//       return date.Year() == 2018
-//     }))
+//	td.Cmp(t, gotTime,
+//	  td.Code(func(date time.Time) bool {
+//	    return date.Year() == 2018
+//	  }))
 //
 // or two values (bool, string) kinds. The bool value has the same
 // meaning as above, and the string value is used to describe the
 // test when it fails:
 //
-//   td.Cmp(t, gotTime,
-//     td.Code(func(date time.Time) (bool, string) {
-//       if date.Year() == 2018 {
-//         return true, ""
-//       }
-//       return false, "year must be 2018"
-//     }))
+//	td.Cmp(t, gotTime,
+//	  td.Code(func(date time.Time) (bool, string) {
+//	    if date.Year() == 2018 {
+//	      return true, ""
+//	    }
+//	    return false, "year must be 2018"
+//	  }))
 //
 // or a single error value. If the returned error is nil, the test
 // succeeded, else the error contains the reason of failure:
 //
-//   td.Cmp(t, gotJsonRawMesg,
-//     td.Code(func(b json.RawMessage) error {
-//       var c map[string]int
-//       err := json.Unmarshal(b, &c)
-//       if err != nil {
-//         return err
-//       }
-//       if c["test"] != 42 {
-//         return fmt.Errorf(`key "test" does not match 42`)
-//       }
-//       return nil
-//     }))
+//	td.Cmp(t, gotJsonRawMesg,
+//	  td.Code(func(b json.RawMessage) error {
+//	    var c map[string]int
+//	    err := json.Unmarshal(b, &c)
+//	    if err != nil {
+//	      return err
+//	    }
+//	    if c["test"] != 42 {
+//	      return fmt.Errorf(`key "test" does not match 42`)
+//	    }
+//	    return nil
+//	  }))
 //
 // This operator allows to handle any specific comparison not handled
 // by standard operators.
@@ -83,22 +83,22 @@ var _ TestDeep = &tdCode{}
 // testing.TB instance passed originally to Cmp (or its derivatives)
 // using NewT():
 //
-//   td.Cmp(t, httpRequest, td.Code(func(t *td.T, r *http.Request) {
-//     token, err := DecodeToken(r.Header.Get("X-Token-1"))
-//     if t.CmpNoError(err) {
-//       t.True(token.OK())
-//     }
-//   }))
+//	td.Cmp(t, httpRequest, td.Code(func(t *td.T, r *http.Request) {
+//	  token, err := DecodeToken(r.Header.Get("X-Token-1"))
+//	  if t.CmpNoError(err) {
+//	    t.True(token.OK())
+//	  }
+//	}))
 //
 // When "fn" expects two *T parameters, they are directly derived from
 // the testing.TB instance passed originally to Cmp (or its derivatives)
 // using AssertRequire():
 //
-//   td.Cmp(t, httpRequest, td.Code(func(assert, require *td.T, r *http.Request) {
-//     token, err := DecodeToken(r.Header.Get("X-Token-1"))
-//     require.CmpNoError(err)
-//     assert.True(token.OK())
-//   }))
+//	td.Cmp(t, httpRequest, td.Code(func(assert, require *td.T, r *http.Request) {
+//	  token, err := DecodeToken(r.Header.Get("X-Token-1"))
+//	  require.CmpNoError(err)
+//	  assert.True(token.OK())
+//	}))
 //
 // Note that these forms do not work when there is no initial testing.TB
 // instance, like when using EqDeeplyError() or EqDeeply() functions,
@@ -110,32 +110,32 @@ var _ TestDeep = &tdCode{}
 // RootName is inherited but not the current path, but it can be
 // recovered if needed:
 //
-//   got := map[string]int{"foo": 123}
-//   td.NewT(t).
-//     RootName("PIPO").
-//     Cmp(got, td.Map(map[string]int{}, td.MapEntries{
-//       "foo": td.Code(func(t *td.T, n int) {
-//         t.Cmp(n, 124)                                   // inherit only RootName
-//         t.RootName(t.Config.OriginalPath()).Cmp(n, 125) // recover current path
-//         t.RootName("").Cmp(n, 126)                      // undo RootName inheritance
-//       }),
-//     }))
+//	got := map[string]int{"foo": 123}
+//	td.NewT(t).
+//	  RootName("PIPO").
+//	  Cmp(got, td.Map(map[string]int{}, td.MapEntries{
+//	    "foo": td.Code(func(t *td.T, n int) {
+//	      t.Cmp(n, 124)                                   // inherit only RootName
+//	      t.RootName(t.Config.OriginalPath()).Cmp(n, 125) // recover current path
+//	      t.RootName("").Cmp(n, 126)                      // undo RootName inheritance
+//	    }),
+//	  }))
 //
 // produces the following errors:
 //
-//   --- FAIL: TestCodeCustom (0.00s)
-//       td_code_test.go:339: Failed test
-//           PIPO: values differ             ← inherit only RootName
-//                  got: 123
-//             expected: 124
-//       td_code_test.go:338: Failed test
-//           PIPO["foo"]: values differ      ← recover current path
-//                  got: 123
-//             expected: 125
-//       td_code_test.go:342: Failed test
-//           DATA: values differ             ← undo RootName inheritance
-//                  got: 123
-//             expected: 126
+//	--- FAIL: TestCodeCustom (0.00s)
+//	    td_code_test.go:339: Failed test
+//	        PIPO: values differ             ← inherit only RootName
+//	               got: 123
+//	          expected: 124
+//	    td_code_test.go:338: Failed test
+//	        PIPO["foo"]: values differ      ← recover current path
+//	               got: 123
+//	          expected: 125
+//	    td_code_test.go:342: Failed test
+//	        DATA: values differ             ← undo RootName inheritance
+//	               got: 123
+//	          expected: 126
 //
 // TypeBehind method returns the reflect.Type of last parameter of "fn".
 func Code(fn any) TestDeep {

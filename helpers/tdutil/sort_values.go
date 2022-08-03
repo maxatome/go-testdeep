@@ -16,9 +16,9 @@ import (
 // SortableValues is used to allow the sorting of a []reflect.Value
 // slice. It is used with the standard sort package:
 //
-//   vals := []reflect.Value{a, b, c, d}
-//   sort.Sort(SortableValues(vals))
-//   // vals contents now sorted
+//	vals := []reflect.Value{a, b, c, d}
+//	sort.Sort(SortableValues(vals))
+//	// vals contents now sorted
 //
 // Replace sort.Sort by sort.Stable for a stable sort. See sort documentation.
 //

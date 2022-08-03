@@ -65,8 +65,10 @@ func (i *Info) Copy() *Info {
 //
 // Each function in "fns" has to be a function with the following
 // possible signatures:
-//   func (A, A) bool
-//   func (A, A) error
+//
+//	func (A, A) bool
+//	func (A, A) error
+//
 // First arg is always "got", and second is always "expected".
 //
 // A cannot be an interface. This retriction can be removed in the
@@ -143,8 +145,9 @@ func (i *Info) Cmp(got, expected reflect.Value) (bool, error) {
 //
 // Each function in "fns" has to be a function with the following
 // possible signatures:
-//   func (A) B
-//   func (A) (B, error)
+//
+//	func (A) B
+//	func (A) (B, error)
 //
 // A cannot be an interface. This retriction can be removed in the
 // future, if really needed.

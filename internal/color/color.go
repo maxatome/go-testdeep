@@ -80,7 +80,7 @@ func Init() {
 // returns a function to be called in a defer statement. Only intended
 // to be used in tests like:
 //
-//   defer color.SaveState()()
+//	defer color.SaveState()()
 //
 // It is not thread-safe.
 func SaveState(on ...bool) func() {

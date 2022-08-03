@@ -165,17 +165,17 @@ func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected any,
 // the reason of failure is logged with the help of "t" Error()
 // method.
 //
-//   got := "foobar"
-//   td.Cmp(t, got, "foobar")            // succeeds
-//   td.Cmp(t, got, td.HasPrefix("foo")) // succeeds
+//	got := "foobar"
+//	td.Cmp(t, got, "foobar")            // succeeds
+//	td.Cmp(t, got, td.HasPrefix("foo")) // succeeds
 //
 // If "t" is a *T then its Config is inherited, so:
 //
-//   td.Cmp(td.Require(t), got, 42)
+//	td.Cmp(td.Require(t), got, 42)
 //
 // is the same as:
 //
-//   td.Require(t).Cmp(got, 42)
+//	td.Require(t).Cmp(got, 42)
 //
 // "args..." are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -191,9 +191,9 @@ func Cmp(t TestingT, got, expected any, args ...any) bool {
 // CmpDeeply works the same as Cmp and is still available for
 // compatibility purpose. Use shorter Cmp in new code.
 //
-//   got := "foobar"
-//   td.CmpDeeply(t, got, "foobar")            // succeeds
-//   td.CmpDeeply(t, got, td.HasPrefix("foo")) // succeeds
+//	got := "foobar"
+//	td.CmpDeeply(t, got, "foobar")            // succeeds
+//	td.CmpDeeply(t, got, td.HasPrefix("foo")) // succeeds
 func CmpDeeply(t TestingT, got, expected any, args ...any) bool {
 	t.Helper()
 	return cmpDeeply(newContext(t), t, got, expected, args...)

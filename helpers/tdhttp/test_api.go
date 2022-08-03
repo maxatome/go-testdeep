@@ -50,22 +50,22 @@ type TestAPI struct {
 // NewTestAPI creates a TestAPI that can be used to test routes of the
 // API behind "handler".
 //
-//   tdhttp.NewTestAPI(t, mux).
-//     Get("/test").
-//     CmpStatus(200).
-//     CmpBody("OK!")
+//	tdhttp.NewTestAPI(t, mux).
+//	  Get("/test").
+//	  CmpStatus(200).
+//	  CmpBody("OK!")
 //
 // Several routes can be tested with the same instance as in:
 //
-//   ta := tdhttp.NewTestAPI(t, mux)
+//	ta := tdhttp.NewTestAPI(t, mux)
 //
-//   ta.Get("/test").
-//     CmpStatus(200).
-//     CmpBody("OK!")
+//	ta.Get("/test").
+//	  CmpStatus(200).
+//	  CmpBody("OK!")
 //
-//   ta.Get("/ping").
-//     CmpStatus(200).
-//     CmpBody("pong")
+//	ta.Get("/ping").
+//	  CmpStatus(200).
+//	  CmpBody("pong")
 //
 // Note that "tb" can be a *testing.T as well as a *td.T.
 func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
@@ -83,20 +83,20 @@ func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 // It is typically used when the *TestAPI instance is "reused" in
 // sub-tests, as in:
 //
-//   func TestMyAPI(t *testing.T) {
-//     ta := tdhttp.NewTestAPI(t, MyAPIHandler())
+//	func TestMyAPI(t *testing.T) {
+//	  ta := tdhttp.NewTestAPI(t, MyAPIHandler())
 //
-//     ta.Get("/test").CmpStatus(200)
+//	  ta.Get("/test").CmpStatus(200)
 //
-//     t.Run("errors", func (t *testing.T) {
-//       ta := ta.With(t)
+//	  t.Run("errors", func (t *testing.T) {
+//	    ta := ta.With(t)
 //
-//       ta.Get("/test?bad=1").CmpStatus(400)
-//       ta.Get("/test?bad=buzz").CmpStatus(400)
-//     }
+//	    ta.Get("/test?bad=1").CmpStatus(400)
+//	    ta.Get("/test?bad=buzz").CmpStatus(400)
+//	  }
 //
-//     ta.Get("/next").CmpStatus(200)
-//   }
+//	  ta.Get("/next").CmpStatus(200)
+//	}
 //
 // Note that "tb" can be a *testing.T as well as a *td.T.
 //
@@ -270,17 +270,17 @@ func (t *TestAPI) PostForm(target string, data url.Values, headersQueryParams ..
 //
 // Note that Failed() status is reset just after this call.
 //
-//   ta.PostMultipartFormData("/data",
-//     &tdhttp.MultipartBody{
-//       // "multipart/form-data" by default
-//       Parts: []*tdhttp.MultipartPart{
-//         tdhttp.NewMultipartPartString("type", "Sales"),
-//         tdhttp.NewMultipartPartFile("report", "report.json", "application/json"),
-//       },
-//     },
-//     "X-Foo", "Foo-value",
-//     "X-Zip", "Zip-value",
-//   )
+//	ta.PostMultipartFormData("/data",
+//	  &tdhttp.MultipartBody{
+//	    // "multipart/form-data" by default
+//	    Parts: []*tdhttp.MultipartPart{
+//	      tdhttp.NewMultipartPartString("type", "Sales"),
+//	      tdhttp.NewMultipartPartFile("report", "report.json", "application/json"),
+//	    },
+//	  },
+//	  "X-Foo", "Foo-value",
+//	  "X-Zip", "Zip-value",
+//	)
 //
 // See NewRequest for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PostMultipartFormData(target string, data *MultipartBody, headersQueryParams ...any) *TestAPI {
@@ -501,13 +501,13 @@ func (t *TestAPI) DeleteXML(target string, body any, headersQueryParams ...any) 
 // expectedStatus. expectedStatus can be an int to match a fixed HTTP
 // status code, or a TestDeep operator.
 //
-//   ta := tdhttp.NewTestAPI(t, mux)
+//	ta := tdhttp.NewTestAPI(t, mux)
 //
-//   ta.Get("/test").
-//     CmpStatus(http.StatusOK)
+//	ta.Get("/test").
+//	  CmpStatus(http.StatusOK)
 //
-//   ta.PostJSON("/new", map[string]string{"name": "Bob"}).
-//     CmpStatus(td.Between(200, 202))
+//	ta.PostJSON("/new", map[string]string{"name": "Bob"}).
+//	  CmpStatus(td.Between(200, 202))
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpStatus(expectedStatus any) *TestAPI {
@@ -538,33 +538,33 @@ func (t *TestAPI) CmpStatus(expectedStatus any) *TestAPI {
 // exactly the response header. Often only the presence of a
 // header key is needed:
 //
-//   ta := tdhttp.NewTestAPI(t, mux).
-//     PostJSON("/new", map[string]string{"name": "Bob"}).
-//     CmdStatus(201).
-//     CmpHeader(td.ContainsKey("X-Custom"))
+//	ta := tdhttp.NewTestAPI(t, mux).
+//	  PostJSON("/new", map[string]string{"name": "Bob"}).
+//	  CmdStatus(201).
+//	  CmpHeader(td.ContainsKey("X-Custom"))
 //
 // or some specific key, value pairs:
 //
-//   ta.CmpHeader(td.SuperMapOf(
-//     http.Header{
-//       "X-Account": []string{"Bob"},
-//     },
-//     td.MapEntries{
-//       "X-Token": td.Bag(td.Re(`^[a-z0-9-]{32}\z`)),
-//     }),
-//   )
+//	ta.CmpHeader(td.SuperMapOf(
+//	  http.Header{
+//	    "X-Account": []string{"Bob"},
+//	  },
+//	  td.MapEntries{
+//	    "X-Token": td.Bag(td.Re(`^[a-z0-9-]{32}\z`)),
+//	  }),
+//	)
 //
 // Note that CmpHeader calls can be chained:
 //
-//   ta.CmpHeader(td.ContainsKey("X-Account")).
-//     CmpHeader(td.ContainsKey("X-Token"))
+//	ta.CmpHeader(td.ContainsKey("X-Account")).
+//	  CmpHeader(td.ContainsKey("X-Token"))
 //
 // instead of doing all tests in one call as All operator allows it:
 //
-//   ta.CmpHeader(td.All(
-//     td.ContainsKey("X-Account"),
-//     td.ContainsKey("X-Token")),
-//   )
+//	ta.CmpHeader(td.All(
+//	  td.ContainsKey("X-Account"),
+//	  td.ContainsKey("X-Token")),
+//	)
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpHeader(expectedHeader any) *TestAPI {
@@ -595,23 +595,23 @@ func (t *TestAPI) CmpHeader(expectedHeader any) *TestAPI {
 // exactly the response cookies. Often only the presence of a
 // cookie key is needed:
 //
-//   ta := tdhttp.NewTestAPI(t, mux).
-//     PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
-//     CmdStatus(200).
-//     CmpCookies(td.SuperBagOf(td.Struct(&http.Cookie{Name: "cookie_session"}, nil))).
-//     CmpCookies(td.SuperBagOf(td.Smuggle("Name", "cookie_session"))) // shorter
+//	ta := tdhttp.NewTestAPI(t, mux).
+//	  PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
+//	  CmdStatus(200).
+//	  CmpCookies(td.SuperBagOf(td.Struct(&http.Cookie{Name: "cookie_session"}, nil))).
+//	  CmpCookies(td.SuperBagOf(td.Smuggle("Name", "cookie_session"))) // shorter
 //
 // To make tests easier, Raw and RawExpires fields of each
 // *http.Cookie are zeroed before doing the comparison. So no need to
 // fill them when comparing against a simple literal as in:
 //
-//   ta := tdhttp.NewTestAPI(t, mux).
-//     PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
-//     CmdStatus(200).
-//     CmpCookies([]*http.Cookies{
-//       {Name: "cookieName1", Value: "cookieValue1"},
-//       {Name: "cookieName2", Value: "cookieValue2"},
-//     })
+//	ta := tdhttp.NewTestAPI(t, mux).
+//	  PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
+//	  CmdStatus(200).
+//	  CmpCookies([]*http.Cookies{
+//	    {Name: "cookieName1", Value: "cookieValue1"},
+//	    {Name: "cookieName2", Value: "cookieValue2"},
+//	  })
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpCookies(expectedCookies any) *TestAPI {
@@ -783,15 +783,15 @@ func (t *TestAPI) CmpMarshaledBody(unmarshal func([]byte, any) error, expectedBo
 // expectedBody. expectedBody can be a []byte, a string or a TestDeep
 // operator.
 //
-//   ta := tdhttp.NewTestAPI(t, mux)
+//	ta := tdhttp.NewTestAPI(t, mux)
 //
-//   ta.Get("/test").
-//     CmpStatus(http.StatusOK).
-//     CmpBody("OK!\n")
+//	ta.Get("/test").
+//	  CmpStatus(http.StatusOK).
+//	  CmpBody("OK!\n")
 //
-//   ta.Get("/test").
-//     CmpStatus(http.StatusOK).
-//     CmpBody(td.Contains("OK"))
+//	ta.Get("/test").
+//	  CmpStatus(http.StatusOK).
+//	  CmpBody(td.Contains("OK"))
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpBody(expectedBody any) *TestAPI {
@@ -827,49 +827,49 @@ func (t *TestAPI) CmpBody(expectedBody any) *TestAPI {
 // expectedBody. expectedBody can be any type encoding/json can
 // Unmarshal into, or a TestDeep operator.
 //
-//   ta := tdhttp.NewTestAPI(t, mux)
+//	ta := tdhttp.NewTestAPI(t, mux)
 //
-//   ta.Get("/person/42").
-//     CmpStatus(http.StatusOK).
-//     CmpJSONBody(Person{
-//       ID:   42,
-//       Name: "Bob",
-//       Age:  26,
-//     })
+//	ta.Get("/person/42").
+//	  CmpStatus(http.StatusOK).
+//	  CmpJSONBody(Person{
+//	    ID:   42,
+//	    Name: "Bob",
+//	    Age:  26,
+//	  })
 //
-//   ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
-//     CmpStatus(http.StatusCreated).
-//     CmpJSONBody(td.SStruct(
-//       Person{
-//         Name: "Bob",
-//         Age:  26,
-//       },
-//       td.StructFields{
-//         "ID": td.NotZero(),
-//       }))
+//	ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
+//	  CmpStatus(http.StatusCreated).
+//	  CmpJSONBody(td.SStruct(
+//	    Person{
+//	      Name: "Bob",
+//	      Age:  26,
+//	    },
+//	    td.StructFields{
+//	      "ID": td.NotZero(),
+//	    }))
 //
 // The same with anchoring, and so without td.SStruct():
 //
-//   ta := tdhttp.NewTestAPI(tt, mux)
+//	ta := tdhttp.NewTestAPI(tt, mux)
 //
-//   ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
-//     CmpStatus(http.StatusCreated).
-//     CmpJSONBody(Person{
-//       ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
-//       Name: "Bob",
-//       Age:  26,
-//     })
+//	ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
+//	  CmpStatus(http.StatusCreated).
+//	  CmpJSONBody(Person{
+//	    ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
+//	    Name: "Bob",
+//	    Age:  26,
+//	  })
 //
 // The same using td.JSON():
 //
-//   ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
-//     CmpStatus(http.StatusCreated).
-//     CmpJSONBody(td.JSON(`
-//   {
-//     "id":   NotZero(),
-//     "name": "Bob",
-//     "age":  26
-//   }`))
+//	ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
+//	  CmpStatus(http.StatusCreated).
+//	  CmpJSONBody(td.JSON(`
+//	{
+//	  "id":   NotZero(),
+//	  "name": "Bob",
+//	  "age":  26
+//	}`))
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpJSONBody(expectedBody any) *TestAPI {
@@ -882,38 +882,38 @@ func (t *TestAPI) CmpJSONBody(expectedBody any) *TestAPI {
 // expectedBody. expectedBody can be any type encoding/xml can
 // Unmarshal into, or a TestDeep operator.
 //
-//   ta := tdhttp.NewTestAPI(t, mux)
+//	ta := tdhttp.NewTestAPI(t, mux)
 //
-//   ta.Get("/person/42").
-//     CmpStatus(http.StatusOK).
-//     CmpXMLBody(Person{
-//       ID:   42,
-//       Name: "Bob",
-//       Age:  26,
-//     })
+//	ta.Get("/person/42").
+//	  CmpStatus(http.StatusOK).
+//	  CmpXMLBody(Person{
+//	    ID:   42,
+//	    Name: "Bob",
+//	    Age:  26,
+//	  })
 //
-//   ta.Get("/person/43").
-//     CmpStatus(http.StatusOK).
-//     CmpXMLBody(td.SStruct(
-//       Person{
-//         Name: "Bob",
-//         Age:  26,
-//       },
-//       td.StructFields{
-//         "ID": td.NotZero(),
-//       }))
+//	ta.Get("/person/43").
+//	  CmpStatus(http.StatusOK).
+//	  CmpXMLBody(td.SStruct(
+//	    Person{
+//	      Name: "Bob",
+//	      Age:  26,
+//	    },
+//	    td.StructFields{
+//	      "ID": td.NotZero(),
+//	    }))
 //
 // The same with anchoring:
 //
-//   ta := tdhttp.NewTestAPI(tt, mux)
+//	ta := tdhttp.NewTestAPI(tt, mux)
 //
-//   ta.Get("/person/42").
-//     CmpStatus(http.StatusOK).
-//     CmpXMLBody(Person{
-//       ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
-//       Name: "Bob",
-//       Age:  26,
-//     })
+//	ta.Get("/person/42").
+//	  CmpStatus(http.StatusOK).
+//	  CmpXMLBody(Person{
+//	    ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
+//	    Name: "Bob",
+//	    Age:  26,
+//	  })
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpXMLBody(expectedBody any) *TestAPI {
@@ -962,14 +962,14 @@ func (t *TestAPI) NoBody() *TestAPI {
 // "fn" can have several types:
 //   - func(body string) or func(t *td.T, body string)
 //     → "fn" is called with response body as a string.
-//       If no response has been received yet, body is "";
+//     If no response has been received yet, body is "";
 //   - func(body []byte) or func(t *td.T, body []byte)
 //     → "fn" is called with response body as a []byte.
-//       If no response has been received yet, body is nil;
+//     If no response has been received yet, body is nil;
 //   - func(t *td.T, resp *httptest.ResponseRecorder)
 //     → "fn" is called with the internal object containing the response.
-//       See net/http/httptest for details.
-//       If no response has been received yet, resp is nil.
+//     See net/http/httptest for details.
+//     If no response has been received yet, resp is nil.
 //
 // If "fn" type is not one of these types, it calls t.T().Fatal().
 func (t *TestAPI) Or(fn any) *TestAPI {
@@ -1027,17 +1027,17 @@ func (t *TestAPI) Or(fn any) *TestAPI {
 
 // OrDumpResponse dumps the response if at least one previous test failed.
 //
-//   ta := tdhttp.NewTestAPI(t, handler)
+//	ta := tdhttp.NewTestAPI(t, handler)
 //
-//   ta.Get("/foo").
-//     CmpStatus(200).
-//     OrDumpResponse(). // if status check failed, dumps the response
-//     CmpBody("bar")    // if it fails, the response is not dumped
+//	ta.Get("/foo").
+//	  CmpStatus(200).
+//	  OrDumpResponse(). // if status check failed, dumps the response
+//	  CmpBody("bar")    // if it fails, the response is not dumped
 //
-//   ta.Get("/foo").
-//     CmpStatus(200).
-//     CmpBody("bar").
-//     OrDumpResponse() // dumps the response if status and/or body checks fail
+//	ta.Get("/foo").
+//	  CmpStatus(200).
+//	  CmpBody("bar").
+//	  OrDumpResponse() // dumps the response if status and/or body checks fail
 //
 // See AutoDumpResponse method to automatize this dump.
 func (t *TestAPI) OrDumpResponse() *TestAPI {
@@ -1066,15 +1066,15 @@ func (t *TestAPI) dumpResponse() {
 // operator "operator" in a go classic literal like a struct, slice,
 // array or map value.
 //
-//   ta := tdhttp.NewTestAPI(tt, mux)
+//	ta := tdhttp.NewTestAPI(tt, mux)
 //
-//   ta.Get("/person/42").
-//     CmpStatus(http.StatusOK).
-//     CmpJSONBody(Person{
-//       ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
-//       Name: "Bob",
-//       Age:  26,
-//     })
+//	ta.Get("/person/42").
+//	  CmpStatus(http.StatusOK).
+//	  CmpJSONBody(Person{
+//	    ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
+//	    Name: "Bob",
+//	    Age:  26,
+//	  })
 //
 // See (*td.T).Anchor documentation for details
 // https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor
@@ -1088,15 +1088,15 @@ func (t *TestAPI) Anchor(operator td.TestDeep, model ...any) any {
 // anchor the TestDeep operator "operator" in a go classic literal
 // like a struct, slice, array or map value.
 //
-//   ta := tdhttp.NewTestAPI(tt, mux)
+//	ta := tdhttp.NewTestAPI(tt, mux)
 //
-//   ta.Get("/person/42").
-//     CmpStatus(http.StatusOK).
-//     CmpJSONBody(Person{
-//       ID:   ta.A(td.NotZero(), uint64(0)).(uint64),
-//       Name: "Bob",
-//       Age:  26,
-//     })
+//	ta.Get("/person/42").
+//	  CmpStatus(http.StatusOK).
+//	  CmpJSONBody(Person{
+//	    ID:   ta.A(td.NotZero(), uint64(0)).(uint64),
+//	    Name: "Bob",
+//	    Age:  26,
+//	  })
 //
 // See (*td.T).Anchor documentation
 // https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor
@@ -1108,14 +1108,14 @@ func (t *TestAPI) A(operator td.TestDeep, model ...any) any {
 // SentAt returns the time just before the last request is handled. It
 // can be used to check the time a route sets and returns, as in:
 //
-//   ta.PostJSON("/person/42", Person{Name: "Bob", Age: 23}).
-//     CmpStatus(http.StatusCreated).
-//     CmpJSONBody(Person{
-//       ID:        ta.A(td.NotZero(), uint64(0)).(uint64),
-//       Name:      "Bob",
-//       Age:       23,
-//       CreatedAt: ta.A(td.Between(ta.SentAt(), time.Now())).(time.Time),
-//     })
+//	ta.PostJSON("/person/42", Person{Name: "Bob", Age: 23}).
+//	  CmpStatus(http.StatusCreated).
+//	  CmpJSONBody(Person{
+//	    ID:        ta.A(td.NotZero(), uint64(0)).(uint64),
+//	    Name:      "Bob",
+//	    Age:       23,
+//	    CreatedAt: ta.A(td.Between(ta.SentAt(), time.Now())).(time.Time),
+//	  })
 //
 // checks that CreatedAt is included between the time when the request
 // has been sent, and the time when the comparison occurs.

@@ -86,11 +86,11 @@ func newRe(regIf any, capture ...any) *tdRe {
 // depending the original matched data. Note that an other operator
 // can be used here.
 //
-//   td.Cmp(t, "foobar zip!", td.Re(`^foobar`)) // succeeds
-//   td.Cmp(t, "John Doe",
-//     td.Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
-//   td.Cmp(t, "John Doe",
-//     td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
+//	td.Cmp(t, "foobar zip!", td.Re(`^foobar`)) // succeeds
+//	td.Cmp(t, "John Doe",
+//	  td.Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
+//	td.Cmp(t, "John Doe",
+//	  td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
 func Re(reg any, capture ...any) TestDeep {
 	r := newRe(reg, capture...)
 	r.numMatches = 1
@@ -114,10 +114,10 @@ func Re(reg any, capture ...any) TestDeep {
 // are presented as a []string or [][]byte depending the original
 // matched data. Note that an other operator can be used here.
 //
-//   td.Cmp(t, "John Doe",
-//     td.ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
-//   td.Cmp(t, "John Doe",
-//     td.ReAll(`(\w+)(?: |\z)`, td.Bag("Doe", "John"))) // succeeds
+//	td.Cmp(t, "John Doe",
+//	  td.ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
+//	td.Cmp(t, "John Doe",
+//	  td.ReAll(`(\w+)(?: |\z)`, td.Bag("Doe", "John"))) // succeeds
 func ReAll(reg, capture any) TestDeep {
 	r := newRe(reg, capture)
 	r.numMatches = -1

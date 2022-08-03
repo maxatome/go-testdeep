@@ -26,28 +26,28 @@ var _ TestDeep = &tdAll{}
 // a match, all of them have to match to succeed. Consider it
 // as a "AND" logical operator.
 //
-//   td.Cmp(t, "foobar", td.All(
-//     td.Len(6),
-//     td.HasPrefix("fo"),
-//     td.HasSuffix("ar"),
-//   )) // succeeds
+//	td.Cmp(t, "foobar", td.All(
+//	  td.Len(6),
+//	  td.HasPrefix("fo"),
+//	  td.HasSuffix("ar"),
+//	)) // succeeds
 //
 // Note Flatten function can be used to group or reuse some values or
 // operators and so avoid boring and inefficient copies:
 //
-//   stringOps := td.Flatten([]td.TestDeep{td.HasPrefix("fo"), td.HasSuffix("ar")})
-//   td.Cmp(t, "foobar", td.All(
-//     td.Len(6),
-//     stringOps,
-//   )) // succeeds
+//	stringOps := td.Flatten([]td.TestDeep{td.HasPrefix("fo"), td.HasSuffix("ar")})
+//	td.Cmp(t, "foobar", td.All(
+//	  td.Len(6),
+//	  stringOps,
+//	)) // succeeds
 //
 // One can do the same with All operator itself:
 //
-//   stringOps := td.All(td.HasPrefix("fo"), td.HasSuffix("ar"))
-//   td.Cmp(t, "foobar", td.All(
-//     td.Len(6),
-//     stringOps,
-//   )) // succeeds
+//	stringOps := td.All(td.HasPrefix("fo"), td.HasSuffix("ar"))
+//	td.Cmp(t, "foobar", td.All(
+//	  td.Len(6),
+//	  stringOps,
+//	)) // succeeds
 //
 // but if an error occurs in the nested All, the report is a bit more
 // complex to read due to the nested level. Flatten does not create a

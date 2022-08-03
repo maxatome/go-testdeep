@@ -19,22 +19,22 @@ import (
 // Q allows to easily declare query parameters for use in tdhttp.NewRequest
 // and related net/http.Request builders, as tdhttp.Get for example:
 //
-//   req := tdhttp.Get("/path", tdhttp.Q{
-//     "id":     []int64{1234, 4567},
-//     "dryrun": true,
-//   })
+//	req := tdhttp.Get("/path", tdhttp.Q{
+//	  "id":     []int64{1234, 4567},
+//	  "dryrun": true,
+//	})
 //
 // See tdhttp.NewRequest documentation for several examples of use.
 //
 // Accepted types as values are:
-//  - fmt.Stringer
-//  - string
-//  - int, int8, int16, int32, int64
-//  - uint, uint8, uint16, uint32, uint64
-//  - float32, float64
-//  - bool
-//  - slice or array of any type above, plus any
-//  - pointer on any type above, plus any or any other pointer
+//   - fmt.Stringer
+//   - string
+//   - int, int8, int16, int32, int64
+//   - uint, uint8, uint16, uint32, uint64
+//   - float32, float64
+//   - bool
+//   - slice or array of any type above, plus any
+//   - pointer on any type above, plus any or any other pointer
 type Q map[string]any
 
 // AddTo adds the q contents to qp.
