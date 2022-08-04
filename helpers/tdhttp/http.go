@@ -24,13 +24,13 @@ func init() {
 }
 
 // Response is used by Cmp*Response functions to make the HTTP
-// response match easier. Each field, can be a TestDeep operator as
-// well as the exact expected value.
+// response match easier. Each field, can be a [td.TestDeep] operator
+// as well as the exact expected value.
 type Response struct {
-	Status  any // Status is the expected status (ignored if nil)
-	Header  any // Header is the expected header (ignored if nil)
-	Cookies any // Cookies are the expected cookies (ignored if nil)
-	Body    any // Body is the expected body (expected to be empty if nil)
+	Status  any // is the expected status (ignored if nil)
+	Header  any // is the expected header (ignored if nil)
+	Cookies any // is the expected cookies (ignored if nil)
+	Body    any // is the expected body (expected to be empty if nil)
 }
 
 func cmpMarshaledResponse(tb testing.TB,
@@ -77,18 +77,18 @@ func cmpMarshaledResponse(tb testing.TB,
 }
 
 // CmpMarshaledResponse is the base function used by some others in
-// tdhttp package. The req *http.Request is launched against
-// handler. The response body is unmarshaled using unmarshal. The
-// response is then tested against expectedResp.
+// tdhttp package. req is launched against handler. The response body
+// is unmarshaled using unmarshal. The response is then tested against
+// expectedResp.
 //
-// "args..." are optional and allow to name the test, a t.Log() done
+// args... are optional and allow to name the test, a t.Log() done
 // before starting any test. If len(args) > 1 and the first item of
-// "args" is a string and contains a '%' rune then fmt.Fprintf is used
-// to compose the name, else "args" are passed to fmt.Fprint.
+// args is a string and contains a '%' rune then [fmt.Fprintf] is used
+// to compose the name, else args are passed to [fmt.Fprint].
 //
 // It returns true if the tests succeed, false otherwise.
 //
-// See TestAPI type and its methods for more flexible tests.
+// See [TestAPI] type and its methods for more flexible tests.
 func CmpMarshaledResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
@@ -100,16 +100,16 @@ func CmpMarshaledResponse(t testing.TB,
 	return cmpMarshaledResponse(t, req, handler, false, unmarshal, expectedResp, args...)
 }
 
-// CmpResponse is used to match a []byte or string response body. The
-// req *http.Request is launched against handler. If expectedResp.Body
-// is non-nil, the response body is converted to []byte or string,
-// depending on the expectedResp.Body type. The response is then
-// tested against expectedResp.
+// CmpResponse is used to match a []byte or string response body. req
+// is launched against handler. If expectedResp.Body is non-nil, the
+// response body is converted to []byte or string, depending on the
+// expectedResp.Body type. The response is then tested against
+// expectedResp.
 //
-// "args..." are optional and allow to name the test, a t.Log() done
+// args... are optional and allow to name the test, a t.Log() done
 // before starting any test. If len(args) > 1 and the first item of
-// "args" is a string and contains a '%' rune then fmt.Fprintf is used
-// to compose the name, else "args" are passed to fmt.Fprint.
+// args is a string and contains a '%' rune then [fmt.Fprintf] is used
+// to compose the name, else args are passed to [fmt.Fprint].
 //
 // It returns true if the tests succeed, false otherwise.
 //
@@ -123,12 +123,12 @@ func CmpMarshaledResponse(t testing.TB,
 //	  },
 //	  "/test route")
 //
-// Status, Header and Body fields of Response struct can all be
-// TestDeep operators as it is for Header field here. Otherwise,
-// Status should be an int, Header a http.Header and Body a []byte or
-// a string.
+// Response.Status, Response.Header and Response.Body fields can all
+// be [td.TestDeep] operators as it is for Response.Header field
+// here. Otherwise, Response.Status should be an int, Response.Header
+// a [http.Header] and Response.Body a []byte or a string.
 //
-// See TestAPI type and its methods for more flexible tests.
+// See [TestAPI] type and its methods for more flexible tests.
 func CmpResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
@@ -160,15 +160,15 @@ func CmpResponse(t testing.TB,
 		args...)
 }
 
-// CmpJSONResponse is used to match a JSON response body. The req
-// *http.Request is launched against handler. If expectedResp.Body is
-// non-nil, the response body is json.Unmarshal'ed. The response is
-// then tested against expectedResp.
+// CmpJSONResponse is used to match a JSON response body. req is
+// launched against handler. If expectedResp.Body is non-nil, the
+// response body is [json.Unmarshal]'ed. The response is then tested
+// against expectedResp.
 //
-// "args..." are optional and allow to name the test, a t.Log() done
+// args... are optional and allow to name the test, a t.Log() done
 // before starting any test. If len(args) > 1 and the first item of
-// "args" is a string and contains a '%' rune then fmt.Fprintf is used
-// to compose the name, else "args" are passed to fmt.Fprint.
+// args is a string and contains a '%' rune then [fmt.Fprintf] is used
+// to compose the name, else args are passed to [fmt.Fprint].
 //
 // It returns true if the tests succeed, false otherwise.
 //
@@ -186,18 +186,20 @@ func CmpResponse(t testing.TB,
 //	  },
 //	  "/person/{id} route")
 //
-// Status, Header and Body fields of Response struct can all be
-// TestDeep operators as it is for Header field here. Otherwise,
-// Status should be an int, Header a http.Header and Body any type
-// encoding/json can Unmarshal into.
+// Response.Status, Response.Header and Response.Body fields can all
+// be [td.TestDeep] operators as it is for Response.Header field
+// here. Otherwise, Response.Status should be an int, Response.Header
+// a [http.Header] and Response.Body any type one can
+// [json.Unmarshal] into.
 //
-// If Status and Header are omitted (or nil), they are not tested.
+// If Response.Status and Response.Header are omitted (or nil), they
+// are not tested.
 //
-// If Body is omitted (or nil), it means the body response has to be
-// empty. If you want to ignore the body response, use td.Ignore()
+// If Response.Body is omitted (or nil), it means the body response has to be
+// empty. If you want to ignore the body response, use [td.Ignore]
 // explicitly.
 //
-// See TestAPI type and its methods for more flexible tests.
+// See [TestAPI] type and its methods for more flexible tests.
 func CmpJSONResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
@@ -213,15 +215,15 @@ func CmpJSONResponse(t testing.TB,
 		args...)
 }
 
-// CmpXMLResponse is used to match an XML response body. The req
-// *http.Request is launched against handler. If expectedResp.Body is
-// non-nil, the response body is xml.Unmarshal'ed. The response is
+// CmpXMLResponse is used to match an XML response body. req
+// is launched against handler. If expectedResp.Body is
+// non-nil, the response body is [xml.Unmarshal]'ed. The response is
 // then tested against expectedResp.
 //
-// "args..." are optional and allow to name the test, a t.Log() done
+// args... are optional and allow to name the test, a t.Log() done
 // before starting any test. If len(args) > 1 and the first item of
-// "args" is a string and contains a '%' rune then fmt.Fprintf is used
-// to compose the name, else "args" are passed to fmt.Fprint.
+// args is a string and contains a '%' rune then [fmt.Fprintf] is used
+// to compose the name, else args are passed to [fmt.Fprint].
 //
 // It returns true if the tests succeed, false otherwise.
 //
@@ -239,18 +241,20 @@ func CmpJSONResponse(t testing.TB,
 //	  },
 //	  "/person/{id} route")
 //
-// Status, Header and Body fields of Response struct can all be
-// TestDeep operators as it is for Header field here. Otherwise,
-// Status should be an int, Header a http.Header and Body any type
-// encoding/xml can Unmarshal into.
+// Response.Status, Response.Header and Response.Body fields can all
+// be [td.TestDeep] operators as it is for Response.Header field
+// here. Otherwise, Response.Status should be an int, Response.Header
+// a [http.Header] and Response.Body any type one can [xml.Unmarshal]
+// into.
 //
-// If Status and Header are omitted (or nil), they are not tested.
+// If Response.Status and Response.Header are omitted (or nil), they
+// are not tested.
 //
-// If Body is omitted (or nil), it means the body response has to be
-// empty. If you want to ignore the body response, use td.Ignore()
-// explicitly.
+// If Response.Body is omitted (or nil), it means the body response
+// has to be empty. If you want to ignore the body response, use
+// [td.Ignore] explicitly.
 //
-// See TestAPI type and its methods for more flexible tests.
+// See [TestAPI] type and its methods for more flexible tests.
 func CmpXMLResponse(t testing.TB,
 	req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
@@ -267,8 +271,8 @@ func CmpXMLResponse(t testing.TB,
 }
 
 // CmpMarshaledResponseFunc returns a function ready to be used with
-// testing.Run, calling CmpMarshaledResponse behind the scene. As it
-// is intended to be used in conjunction with testing.Run() which
+// [testing.Run], calling [CmpMarshaledResponse] behind the scene. As it
+// is intended to be used in conjunction with [testing.Run] which
 // names the sub-test, the test name part (args...) is voluntary
 // omitted.
 //
@@ -279,9 +283,9 @@ func CmpXMLResponse(t testing.TB,
 //	    Status: http.StatusOK,
 //	  }))
 //
-// See CmpMarshaledResponse documentation for details.
+// See [CmpMarshaledResponse] for details.
 //
-// See TestAPI type and its methods for more flexible tests.
+// See [TestAPI] type and its methods for more flexible tests.
 func CmpMarshaledResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	unmarshal func([]byte, any) error,
@@ -293,8 +297,8 @@ func CmpMarshaledResponseFunc(req *http.Request,
 }
 
 // CmpResponseFunc returns a function ready to be used with
-// testing.Run, calling CmpResponse behind the scene. As it is
-// intended to be used in conjunction with testing.Run() which names
+// [testing.Run], calling [CmpResponse] behind the scene. As it is
+// intended to be used in conjunction with [testing.Run] which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //	t.Run("Subtest name", tdhttp.CmpResponseFunc(
@@ -304,9 +308,9 @@ func CmpMarshaledResponseFunc(req *http.Request,
 //	    Status: http.StatusOK,
 //	  }))
 //
-// See CmpResponse documentation for details.
+// See [CmpResponse] documentation for details.
 //
-// See TestAPI type and its methods for more flexible tests.
+// See [TestAPI] type and its methods for more flexible tests.
 func CmpResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response) func(t *testing.T) {
@@ -317,8 +321,8 @@ func CmpResponseFunc(req *http.Request,
 }
 
 // CmpJSONResponseFunc returns a function ready to be used with
-// testing.Run, calling CmpJSONResponse behind the scene. As it is
-// intended to be used in conjunction with testing.Run() which names
+// [testing.Run], calling [CmpJSONResponse] behind the scene. As it is
+// intended to be used in conjunction with [testing.Run] which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //	t.Run("Subtest name", tdhttp.CmpJSONResponseFunc(
@@ -329,9 +333,9 @@ func CmpResponseFunc(req *http.Request,
 //	    Body:   JResp{Comment: "expected comment!"},
 //	  }))
 //
-// See CmpJSONResponse documentation for details.
+// See [CmpJSONResponse] documentation for details.
 //
-// See TestAPI type and its methods for more flexible tests.
+// See [TestAPI] type and its methods for more flexible tests.
 func CmpJSONResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response) func(t *testing.T) {
@@ -342,8 +346,8 @@ func CmpJSONResponseFunc(req *http.Request,
 }
 
 // CmpXMLResponseFunc returns a function ready to be used with
-// testing.Run, calling CmpXMLResponse behind the scene. As it is
-// intended to be used in conjunction with testing.Run() which names
+// [testing.Run], calling [CmpXMLResponse] behind the scene. As it is
+// intended to be used in conjunction with [testing.Run] which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //	t.Run("Subtest name", tdhttp.CmpXMLResponseFunc(
@@ -354,9 +358,9 @@ func CmpJSONResponseFunc(req *http.Request,
 //	    Body:   JResp{Comment: "expected comment!"},
 //	  }))
 //
-// See CmpXMLResponse documentation for details.
+// See [CmpXMLResponse] documentation for details.
 //
-// See TestAPI type and its methods for more flexible tests.
+// See [TestAPI] type and its methods for more flexible tests.
 func CmpXMLResponseFunc(req *http.Request,
 	handler func(w http.ResponseWriter, r *http.Request),
 	expectedResp Response) func(t *testing.T) {

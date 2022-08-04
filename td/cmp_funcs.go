@@ -89,11 +89,11 @@ var allOperators = map[string]any{
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpAll(t TestingT, got any, expectedValues []any, args ...any) bool {
 	t.Helper()
@@ -110,11 +110,11 @@ func CmpAll(t TestingT, got any, expectedValues []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpAny(t TestingT, got any, expectedValues []any, args ...any) bool {
 	t.Helper()
@@ -131,11 +131,11 @@ func CmpAny(t TestingT, got any, expectedValues []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpArray(t TestingT, got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
@@ -152,11 +152,11 @@ func CmpArray(t TestingT, got, model any, expectedEntries ArrayEntries, args ...
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpArrayEach(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -173,11 +173,11 @@ func CmpArrayEach(t TestingT, got, expectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpBag(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -198,11 +198,11 @@ func CmpBag(t TestingT, got any, expectedItems []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpBetween(t TestingT, got, from, to any, bounds BoundsKind, args ...any) bool {
 	t.Helper()
@@ -219,11 +219,11 @@ func CmpBetween(t TestingT, got, from, to any, bounds BoundsKind, args ...any) b
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpCap(t TestingT, got, expectedCap any, args ...any) bool {
 	t.Helper()
@@ -240,11 +240,11 @@ func CmpCap(t TestingT, got, expectedCap any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpCode(t TestingT, got, fn any, args ...any) bool {
 	t.Helper()
@@ -261,11 +261,11 @@ func CmpCode(t TestingT, got, fn any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpContains(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -282,11 +282,11 @@ func CmpContains(t TestingT, got, expectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpContainsKey(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -303,11 +303,11 @@ func CmpContainsKey(t TestingT, got, expectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpEmpty(t TestingT, got any, args ...any) bool {
 	t.Helper()
@@ -324,11 +324,11 @@ func CmpEmpty(t TestingT, got any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpGt(t TestingT, got, minExpectedValue any, args ...any) bool {
 	t.Helper()
@@ -345,11 +345,11 @@ func CmpGt(t TestingT, got, minExpectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpGte(t TestingT, got, minExpectedValue any, args ...any) bool {
 	t.Helper()
@@ -366,11 +366,11 @@ func CmpGte(t TestingT, got, minExpectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpHasPrefix(t TestingT, got any, expected string, args ...any) bool {
 	t.Helper()
@@ -387,11 +387,11 @@ func CmpHasPrefix(t TestingT, got any, expected string, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpHasSuffix(t TestingT, got any, expected string, args ...any) bool {
 	t.Helper()
@@ -408,11 +408,11 @@ func CmpHasSuffix(t TestingT, got any, expected string, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpIsa(t TestingT, got, model any, args ...any) bool {
 	t.Helper()
@@ -429,11 +429,11 @@ func CmpIsa(t TestingT, got, model any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpJSON(t TestingT, got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
@@ -450,11 +450,11 @@ func CmpJSON(t TestingT, got, expectedJSON any, params []any, args ...any) bool 
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpJSONPointer(t TestingT, got any, pointer string, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -471,11 +471,11 @@ func CmpJSONPointer(t TestingT, got any, pointer string, expectedValue any, args
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpKeys(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
@@ -492,11 +492,11 @@ func CmpKeys(t TestingT, got, val any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpLax(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -513,11 +513,11 @@ func CmpLax(t TestingT, got, expectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpLen(t TestingT, got, expectedLen any, args ...any) bool {
 	t.Helper()
@@ -534,11 +534,11 @@ func CmpLen(t TestingT, got, expectedLen any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpLt(t TestingT, got, maxExpectedValue any, args ...any) bool {
 	t.Helper()
@@ -555,11 +555,11 @@ func CmpLt(t TestingT, got, maxExpectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpLte(t TestingT, got, maxExpectedValue any, args ...any) bool {
 	t.Helper()
@@ -576,11 +576,11 @@ func CmpLte(t TestingT, got, maxExpectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpMap(t TestingT, got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
@@ -597,11 +597,11 @@ func CmpMap(t TestingT, got, model any, expectedEntries MapEntries, args ...any)
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpMapEach(t TestingT, got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -622,11 +622,11 @@ func CmpMapEach(t TestingT, got, expectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpN(t TestingT, got, num, tolerance any, args ...any) bool {
 	t.Helper()
@@ -643,11 +643,11 @@ func CmpN(t TestingT, got, num, tolerance any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNaN(t TestingT, got any, args ...any) bool {
 	t.Helper()
@@ -664,11 +664,11 @@ func CmpNaN(t TestingT, got any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNil(t TestingT, got any, args ...any) bool {
 	t.Helper()
@@ -685,11 +685,11 @@ func CmpNil(t TestingT, got any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNone(t TestingT, got any, notExpectedValues []any, args ...any) bool {
 	t.Helper()
@@ -706,11 +706,11 @@ func CmpNone(t TestingT, got any, notExpectedValues []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNot(t TestingT, got, notExpected any, args ...any) bool {
 	t.Helper()
@@ -727,11 +727,11 @@ func CmpNot(t TestingT, got, notExpected any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNotAny(t TestingT, got any, notExpectedItems []any, args ...any) bool {
 	t.Helper()
@@ -748,11 +748,11 @@ func CmpNotAny(t TestingT, got any, notExpectedItems []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNotEmpty(t TestingT, got any, args ...any) bool {
 	t.Helper()
@@ -769,11 +769,11 @@ func CmpNotEmpty(t TestingT, got any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNotNaN(t TestingT, got any, args ...any) bool {
 	t.Helper()
@@ -790,11 +790,11 @@ func CmpNotNaN(t TestingT, got any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNotNil(t TestingT, got any, args ...any) bool {
 	t.Helper()
@@ -811,11 +811,11 @@ func CmpNotNil(t TestingT, got any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNotZero(t TestingT, got any, args ...any) bool {
 	t.Helper()
@@ -832,11 +832,11 @@ func CmpNotZero(t TestingT, got any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpPPtr(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
@@ -853,11 +853,11 @@ func CmpPPtr(t TestingT, got, val any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpPtr(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
@@ -878,11 +878,11 @@ func CmpPtr(t TestingT, got, val any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpRe(t TestingT, got, reg, capture any, args ...any) bool {
 	t.Helper()
@@ -899,11 +899,11 @@ func CmpRe(t TestingT, got, reg, capture any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpReAll(t TestingT, got, reg, capture any, args ...any) bool {
 	t.Helper()
@@ -920,11 +920,11 @@ func CmpReAll(t TestingT, got, reg, capture any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSet(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -941,11 +941,11 @@ func CmpSet(t TestingT, got any, expectedItems []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpShallow(t TestingT, got, expectedPtr any, args ...any) bool {
 	t.Helper()
@@ -962,11 +962,11 @@ func CmpShallow(t TestingT, got, expectedPtr any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSlice(t TestingT, got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
@@ -983,11 +983,11 @@ func CmpSlice(t TestingT, got, model any, expectedEntries ArrayEntries, args ...
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSmuggle(t TestingT, got, fn, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -1008,11 +1008,11 @@ func CmpSmuggle(t TestingT, got, fn, expectedValue any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSStruct(t TestingT, got, model any, expectedFields StructFields, args ...any) bool {
 	t.Helper()
@@ -1029,11 +1029,11 @@ func CmpSStruct(t TestingT, got, model any, expectedFields StructFields, args ..
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpString(t TestingT, got any, expected string, args ...any) bool {
 	t.Helper()
@@ -1054,11 +1054,11 @@ func CmpString(t TestingT, got any, expected string, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpStruct(t TestingT, got, model any, expectedFields StructFields, args ...any) bool {
 	t.Helper()
@@ -1075,11 +1075,11 @@ func CmpStruct(t TestingT, got, model any, expectedFields StructFields, args ...
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSubBagOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -1096,11 +1096,11 @@ func CmpSubBagOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSubJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
@@ -1117,11 +1117,11 @@ func CmpSubJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any) 
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSubMapOf(t TestingT, got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
@@ -1138,11 +1138,11 @@ func CmpSubMapOf(t TestingT, got, model any, expectedEntries MapEntries, args ..
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSubSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -1159,11 +1159,11 @@ func CmpSubSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSuperBagOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -1180,11 +1180,11 @@ func CmpSuperBagOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSuperJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
@@ -1201,11 +1201,11 @@ func CmpSuperJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSuperMapOf(t TestingT, got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
@@ -1222,11 +1222,11 @@ func CmpSuperMapOf(t TestingT, got, model any, expectedEntries MapEntries, args 
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSuperSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -1243,11 +1243,11 @@ func CmpSuperSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpSuperSliceOf(t TestingT, got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
@@ -1268,11 +1268,11 @@ func CmpSuperSliceOf(t TestingT, got, model any, expectedEntries ArrayEntries, a
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpTruncTime(t TestingT, got, expectedTime any, trunc time.Duration, args ...any) bool {
 	t.Helper()
@@ -1289,11 +1289,11 @@ func CmpTruncTime(t TestingT, got, expectedTime any, trunc time.Duration, args .
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpValues(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
@@ -1310,11 +1310,11 @@ func CmpValues(t TestingT, got, val any, args ...any) bool {
 //
 // If "t" is a *T then its Config is inherited.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpZero(t TestingT, got any, args ...any) bool {
 	t.Helper()

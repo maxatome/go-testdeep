@@ -6,9 +6,8 @@
 
 // Package tdhttp provides some functions to easily test HTTP handlers.
 //
-// Combined to td package
-// (https://pkg.go.dev/github.com/maxatome/go-testdeep/td) it provides
-// powerful testing features.
+// Combined to td package ([github.com/maxatome/go-testdeep/td]) it
+// provides powerful testing features.
 //
 // # TestAPI
 //
@@ -60,7 +59,7 @@
 //	  },
 //	  "/person/{id} route")
 //
-// It now uses TestAPI behind the scene. It is better to directly use
-// TestAPI and its methods instead, as it is more flexible and
+// It now uses [TestAPI] behind the scene. It is better to directly
+// use [TestAPI] and its methods instead, as it is more flexible and
 // readable.
 package tdhttp

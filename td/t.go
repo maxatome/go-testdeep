@@ -20,11 +20,11 @@ import (
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) All(got any, expectedValues []any, args ...any) bool {
 	t.Helper()
@@ -39,11 +39,11 @@ func (t *T) All(got any, expectedValues []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Any(got any, expectedValues []any, args ...any) bool {
 	t.Helper()
@@ -58,11 +58,11 @@ func (t *T) Any(got any, expectedValues []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Array(got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
@@ -77,11 +77,11 @@ func (t *T) Array(got, model any, expectedEntries ArrayEntries, args ...any) boo
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) ArrayEach(got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -96,11 +96,11 @@ func (t *T) ArrayEach(got, expectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Bag(got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -119,11 +119,11 @@ func (t *T) Bag(got any, expectedItems []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Between(got, from, to any, bounds BoundsKind, args ...any) bool {
 	t.Helper()
@@ -138,11 +138,11 @@ func (t *T) Between(got, from, to any, bounds BoundsKind, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Cap(got, expectedCap any, args ...any) bool {
 	t.Helper()
@@ -157,11 +157,11 @@ func (t *T) Cap(got, expectedCap any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Code(got, fn any, args ...any) bool {
 	t.Helper()
@@ -176,11 +176,11 @@ func (t *T) Code(got, fn any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Contains(got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -195,11 +195,11 @@ func (t *T) Contains(got, expectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) ContainsKey(got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -214,11 +214,11 @@ func (t *T) ContainsKey(got, expectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Empty(got any, args ...any) bool {
 	t.Helper()
@@ -233,11 +233,11 @@ func (t *T) Empty(got any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Gt(got, minExpectedValue any, args ...any) bool {
 	t.Helper()
@@ -252,11 +252,11 @@ func (t *T) Gt(got, minExpectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Gte(got, minExpectedValue any, args ...any) bool {
 	t.Helper()
@@ -271,11 +271,11 @@ func (t *T) Gte(got, minExpectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) HasPrefix(got any, expected string, args ...any) bool {
 	t.Helper()
@@ -290,11 +290,11 @@ func (t *T) HasPrefix(got any, expected string, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) HasSuffix(got any, expected string, args ...any) bool {
 	t.Helper()
@@ -309,11 +309,11 @@ func (t *T) HasSuffix(got any, expected string, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Isa(got, model any, args ...any) bool {
 	t.Helper()
@@ -328,11 +328,11 @@ func (t *T) Isa(got, model any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) JSON(got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
@@ -347,11 +347,11 @@ func (t *T) JSON(got, expectedJSON any, params []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) JSONPointer(got any, pointer string, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -366,11 +366,11 @@ func (t *T) JSONPointer(got any, pointer string, expectedValue any, args ...any)
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Keys(got, val any, args ...any) bool {
 	t.Helper()
@@ -385,11 +385,11 @@ func (t *T) Keys(got, val any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) CmpLax(got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -404,11 +404,11 @@ func (t *T) CmpLax(got, expectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Len(got, expectedLen any, args ...any) bool {
 	t.Helper()
@@ -423,11 +423,11 @@ func (t *T) Len(got, expectedLen any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Lt(got, maxExpectedValue any, args ...any) bool {
 	t.Helper()
@@ -442,11 +442,11 @@ func (t *T) Lt(got, maxExpectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Lte(got, maxExpectedValue any, args ...any) bool {
 	t.Helper()
@@ -461,11 +461,11 @@ func (t *T) Lte(got, maxExpectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Map(got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
@@ -480,11 +480,11 @@ func (t *T) Map(got, model any, expectedEntries MapEntries, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) MapEach(got, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -503,11 +503,11 @@ func (t *T) MapEach(got, expectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) N(got, num, tolerance any, args ...any) bool {
 	t.Helper()
@@ -522,11 +522,11 @@ func (t *T) N(got, num, tolerance any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) NaN(got any, args ...any) bool {
 	t.Helper()
@@ -541,11 +541,11 @@ func (t *T) NaN(got any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Nil(got any, args ...any) bool {
 	t.Helper()
@@ -560,11 +560,11 @@ func (t *T) Nil(got any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) None(got any, notExpectedValues []any, args ...any) bool {
 	t.Helper()
@@ -579,11 +579,11 @@ func (t *T) None(got any, notExpectedValues []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Not(got, notExpected any, args ...any) bool {
 	t.Helper()
@@ -598,11 +598,11 @@ func (t *T) Not(got, notExpected any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) NotAny(got any, notExpectedItems []any, args ...any) bool {
 	t.Helper()
@@ -617,11 +617,11 @@ func (t *T) NotAny(got any, notExpectedItems []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) NotEmpty(got any, args ...any) bool {
 	t.Helper()
@@ -636,11 +636,11 @@ func (t *T) NotEmpty(got any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) NotNaN(got any, args ...any) bool {
 	t.Helper()
@@ -655,11 +655,11 @@ func (t *T) NotNaN(got any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) NotNil(got any, args ...any) bool {
 	t.Helper()
@@ -674,11 +674,11 @@ func (t *T) NotNil(got any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) NotZero(got any, args ...any) bool {
 	t.Helper()
@@ -693,11 +693,11 @@ func (t *T) NotZero(got any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) PPtr(got, val any, args ...any) bool {
 	t.Helper()
@@ -712,11 +712,11 @@ func (t *T) PPtr(got, val any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Ptr(got, val any, args ...any) bool {
 	t.Helper()
@@ -735,11 +735,11 @@ func (t *T) Ptr(got, val any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Re(got, reg, capture any, args ...any) bool {
 	t.Helper()
@@ -754,11 +754,11 @@ func (t *T) Re(got, reg, capture any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) ReAll(got, reg, capture any, args ...any) bool {
 	t.Helper()
@@ -773,11 +773,11 @@ func (t *T) ReAll(got, reg, capture any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Set(got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -792,11 +792,11 @@ func (t *T) Set(got any, expectedItems []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Shallow(got, expectedPtr any, args ...any) bool {
 	t.Helper()
@@ -811,11 +811,11 @@ func (t *T) Shallow(got, expectedPtr any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Slice(got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
@@ -830,11 +830,11 @@ func (t *T) Slice(got, model any, expectedEntries ArrayEntries, args ...any) boo
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Smuggle(got, fn, expectedValue any, args ...any) bool {
 	t.Helper()
@@ -853,11 +853,11 @@ func (t *T) Smuggle(got, fn, expectedValue any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SStruct(got, model any, expectedFields StructFields, args ...any) bool {
 	t.Helper()
@@ -872,11 +872,11 @@ func (t *T) SStruct(got, model any, expectedFields StructFields, args ...any) bo
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) String(got any, expected string, args ...any) bool {
 	t.Helper()
@@ -895,11 +895,11 @@ func (t *T) String(got any, expected string, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Struct(got, model any, expectedFields StructFields, args ...any) bool {
 	t.Helper()
@@ -914,11 +914,11 @@ func (t *T) Struct(got, model any, expectedFields StructFields, args ...any) boo
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SubBagOf(got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -933,11 +933,11 @@ func (t *T) SubBagOf(got any, expectedItems []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SubJSONOf(got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
@@ -952,11 +952,11 @@ func (t *T) SubJSONOf(got, expectedJSON any, params []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SubMapOf(got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
@@ -971,11 +971,11 @@ func (t *T) SubMapOf(got, model any, expectedEntries MapEntries, args ...any) bo
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SubSetOf(got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -990,11 +990,11 @@ func (t *T) SubSetOf(got any, expectedItems []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SuperBagOf(got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -1009,11 +1009,11 @@ func (t *T) SuperBagOf(got any, expectedItems []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SuperJSONOf(got, expectedJSON any, params []any, args ...any) bool {
 	t.Helper()
@@ -1028,11 +1028,11 @@ func (t *T) SuperJSONOf(got, expectedJSON any, params []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SuperMapOf(got, model any, expectedEntries MapEntries, args ...any) bool {
 	t.Helper()
@@ -1047,11 +1047,11 @@ func (t *T) SuperMapOf(got, model any, expectedEntries MapEntries, args ...any) 
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SuperSetOf(got any, expectedItems []any, args ...any) bool {
 	t.Helper()
@@ -1066,11 +1066,11 @@ func (t *T) SuperSetOf(got any, expectedItems []any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) SuperSliceOf(got, model any, expectedEntries ArrayEntries, args ...any) bool {
 	t.Helper()
@@ -1089,11 +1089,11 @@ func (t *T) SuperSliceOf(got, model any, expectedEntries ArrayEntries, args ...a
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) TruncTime(got, expectedTime any, trunc time.Duration, args ...any) bool {
 	t.Helper()
@@ -1108,11 +1108,11 @@ func (t *T) TruncTime(got, expectedTime any, trunc time.Duration, args ...any) b
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Values(got, val any, args ...any) bool {
 	t.Helper()
@@ -1127,11 +1127,11 @@ func (t *T) Values(got, val any, args ...any) bool {
 //
 // Returns true if the test is OK, false if it fails.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Zero(got any, args ...any) bool {
 	t.Helper()

@@ -18,6 +18,40 @@ die "usage $0 [-h]\n" if @ARGV != 0;
 (my $REPO_DIR = $0) =~ s,/[^/]+\z,/..,;
 -d $REPO_DIR or die "Cannot find repository directory ($REPO_DIR)\n";
 
+# Check .golangci.yml vs .github/workflows/ci.yml
+if (open(my $fh, '<', "$REPO_DIR/.github/workflows/ci.yml"))
+{
+    my($ci_min, $linter_min);
+    while (defined(my $line = <$fh>))
+    {
+        if ($line =~ /^\s+go-version: \[(\d+\.\d+)/)
+        {
+            $ci_min = $1;
+            last;
+        }
+    }
+    close $fh;
+    $ci_min // die "*** Cannot extract min go version from .github/workflows/ci.yml\n";
+
+    undef $fh;
+    open($fh, '<', "$REPO_DIR/.golangci.yml");
+    while (defined(my $line = <$fh>))
+    {
+        if ($line =~ /^\s+go: '([\d.]+)'/)
+        {
+            $linter_min = $1;
+            last;
+        }
+    }
+    close $fh;
+    $linter_min // die "*** Cannot extract min go version from .golangci.yml\n";
+
+    if ($ci_min ne $linter_min)
+    {
+        die "*** min go versions mismatch: ci=$ci_min linter=$linter_min\n";
+    }
+}
+
 my $SITE_REPO_DIR = "$REPO_DIR/../go-testdeep-site";
 unless (-d $SITE_REPO_DIR)
 {
@@ -45,11 +79,11 @@ EOH
 
 my $args_comment_src = <<'EOC';
 
-%arg{args...} are optional and allow to name the test. This name is
+args... are optional and allow to name the test. This name is
 used in case of failure to qualify the test. If %code{len(args) > 1} and
-the first item of %arg{args} is a string and contains a '%' rune then
-%godoc{fmt.Fprintf} is used to compose the name, else %arg{args} are passed to
-%godoc{fmt.Fprint}. Do not forget it is the name of the test, not the
+the first item of args is a string and contains a '%' rune then
+[fmt.Fprintf] is used to compose the name, else args are passed to
+[fmt.Fprint]. Do not forget it is the name of the test, not the
 reason of a potential failure.
 EOC
 

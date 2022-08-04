@@ -25,9 +25,9 @@ var tType = reflect.TypeOf((*td.T)(nil))
 // Setup returns an error, the tests suite aborts: no tests are run.
 //
 // Starting go1.14, t.Cleanup() can be called in Setup method. It can
-// replace the definition of a Destroy method. It can also be used
+// replace the definition of a [Destroy] method. It can also be used
 // together, in this case cleanup registered functions are called
-// after Destroy.
+// after [Destroy].
 type Setup interface {
 	Setup(t *td.T) error
 }
@@ -38,16 +38,16 @@ type Setup interface {
 // is not run.
 //
 // Starting go1.14, t.Cleanup() can be called in PreTest method. It can
-// replace the definition of a PostTest method. It can also be used
+// replace the definition of a [PostTest] method. It can also be used
 // together, in this case cleanup registered functions are called
-// after PostTest.
+// after [PostTest].
 type PreTest interface {
 	PreTest(t *td.T, testName string) error
 }
 
 // PostTest is an interface a tests suite can implement. PostTest
 // method is called after each test is run, in the same subtest as
-// the test itself. If PreTest interface is implemented and PreTest
+// the test itself. If [PreTest] interface is implemented and [PreTest]
 // method returned an error, PostTest is never called.
 type PostTest interface {
 	PostTest(t *td.T, testName string) error
@@ -62,7 +62,7 @@ type BetweenTests interface {
 
 // Destroy is an interface a tests suite can implement. When running
 // the tests suite, Destroy method is called once after all tests
-// ran. If Setup interface is implemented and Setup method returned an
+// ran. If [Setup] interface is implemented and [Setup] method returned an
 // error, Destroy is never called.
 type Destroy interface {
 	Destroy(t *td.T) error
@@ -118,18 +118,17 @@ func shouldContinue(t *td.T, testName string, ret []reflect.Value) bool {
 	return cont
 }
 
-// Run runs the tests suite "suite" using "tb" as base testing
-// framework. "tb" is typically a *testing.T as in:
+// Run runs the tests suite suite using tb as base testing
+// framework. tb is typically a [*testing.T] as in:
 //
 //	func TestSuite(t *testing.T) {
 //	  tdsuite.Run(t, &Suite{})
 //	}
 //
-// but it can also be a *td.T of course.
+// but it can also be a [*td.T] of course.
 //
-// "config" can be used to alter the internal *td.T instance. See
-// https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig
-// for detailed options, as:
+// config can be used to alter the internal [*td.T] instance. See
+// [td.ContextConfig] for detailed options, as:
 //
 //	func TestSuite(t *testing.T) {
 //	  tdsuite.Run(t, &Suite{}, td.ContextConfig{
@@ -140,11 +139,11 @@ func shouldContinue(t *td.T, testName string, ret []reflect.Value) bool {
 //
 // Run returns true if all the tests succeeded, false otherwise.
 //
-// Note that if "suite" is not an empty struct, it should be a pointer
+// Note that if suite is not an empty struct, it should be a pointer
 // if its contents has to be altered by hooks & tests methods.
 //
-// If "suite" is a pointer, it has access to non-pointer & pointer
-// methods hooks & tests. If "suite" is not a pointer, it only has
+// If suite is a pointer, it has access to non-pointer & pointer
+// methods hooks & tests. If suite is not a pointer, it only has
 // access to non-pointer methods hooks & tests.
 func Run(tb testing.TB, suite any, config ...td.ContextConfig) bool {
 	t := td.NewT(tb, config...)

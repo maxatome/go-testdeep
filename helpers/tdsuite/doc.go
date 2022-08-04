@@ -62,7 +62,7 @@
 // # Very simple tests suite
 //
 // Used typically to group tests and benefit from already instanciated
-// *td.T instances.
+// [*td.T] instances.
 //
 //	import (
 //	  "testing"
@@ -123,6 +123,6 @@
 //	  tdsuite.Run(t, &SuiteDB{})
 //	}
 //
-// See documentation below for other possible hooks: PreTest, PostTest
-// and BetweenTests.
+// See documentation below for other possible hooks: [PreTest], [PostTest]
+// and [BetweenTests].
 package tdsuite

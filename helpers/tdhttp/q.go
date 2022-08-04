@@ -16,18 +16,18 @@ import (
 	"github.com/maxatome/go-testdeep/internal/color"
 )
 
-// Q allows to easily declare query parameters for use in tdhttp.NewRequest
-// and related net/http.Request builders, as tdhttp.Get for example:
+// Q allows to easily declare query parameters for use in [NewRequest]
+// and related [http.Request] builders, as [Get] for example:
 //
 //	req := tdhttp.Get("/path", tdhttp.Q{
 //	  "id":     []int64{1234, 4567},
 //	  "dryrun": true,
 //	})
 //
-// See tdhttp.NewRequest documentation for several examples of use.
+// See [NewRequest] for several examples of use.
 //
 // Accepted types as values are:
-//   - fmt.Stringer
+//   - [fmt.Stringer]
 //   - string
 //   - int, int8, int16, int32, int64
 //   - uint, uint8, uint16, uint32, uint64
@@ -52,7 +52,7 @@ func (q Q) AddTo(qp url.Values) error {
 	return nil
 }
 
-// Values returns a url.Values instance corresponding to q. It panics
+// Values returns a [url.Values] instance corresponding to q. It panics
 // if a value cannot be converted.
 func (q Q) Values() url.Values {
 	qp := make(url.Values, len(q))
@@ -63,7 +63,7 @@ func (q Q) Values() url.Values {
 	return qp
 }
 
-// Encode does the same as url.Values.Encode does. So quoting its doc,
+// Encode does the same as [url.Values.Encode] does. So quoting its doc,
 // it encodes the values into “URL encoded” form ("bar=baz&foo=quux")
 // sorted by key.
 //

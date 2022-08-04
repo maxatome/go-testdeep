@@ -22,18 +22,21 @@ const (
 
 // MultipartBody is a body of a multipart/form-data HTTP request (by
 // default, or any other multipart/… body, see MediaType field) as
-// defined in RFC 2046 to be used as a io.Reader body of
-// net/http.Request and so compliant with RFC 2388. It implements
-// io.Reader and can only be read once. See PostMultipartFormData()
-// and (*TestAPI).PostMultipartFormData() for examples of use.
+// defined in [RFC 2046] to be used as a [io.Reader] body of
+// [http.Request] and so compliant with [RFC 2388]. It implements
+// [io.Reader] and can only be read once. See [PostMultipartFormData]
+// and [TestAPI.PostMultipartFormData] for examples of use.
+//
+// [RFC 2046]: https://tools.ietf.org/html/rfc2046
+// [RFC 2388]: https://tools.ietf.org/html/rfc2388
 type MultipartBody struct {
-	MediaType string           // Media type to use instead of default "multipart/form-data"
-	Boundary  string           // Boundary to use between parts. Automatically initialized when calling ContentType().
-	Parts     []*MultipartPart // Parts composing this multipart/… body.
+	MediaType string           // type to use instead of default "multipart/form-data"
+	Boundary  string           // boundary to use between parts. Automatically initialized when calling ContentType().
+	Parts     []*MultipartPart // parts composing this multipart/… body.
 	content   io.Reader
 }
 
-// Read implements io.Reader interface.
+// Read implements [io.Reader] interface.
 func (b *MultipartBody) Read(p []byte) (n int, err error) {
 	if b.content == nil {
 		if b.Boundary == "" {
@@ -81,18 +84,18 @@ func (b *MultipartBody) ContentType() string {
 	return mt + `; boundary="` + b.Boundary + `"`
 }
 
-// MultipartPart is a part in a MultipartBody body. It implements io.Reader
+// MultipartPart is a part in a [MultipartBody] body. It implements io.Reader
 // and can only be read once.
 type MultipartPart struct {
-	Name       string      // Name is "name" in Content-Disposition. If empty, Content-Disposition header is omitted.
-	Filename   string      // Filename is optional. If set it is "filename" in Content-Disposition.
-	Content    io.Reader   // Content is the body section of the part.
-	Header     http.Header // Header is the header of the part and is optional. It is automatically initialized when needed.
+	Name       string      // is "name" in Content-Disposition. If empty, Content-Disposition header is omitted.
+	Filename   string      // is optional. If set it is "filename" in Content-Disposition.
+	Content    io.Reader   // is the body section of the part.
+	Header     http.Header // is the header of the part and is optional. It is automatically initialized when needed.
 	headerDone bool
 }
 
-// NewMultipartPart returns a new *MultipartPart based on "body"
-// content. If "body" is nil, it means there is no body at all.
+// NewMultipartPart returns a new [MultipartPart] based on body
+// content. If body is nil, it means there is no body at all.
 func NewMultipartPart(name string, body io.Reader, contentType ...string) *MultipartPart {
 	p := MultipartPart{
 		Name:    name,
@@ -104,8 +107,8 @@ func NewMultipartPart(name string, body io.Reader, contentType ...string) *Multi
 	return &p
 }
 
-// NewMultipartPartFile returns a new *MultipartPart based on
-// "filePath" content. If "filePath" cannot be opened, an error is
+// NewMultipartPartFile returns a new [MultipartPart] based on
+// filePath content. If filePath cannot be opened, an error is
 // returned on first Read() call.
 func NewMultipartPartFile(name string, filePath string, contentType ...string) *MultipartPart {
 	p := NewMultipartPart(name, &fileReader{filePath: filePath}, contentType...)
@@ -113,17 +116,17 @@ func NewMultipartPartFile(name string, filePath string, contentType ...string) *
 	return p
 }
 
-// NewMultipartPartString returns a new *MultipartPart based on "body" content.
+// NewMultipartPartString returns a new [MultipartPart] based on body content.
 func NewMultipartPartString(name string, body string, contentType ...string) *MultipartPart {
 	return NewMultipartPart(name, strings.NewReader(body), contentType...)
 }
 
-// NewMultipartPartBytes returns a new *MultipartPart based on "body" content.
+// NewMultipartPartBytes returns a new [MultipartPart] based on body content.
 func NewMultipartPartBytes(name string, body []byte, contentType ...string) *MultipartPart {
 	return NewMultipartPart(name, bytes.NewReader(body), contentType...)
 }
 
-// Read implements io.Reader interface.
+// Read implements [io.Reader] interface.
 func (p *MultipartPart) Read(b []byte) (n int, err error) {
 	if !p.headerDone {
 		// Header not yet computed
