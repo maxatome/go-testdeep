@@ -28,7 +28,7 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
-// TestAPI allows to test one HTTP API. See NewTestAPI function to
+// TestAPI allows to test one HTTP API. See [NewTestAPI] function to
 // create a new instance and get some examples of use.
 type TestAPI struct {
 	t       *td.T
@@ -47,8 +47,8 @@ type TestAPI struct {
 	responseDumped   bool
 }
 
-// NewTestAPI creates a TestAPI that can be used to test routes of the
-// API behind "handler".
+// NewTestAPI creates a [TestAPI] that can be used to test routes of the
+// API behind handler.
 //
 //	tdhttp.NewTestAPI(t, mux).
 //	  Get("/test").
@@ -67,7 +67,7 @@ type TestAPI struct {
 //	  CmpStatus(200).
 //	  CmpBody("pong")
 //
-// Note that "tb" can be a *testing.T as well as a *td.T.
+// Note that tb can be a [*testing.T] as well as a [*td.T].
 func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 	return &TestAPI{
 		t:       td.NewT(tb),
@@ -75,12 +75,12 @@ func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 	}
 }
 
-// With creates a new *TestAPI instance copied from "t", but resetting
-// the testing.TB instance the tests are based on to "tb". The
-// returned instance is independent from "t", sharing only the same
+// With creates a new [*TestAPI] instance copied from t, but resetting
+// the [testing.TB] instance the tests are based on to tb. The
+// returned instance is independent from t, sharing only the same
 // handler.
 //
-// It is typically used when the *TestAPI instance is "reused" in
+// It is typically used when the [TestAPI] instance is "reused" in
 // sub-tests, as in:
 //
 //	func TestMyAPI(t *testing.T) {
@@ -98,9 +98,9 @@ func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 //	  ta.Get("/next").CmpStatus(200)
 //	}
 //
-// Note that "tb" can be a *testing.T as well as a *td.T.
+// Note that tb can be a [*testing.T] as well as a [*td.T].
 //
-// See Run method for another way to handle subtests.
+// See [TestAPI.Run] for another way to handle subtests.
 func (t *TestAPI) With(tb testing.TB) *TestAPI {
 	return &TestAPI{
 		t:                td.NewT(tb),
@@ -109,12 +109,12 @@ func (t *TestAPI) With(tb testing.TB) *TestAPI {
 	}
 }
 
-// T returns the internal instance of *td.T.
+// T returns the internal instance of [*td.T].
 func (t *TestAPI) T() *td.T {
 	return t.t
 }
 
-// Run runs "f" as a subtest of t called "name".
+// Run runs f as a subtest of t called name.
 func (t *TestAPI) Run(name string, f func(t *TestAPI)) bool {
 	return t.t.Run(name, func(tdt *td.T) {
 		f(NewTestAPI(tdt, t.handler))
@@ -130,9 +130,9 @@ func (t *TestAPI) AutoDumpResponse() *TestAPI {
 
 // Name allows to name the series of tests that follow. This name is
 // used as a prefix for all following tests, in case of failure to
-// qualify each test. If len(args) > 1 and the first item of "args" is
-// a string and contains a '%' rune then fmt.Fprintf is used to
-// compose the name, else "args" are passed to fmt.Fprint.
+// qualify each test. If len(args) > 1 and the first item of args is
+// a string and contains a '%' rune then [fmt.Fprintf] is used to
+// compose the name, else args are passed to [fmt.Fprint].
 func (t *TestAPI) Name(args ...any) *TestAPI {
 	t.name = tdutil.BuildTestName(args...)
 	if t.name != "" {
@@ -142,9 +142,9 @@ func (t *TestAPI) Name(args ...any) *TestAPI {
 }
 
 // Request sends a new HTTP request to the tested API. Any Cmp* or
-// NoBody methods can now be called.
+// [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 func (t *TestAPI) Request(req *http.Request) *TestAPI {
 	t.response = httptest.NewRecorder()
 
@@ -178,18 +178,18 @@ func (t *TestAPI) checkRequestSent() bool {
 			t.name+"request is sent")
 }
 
-// Failed returns true if any Cmp* or NoBody method failed since last
+// Failed returns true if any Cmp* or [TestAPI.NoBody] method failed since last
 // request sending.
 func (t *TestAPI) Failed() bool {
 	return t.statusFailed || t.headerFailed || t.cookiesFailed || t.bodyFailed
 }
 
-// Get sends a HTTP GET to the tested API. Any Cmp* or NoBody methods
+// Get sends a HTTP GET to the tested API. Any Cmp* or [TestAPI.NoBody] methods
 // can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) Get(target string, headersQueryParams ...any) *TestAPI {
 	req, err := get(target, headersQueryParams...)
 	if err != nil {
@@ -199,12 +199,12 @@ func (t *TestAPI) Get(target string, headersQueryParams ...any) *TestAPI {
 	return t.Request(req)
 }
 
-// Head sends a HTTP HEAD to the tested API. Any Cmp* or NoBody methods
+// Head sends a HTTP HEAD to the tested API. Any Cmp* or [TestAPI.NoBody] methods
 // can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) Head(target string, headersQueryParams ...any) *TestAPI {
 	req, err := head(target, headersQueryParams...)
 	if err != nil {
@@ -214,12 +214,12 @@ func (t *TestAPI) Head(target string, headersQueryParams ...any) *TestAPI {
 	return t.Request(req)
 }
 
-// Options sends a HTTP OPTIONS to the tested API. Any Cmp* or NoBody methods
-// can now be called.
+// Options sends a HTTP OPTIONS to the tested API. Any Cmp* or
+// [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) Options(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	req, err := options(target, body, headersQueryParams...)
 	if err != nil {
@@ -229,12 +229,12 @@ func (t *TestAPI) Options(target string, body io.Reader, headersQueryParams ...a
 	return t.Request(req)
 }
 
-// Post sends a HTTP POST to the tested API. Any Cmp* or NoBody methods
-// can now be called.
+// Post sends a HTTP POST to the tested API. Any Cmp* or
+// [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) Post(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	req, err := post(target, body, headersQueryParams...)
 	if err != nil {
@@ -247,11 +247,11 @@ func (t *TestAPI) Post(target string, body io.Reader, headersQueryParams ...any)
 // PostForm sends a HTTP POST with data's keys and values URL-encoded
 // as the request body to the tested API. "Content-Type" header is
 // automatically set to "application/x-www-form-urlencoded". Any Cmp*
-// or NoBody methods can now be called.
+// or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PostForm(target string, data url.Values, headersQueryParams ...any) *TestAPI {
 	req, err := postForm(target, data, headersQueryParams...)
 	if err != nil {
@@ -262,13 +262,13 @@ func (t *TestAPI) PostForm(target string, data url.Values, headersQueryParams ..
 }
 
 // PostMultipartFormData sends a HTTP POST multipart request, like
-// multipart/form-data one for example. See MultipartBody type for
+// multipart/form-data one for example. See [MultipartBody] type for
 // details. "Content-Type" header is automatically set depending on
 // data.MediaType (defaults to "multipart/form-data") and data.Boundary
-// (defaults to "go-testdeep-42"). Any Cmp* or NoBody methods can now
+// (defaults to "go-testdeep-42"). Any Cmp* or [TestAPI.NoBody] methods can now
 // be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
 //	ta.PostMultipartFormData("/data",
 //	  &tdhttp.MultipartBody{
@@ -282,7 +282,7 @@ func (t *TestAPI) PostForm(target string, data url.Values, headersQueryParams ..
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PostMultipartFormData(target string, data *MultipartBody, headersQueryParams ...any) *TestAPI {
 	req, err := postMultipartFormData(target, data, headersQueryParams...)
 	if err != nil {
@@ -292,12 +292,12 @@ func (t *TestAPI) PostMultipartFormData(target string, data *MultipartBody, head
 	return t.Request(req)
 }
 
-// Put sends a HTTP PUT to the tested API. Any Cmp* or NoBody methods
+// Put sends a HTTP PUT to the tested API. Any Cmp* or [TestAPI.NoBody] methods
 // can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) Put(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	req, err := put(target, body, headersQueryParams...)
 	if err != nil {
@@ -307,12 +307,12 @@ func (t *TestAPI) Put(target string, body io.Reader, headersQueryParams ...any) 
 	return t.Request(req)
 }
 
-// Patch sends a HTTP PATCH to the tested API. Any Cmp* or NoBody methods
+// Patch sends a HTTP PATCH to the tested API. Any Cmp* or [TestAPI.NoBody] methods
 // can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) Patch(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	req, err := patch(target, body, headersQueryParams...)
 	if err != nil {
@@ -322,12 +322,12 @@ func (t *TestAPI) Patch(target string, body io.Reader, headersQueryParams ...any
 	return t.Request(req)
 }
 
-// Delete sends a HTTP DELETE to the tested API. Any Cmp* or NoBody methods
+// Delete sends a HTTP DELETE to the tested API. Any Cmp* or [TestAPI.NoBody] methods
 // can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) Delete(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	req, err := del(target, body, headersQueryParams...)
 	if err != nil {
@@ -339,11 +339,11 @@ func (t *TestAPI) Delete(target string, body io.Reader, headersQueryParams ...an
 
 // NewJSONRequest sends a HTTP request with body marshaled to
 // JSON. "Content-Type" header is automatically set to
-// "application/json". Any Cmp* or NoBody methods can now be called.
+// "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) NewJSONRequest(method, target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newJSONRequest(method, target, body, headersQueryParams...)
 	if err != nil {
@@ -355,11 +355,11 @@ func (t *TestAPI) NewJSONRequest(method, target string, body any, headersQueryPa
 
 // PostJSON sends a HTTP POST with body marshaled to
 // JSON. "Content-Type" header is automatically set to
-// "application/json". Any Cmp* or NoBody methods can now be called.
+// "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PostJSON(target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newJSONRequest(http.MethodPost, target, body, headersQueryParams...)
 	if err != nil {
@@ -371,11 +371,11 @@ func (t *TestAPI) PostJSON(target string, body any, headersQueryParams ...any) *
 
 // PutJSON sends a HTTP PUT with body marshaled to
 // JSON. "Content-Type" header is automatically set to
-// "application/json". Any Cmp* or NoBody methods can now be called.
+// "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PutJSON(target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newJSONRequest(http.MethodPut, target, body, headersQueryParams...)
 	if err != nil {
@@ -387,11 +387,11 @@ func (t *TestAPI) PutJSON(target string, body any, headersQueryParams ...any) *T
 
 // PatchJSON sends a HTTP PATCH with body marshaled to
 // JSON. "Content-Type" header is automatically set to
-// "application/json". Any Cmp* or NoBody methods can now be called.
+// "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PatchJSON(target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newJSONRequest(http.MethodPatch, target, body, headersQueryParams...)
 	if err != nil {
@@ -403,11 +403,11 @@ func (t *TestAPI) PatchJSON(target string, body any, headersQueryParams ...any) 
 
 // DeleteJSON sends a HTTP DELETE with body marshaled to
 // JSON. "Content-Type" header is automatically set to
-// "application/json". Any Cmp* or NoBody methods can now be called.
+// "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) DeleteJSON(target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newJSONRequest(http.MethodDelete, target, body, headersQueryParams...)
 	if err != nil {
@@ -419,11 +419,11 @@ func (t *TestAPI) DeleteJSON(target string, body any, headersQueryParams ...any)
 
 // NewXMLRequest sends a HTTP request with body marshaled to
 // XML. "Content-Type" header is automatically set to
-// "application/xml". Any Cmp* or NoBody methods can now be called.
+// "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) NewXMLRequest(method, target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newXMLRequest(method, target, body, headersQueryParams...)
 	if err != nil {
@@ -435,11 +435,11 @@ func (t *TestAPI) NewXMLRequest(method, target string, body any, headersQueryPar
 
 // PostXML sends a HTTP POST with body marshaled to
 // XML. "Content-Type" header is automatically set to
-// "application/xml". Any Cmp* or NoBody methods can now be called.
+// "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PostXML(target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newXMLRequest(http.MethodPost, target, body, headersQueryParams...)
 	if err != nil {
@@ -451,11 +451,11 @@ func (t *TestAPI) PostXML(target string, body any, headersQueryParams ...any) *T
 
 // PutXML sends a HTTP PUT with body marshaled to
 // XML. "Content-Type" header is automatically set to
-// "application/xml". Any Cmp* or NoBody methods can now be called.
+// "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PutXML(target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newXMLRequest(http.MethodPut, target, body, headersQueryParams...)
 	if err != nil {
@@ -467,11 +467,11 @@ func (t *TestAPI) PutXML(target string, body any, headersQueryParams ...any) *Te
 
 // PatchXML sends a HTTP PATCH with body marshaled to
 // XML. "Content-Type" header is automatically set to
-// "application/xml". Any Cmp* or NoBody methods can now be called.
+// "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) PatchXML(target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newXMLRequest(http.MethodPatch, target, body, headersQueryParams...)
 	if err != nil {
@@ -483,11 +483,11 @@ func (t *TestAPI) PatchXML(target string, body any, headersQueryParams ...any) *
 
 // DeleteXML sends a HTTP DELETE with body marshaled to
 // XML. "Content-Type" header is automatically set to
-// "application/xml". Any Cmp* or NoBody methods can now be called.
+// "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// Note that Failed() status is reset just after this call.
+// Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (t *TestAPI) DeleteXML(target string, body any, headersQueryParams ...any) *TestAPI {
 	req, err := newXMLRequest(http.MethodDelete, target, body, headersQueryParams...)
 	if err != nil {
@@ -499,7 +499,7 @@ func (t *TestAPI) DeleteXML(target string, body any, headersQueryParams ...any) 
 
 // CmpStatus tests the last request response status against
 // expectedStatus. expectedStatus can be an int to match a fixed HTTP
-// status code, or a TestDeep operator.
+// status code, or a [td.TestDeep] operator.
 //
 //	ta := tdhttp.NewTestAPI(t, mux)
 //
@@ -533,10 +533,10 @@ func (t *TestAPI) CmpStatus(expectedStatus any) *TestAPI {
 }
 
 // CmpHeader tests the last request response header against
-// expectedHeader. expectedHeader can be a http.Header or a TestDeep
-// operator. Keep in mind that if it is a http.Header, it has to match
-// exactly the response header. Often only the presence of a
-// header key is needed:
+// expectedHeader. expectedHeader can be a [http.Header] or a
+// [td.TestDeep] operator. Keep in mind that if it is a [http.Header],
+// it has to match exactly the response header. Often only the
+// presence of a header key is needed:
 //
 //	ta := tdhttp.NewTestAPI(t, mux).
 //	  PostJSON("/new", map[string]string{"name": "Bob"}).
@@ -559,7 +559,7 @@ func (t *TestAPI) CmpStatus(expectedStatus any) *TestAPI {
 //	ta.CmpHeader(td.ContainsKey("X-Account")).
 //	  CmpHeader(td.ContainsKey("X-Token"))
 //
-// instead of doing all tests in one call as All operator allows it:
+// instead of doing all tests in one call as [td.All] operator allows it:
 //
 //	ta.CmpHeader(td.All(
 //	  td.ContainsKey("X-Account"),
@@ -590,10 +590,10 @@ func (t *TestAPI) CmpHeader(expectedHeader any) *TestAPI {
 }
 
 // CmpCookies tests the last request response cookies against
-// expectedCookies. expectedCookies can be a []*http.Cookie or a TestDeep
-// operator. Keep in mind that if it is a []*http.Cookie, it has to match
-// exactly the response cookies. Often only the presence of a
-// cookie key is needed:
+// expectedCookies. expectedCookies can be a [][*http.Cookie] or a
+// [td.TestDeep] operator. Keep in mind that if it is a
+// [][*http.Cookie], it has to match exactly the response
+// cookies. Often only the presence of a cookie key is needed:
 //
 //	ta := tdhttp.NewTestAPI(t, mux).
 //	  PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
@@ -601,9 +601,9 @@ func (t *TestAPI) CmpHeader(expectedHeader any) *TestAPI {
 //	  CmpCookies(td.SuperBagOf(td.Struct(&http.Cookie{Name: "cookie_session"}, nil))).
 //	  CmpCookies(td.SuperBagOf(td.Smuggle("Name", "cookie_session"))) // shorter
 //
-// To make tests easier, Raw and RawExpires fields of each
-// *http.Cookie are zeroed before doing the comparison. So no need to
-// fill them when comparing against a simple literal as in:
+// To make tests easier, [http.Cookie.Raw] and [http.Cookie.RawExpires] fields
+// of each [*http.Cookie] are zeroed before doing the comparison. So no need
+// to fill them when comparing against a simple literal as in:
 //
 //	ta := tdhttp.NewTestAPI(t, mux).
 //	  PostJSON("/login", map[string]string{"name": "Bob", "password": "Sponge"}).
@@ -767,11 +767,12 @@ func (t *TestAPI) cmpMarshaledBody(
 }
 
 // CmpMarshaledBody tests that the last request response body can be
-// unmarshaled using unmarhsal function and then, that it matches
+// unmarshaled using unmarshal function and then, that it matches
 // expectedBody. expectedBody can be any type unmarshal function can
-// handle, or a TestDeep operator.
+// handle, or a [td.TestDeep] operator.
 //
-// See CmpJSONBody and CmpXMLBody sources for examples of use.
+// See [TestAPI.CmpJSONBody] and [TestAPI.CmpXMLBody] sources for
+// examples of use.
 //
 // It fails if no request has been sent yet.
 func (t *TestAPI) CmpMarshaledBody(unmarshal func([]byte, any) error, expectedBody any) *TestAPI {
@@ -780,7 +781,7 @@ func (t *TestAPI) CmpMarshaledBody(unmarshal func([]byte, any) error, expectedBo
 }
 
 // CmpBody tests the last request response body against
-// expectedBody. expectedBody can be a []byte, a string or a TestDeep
+// expectedBody. expectedBody can be a []byte, a string or a [td.TestDeep]
 // operator.
 //
 //	ta := tdhttp.NewTestAPI(t, mux)
@@ -823,9 +824,9 @@ func (t *TestAPI) CmpBody(expectedBody any) *TestAPI {
 }
 
 // CmpJSONBody tests that the last request response body can be
-// encoding/json.Unmarshall'ed and that it matches
-// expectedBody. expectedBody can be any type encoding/json can
-// Unmarshal into, or a TestDeep operator.
+// [json.Unmarshal]'ed and that it matches expectedBody. expectedBody
+// can be any type one can [json.Unmarshal] into, or a [td.TestDeep]
+// operator.
 //
 //	ta := tdhttp.NewTestAPI(t, mux)
 //
@@ -848,7 +849,7 @@ func (t *TestAPI) CmpBody(expectedBody any) *TestAPI {
 //	      "ID": td.NotZero(),
 //	    }))
 //
-// The same with anchoring, and so without td.SStruct():
+// The same with anchoring, and so without [td.SStruct]:
 //
 //	ta := tdhttp.NewTestAPI(tt, mux)
 //
@@ -860,7 +861,7 @@ func (t *TestAPI) CmpBody(expectedBody any) *TestAPI {
 //	    Age:  26,
 //	  })
 //
-// The same using td.JSON():
+// The same using [td.JSON]:
 //
 //	ta.PostJSON("/person", Person{Name: "Bob", Age: 23}).
 //	  CmpStatus(http.StatusCreated).
@@ -878,9 +879,9 @@ func (t *TestAPI) CmpJSONBody(expectedBody any) *TestAPI {
 }
 
 // CmpXMLBody tests that the last request response body can be
-// encoding/xml.Unmarshall'ed and that it matches
-// expectedBody. expectedBody can be any type encoding/xml can
-// Unmarshal into, or a TestDeep operator.
+// [xml.Unmarshal]'ed and that it matches expectedBody. expectedBody
+// can be any type one can [xml.Unmarshal] into, or a [td.TestDeep]
+// operator.
 //
 //	ta := tdhttp.NewTestAPI(t, mux)
 //
@@ -957,21 +958,21 @@ func (t *TestAPI) NoBody() *TestAPI {
 	return t
 }
 
-// Or executes function "fn" if t.Failed() is true at the moment it is called.
+// Or executes function fn if t.Failed() is true at the moment it is called.
 //
-// "fn" can have several types:
+// fn can have several types:
 //   - func(body string) or func(t *td.T, body string)
-//     → "fn" is called with response body as a string.
+//     → fn is called with response body as a string.
 //     If no response has been received yet, body is "";
 //   - func(body []byte) or func(t *td.T, body []byte)
-//     → "fn" is called with response body as a []byte.
+//     → fn is called with response body as a []byte.
 //     If no response has been received yet, body is nil;
 //   - func(t *td.T, resp *httptest.ResponseRecorder)
-//     → "fn" is called with the internal object containing the response.
+//     → fn is called with the internal object containing the response.
 //     See net/http/httptest for details.
 //     If no response has been received yet, resp is nil.
 //
-// If "fn" type is not one of these types, it calls t.T().Fatal().
+// If fn type is not one of these types, it calls t.T().Fatal().
 func (t *TestAPI) Or(fn any) *TestAPI {
 	t.t.Helper()
 	switch fn := fn.(type) {
@@ -1039,7 +1040,7 @@ func (t *TestAPI) Or(fn any) *TestAPI {
 //	  CmpBody("bar").
 //	  OrDumpResponse() // dumps the response if status and/or body checks fail
 //
-// See AutoDumpResponse method to automatize this dump.
+// See [TestAPI.AutoDumpResponse] method to automatize this dump.
 func (t *TestAPI) OrDumpResponse() *TestAPI {
 	if t.Failed() {
 		t.dumpResponse()
@@ -1062,8 +1063,8 @@ func (t *TestAPI) dumpResponse() {
 	t.t.Logf("No response received yet")
 }
 
-// Anchor returns a typed value allowing to anchor the TestDeep
-// operator "operator" in a go classic literal like a struct, slice,
+// Anchor returns a typed value allowing to anchor the [td.TestDeep]
+// operator operator in a go classic literal like a struct, slice,
 // array or map value.
 //
 //	ta := tdhttp.NewTestAPI(tt, mux)
@@ -1076,16 +1077,15 @@ func (t *TestAPI) dumpResponse() {
 //	    Age:  26,
 //	  })
 //
-// See (*td.T).Anchor documentation for details
-// https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor
+// See [td.T.Anchor] for details.
 //
-// See A method for a shorter synonym of Anchor.
+// See [TestAPI.A] method for a shorter synonym of Anchor.
 func (t *TestAPI) Anchor(operator td.TestDeep, model ...any) any {
 	return t.t.Anchor(operator, model...)
 }
 
-// A is a synonym for Anchor. It returns a typed value allowing to
-// anchor the TestDeep operator "operator" in a go classic literal
+// A is a synonym for [TestAPI.Anchor]. It returns a typed value allowing to
+// anchor the [td.TestDeep] operator in a go classic literal
 // like a struct, slice, array or map value.
 //
 //	ta := tdhttp.NewTestAPI(tt, mux)
@@ -1098,9 +1098,7 @@ func (t *TestAPI) Anchor(operator td.TestDeep, model ...any) any {
 //	    Age:  26,
 //	  })
 //
-// See (*td.T).Anchor documentation
-// https://pkg.go.dev/github.com/maxatome/go-testdeep/td#T.Anchor
-// for details.
+// See [td.T.Anchor] for details.
 func (t *TestAPI) A(operator td.TestDeep, model ...any) any {
 	return t.Anchor(operator, model...)
 }
@@ -1117,8 +1115,8 @@ func (t *TestAPI) A(operator td.TestDeep, model ...any) any {
 //	    CreatedAt: ta.A(td.Between(ta.SentAt(), time.Now())).(time.Time),
 //	  })
 //
-// checks that CreatedAt is included between the time when the request
-// has been sent, and the time when the comparison occurs.
+// checks that CreatedAt field is included between the time when the
+// request has been sent, and the time when the comparison occurs.
 func (t *TestAPI) SentAt() time.Time {
 	return t.sentAt
 }

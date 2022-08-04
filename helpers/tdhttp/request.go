@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021, Maxime Soulé
+// Copyright (c) 2019-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -103,10 +103,10 @@ func newRequest(method string, target string, body io.Reader, headersQueryParams
 	return req, nil
 }
 
-// BasicAuthHeader returns a new http.Header with only Authorization
-// key set, compliant with HTTP Basic Authentication using "username"
-// and "password". It is provided as a facility to build request in
-// one line:
+// BasicAuthHeader returns a new [http.Header] with only Authorization
+// key set, compliant with HTTP Basic Authentication using user and
+// password. It is provided as a facility to build request in one
+// line:
 //
 //	ta.Get("/path", tdhttp.BasicAuthHeader("max", "5ecr3T"))
 //
@@ -116,7 +116,7 @@ func newRequest(method string, target string, body io.Reader, headersQueryParams
 //	req.SetBasicAuth("max", "5ecr3T")
 //	ta.Request(req)
 //
-// See (*net/http.Request).SetBasicAuth() for details.
+// See [http.Request.SetBasicAuth] for details.
 func BasicAuthHeader(user, password string) http.Header {
 	return http.Header{
 		"Authorization": []string{
@@ -167,9 +167,9 @@ func del(target string, body io.Reader, headersQueryParams ...any) (*http.Reques
 	return newRequest(http.MethodDelete, target, body, headersQueryParams)
 }
 
-// NewRequest creates a new HTTP request as
-// net/http/httptest.NewRequest does, with the ability to immediately
-// add some headers and/or some query parameters.
+// NewRequest creates a new HTTP request as [httptest.NewRequest]
+// does, with the ability to immediately add some headers and/or some
+// query parameters.
 //
 // Headers can be added using string pairs as in:
 //
@@ -178,20 +178,20 @@ func del(target string, body io.Reader, headersQueryParams ...any) (*http.Reques
 //	  "X-Test", "value",
 //	)
 //
-// or using http.Header as in:
+// or using [http.Header] as in:
 //
 //	req := tdhttp.NewRequest("POST", "/pdf", body,
 //	  http.Header{"Content-type": []string{"application/pdf"}},
 //	)
 //
-// or using BasicAuthHeader() as in:
+// or using [BasicAuthHeader] as in:
 //
 //	req := tdhttp.NewRequest("POST", "/pdf", body,
 //	  tdhttp.BasicAuthHeader("max", "5ecr3T"),
 //	)
 //
-// or using http.Cookie or *http.Cookie (behind the scene,
-// (*net/http.Request).AddCookie() is used) as in:
+// or using [http.Cookie] (pointer or not, behind the scene,
+// [http.Request.AddCookie] is used) as in:
 //
 //	req := tdhttp.NewRequest("POST", "/pdf", body,
 //	  http.Cookie{Name: "cook1", Value: "val1"},
@@ -209,7 +209,7 @@ func del(target string, body io.Reader, headersQueryParams ...any) (*http.Reques
 //	  &http.Cookie{Name: "cook2", Value: "val2"},
 //	)
 //
-// Produces the following http.Header:
+// Produces the following [http.Header]:
 //
 //	http.Header{
 //	  "Authorization": []string{"Basic bWF4OjVlY3IzVA=="},
@@ -218,8 +218,8 @@ func del(target string, body io.Reader, headersQueryParams ...any) (*http.Reques
 //	  "X-Test":        []string{"value1", "value2"},
 //	}
 //
-// A string slice or a map can be flatened as well. As NewRequest() expects
-// ...any, td.Flatten() can help here too:
+// A string slice or a map can be flatened as well. As [NewRequest] expects
+// ...any, [td.Flatten] can help here too:
 //
 //	strHeaders := map[string]string{
 //	  "X-Length": "666",
@@ -239,10 +239,10 @@ func del(target string, body io.Reader, headersQueryParams ...any) (*http.Reques
 //	  &http.Cookie{Name: "cook2", Value: "val2"},
 //	)
 //
-// Header keys are always canonicalized using net/http.CanonicalHeaderKey().
+// Header keys are always canonicalized using [http.CanonicalHeaderKey].
 //
-// Query parameters can be added using url.Values or more flexible
-// tdhttp.Q, as in:
+// Query parameters can be added using [url.Values] or more flexible
+// [Q], as in:
 //
 //	req := tdhttp.NewRequest("GET", "/pdf",
 //	  url.Values{
@@ -257,7 +257,7 @@ func del(target string, body io.Reader, headersQueryParams ...any) (*http.Reques
 //	  },
 //	)
 //
-// All url.Values and tdhttp.Q instances are combined to produce the
+// All [url.Values] and [Q] instances are combined to produce the
 // final query string to use. The previous example produces the
 // following target:
 //
@@ -271,12 +271,11 @@ func del(target string, body io.Reader, headersQueryParams ...any) (*http.Reques
 //
 //	/path?details=true&limit=10
 //
-// Behind the scene, url.Values.Encode() is used, so the parameters
+// Behind the scene, [url.Values.Encode] is used, so the parameters
 // are always sorted by key. If you want a specific order, then do not
-// use url.Values nor tdhttp.Q instances, but compose target by
-// yourself.
+// use [url.Values] nor [Q] instances, but compose target by yourself.
 //
-// See tdhttp.Q documentation to learn how values are stringified.
+// See [Q] documentation to learn how values are stringified.
 func NewRequest(method, target string, body io.Reader, headersQueryParams ...any) *http.Request {
 	req, err := newRequest(method, target, body, headersQueryParams)
 	if err != nil {
@@ -289,7 +288,7 @@ func NewRequest(method, target string, body io.Reader, headersQueryParams ...any
 //
 //	tdhttp.NewRequest(http.MethodGet, target, nil, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func Get(target string, headersQueryParams ...any) *http.Request {
 	req, err := get(target, headersQueryParams...)
 	if err != nil {
@@ -302,7 +301,7 @@ func Get(target string, headersQueryParams ...any) *http.Request {
 //
 //	tdhttp.NewRequest(http.MethodHead, target, nil, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func Head(target string, headersQueryParams ...any) *http.Request {
 	req, err := head(target, headersQueryParams...)
 	if err != nil {
@@ -315,7 +314,7 @@ func Head(target string, headersQueryParams ...any) *http.Request {
 //
 //	tdhttp.NewRequest(http.MethodOptions, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func Options(target string, body io.Reader, headersQueryParams ...any) *http.Request {
 	req, err := options(target, body, headersQueryParams...)
 	if err != nil {
@@ -328,7 +327,7 @@ func Options(target string, body io.Reader, headersQueryParams ...any) *http.Req
 //
 //	tdhttp.NewRequest(http.MethodPost, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func Post(target string, body io.Reader, headersQueryParams ...any) *http.Request {
 	req, err := post(target, body, headersQueryParams...)
 	if err != nil {
@@ -351,7 +350,7 @@ func Post(target string, body io.Reader, headersQueryParams ...any) *http.Reques
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func PostForm(target string, data url.Values, headersQueryParams ...any) *http.Request {
 	req, err := postForm(target, data, headersQueryParams...)
 	if err != nil {
@@ -361,7 +360,7 @@ func PostForm(target string, data url.Values, headersQueryParams ...any) *http.R
 }
 
 // PostMultipartFormData creates a HTTP POST multipart request, like
-// multipart/form-data one for example. See MultipartBody type for
+// multipart/form-data one for example. See [MultipartBody] type for
 // details. "Content-Type" header is automatically set depending on
 // data.MediaType (defaults to "multipart/form-data") and data.Boundary
 // (defaults to "go-testdeep-42"). Other headers can be added via
@@ -393,7 +392,7 @@ func PostForm(target string, data url.Values, headersQueryParams ...any) *http.R
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func PostMultipartFormData(target string, data *MultipartBody, headersQueryParams ...any) *http.Request {
 	req, err := postMultipartFormData(target, data, headersQueryParams...)
 	if err != nil {
@@ -406,7 +405,7 @@ func PostMultipartFormData(target string, data *MultipartBody, headersQueryParam
 //
 //	tdhttp.NewRequest(http.MethodPut, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func Put(target string, body io.Reader, headersQueryParams ...any) *http.Request {
 	req, err := put(target, body, headersQueryParams...)
 	if err != nil {
@@ -419,7 +418,7 @@ func Put(target string, body io.Reader, headersQueryParams ...any) *http.Request
 //
 //	tdhttp.NewRequest(http.MethodPatch, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func Patch(target string, body io.Reader, headersQueryParams ...any) *http.Request {
 	req, err := patch(target, body, headersQueryParams...)
 	if err != nil {
@@ -432,7 +431,7 @@ func Patch(target string, body io.Reader, headersQueryParams ...any) *http.Reque
 //
 //	tdhttp.NewRequest(http.MethodDelete, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func Delete(target string, body io.Reader, headersQueryParams ...any) *http.Request {
 	req, err := del(target, body, headersQueryParams...)
 	if err != nil {
@@ -470,7 +469,7 @@ func newJSONRequest(method, target string, body any, headersQueryParams ...any) 
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func NewJSONRequest(method, target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newJSONRequest(method, target, body, headersQueryParams...)
 	if err != nil {
@@ -485,7 +484,7 @@ func NewJSONRequest(method, target string, body any, headersQueryParams ...any) 
 //
 //	tdhttp.NewJSONRequest(http.MethodPost, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func PostJSON(target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newJSONRequest(http.MethodPost, target, body, headersQueryParams...)
 	if err != nil {
@@ -500,7 +499,7 @@ func PostJSON(target string, body any, headersQueryParams ...any) *http.Request 
 //
 //	tdhttp.NewJSONRequest(http.MethodPut, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func PutJSON(target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newJSONRequest(http.MethodPut, target, body, headersQueryParams...)
 	if err != nil {
@@ -515,7 +514,7 @@ func PutJSON(target string, body any, headersQueryParams ...any) *http.Request {
 //
 //	tdhttp.NewJSONRequest(http.MethodPatch, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func PatchJSON(target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newJSONRequest(http.MethodPatch, target, body, headersQueryParams...)
 	if err != nil {
@@ -530,7 +529,7 @@ func PatchJSON(target string, body any, headersQueryParams ...any) *http.Request
 //
 //	tdhttp.NewJSONRequest(http.MethodDelete, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func DeleteJSON(target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newJSONRequest(http.MethodDelete, target, body, headersQueryParams...)
 	if err != nil {
@@ -560,7 +559,7 @@ func newXMLRequest(method, target string, body any, headersQueryParams ...any) (
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func NewXMLRequest(method, target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newXMLRequest(method, target, body, headersQueryParams...)
 	if err != nil {
@@ -575,7 +574,7 @@ func NewXMLRequest(method, target string, body any, headersQueryParams ...any) *
 //
 //	tdhttp.NewXMLRequest(http.MethodPost, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func PostXML(target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newXMLRequest(http.MethodPost, target, body, headersQueryParams...)
 	if err != nil {
@@ -590,7 +589,7 @@ func PostXML(target string, body any, headersQueryParams ...any) *http.Request {
 //
 //	tdhttp.NewXMLRequest(http.MethodPut, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func PutXML(target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newXMLRequest(http.MethodPut, target, body, headersQueryParams...)
 	if err != nil {
@@ -605,7 +604,7 @@ func PutXML(target string, body any, headersQueryParams ...any) *http.Request {
 //
 //	tdhttp.NewXMLRequest(http.MethodPatch, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func PatchXML(target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newXMLRequest(http.MethodPatch, target, body, headersQueryParams...)
 	if err != nil {
@@ -620,7 +619,7 @@ func PatchXML(target string, body any, headersQueryParams ...any) *http.Request 
 //
 //	tdhttp.NewXMLRequest(http.MethodDelete, target, body, headersQueryParams...)
 //
-// See NewRequest for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in headersQueryParams.
 func DeleteXML(target string, body any, headersQueryParams ...any) *http.Request {
 	req, err := newXMLRequest(http.MethodDelete, target, body, headersQueryParams...)
 	if err != nil {

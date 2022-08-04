@@ -22,11 +22,11 @@ import (
 //
 //	td.CmpTrue(t, IsAvailable(x), "x should be available")
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpTrue(t TestingT, got bool, args ...any) bool {
 	t.Helper()
@@ -41,11 +41,11 @@ func CmpTrue(t TestingT, got bool, args ...any) bool {
 //
 //	td.CmpFalse(t, IsAvailable(x), "x should not be available")
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpFalse(t TestingT, got bool, args ...any) bool {
 	t.Helper()
@@ -97,11 +97,11 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...any) bool {
 //	_, err := MyFunction(1, 2, 3)
 //	td.CmpError(t, err, "MyFunction(1, 2, 3) should return an error")
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpError(t TestingT, got error, args ...any) bool {
 	t.Helper()
@@ -115,11 +115,11 @@ func CmpError(t TestingT, got error, args ...any) bool {
 //	  // one can now check value...
 //	}
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNoError(t TestingT, got error, args ...any) bool {
 	t.Helper()
@@ -226,11 +226,11 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...any) bool {
 //
 //	td.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)") // succeeds
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpPanic(t TestingT, fn func(), expectedPanic any,
 	args ...any) bool {
@@ -249,11 +249,11 @@ func CmpPanic(t TestingT, fn func(), expectedPanic any,
 //	td.CmpNotPanic(t, func() { panic("I am panicking!") }) // fails
 //	td.CmpNotPanic(t, func() { panic(nil) })               // fails too
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func CmpNotPanic(t TestingT, fn func(), args ...any) bool {
 	t.Helper()

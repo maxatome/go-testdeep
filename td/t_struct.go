@@ -411,11 +411,11 @@ func (t *T) IgnoreUnexported(types ...any) *T {
 // with the exception that t.Config is used to configure the test
 // Context.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) Cmp(got, expected any, args ...any) bool {
 	t.Helper()
@@ -439,11 +439,11 @@ func (t *T) CmpDeeply(got, expected any, args ...any) bool {
 //
 //	t.True(IsAvailable(x), "x should be available")
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) True(got any, args ...any) bool {
 	t.Helper()
@@ -458,11 +458,11 @@ func (t *T) True(got any, args ...any) bool {
 //
 //	t.False(IsAvailable(x), "x should not be available")
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) False(got any, args ...any) bool {
 	t.Helper()
@@ -476,11 +476,11 @@ func (t *T) False(got any, args ...any) bool {
 //
 // CmpError and not Error to avoid collision with t.TB.Error method.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) CmpError(got error, args ...any) bool {
 	t.Helper()
@@ -496,11 +496,11 @@ func (t *T) CmpError(got error, args ...any) bool {
 //
 // CmpNoError and not NoError to be consistent with CmpError method.
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) CmpNoError(got error, args ...any) bool {
 	t.Helper()
@@ -524,11 +524,11 @@ func (t *T) CmpNoError(got error, args ...any) bool {
 //
 //	t.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)")
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) CmpPanic(fn func(), expected any, args ...any) bool {
 	t.Helper()
@@ -547,11 +547,11 @@ func (t *T) CmpPanic(fn func(), expected any, args ...any) bool {
 //	t.CmpNotPanic(func() { panic("I am panicking!") }) // fails
 //	t.CmpNotPanic(func() { panic(nil) })               // fails too
 //
-// "args..." are optional and allow to name the test. This name is
+// args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
-// the first item of "args" is a string and contains a '%' rune then
-// fmt.Fprintf is used to compose the name, else "args" are passed to
-// fmt.Fprint. Do not forget it is the name of the test, not the
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
 func (t *T) CmpNotPanic(fn func(), args ...any) bool {
 	t.Helper()
