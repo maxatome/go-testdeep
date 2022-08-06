@@ -35,7 +35,7 @@ func stringPointer(s string) uintptr {
 // applies on channels, functions (with some restrictions), maps,
 // pointers, slices and strings.
 //
-// During a match, the compared data must be the same as "expectedPtr"
+// During a match, the compared data must be the same as expectedPtr
 // to succeed.
 //
 //	a, b := 123, 123
@@ -60,6 +60,8 @@ func stringPointer(s string) uintptr {
 //	a := []int{1, 2, 3, 4, 5, 6}
 //	b := a[:2]                    // aka []int{1, 2}
 //	td.Cmp(t, &a, td.Shallow(&b)) // succeeds as both slices point to the same area, even if len() differ
+//
+// See also [Ptr].
 func Shallow(expectedPtr any) TestDeep {
 	vptr := reflect.ValueOf(expectedPtr)
 

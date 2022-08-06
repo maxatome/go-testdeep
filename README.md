@@ -286,7 +286,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`tdutil`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil
 
 [`BeLax` config flag]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig.BeLax
-[`error`]: https://pkg.go.dev/builtin/#error
+[`error`]: https://pkg.go.dev/builtin#error
 
 
 [`fmt.Stringer`]: https://pkg.go.dev/fmt/#Stringer

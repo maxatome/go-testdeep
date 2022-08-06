@@ -36,6 +36,8 @@ var _ TestDeep = &tdNil{}
 //	td.Cmp(t, got, nil)      // fails, as the interface is not nil
 //	got = nil
 //	td.Cmp(t, got, nil) // succeeds
+//
+// See also [Empty], [NotNil] and [Zero].
 func Nil() TestDeep {
 	return &tdNil{
 		baseOKNil: newBaseOKNil(3),
@@ -91,6 +93,8 @@ var _ TestDeep = &tdNotNil{}
 //	var got fmt.Stringer = (*bytes.Buffer)(nil)
 //	td.Cmp(t, got, td.NotNil()) // fails
 //	td.Cmp(t, got, td.Not(nil)) // succeeds, as the interface is not nil
+//
+// See also [Nil], [NotEmpty] and [NotZero].
 func NotNil() TestDeep {
 	return &tdNotNil{
 		baseOKNil: newBaseOKNil(3),

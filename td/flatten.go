@@ -16,7 +16,7 @@ import (
 // Flatten allows to flatten any slice, array or map in parameters of
 // operators expecting ...any.
 //
-// For example the Set operator is defined as:
+// For example the [Set] operator is defined as:
 //
 //	func Set(expectedItems ...any) TestDeep
 //
@@ -27,7 +27,7 @@ import (
 //
 // it works but if the expected items are already in a []int, we have
 // to copy them in a []any as it can not be flattened directly
-// in Set parameters:
+// in [Set] parameters:
 //
 //	expected := []int{22, 42, 66}
 //	expectedIf := make([]any, len(expected))
@@ -36,8 +36,8 @@ import (
 //	}
 //	td.Cmp(t, got, td.Set(expectedIf...))
 //
-// but it is a bit boring and less efficient, as Set does not keep the
-// []any behind the scene.
+// but it is a bit boring and less efficient, as [Set] does not keep
+// the []any behind the scene.
 //
 // The same with Flatten follows:
 //

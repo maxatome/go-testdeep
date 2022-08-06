@@ -46,7 +46,7 @@ func IgnorePackage(skip ...int) bool {
 	return false
 }
 
-// UnignorePackage cancels a previous use of IgnorePackage, so the
+// UnignorePackage cancels a previous use of [IgnorePackage], so the
 // calling package is no longer ignored. Only intended to be used in
 // go-testdeep internal tests.
 func UnignorePackage(skip ...int) bool {
@@ -103,7 +103,7 @@ func FindGoModDirLinks(in string) string {
 }
 
 // Reset resets the ignored packages map plus cached mod and GOPATH
-// directories (Init() should be called again). Only intended to be
+// directories ([Init] should be called again). Only intended to be
 // used in go-testdeep internal tests.
 func Reset() {
 	ignorePkg = map[string]struct{}{}
@@ -130,7 +130,7 @@ func Init() {
 }
 
 // Frames is the interface corresponding to type returned by
-// runtime.CallersFrames. See CallersFrames variable.
+// [runtime.CallersFrames]. See [CallersFrames] variable.
 type Frames interface {
 	Next() (frame runtime.Frame, more bool)
 }

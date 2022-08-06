@@ -38,10 +38,10 @@ type mapEntryInfo struct {
 	expected reflect.Value
 }
 
-// MapEntries allows to pass map entries to check in function Map. It
-// is a map whose each key is the expected entry key and the
-// corresponding value the expected entry value (which can be a
-// TestDeep operator as well as a zero value.)
+// MapEntries allows to pass map entries to check in functions [Map],
+// [SubMapOf] and [SuperMapOf]. It is a map whose each key is the
+// expected entry key and the corresponding value the expected entry
+// value (which can be a [TestDeep] operator as well as a zero value.)
 type MapEntries map[any]any
 
 func newMap(model any, entries MapEntries, kind mapKind) *tdMap {
@@ -169,12 +169,12 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 // input(Map): map,ptr(ptr on map)
 
 // Map operator compares the contents of a map against the non-zero
-// values of "model" (if any) and the values of "expectedEntries".
+// values of model (if any) and the values of expectedEntries.
 //
-// "model" must be the same type as compared data.
+// model must be the same type as compared data.
 //
-// "expectedEntries" can be nil, if no zero entries are expected and
-// no TestDeep operator are involved.
+// expectedEntries can be nil, if no zero entries are expected and
+// no [TestDeep] operators are involved.
 //
 // During a match, all expected entries must be found and all data
 // entries must be expected to succeed.
@@ -194,7 +194,9 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 //	  }),
 //	) // succeeds
 //
-// TypeBehind method returns the reflect.Type of "model".
+// TypeBehind method returns the [reflect.Type] of model.
+//
+// See also [SubMapOf] and [SuperMapOf].
 func Map(model any, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, allMap)
 }
@@ -204,12 +206,12 @@ func Map(model any, expectedEntries MapEntries) TestDeep {
 // input(SubMapOf): map,ptr(ptr on map)
 
 // SubMapOf operator compares the contents of a map against the non-zero
-// values of "model" (if any) and the values of "expectedEntries".
+// values of model (if any) and the values of expectedEntries.
 //
-// "model" must be the same type as compared data.
+// model must be the same type as compared data.
 //
-// "expectedEntries" can be nil, if no zero entries are expected and
-// no TestDeep operator are involved.
+// expectedEntries can be nil, if no zero entries are expected and
+// no [TestDeep] operators are involved.
 //
 // During a match, each map entry should be matched by an expected
 // entry to succeed. But some expected entries can be missing from the
@@ -238,7 +240,9 @@ func Map(model any, expectedEntries MapEntries) TestDeep {
 //	  }),
 //	) // fails, extra {"foo": "test"} in got
 //
-// TypeBehind method returns the reflect.Type of "model".
+// TypeBehind method returns the [reflect.Type] of model.
+//
+// See also [Map] and [SuperMapOf].
 func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, subMap)
 }
@@ -248,12 +252,12 @@ func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
 // input(SuperMapOf): map,ptr(ptr on map)
 
 // SuperMapOf operator compares the contents of a map against the non-zero
-// values of "model" (if any) and the values of "expectedEntries".
+// values of model (if any) and the values of expectedEntries.
 //
-// "model" must be the same type as compared data.
+// model must be the same type as compared data.
 //
-// "expectedEntries" can be nil, if no zero entries are expected and
-// no TestDeep operator are involved.
+// expectedEntries can be nil, if no zero entries are expected and
+// no [TestDeep] operators are involved.
 //
 // During a match, each expected entry should match in the compared
 // map. But some entries in the compared map may not be expected.
@@ -281,7 +285,9 @@ func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
 //	  }),
 //	) // fails, missing {"biz": …} in got
 //
-// TypeBehind method returns the reflect.Type of "model".
+// TypeBehind method returns the [reflect.Type] of model.
+//
+// See also [SuperMapOf] and [SubMapOf].
 func SuperMapOf(model any, expectedEntries MapEntries) TestDeep {
 	return newMap(model, expectedEntries, superMap)
 }

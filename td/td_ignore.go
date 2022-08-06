@@ -20,9 +20,9 @@ type tdIgnore struct {
 // input(Ignore): all
 
 // Ignore operator is always true, whatever data is. It is useful when
-// comparing a slice with Slice and wanting to ignore some indexes,
-// for example. Or comparing a struct with SStruct and wanting to
-// ignore some fields:
+// comparing a slice with [Slice] and wanting to ignore some indexes,
+// for example (if you don't want to use [SuperSliceOf]). Or comparing
+// a struct with [SStruct] and wanting to ignore some fields:
 //
 //	td.Cmp(t, got, td.SStruct(
 //	  Person{

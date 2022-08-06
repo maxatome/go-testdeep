@@ -75,7 +75,7 @@ func Init() {
 }
 
 // SaveState saves the "TESTDEEP_COLOR" environment variable
-// value, sets it to "on" (if true passed as on) or "false" (if on not
+// value, sets it to "on" (if true passed as on) or "off" (if on not
 // passed or set to false), resets the colors initialization and
 // returns a function to be called in a defer statement. Only intended
 // to be used in tests like:
@@ -249,7 +249,7 @@ func TooManyParams(usage string) string {
 	return BadOnBold + "usage: " + usage + ", too many parameters" + BadOff
 }
 
-// UnBad returns "s" with bad color prefix & suffix removed.
+// UnBad returns s with bad color prefix & suffix removed.
 func UnBad(s string) string {
 	return strings.TrimSuffix(strings.TrimPrefix(s, BadOnBold), BadOff)
 }

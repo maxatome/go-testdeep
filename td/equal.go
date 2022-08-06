@@ -63,9 +63,9 @@ func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {
 				return ctxerr.BooleanError
 			}
 
-			// Special case if "expected" is a TestDeep operator which
-			// does not handle invalid values: the operator is not called,
-			// but for the user the error comes from it
+			// Special case if expected is a TestDeep operator which does
+			// not handle invalid values: the operator is not called, but
+			// for the user the error comes from it
 		} else if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
@@ -73,8 +73,8 @@ func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {
 		err.Expected = expected
 	} else { // here: !expected.IsValid() && got.IsValid()
 		switch got.Kind() {
-		// Special case: "got" is a nil interface, so consider as equal
-		// to "expected" nil.
+		// Special case: got is a nil interface, so consider as equal
+		// to expected nil.
 		case reflect.Interface:
 			if got.IsNil() {
 				return nil
@@ -125,7 +125,7 @@ func resolveAnchor(ctx ctxerr.Context, v reflect.Value) (reflect.Value, bool) {
 }
 
 func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxerr.Error) {
-	// "got" must not implement testDeeper
+	// got must not implement testDeeper
 	if got.IsValid() && got.Type().Implements(testDeeper) {
 		panic(color.Bad("Found a TestDeep operator in got param, " +
 			"can only use it in expected one!"))
@@ -203,13 +203,13 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 			return curOperator.Match(ctx, got)
 		}
 
-		// "expected" is not a TestDeep operator
+		// expected is not a TestDeep operator
 
 		if ctx.BeLax && types.IsConvertible(expected, got.Type()) {
 			return deepValueEqual(ctx, got, expected.Convert(got.Type()))
 		}
 
-		// If "got" is an interface, try to see what is behind before failing
+		// If got is an interface, try to see what is behind before failing
 		// Used by Set/Bag Match method in such cases:
 		//           []any{123, "foo"}  →  Bag("foo", 123)
 		// Interface kind -^-----^   but String-^ and ^- Int kinds
@@ -450,8 +450,8 @@ func deepValueEqualOK(got, expected reflect.Value) bool {
 	return deepValueEqualFinal(newBooleanContext(), got, expected) == nil
 }
 
-// EqDeeply returns true if "got" matches "expected". "expected" can
-// be the same type as "got" is, or contains some TestDeep operators.
+// EqDeeply returns true if got matches expected. expected can
+// be the same type as got is, or contains some [TestDeep] operators.
 //
 //	got := "foobar"
 //	td.EqDeeply(got, "foobar")            // returns true
@@ -460,10 +460,10 @@ func EqDeeply(got, expected any) bool {
 	return deepValueEqualOK(reflect.ValueOf(got), reflect.ValueOf(expected))
 }
 
-// EqDeeplyError returns nil if "got" matches "expected". "expected"
-// can be the same type as got is, or contains some TestDeep
-// operators. If "got" does not match "expected", the returned *ctxerr.Error
-// contains the reason of the first mismatch detected.
+// EqDeeplyError returns nil if got matches expected. expected can be
+// the same type as got is, or contains some [TestDeep] operators. If
+// got does not match expected, the returned [*ctxerr.Error] contains
+// the reason of the first mismatch detected.
 //
 //	got := "foobar"
 //	if err := td.EqDeeplyError(got, "foobar"); err != nil {

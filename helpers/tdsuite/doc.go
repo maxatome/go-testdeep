@@ -4,7 +4,7 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-// Package tdsuite adds tests suite feature to go-testdeep in a
+// Package tdsuite adds tests suite feature to [go-testdeep] in a
 // non-intrusive way, but easily and powerfully.
 //
 // A tests suite is a set of tests run sequentially that share some data.
@@ -125,4 +125,6 @@
 //
 // See documentation below for other possible hooks: [PreTest], [PostTest]
 // and [BetweenTests].
+//
+// [go-testdeep]: https://go-testdeep.zetta.rocks/
 package tdsuite

@@ -23,7 +23,7 @@ import (
 //	td.CmpTrue(t, IsAvailable(x), "x should be available")
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -42,7 +42,7 @@ func CmpTrue(t TestingT, got bool, args ...any) bool {
 //	td.CmpFalse(t, IsAvailable(x), "x should not be available")
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -92,13 +92,13 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...any) bool {
 	return false
 }
 
-// CmpError checks that "got" is non-nil error.
+// CmpError checks that got is non-nil error.
 //
 //	_, err := MyFunction(1, 2, 3)
 //	td.CmpError(t, err, "MyFunction(1, 2, 3) should return an error")
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -108,7 +108,7 @@ func CmpError(t TestingT, got error, args ...any) bool {
 	return cmpError(newContext(t), t, got, args...)
 }
 
-// CmpNoError checks that "got" is nil error.
+// CmpNoError checks that got is nil error.
 //
 //	value, err := MyFunction(1, 2, 3)
 //	if td.CmpNoError(t, err) {
@@ -116,7 +116,7 @@ func CmpError(t TestingT, got error, args ...any) bool {
 //	}
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -207,12 +207,12 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...any) bool {
 	return false
 }
 
-// CmpPanic calls "fn" and checks a panic() occurred with the
-// "expectedPanic" parameter. It returns true only if both conditions
+// CmpPanic calls fn and checks a panic() occurred with the
+// expectedPanic parameter. It returns true only if both conditions
 // are fulfilled.
 //
-// Note that calling panic(nil) in "fn" body is detected as a panic
-// (in this case "expectedPanic" has to be nil).
+// Note that calling panic(nil) in fn body is detected as a panic
+// (in this case expectedPanic has to be nil).
 //
 //	td.CmpPanic(t,
 //	  func() { panic("I am panicking!") },
@@ -227,7 +227,7 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...any) bool {
 //	td.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)") // succeeds
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -238,11 +238,11 @@ func CmpPanic(t TestingT, fn func(), expectedPanic any,
 	return cmpPanic(newContext(t), t, fn, expectedPanic, args...)
 }
 
-// CmpNotPanic calls "fn" and checks no panic() occurred. If a panic()
+// CmpNotPanic calls fn and checks no panic() occurred. If a panic()
 // occurred false is returned then the panic() parameter and the stack
 // trace appear in the test report.
 //
-// Note that calling panic(nil) in "fn" body is detected as a panic.
+// Note that calling panic(nil) in fn body is detected as a panic.
 //
 //	td.CmpNotPanic(t, func() {}) // succeeds as function does not panic
 //
@@ -250,7 +250,7 @@ func CmpPanic(t TestingT, fn func(), expectedPanic any,
 //	td.CmpNotPanic(t, func() { panic(nil) })               // fails too
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the

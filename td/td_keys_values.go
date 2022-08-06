@@ -45,19 +45,21 @@ var _ TestDeep = &tdKeys{}
 // input(Keys): map
 
 // Keys is a smuggler operator. It takes a map and compares its
-// ordered keys to "val".
+// ordered keys to val.
 //
-// "val" can be a slice of items of the same type as the map keys:
+// val can be a slice of items of the same type as the map keys:
 //
 //	got := map[string]bool{"c": true, "a": false, "b": true}
 //	td.Cmp(t, got, td.Keys([]string{"a", "b", "c"})) // succeeds, keys sorted
 //	td.Cmp(t, got, td.Keys([]string{"c", "a", "b"})) // fails as not sorted
 //
-// as well as an other operator as Bag, for example, to test keys in
+// as well as an other operator as [Bag], for example, to test keys in
 // an unsorted manner:
 //
 //	got := map[string]bool{"c": true, "a": false, "b": true}
 //	td.Cmp(t, got, td.Keys(td.Bag("c", "a", "b"))) // succeeds
+//
+// See also [Values] and [ContainsKey].
 func Keys(val any) TestDeep {
 	k := tdKeys{}
 	if !k.initKVBase(val) {
@@ -111,19 +113,21 @@ var _ TestDeep = &tdValues{}
 // input(Values): map
 
 // Values is a smuggler operator. It takes a map and compares its
-// ordered values to "val".
+// ordered values to val.
 //
-// "val" can be a slice of items of the same type as the map values:
+// val can be a slice of items of the same type as the map values:
 //
 //	got := map[int]string{3: "c", 1: "a", 2: "b"}
 //	td.Cmp(t, got, td.Values([]string{"a", "b", "c"})) // succeeds, values sorted
 //	td.Cmp(t, got, td.Values([]string{"c", "a", "b"})) // fails as not sorted
 //
-// as well as an other operator as Bag, for example, to test values in
+// as well as an other operator as [Bag], for example, to test values in
 // an unsorted manner:
 //
 //	got := map[int]string{3: "c", 1: "a", 2: "b"}
 //	td.Cmp(t, got, td.Values(td.Bag("c", "a", "b"))) // succeeds
+//
+// See also [Keys].
 func Values(val any) TestDeep {
 	v := tdValues{}
 	if !v.initKVBase(val) {

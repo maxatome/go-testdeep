@@ -28,14 +28,14 @@ var _ TestDeep = &tdJSONPointer{}
 
 // JSONPointer is a smuggler operator. It takes the JSON
 // representation of data, gets the value corresponding to the JSON
-// pointer "pointer" (as RFC 6901 specifies it) and compares it to
-// "expectedValue".
+// pointer ptr (as [RFC 6901] specifies it) and compares it to
+// expectedValue.
 //
-// Lax mode is automatically enabled to simplify numeric tests.
+// [Lax] mode is automatically enabled to simplify numeric tests.
 //
 // JSONPointer does its best to convert back the JSON pointed data to
-// the type of "expectedValue" or to the type behind the
-// "expectedValue" operator, if it is an operator. Allowing to do
+// the type of expectedValue or to the type behind the
+// expectedValue operator, if it is an operator. Allowing to do
 // things like:
 //
 //	type Item struct {
@@ -61,8 +61,8 @@ var _ TestDeep = &tdJSONPointer{}
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []any, map[string]any or simply nil).
 //
-// Note that as any TestDeep operator can be used as "expectedValue",
-// JSON operator works out of the box:
+// Note that as any [TestDeep] operator can be used as expectedValue,
+// [JSON] operator works out of the box:
 //
 //	got := json.RawMessage(`{"foo":{"bar": {"zip": true}}}`)
 //	td.Cmp(t, got, td.JSONPointer("/foo/bar", td.JSON(`{"zip": true}`)))
@@ -78,7 +78,7 @@ var _ TestDeep = &tdJSONPointer{}
 //
 //	td.Cmp(t, got, td.JSONPointer("/Next/Next", Item{Val: 3}))
 //
-// Contrary to Smuggle operator and its fields-path feature, only
+// Contrary to [Smuggle] operator and its fields-path feature, only
 // public fields can be followed, as private ones are never (un)marshaled.
 //
 // There is no JSONHas nor JSONHasnt operators to only check a JSON
@@ -94,14 +94,18 @@ var _ TestDeep = &tdJSONPointer{}
 //
 // TypeBehind method always returns nil as the expected type cannot be
 // guessed from a JSON pointer.
-func JSONPointer(pointer string, expectedValue any) TestDeep {
+//
+// See also [JSON], [SubJSONOf], [SuperJSONOf] and [Smuggle].
+//
+// [RFC 6901]: https://tools.ietf.org/html/rfc6901
+func JSONPointer(ptr string, expectedValue any) TestDeep {
 	p := tdJSONPointer{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
-		pointer:        pointer,
+		pointer:        ptr,
 	}
 
-	if !strings.HasPrefix(pointer, "/") && pointer != "" {
-		p.err = ctxerr.OpBad("JSONPointer", "bad JSON pointer %q", pointer)
+	if !strings.HasPrefix(ptr, "/") && ptr != "" {
+		p.err = ctxerr.OpBad("JSONPointer", "bad JSON pointer %q", ptr)
 		return &p
 	}
 

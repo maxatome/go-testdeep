@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2021, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -16,12 +16,12 @@ import (
 //
 //	t.Cmp(got, td.All(expectedValues...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#All for details.
+// See [All] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -35,12 +35,12 @@ func (t *T) All(got any, expectedValues []any, args ...any) bool {
 //
 //	t.Cmp(got, td.Any(expectedValues...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Any for details.
+// See [Any] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -54,12 +54,12 @@ func (t *T) Any(got any, expectedValues []any, args ...any) bool {
 //
 //	t.Cmp(got, td.Array(model, expectedEntries), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Array for details.
+// See [Array] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -73,12 +73,12 @@ func (t *T) Array(got, model any, expectedEntries ArrayEntries, args ...any) boo
 //
 //	t.Cmp(got, td.ArrayEach(expectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ArrayEach for details.
+// See [ArrayEach] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -92,12 +92,12 @@ func (t *T) ArrayEach(got, expectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.Bag(expectedItems...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Bag for details.
+// See [Bag] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -111,16 +111,16 @@ func (t *T) Bag(got any, expectedItems []any, args ...any) bool {
 //
 //	t.Cmp(got, td.Between(from, to, bounds), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Between for details.
+// See [Between] for details.
 //
-// Between() optional parameter "bounds" is here mandatory.
+// [Between] optional parameter bounds is here mandatory.
 // [BoundsInIn] value should be passed to mimic its absence in
-// original Between() call.
+// original [Between] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -134,12 +134,12 @@ func (t *T) Between(got, from, to any, bounds BoundsKind, args ...any) bool {
 //
 //	t.Cmp(got, td.Cap(expectedCap), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Cap for details.
+// See [Cap] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -153,12 +153,12 @@ func (t *T) Cap(got, expectedCap any, args ...any) bool {
 //
 //	t.Cmp(got, td.Code(fn), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Code for details.
+// See [Code] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -172,12 +172,12 @@ func (t *T) Code(got, fn any, args ...any) bool {
 //
 //	t.Cmp(got, td.Contains(expectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Contains for details.
+// See [Contains] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -191,12 +191,12 @@ func (t *T) Contains(got, expectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.ContainsKey(expectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContainsKey for details.
+// See [ContainsKey] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -210,12 +210,12 @@ func (t *T) ContainsKey(got, expectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.Empty(), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Empty for details.
+// See [Empty] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -229,12 +229,12 @@ func (t *T) Empty(got any, args ...any) bool {
 //
 //	t.Cmp(got, td.Gt(minExpectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Gt for details.
+// See [Gt] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -248,12 +248,12 @@ func (t *T) Gt(got, minExpectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.Gte(minExpectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Gte for details.
+// See [Gte] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -267,12 +267,12 @@ func (t *T) Gte(got, minExpectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.HasPrefix(expected), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#HasPrefix for details.
+// See [HasPrefix] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -286,12 +286,12 @@ func (t *T) HasPrefix(got any, expected string, args ...any) bool {
 //
 //	t.Cmp(got, td.HasSuffix(expected), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#HasSuffix for details.
+// See [HasSuffix] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -305,12 +305,12 @@ func (t *T) HasSuffix(got any, expected string, args ...any) bool {
 //
 //	t.Cmp(got, td.Isa(model), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Isa for details.
+// See [Isa] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -324,12 +324,12 @@ func (t *T) Isa(got, model any, args ...any) bool {
 //
 //	t.Cmp(got, td.JSON(expectedJSON, params...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#JSON for details.
+// See [JSON] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -341,33 +341,33 @@ func (t *T) JSON(got, expectedJSON any, params []any, args ...any) bool {
 
 // JSONPointer is a shortcut for:
 //
-//	t.Cmp(got, td.JSONPointer(pointer, expectedValue), args...)
+//	t.Cmp(got, td.JSONPointer(ptr, expectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#JSONPointer for details.
+// See [JSONPointer] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) JSONPointer(got any, pointer string, expectedValue any, args ...any) bool {
+func (t *T) JSONPointer(got any, ptr string, expectedValue any, args ...any) bool {
 	t.Helper()
-	return t.Cmp(got, JSONPointer(pointer, expectedValue), args...)
+	return t.Cmp(got, JSONPointer(ptr, expectedValue), args...)
 }
 
 // Keys is a shortcut for:
 //
 //	t.Cmp(got, td.Keys(val), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Keys for details.
+// See [Keys] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -381,12 +381,12 @@ func (t *T) Keys(got, val any, args ...any) bool {
 //
 //	t.Cmp(got, td.Lax(expectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lax for details.
+// See [Lax] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -400,12 +400,12 @@ func (t *T) CmpLax(got, expectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.Len(expectedLen), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Len for details.
+// See [Len] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -419,12 +419,12 @@ func (t *T) Len(got, expectedLen any, args ...any) bool {
 //
 //	t.Cmp(got, td.Lt(maxExpectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lt for details.
+// See [Lt] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -438,12 +438,12 @@ func (t *T) Lt(got, maxExpectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.Lte(maxExpectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Lte for details.
+// See [Lte] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -457,12 +457,12 @@ func (t *T) Lte(got, maxExpectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.Map(model, expectedEntries), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Map for details.
+// See [Map] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -476,12 +476,12 @@ func (t *T) Map(got, model any, expectedEntries MapEntries, args ...any) bool {
 //
 //	t.Cmp(got, td.MapEach(expectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#MapEach for details.
+// See [MapEach] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -495,16 +495,16 @@ func (t *T) MapEach(got, expectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.N(num, tolerance), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#N for details.
+// See [N] for details.
 //
-// N() optional parameter "tolerance" is here mandatory.
+// [N] optional parameter tolerance is here mandatory.
 // 0 value should be passed to mimic its absence in
-// original N() call.
+// original [N] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -518,12 +518,12 @@ func (t *T) N(got, num, tolerance any, args ...any) bool {
 //
 //	t.Cmp(got, td.NaN(), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NaN for details.
+// See [NaN] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -537,12 +537,12 @@ func (t *T) NaN(got any, args ...any) bool {
 //
 //	t.Cmp(got, td.Nil(), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Nil for details.
+// See [Nil] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -556,12 +556,12 @@ func (t *T) Nil(got any, args ...any) bool {
 //
 //	t.Cmp(got, td.None(notExpectedValues...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#None for details.
+// See [None] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -575,12 +575,12 @@ func (t *T) None(got any, notExpectedValues []any, args ...any) bool {
 //
 //	t.Cmp(got, td.Not(notExpected), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Not for details.
+// See [Not] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -594,12 +594,12 @@ func (t *T) Not(got, notExpected any, args ...any) bool {
 //
 //	t.Cmp(got, td.NotAny(notExpectedItems...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotAny for details.
+// See [NotAny] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -613,12 +613,12 @@ func (t *T) NotAny(got any, notExpectedItems []any, args ...any) bool {
 //
 //	t.Cmp(got, td.NotEmpty(), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotEmpty for details.
+// See [NotEmpty] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -632,12 +632,12 @@ func (t *T) NotEmpty(got any, args ...any) bool {
 //
 //	t.Cmp(got, td.NotNaN(), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotNaN for details.
+// See [NotNaN] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -651,12 +651,12 @@ func (t *T) NotNaN(got any, args ...any) bool {
 //
 //	t.Cmp(got, td.NotNil(), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotNil for details.
+// See [NotNil] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -670,12 +670,12 @@ func (t *T) NotNil(got any, args ...any) bool {
 //
 //	t.Cmp(got, td.NotZero(), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#NotZero for details.
+// See [NotZero] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -689,12 +689,12 @@ func (t *T) NotZero(got any, args ...any) bool {
 //
 //	t.Cmp(got, td.PPtr(val), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#PPtr for details.
+// See [PPtr] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -708,12 +708,12 @@ func (t *T) PPtr(got, val any, args ...any) bool {
 //
 //	t.Cmp(got, td.Ptr(val), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Ptr for details.
+// See [Ptr] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -727,16 +727,16 @@ func (t *T) Ptr(got, val any, args ...any) bool {
 //
 //	t.Cmp(got, td.Re(reg, capture), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Re for details.
+// See [Re] for details.
 //
-// Re() optional parameter "capture" is here mandatory.
+// [Re] optional parameter capture is here mandatory.
 // nil value should be passed to mimic its absence in
-// original Re() call.
+// original [Re] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -750,12 +750,12 @@ func (t *T) Re(got, reg, capture any, args ...any) bool {
 //
 //	t.Cmp(got, td.ReAll(reg, capture), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ReAll for details.
+// See [ReAll] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -769,12 +769,12 @@ func (t *T) ReAll(got, reg, capture any, args ...any) bool {
 //
 //	t.Cmp(got, td.Set(expectedItems...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Set for details.
+// See [Set] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -788,12 +788,12 @@ func (t *T) Set(got any, expectedItems []any, args ...any) bool {
 //
 //	t.Cmp(got, td.Shallow(expectedPtr), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Shallow for details.
+// See [Shallow] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -807,12 +807,12 @@ func (t *T) Shallow(got, expectedPtr any, args ...any) bool {
 //
 //	t.Cmp(got, td.Slice(model, expectedEntries), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Slice for details.
+// See [Slice] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -826,12 +826,12 @@ func (t *T) Slice(got, model any, expectedEntries ArrayEntries, args ...any) boo
 //
 //	t.Cmp(got, td.Smuggle(fn, expectedValue), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Smuggle for details.
+// See [Smuggle] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -845,16 +845,16 @@ func (t *T) Smuggle(got, fn, expectedValue any, args ...any) bool {
 //
 //	t.Cmp(got, td.SStruct(model, expectedFields), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SStruct for details.
+// See [SStruct] for details.
 //
-// SStruct() optional parameter "expectedFields" is here mandatory.
+// [SStruct] optional parameter expectedFields is here mandatory.
 // nil value should be passed to mimic its absence in
-// original SStruct() call.
+// original [SStruct] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -868,12 +868,12 @@ func (t *T) SStruct(got, model any, expectedFields StructFields, args ...any) bo
 //
 //	t.Cmp(got, td.String(expected), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#String for details.
+// See [String] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -887,16 +887,16 @@ func (t *T) String(got any, expected string, args ...any) bool {
 //
 //	t.Cmp(got, td.Struct(model, expectedFields), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Struct for details.
+// See [Struct] for details.
 //
-// Struct() optional parameter "expectedFields" is here mandatory.
+// [Struct] optional parameter expectedFields is here mandatory.
 // nil value should be passed to mimic its absence in
-// original Struct() call.
+// original [Struct] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -910,12 +910,12 @@ func (t *T) Struct(got, model any, expectedFields StructFields, args ...any) boo
 //
 //	t.Cmp(got, td.SubBagOf(expectedItems...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubBagOf for details.
+// See [SubBagOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -929,12 +929,12 @@ func (t *T) SubBagOf(got any, expectedItems []any, args ...any) bool {
 //
 //	t.Cmp(got, td.SubJSONOf(expectedJSON, params...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubJSONOf for details.
+// See [SubJSONOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -948,12 +948,12 @@ func (t *T) SubJSONOf(got, expectedJSON any, params []any, args ...any) bool {
 //
 //	t.Cmp(got, td.SubMapOf(model, expectedEntries), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubMapOf for details.
+// See [SubMapOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -967,12 +967,12 @@ func (t *T) SubMapOf(got, model any, expectedEntries MapEntries, args ...any) bo
 //
 //	t.Cmp(got, td.SubSetOf(expectedItems...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SubSetOf for details.
+// See [SubSetOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -986,12 +986,12 @@ func (t *T) SubSetOf(got any, expectedItems []any, args ...any) bool {
 //
 //	t.Cmp(got, td.SuperBagOf(expectedItems...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperBagOf for details.
+// See [SuperBagOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -1005,12 +1005,12 @@ func (t *T) SuperBagOf(got any, expectedItems []any, args ...any) bool {
 //
 //	t.Cmp(got, td.SuperJSONOf(expectedJSON, params...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperJSONOf for details.
+// See [SuperJSONOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -1024,12 +1024,12 @@ func (t *T) SuperJSONOf(got, expectedJSON any, params []any, args ...any) bool {
 //
 //	t.Cmp(got, td.SuperMapOf(model, expectedEntries), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperMapOf for details.
+// See [SuperMapOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -1043,12 +1043,12 @@ func (t *T) SuperMapOf(got, model any, expectedEntries MapEntries, args ...any) 
 //
 //	t.Cmp(got, td.SuperSetOf(expectedItems...), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperSetOf for details.
+// See [SuperSetOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -1062,12 +1062,12 @@ func (t *T) SuperSetOf(got any, expectedItems []any, args ...any) bool {
 //
 //	t.Cmp(got, td.SuperSliceOf(model, expectedEntries), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#SuperSliceOf for details.
+// See [SuperSliceOf] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -1081,16 +1081,16 @@ func (t *T) SuperSliceOf(got, model any, expectedEntries ArrayEntries, args ...a
 //
 //	t.Cmp(got, td.TruncTime(expectedTime, trunc), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#TruncTime for details.
+// See [TruncTime] for details.
 //
-// TruncTime() optional parameter "trunc" is here mandatory.
+// [TruncTime] optional parameter trunc is here mandatory.
 // 0 value should be passed to mimic its absence in
-// original TruncTime() call.
+// original [TruncTime] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -1104,12 +1104,12 @@ func (t *T) TruncTime(got, expectedTime any, trunc time.Duration, args ...any) b
 //
 //	t.Cmp(got, td.Values(val), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Values for details.
+// See [Values] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
@@ -1123,12 +1123,12 @@ func (t *T) Values(got, val any, args ...any) bool {
 //
 //	t.Cmp(got, td.Zero(), args...)
 //
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#Zero for details.
+// See [Zero] for details.
 //
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
-// used in case of failure to qualify the test. If len(args) > 1 and
+// used in case of failure to qualify the test. If len(args) > 1 and
 // the first item of args is a string and contains a '%' rune then
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the

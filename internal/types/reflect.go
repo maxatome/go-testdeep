@@ -27,7 +27,7 @@ var (
 	String          = reflect.TypeOf("")
 )
 
-// IsStruct returns true if "t" is a struct or a pointer on a struct
+// IsStruct returns true if t is a struct or a pointer on a struct
 // (whatever the number of chained pointers), false otherwise.
 func IsStruct(t reflect.Type) bool {
 	for {
@@ -42,8 +42,8 @@ func IsStruct(t reflect.Type) bool {
 	}
 }
 
-// IsTypeOrConvertible returns (true, false) if "v" type == "target",
-// (true, true) if "v" if convertible to "target" type, (false, false)
+// IsTypeOrConvertible returns (true, false) if v type == target,
+// (true, true) if v if convertible to target type, (false, false)
 // otherwise.
 //
 // It handles go 1.17 slice to array pointer convertibility.
@@ -57,7 +57,7 @@ func IsTypeOrConvertible(v reflect.Value, target reflect.Type) (bool, bool) {
 	return false, false
 }
 
-// IsConvertible returns true if "v" if convertible to "target" type,
+// IsConvertible returns true if v if convertible to target type,
 // false otherwise.
 //
 // It handles go 1.17 slice to array pointer convertibility.

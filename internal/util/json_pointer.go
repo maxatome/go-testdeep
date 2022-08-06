@@ -34,9 +34,11 @@ func (e *JSONPointerError) Error() string {
 }
 
 // JSONPointer returns the value corresponding to JSON pointer
-// "pointer" in "v" as RFC 6901 specifies it. To be searched, "v" has
+// pointer in v as [RFC 6901] specifies it. To be searched, v has
 // to contains map[string]any or []any values. All
 // other types fail to be searched.
+//
+// [RFC 6901]: https://tools.ietf.org/html/rfc6901
 func JSONPointer(v any, pointer string) (any, error) {
 	if !strings.HasPrefix(pointer, "/") {
 		if pointer == "" {

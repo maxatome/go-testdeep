@@ -75,13 +75,13 @@ func newRe(regIf any, capture ...any) *tdRe {
 // input(Re): str,slice([]byte),if(✓ + fmt.Stringer/error)
 
 // Re operator allows to apply a regexp on a string (or convertible),
-// []byte, error or fmt.Stringer interface (error interface is tested
-// before fmt.Stringer.)
+// []byte, error or [fmt.Stringer] interface (error interface is tested
+// before [fmt.Stringer].)
 //
-// "reg" is the regexp. It can be a string that is automatically
-// compiled using regexp.MustCompile, or a *regexp.Regexp.
+// reg is the regexp. It can be a string that is automatically
+// compiled using [regexp.Compile], or a [*regexp.Regexp].
 //
-// Optional "capture" parameter can be used to match the contents of
+// Optional capture parameter can be used to match the contents of
 // regexp groups. Groups are presented as a []string or [][]byte
 // depending the original matched data. Note that an other operator
 // can be used here.
@@ -91,6 +91,8 @@ func newRe(regIf any, capture ...any) *tdRe {
 //	  td.Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
 //	td.Cmp(t, "John Doe",
 //	  td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
+//
+// See also [ReAll].
 func Re(reg any, capture ...any) TestDeep {
 	r := newRe(reg, capture...)
 	r.numMatches = 1
@@ -103,14 +105,14 @@ func Re(reg any, capture ...any) TestDeep {
 // input(ReAll): str,slice([]byte),if(✓ + fmt.Stringer/error)
 
 // ReAll operator allows to successively apply a regexp on a string
-// (or convertible), []byte, error or fmt.Stringer interface (error
-// interface is tested before fmt.Stringer) and to match its groups
+// (or convertible), []byte, error or [fmt.Stringer] interface (error
+// interface is tested before [fmt.Stringer]) and to match its groups
 // contents.
 //
-// "reg" is the regexp. It can be a string that is automatically
-// compiled using regexp.MustCompile, or a *regexp.Regexp.
+// reg is the regexp. It can be a string that is automatically
+// compiled using [regexp.Compile], or a [*regexp.Regexp].
 //
-// "capture" is used to match the contents of regexp groups. Groups
+// capture is used to match the contents of regexp groups. Groups
 // are presented as a []string or [][]byte depending the original
 // matched data. Note that an other operator can be used here.
 //
@@ -118,6 +120,8 @@ func Re(reg any, capture ...any) TestDeep {
 //	  td.ReAll(`(\w+)(?: |\z)`, []string{"John", "Doe"})) // succeeds
 //	td.Cmp(t, "John Doe",
 //	  td.ReAll(`(\w+)(?: |\z)`, td.Bag("Doe", "John"))) // succeeds
+//
+// See also [Re].
 func ReAll(reg, capture any) TestDeep {
 	r := newRe(reg, capture)
 	r.numMatches = -1

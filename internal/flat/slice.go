@@ -154,7 +154,7 @@ func (f Slice) appendTo(si []any) []any {
 
 // Len returns the number of items contained in items. Nested Slice
 // items are counted as if they are flattened. It returns true if at
-// least one Slice item is found, false otherwise.
+// least one [Slice] item is found, false otherwise.
 func Len(items []any) (int, bool) {
 	l := len(items)
 	flattened := true
@@ -168,8 +168,8 @@ func Len(items []any) (int, bool) {
 	return l, flattened
 }
 
-// Values returns the items values as a slice of reflect.Value. Nested
-// Slice items are flattened.
+// Values returns the items values as a slice of
+// [reflect.Value]. Nested [Slice] items are flattened.
 func Values(items []any) []reflect.Value {
 	l, flattened := Len(items)
 	if flattened {
@@ -192,7 +192,7 @@ func Values(items []any) []reflect.Value {
 }
 
 // Interfaces returns the items values as a slice of
-// any. Nested Slice items are flattened.
+// any. Nested [Slice] items are flattened.
 func Interfaces(items ...any) []any {
 	l, flattened := Len(items)
 	if flattened {

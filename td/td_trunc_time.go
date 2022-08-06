@@ -27,18 +27,18 @@ var _ TestDeep = &tdTruncTime{}
 // truncating them
 // input(TruncTime): struct(time.Time),ptr(todo)
 
-// TruncTime operator compares time.Time (or assignable) values after
-// truncating them to the optional "trunc" duration. See time.Truncate
-// for details about the truncation.
+// TruncTime operator compares [time.Time] (or assignable) values
+// after truncating them to the optional trunc duration. See
+// [time.Time.Truncate] for details about the truncation.
 //
-// If "trunc" is missing, it defaults to 0.
+// If trunc is missing, it defaults to 0.
 //
-// During comparison, location does not matter as time.Equal method is
-// used behind the scenes: a time instant in two different locations
-// is the same time instant.
+// During comparison, location does not matter as [time.Time.Equal]
+// method is used behind the scenes: a time instant in two different
+// locations is the same time instant.
 //
-// Whatever the "trunc" value is, the monotonic clock is stripped
-// before the comparison against "expectedTime".
+// Whatever the trunc value is, the monotonic clock is stripped
+// before the comparison against expectedTime.
 //
 //	gotDate := time.Date(2018, time.March, 9, 1, 2, 3, 999999999, time.UTC).
 //	  In(time.FixedZone("UTC+2", 2))
@@ -48,7 +48,7 @@ var _ TestDeep = &tdTruncTime{}
 //	td.Cmp(t, gotDate, td.TruncTime(expected))              // fails, ns differ
 //	td.Cmp(t, gotDate, td.TruncTime(expected, time.Second)) // succeeds
 //
-// TypeBehind method returns the reflect.Type of "expectedTime".
+// TypeBehind method returns the [reflect.Type] of expectedTime.
 func TruncTime(expectedTime any, trunc ...time.Duration) TestDeep {
 	const usage = "(time.Time[, time.Duration])"
 

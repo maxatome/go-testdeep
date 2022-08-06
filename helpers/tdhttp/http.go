@@ -271,8 +271,8 @@ func CmpXMLResponse(t testing.TB,
 }
 
 // CmpMarshaledResponseFunc returns a function ready to be used with
-// [testing.Run], calling [CmpMarshaledResponse] behind the scene. As it
-// is intended to be used in conjunction with [testing.Run] which
+// [testing.T.Run], calling [CmpMarshaledResponse] behind the scene. As it
+// is intended to be used in conjunction with [testing.T.Run] which
 // names the sub-test, the test name part (args...) is voluntary
 // omitted.
 //
@@ -297,8 +297,8 @@ func CmpMarshaledResponseFunc(req *http.Request,
 }
 
 // CmpResponseFunc returns a function ready to be used with
-// [testing.Run], calling [CmpResponse] behind the scene. As it is
-// intended to be used in conjunction with [testing.Run] which names
+// [testing.T.Run], calling [CmpResponse] behind the scene. As it is
+// intended to be used in conjunction with [testing.T.Run] which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //	t.Run("Subtest name", tdhttp.CmpResponseFunc(
@@ -321,8 +321,8 @@ func CmpResponseFunc(req *http.Request,
 }
 
 // CmpJSONResponseFunc returns a function ready to be used with
-// [testing.Run], calling [CmpJSONResponse] behind the scene. As it is
-// intended to be used in conjunction with [testing.Run] which names
+// [testing.T.Run], calling [CmpJSONResponse] behind the scene. As it is
+// intended to be used in conjunction with [testing.T.Run] which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //	t.Run("Subtest name", tdhttp.CmpJSONResponseFunc(
@@ -346,8 +346,8 @@ func CmpJSONResponseFunc(req *http.Request,
 }
 
 // CmpXMLResponseFunc returns a function ready to be used with
-// [testing.Run], calling [CmpXMLResponse] behind the scene. As it is
-// intended to be used in conjunction with [testing.Run] which names
+// [testing.T.Run], calling [CmpXMLResponse] behind the scene. As it is
+// intended to be used in conjunction with [testing.T.Run] which names
 // the sub-test, the test name part (args...) is voluntary omitted.
 //
 //	t.Run("Subtest name", tdhttp.CmpXMLResponseFunc(

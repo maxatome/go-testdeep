@@ -15,7 +15,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
-// Context is used internally to keep track of the CmpDeeply in-Depth
+// Context is used internally to keep track of the Cmp in-depth
 // traversal.
 type Context struct {
 	Path        Path
@@ -46,7 +46,7 @@ type Context struct {
 	IgnoreUnexported bool
 }
 
-// InitErrors initializes Context *Errors slice, if MaxErrors < 0 or
+// InitErrors initializes [Context] *Errors slice, if MaxErrors < 0 or
 // MaxErrors > 1.
 func (c *Context) InitErrors() {
 	if c.MaxErrors != 0 && c.MaxErrors != 1 {
@@ -55,7 +55,7 @@ func (c *Context) InitErrors() {
 	}
 }
 
-// ResetErrors returns a new Context without any Error set.
+// ResetErrors returns a new [Context] without any Error set.
 func (c Context) ResetErrors() (new Context) {
 	new = c
 	new.InitErrors()
@@ -65,7 +65,8 @@ func (c Context) ResetErrors() (new Context) {
 // CollectError collects an error in the context. It returns an error
 // if the collector is full, nil otherwise.
 //
-// In boolean context, ignore the passed error and return the BooleanError.
+// In boolean context, it ignores the passed error and returns the
+// [BooleanError].
 func (c Context) CollectError(err *Error) *Error {
 	if err == nil {
 		return nil
@@ -126,7 +127,7 @@ func (c Context) CannotCompareError() *Error {
 	}
 }
 
-// AddCustomLevel creates a new Context from current one plus pathAdd.
+// AddCustomLevel creates a new [Context] from current one plus pathAdd.
 func (c Context) AddCustomLevel(pathAdd string) (new Context) {
 	new = c
 	new.Path = new.Path.AddCustomLevel(pathAdd)
@@ -134,7 +135,7 @@ func (c Context) AddCustomLevel(pathAdd string) (new Context) {
 	return
 }
 
-// AddField creates a new Context from current one plus "." + field.
+// AddField creates a new [Context] from current one plus "." + field.
 func (c Context) AddField(field string) (new Context) {
 	new = c
 	new.Path = new.Path.AddField(field)
@@ -142,7 +143,7 @@ func (c Context) AddField(field string) (new Context) {
 	return
 }
 
-// AddArrayIndex creates a new Context from current one plus an array
+// AddArrayIndex creates a new [Context] from current one plus an array
 // dereference for index-th item.
 func (c Context) AddArrayIndex(index int) (new Context) {
 	new = c
@@ -151,7 +152,7 @@ func (c Context) AddArrayIndex(index int) (new Context) {
 	return
 }
 
-// AddMapKey creates a new Context from current one plus a map
+// AddMapKey creates a new [Context] from current one plus a map
 // dereference for key key.
 func (c Context) AddMapKey(key any) (new Context) {
 	new = c
@@ -160,7 +161,7 @@ func (c Context) AddMapKey(key any) (new Context) {
 	return
 }
 
-// AddPtr creates a new Context from current one plus a pointer dereference.
+// AddPtr creates a new [Context] from current one plus a pointer dereference.
 func (c Context) AddPtr(num int) (new Context) {
 	new = c
 	new.Path = new.Path.AddPtr(num)
@@ -168,7 +169,7 @@ func (c Context) AddPtr(num int) (new Context) {
 	return
 }
 
-// AddFunctionCall creates a new Context from current one inside a
+// AddFunctionCall creates a new [Context] from current one inside a
 // function call.
 func (c Context) AddFunctionCall(fn string) (new Context) {
 	new = c
@@ -177,7 +178,7 @@ func (c Context) AddFunctionCall(fn string) (new Context) {
 	return
 }
 
-// ResetPath creates a new Context from current one but reinitializing Path.
+// ResetPath creates a new [Context] from current one but reinitializing Path.
 func (c Context) ResetPath(newRoot string) (new Context) {
 	new = c
 	new.Path = NewPath(newRoot)
