@@ -26,10 +26,10 @@ var _ TestDeep = &tdCode{}
 // input(Code): all
 
 // Code operator allows to check data using a custom function. So
-// "fn" is a function that must take one parameter whose type must be
+// fn is a function that must take one parameter whose type must be
 // the same as the type of the compared value.
 //
-// "fn" can return a single bool kind value, telling that yes or no
+// fn can return a single bool kind value, telling that yes or no
 // the custom test is successful:
 //
 //	td.Cmp(t, gotTime,
@@ -68,20 +68,20 @@ var _ TestDeep = &tdCode{}
 // This operator allows to handle any specific comparison not handled
 // by standard operators.
 //
-// It is not recommended to call Cmp (or any other Cmp*
-// functions or *T methods) inside the body of "fn", because of
+// It is not recommended to call [Cmp] (or any other Cmp*
+// functions or [*T] methods) inside the body of fn, because of
 // confusion produced by output in case of failure. When the data
-// needs to be transformed before being compared again, Smuggle
+// needs to be transformed before being compared again, [Smuggle]
 // operator should be used instead.
 //
 // But in some cases it can be better to handle yourself the
-// comparison than to chain TestDeep operators. In this case, "fn" can
-// be a function receiving one or two *T as first parameters and
+// comparison than to chain [TestDeep] operators. In this case, fn can
+// be a function receiving one or two [*T] as first parameters and
 // returning no values.
 //
-// When "fn" expects one *T parameter, is it directly derived from the
-// testing.TB instance passed originally to Cmp (or its derivatives)
-// using NewT():
+// When fn expects one [*T] parameter, it is directly derived from the
+// [testing.TB] instance passed originally to [Cmp] (or its derivatives)
+// using [NewT]:
 //
 //	td.Cmp(t, httpRequest, td.Code(func(t *td.T, r *http.Request) {
 //	  token, err := DecodeToken(r.Header.Get("X-Token-1"))
@@ -90,9 +90,9 @@ var _ TestDeep = &tdCode{}
 //	  }
 //	}))
 //
-// When "fn" expects two *T parameters, they are directly derived from
-// the testing.TB instance passed originally to Cmp (or its derivatives)
-// using AssertRequire():
+// When fn expects two [*T] parameters, they are directly derived from
+// the [testing.TB] instance passed originally to [Cmp] (or its derivatives)
+// using [AssertRequire]:
 //
 //	td.Cmp(t, httpRequest, td.Code(func(assert, require *td.T, r *http.Request) {
 //	  token, err := DecodeToken(r.Header.Get("X-Token-1"))
@@ -100,12 +100,13 @@ var _ TestDeep = &tdCode{}
 //	  assert.True(token.OK())
 //	}))
 //
-// Note that these forms do not work when there is no initial testing.TB
-// instance, like when using EqDeeplyError() or EqDeeply() functions,
-// or when the Code operator is called behind the following operators,
-// as they just check if a match occurs without raising an error: Any,
-// Bag, Contains, ContainsKey, None, Not, NotAny, Set, SubBagOf,
-// SubSetOf, SuperBagOf and SuperSetOf.
+// Note that these forms do not work when there is no initial
+// [testing.TB] instance, like when using [EqDeeplyError] or
+// [EqDeeply] functions, or when the Code operator is called behind
+// the following operators, as they just check if a match occurs
+// without raising an error: [Any], [Bag], [Contains], [ContainsKey],
+// [None], [Not], [NotAny], [Set], [SubBagOf], [SubSetOf],
+// [SuperBagOf] and [SuperSetOf].
 //
 // RootName is inherited but not the current path, but it can be
 // recovered if needed:
@@ -137,7 +138,7 @@ var _ TestDeep = &tdCode{}
 //	               got: 123
 //	          expected: 126
 //
-// TypeBehind method returns the reflect.Type of last parameter of "fn".
+// TypeBehind method returns the [reflect.Type] of last parameter of fn.
 func Code(fn any) TestDeep {
 	vfn := reflect.ValueOf(fn)
 

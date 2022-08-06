@@ -33,7 +33,7 @@ const (
 	levelCustom
 )
 
-// NewPath returns a new Path initialized with "root" root node.
+// NewPath returns a new [Path] initialized with root root node.
 func NewPath(root string) Path {
 	return Path{
 		{
@@ -48,7 +48,7 @@ func (p Path) Len() int {
 	return len(p)
 }
 
-// Equal returns true if "p" and "o" are equal, false otherwise.
+// Equal returns true if p and o are equal, false otherwise.
 func (p Path) Equal(o Path) bool {
 	if len(p) != len(o) {
 		return false
@@ -67,7 +67,7 @@ func (p Path) addLevel(level pathLevel) Path {
 	return append(new, level)
 }
 
-// Copy returns a new Path, exact but independent copy of "p".
+// Copy returns a new [Path], exact but independent copy of p.
 func (p Path) Copy() Path {
 	if p == nil {
 		return nil
@@ -120,7 +120,7 @@ func (p Path) AddMapKey(key any) Path {
 	})
 }
 
-// AddPtr adds "num" pointers levels.
+// AddPtr adds num pointers levels.
 func (p Path) AddPtr(num int) Path {
 	if p == nil {
 		return nil

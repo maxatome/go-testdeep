@@ -20,7 +20,7 @@ type ErrorSummary interface {
 	AppendSummary(buf *bytes.Buffer, prefix string)
 }
 
-// ErrorSummaryItem implements the ErrorSummary interface and allows
+// ErrorSummaryItem implements the [ErrorSummary] interface and allows
 // to render a labeled value.
 //
 // With explanation set:
@@ -39,7 +39,7 @@ type ErrorSummaryItem struct {
 
 var _ ErrorSummary = ErrorSummaryItem{}
 
-// AppendSummary implements the ErrorSummary interface.
+// AppendSummary implements the [ErrorSummary] interface.
 func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
 	color.Init()
 
@@ -62,8 +62,8 @@ func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
 	buf.WriteString(color.BadOff)
 }
 
-// ErrorSummaryItems implements the ErrorSummary interface and allows
-// to render summaries with several labeled values. For example:
+// ErrorSummaryItems implements the [ErrorSummary] interface and
+// allows to render summaries with several labeled values. For example:
 //
 //	Missing 6 items: the 6 items...
 //	  Extra 2 items: the 2 items...
@@ -71,7 +71,7 @@ type ErrorSummaryItems []ErrorSummaryItem
 
 var _ ErrorSummary = (ErrorSummaryItems)(nil)
 
-// AppendSummary implements ErrorSummary interface.
+// AppendSummary implements [ErrorSummary] interface.
 func (s ErrorSummaryItems) AppendSummary(buf *bytes.Buffer, prefix string) {
 	maxLen := 0
 	for _, item := range s {
@@ -109,15 +109,15 @@ func NewSummary(s string) ErrorSummary {
 	return errorSummaryString(s)
 }
 
-// NewSummaryReason returns an ErrorSummary meaning that the value got
+// NewSummaryReason returns an [ErrorSummary] meaning that the value got
 // failed for an (optional) reason.
 //
-// With a given reason "it is not nil", the generated summary will be:
+// With a given reason "it is not nil", the generated summary is:
 //
 //	        value: the_got_value
 //	it failed coz: it is not nil
 //
-// If reason is empty, the generated summary will be:
+// If reason is empty, the generated summary is:
 //
 //	  value: the_got_value
 //	it failed but didn't say why

@@ -18,18 +18,18 @@ import (
 var allAnchors = map[string]*anchors.Info{}
 var allAnchorsMu sync.Mutex
 
-// AddAnchorableStructType declares a struct type as anchorable. "fn"
+// AddAnchorableStructType declares a struct type as anchorable. fn
 // is a function allowing to return a unique and identifiable instance
 // of the struct type.
 //
-// "fn" has to have the following signature:
+// fn has to have the following signature:
 //
 //	func (nextAnchor int) TYPE
 //
-// TYPE is the struct type to make anchorable and "nextAnchor" is an
+// TYPE is the struct type to make anchorable and nextAnchor is an
 // index to allow to differentiate several instances of the same type.
 //
-// For example, the time.Time type which is anchorable by default,
+// For example, the [time.Time] type which is anchorable by default,
 // could be declared as:
 //
 //	AddAnchorableStructType(func (nextAnchor int) time.Time {
@@ -40,8 +40,11 @@ var allAnchorsMu sync.Mutex
 // with the math.MaxInt64 extreme limit and so avoid possible
 // collision with real world values.
 //
-// It panics if the provided "fn" is not a function or if it has not
-// the expected signature (see above).
+// It panics if the provided fn is not a function or if it has not the
+// expected signature (see above).
+//
+// See also [T.Anchor], [T.AnchorsPersistTemporarily],
+// [T.DoAnchorsPersist], [T.ResetAnchors] and [T.SetAnchorsPersist].
 func AddAnchorableStructType(fn any) {
 	err := anchors.AddAnchorableStructType(fn)
 	if err != nil {
@@ -50,18 +53,19 @@ func AddAnchorableStructType(fn any) {
 }
 
 // Anchor returns a typed value allowing to anchor the TestDeep
-// operator "operator" in a go classic literal like a struct, slice,
+// operator operator in a go classic literal like a struct, slice,
 // array or map value.
 //
-// If the TypeBehind method of "operator" returns non-nil, "model" can
-// be omitted (like with Between operator in the example
-// below). Otherwise, "model" should contain only one value
+// If the TypeBehind method of operator returns non-nil, model can be
+// omitted (like with [Between] operator in the example
+// below). Otherwise, model should contain only one value
 // corresponding to the returning type. It can be:
-//   - a go value: returning type is the type of the value, whatever the value is
-//   - a reflect.Type
+//   - a go value: returning type is the type of the value,
+//     whatever the value is
+//   - a [reflect.Type]
 //
 // It returns a typed value ready to be embed in a go data structure to
-// be compared using T.Cmp or T.CmpLax:
+// be compared using [T.Cmp] or [T.CmpLax]:
 //
 //	import (
 //	  "testing"
@@ -84,18 +88,17 @@ func AddAnchorableStructType(fn any) {
 //
 // In this example:
 //
-// HasPrefix operates on several input types (string, fmt.Stringer,
-// error, …), so its TypeBehind method returns always nil as it can
-// not guess in advance on which type it operates. In this case, we
-// must pass "" as "model" parameter in order to tell it to return the
-// string type. Note that the .(string) type assertion is then
-// mandatory to conform to the strict type checking.
-//
-// Between, on its side, knows the type on which it operates, as it is
-// the same as the one of its parameters. So its TypeBehind method
-// returns the right type, and so no need to pass it as "model"
-// parameter. Note that the .(int) type assertion is still mandatory
-// to conform to the strict type checking.
+//   - [HasPrefix] operates on several input types (string,
+//     [fmt.Stringer], error, …), so its TypeBehind method returns always
+//     nil as it can not guess in advance on which type it operates. In
+//     this case, we must pass "" as model parameter in order to tell it
+//     to return the string type. Note that the .(string) type assertion
+//     is then mandatory to conform to the strict type checking.
+//   - [Between], on its side, knows the type on which it operates, as
+//     it is the same as the one of its parameters. So its TypeBehind
+//     method returns the right type, and so no need to pass it as model
+//     parameter. Note that the .(int) type assertion is still mandatory
+//     to conform to the strict type checking.
 //
 // Without operator anchoring feature, the previous example would have
 // been:
@@ -120,14 +123,17 @@ func AddAnchorableStructType(fn any) {
 //	  }))
 //	}
 //
-// using two times the Struct operator to work around the strict type
+// using two times the [Struct] operator to work around the strict type
 // checking of golang.
 //
 // By default, the value returned by Anchor can only be used in the
-// next T.Cmp or T.CmpLax call. To make it persistent across calls,
-// see SetAnchorsPersist and AnchorsPersistTemporarily methods.
+// next [T.Cmp] or [T.CmpLax] call. To make it persistent across calls,
+// see [T.SetAnchorsPersist] and [T.AnchorsPersistTemporarily] methods.
 //
-// See A method for a shorter synonym of Anchor.
+// See [T.A] method for a shorter synonym of Anchor.
+//
+// See also [T.AnchorsPersistTemporarily], [T.DoAnchorsPersist],
+// [T.ResetAnchors], [T.SetAnchorsPersist] and [AddAnchorableStructType].
 func (t *T) Anchor(operator TestDeep, model ...any) any {
 	if operator == nil {
 		t.Helper()
@@ -174,7 +180,7 @@ func (t *T) Anchor(operator TestDeep, model ...any) any {
 	return nvm.Interface()
 }
 
-// A is a synonym for Anchor.
+// A is a synonym for [T.Anchor].
 //
 //	import (
 //	  "testing"
@@ -194,6 +200,9 @@ func (t *T) Anchor(operator TestDeep, model ...any) any {
 //	    },
 //	  })
 //	}
+//
+// See also [T.AnchorsPersistTemporarily], [T.DoAnchorsPersist],
+// [T.ResetAnchors], [T.SetAnchorsPersist] and [AddAnchorableStructType].
 func (t *T) A(operator TestDeep, model ...any) any {
 	t.Helper()
 	return t.Anchor(operator, model...)
@@ -203,18 +212,21 @@ func (t *T) resetNonPersistentAnchors() {
 	t.Config.anchors.ResetAnchors(false)
 }
 
-// ResetAnchors frees all operators anchored with Anchor
+// ResetAnchors frees all operators anchored with [T.Anchor]
 // method. Unless operators anchoring persistence has been enabled
-// with SetAnchorsPersist, there is no need to call this
-// method. Anchored operators are automatically freed after each Cmp,
-// CmpDeeply and CmpPanic call (or others methods calling them behind
+// with [T.SetAnchorsPersist], there is no need to call this
+// method. Anchored operators are automatically freed after each [Cmp],
+// [CmpDeeply] and [CmpPanic] call (or others methods calling them behind
 // the scene).
+//
+// See also [T.Anchor], [T.AnchorsPersistTemporarily],
+// [T.DoAnchorsPersist], [T.SetAnchorsPersist] and [AddAnchorableStructType].
 func (t *T) ResetAnchors() {
 	t.Config.anchors.ResetAnchors(true)
 }
 
 // AnchorsPersistTemporarily is used by helpers to temporarily enable
-// anchors persistence. See tdhttp package for an example of use. It
+// anchors persistence. See [tdhttp] package for an example of use. It
 // returns a function to be deferred, to restore the normal behavior
 // (clear anchored operators if persistence was false, do nothing
 // otherwise).
@@ -222,6 +234,13 @@ func (t *T) ResetAnchors() {
 // Typically used as:
 //
 //	defer t.AnchorsPersistTemporarily()()
+//	// or
+//	t.Cleanup(t.AnchorsPersistTemporarily())
+//
+// See also [T.Anchor], [T.DoAnchorsPersist], [T.ResetAnchors],
+// [T.SetAnchorsPersist] and [AddAnchorableStructType].
+//
+// [tdhttp]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp
 func (t *T) AnchorsPersistTemporarily() func() {
 	// If already persistent, do nothing on defer
 	if t.DoAnchorsPersist() {
@@ -237,11 +256,17 @@ func (t *T) AnchorsPersistTemporarily() func() {
 
 // DoAnchorsPersist returns true if anchors persistence is enabled,
 // false otherwise.
+//
+// See also [T.Anchor], [T.AnchorsPersistTemporarily],
+// [T.ResetAnchors], [T.SetAnchorsPersist] and [AddAnchorableStructType].
 func (t *T) DoAnchorsPersist() bool {
 	return t.Config.anchors.DoAnchorsPersist()
 }
 
 // SetAnchorsPersist allows to enable or disable anchors persistence.
+//
+// See also [T.Anchor], [T.AnchorsPersistTemporarily],
+// [T.DoAnchorsPersist], [T.ResetAnchors] and [AddAnchorableStructType].
 func (t *T) SetAnchorsPersist(persist bool) {
 	t.Config.anchors.SetAnchorsPersist(persist)
 }

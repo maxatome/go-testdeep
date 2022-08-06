@@ -23,9 +23,9 @@ var _ TestDeep = &tdPtr{}
 // input(Ptr): ptr
 
 // Ptr is a smuggler operator. It takes the address of data and
-// compares it to "val".
+// compares it to val.
 //
-// "val" depends on data type. For example, if the compared data is an
+// val depends on data type. For example, if the compared data is an
 // *int, one can have:
 //
 //	num := 12
@@ -36,10 +36,12 @@ var _ TestDeep = &tdPtr{}
 //	num := 3
 //	td.Cmp(t, &num, td.Ptr(td.Between(3, 4)))
 //
-// TypeBehind method returns the reflect.Type of a pointer on "val",
-// except if "val" is a TestDeep operator. In this case, it delegates
-// TypeBehind() to the operator and returns the reflect.Type of a
+// TypeBehind method returns the [reflect.Type] of a pointer on val,
+// except if val is a [TestDeep] operator. In this case, it delegates
+// TypeBehind() to the operator and returns the [reflect.Type] of a
 // pointer on the returned value (if non-nil of course).
+//
+// See also [PPtr] and [Shallow].
 func Ptr(val any) TestDeep {
 	p := tdPtr{
 		tdSmugglerBase: newSmugglerBase(val),
@@ -118,9 +120,9 @@ var _ TestDeep = &tdPPtr{}
 // input(PPtr): ptr
 
 // PPtr is a smuggler operator. It takes the address of the address of
-// data and compares it to "val".
+// data and compares it to val.
 //
-// "val" depends on data type. For example, if the compared data is an
+// val depends on data type. For example, if the compared data is an
 // **int, one can have:
 //
 //	num := 12
@@ -137,11 +139,13 @@ var _ TestDeep = &tdPPtr{}
 //
 //	td.Cmp(t, &pnum, td.Ptr(td.Ptr(val))) // succeeds too
 //
-// TypeBehind method returns the reflect.Type of a pointer on a
-// pointer on "val", except if "val" is a TestDeep operator. In this
+// TypeBehind method returns the [reflect.Type] of a pointer on a
+// pointer on val, except if val is a [TestDeep] operator. In this
 // case, it delegates TypeBehind() to the operator and returns the
-// reflect.Type of a pointer on a pointer on the returned value (if
+// [reflect.Type] of a pointer on a pointer on the returned value (if
 // non-nil of course).
+//
+// See also [Ptr].
 func PPtr(val any) TestDeep {
 	p := tdPPtr{
 		tdSmugglerBase: newSmugglerBase(val),

@@ -67,8 +67,12 @@ unless (-d $SITE_REPO_DIR)
 my $DIR = "$REPO_DIR/td";
 -d $DIR or die "Cannot find td/ directory ($DIR)\n";
 
+my $URL_ZETTA = 'https://go-testdeep.zetta.rocks';
+my $URL_GODEV = 'https://pkg.go.dev';
+my $URL_GODOC = "$URL_GODEV/github.com/maxatome/go-testdeep";
+
 my $HEADER = <<'EOH';
-// Copyright (c) 2018-2021, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -79,10 +83,10 @@ EOH
 
 my $args_comment_src = <<'EOC';
 
-args... are optional and allow to name the test. This name is
-used in case of failure to qualify the test. If %code{len(args) > 1} and
-the first item of args is a string and contains a '%' rune then
-[fmt.Fprintf] is used to compose the name, else args are passed to
+%arg{args...} are optional and allow to name the test. This name is
+used in case of failure to qualify the test. If %code{len(args) > 1} and
+the first item of %arg{args} is a string and contains a '%' rune then
+[fmt.Fprintf] is used to compose the name, else %arg{args} are passed to
 [fmt.Fprint]. Do not forget it is the name of the test, not the
 reason of a potential failure.
 EOC
@@ -91,7 +95,7 @@ my $ARGS_COMMENT_GD = doc2godoc($args_comment_src);
 my $ARGS_COMMENT_MD = doc2md($args_comment_src);
 
 
-# These functions are variadics, but only with one possible param. In
+# These functions are variadics, but with only one possible param. In
 # this case, discard the variadic property and use a default value for
 # this optional parameter.
 my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
@@ -125,7 +129,7 @@ while (readdir $dh)
 {
     if (/^td_.*\.go\z/ and not /_test.go\z/)
     {
-        my $contents = do { local $/; open(my $fh, '<', "$DIR/$_"); <$fh> };
+        my $contents = slurp("$DIR/$_");
 
         # Load the operators forbidden inside JSON()
         if ($_ eq 'td_json.go')
@@ -138,6 +142,26 @@ while (readdir $dh)
         while ($contents =~ /^const \(\n(.+)^\)\n/gms)
         {
             @consts{$1 =~ /^\t([A-Z]\w+)/mg} = ();
+        }
+
+        my %imports = map { ($_ => $_) } qw(fmt io ioutil os reflect testing);
+        if ($contents =~ /^import \(\n(.+?)\s*\)\n/ms)
+        {
+            foreach my $pkg (split(/\n+/, $1))
+            {
+                if ($pkg =~ /^\s*(\w+)\s+\"([^"]+)/)
+                {
+                    $imports{$1} = $2;
+                }
+                elsif ($pkg =~ m,^\s*"((?:.+/)?([^/"]+)),)
+                {
+                    $imports{$2} = $1;
+                }
+                else
+                {
+                    die "$_: cannot parse import line <$pkg>\n";
+                }
+            }
         }
 
         my %ops;
@@ -168,7 +192,7 @@ while (readdir $dh)
                 {
                     $inputs{$op}{$in} = '✓';
                 }
-                exists $INPUTS{$in} or die "$_: input($op) unknow input '$in'\n";
+                exists $INPUTS{$in} or die "$_: input($op) unknown input '$in'\n";
                 $inputs{$op}{if} //= '✓'; # interface
             }
         }
@@ -219,6 +243,7 @@ while (readdir $dh)
 
 	    $funcs{$func}{args} = \@args unless $ONLY_OPERATORS{$func};
 
+            # "//<TAB>" is OK, otherwise TAB is not allowed
             die "TAB detected in $func operator documentation\n" if $doc =~ m,(?<!^//)\t,m;
 
             $operators{$func} = {
@@ -228,6 +253,7 @@ while (readdir $dh)
                 doc       => $doc,
                 signature => "func $func($params) TestDeep",
                 args      => \@args,
+                imports   => \%imports,
             };
         }
 
@@ -331,7 +357,7 @@ Cmp$func is a shortcut for:
 EOF
 
     $funcs_contents .= "\n" . go_comment($cmp_doc) . <<EOF;
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$func for details.
+// See [$func] for details.
 EOF
     $cmp_doc .= <<EOF; # operator doc
 See above for details.
@@ -344,7 +370,7 @@ $method_name is a shortcut for:
 
 EOF
     $t_contents .= "\n" . go_comment($t_doc) . <<EOF;
-// See https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$func for details.
+// See [$func] for details.
 EOF
     $t_doc .= <<EOF; # operator doc
 See above for details.
@@ -358,9 +384,9 @@ EOF
         $default = "[$1]" if $default =~ /^td\.(.+)/ and exists $consts{$1};
         $func_comment .= <<EOF;
 
-$func() optional parameter "$last_arg->{name}" is here mandatory.
+[$func] optional parameter $last_arg->{name} is here mandatory.
 $default value should be passed to mimic its absence in
-original $func() call.
+original [$func] call.
 EOF
     }
 
@@ -371,7 +397,7 @@ EOF
     my $method_comment = $func_comment;
     $func_comment .= <<EOF;
 
-If "t" is a *T then its Config is inherited.
+If t is a [*T] then its Config field is inherited.
 EOF
     $operators{$func}{cmp}{name} = "Cmp$func";
     $operators{$func}{cmp}{doc} = $cmp_doc . $func_comment . $ARGS_COMMENT_MD;
@@ -398,7 +424,7 @@ $t_sig {
 EOF
 }
 
-my $examples = do { open(my $efh, '<', "$DIR/example_test.go"); local $/; <$efh> };
+my $examples = slurp("$DIR/example_test.go");
 my $funcs_reg = join('|', @sorted_funcs);
 
 my($imports) = ($examples =~ /^(import \(.+?^\))$/ms);
@@ -548,7 +574,7 @@ $ARGS_COMMENT_GD = go_comment($ARGS_COMMENT_GD);
 foreach my $go_file (do { opendir(my $dh, $DIR);
                           grep /(?<!_test)\.go\z/, readdir $dh })
 {
-    my $contents = do { local $/; open(my $fh, '<', "$DIR/$go_file"); <$fh> };
+    my $contents = slurp("$DIR/$go_file");
 
     while ($contents =~ m,\n((?://[^\n]*\n)*)
                             func\ ([A-Z]\w+|\(t\ \*T\)\ [A-Z]\w+)($rep),xg)
@@ -559,38 +585,34 @@ foreach my $go_file (do { opendir(my $dh, $DIR);
                  or $func eq 'CmpDeeply'
                  or $func =~ /^\(t \*T\) (?:Log|Error|Fatal)Trace\z/);
 
-        if ($params =~ /\Qargs ...any)\E\z/)
+        if ($params =~ /\Qargs ...any)\E\z/
+            and $comment !~ /\Q$ARGS_COMMENT_GD/)
         {
-            #chomp $comment;
-            if (substr($comment, - length($ARGS_COMMENT_GD)) ne $ARGS_COMMENT_GD)
-            {
-                push(@args_errors, "$go_file: $func");
-            }
+            push(@args_errors, "$go_file: $func");
         }
     }
 }
 if (@args_errors)
 {
-    die "*** At least one args comment is missing or not conform:\n- "
+    die "*** At least one args... comment is missing or not conform:\n- "
         . join("\n- ", @args_errors)
         . "\n";
 }
 
 my $common_links = do
 {
-    my $base_url = 'https://pkg.go.dev/github.com/maxatome/go-testdeep';
-    my $td_url = "$base_url/td";
+    my $td_url = "$URL_GODOC/td";
 
     # Specific types and functions
     join("\n", map "[`$_`]: $td_url#$_", qw(T TestDeep Cmp))
         . "\n\n"
         # Helpers
-        . join("\n", map "[`$_`]: $base_url/helpers/$_",
+        . join("\n", map "[`$_`]: $URL_GODOC/helpers/$_",
                qw(tdhttp tdsuite tdutil))
         . "\n\n"
         # Specific links
         . "[`BeLax` config flag]: $td_url#ContextConfig.BeLax\n"
-        . "[`error`]: https://pkg.go.dev/builtin/#error\n"
+        . "[`error`]: https://pkg.go.dev/builtin#error\n"
         . "\n\n"
         # Foreign types
         . join("\n", map "[`$_->[0]`]: https://pkg.go.dev/$_->[1]",
@@ -622,7 +644,7 @@ my $md_links = do
 
 my $gh_links = do
 {
-    my $td_url = 'https://go-testdeep.zetta.rocks/operators/';
+    my $td_url = "$URL_ZETTA/operators/";
     $common_links
         . join("\n", map qq([`$_`]: $td_url\L$_/), @sorted_operators)
         . "\n\n"
@@ -640,7 +662,7 @@ my $gh_links = do
 
 # README.md
 {
-    my $readme = do { local $/; open(my $fh, '<', "$REPO_DIR/README.md"); <$fh> };
+    my $readme = slurp("$REPO_DIR/README.md");
 
     # Links
     $readme =~ s{(<!-- links:begin -->).*(<!-- links:end -->)}
@@ -656,17 +678,11 @@ my $gh_links = do
 # Hugo
 if (defined $SITE_REPO_DIR)
 {
-    my $op_examples = do { local $/;
-                           open(my $fh, '<', "$DIR/example_test.go");
-                           <$fh> };
+    my $op_examples = slurp("$DIR/example_test.go");
 
     # Reload generated examples so they are properly gofmt'ed
-    my $cmp_examples = do { local $/;
-                            open(my $fh, '<', "$DIR/example_cmp_test.go");
-                            <$fh> };
-    my $t_examples = do { local $/;
-                          open(my $fh, '<', "$DIR/example_t_test.go");
-                          <$fh> };
+    my $cmp_examples = slurp("$DIR/example_cmp_test.go");
+    my $t_examples = slurp("$DIR/example_t_test.go");
 
     foreach my $operator (@sorted_operators)
     {
@@ -710,7 +726,11 @@ EOE
 
         if (my $cmp = $operators{$operator}{cmp})
         {
+            $cmp->{imports} = $operators{$operator}{imports};
+            unshift(@{$cmp->{args}}, { name => 't' });
             my $doc = process_doc($cmp);
+            shift @{$cmp->{args}};
+
             print $fh <<EOM;
 ## $cmp->{name} shortcut
 
@@ -745,7 +765,11 @@ EOE
 
         if (my $t = $operators{$operator}{t})
         {
+            $t->{imports} = $operators{$operator}{imports};
+            unshift(@{$t->{args}}, { name => 't' });
             my $doc = process_doc($t);
+            shift @{$t->{args}};
+
             print $fh <<EOM;
 ## T.$t->{name} shortcut
 
@@ -783,7 +807,7 @@ EOE
     # Dump operators
     {
         my $op_list_file = "$SITE_REPO_DIR/docs_src/content/operators/_index.md";
-        my $op_list = do { local $/; open(my $fh, '<', $op_list_file); <$fh> };
+        my $op_list = slurp($op_list_file);
 
         $op_list =~ s{(<!-- operators:begin -->).*(<!-- operators:end -->)}
                      {
@@ -813,7 +837,7 @@ EOE
     # Dump matrices
     {
         my $matrix_file = "$SITE_REPO_DIR/docs_src/content/operators/matrix.md";
-        my $matrix = do { local $/; open(my $fh, '<', $matrix_file); <$fh> };
+        my $matrix = slurp($matrix_file);
 
         my $header = <<'EOH';
 
@@ -880,12 +904,7 @@ EOH
 
     # tdhttp example
     {
-        my $example = do
-        {
-            open(my $fh, '<', "$REPO_DIR/helpers/tdhttp/example_test.go");
-            local $/;
-            <$fh>
-        };
+        my $example = slurp("$REPO_DIR/helpers/tdhttp/example_test.go");
 
         my($import) = $example =~ /^(import \(.*?^\))$/ms;
         $import or die "tdhttp example, import not found!\n";
@@ -901,7 +920,7 @@ EOH
 
         my $md_file = "$SITE_REPO_DIR/docs_src/content/helpers/_index.md";
 
-        my $final = do { open(my $fh, '<', $md_file); local $/; <$fh> } =~
+        my $final = slurp($md_file) =~
             s{(<!-- tdhttp:begin -->).*(<!-- tdhttp:end -->)}
              <$1
 {{%expand "Main example" %}}```go
@@ -947,7 +966,7 @@ sub doc2godoc
 {
     my $doc = shift;
 
-    state $repl = { arg   => sub { qq("$_[0]") },
+    state $repl = { arg   => sub { $_[0] },
                     code  => sub { $_[0] },
                     godoc => sub { $_[0] } };
 
@@ -1012,91 +1031,102 @@ sub process_doc
              >gemx;
     $doc .= "```\n" if $inEx;
 
+    # Get & remove links at the end of comment
+    my %links;
+    while ($doc =~ s/^\[([^]\n]+)\]: (.+)\n\z//m)
+    {
+        $links{$1} = $2;
+    }
+
     my @codes;
     $doc =~ s/^(```go\n.*?^```\n)/push(@codes, $1); "CODE<$#codes>"/gems;
 
-    $doc =~ s<
-        (\$\^[A-Za-z]+)                    # $1
-      | (\b(${\join('|', grep !/^JSON/, keys %operators)}
-           |JSON(?!\s+(?:value|data|filename|object|representation|specification)))
-        (?:\([^)]*\)|\b))                  # $2 $3
-      | ((?:(?:\[\])+|\*+|\b)(?:bool\b
-                               |u?int(?:\*|(?:8|16|32|64)?\b)
-                               |float(?:\*|(?:32|64)\b)
-                               |complex(?:\*|(?:64|128)\b)
-                               |string\b
-                               |rune\b
-                               |byte\b
-                               |any)
-        |\(\*byte\)\(nil\)
-        |\bmap\[string\]any
-        |\b(?:len|cap)\(\)
-        |\bnil\b
-        |\$(?:\d+|[a-zA-Z_]\w*))           # $4
-      | ((?:\b|\*)fmt\.Stringer
-        |\breflect\.Type
-        |\bregexp\.MustCompile
-        |\*regexp\.Regexp
-        |\btime\.[A-Z][a-zA-Z]+
-        |\bjson\.(?:Unm|M)arshal
-        |\bio\.Reader
-        |\bioutil\.Read(?:All|File))\b     # $5
-      | (\berror\b)                        # $6
-      | (\bTypeBehind(?:\(\)|\b))          # $7
-      | \[(${\join('|', keys %consts)})\]  # $8
-      | \b(smuggler\s+operator)\b          # $9
-      | \b(TestDeep\s+operators?)\b        # $10
-      | (?|\*?(SmuggledGot)|(Flatten))\b   # $11
-      >{
-           if ($1)
+    $doc =~ s{
+        (?<placeholder> \$\^[A-Za-z]+)           # placeholder
+      | \[TestDeep\](?<operator>\s+operators?)   # operator
+      | (?<!\w) \[ (?<link> [^]\n]+) \] (?!\w)   # link
+      | (?<native_type> (?:(?:\[\])+|\*+|\b)
+                        (?:bool\b
+                          |u?int(?:\*|(?:8|16|32|64)?\b)
+                          |float(?:\*|(?:32|64)\b)
+                          |complex(?:\*|(?:64|128)\b)
+                          |string\b
+                          |rune\b
+                          |byte\b
+                          |any(?!\s+(?:numeric|of|placeholder)))
+                        |\(\*byte\)\(nil\)
+                        |\bmap\[string\]any
+                        |\b(?:len|cap)\(\)
+                        |\bnil\b
+                        |\$(?:\d+|[a-zA-Z_]\w*)) # native_type
+      | (?<error> \berror\b)                     # error
+      | (?<type_behind> \bTypeBehind(?:\(\)|\b)) # type_behind
+      | \b(?<smuggler> smuggler\s+operator)\b    # smuggler
+      | (?<belax> BeLax\s+config\s+flag)         # belax
+      }{
+           if ($+{placeholder})
            {
-               "`$1`"
+               "`$+{placeholder}`"
            }
-           elsif ($2)
+           elsif ($+{operator})
            {
-               qq![`$2`]({{< ref "$3" >}})!
+               qq![TestDeep$+{operator}]({{< ref "operators" >}})!;
            }
-           elsif ($4)
+           elsif (my $inner = $+{link})
            {
-               "`$4`"
+               if ($links{$inner})
+               {
+                   qq![$inner]($links{$inner})!;
+               }
+               elsif ($operators{$inner})
+               {
+                   qq![`$inner`]({{< ref "$inner" >}})!;
+               }
+               # local exported identifier
+               elsif ($inner =~ /^\*?([A-Z]\w*(?:\.[A-Z]\w*)?)\z/)
+               {
+                   qq![`$inner`]($URL_GODOC/td#$1)!;
+               }
+               # imported package
+               elsif ($inner =~ /^\*?([a-z]\w*)(?:\.([A-Z]\w*(?:\.[A-Z]\w*)?))?\z/
+                      and my $full = $op->{imports}{$1})
+               {
+                   qq![`$inner`]($URL_GODEV/$full! . ($2 ? "#$2" : '') . ')';
+               }
+               else
+               {
+                   qq![$inner]!;
+               }
            }
-           elsif ($5)
+           elsif ($+{native_type})
            {
-               my $all = $5;
-               my($pkg, $fn) = split('\.', $all, 2);
-               $pkg =~ s/^\*//;
-               "[`$all`](https://pkg.go.dev/$pkg/#$fn)"
+               "`$+{native_type}`"
            }
-           elsif ($6)
+           elsif ($+{error})
            {
-               "[`$6`](https://pkg.go.dev/builtin/#error)"
+               "[`error`]($URL_GODEV/builtin#error)"
            }
-           elsif ($7)
+           elsif ($+{type_behind})
            {
-               qq![`$7`]({{< ref "operators#typebehind-method" >}})!
+               qq![`$+{type_behind}`]({{< ref "operators#typebehind-method" >}})!
            }
-           elsif ($8)
+           elsif ($+{smuggler})
            {
-               "[`$8`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$8)"
+               qq![$+{smuggler}]({{< ref "operators#smuggler-operators" >}})!
            }
-           elsif ($9)
+           elsif ($+{belax})
            {
-               qq![$9]({{< ref "operators#smuggler-operators" >}})!
-           }
-           elsif ($10)
-           {
-               qq![$10]({{< ref "operators" >}})!
-           }
-           elsif ($11)
-           {
-               qq![`$11`](https://pkg.go.dev/github.com/maxatome/go-testdeep/td#$11)!
+               qq![`BeLax` config flag]($URL_GODOC/td#ContextConfig.BeLax)!;
            }
        }geox;
 
+    $doc =~ s/^See also /> See also /m;
+
     if ($op->{args} and @{$op->{args}})
     {
-        $doc =~ s/"(${\join('|', map quotemeta($_->{name}),
-                            @{$op->{args}})})"/*$1*/g;
+        $doc =~ s/(?<!\w)
+                  (${\join('|', map quotemeta($_->{name}), @{$op->{args}})})
+                  (?!\w)/*$1*/gx;
     }
 
     return $doc =~ s/^CODE<(\d+)>/go_format($op, $codes[$1])/egmr;
@@ -1167,4 +1197,11 @@ EOD
     }
 
     return "```go\n$new_code\n```\n";
+}
+
+sub slurp
+{
+    local $/;
+    open(my $fh, '<', shift);
+    <$fh>
 }

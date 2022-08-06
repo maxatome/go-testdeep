@@ -17,7 +17,7 @@ import (
 )
 
 // T can be used in tests, to test [testing.T] behavior as it overrides
-// [testing.Run] method.
+// [testing.T.Run] method.
 type T struct {
 	testing.T
 	name string

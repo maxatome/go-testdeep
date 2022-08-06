@@ -37,8 +37,8 @@ func NewInfo() *Info {
 
 var ErrBoolean = errors.New("CmpHook(got, expected) failed")
 
-// Copy returns a new instance of *Info with the same hooks as i. As a
-// special case, if i is nil, returned instance is non-nil.
+// Copy returns a new instance of [*Info] with the same hooks as i. As
+// a special case, if i is nil, returned instance is non-nil.
 func (i *Info) Copy() *Info {
 	ni := NewInfo()
 
@@ -61,20 +61,20 @@ func (i *Info) Copy() *Info {
 	return ni
 }
 
-// AddCmpHooks records new Cmp hooks using functions contained in "fns".
+// AddCmpHooks records new Cmp hooks using functions contained in fns.
 //
-// Each function in "fns" has to be a function with the following
+// Each function in fns has to be a function with the following
 // possible signatures:
 //
-//	func (A, A) bool
-//	func (A, A) error
+//	func (got A, expected A) bool
+//	func (got A, expected A) error
 //
-// First arg is always "got", and second is always "expected".
+// First arg is always “got”, and second is always “expected”.
 //
 // A cannot be an interface. This retriction can be removed in the
 // future, if really needed.
 //
-// It returns an error if an item of "fns" is not a function or if its
+// It returns an error if an item of fns is not a function or if its
 // signature does not match the expected ones.
 func (i *Info) AddCmpHooks(fns []any) error {
 	for n, fn := range fns {
@@ -104,13 +104,13 @@ func (i *Info) AddCmpHooks(fns []any) error {
 	return nil
 }
 
-// Cmp checks if a Cmp hook exists matching "got" and "expected" types.
+// Cmp checks if a Cmp hook exists matching got and expected types.
 //
 // If no, it returns (false, nil)
 //
 // If yes, it calls it and returns (true, nil) if it succeeds,
 // (true, <an error>) if it fails. If the hook returns a false bool, the
-// error returned is ErrBoolean.
+// error returned is [ErrBoolean].
 func (i *Info) Cmp(got, expected reflect.Value) (bool, error) {
 	if i == nil {
 		return false, nil
@@ -141,20 +141,20 @@ func (i *Info) Cmp(got, expected reflect.Value) (bool, error) {
 }
 
 // AddSmuggleHooks records new Smuggle hooks using functions contained
-// in "fns".
+// in fns.
 //
-// Each function in "fns" has to be a function with the following
+// Each function in fns has to be a function with the following
 // possible signatures:
 //
-//	func (A) B
-//	func (A) (B, error)
+//	func (got A) B
+//	func (got A) (B, error)
 //
 // A cannot be an interface. This retriction can be removed in the
 // future, if really needed.
 //
 // B can be an interface.
 //
-// It returns an error if an item of "fns" is not a function or if its
+// It returns an error if an item of fns is not a function or if its
 // signature does not match the expected ones.
 func (i *Info) AddSmuggleHooks(fns []any) error {
 	for n, fn := range fns {
@@ -183,7 +183,7 @@ func (i *Info) AddSmuggleHooks(fns []any) error {
 	return nil
 }
 
-// Smuggle checks if a Smuggle hook exists matching "*got" type.
+// Smuggle checks if a Smuggle hook exists matching *got type.
 //
 // If no, it returns (false, nil)
 //
@@ -214,8 +214,8 @@ func (i *Info) Smuggle(got *reflect.Value) (bool, error) {
 	return true, nil
 }
 
-// AddUseEqual records types of values contained in "ts" as using
-// Equal method. "ts" can also contain reflect.Type instances.
+// AddUseEqual records types of values contained in ts as using
+// Equal method. ts can also contain [reflect.Type] instances.
 func (i *Info) AddUseEqual(ts []any) error {
 	if len(ts) == 0 {
 		return nil
@@ -254,7 +254,7 @@ func (i *Info) AddUseEqual(ts []any) error {
 	return nil
 }
 
-// UseEqual returns true if the type "t" needs to use its Equal method
+// UseEqual returns true if the type t needs to use its Equal method
 // to be compared.
 func (i *Info) UseEqual(t reflect.Type) bool {
 	if i == nil {
@@ -266,8 +266,8 @@ func (i *Info) UseEqual(t reflect.Type) bool {
 	return i.props[t].useEqual
 }
 
-// AddIgnoreUnexported records types of values contained in "ts" as ignoring
-// unexported struct fields. "ts" can also contain reflect.Type instances.
+// AddIgnoreUnexported records types of values contained in ts as ignoring
+// unexported struct fields. ts can also contain [reflect.Type] instances.
 func (i *Info) AddIgnoreUnexported(ts []any) error {
 	if len(ts) == 0 {
 		return nil
@@ -297,7 +297,7 @@ func (i *Info) AddIgnoreUnexported(ts []any) error {
 }
 
 // IgnoreUnexported returns true if the unexported fields of the type
-// "t" have to be ignored.
+// t have to be ignored.
 func (i *Info) IgnoreUnexported(t reflect.Type) bool {
 	if i == nil {
 		return false

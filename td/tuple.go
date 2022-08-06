@@ -35,7 +35,7 @@ var tupleType = reflect.TypeOf(tuple{})
 //	  td.TupleFrom(float64(0), "", td.Not(nil)),
 //	)
 //
-// Once initialized with TupleFrom, a Tuple is immutable.
+// Once initialized with [TupleFrom], a Tuple is immutable.
 type Tuple interface {
 	// Len returns t length, aka the number of items the tuple contains.
 	Len() int
@@ -43,12 +43,12 @@ type Tuple interface {
 	Index(int) any
 }
 
-// TupleFrom returns a new Tuple initialized to the values of "vals".
+// TupleFrom returns a new [Tuple] initialized to the values of vals.
 //
 //	td.TupleFrom(float64(0), "", td.Not(nil))
 //
-// Flatten can be used to flatten non-[]any slice/array into a
-// new Tuple:
+// [Flatten] can be used to flatten non-[]any slice/array into a
+// new [Tuple]:
 //
 //	ints := []int64{1, 2, 3}
 //	td.TupleFrom(td.Flatten(ints), "OK", nil)

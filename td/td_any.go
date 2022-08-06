@@ -32,7 +32,7 @@ var _ TestDeep = &tdAny{}
 //	  td.HasSuffix("z"),
 //	)) // succeeds coz "f" prefix
 //
-// Note Flatten function can be used to group or reuse some values or
+// Note [Flatten] function can be used to group or reuse some values or
 // operators and so avoid boring and inefficient copies:
 //
 //	stringOps := td.Flatten([]td.TestDeep{td.HasPrefix("f"), td.HasSuffix("z")})
@@ -41,9 +41,11 @@ var _ TestDeep = &tdAny{}
 //	  stringOps,
 //	)) // succeeds coz "f" prefix
 //
-// TypeBehind method can return a non-nil reflect.Type if all items
+// TypeBehind method can return a non-nil [reflect.Type] if all items
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
+//
+// See also [All] and [None].
 func Any(expectedValues ...any) TestDeep {
 	return &tdAny{
 		tdList: newList(expectedValues...),

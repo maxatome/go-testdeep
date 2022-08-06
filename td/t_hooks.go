@@ -10,30 +10,31 @@ import (
 	"github.com/maxatome/go-testdeep/internal/color"
 )
 
-// WithCmpHooks returns a new *T instance with new Cmp hooks recorded
-// using functions passed in "fns".
+// WithCmpHooks returns a new [*T] instance with new Cmp hooks recorded
+// using functions passed in fns.
 //
-// Each function in "fns" has to be a function with the following
+// Each function in fns has to be a function with the following
 // possible signatures:
 //
-//	func (A, A) bool
-//	func (A, A) error
+//	func (got A, expected A) bool
+//	func (got A, expected A) error
 //
-// First arg is always "got", and second is always "expected".
+// First arg is always got, and second is always expected.
 //
 // A cannot be an interface. This retriction can be removed in the
 // future, if really needed.
 //
 // This function is called as soon as possible each time the type A is
-// encountered for "got" while "expected" type is assignable to A.
+// encountered for got while expected type is assignable to A.
 //
 // When it returns a bool, false means A is not equal to B.
 //
-// When it returns a non-nil error (meaning "got" ≠ "expected"), its
+// When it returns a non-nil error (meaning got ≠ expected), its
 // contents is used to tell the reason of the failure.
 //
-// Cmp hooks are checked before UseEqual feature.
-// Cmp hooks are run just after Smuggle hooks.
+// Cmp hooks are checked before [UseEqual] feature.
+//
+// Cmp hooks are run just after [Smuggle] hooks.
 //
 //	func TestCmpHook(tt *testing.T) {
 //	  t := td.NewT(tt)
@@ -68,12 +69,16 @@ import (
 //	  )
 //	}
 //
-// There is no way to add or remove hooks of an existing *T instance,
-// only create a new *T instance with this method or WithSmuggleHooks
-// to add some.
+// There is no way to add or remove hooks of an existing [*T]
+// instance, only to create a new [*T] instance with this method or
+// [T.WithSmuggleHooks] to add some.
 //
-// WithCmpHooks calls t.Fatal if an item of "fns" is not a function or
+// WithCmpHooks calls t.Fatal if an item of fns is not a function or
 // if its signature does not match the expected ones.
+//
+// See also [T.WithSmuggleHooks].
+//
+// [UseEqual]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig.UseEqual
 func (t *T) WithCmpHooks(fns ...any) *T {
 	t = t.copyWithHooks()
 
@@ -86,14 +91,14 @@ func (t *T) WithCmpHooks(fns ...any) *T {
 	return t
 }
 
-// WithSmuggleHooks returns a new *T instance with new Smuggle hooks
-// recorded using functions passed in "fns".
+// WithSmuggleHooks returns a new [*T] instance with new Smuggle hooks
+// recorded using functions passed in fns.
 //
-// Each function in "fns" has to be a function with the following
+// Each function in fns has to be a function with the following
 // possible signatures:
 //
-//	func (A) B
-//	func (A) (B, error)
+//	func (got A) B
+//	func (got A) (B, error)
 //
 // A cannot be an interface. This retriction can be removed in the
 // future, if really needed.
@@ -101,9 +106,9 @@ func (t *T) WithCmpHooks(fns ...any) *T {
 // B cannot be an interface. If you have a use case, we can talk about it.
 //
 // This function is called as soon as possible each time the type A is
-// encountered for "got".
+// encountered for got.
 //
-// The B value returned replaces the "got" value for subsequent tests.
+// The B value returned replaces the got value for subsequent tests.
 // Smuggle hooks are NOT run again for this returned value to avoid
 // easy infinite loop recursion.
 //
@@ -134,11 +139,14 @@ func (t *T) WithCmpHooks(fns ...any) *T {
 //	  )
 //	}
 //
-// There is no way to add or remove hooks of an existing *T instance,
-// only create a new *T instance with this method or WithCmpHooks to add some.
+// There is no way to add or remove hooks of an existing [*T]
+// instance, only create a new [*T] instance with this method or
+// [T.WithCmpHooks] to add some.
 //
-// WithSmuggleHooks calls t.Fatal if an item of "fns" is not a
+// WithSmuggleHooks calls t.Fatal if an item of fns is not a
 // function or if its signature does not match the expected ones.
+//
+// See also [T.WithCmpHooks].
 func (t *T) WithSmuggleHooks(fns ...any) *T {
 	t = t.copyWithHooks()
 

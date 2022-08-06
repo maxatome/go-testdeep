@@ -27,7 +27,7 @@ var _ TestDeep = &tdArrayEach{}
 
 // ArrayEach operator has to be applied on arrays or slices or on
 // pointers on array/slice. It compares each item of data array/slice
-// against "expectedValue". During a match, all items have to match to
+// against expectedValue. During a match, all items have to match to
 // succeed.
 //
 //	got := [3]string{"foo", "bar", "biz"}

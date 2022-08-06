@@ -4,10 +4,10 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-// Package tdhttp provides some functions to easily test HTTP handlers.
+// Package tdhttp, from [go-testdeep], provides some functions to easily
+// test HTTP handlers.
 //
-// Combined to td package ([github.com/maxatome/go-testdeep/td]) it
-// provides powerful testing features.
+// Combined to [td] package it provides powerful testing features.
 //
 // # TestAPI
 //
@@ -62,4 +62,6 @@
 // It now uses [TestAPI] behind the scene. It is better to directly
 // use [TestAPI] and its methods instead, as it is more flexible and
 // readable.
+//
+// [go-testdeep]: https://go-testdeep.zetta.rocks/
 package tdhttp

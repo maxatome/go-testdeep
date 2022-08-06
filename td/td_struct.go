@@ -73,7 +73,7 @@ func parseMatcher(s string) []string {
 	return subs
 }
 
-// newFieldMatcher checks "name" matches "[NUM] OP PATTERN" where NUM
+// newFieldMatcher checks name matches "[NUM] OP PATTERN" where NUM
 // is an optional number used to sort patterns, OP is "=~", "!~", "="
 // or "!" and PATTERN is a regexp (when OP is either "=~" or "!~") or
 // a shell pattern (when OP is either "=" or "!").
@@ -127,14 +127,14 @@ func (m fieldMatcherSlice) Less(i, j int) bool {
 func (m fieldMatcherSlice) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
 
 // StructFields allows to pass struct fields to check in functions
-// Struct and SStruct. It is a map whose each key is the expected
+// [Struct] and [SStruct]. It is a map whose each key is the expected
 // field name (or a regexp or a shell pattern matching a field name,
-// see Struct & SStruct docs for details) and the corresponding value
-// the expected field value (which can be a TestDeep operator as well
-// as a zero value.)
+// see [Struct] & [SStruct] docs for details) and the corresponding
+// value the expected field value (which can be a [TestDeep] operator
+// as well as a zero value.)
 type StructFields map[string]any
 
-// canonStructField canonicalizes "name", a key in a StructFields map,
+// canonStructField canonicalizes name, a key in a StructFields map,
 // so it can be compared with other keys during a mergeStructFields().
 //   - "name"                 → "name"
 //   - ">  name  "            → ">name"
@@ -167,7 +167,7 @@ func canonStructField(name string) string {
 	return name
 }
 
-// mergeStructFields merges all "sfs" items into one StructFields and
+// mergeStructFields merges all sfs items into one StructFields and
 // returns it.
 func mergeStructFields(sfs ...StructFields) StructFields {
 	switch len(sfs) {
@@ -446,14 +446,14 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 // input(Struct): struct,ptr(ptr on struct)
 
 // Struct operator compares the contents of a struct or a pointer on a
-// struct against the non-zero values of "model" (if any) and the
-// values of "expectedFields". See SStruct to compares against zero
-// fields without specifying them in "expectedFields".
+// struct against the non-zero values of model (if any) and the
+// values of expectedFields. See [SStruct] to compares against zero
+// fields without specifying them in expectedFields.
 //
-// "model" must be the same type as compared data.
+// model must be the same type as compared data.
 //
-// "expectedFields" can be omitted, if no zero entries are expected
-// and no TestDeep operators are involved. If "expectedFields"
+// expectedFields can be omitted, if no zero entries are expected
+// and no [TestDeep] operators are involved. If expectedFields
 // contains more than one item, all items are merged before their use,
 // from left to right.
 //
@@ -470,11 +470,11 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 //	  }),
 //	)
 //
-// It is an error to set a non-zero field in "model" AND to set the
-// same field in "expectedFields", as in such cases the Struct
+// It is an error to set a non-zero field in model AND to set the
+// same field in expectedFields, as in such cases the Struct
 // operator does not know if the user wants to override the non-zero
-// "model" field value or if it is an error. To explicitly override a
-// non-zero "model" in "expectedFields", just prefix its name with a
+// model field value or if it is an error. To explicitly override a
+// non-zero model in expectedFields, just prefix its name with a
 // ">" (followed by some optional spaces), as in:
 //
 //	td.Cmp(t, got, td.Struct(
@@ -489,9 +489,9 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 //	  }),
 //	)
 //
-// "expectedFields" can also contain regexps or shell patterns to
-// match multiple fields not explicitly listed in "model" and in
-// "expectedFields". Regexps are prefixed by "=~" or "!~" to
+// expectedFields can also contain regexps or shell patterns to
+// match multiple fields not explicitly listed in model and in
+// expectedFields. Regexps are prefixed by "=~" or "!~" to
 // respectively match or don't-match. Shell patterns are prefixed by "="
 // or "!" to respectively match or don't-match.
 //
@@ -522,7 +522,7 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 //
 // This way, "*At" shell pattern is always used before "^[a-z]"
 // regexp, so if a field "createdAt" exists it is tested against
-// time.Now() and never against NotNil. A pattern without a
+// time.Now() and never against [NotNil]. A pattern without a
 // prefix number is the same as specifying "0" as prefix.
 //
 // To make it clearer, some spaces can be added, as well as bigger
@@ -557,7 +557,9 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 // During a match, all expected fields must be found to
 // succeed. Non-expected fields are ignored.
 //
-// TypeBehind method returns the reflect.Type of "model".
+// TypeBehind method returns the [reflect.Type] of model.
+//
+// See also [SStruct].
 func Struct(model any, expectedFields ...StructFields) TestDeep {
 	return anyStruct(model, mergeStructFields(expectedFields...), false)
 }
@@ -566,20 +568,20 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 // pointer on a struct
 // input(SStruct): struct,ptr(ptr on struct)
 
-// SStruct operator (aka strict-Struct) compares the contents of a
-// struct or a pointer on a struct against values of "model" (if any)
-// and the values of "expectedFields". The zero values are compared
-// too even if they are omitted from "expectedFields": that is the
-// difference with Struct operator.
+// SStruct operator (aka strict-[Struct]) compares the contents of a
+// struct or a pointer on a struct against values of model (if any)
+// and the values of expectedFields. The zero values are compared
+// too even if they are omitted from expectedFields: that is the
+// difference with [Struct] operator.
 //
-// "model" must be the same type as compared data.
+// model must be the same type as compared data.
 //
-// "expectedFields" can be omitted, if no TestDeep operators are
-// involved. If "expectedFields" contains more than one item, all
+// expectedFields can be omitted, if no [TestDeep] operators are
+// involved. If expectedFields contains more than one item, all
 // items are merged before their use, from left to right.
 //
-// To ignore a field, one has to specify it in "expectedFields" and
-// use the Ignore operator.
+// To ignore a field, one has to specify it in expectedFields and
+// use the [Ignore] operator.
 //
 //	td.Cmp(t, got, td.SStruct(
 //	  Person{
@@ -594,11 +596,11 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 //	  }),
 //	)
 //
-// It is an error to set a non-zero field in "model" AND to set the
-// same field in "expectedFields", as in such cases the SStruct
+// It is an error to set a non-zero field in model AND to set the
+// same field in expectedFields, as in such cases the SStruct
 // operator does not know if the user wants to override the non-zero
-// "model" field value or if it is an error. To explicitly override a
-// non-zero "model" in "expectedFields", just prefix its name with a
+// model field value or if it is an error. To explicitly override a
+// non-zero model in expectedFields, just prefix its name with a
 // ">" (followed by some optional spaces), as in:
 //
 //	td.Cmp(t, got, td.SStruct(
@@ -613,9 +615,9 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 //	  }),
 //	)
 //
-// "expectedFields" can also contain regexps or shell patterns to
-// match multiple fields not explicitly listed in "model" and in
-// "expectedFields". Regexps are prefixed by "=~" or "!~" to
+// expectedFields can also contain regexps or shell patterns to
+// match multiple fields not explicitly listed in model and in
+// expectedFields. Regexps are prefixed by "=~" or "!~" to
 // respectively match or don't-match. Shell patterns are prefixed by "="
 // or "!" to respectively match or don't-match.
 //
@@ -646,7 +648,7 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 //
 // This way, "*At" shell pattern is always used before "^[a-z]"
 // regexp, so if a field "createdAt" exists it is tested against
-// time.Now() and never against NotNil. A pattern without a
+// time.Now() and never against [NotNil]. A pattern without a
 // prefix number is the same as specifying "0" as prefix.
 //
 // To make it clearer, some spaces can be added, as well as bigger
@@ -681,7 +683,9 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 // During a match, all expected and zero fields must be found to
 // succeed.
 //
-// TypeBehind method returns the reflect.Type of "model".
+// TypeBehind method returns the [reflect.Type] of model.
+//
+// See also [SStruct].
 func SStruct(model any, expectedFields ...StructFields) TestDeep {
 	return anyStruct(model, mergeStructFields(expectedFields...), true)
 }

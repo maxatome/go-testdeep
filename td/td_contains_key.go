@@ -25,7 +25,7 @@ var _ TestDeep = &tdContainsKey{}
 // input(ContainsKey): map
 
 // ContainsKey is a smuggler operator and works on maps only. It
-// compares each key of map against "expectedValue".
+// compares each key of map against expectedValue.
 //
 //	hash := map[string]int{"foo": 12, "bar": 34, "zip": 28}
 //	td.Cmp(t, hash, td.ContainsKey("foo"))             // succeeds
@@ -38,7 +38,7 @@ var _ TestDeep = &tdContainsKey{}
 //
 // When ContainsKey(nil) is used, nil is automatically converted to a
 // typed nil on the fly to avoid confusion (if the map key type allows
-// it of course.) So all following Cmp calls are equivalent
+// it of course.) So all following [Cmp] calls are equivalent
 // (except the (*byte)(nil) one):
 //
 //	num := 123
@@ -48,6 +48,8 @@ var _ TestDeep = &tdContainsKey{}
 //	td.Cmp(t, hnum, td.ContainsKey(td.Nil()))    // succeeds
 //	// But...
 //	td.Cmp(t, hnum, td.ContainsKey((*byte)(nil))) // fails: (*byte)(nil) ≠ (*int)(nil)
+//
+// See also [Contains].
 func ContainsKey(expectedValue any) TestDeep {
 	c := tdContainsKey{
 		tdSmugglerBase: newSmugglerBase(expectedValue),

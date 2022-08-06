@@ -15,7 +15,7 @@ import (
 // package.
 //
 // It returns (nil, false) if the data behind val can not be retrieved
-// as an any (aka struct private + non-copyable field).
+// as an any interface (aka struct private + non-copyable field).
 var GetInterface = func(val reflect.Value, force bool) (any, bool) {
 	if !val.IsValid() {
 		return nil, true

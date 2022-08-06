@@ -68,24 +68,24 @@ type tdBetweenCmp struct {
 // between two bounds
 // input(Between): str,int,float,cplx(todo),struct(time.Time)
 
-// Between operator checks that data is between "from" and
-// "to". "from" and "to" can be any numeric, string, time.Time (or
+// Between operator checks that data is between from and
+// to. from and to can be any numeric, string, [time.Time] (or
 // assignable) value or implement at least one of the two following
 // methods:
 //
 //	func (a T) Less(b T) bool   // returns true if a < b
 //	func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
 //
-// "from" and "to" must be the same type as the compared value, except
-// if BeLax config flag is true. time.Duration type is accepted as
-// "to" when "from" is time.Time or convertible. "bounds" allows to
+// from and to must be the same type as the compared value, except
+// if BeLax config flag is true. [time.Duration] type is accepted as
+// to when from is [time.Time] or convertible. bounds allows to
 // specify whether bounds are included or not:
-//   - [BoundsInIn] (default): between "from" and "to" both included
-//   - [BoundsInOut]: between "from" included and "to" excluded
-//   - [BoundsOutIn]: between "from" excluded and "to" included
-//   - [BoundsOutOut]: between "from" and "to" both excluded
+//   - [BoundsInIn] (default): between from and to both included
+//   - [BoundsInOut]: between from included and to excluded
+//   - [BoundsOutIn]: between from excluded and to included
+//   - [BoundsOutOut]: between from and to both excluded
 //
-// If "bounds" is missing, it defaults to [BoundsInIn].
+// If bounds is missing, it defaults to [BoundsInIn].
 //
 //	tc.Cmp(t, 17, td.Between(17, 20))               // succeeds, BoundsInIn by default
 //	tc.Cmp(t, 17, td.Between(10, 17, BoundsInOut))  // fails
@@ -95,7 +95,7 @@ type tdBetweenCmp struct {
 //	  netip.MustParse("127.0.0.1"),
 //	  td.Between(netip.MustParse("127.0.0.0"), netip.MustParse("127.255.255.255")))
 //
-// TypeBehind method returns the reflect.Type of "from" (same as the "to" one.)
+// TypeBehind method returns the [reflect.Type] of from.
 func Between(from, to any, bounds ...BoundsKind) TestDeep {
 	b := tdBetween{
 		base:        newBase(3),
@@ -303,15 +303,15 @@ func (b *tdBetween) nFloat(tolerance reflect.Value) {
 // summary(N): compares a number with a tolerance value
 // input(N): int,float,cplx(todo)
 
-// N operator compares a numeric data against "num" ± "tolerance". If
-// "tolerance" is missing, it defaults to 0. "num" and "tolerance"
+// N operator compares a numeric data against num ± tolerance. If
+// tolerance is missing, it defaults to 0. num and tolerance
 // must be the same type as the compared value, except if BeLax config
 // flag is true.
 //
 //	td.Cmp(t, 12.2, td.N(12., 0.3)) // succeeds
 //	td.Cmp(t, 12.2, td.N(12., 0.1)) // fails
 //
-// TypeBehind method returns the reflect.Type of "num".
+// TypeBehind method returns the [reflect.Type] of num.
 func N(num any, tolerance ...any) TestDeep {
 	n := tdBetween{
 		base:        newBase(3),
@@ -368,21 +368,21 @@ func N(num any, tolerance ...any) TestDeep {
 // input(Gt): str,int,float,cplx(todo),struct(time.Time)
 
 // Gt operator checks that data is greater than
-// "minExpectedValue". "minExpectedValue" can be any numeric, string,
-// time.Time (or assignable) value or implements at least one of the
+// minExpectedValue. minExpectedValue can be any numeric, string,
+// [time.Time] (or assignable) value or implements at least one of the
 // two following methods:
 //
 //	func (a T) Less(b T) bool   // returns true if a < b
 //	func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
 //
-// "minExpectedValue" must be the same type as the compared value,
+// minExpectedValue must be the same type as the compared value,
 // except if BeLax config flag is true.
 //
 //	td.Cmp(t, 17, td.Gt(15))
 //	before := time.Now()
 //	td.Cmp(t, time.Now(), td.Gt(before))
 //
-// TypeBehind method returns the reflect.Type of "minExpectedValue".
+// TypeBehind method returns the [reflect.Type] of minExpectedValue.
 func Gt(minExpectedValue any) TestDeep {
 	b := &tdBetween{
 		base:        newBase(3),
@@ -397,21 +397,21 @@ func Gt(minExpectedValue any) TestDeep {
 // input(Gte): str,int,float,cplx(todo),struct(time.Time)
 
 // Gte operator checks that data is greater or equal than
-// "minExpectedValue". "minExpectedValue" can be any numeric, string,
-// time.Time (or assignable) value or implements at least one of the
+// minExpectedValue. minExpectedValue can be any numeric, string,
+// [time.Time] (or assignable) value or implements at least one of the
 // two following methods:
 //
 //	func (a T) Less(b T) bool   // returns true if a < b
 //	func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
 //
-// "minExpectedValue" must be the same type as the compared value,
+// minExpectedValue must be the same type as the compared value,
 // except if BeLax config flag is true.
 //
 //	td.Cmp(t, 17, td.Gte(17))
 //	before := time.Now()
 //	td.Cmp(t, time.Now(), td.Gte(before))
 //
-// TypeBehind method returns the reflect.Type of "minExpectedValue".
+// TypeBehind method returns the [reflect.Type] of minExpectedValue.
 func Gte(minExpectedValue any) TestDeep {
 	b := &tdBetween{
 		base:        newBase(3),
@@ -426,21 +426,21 @@ func Gte(minExpectedValue any) TestDeep {
 // input(Lt): str,int,float,cplx(todo),struct(time.Time)
 
 // Lt operator checks that data is lesser than
-// "maxExpectedValue". "maxExpectedValue" can be any numeric, string,
-// time.Time (or assignable) value or implements at least one of the
+// maxExpectedValue. maxExpectedValue can be any numeric, string,
+// [time.Time] (or assignable) value or implements at least one of the
 // two following methods:
 //
 //	func (a T) Less(b T) bool   // returns true if a < b
 //	func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
 //
-// "maxExpectedValue" must be the same type as the compared value,
+// maxExpectedValue must be the same type as the compared value,
 // except if BeLax config flag is true.
 //
 //	td.Cmp(t, 17, td.Lt(19))
 //	before := time.Now()
 //	td.Cmp(t, before, td.Lt(time.Now()))
 //
-// TypeBehind method returns the reflect.Type of "maxExpectedValue".
+// TypeBehind method returns the [reflect.Type] of maxExpectedValue.
 func Lt(maxExpectedValue any) TestDeep {
 	b := &tdBetween{
 		base:        newBase(3),
@@ -455,21 +455,21 @@ func Lt(maxExpectedValue any) TestDeep {
 // input(Lte): str,int,float,cplx(todo),struct(time.Time)
 
 // Lte operator checks that data is lesser or equal than
-// "maxExpectedValue". "maxExpectedValue" can be any numeric, string,
-// time.Time (or assignable) value or implements at least one of the
+// maxExpectedValue. maxExpectedValue can be any numeric, string,
+// [time.Time] (or assignable) value or implements at least one of the
 // two following methods:
 //
 //	func (a T) Less(b T) bool   // returns true if a < b
 //	func (a T) Compare(b T) int // returns -1 if a < b, 1 if a > b, 0 if a == b
 //
-// "maxExpectedValue" must be the same type as the compared value,
+// maxExpectedValue must be the same type as the compared value,
 // except if BeLax config flag is true.
 //
 //	td.Cmp(t, 17, td.Lte(17))
 //	before := time.Now()
 //	td.Cmp(t, before, td.Lt(time.Now()))
 //
-// TypeBehind method returns the reflect.Type of "maxExpectedValue".
+// TypeBehind method returns the [reflect.Type] of maxExpectedValue.
 func Lte(maxExpectedValue any) TestDeep {
 	b := &tdBetween{
 		base:        newBase(3),

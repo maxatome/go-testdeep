@@ -19,7 +19,7 @@ import (
 
 // ContextConfig allows to configure finely how tests failures are rendered.
 //
-// See NewT function to use it.
+// See [NewT] function to use it.
 type ContextConfig struct {
 	// RootName is the string used to represent the root of got data. It
 	// defaults to "DATA". For an HTTP response body, it could be "BODY"
@@ -77,8 +77,8 @@ type ContextConfig struct {
 	IgnoreUnexported bool
 }
 
-// Equal returns true if both ContextConfig are equal. Only public
-// fields are taken into account to check equality.
+// Equal returns true if both c and o are equal. Only public fields
+// are taken into account to check equality.
 func (c ContextConfig) Equal(o ContextConfig) bool {
 	return c.RootName == o.RootName &&
 		c.MaxErrors == o.MaxErrors &&
@@ -88,9 +88,9 @@ func (c ContextConfig) Equal(o ContextConfig) bool {
 		c.IgnoreUnexported == o.IgnoreUnexported
 }
 
-// OriginalPath returns the current path when the ContextConfig has
-// been built. It always returns RootName except if the ContextConfig
-// has been built by Code operator. See Code documentation for an
+// OriginalPath returns the current path when the [ContextConfig] has
+// been built. It always returns ContextConfig.RootName except if c
+// has been built by [Code] operator. See [Code] documentation for an
 // example of use.
 func (c ContextConfig) OriginalPath() string {
 	if c.forkedFromCtx == nil {
@@ -118,7 +118,7 @@ func getMaxErrorsFromEnv() int {
 
 // DefaultContextConfig is the default configuration used to render
 // tests failures. If overridden, new settings will impact all Cmp*
-// functions and *T methods (if not specifically configured.)
+// functions and [*T] methods (if not specifically configured.)
 var DefaultContextConfig = ContextConfig{
 	RootName:         contextDefaultRootName,
 	MaxErrors:        getMaxErrorsFromEnv(),

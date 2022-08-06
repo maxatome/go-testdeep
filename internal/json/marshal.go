@@ -22,10 +22,10 @@ type marshaler struct {
 	tmp    []byte
 }
 
-// Marshal returns the JSON encoding of "v". It differs from
-// encoding/json.Marshal() as it only handles map[string]any,
+// Marshal returns the JSON encoding of v. It differs from
+// [encoding/json.Marshal] as it only handles map[string]any,
 // []any, bool, float64, string, nil and
-// encoding/json.Marshaler values. It also accepts "invalid" JSON data
+// [encoding/json.Marshaler] values. It also accepts "invalid" JSON data
 // returned by MarshalJSON method.
 func Marshal(v any, indent int) ([]byte, error) {
 	m := marshaler{
@@ -39,8 +39,8 @@ func Marshal(v any, indent int) ([]byte, error) {
 	return m.buf.Bytes(), nil
 }
 
-// AppendMarshal does the same as Marshal but appends the JSON
-// encoding to "buf".
+// AppendMarshal does the same as [Marshal] but appends the JSON
+// encoding to buf.
 func AppendMarshal(buf *bytes.Buffer, v any, indent int) error {
 	m := marshaler{
 		indent: indent,

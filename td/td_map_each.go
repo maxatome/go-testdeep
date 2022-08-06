@@ -27,7 +27,7 @@ var _ TestDeep = &tdMapEach{}
 // input(MapEach): map,ptr(ptr on map)
 
 // MapEach operator has to be applied on maps. It compares each value
-// of data map against expected value. During a match, all values have
+// of data map against expectedValue. During a match, all values have
 // to match to succeed.
 //
 //	got := map[string]string{"test": "foo", "buzz": "bar"}

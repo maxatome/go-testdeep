@@ -96,7 +96,7 @@ func (u tdJSONUnmarshaler) replaceLocation(tdOp TestDeep, posInJSON json.Positio
 	tdOp.replaceLocation(newPos)
 }
 
-// unmarshal unmarshals "expectedJSON" using placeholder parameters "params".
+// unmarshal unmarshals expectedJSON using placeholder parameters params.
 func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxerr.Error) {
 	var (
 		err error
@@ -343,10 +343,10 @@ func (s *tdJSONSmuggler) TypeBehind() reflect.Type {
 //	td.JSON(`{"foo": $1}`, td.Between(12, 34))
 //
 // It takes the JSON representation of data and compares it to
-// "expectedValue".
+// expectedValue.
 //
 // It does its best to convert back the JSON pointed data to the type
-// of "expectedValue" or to the type behind the "expectedValue".
+// of expectedValue or to the type behind the expectedValue.
 type tdJSONPlaceholder struct {
 	tdJSONSmuggler
 	name string
@@ -422,7 +422,7 @@ func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
 // ensures that.
 //
 // It does its best to convert back the JSON pointed data to the type
-// of the type behind the "expectedValue" (which is always a TestDeep
+// of the type behind the expectedValue (which is always a TestDeep
 // operator).
 type tdJSONEmbedded struct {
 	tdJSONSmuggler
@@ -484,23 +484,23 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 // input(JSON): nil,bool,str,int,float,array,slice,map,struct,ptr
 
 // JSON operator allows to compare the JSON representation of data
-// against "expectedJSON". "expectedJSON" can be a:
+// against expectedJSON. expectedJSON can be a:
 //
 //   - string containing JSON data like `{"fullname":"Bob","age":42}`
 //   - string containing a JSON filename, ending with ".json" (its
-//     content is ioutil.ReadFile before unmarshaling)
+//     content is [ioutil.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
-//   - io.Reader stream containing JSON data (is ioutil.ReadAll before
-//     unmarshaling)
+//   - [io.Reader] stream containing JSON data (is [ioutil.ReadAll]
+//     before unmarshaling)
 //
-// "expectedJSON" JSON value can contain placeholders. The "params"
-// are for any placeholder parameters in "expectedJSON". "params" can
-// contain TestDeep operators as well as raw values. A placeholder can
+// expectedJSON JSON value can contain placeholders. The params
+// are for any placeholder parameters in expectedJSON. params can
+// contain [TestDeep] operators as well as raw values. A placeholder can
 // be numeric like $2 or named like $name and always references an
-// item in "params".
+// item in params.
 //
 // Numeric placeholders reference the n'th "operators" item (starting
-// at 1). Named placeholders are used with Tag operator as follows:
+// at 1). Named placeholders are used with [Tag] operator as follows:
 //
 //	td.Cmp(t, gotValue,
 //	  td.JSON(`{"fullname": $name, "age": $2, "gender": $3}`,
@@ -537,7 +537,7 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []any, map[string]any or simply nil).
 //
-// Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
+// Note expectedJSON can be a []byte, a JSON filename or a [io.Reader]:
 //
 //	td.Cmp(t, gotValue, td.JSON("file.json", td.Between(12, 34)))
 //	td.Cmp(t, gotValue, td.JSON([]byte(`[1, $1, 3]`), td.Between(12, 34)))
@@ -557,7 +557,7 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 // For the "details" key, the raw value "$info" is expected, no
 // placeholders are involved here.
 //
-// Note that Lax mode is automatically enabled by JSON operator to
+// Note that [Lax] mode is automatically enabled by JSON operator to
 // simplify numeric tests.
 //
 // Comments can be embedded in JSON data:
@@ -606,21 +606,23 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 //	td.Cmp(t, gotValue, td.JSON(`{"fullname": HasPrefix($1)}`, "Zip"))
 //
 // A few notes about operators embedding:
-//   - SubMapOf and SuperMapOf take only one parameter, a JSON object;
-//   - the optional 3rd parameter of Between has to be specified as a string
+//   - [SubMapOf] and [SuperMapOf] take only one parameter, a JSON object;
+//   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
-//   - not all operators are embeddable only the following are;
-//   - All, Any, ArrayEach, Bag, Between, Contains, ContainsKey, Empty, Gt,
-//     Gte, HasPrefix, HasSuffix, Ignore, JSONPointer, Keys, Len, Lt, Lte,
-//     MapEach, N, NaN, Nil, None, Not, NotAny, NotEmpty, NotNaN, NotNil,
-//     NotZero, Re, ReAll, Set, SubBagOf, SubMapOf, SubSetOf, SuperBagOf,
-//     SuperMapOf, SuperSetOf, Values and Zero.
+//   - not all operators are embeddable only the following are:
+//     [All], [Any], [ArrayEach], [Bag], [Between], [Contains],
+//     [ContainsKey], [Empty], [Gt], [Gte], [HasPrefix], [HasSuffix],
+//     [Ignore], [JSONPointer], [Keys], [Len], [Lt], [Lte], [MapEach],
+//     [N], [NaN], [Nil], [None], [Not], [NotAny], [NotEmpty], [NotNaN],
+//     [NotNil], [NotZero], [Re], [ReAll], [Set], [SubBagOf],
+//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf],
+//     [Values] and [Zero].
 //
 // Operators taking no parameters can also be directly embedded in
 // JSON data using $^OperatorName or "$^OperatorName" notation. They
 // are named shortcut operators (they predate the above operators embedding
-// but they subsist for compatibility):
+// but they still subsist for compatibility):
 //
 //	td.Cmp(t, gotValue, td.JSON(`{"id": $1}`, td.NotZero()))
 //
@@ -636,20 +638,21 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 // "$^NotZero".
 //
 // The allowed shortcut operators follow:
-//   - Empty    → $^Empty
-//   - Ignore   → $^Ignore
-//   - NaN      → $^NaN
-//   - Nil      → $^Nil
-//   - NotEmpty → $^NotEmpty
-//   - NotNaN   → $^NotNaN
-//   - NotNil   → $^NotNil
-//   - NotZero  → $^NotZero
-//   - Zero     → $^Zero
+//   - [Empty]    → $^Empty
+//   - [Ignore]   → $^Ignore
+//   - [NaN]      → $^NaN
+//   - [Nil]      → $^Nil
+//   - [NotEmpty] → $^NotEmpty
+//   - [NotNaN]   → $^NotNaN
+//   - [NotNil]   → $^NotNil
+//   - [NotZero]  → $^NotZero
+//   - [Zero]     → $^Zero
 //
-// TypeBehind method returns the reflect.Type of the "expectedJSON"
-// json.Unmarshal'ed. So it can be bool, string, float64,
-// []any, map[string]any or any in case
-// "expectedJSON" is "null".
+// TypeBehind method returns the [reflect.Type] of the expectedJSON
+// once JSON unmarshaled. So it can be bool, string, float64, []any,
+// map[string]any or any in case expectedJSON is "null".
+//
+// See also [JSONPointer], [SubJSONOf] and [SuperJSONOf].
 func JSON(expectedJSON any, params ...any) TestDeep {
 	j := &tdJSON{
 		baseOKNil: newBaseOKNil(3),
@@ -730,17 +733,17 @@ var _ TestDeep = &tdMapJSON{}
 // input(SubJSONOf): map,struct,ptr(ptr on map/struct)
 
 // SubJSONOf operator allows to compare the JSON representation of
-// data against "expectedJSON". Unlike JSON operator, marshaled data
-// must be a JSON object/map (aka {…}). "expectedJSON" can be a:
+// data against expectedJSON. Unlike [JSON] operator, marshaled data
+// must be a JSON object/map (aka {…}). expectedJSON can be a:
 //
 //   - string containing JSON data like `{"fullname":"Bob","age":42}`
 //   - string containing a JSON filename, ending with ".json" (its
-//     content is ioutil.ReadFile before unmarshaling)
+//     content is [ioutil.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
-//   - io.Reader stream containing JSON data (is ioutil.ReadAll before
+//   - [io.Reader] stream containing JSON data (is [ioutil.ReadAll] before
 //     unmarshaling)
 //
-// JSON data contained in "expectedJSON" must be a JSON object/map
+// JSON data contained in expectedJSON must be a JSON object/map
 // (aka {…}) too. During a match, each expected entry should match in
 // the compared map. But some expected entries can be missing from the
 // compared map.
@@ -756,14 +759,14 @@ var _ TestDeep = &tdMapJSON{}
 //	td.Cmp(t, got, td.SubJSONOf(`{"name": "Bob", "age": 42, "city": "NY"}`)) // succeeds
 //	td.Cmp(t, got, td.SubJSONOf(`{"name": "Bob", "zip": 666}`))              // fails, extra "age"
 //
-// "expectedJSON" JSON value can contain placeholders. The "params"
-// are for any placeholder parameters in "expectedJSON". "params" can
-// contain TestDeep operators as well as raw values. A placeholder can
+// expectedJSON JSON value can contain placeholders. The params
+// are for any placeholder parameters in expectedJSON. params can
+// contain [TestDeep] operators as well as raw values. A placeholder can
 // be numeric like $2 or named like $name and always references an
-// item in "params".
+// item in params.
 //
 // Numeric placeholders reference the n'th "operators" item (starting
-// at 1). Named placeholders are used with Tag operator as follows:
+// at 1). Named placeholders are used with [Tag] operator as follows:
 //
 //	td.Cmp(t, gotValue,
 //	  td.SubJSONOf(`{"fullname": $name, "age": $2, "gender": $3}`,
@@ -802,7 +805,7 @@ var _ TestDeep = &tdMapJSON{}
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []any, map[string]any or simply nil).
 //
-// Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
+// Note expectedJSON can be a []byte, JSON filename or [io.Reader]:
 //
 //	td.Cmp(t, gotValue, td.SubJSONOf("file.json", td.Between(12, 34)))
 //	td.Cmp(t, gotValue, td.SubJSONOf([]byte(`[1, $1, 3]`), td.Between(12, 34)))
@@ -822,7 +825,7 @@ var _ TestDeep = &tdMapJSON{}
 // For the "details" key, the raw value "$info" is expected, no
 // placeholders are involved here.
 //
-// Note that Lax mode is automatically enabled by SubJSONOf operator to
+// Note that [Lax] mode is automatically enabled by SubJSONOf operator to
 // simplify numeric tests.
 //
 // Comments can be embedded in JSON data:
@@ -872,16 +875,18 @@ var _ TestDeep = &tdMapJSON{}
 //	  td.SubJSONOf(`{"fullname": HasPrefix($1), "bar": 42}`, "Zip"))
 //
 // A few notes about operators embedding:
-//   - SubMapOf and SuperMapOf take only one parameter, a JSON object;
-//   - the optional 3rd parameter of Between has to be specified as a string
+//   - [SubMapOf] and [SuperMapOf] take only one parameter, a JSON object;
+//   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
-//   - not all operators are embeddable only the following are;
-//   - All, Any, ArrayEach, Bag, Between, Contains, ContainsKey, Empty, Gt,
-//     Gte, HasPrefix, HasSuffix, Ignore, JSONPointer, Keys, Len, Lt, Lte,
-//     MapEach, N, NaN, Nil, None, Not, NotAny, NotEmpty, NotNaN, NotNil,
-//     NotZero, Re, ReAll, Set, SubBagOf, SubMapOf, SubSetOf, SuperBagOf,
-//     SuperMapOf, SuperSetOf, Values and Zero.
+//   - not all operators are embeddable only the following are:
+//     [All], [Any], [ArrayEach], [Bag], [Between], [Contains],
+//     [ContainsKey], [Empty], [Gt], [Gte], [HasPrefix], [HasSuffix],
+//     [Ignore], [JSONPointer], [Keys], [Len], [Lt], [Lte], [MapEach],
+//     [N], [NaN], [Nil], [None], [Not], [NotAny], [NotEmpty], [NotNaN],
+//     [NotNil], [NotZero], [Re], [ReAll], [Set], [SubBagOf],
+//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf],
+//     [Values] and [Zero].
 //
 // Operators taking no parameters can also be directly embedded in
 // JSON data using $^OperatorName or "$^OperatorName" notation. They
@@ -902,17 +907,19 @@ var _ TestDeep = &tdMapJSON{}
 // "$^NotZero".
 //
 // The allowed shortcut operators follow:
-//   - Empty    → $^Empty
-//   - Ignore   → $^Ignore
-//   - NaN      → $^NaN
-//   - Nil      → $^Nil
-//   - NotEmpty → $^NotEmpty
-//   - NotNaN   → $^NotNaN
-//   - NotNil   → $^NotNil
-//   - NotZero  → $^NotZero
-//   - Zero     → $^Zero
+//   - [Empty]    → $^Empty
+//   - [Ignore]   → $^Ignore
+//   - [NaN]      → $^NaN
+//   - [Nil]      → $^Nil
+//   - [NotEmpty] → $^NotEmpty
+//   - [NotNaN]   → $^NotNaN
+//   - [NotNil]   → $^NotNil
+//   - [NotZero]  → $^NotZero
+//   - [Zero]     → $^Zero
 //
 // TypeBehind method returns the map[string]any type.
+//
+// See also [JSON], [JSONPointer] and [SuperJSONOf].
 func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 	m := &tdMapJSON{
 		tdMap: tdMap{
@@ -947,17 +954,17 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 // input(SuperJSONOf): map,struct,ptr(ptr on map/struct)
 
 // SuperJSONOf operator allows to compare the JSON representation of
-// data against "expectedJSON". Unlike JSON operator, marshaled data
-// must be a JSON object/map (aka {…}). "expectedJSON" can be a:
+// data against expectedJSON. Unlike JSON operator, marshaled data
+// must be a JSON object/map (aka {…}). expectedJSON can be a:
 //
 //   - string containing JSON data like `{"fullname":"Bob","age":42}`
 //   - string containing a JSON filename, ending with ".json" (its
-//     content is ioutil.ReadFile before unmarshaling)
+//     content is [ioutil.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
-//   - io.Reader stream containing JSON data (is ioutil.ReadAll before
+//   - [io.Reader] stream containing JSON data (is [ioutil.ReadAll] before
 //     unmarshaling)
 //
-// JSON data contained in "expectedJSON" must be a JSON object/map
+// JSON data contained in expectedJSON must be a JSON object/map
 // (aka {…}) too. During a match, each expected entry should match in
 // the compared map. But some entries in the compared map may not be
 // expected.
@@ -975,14 +982,14 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 //	td.Cmp(t, got, td.SuperJSONOf(`{"name": "Bob", "age": 42}`))  // succeeds
 //	td.Cmp(t, got, td.SuperJSONOf(`{"name": "Bob", "zip": 666}`)) // fails, miss "zip"
 //
-// "expectedJSON" JSON value can contain placeholders. The "params"
-// are for any placeholder parameters in "expectedJSON". "params" can
-// contain TestDeep operators as well as raw values. A placeholder can
-// be numeric like $2 or named like $name and always references an
-// item in "params".
+// expectedJSON JSON value can contain placeholders. The params are
+// for any placeholder parameters in expectedJSON. params can contain
+// [TestDeep] operators as well as raw values. A placeholder can be
+// numeric like $2 or named like $name and always references an item
+// in params.
 //
 // Numeric placeholders reference the n'th "operators" item (starting
-// at 1). Named placeholders are used with Tag operator as follows:
+// at 1). Named placeholders are used with [Tag] operator as follows:
 //
 //	td.Cmp(t, gotValue,
 //	  SuperJSONOf(`{"fullname": $name, "age": $2, "gender": $3}`,
@@ -1021,7 +1028,7 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []any, map[string]any or simply nil).
 //
-// Note "expectedJSON" can be a []byte, JSON filename or io.Reader:
+// Note expectedJSON can be a []byte, JSON filename or [io.Reader]:
 //
 //	td.Cmp(t, gotValue, td.SuperJSONOf("file.json", td.Between(12, 34)))
 //	td.Cmp(t, gotValue, td.SuperJSONOf([]byte(`[1, $1, 3]`), td.Between(12, 34)))
@@ -1041,7 +1048,7 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 // For the "details" key, the raw value "$info" is expected, no
 // placeholders are involved here.
 //
-// Note that Lax mode is automatically enabled by SuperJSONOf operator to
+// Note that [Lax] mode is automatically enabled by SuperJSONOf operator to
 // simplify numeric tests.
 //
 // Comments can be embedded in JSON data:
@@ -1090,16 +1097,18 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 //	td.Cmp(t, gotValue, td.SuperJSONOf(`{"fullname": HasPrefix($1)}`, "Zip"))
 //
 // A few notes about operators embedding:
-//   - SubMapOf and SuperMapOf take only one parameter, a JSON object;
-//   - the optional 3rd parameter of Between has to be specified as a string
+//   - [SubMapOf] and [SuperMapOf] take only one parameter, a JSON object;
+//   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
-//   - not all operators are embeddable only the following are;
-//   - All, Any, ArrayEach, Bag, Between, Contains, ContainsKey, Empty, Gt,
-//     Gte, HasPrefix, HasSuffix, Ignore, JSONPointer, Keys, Len, Lt, Lte,
-//     MapEach, N, NaN, Nil, None, Not, NotAny, NotEmpty, NotNaN, NotNil,
-//     NotZero, Re, ReAll, Set, SubBagOf, SubMapOf, SubSetOf, SuperBagOf,
-//     SuperMapOf, SuperSetOf, Values and Zero.
+//   - not all operators are embeddable only the following are:
+//     [All], [Any], [ArrayEach], [Bag], [Between], [Contains],
+//     [ContainsKey], [Empty], [Gt], [Gte], [HasPrefix], [HasSuffix],
+//     [Ignore], [JSONPointer], [Keys], [Len], [Lt], [Lte], [MapEach],
+//     [N], [NaN], [Nil], [None], [Not], [NotAny], [NotEmpty], [NotNaN],
+//     [NotNil], [NotZero], [Re], [ReAll], [Set], [SubBagOf],
+//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf],
+//     [Values] and [Zero].
 //
 // Operators taking no parameters can also be directly embedded in
 // JSON data using $^OperatorName or "$^OperatorName" notation. They
@@ -1120,17 +1129,19 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 // "$^NotZero".
 //
 // The allowed shortcut operators follow:
-//   - Empty    → $^Empty
-//   - Ignore   → $^Ignore
-//   - NaN      → $^NaN
-//   - Nil      → $^Nil
-//   - NotEmpty → $^NotEmpty
-//   - NotNaN   → $^NotNaN
-//   - NotNil   → $^NotNil
-//   - NotZero  → $^NotZero
-//   - Zero     → $^Zero
+//   - [Empty]    → $^Empty
+//   - [Ignore]   → $^Ignore
+//   - [NaN]      → $^NaN
+//   - [Nil]      → $^Nil
+//   - [NotEmpty] → $^NotEmpty
+//   - [NotNaN]   → $^NotNaN
+//   - [NotNil]   → $^NotNil
+//   - [NotZero]  → $^NotZero
+//   - [Zero]     → $^Zero
 //
 // TypeBehind method returns the map[string]any type.
+//
+// See also [JSON], [JSONPointer] and [SubJSONOf].
 func SuperJSONOf(expectedJSON any, params ...any) TestDeep {
 	m := &tdMapJSON{
 		tdMap: tdMap{

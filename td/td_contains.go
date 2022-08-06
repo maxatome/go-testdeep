@@ -33,14 +33,14 @@ var _ TestDeep = &tdContains{}
 // in another thing. Contains has to be applied on arrays, slices, maps or
 // strings. It tries to be as smarter as possible.
 //
-// If "expectedValue" is a TestDeep operator, each item of data
+// If expectedValue is a [TestDeep] operator, each item of data
 // array/slice/map/string (rune for strings) is compared to it. The
-// use of a TestDeep operator as "expectedValue" works only in this
+// use of a [TestDeep] operator as expectedValue works only in this
 // way: item per item.
 //
-// If data is a slice, and "expectedValue" has the same type, then
-// "expectedValue" is searched as a sub-slice, otherwise
-// "expectedValue" is compared to each slice value.
+// If data is a slice, and expectedValue has the same type, then
+// expectedValue is searched as a sub-slice, otherwise
+// expectedValue is compared to each slice value.
 //
 //	list := []int{12, 34, 28}
 //	td.Cmp(t, list, td.Contains(34))                 // succeeds
@@ -49,7 +49,7 @@ var _ TestDeep = &tdContains{}
 //	td.Cmp(t, list, td.Contains([]int{34, 28}))      // succeeds
 //
 // If data is an array or a map, each value is compared to
-// "expectedValue". Map keys are not checked: see ContainsKey to check
+// expectedValue. Map keys are not checked: see [ContainsKey] to check
 // map keys existence.
 //
 //	hash := map[string]int{"foo": 12, "bar": 34, "zip": 28}
@@ -63,8 +63,8 @@ var _ TestDeep = &tdContains{}
 //	td.Cmp(t, array, td.Contains(35))                 // fails
 //
 // If data is a string (or convertible), []byte (or convertible),
-// error or fmt.Stringer interface (error interface is tested before
-// fmt.Stringer), "expectedValue" can be a string, a []byte, a rune or
+// error or [fmt.Stringer] interface (error interface is tested before
+// [fmt.Stringer]), expectedValue can be a string, a []byte, a rune or
 // a byte. In this case, it tests if the got string contains this
 // expected string, []byte, rune or byte.
 //
@@ -90,14 +90,14 @@ var _ TestDeep = &tdContains{}
 //
 //	td.Cmp(t, "foobar", td.Contains(td.All("foo", "bar"))) // Bad!
 //
-// as TestDeep operator All in Contains operates on each rune, so it
+// as [TestDeep] operator [All] in Contains operates on each rune, so it
 // does not work as expected, but do::
 //
 //	td.Cmp(t, "foobar", td.All(td.Contains("foo"), td.Contains("bar")))
 //
 // When Contains(nil) is used, nil is automatically converted to a
 // typed nil on the fly to avoid confusion (if the array/slice/map
-// item type allows it of course.) So all following Cmp calls
+// item type allows it of course.) So all following [Cmp] calls
 // are equivalent (except the (*byte)(nil) one):
 //
 //	num := 123
@@ -114,6 +114,8 @@ var _ TestDeep = &tdContains{}
 //	td.Cmp(t, hash, td.Contains(nil))         // succeeds → (*int)(nil)
 //	td.Cmp(t, hash, td.Contains((*int)(nil))) // succeeds
 //	td.Cmp(t, hash, td.Contains(td.Nil()))    // succeeds
+//
+// See also [ContainsKey].
 func Contains(expectedValue any) TestDeep {
 	c := tdContains{
 		tdSmugglerBase: newSmugglerBase(expectedValue),

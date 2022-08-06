@@ -27,7 +27,7 @@ type Info struct {
 	anchors map[any]anchor
 }
 
-// NewInfo returns a new instance of *Info.
+// NewInfo returns a new instance of [*Info].
 func NewInfo() *Info {
 	return &Info{
 		anchors: map[any]anchor{},
