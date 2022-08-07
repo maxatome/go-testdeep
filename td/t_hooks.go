@@ -21,7 +21,7 @@ import (
 //
 // First arg is always got, and second is always expected.
 //
-// A cannot be an interface. This retriction can be removed in the
+// A cannot be an interface. This restriction can be removed in the
 // future, if really needed.
 //
 // This function is called as soon as possible each time the type A is
@@ -30,7 +30,7 @@ import (
 // When it returns a bool, false means A is not equal to B.
 //
 // When it returns a non-nil error (meaning got ≠ expected), its
-// contents is used to tell the reason of the failure.
+// content is used to tell the reason of the failure.
 //
 // Cmp hooks are checked before [UseEqual] feature.
 //
@@ -100,7 +100,7 @@ func (t *T) WithCmpHooks(fns ...any) *T {
 //	func (got A) B
 //	func (got A) (B, error)
 //
-// A cannot be an interface. This retriction can be removed in the
+// A cannot be an interface. This restriction can be removed in the
 // future, if really needed.
 //
 // B cannot be an interface. If you have a use case, we can talk about it.
@@ -114,7 +114,7 @@ func (t *T) WithCmpHooks(fns ...any) *T {
 //
 // When it returns non-nil error (meaning something wrong happened
 // during the conversion of A to B), it raises a global error and its
-// contents is used to tell the reason of the failure.
+// content is used to tell the reason of the failure.
 //
 // Smuggle hooks are run just before Cmp hooks.
 //
