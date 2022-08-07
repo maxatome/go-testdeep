@@ -36,7 +36,7 @@ type tdBetween struct {
 
 var _ TestDeep = &tdBetween{}
 
-// BoundsKind type qualifies the "Between" bounds.
+// BoundsKind type qualifies the [Between] bounds.
 type BoundsKind uint8
 
 const (

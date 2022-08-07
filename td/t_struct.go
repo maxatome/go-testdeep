@@ -780,6 +780,8 @@ func getTrace(args ...any) string {
 // added. If len(args) > 1 and the first item of args is a string
 // and contains a '%' rune then [fmt.Fprintf] is used to compose the
 // name, else args are passed to [fmt.Fprint].
+//
+// See also [T.ErrorTrace] and [T.FatalTrace].
 func (t *T) LogTrace(args ...any) {
 	t.Helper()
 	t.Log(getTrace(args...))
@@ -793,6 +795,8 @@ func (t *T) LogTrace(args ...any) {
 // added. If len(args) > 1 and the first item of args is a string
 // and contains a '%' rune then [fmt.Fprintf] is used to compose the
 // name, else args are passed to [fmt.Fprint].
+//
+// See also [T.LogTrace] and [T.FatalTrace].
 func (t *T) ErrorTrace(args ...any) {
 	t.Helper()
 	t.Error(getTrace(args...))
@@ -806,6 +810,8 @@ func (t *T) ErrorTrace(args ...any) {
 // added. If len(args) > 1 and the first item of args is a string
 // and contains a '%' rune then [fmt.Fprintf] is used to compose the
 // name, else args are passed to [fmt.Fprint].
+//
+// See also [T.LogTrace] and [T.ErrorTrace].
 func (t *T) FatalTrace(args ...any) {
 	t.Helper()
 	t.Fatal(getTrace(args...))

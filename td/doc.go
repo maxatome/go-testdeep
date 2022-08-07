@@ -112,7 +112,7 @@
 // with a value included between the date before CreateRecord() call
 // and the date just after.
 //
-// Note that if `Id` and `CreateAt` could be known in advance, we could
+// Note that if Id and CreateAt could be known in advance, we could
 // simply do:
 //
 //	import (

@@ -61,8 +61,8 @@ func AddAnchorableStructType(fn any) {
 // below). Otherwise, model should contain only one value
 // corresponding to the returning type. It can be:
 //   - a go value: returning type is the type of the value,
-//     whatever the value is
-//   - a [reflect.Type]
+//     whatever the value is;
+//   - a [reflect.Type].
 //
 // It returns a typed value ready to be embed in a go data structure to
 // be compared using [T.Cmp] or [T.CmpLax]:
