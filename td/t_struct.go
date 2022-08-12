@@ -168,7 +168,7 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 	return &newT
 }
 
-// Assert return a new [*T] instance with FailureIsFatal flag set to
+// Assert returns a new [*T] instance with FailureIsFatal flag set to
 // false.
 //
 //	assert := Assert(t)
@@ -179,12 +179,12 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 //
 // See [NewT] documentation for usefulness of config optional parameter.
 //
-// See also [Require] and [AssertRequire].
+// See also [Require], [AssertRequire] and [T.Assert].
 func Assert(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal(false)
 }
 
-// Require return a new [*T] instance with FailureIsFatal flag set to
+// Require returns a new [*T] instance with FailureIsFatal flag set to
 // true.
 //
 //	require := Require(t)
@@ -195,7 +195,7 @@ func Assert(t testing.TB, config ...ContextConfig) *T {
 //
 // See [NewT] documentation for usefulness of config optional parameter.
 //
-// See also [Assert] and [AssertRequire].
+// See also [Assert], [AssertRequire] and [T.Require].
 func Require(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal()
 }
@@ -282,10 +282,40 @@ func (t *T) RootName(rootName string) *T {
 //	t.Cmp(...)
 //
 // Note that t.FailureIsFatal() acts as t.FailureIsFatal(true).
+//
+// See also [T.Assert] and [T.Require].
 func (t *T) FailureIsFatal(enable ...bool) *T {
 	new := *t
 	new.Config.FailureIsFatal = len(enable) == 0 || enable[0]
 	return &new
+}
+
+// Assert returns a new [*T] instance inheriting the t config but with
+// FailureIsFatal flag set to false.
+//
+// It returns a new instance of [*T] so does not alter the original t
+//
+// It is a shortcut for:
+//
+//	t.FailureIsFatal(false)
+//
+// See also [T.FailureIsFatal] and [T.Require].
+func (t *T) Assert() *T {
+	return t.FailureIsFatal(false)
+}
+
+// Require returns a new [*T] instance inheriting the t config but
+// with FailureIsFatal flag set to true.
+//
+// It returns a new instance of [*T] so does not alter the original t
+//
+// It is a shortcut for:
+//
+//	t.FailureIsFatal(true)
+//
+// See also [T.FailureIsFatal] and [T.Assert].
+func (t *T) Require() *T {
+	return t.FailureIsFatal(true)
 }
 
 // UseEqual tells go-testdeep to delegate the comparison of items

@@ -335,7 +335,7 @@ func TestFailureIsFatal(tt *testing.T) {
 	t := td.NewT(ttt)
 	t.True(false) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
-	test.IsFalse(tt, ttt.IsFatal, "by default it not fatal")
+	test.IsFalse(tt, ttt.IsFatal, "by default it is not fatal")
 
 	// Using specific config
 	ttt = test.NewTestingTB(tt.Name())
@@ -354,6 +354,20 @@ func TestFailureIsFatal(tt *testing.T) {
 	// Using FailureIsFatal(true)
 	ttt = test.NewTestingTB(tt.Name())
 	t = td.NewT(ttt).FailureIsFatal(true)
+	ttt.CatchFatal(func() { t.True(false) }) // failure
+	test.IsTrue(tt, ttt.LastMessage() != "")
+	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
+
+	// Using T.Assert()
+	ttt = test.NewTestingTB(tt.Name())
+	t = td.NewT(ttt, td.ContextConfig{FailureIsFatal: true}).Assert()
+	t.True(false) // failure
+	test.IsTrue(tt, ttt.LastMessage() != "")
+	test.IsFalse(tt, ttt.IsFatal, "by default it is not fatal")
+
+	// Using T.Require()
+	ttt = test.NewTestingTB(tt.Name())
+	t = td.NewT(ttt).Require()
 	ttt.CatchFatal(func() { t.True(false) }) // failure
 	test.IsTrue(tt, ttt.LastMessage() != "")
 	test.IsTrue(tt, ttt.IsFatal, "it must be fatal")
