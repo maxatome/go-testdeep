@@ -26,6 +26,14 @@ func TestBuildTestName(t *testing.T) {
 			expected: "foobar",
 		},
 		{
+			params:   []any{"foobar %d"},
+			expected: "foobar %d",
+		},
+		{
+			params:   []any{"foobar %", 12},
+			expected: "foobar %12",
+		},
+		{
 			params:   []any{"foo", "bar"},
 			expected: "foobar",
 		},
