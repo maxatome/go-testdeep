@@ -274,6 +274,40 @@ DATA: test error message
 	}
 }
 
+func TestS(t *testing.T) {
+	for i, curTest := range []struct {
+		params   []any
+		expected string
+	}{
+		{
+			params:   []any{},
+			expected: "",
+		},
+		{
+			params:   []any{"pipo", "bingo"},
+			expected: "pipobingo",
+		},
+		{
+			params:   []any{"pipo %d %s", 42, "bingo"},
+			expected: "pipo 42 bingo",
+		},
+		{
+			params:   []any{"pipo %d"},
+			expected: "pipo %d",
+		},
+		{
+			params:   []any{"pipo %", 42},
+			expected: "pipo %42",
+		},
+		{
+			params:   []any{42, 666},
+			expected: "42 666",
+		},
+	} {
+		test.EqualStr(t, S(curTest.params...), curTest.expected, "#%d", i)
+	}
+}
+
 func TestCmp(t *testing.T) {
 	tt := test.NewTestingTB(t.Name())
 	test.IsTrue(t, Cmp(tt, 1, 1))

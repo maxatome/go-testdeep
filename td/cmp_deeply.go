@@ -159,6 +159,30 @@ func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected any,
 	return false
 }
 
+// S returns a string based on args as Cmp* functions do with their
+// own args parameter to name their test. So behind the scene,
+// [tdutil.BuildTestName] is used.
+//
+// If len(args) > 1 and the first item of args is a string and
+// contains a '%' rune then [fmt.Fprintf] is used to compose the
+// returned string, else args are passed to [fmt.Fprint].
+//
+// It can be used as a shorter [fmt.Sprintf]:
+//
+//	t.Run(fmt.Sprintf("Foo #%d", i), func(t *td.T) {})
+//	t.Run(td.S("Foo #%d", i), func(t *td.T) {})
+//
+// or to print any values as [fmt.Sprint] handles them:
+//
+//	a, ok := []int{1, 2, 3}, true
+//	t.Run(fmt.Sprint(a, ok), func(t *td.T) {})
+//	t.Run(td.S(a, ok), func(t *td.T) {})
+//
+// The only gain is less characters to type.
+func S(args ...any) string {
+	return tdutil.BuildTestName(args...)
+}
+
 // Cmp returns true if got matches expected. expected can
 // be the same type as got is, or contains some [TestDeep]
 // operators. If got does not match expected, it returns false and
