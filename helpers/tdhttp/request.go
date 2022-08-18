@@ -371,7 +371,7 @@ func PostForm(target string, data url.Values, headersQueryParams ...any) *http.R
 //	    // "multipart/form-data" by default
 //	    Parts: []*tdhttp.MultipartPart{
 //	      tdhttp.NewMultipartPartString("type", "Sales"),
-//	      tdhttp.NewMultipartPartFile("report", report.json", "application/json"),
+//	      tdhttp.NewMultipartPartFile("report", "report.json", "application/json"),
 //	    },
 //	  },
 //	  "X-Foo", "Foo-value",
