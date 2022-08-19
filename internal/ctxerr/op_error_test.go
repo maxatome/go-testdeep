@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Maxime Soulé
+// Copyright (c) 2021-2022 Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -7,6 +7,7 @@
 package ctxerr_test
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/color"
@@ -65,4 +66,52 @@ func TestBad(t *testing.T) {
 	test.EqualStr(t,
 		ctxerr.OpBad("Zzz", "test %d", 123).Error(),
 		prefix+"test 123")
+}
+
+func TestBadKind(t *testing.T) {
+	defer color.SaveState()()
+
+	expected := func(got string) string {
+		return ": bad kind\n\t     got: " + got + "\n\texpected: some kinds"
+	}
+
+	test.EqualStr(t,
+		ctxerr.BadKind(reflect.ValueOf(42), "some kinds").Error(),
+		expected("int"))
+
+	test.EqualStr(t,
+		ctxerr.BadKind(reflect.ValueOf(&[]int{}), "some kinds").Error(),
+		expected("*slice (*[]int type)"))
+
+	test.EqualStr(t,
+		ctxerr.BadKind(reflect.ValueOf((***int)(nil)), "some kinds").Error(),
+		expected("***int"))
+
+	test.EqualStr(t,
+		ctxerr.BadKind(reflect.ValueOf(nil), "some kinds").Error(),
+		expected("nil"))
+}
+
+func TestNilPointer(t *testing.T) {
+	defer color.SaveState()()
+
+	expected := func(got string) string {
+		return ": nil pointer\n\t     got: nil " + got + "\n\texpected: non-nil blah blah"
+	}
+
+	test.EqualStr(t,
+		ctxerr.NilPointer(reflect.ValueOf((*int)(nil)), "non-nil blah blah").Error(),
+		expected("*int"))
+
+	test.EqualStr(t,
+		ctxerr.NilPointer(reflect.ValueOf((*[]int)(nil)), "non-nil blah blah").Error(),
+		expected("*slice (*[]int type)"))
+
+	test.EqualStr(t,
+		ctxerr.NilPointer(reflect.ValueOf((***int)(nil)), "non-nil blah blah").Error(),
+		expected("***int"))
+
+	test.EqualStr(t,
+		ctxerr.NilPointer(reflect.ValueOf(nil), "non-nil blah blah").Error(),
+		expected("nil"))
 }

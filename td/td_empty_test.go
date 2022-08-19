@@ -38,10 +38,10 @@ func TestEmpty(t *testing.T) {
 
 	checkError(t, 12, td.Empty(),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
+			Expected: mustBe("array OR chan OR map OR slice OR string OR pointer(s) on them"),
 		})
 
 	num := 12
@@ -50,19 +50,19 @@ func TestEmpty(t *testing.T) {
 	n3 := &n2
 	checkError(t, &n3, td.Empty(),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("****int"),
-			Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
+			Expected: mustBe("array OR chan OR map OR slice OR string OR pointer(s) on them"),
 		})
 
 	n1 = nil
 	checkError(t, &n3, td.Empty(),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("****int"),
-			Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
+			Expected: mustBe("array OR chan OR map OR slice OR string OR pointer(s) on them"),
 		})
 
 	checkError(t, "foobar", td.Empty(),
@@ -131,10 +131,10 @@ func TestNotEmpty(t *testing.T) {
 
 	checkError(t, 12, td.NotEmpty(),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("Array, Chan, Map, Slice, string or pointer(s) on them"),
+			Expected: mustBe("array OR chan OR map OR slice OR string OR pointer(s) on them"),
 		})
 
 	checkError(t, nil, td.NotEmpty(),

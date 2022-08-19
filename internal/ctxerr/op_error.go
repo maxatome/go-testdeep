@@ -10,6 +10,9 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/types"
 )
 
 // OpBadUsage returns a string to notice the user he passed a bad
@@ -67,5 +70,48 @@ func OpBad(op, s string, args ...any) *Error {
 	return &Error{
 		Message: "bad usage of " + op + " operator",
 		Summary: NewSummary(s),
+	}
+}
+
+func kindType(got reflect.Value) (gotKind string) {
+	if !got.IsValid() {
+		return "nil"
+	}
+
+	nptr := 0
+	typ := got.Type()
+	for typ.Kind() == reflect.Ptr {
+		nptr++
+		typ = typ.Elem()
+	}
+	gotKind = strings.Repeat("*", nptr) + typ.Kind().String()
+	gotType := got.Type().String()
+	if gotKind != gotType {
+		gotKind += " (" + gotType + " type)"
+	}
+	return
+}
+
+// BadKind returns a “bad kind” [*Error], saying got kind does not
+// match kind(s) listed in okKinds. It is the caller responsibility to
+// check the kinds compatibility. got can be invalid, in this case it
+// is displayed as nil.
+func BadKind(got reflect.Value, okKinds string) *Error {
+	return &Error{
+		Message:  "bad kind",
+		Got:      types.RawString(kindType(got)),
+		Expected: types.RawString(okKinds),
+	}
+}
+
+// NilPointer returns a “nil pointer” [*Error], saying got value is a
+// nil pointer instead of what expected lists. It is the caller
+// responsibility to check got contains a nil pointer. got should not
+// be invalid.
+func NilPointer(got reflect.Value, expected string) *Error {
+	return &Error{
+		Message:  "nil pointer",
+		Got:      types.RawString("nil " + kindType(got)),
+		Expected: types.RawString(expected),
 	}
 }

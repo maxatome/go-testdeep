@@ -47,8 +47,8 @@ func TestMapEach(t *testing.T) {
 		expectedError{
 			Message:  mustBe("nil pointer"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("nil *td_test.MyMap"),
-			Expected: mustBe("Map OR *Map"),
+			Got:      mustBe("nil *map (*td_test.MyMap type)"),
+			Expected: mustBe("non-nil *map"),
 		})
 
 	checkOKForEach(t,
@@ -65,7 +65,7 @@ func TestMapEach(t *testing.T) {
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil"),
-			Expected: mustBe("Map OR *Map"),
+			Expected: mustBe("map OR *map"),
 		})
 
 	checkErrorForEach(t,
@@ -85,18 +85,18 @@ func TestMapEach(t *testing.T) {
 
 	checkError(t, 666, td.MapEach(4),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("Map OR *Map"),
+			Expected: mustBe("map OR *map"),
 		})
 	num := 666
 	checkError(t, &num, td.MapEach(4),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("*int"),
-			Expected: mustBe("Map OR *Map"),
+			Expected: mustBe("map OR *map"),
 		})
 
 	checkOK(t, map[string]any{"a": nil, "b": nil, "c": nil},

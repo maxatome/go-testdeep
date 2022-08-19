@@ -132,20 +132,20 @@ func TestBag(t *testing.T) {
 
 		checkError(t, 123, bag,
 			expectedError{
-				Message:  mustBe("bad type"),
+				Message:  mustBe("bad kind"),
 				Path:     mustBe("DATA"),
 				Got:      mustBe("int"),
-				Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+				Expected: mustBe("slice OR array OR *slice OR *array"),
 			},
 			testName)
 
 		num := 123
 		checkError(t, &num, bag,
 			expectedError{
-				Message:  mustBe("bad type"),
+				Message:  mustBe("bad kind"),
 				Path:     mustBe("DATA"),
 				Got:      mustBe("*int"),
-				Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+				Expected: mustBe("slice OR array OR *slice OR *array"),
 			},
 			testName)
 
@@ -154,17 +154,17 @@ func TestBag(t *testing.T) {
 			expectedError{
 				Message:  mustBe("nil pointer"),
 				Path:     mustBe("DATA"),
-				Got:      mustBe("nil *td_test.MySlice"),
-				Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+				Got:      mustBe("nil *slice (*td_test.MySlice type)"),
+				Expected: mustBe("non-nil *slice OR *array"),
 			},
 			testName)
 
 		checkError(t, nil, bag,
 			expectedError{
-				Message:  mustBe("bad type"),
+				Message:  mustBe("bad kind"),
 				Path:     mustBe("DATA"),
 				Got:      mustBe("nil"),
-				Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+				Expected: mustBe("slice OR array OR *slice OR *array"),
 			},
 			testName)
 	}
