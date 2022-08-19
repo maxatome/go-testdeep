@@ -52,15 +52,15 @@ func TestArrayEach(t *testing.T) {
 		expectedError{
 			Message:  mustBe("nil pointer"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("nil *td_test.MyArray"),
-			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+			Got:      mustBe("nil *array (*td_test.MyArray type)"),
+			Expected: mustBe("non-nil *slice OR *array"),
 		})
 	checkError(t, (*MySlice)(nil), td.ArrayEach(4),
 		expectedError{
 			Message:  mustBe("nil pointer"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("nil *td_test.MySlice"),
-			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+			Got:      mustBe("nil *slice (*td_test.MySlice type)"),
+			Expected: mustBe("non-nil *slice OR *array"),
 		})
 
 	checkOKForEach(t,
@@ -79,7 +79,7 @@ func TestArrayEach(t *testing.T) {
 			Message:  mustBe("nil value"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil"),
-			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+			Expected: mustBe("slice OR array OR *slice OR *array"),
 		})
 
 	checkErrorForEach(t,
@@ -101,18 +101,18 @@ func TestArrayEach(t *testing.T) {
 
 	checkError(t, 666, td.ArrayEach(4),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+			Expected: mustBe("slice OR array OR *slice OR *array"),
 		})
 	num := 666
 	checkError(t, &num, td.ArrayEach(4),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("*int"),
-			Expected: mustBe("Slice OR Array OR *Slice OR *Array"),
+			Expected: mustBe("slice OR array OR *slice OR *array"),
 		})
 
 	checkOK(t, []any{nil, nil, nil}, td.ArrayEach(nil))

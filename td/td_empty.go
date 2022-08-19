@@ -13,7 +13,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
-const emptyBadType types.RawString = "Array, Chan, Map, Slice, string or pointer(s) on them"
+const emptyBadKind = "array OR chan OR map OR slice OR string OR pointer(s) on them"
 
 type tdEmpty struct {
 	baseOKNil
@@ -41,11 +41,11 @@ func Empty() TestDeep {
 	}
 }
 
-// isEmpty returns (isEmpty, typeError) boolean values with only 3
+// isEmpty returns (isEmpty, kindError) boolean values with only 3
 // possible cases:
 //   - true, false  → "got" is empty
 //   - false, false → "got" is not empty
-//   - false, true  → "got" type is not compatible with emptiness
+//   - false, true  → "got" kind is not compatible with emptiness
 func isEmpty(got reflect.Value) (bool, bool) {
 	switch got.Kind() {
 	case reflect.Array, reflect.Chan, reflect.Map, reflect.Slice, reflect.String:
@@ -62,7 +62,7 @@ func isEmpty(got reflect.Value) (bool, bool) {
 		case reflect.Ptr:
 			return isEmpty(got.Elem())
 		default:
-			return false, true // bad type
+			return false, true // bad kind
 		}
 
 	default:
@@ -70,12 +70,12 @@ func isEmpty(got reflect.Value) (bool, bool) {
 		if !got.IsValid() {
 			return true, false
 		}
-		return false, true // bad type
+		return false, true // bad kind
 	}
 }
 
 func (e *tdEmpty) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
-	ok, badType := isEmpty(got)
+	ok, badKind := isEmpty(got)
 	if ok {
 		return nil
 	}
@@ -84,12 +84,8 @@ func (e *tdEmpty) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Erro
 		return ctxerr.BooleanError
 	}
 
-	if badType {
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "bad type",
-			Got:      types.RawString(got.Type().String()),
-			Expected: emptyBadType,
-		})
+	if badKind {
+		return ctx.CollectError(ctxerr.BadKind(got, emptyBadKind))
 	}
 
 	return ctx.CollectError(&ctxerr.Error{
@@ -130,7 +126,7 @@ func NotEmpty() TestDeep {
 }
 
 func (e *tdNotEmpty) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
-	ok, badType := isEmpty(got)
+	ok, badKind := isEmpty(got)
 	if ok {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
@@ -142,15 +138,11 @@ func (e *tdNotEmpty) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.E
 		})
 	}
 
-	if badType {
+	if badKind {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "bad type",
-			Got:      types.RawString(got.Type().String()),
-			Expected: emptyBadType,
-		})
+		return ctx.CollectError(ctxerr.BadKind(got, emptyBadKind))
 	}
 	return nil
 }

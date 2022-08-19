@@ -147,11 +147,7 @@ func (l *tdLen) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "bad type",
-			Got:      types.RawString(got.Type().String()),
-			Expected: types.RawString("Array, Chan, Map, Slice or string"),
-		})
+		return ctx.CollectError(ctxerr.BadKind(got, "array OR chan OR map OR slice OR string"))
 	}
 }
 
@@ -217,10 +213,6 @@ func (c *tdCap) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "bad type",
-			Got:      types.RawString(got.Type().String()),
-			Expected: types.RawString("Array, Chan or Slice"),
-		})
+		return ctx.CollectError(ctxerr.BadKind(got, "array OR chan OR slice"))
 	}
 }

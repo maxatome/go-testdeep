@@ -60,10 +60,10 @@ func TestLen(t *testing.T) {
 
 	checkError(t, 123, td.Len(4),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("int"),
-			Expected: mustBe("Array, Chan, Map, Slice or string"),
+			Expected: mustBe("array OR chan OR map OR slice OR string"),
 		})
 
 	//
@@ -166,10 +166,10 @@ func TestCap(t *testing.T) {
 
 	checkError(t, map[int]int{1: 2}, td.Cap(1),
 		expectedError{
-			Message:  mustBe("bad type"),
+			Message:  mustBe("bad kind"),
 			Path:     mustBe("DATA"),
-			Got:      mustBe("map[int]int"),
-			Expected: mustBe("Array, Chan or Slice"),
+			Got:      mustBe("map (map[int]int type)"),
+			Expected: mustBe("array OR chan OR slice"),
 		})
 
 	//

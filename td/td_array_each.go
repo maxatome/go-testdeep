@@ -60,7 +60,7 @@ func (a *tdArrayEach) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.
 		return ctx.CollectError(&ctxerr.Error{
 			Message:  "nil value",
 			Got:      types.RawString("nil"),
-			Expected: types.RawString("Slice OR Array OR *Slice OR *Array"),
+			Expected: types.RawString("slice OR array OR *slice OR *array"),
 		})
 	}
 
@@ -71,11 +71,7 @@ func (a *tdArrayEach) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&ctxerr.Error{
-				Message:  "nil pointer",
-				Got:      types.RawString("nil " + got.Type().String()),
-				Expected: types.RawString("Slice OR Array OR *Slice OR *Array"),
-			})
+			return ctx.CollectError(ctxerr.NilPointer(got, "non-nil *slice OR *array"))
 		}
 
 		if gotElem.Kind() != reflect.Array && gotElem.Kind() != reflect.Slice {
@@ -100,11 +96,7 @@ func (a *tdArrayEach) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&ctxerr.Error{
-		Message:  "bad type",
-		Got:      types.RawString(got.Type().String()),
-		Expected: types.RawString("Slice OR Array OR *Slice OR *Array"),
-	})
+	return ctx.CollectError(ctxerr.BadKind(got, "slice OR array OR *slice OR *array"))
 }
 
 func (a *tdArrayEach) String() string {

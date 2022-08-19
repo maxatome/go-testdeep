@@ -48,7 +48,7 @@ func (m *tdMapEach) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		return ctx.CollectError(&ctxerr.Error{
 			Message:  "nil value",
 			Got:      types.RawString("nil"),
-			Expected: types.RawString("Map OR *Map"),
+			Expected: types.RawString("map OR *map"),
 		})
 	}
 
@@ -59,11 +59,7 @@ func (m *tdMapEach) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(&ctxerr.Error{
-				Message:  "nil pointer",
-				Got:      types.RawString("nil " + got.Type().String()),
-				Expected: types.RawString("Map OR *Map"),
-			})
+			return ctx.CollectError(ctxerr.NilPointer(got, "non-nil *map"))
 		}
 
 		if gotElem.Kind() != reflect.Map {
@@ -84,11 +80,7 @@ func (m *tdMapEach) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
-	return ctx.CollectError(&ctxerr.Error{
-		Message:  "bad type",
-		Got:      types.RawString(got.Type().String()),
-		Expected: types.RawString("Map OR *Map"),
-	})
+	return ctx.CollectError(ctxerr.BadKind(got, "map OR *map"))
 }
 
 func (m *tdMapEach) String() string {
