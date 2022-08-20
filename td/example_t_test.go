@@ -2232,6 +2232,153 @@ func ExampleT_ReAll_compiledCaptureComplex() {
 	// false
 }
 
+func ExampleT_Recv_basic() {
+	t := td.NewT(&testing.T{})
+
+	got := make(chan int, 3)
+
+	ok := t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("nothing to receive:", ok)
+
+	got <- 1
+	got <- 2
+	got <- 3
+	close(got)
+
+	ok = t.Recv(got, 1, 0)
+	fmt.Println("1st receive is 1:", ok)
+
+	ok = t.Cmp(got, td.All(
+		td.Recv(2),
+		td.Recv(td.Between(3, 4)),
+		td.Recv(td.RecvClosed),
+	))
+	fmt.Println("next receives are 2, 3 then closed:", ok)
+
+	ok = t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("nothing to receive:", ok)
+
+	// Output:
+	// nothing to receive: true
+	// 1st receive is 1: true
+	// next receives are 2, 3 then closed: true
+	// nothing to receive: false
+}
+
+func ExampleT_Recv_channelPointer() {
+	t := td.NewT(&testing.T{})
+
+	got := make(chan int, 3)
+
+	ok := t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("nothing to receive:", ok)
+
+	got <- 1
+	got <- 2
+	got <- 3
+	close(got)
+
+	ok = t.Recv(&got, 1, 0)
+	fmt.Println("1st receive is 1:", ok)
+
+	ok = t.Cmp(&got, td.All(
+		td.Recv(2),
+		td.Recv(td.Between(3, 4)),
+		td.Recv(td.RecvClosed),
+	))
+	fmt.Println("next receives are 2, 3 then closed:", ok)
+
+	ok = t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("nothing to receive:", ok)
+
+	// Output:
+	// nothing to receive: true
+	// 1st receive is 1: true
+	// next receives are 2, 3 then closed: true
+	// nothing to receive: false
+}
+
+func ExampleT_Recv_withTimeout() {
+	t := td.NewT(&testing.T{})
+
+	got := make(chan int, 1)
+	tick := make(chan struct{})
+
+	go func() {
+		// ①
+		<-tick
+		time.Sleep(100 * time.Millisecond)
+		got <- 0
+
+		// ②
+		<-tick
+		time.Sleep(100 * time.Millisecond)
+		got <- 1
+
+		// ③
+		<-tick
+		time.Sleep(100 * time.Millisecond)
+		close(got)
+	}()
+
+	t.Recv(got, td.RecvNothing, 0)
+
+	// ①
+	tick <- struct{}{}
+	ok := t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("① RecvNothing:", ok)
+	ok = t.Recv(got, 0, 150*time.Millisecond)
+	fmt.Println("① receive 0 w/150ms timeout:", ok)
+	ok = t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("① RecvNothing:", ok)
+
+	// ②
+	tick <- struct{}{}
+	ok = t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("② RecvNothing:", ok)
+	ok = t.Recv(got, 1, 150*time.Millisecond)
+	fmt.Println("② receive 1 w/150ms timeout:", ok)
+	ok = t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("② RecvNothing:", ok)
+
+	// ③
+	tick <- struct{}{}
+	ok = t.Recv(got, td.RecvNothing, 0)
+	fmt.Println("③ RecvNothing:", ok)
+	ok = t.Recv(got, td.RecvClosed, 150*time.Millisecond)
+	fmt.Println("③ check closed w/150ms timeout:", ok)
+
+	// Output:
+	// ① RecvNothing: true
+	// ① receive 0 w/150ms timeout: true
+	// ① RecvNothing: true
+	// ② RecvNothing: true
+	// ② receive 1 w/150ms timeout: true
+	// ② RecvNothing: true
+	// ③ RecvNothing: true
+	// ③ check closed w/150ms timeout: true
+}
+
+func ExampleT_Recv_nilChannel() {
+	t := td.NewT(&testing.T{})
+
+	var ch chan int
+
+	ok := t.Recv(ch, td.RecvNothing, 0)
+	fmt.Println("nothing to receive from nil channel:", ok)
+
+	ok = t.Recv(ch, 42, 0)
+	fmt.Println("something to receive from nil channel:", ok)
+
+	ok = t.Recv(ch, td.RecvClosed, 0)
+	fmt.Println("is a nil channel closed:", ok)
+
+	// Output:
+	// nothing to receive from nil channel: true
+	// something to receive from nil channel: false
+	// is a nil channel closed: false
+}
+
 func ExampleT_Set() {
 	t := td.NewT(&testing.T{})
 

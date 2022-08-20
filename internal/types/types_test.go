@@ -1,4 +1,4 @@
-// Copyright (c) 2021, Maxime Soulé
+// Copyright (c) 2021-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -63,4 +63,30 @@ func TestOperatorNotJSONMarshallableError(t *testing.T) {
 			return
 		}
 	})
+}
+
+func TestRawString(t *testing.T) {
+	s := types.RawString("foo")
+	if str := s.String(); str != "foo" {
+		t.Errorf("Very weird, got %s", str)
+	}
+}
+
+func TestRawInt(t *testing.T) {
+	i := types.RawInt(42)
+	if str := i.String(); str != "42" {
+		t.Errorf("Very weird, got %s", str)
+	}
+}
+
+func TestRecvKind(t *testing.T) {
+	s := types.RecvNothing.String()
+	if s != "nothing received on channel" {
+		t.Errorf(`got: %q / expected: "nothing received on channel"`, s)
+	}
+
+	s = types.RecvClosed.String()
+	if s != "channel is closed" {
+		t.Errorf(`got: %q / expected: "channel is closed"`, s)
+	}
 }

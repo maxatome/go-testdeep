@@ -334,6 +334,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`Ptr`]: https://go-testdeep.zetta.rocks/operators/ptr/
 [`Re`]: https://go-testdeep.zetta.rocks/operators/re/
 [`ReAll`]: https://go-testdeep.zetta.rocks/operators/reall/
+[`Recv`]: https://go-testdeep.zetta.rocks/operators/recv/
 [`Set`]: https://go-testdeep.zetta.rocks/operators/set/
 [`Shallow`]: https://go-testdeep.zetta.rocks/operators/shallow/
 [`Slice`]: https://go-testdeep.zetta.rocks/operators/slice/
@@ -394,6 +395,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpPtr`]: https://go-testdeep.zetta.rocks/operators/ptr/#cmpptr-shortcut
 [`CmpRe`]: https://go-testdeep.zetta.rocks/operators/re/#cmpre-shortcut
 [`CmpReAll`]: https://go-testdeep.zetta.rocks/operators/reall/#cmpreall-shortcut
+[`CmpRecv`]: https://go-testdeep.zetta.rocks/operators/recv/#cmprecv-shortcut
 [`CmpSet`]: https://go-testdeep.zetta.rocks/operators/set/#cmpset-shortcut
 [`CmpShallow`]: https://go-testdeep.zetta.rocks/operators/shallow/#cmpshallow-shortcut
 [`CmpSlice`]: https://go-testdeep.zetta.rocks/operators/slice/#cmpslice-shortcut
@@ -453,6 +455,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.Ptr`]: https://go-testdeep.zetta.rocks/operators/ptr/#tptr-shortcut
 [`T.Re`]: https://go-testdeep.zetta.rocks/operators/re/#tre-shortcut
 [`T.ReAll`]: https://go-testdeep.zetta.rocks/operators/reall/#treall-shortcut
+[`T.Recv`]: https://go-testdeep.zetta.rocks/operators/recv/#trecv-shortcut
 [`T.Set`]: https://go-testdeep.zetta.rocks/operators/set/#tset-shortcut
 [`T.Shallow`]: https://go-testdeep.zetta.rocks/operators/shallow/#tshallow-shortcut
 [`T.Slice`]: https://go-testdeep.zetta.rocks/operators/slice/#tslice-shortcut

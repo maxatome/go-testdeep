@@ -205,6 +205,17 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 
 		// expected is not a TestDeep operator
 
+		if got.Type() == recvKindType || expected.Type() == recvKindType {
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+			return ctx.CollectError(&ctxerr.Error{
+				Message:  "values differ",
+				Got:      got,
+				Expected: expected,
+			})
+		}
+
 		if ctx.BeLax && types.IsConvertible(expected, got.Type()) {
 			return deepValueEqual(ctx, got, expected.Convert(got.Type()))
 		}
