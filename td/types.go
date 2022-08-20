@@ -21,6 +21,7 @@ var (
 	testDeeper         = reflect.TypeOf((*TestDeep)(nil)).Elem()
 	smuggledGotType    = reflect.TypeOf(SmuggledGot{})
 	smuggledGotPtrType = reflect.TypeOf((*SmuggledGot)(nil))
+	recvKindType       = reflect.TypeOf(RecvNothing)
 )
 
 // TestingT is the minimal interface used by [Cmp] to report errors. It

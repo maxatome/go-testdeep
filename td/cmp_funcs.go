@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// allOperators lists the 62 operators.
+// allOperators lists the 63 operators.
 // nil means not usable in JSON().
 var allOperators = map[string]any{
 	"All":          All,
@@ -57,6 +57,7 @@ var allOperators = map[string]any{
 	"Ptr":          nil,
 	"Re":           Re,
 	"ReAll":        ReAll,
+	"Recv":         nil,
 	"SStruct":      nil,
 	"Set":          Set,
 	"Shallow":      nil,
@@ -908,6 +909,31 @@ func CmpRe(t TestingT, got, reg, capture any, args ...any) bool {
 func CmpReAll(t TestingT, got, reg, capture any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, ReAll(reg, capture), args...)
+}
+
+// CmpRecv is a shortcut for:
+//
+//	td.Cmp(t, got, td.Recv(expectedValue, timeout), args...)
+//
+// See [Recv] for details.
+//
+// [Recv] optional parameter timeout is here mandatory.
+// 0 value should be passed to mimic its absence in
+// original [Recv] call.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// If t is a [*T] then its Config field is inherited.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpRecv(t TestingT, got, expectedValue any, timeout time.Duration, args ...any) bool {
+	t.Helper()
+	return Cmp(t, got, Recv(expectedValue, timeout), args...)
 }
 
 // CmpSet is a shortcut for:

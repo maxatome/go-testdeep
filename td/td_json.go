@@ -40,6 +40,7 @@ var forbiddenOpsInJSON = map[string]string{
 	"Map":          "literal {}",
 	"PPtr":         "",
 	"Ptr":          "",
+	"Recv":         "",
 	"SStruct":      "",
 	"Shallow":      "",
 	"Slice":        "literal []",

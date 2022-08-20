@@ -75,3 +75,22 @@ func AsOperatorNotJSONMarshallableError(err error) (OperatorNotJSONMarshallableE
 
 	return "", false
 }
+
+type RecvKind bool
+
+const (
+	_ RecvKind = (iota & 1) == 0
+	RecvNothing
+	RecvClosed
+)
+
+func (r RecvKind) _TestDeep() {}
+
+func (r RecvKind) String() string {
+	if r == RecvNothing {
+		return "nothing received on channel"
+	}
+	return "channel is closed"
+}
+
+var _ = []TestDeepStringer{RecvNothing, RecvClosed}
