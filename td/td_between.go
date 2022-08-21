@@ -40,14 +40,11 @@ var _ TestDeep = &tdBetween{}
 type BoundsKind uint8
 
 const (
-	// BoundsInIn allows to match between "from" and "to" both included.
-	BoundsInIn BoundsKind = iota
-	// BoundsInOut allows to match between "from" included and "to" excluded.
-	BoundsInOut
-	// BoundsOutIn allows to match between "from" excluded and "to" included.
-	BoundsOutIn
-	// BoundsOutOut allows to match between "from" and "to" both excluded.
-	BoundsOutOut
+	_            BoundsKind = (iota - 1) & 3
+	BoundsInIn              // allows to match between "from" and "to" both included.
+	BoundsInOut             // allows to match between "from" included and "to" excluded.
+	BoundsOutIn             // allows to match between "from" excluded and "to" included.
+	BoundsOutOut            // allows to match between "from" and "to" both excluded.
 )
 
 type tdBetweenTime struct {
