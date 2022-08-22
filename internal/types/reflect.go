@@ -57,13 +57,13 @@ func IsTypeOrConvertible(v reflect.Value, target reflect.Type) (bool, bool) {
 	return false, false
 }
 
-// IsConvertible returns true if v if convertible to target type,
+// IsConvertible returns true if v is convertible to target type,
 // false otherwise.
 //
 // It handles go 1.17 slice to array pointer convertibility.
 func IsConvertible(v reflect.Value, target reflect.Type) bool {
 	if v.Type().ConvertibleTo(target) {
-		// Since go 1.17, a slice can be convertible to a pointer of an
+		// Since go 1.17, a slice can be convertible to a pointer to an
 		// array, but Convert() may still panic if the slice length is lesser
 		// than array pointed one
 		if v.Kind() != reflect.Slice ||
