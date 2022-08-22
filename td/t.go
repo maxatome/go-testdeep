@@ -225,6 +225,44 @@ func (t *T) Empty(got any, args ...any) bool {
 	return t.Cmp(got, Empty(), args...)
 }
 
+// First is a shortcut for:
+//
+//	t.Cmp(got, td.First(filter, expectedValue), args...)
+//
+// See [First] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) First(got, filter, expectedValue any, args ...any) bool {
+	t.Helper()
+	return t.Cmp(got, First(filter, expectedValue), args...)
+}
+
+// Grep is a shortcut for:
+//
+//	t.Cmp(got, td.Grep(filter, expectedValue), args...)
+//
+// See [Grep] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Grep(got, filter, expectedValue any, args ...any) bool {
+	t.Helper()
+	return t.Cmp(got, Grep(filter, expectedValue), args...)
+}
+
 // Gt is a shortcut for:
 //
 //	t.Cmp(got, td.Gt(minExpectedValue), args...)
@@ -375,6 +413,25 @@ func (t *T) JSONPointer(got any, ptr string, expectedValue any, args ...any) boo
 func (t *T) Keys(got, val any, args ...any) bool {
 	t.Helper()
 	return t.Cmp(got, Keys(val), args...)
+}
+
+// Last is a shortcut for:
+//
+//	t.Cmp(got, td.Last(filter, expectedValue), args...)
+//
+// See [Last] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Last(got, filter, expectedValue any, args ...any) bool {
+	t.Helper()
+	return t.Cmp(got, Last(filter, expectedValue), args...)
 }
 
 // CmpLax is a shortcut for:

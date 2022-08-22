@@ -305,6 +305,8 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`ContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/
 [`Delay`]: https://go-testdeep.zetta.rocks/operators/delay/
 [`Empty`]: https://go-testdeep.zetta.rocks/operators/empty/
+[`First`]: https://go-testdeep.zetta.rocks/operators/first/
+[`Grep`]: https://go-testdeep.zetta.rocks/operators/grep/
 [`Gt`]: https://go-testdeep.zetta.rocks/operators/gt/
 [`Gte`]: https://go-testdeep.zetta.rocks/operators/gte/
 [`HasPrefix`]: https://go-testdeep.zetta.rocks/operators/hasprefix/
@@ -314,6 +316,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`JSON`]: https://go-testdeep.zetta.rocks/operators/json/
 [`JSONPointer`]: https://go-testdeep.zetta.rocks/operators/jsonpointer/
 [`Keys`]: https://go-testdeep.zetta.rocks/operators/keys/
+[`Last`]: https://go-testdeep.zetta.rocks/operators/last/
 [`Lax`]: https://go-testdeep.zetta.rocks/operators/lax/
 [`Len`]: https://go-testdeep.zetta.rocks/operators/len/
 [`Lt`]: https://go-testdeep.zetta.rocks/operators/lt/
@@ -367,6 +370,8 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpContains`]: https://go-testdeep.zetta.rocks/operators/contains/#cmpcontains-shortcut
 [`CmpContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/#cmpcontainskey-shortcut
 [`CmpEmpty`]: https://go-testdeep.zetta.rocks/operators/empty/#cmpempty-shortcut
+[`CmpFirst`]: https://go-testdeep.zetta.rocks/operators/first/#cmpfirst-shortcut
+[`CmpGrep`]: https://go-testdeep.zetta.rocks/operators/grep/#cmpgrep-shortcut
 [`CmpGt`]: https://go-testdeep.zetta.rocks/operators/gt/#cmpgt-shortcut
 [`CmpGte`]: https://go-testdeep.zetta.rocks/operators/gte/#cmpgte-shortcut
 [`CmpHasPrefix`]: https://go-testdeep.zetta.rocks/operators/hasprefix/#cmphasprefix-shortcut
@@ -375,6 +380,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpJSON`]: https://go-testdeep.zetta.rocks/operators/json/#cmpjson-shortcut
 [`CmpJSONPointer`]: https://go-testdeep.zetta.rocks/operators/jsonpointer/#cmpjsonpointer-shortcut
 [`CmpKeys`]: https://go-testdeep.zetta.rocks/operators/keys/#cmpkeys-shortcut
+[`CmpLast`]: https://go-testdeep.zetta.rocks/operators/last/#cmplast-shortcut
 [`CmpLax`]: https://go-testdeep.zetta.rocks/operators/lax/#cmplax-shortcut
 [`CmpLen`]: https://go-testdeep.zetta.rocks/operators/len/#cmplen-shortcut
 [`CmpLt`]: https://go-testdeep.zetta.rocks/operators/lt/#cmplt-shortcut
@@ -427,6 +433,8 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.Contains`]: https://go-testdeep.zetta.rocks/operators/contains/#tcontains-shortcut
 [`T.ContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/#tcontainskey-shortcut
 [`T.Empty`]: https://go-testdeep.zetta.rocks/operators/empty/#tempty-shortcut
+[`T.First`]: https://go-testdeep.zetta.rocks/operators/first/#tfirst-shortcut
+[`T.Grep`]: https://go-testdeep.zetta.rocks/operators/grep/#tgrep-shortcut
 [`T.Gt`]: https://go-testdeep.zetta.rocks/operators/gt/#tgt-shortcut
 [`T.Gte`]: https://go-testdeep.zetta.rocks/operators/gte/#tgte-shortcut
 [`T.HasPrefix`]: https://go-testdeep.zetta.rocks/operators/hasprefix/#thasprefix-shortcut
@@ -435,6 +443,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.JSON`]: https://go-testdeep.zetta.rocks/operators/json/#tjson-shortcut
 [`T.JSONPointer`]: https://go-testdeep.zetta.rocks/operators/jsonpointer/#tjsonpointer-shortcut
 [`T.Keys`]: https://go-testdeep.zetta.rocks/operators/keys/#tkeys-shortcut
+[`T.Last`]: https://go-testdeep.zetta.rocks/operators/last/#tlast-shortcut
 [`T.CmpLax`]: https://go-testdeep.zetta.rocks/operators/lax/#tcmplax-shortcut
 [`T.Len`]: https://go-testdeep.zetta.rocks/operators/len/#tlen-shortcut
 [`T.Lt`]: https://go-testdeep.zetta.rocks/operators/lt/#tlt-shortcut

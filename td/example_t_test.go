@@ -727,6 +727,170 @@ func ExampleT_Empty_pointers() {
 	// false
 }
 
+func ExampleT_First_classic() {
+	t := td.NewT(&testing.T{})
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := t.First(got, td.Gt(0), 1)
+	fmt.Println("first positive number is 1:", ok)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	ok = t.First(got, isEven, -2)
+	fmt.Println("first even number is -2:", ok)
+
+	ok = t.First(got, isEven, td.Lt(0))
+	fmt.Println("first even number is < 0:", ok)
+
+	ok = t.First(got, isEven, td.Code(isEven))
+	fmt.Println("first even number is well even:", ok)
+
+	// Output:
+	// first positive number is 1: true
+	// first even number is -2: true
+	// first even number is < 0: true
+	// first even number is well even: true
+}
+
+func ExampleT_First_empty() {
+	t := td.NewT(&testing.T{})
+
+	ok := t.First(([]int)(nil), td.Gt(0), td.Gt(0))
+	fmt.Println("first in nil slice:", ok)
+
+	ok = t.First([]int{}, td.Gt(0), td.Gt(0))
+	fmt.Println("first in empty slice:", ok)
+
+	ok = t.First(&[]int{}, td.Gt(0), td.Gt(0))
+	fmt.Println("first in empty pointed slice:", ok)
+
+	ok = t.First([0]int{}, td.Gt(0), td.Gt(0))
+	fmt.Println("first in empty array:", ok)
+
+	// Output:
+	// first in nil slice: false
+	// first in empty slice: false
+	// first in empty pointed slice: false
+	// first in empty array: false
+}
+
+func ExampleT_First_struct() {
+	t := td.NewT(&testing.T{})
+
+	type Person struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}
+
+	got := []*Person{
+		{
+			Fullname: "Bob Foobar",
+			Age:      42,
+		},
+		{
+			Fullname: "Alice Bingo",
+			Age:      37,
+		},
+	}
+
+	ok := t.First(got, td.Smuggle("Age", td.Gt(30)), td.Smuggle("Fullname", "Bob Foobar"))
+	fmt.Println("first person.Age > 30 → Bob:", ok)
+
+	ok = t.First(got, td.JSONPointer("/age", td.Gt(30)), td.SuperJSONOf(`{"fullname":"Bob Foobar"}`))
+	fmt.Println("first person.Age > 30 → Bob, using JSON:", ok)
+
+	ok = t.First(got, td.JSONPointer("/age", td.Gt(30)), td.JSONPointer("/fullname", td.HasPrefix("Bob")))
+	fmt.Println("first person.Age > 30 → Bob, using JSONPointer:", ok)
+
+	// Output:
+	// first person.Age > 30 → Bob: true
+	// first person.Age > 30 → Bob, using JSON: true
+	// first person.Age > 30 → Bob, using JSONPointer: true
+}
+
+func ExampleT_Grep_classic() {
+	t := td.NewT(&testing.T{})
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := t.Grep(got, td.Gt(0), []int{1, 2, 3})
+	fmt.Println("check positive numbers:", ok)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	ok = t.Grep(got, isEven, []int{-2, 0, 2})
+	fmt.Println("even numbers are -2, 0 and 2:", ok)
+
+	ok = t.Grep(got, isEven, td.Set(0, 2, -2))
+	fmt.Println("even numbers are also 0, 2 and -2:", ok)
+
+	ok = t.Grep(got, isEven, td.ArrayEach(td.Code(isEven)))
+	fmt.Println("even numbers are each even:", ok)
+
+	// Output:
+	// check positive numbers: true
+	// even numbers are -2, 0 and 2: true
+	// even numbers are also 0, 2 and -2: true
+	// even numbers are each even: true
+}
+
+func ExampleT_Grep_nil() {
+	t := td.NewT(&testing.T{})
+
+	var got []int
+	ok := t.Grep(got, td.Gt(0), ([]int)(nil))
+	fmt.Println("typed []int nil:", ok)
+
+	ok = t.Grep(got, td.Gt(0), ([]string)(nil))
+	fmt.Println("typed []string nil:", ok)
+
+	ok = t.Grep(got, td.Gt(0), td.Nil())
+	fmt.Println("td.Nil:", ok)
+
+	ok = t.Grep(got, td.Gt(0), []int{})
+	fmt.Println("empty non-nil slice:", ok)
+
+	// Output:
+	// typed []int nil: true
+	// typed []string nil: false
+	// td.Nil: true
+	// empty non-nil slice: false
+}
+
+func ExampleT_Grep_struct() {
+	t := td.NewT(&testing.T{})
+
+	type Person struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}
+
+	got := []*Person{
+		{
+			Fullname: "Bob Foobar",
+			Age:      42,
+		},
+		{
+			Fullname: "Alice Bingo",
+			Age:      27,
+		},
+	}
+
+	ok := t.Grep(got, td.Smuggle("Age", td.Gt(30)), td.All(
+		td.Len(1),
+		td.ArrayEach(td.Smuggle("Fullname", "Bob Foobar")),
+	))
+	fmt.Println("person.Age > 30 → only Bob:", ok)
+
+	ok = t.Grep(got, td.JSONPointer("/age", td.Gt(30)), td.JSON(`[ SuperMapOf({"fullname":"Bob Foobar"}) ]`))
+	fmt.Println("person.Age > 30 → only Bob, using JSON:", ok)
+
+	// Output:
+	// person.Age > 30 → only Bob: true
+	// person.Age > 30 → only Bob, using JSON: true
+}
+
 func ExampleT_Gt_int() {
 	t := td.NewT(&testing.T{})
 
@@ -1354,6 +1518,88 @@ func ExampleT_Keys() {
 	// All unsorted keys are found: false
 	// All unsorted keys are found, with the help of Bag operator: true
 	// Each key is 3 bytes long: true
+}
+
+func ExampleT_Last_classic() {
+	t := td.NewT(&testing.T{})
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := t.Last(got, td.Lt(0), -1)
+	fmt.Println("last negative number is -1:", ok)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	ok = t.Last(got, isEven, 2)
+	fmt.Println("last even number is 2:", ok)
+
+	ok = t.Last(got, isEven, td.Gt(0))
+	fmt.Println("last even number is > 0:", ok)
+
+	ok = t.Last(got, isEven, td.Code(isEven))
+	fmt.Println("last even number is well even:", ok)
+
+	// Output:
+	// last negative number is -1: true
+	// last even number is 2: true
+	// last even number is > 0: true
+	// last even number is well even: true
+}
+
+func ExampleT_Last_empty() {
+	t := td.NewT(&testing.T{})
+
+	ok := t.Last(([]int)(nil), td.Gt(0), td.Gt(0))
+	fmt.Println("last in nil slice:", ok)
+
+	ok = t.Last([]int{}, td.Gt(0), td.Gt(0))
+	fmt.Println("last in empty slice:", ok)
+
+	ok = t.Last(&[]int{}, td.Gt(0), td.Gt(0))
+	fmt.Println("last in empty pointed slice:", ok)
+
+	ok = t.Last([0]int{}, td.Gt(0), td.Gt(0))
+	fmt.Println("last in empty array:", ok)
+
+	// Output:
+	// last in nil slice: false
+	// last in empty slice: false
+	// last in empty pointed slice: false
+	// last in empty array: false
+}
+
+func ExampleT_Last_struct() {
+	t := td.NewT(&testing.T{})
+
+	type Person struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}
+
+	got := []*Person{
+		{
+			Fullname: "Bob Foobar",
+			Age:      42,
+		},
+		{
+			Fullname: "Alice Bingo",
+			Age:      37,
+		},
+	}
+
+	ok := t.Last(got, td.Smuggle("Age", td.Gt(30)), td.Smuggle("Fullname", "Alice Bingo"))
+	fmt.Println("last person.Age > 30 → Alice:", ok)
+
+	ok = t.Last(got, td.JSONPointer("/age", td.Gt(30)), td.SuperJSONOf(`{"fullname":"Alice Bingo"}`))
+	fmt.Println("last person.Age > 30 → Alice, using JSON:", ok)
+
+	ok = t.Last(got, td.JSONPointer("/age", td.Gt(30)), td.JSONPointer("/fullname", td.HasPrefix("Alice")))
+	fmt.Println("first person.Age > 30 → Alice, using JSONPointer:", ok)
+
+	// Output:
+	// last person.Age > 30 → Alice: true
+	// last person.Age > 30 → Alice, using JSON: true
+	// first person.Age > 30 → Alice, using JSONPointer: true
 }
 
 func ExampleT_CmpLax() {

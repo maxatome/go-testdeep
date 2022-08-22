@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021, Maxime Soulé
+// Copyright (c) 2019-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -611,14 +611,15 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 //   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
-//   - not all operators are embeddable only the following are:
-//     [All], [Any], [ArrayEach], [Bag], [Between], [Contains],
-//     [ContainsKey], [Empty], [Gt], [Gte], [HasPrefix], [HasSuffix],
-//     [Ignore], [JSONPointer], [Keys], [Len], [Lt], [Lte], [MapEach],
-//     [N], [NaN], [Nil], [None], [Not], [NotAny], [NotEmpty], [NotNaN],
-//     [NotNil], [NotZero], [Re], [ReAll], [Set], [SubBagOf],
-//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf],
-//     [Values] and [Zero].
+//   - not all operators are embeddable only the following are: [All],
+//     [Any], [ArrayEach], [Bag], [Between], [Contains],
+//     [ContainsKey], [Empty], [First], [Grep], [Gt], [Gte],
+//     [HasPrefix], [HasSuffix], [Ignore], [JSONPointer], [Keys],
+//     [Last], [Len], [Lt], [Lte], [MapEach], [N], [NaN], [Nil],
+//     [None], [Not], [NotAny], [NotEmpty], [NotNaN], [NotNil],
+//     [NotZero], [Re], [ReAll], [Set], [SubBagOf], [SubMapOf],
+//     [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf], [Values]
+//     and [Zero].
 //
 // Operators taking no parameters can also be directly embedded in
 // JSON data using $^OperatorName or "$^OperatorName" notation. They
@@ -880,14 +881,15 @@ var _ TestDeep = &tdMapJSON{}
 //   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
-//   - not all operators are embeddable only the following are:
-//     [All], [Any], [ArrayEach], [Bag], [Between], [Contains],
-//     [ContainsKey], [Empty], [Gt], [Gte], [HasPrefix], [HasSuffix],
-//     [Ignore], [JSONPointer], [Keys], [Len], [Lt], [Lte], [MapEach],
-//     [N], [NaN], [Nil], [None], [Not], [NotAny], [NotEmpty], [NotNaN],
-//     [NotNil], [NotZero], [Re], [ReAll], [Set], [SubBagOf],
-//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf],
-//     [Values] and [Zero].
+//   - not all operators are embeddable only the following are: [All],
+//     [Any], [ArrayEach], [Bag], [Between], [Contains],
+//     [ContainsKey], [Empty], [First], [Grep], [Gt], [Gte],
+//     [HasPrefix], [HasSuffix], [Ignore], [JSONPointer], [Keys],
+//     [Last], [Len], [Lt], [Lte], [MapEach], [N], [NaN], [Nil],
+//     [None], [Not], [NotAny], [NotEmpty], [NotNaN], [NotNil],
+//     [NotZero], [Re], [ReAll], [Set], [SubBagOf], [SubMapOf],
+//     [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf], [Values]
+//     and [Zero].
 //
 // Operators taking no parameters can also be directly embedded in
 // JSON data using $^OperatorName or "$^OperatorName" notation. They
@@ -1102,14 +1104,15 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 //   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
-//   - not all operators are embeddable only the following are:
-//     [All], [Any], [ArrayEach], [Bag], [Between], [Contains],
-//     [ContainsKey], [Empty], [Gt], [Gte], [HasPrefix], [HasSuffix],
-//     [Ignore], [JSONPointer], [Keys], [Len], [Lt], [Lte], [MapEach],
-//     [N], [NaN], [Nil], [None], [Not], [NotAny], [NotEmpty], [NotNaN],
-//     [NotNil], [NotZero], [Re], [ReAll], [Set], [SubBagOf],
-//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf],
-//     [Values] and [Zero].
+//   - not all operators are embeddable only the following are: [All],
+//     [Any], [ArrayEach], [Bag], [Between], [Contains],
+//     [ContainsKey], [Empty], [First], [Grep], [Gt], [Gte],
+//     [HasPrefix], [HasSuffix], [Ignore], [JSONPointer], [Keys],
+//     [Last], [Len], [Lt], [Lte], [MapEach], [N], [NaN], [Nil],
+//     [None], [Not], [NotAny], [NotEmpty], [NotNaN], [NotNil],
+//     [NotZero], [Re], [ReAll], [Set], [SubBagOf], [SubMapOf],
+//     [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf], [Values]
+//     and [Zero].
 //
 // Operators taking no parameters can also be directly embedded in
 // JSON data using $^OperatorName or "$^OperatorName" notation. They
