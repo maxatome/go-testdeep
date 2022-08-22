@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2021, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -914,6 +914,248 @@ func ExampleEmpty_pointers() {
 	// false
 }
 
+func ExampleFirst_classic() {
+	t := &testing.T{}
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := td.Cmp(t, got, td.First(td.Gt(0), 1))
+	fmt.Println("first positive number is 1:", ok)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	ok = td.Cmp(t, got, td.First(isEven, -2))
+	fmt.Println("first even number is -2:", ok)
+
+	ok = td.Cmp(t, got, td.First(isEven, td.Lt(0)))
+	fmt.Println("first even number is < 0:", ok)
+
+	ok = td.Cmp(t, got, td.First(isEven, td.Code(isEven)))
+	fmt.Println("first even number is well even:", ok)
+
+	// Output:
+	// first positive number is 1: true
+	// first even number is -2: true
+	// first even number is < 0: true
+	// first even number is well even: true
+}
+
+func ExampleFirst_empty() {
+	t := &testing.T{}
+
+	ok := td.Cmp(t, ([]int)(nil), td.First(td.Gt(0), td.Gt(0)))
+	fmt.Println("first in nil slice:", ok)
+
+	ok = td.Cmp(t, []int{}, td.First(td.Gt(0), td.Gt(0)))
+	fmt.Println("first in empty slice:", ok)
+
+	ok = td.Cmp(t, &[]int{}, td.First(td.Gt(0), td.Gt(0)))
+	fmt.Println("first in empty pointed slice:", ok)
+
+	ok = td.Cmp(t, [0]int{}, td.First(td.Gt(0), td.Gt(0)))
+	fmt.Println("first in empty array:", ok)
+
+	// Output:
+	// first in nil slice: false
+	// first in empty slice: false
+	// first in empty pointed slice: false
+	// first in empty array: false
+}
+
+func ExampleFirst_struct() {
+	t := &testing.T{}
+
+	type Person struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}
+
+	got := []*Person{
+		{
+			Fullname: "Bob Foobar",
+			Age:      42,
+		},
+		{
+			Fullname: "Alice Bingo",
+			Age:      37,
+		},
+	}
+
+	ok := td.Cmp(t, got, td.First(
+		td.Smuggle("Age", td.Gt(30)),
+		td.Smuggle("Fullname", "Bob Foobar")))
+	fmt.Println("first person.Age > 30 → Bob:", ok)
+
+	ok = td.Cmp(t, got, td.First(
+		td.JSONPointer("/age", td.Gt(30)),
+		td.SuperJSONOf(`{"fullname":"Bob Foobar"}`)))
+	fmt.Println("first person.Age > 30 → Bob, using JSON:", ok)
+
+	ok = td.Cmp(t, got, td.First(
+		td.JSONPointer("/age", td.Gt(30)),
+		td.JSONPointer("/fullname", td.HasPrefix("Bob"))))
+	fmt.Println("first person.Age > 30 → Bob, using JSONPointer:", ok)
+
+	// Output:
+	// first person.Age > 30 → Bob: true
+	// first person.Age > 30 → Bob, using JSON: true
+	// first person.Age > 30 → Bob, using JSONPointer: true
+}
+
+func ExampleFirst_json() {
+	t := &testing.T{}
+
+	got := map[string]any{
+		"values": []int{1, 2, 3, 4},
+	}
+	ok := td.Cmp(t, got, td.JSON(`{"values": First(Gt(2), 3)}`))
+	fmt.Println("first number > 2:", ok)
+
+	got = map[string]any{
+		"persons": []map[string]any{
+			{"id": 1, "name": "Joe"},
+			{"id": 2, "name": "Bob"},
+			{"id": 3, "name": "Alice"},
+			{"id": 4, "name": "Brian"},
+			{"id": 5, "name": "Britt"},
+		},
+	}
+	ok = td.Cmp(t, got, td.JSON(`
+{
+  "persons": First(JSONPointer("/name", "Brian"), {"id": 4, "name": "Brian"})
+}`))
+	fmt.Println(`is "Brian" content OK:`, ok)
+
+	ok = td.Cmp(t, got, td.JSON(`
+{
+  "persons": First(JSONPointer("/name", "Brian"), JSONPointer("/id", 4))
+}`))
+	fmt.Println(`ID of "Brian" is 4:`, ok)
+
+	// Output:
+	// first number > 2: true
+	// is "Brian" content OK: true
+	// ID of "Brian" is 4: true
+}
+
+func ExampleGrep_classic() {
+	t := &testing.T{}
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := td.Cmp(t, got, td.Grep(td.Gt(0), []int{1, 2, 3}))
+	fmt.Println("check positive numbers:", ok)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	ok = td.Cmp(t, got, td.Grep(isEven, []int{-2, 0, 2}))
+	fmt.Println("even numbers are -2, 0 and 2:", ok)
+
+	ok = td.Cmp(t, got, td.Grep(isEven, td.Set(0, 2, -2)))
+	fmt.Println("even numbers are also 0, 2 and -2:", ok)
+
+	ok = td.Cmp(t, got, td.Grep(isEven, td.ArrayEach(td.Code(isEven))))
+	fmt.Println("even numbers are each even:", ok)
+
+	// Output:
+	// check positive numbers: true
+	// even numbers are -2, 0 and 2: true
+	// even numbers are also 0, 2 and -2: true
+	// even numbers are each even: true
+}
+
+func ExampleGrep_nil() {
+	t := &testing.T{}
+
+	var got []int
+	ok := td.Cmp(t, got, td.Grep(td.Gt(0), ([]int)(nil)))
+	fmt.Println("typed []int nil:", ok)
+
+	ok = td.Cmp(t, got, td.Grep(td.Gt(0), ([]string)(nil)))
+	fmt.Println("typed []string nil:", ok)
+
+	ok = td.Cmp(t, got, td.Grep(td.Gt(0), td.Nil()))
+	fmt.Println("td.Nil:", ok)
+
+	ok = td.Cmp(t, got, td.Grep(td.Gt(0), []int{}))
+	fmt.Println("empty non-nil slice:", ok)
+
+	// Output:
+	// typed []int nil: true
+	// typed []string nil: false
+	// td.Nil: true
+	// empty non-nil slice: false
+}
+
+func ExampleGrep_struct() {
+	t := &testing.T{}
+
+	type Person struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}
+
+	got := []*Person{
+		{
+			Fullname: "Bob Foobar",
+			Age:      42,
+		},
+		{
+			Fullname: "Alice Bingo",
+			Age:      27,
+		},
+	}
+
+	ok := td.Cmp(t, got, td.Grep(
+		td.Smuggle("Age", td.Gt(30)),
+		td.All(
+			td.Len(1),
+			td.ArrayEach(td.Smuggle("Fullname", "Bob Foobar")),
+		)))
+	fmt.Println("person.Age > 30 → only Bob:", ok)
+
+	ok = td.Cmp(t, got, td.Grep(
+		td.JSONPointer("/age", td.Gt(30)),
+		td.JSON(`[ SuperMapOf({"fullname":"Bob Foobar"}) ]`)))
+	fmt.Println("person.Age > 30 → only Bob, using JSON:", ok)
+
+	// Output:
+	// person.Age > 30 → only Bob: true
+	// person.Age > 30 → only Bob, using JSON: true
+}
+
+func ExampleGrep_json() {
+	t := &testing.T{}
+
+	got := map[string]any{
+		"values": []int{1, 2, 3, 4},
+	}
+	ok := td.Cmp(t, got, td.JSON(`{"values": Grep(Gt(2), [3, 4])}`))
+	fmt.Println("grep a number > 2:", ok)
+
+	got = map[string]any{
+		"persons": []map[string]any{
+			{"id": 1, "name": "Joe"},
+			{"id": 2, "name": "Bob"},
+			{"id": 3, "name": "Alice"},
+			{"id": 4, "name": "Brian"},
+			{"id": 5, "name": "Britt"},
+		},
+	}
+	ok = td.Cmp(t, got, td.JSON(`
+{
+  "persons": Grep(JSONPointer("/name", HasPrefix("Br")), [
+    {"id": 4, "name": "Brian"},
+    {"id": 5, "name": "Britt"},
+  ])
+}`))
+	fmt.Println(`grep "Br" prefix:`, ok)
+
+	// Output:
+	// grep a number > 2: true
+	// grep "Br" prefix: true
+}
+
 func ExampleGt_int() {
 	t := &testing.T{}
 
@@ -1487,6 +1729,130 @@ func ExampleKeys() {
 	// All unsorted keys are found: false
 	// All unsorted keys are found, with the help of Bag operator: true
 	// Each key is 3 bytes long: true
+}
+
+func ExampleLast_classic() {
+	t := &testing.T{}
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := td.Cmp(t, got, td.Last(td.Lt(0), -1))
+	fmt.Println("last negative number is -1:", ok)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	ok = td.Cmp(t, got, td.Last(isEven, 2))
+	fmt.Println("last even number is 2:", ok)
+
+	ok = td.Cmp(t, got, td.Last(isEven, td.Gt(0)))
+	fmt.Println("last even number is > 0:", ok)
+
+	ok = td.Cmp(t, got, td.Last(isEven, td.Code(isEven)))
+	fmt.Println("last even number is well even:", ok)
+
+	// Output:
+	// last negative number is -1: true
+	// last even number is 2: true
+	// last even number is > 0: true
+	// last even number is well even: true
+}
+
+func ExampleLast_empty() {
+	t := &testing.T{}
+
+	ok := td.Cmp(t, ([]int)(nil), td.Last(td.Gt(0), td.Gt(0)))
+	fmt.Println("last in nil slice:", ok)
+
+	ok = td.Cmp(t, []int{}, td.Last(td.Gt(0), td.Gt(0)))
+	fmt.Println("last in empty slice:", ok)
+
+	ok = td.Cmp(t, &[]int{}, td.Last(td.Gt(0), td.Gt(0)))
+	fmt.Println("last in empty pointed slice:", ok)
+
+	ok = td.Cmp(t, [0]int{}, td.Last(td.Gt(0), td.Gt(0)))
+	fmt.Println("last in empty array:", ok)
+
+	// Output:
+	// last in nil slice: false
+	// last in empty slice: false
+	// last in empty pointed slice: false
+	// last in empty array: false
+}
+
+func ExampleLast_struct() {
+	t := &testing.T{}
+
+	type Person struct {
+		Fullname string `json:"fullname"`
+		Age      int    `json:"age"`
+	}
+
+	got := []*Person{
+		{
+			Fullname: "Bob Foobar",
+			Age:      42,
+		},
+		{
+			Fullname: "Alice Bingo",
+			Age:      37,
+		},
+	}
+
+	ok := td.Cmp(t, got, td.Last(
+		td.Smuggle("Age", td.Gt(30)),
+		td.Smuggle("Fullname", "Alice Bingo")))
+	fmt.Println("last person.Age > 30 → Alice:", ok)
+
+	ok = td.Cmp(t, got, td.Last(
+		td.JSONPointer("/age", td.Gt(30)),
+		td.SuperJSONOf(`{"fullname":"Alice Bingo"}`)))
+	fmt.Println("last person.Age > 30 → Alice, using JSON:", ok)
+
+	ok = td.Cmp(t, got, td.Last(
+		td.JSONPointer("/age", td.Gt(30)),
+		td.JSONPointer("/fullname", td.HasPrefix("Alice"))))
+	fmt.Println("first person.Age > 30 → Alice, using JSONPointer:", ok)
+
+	// Output:
+	// last person.Age > 30 → Alice: true
+	// last person.Age > 30 → Alice, using JSON: true
+	// first person.Age > 30 → Alice, using JSONPointer: true
+}
+
+func ExampleLast_json() {
+	t := &testing.T{}
+
+	got := map[string]any{
+		"values": []int{1, 2, 3, 4},
+	}
+	ok := td.Cmp(t, got, td.JSON(`{"values": Last(Lt(3), 2)}`))
+	fmt.Println("last number < 3:", ok)
+
+	got = map[string]any{
+		"persons": []map[string]any{
+			{"id": 1, "name": "Joe"},
+			{"id": 2, "name": "Bob"},
+			{"id": 3, "name": "Alice"},
+			{"id": 4, "name": "Brian"},
+			{"id": 5, "name": "Britt"},
+		},
+	}
+	ok = td.Cmp(t, got, td.JSON(`
+{
+  "persons": Last(JSONPointer("/name", "Brian"), {"id": 4, "name": "Brian"})
+}`))
+	fmt.Println(`is "Brian" content OK:`, ok)
+
+	ok = td.Cmp(t, got, td.JSON(`
+{
+  "persons": Last(JSONPointer("/name", "Brian"), JSONPointer("/id", 4))
+}`))
+	fmt.Println(`ID of "Brian" is 4:`, ok)
+
+	// Output:
+	// last number < 3: true
+	// is "Brian" content OK: true
+	// ID of "Brian" is 4: true
 }
 
 func ExampleLax() {

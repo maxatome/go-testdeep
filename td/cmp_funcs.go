@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// allOperators lists the 63 operators.
+// allOperators lists the 66 operators.
 // nil means not usable in JSON().
 var allOperators = map[string]any{
 	"All":          All,
@@ -28,6 +28,8 @@ var allOperators = map[string]any{
 	"ContainsKey":  ContainsKey,
 	"Delay":        nil,
 	"Empty":        Empty,
+	"First":        First,
+	"Grep":         Grep,
 	"Gt":           Gt,
 	"Gte":          Gte,
 	"HasPrefix":    HasPrefix,
@@ -37,6 +39,7 @@ var allOperators = map[string]any{
 	"JSON":         nil,
 	"JSONPointer":  JSONPointer,
 	"Keys":         Keys,
+	"Last":         Last,
 	"Lax":          nil,
 	"Len":          Len,
 	"Lt":           Lt,
@@ -315,6 +318,48 @@ func CmpEmpty(t TestingT, got any, args ...any) bool {
 	return Cmp(t, got, Empty(), args...)
 }
 
+// CmpFirst is a shortcut for:
+//
+//	td.Cmp(t, got, td.First(filter, expectedValue), args...)
+//
+// See [First] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// If t is a [*T] then its Config field is inherited.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpFirst(t TestingT, got, filter, expectedValue any, args ...any) bool {
+	t.Helper()
+	return Cmp(t, got, First(filter, expectedValue), args...)
+}
+
+// CmpGrep is a shortcut for:
+//
+//	td.Cmp(t, got, td.Grep(filter, expectedValue), args...)
+//
+// See [Grep] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// If t is a [*T] then its Config field is inherited.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpGrep(t TestingT, got, filter, expectedValue any, args ...any) bool {
+	t.Helper()
+	return Cmp(t, got, Grep(filter, expectedValue), args...)
+}
+
 // CmpGt is a shortcut for:
 //
 //	td.Cmp(t, got, td.Gt(minExpectedValue), args...)
@@ -481,6 +526,27 @@ func CmpJSONPointer(t TestingT, got any, ptr string, expectedValue any, args ...
 func CmpKeys(t TestingT, got, val any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Keys(val), args...)
+}
+
+// CmpLast is a shortcut for:
+//
+//	td.Cmp(t, got, td.Last(filter, expectedValue), args...)
+//
+// See [Last] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// If t is a [*T] then its Config field is inherited.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpLast(t TestingT, got, filter, expectedValue any, args ...any) bool {
+	t.Helper()
+	return Cmp(t, got, Last(filter, expectedValue), args...)
 }
 
 // CmpLax is a shortcut for:
