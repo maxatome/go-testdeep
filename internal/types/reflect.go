@@ -1,4 +1,4 @@
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -74,4 +75,26 @@ func IsConvertible(v reflect.Value, target reflect.Type) bool {
 		}
 	}
 	return false
+}
+
+// KindType returns the kind of val as a string. If the kind is
+// [reflect.Ptr], a "*" is used as prefix of kind of
+// val.Type().Elem(), and so on. If the final kind differs from
+// val.Type(), the type is appended inside parenthesis.
+func KindType(val reflect.Value) string {
+	if !val.IsValid() {
+		return "nil"
+	}
+
+	nptr := 0
+	typ := val.Type()
+	for typ.Kind() == reflect.Ptr {
+		nptr++
+		typ = typ.Elem()
+	}
+	kind := strings.Repeat("*", nptr) + typ.Kind().String()
+	if typ := val.Type().String(); kind != typ {
+		kind += " (" + typ + " type)"
+	}
+	return kind
 }
