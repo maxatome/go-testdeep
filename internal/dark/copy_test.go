@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -15,7 +15,8 @@ import (
 )
 
 func checkFieldValueOK(t *testing.T,
-	s reflect.Value, fieldName string, value any) {
+	s reflect.Value, fieldName string, value any,
+) {
 	t.Helper()
 
 	testName := "field " + fieldName
@@ -51,7 +52,7 @@ func TestCopyValue(t *testing.T) {
 	}
 
 	type SubPrivate struct {
-		private int //nolint: unused,megacheck,staticcheck,structcheck
+		private int //nolint: unused,megacheck,staticcheck
 	}
 
 	type Private struct {

@@ -41,7 +41,7 @@ jobs:
         if: matrix.full-tests
         run: |
           curl -sL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
-              sh -s -- -b $HOME/go/bin v1.48.0
+              sh -s -- -b $HOME/go/bin v1.49.0
           echo $PATH
           $HOME/go/bin/golangci-lint run --max-issues-per-linter 0 \
                                          --max-same-issues 0 \
@@ -96,7 +96,7 @@ jobs:
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          go install github.com/mattn/goveralls@v0.0.9
+          go install github.com/mattn/goveralls@v0.0.11
           go install github.com/wadey/gocovmerge@latest
           gocovmerge coverage.out \
                      coverage-safe.out \
