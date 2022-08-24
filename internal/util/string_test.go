@@ -152,7 +152,7 @@ func TestTypeFullName(t *testing.T) {
 		b bool
 	}{})), "struct { s struct { a []int }; b bool }")
 
-	type anon struct{ a []int } //nolint: structcheck,unused
+	type anon struct{ a []int } //nolint: unused
 	test.EqualStr(t, util.TypeFullName(reflect.TypeOf(struct {
 		anon
 		b bool

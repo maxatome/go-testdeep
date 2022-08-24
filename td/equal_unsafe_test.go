@@ -15,7 +15,7 @@ import (
 
 // Map, unsafe access is mandatory here.
 func TestEqualMapUnsafe(t *testing.T) {
-	type key struct{ k string } //nolint: structcheck
+	type key struct{ k string }
 	type A struct{ x map[key]struct{} }
 
 	checkError(t, A{x: map[key]struct{}{{k: "z"}: {}}},

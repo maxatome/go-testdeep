@@ -1,4 +1,4 @@
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -18,7 +18,7 @@ func TestAddAnchorableStructType(t *testing.T) {
 	defer func() { anchors.AnchorableTypes = oldAnchorableTypes }()
 
 	type ok struct{ index int }
-	type notComparable struct{ s []int } //nolint: structcheck,unused
+	type notComparable struct{ s []int } //nolint: unused
 
 	// Usage error cases
 	for i, fn := range []any{
