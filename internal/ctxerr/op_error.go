@@ -10,7 +10,6 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
-	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -73,25 +72,6 @@ func OpBad(op, s string, args ...any) *Error {
 	}
 }
 
-func kindType(got reflect.Value) (gotKind string) {
-	if !got.IsValid() {
-		return "nil"
-	}
-
-	nptr := 0
-	typ := got.Type()
-	for typ.Kind() == reflect.Ptr {
-		nptr++
-		typ = typ.Elem()
-	}
-	gotKind = strings.Repeat("*", nptr) + typ.Kind().String()
-	gotType := got.Type().String()
-	if gotKind != gotType {
-		gotKind += " (" + gotType + " type)"
-	}
-	return
-}
-
 // BadKind returns a “bad kind” [*Error], saying got kind does not
 // match kind(s) listed in okKinds. It is the caller responsibility to
 // check the kinds compatibility. got can be invalid, in this case it
@@ -99,7 +79,7 @@ func kindType(got reflect.Value) (gotKind string) {
 func BadKind(got reflect.Value, okKinds string) *Error {
 	return &Error{
 		Message:  "bad kind",
-		Got:      types.RawString(kindType(got)),
+		Got:      types.RawString(types.KindType(got)),
 		Expected: types.RawString(okKinds),
 	}
 }
@@ -111,7 +91,7 @@ func BadKind(got reflect.Value, okKinds string) *Error {
 func NilPointer(got reflect.Value, expected string) *Error {
 	return &Error{
 		Message:  "nil pointer",
-		Got:      types.RawString("nil " + kindType(got)),
+		Got:      types.RawString("nil " + types.KindType(got)),
 		Expected: types.RawString(expected),
 	}
 }

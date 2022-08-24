@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2021, Maxime Soulé
+// Copyright (c) 2020-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -55,4 +55,26 @@ func TestIsTypeOrConvertible(t *testing.T) {
 	ok, convertible = types.IsTypeOrConvertible(reflect.ValueOf("xx"), reflect.TypeOf(123))
 	test.IsFalse(t, ok)
 	test.IsFalse(t, convertible)
+}
+
+func TestKindType(t *testing.T) {
+	for _, tc := range []struct {
+		val      any
+		expected string
+	}{
+		{nil, "nil"},
+		{42, "int"},
+		{(*int)(nil), "*int"},
+		{(*[]int)(nil), "*slice (*[]int type)"},
+		{(***int)(nil), "***int"},
+	} {
+		vval := reflect.ValueOf(tc.val)
+		name := "nil"
+		if tc.val != nil {
+			name = vval.Type().String()
+		}
+		t.Run(name, func(t *testing.T) {
+			test.EqualStr(t, types.KindType(vval), tc.expected)
+		})
+	}
 }
