@@ -27,7 +27,7 @@
 //
 //	ta.Get("/person/42", "Accept", "application/json").
 //	  CmpStatus(http.StatusOK).
-//	  CmpHeaders(td.ContainsKey("X-Custom-Header")).
+//	  CmpHeader(td.ContainsKey("X-Custom-Header")).
 //	  CmpCookies(td.SuperBagOf(td.Struct(&http.Cookie{Name: "cookie_session"}, nil))).
 //	  CmpJSONBody(td.JSON(`
 //	{
