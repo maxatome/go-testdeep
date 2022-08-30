@@ -2889,23 +2889,21 @@ func ExampleT_SStruct_patterns() {
 		secret:    "5ecr3T",
 	}
 
-	ok := t.Cmp(got,
-		td.Struct(Person{Lastname: "Foo"}, td.StructFields{
-			`DeletedAt`: nil,
-			`=  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
-			`=~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
-			`!  [A-Z]*`: td.Ignore(),        // private fields
-		}),
+	ok := t.SStruct(got, Person{Lastname: "Foo"}, td.StructFields{
+		`DeletedAt`: nil,
+		`=  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
+		`=~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
+		`!  [A-Z]*`: td.Ignore(),        // private fields
+	},
 		"mix shell & regexp patterns")
 	fmt.Println("Patterns match only remaining fields:", ok)
 
-	ok = t.Cmp(got,
-		td.Struct(Person{Lastname: "Foo"}, td.StructFields{
-			`DeletedAt`:   nil,
-			`1 =  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
-			`2 =~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
-			`3 !~ ^[A-Z]`: td.Ignore(),        // private fields
-		}),
+	ok = t.SStruct(got, Person{Lastname: "Foo"}, td.StructFields{
+		`DeletedAt`:   nil,
+		`1 =  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
+		`2 =~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
+		`3 !~ ^[A-Z]`: td.Ignore(),        // private fields
+	},
 		"ordered patterns")
 	fmt.Println("Ordered patterns match only remaining fields:", ok)
 

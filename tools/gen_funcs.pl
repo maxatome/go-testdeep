@@ -432,7 +432,12 @@ my($imports) = ($examples =~ /^(import \(.+?^\))$/ms);
 
 while ($examples =~ /^func Example($funcs_reg)(_\w+)?\(\) \{\n(.*?)^\}$/gms)
 {
-    push(@{$funcs{$1}{examples}}, { name => $2 // '', code => $3 });
+    my($op, $name, $code) = ($1, $2, $3);
+    if ($code =~ /\btd\.$op\(/)
+    {
+        # Only copy example for which an operator use is found
+        push(@{$funcs{$op}{examples}}, { name => $name // '', code => $code });
+    }
 }
 
 {

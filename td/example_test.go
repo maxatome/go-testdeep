@@ -3529,7 +3529,7 @@ func ExampleSStruct_patterns() {
 	}
 
 	ok := td.Cmp(t, got,
-		td.Struct(Person{Lastname: "Foo"}, td.StructFields{
+		td.SStruct(Person{Lastname: "Foo"}, td.StructFields{
 			`DeletedAt`: nil,
 			`=  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
 			`=~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
@@ -3539,7 +3539,7 @@ func ExampleSStruct_patterns() {
 	fmt.Println("Patterns match only remaining fields:", ok)
 
 	ok = td.Cmp(t, got,
-		td.Struct(Person{Lastname: "Foo"}, td.StructFields{
+		td.SStruct(Person{Lastname: "Foo"}, td.StructFields{
 			`DeletedAt`:   nil,
 			`1 =  *name`:  td.Re(`^(?i)max`),  // shell pattern, matches all names except Lastname as in model
 			`2 =~ At\z`:   td.Lte(time.Now()), // regexp, matches CreatedAt & UpdatedAt
