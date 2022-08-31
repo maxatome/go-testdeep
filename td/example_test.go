@@ -1487,6 +1487,79 @@ func ExampleJSON_embedding() {
 	// check got with complex operators, w/placeholder args: true
 }
 
+func ExampleJSON_rawStrings() {
+	t := &testing.T{}
+
+	type details struct {
+		Address string `json:"address"`
+		Car     string `json:"car"`
+	}
+
+	got := &struct {
+		Fullname string  `json:"fullname"`
+		Age      int     `json:"age"`
+		Details  details `json:"details"`
+	}{
+		Fullname: "Foo Bar",
+		Age:      42,
+		Details: details{
+			Address: "something",
+			Car:     "Peugeot",
+		},
+	}
+
+	ok := td.Cmp(t, got,
+		td.JSON(`
+{
+  "fullname": HasPrefix("Foo"),
+  "age":      Between(41, 43),
+  "details":  SuperMapOf({
+    "address": NotEmpty, // () are optional when no parameters
+    "car":     Any("Peugeot", "Tesla", "Jeep") // any of these
+  })
+}`))
+	fmt.Println("Original:", ok)
+
+	ok = td.Cmp(t, got,
+		td.JSON(`
+{
+  "fullname": "$^HasPrefix(\"Foo\")",
+  "age":      "$^Between(41, 43)",
+  "details":  "$^SuperMapOf({\n\"address\": NotEmpty,\n\"car\": Any(\"Peugeot\", \"Tesla\", \"Jeep\")\n})"
+}`))
+	fmt.Println("JSON compliant:", ok)
+
+	ok = td.Cmp(t, got,
+		td.JSON(`
+{
+  "fullname": "$^HasPrefix(\"Foo\")",
+  "age":      "$^Between(41, 43)",
+  "details":  "$^SuperMapOf({
+    \"address\": NotEmpty, // () are optional when no parameters
+    \"car\":     Any(\"Peugeot\", \"Tesla\", \"Jeep\") // any of these
+  })"
+}`))
+	fmt.Println("JSON multilines strings:", ok)
+
+	ok = td.Cmp(t, got,
+		td.JSON(`
+{
+  "fullname": "$^HasPrefix(r<Foo>)",
+  "age":      "$^Between(41, 43)",
+  "details":  "$^SuperMapOf({
+    r<address>: NotEmpty, // () are optional when no parameters
+    r<car>:     Any(r<Peugeot>, r<Tesla>, r<Jeep>) // any of these
+  })"
+}`))
+	fmt.Println("Raw strings:", ok)
+
+	// Output:
+	// Original: true
+	// JSON compliant: true
+	// JSON multilines strings: true
+	// Raw strings: true
+}
+
 func ExampleJSON_file() {
 	t := &testing.T{}
 

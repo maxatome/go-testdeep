@@ -111,11 +111,23 @@ func TestJSON(t *testing.T) {
 	// Tag placeholders + nil
 	checkOK(t, nil, td.JSON(`$all`, td.Tag("all", nil)))
 
-	// Mixed placeholders + operator shortcut
-	checkOK(t, got,
-		td.JSON(`{"name":"$name","age":$1,"gender":$^NotEmpty}`,
-			td.Tag("age", td.Between(40, 45)),
-			td.Tag("name", td.Re(`^Bob`))))
+	// Mixed placeholders + operator
+	for _, op := range []string{
+		"NotEmpty",
+		"NotEmpty()",
+		"$^NotEmpty",
+		"$^NotEmpty()",
+		`"$^NotEmpty"`,
+		`"$^NotEmpty()"`,
+		`r<$^NotEmpty>`,
+		`r<$^NotEmpty()>`,
+	} {
+		checkOK(t, got,
+			td.JSON(`{"name":"$name","age":$1,"gender":`+op+`}`,
+				td.Tag("age", td.Between(40, 45)),
+				td.Tag("name", td.Re(`^Bob`))),
+			"using operator %s", op)
+	}
 
 	checkOK(t, got,
 		td.JSON(`{"name":Re("^Bo\\w"),"age":Between(40,45),"gender":NotEmpty()}`))
@@ -125,6 +137,31 @@ func TestJSON(t *testing.T) {
   "name":   All(Re("^Bo\\w"), HasPrefix("Bo"), HasSuffix("ob")),
   "age":    Between(40,45),
   "gender": NotEmpty()
+}`))
+	checkOK(t, got,
+		td.JSON(`
+{
+  "name":   All(Re("^Bo\\w"), HasPrefix("Bo"), HasSuffix("ob")),
+  "age":    Between(40,45),
+  "gender": NotEmpty
+}`))
+
+	// Same but operators in strings using "$^"
+	checkOK(t, got,
+		td.JSON(`{"name":Re("^Bo\\w"),"age":"$^Between(40,45)","gender":"$^NotEmpty()"}`))
+	checkOK(t, got, // using classic "" string, so each \ has to be escaped
+		td.JSON(`
+{
+  "name":   "$^All(Re(\"^Bo\\\\w\"), HasPrefix(\"Bo\"), HasSuffix(\"ob\"))",
+  "age":    "$^Between(40,45)",
+  "gender": "$^NotEmpty()",
+}`))
+	checkOK(t, got, // using raw strings, no escape needed
+		td.JSON(`
+{
+  "name":   "$^All(Re(r(^Bo\\w)), HasPrefix(r{Bo}), HasSuffix(r'ob'))",
+  "age":    "$^Between(40,45)",
+  "gender": "$^NotEmpty()",
 }`))
 
 	// …with comments…
@@ -138,7 +175,7 @@ func TestJSON(t *testing.T) {
                           - placeholder unquoted, but could be without
                             any change
                           - to demonstrate a multi-lines comment */
-  "gender": $^NotEmpty // Shortcut to operator NotEmpty
+  "gender": $^NotEmpty // Operator NotEmpty
 }`,
 			td.Tag("age", td.Between(40, 45)),
 			td.Tag("name", td.Re(`^Bob`))))
@@ -338,13 +375,21 @@ func TestJSON(t *testing.T) {
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`),
 		})
 
-	// operator shortcut
+	// $^Operator
+	checkError(t, "never tested",
+		td.JSON(`[1, $^bad%]`),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`JSON unmarshal error: $^ must be followed by an operator name at line 1:4 (pos 4)`),
+		})
+
 	checkError(t, "never tested",
 		td.JSON(`[1, "$^bad%"]`),
 		expectedError{
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe(`JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`),
+			Summary: mustBe(`JSON unmarshal error: $^ must be followed by an operator name at line 1:5 (pos 5)`),
 		})
 
 	// named placeholders
@@ -383,6 +428,28 @@ JSON([
 	test.EqualStr(t, td.JSON(` null `).String(), `JSON(null)`)
 
 	test.EqualStr(t,
+		td.JSON(`[ $1, $name, $2, Nil(), $nil, 26, Between(5, 6), Len(34), Len(Between(5, 6)), 28 ]`,
+			td.Between(12, 20),
+			"test",
+			td.Tag("name", td.Code(func(s string) bool { return len(s) > 0 })),
+			td.Tag("nil", nil),
+			14,
+		).String(),
+		`
+JSON([
+       "$1" /* 12 ≤ got ≤ 20 */,
+       "$name" /* Code(func(string) bool) */,
+       "test",
+       nil,
+       null,
+       26,
+       5.0 ≤ got ≤ 6.0,
+       len=34,
+       len: 5.0 ≤ got ≤ 6.0,
+       28
+     ])`[1:])
+
+	test.EqualStr(t,
 		td.JSON(`[ $1, $name, $2, $^Nil, $nil ]`,
 			td.Between(12, 20),
 			"test",
@@ -394,7 +461,7 @@ JSON([
        "$1" /* 12 ≤ got ≤ 20 */,
        "$name" /* Code(func(string) bool) */,
        "test",
-       "$^Nil",
+       nil,
        null
      ])`[1:])
 
@@ -419,7 +486,7 @@ JSON({
                                 JSON({
                                        "name": "$1" /* HasPrefix("Alice") */
                                      })) */,
-       "zip": "$^NotZero"
+       "zip": NotZero()
      })`[1:])
 
 	test.EqualStr(t,
@@ -784,12 +851,24 @@ func TestSubJSONOf(t *testing.T) {
 			td.Tag("age", td.Between(40, 45)),
 			td.Tag("gender", td.NotEmpty())))
 
-	// Mixed placeholders + operator shortcut
-	checkOK(t, got,
-		td.SubJSONOf(
-			`{"name":"$name","age":$1,"gender":$^NotEmpty,"details":{}}`,
-			td.Tag("age", td.Between(40, 45)),
-			td.Tag("name", td.Re(`^Bob`))))
+	// Mixed placeholders + operator
+	for _, op := range []string{
+		"NotEmpty",
+		"NotEmpty()",
+		"$^NotEmpty",
+		"$^NotEmpty()",
+		`"$^NotEmpty"`,
+		`"$^NotEmpty()"`,
+		`r<$^NotEmpty>`,
+		`r<$^NotEmpty()>`,
+	} {
+		checkOK(t, got,
+			td.SubJSONOf(
+				`{"name":"$name","age":$1,"gender":`+op+`,"details":{}}`,
+				td.Tag("age", td.Between(40, 45)),
+				td.Tag("name", td.Re(`^Bob`))),
+			"using operator %s", op)
+	}
 
 	//
 	// Errors
@@ -848,13 +927,21 @@ func TestSubJSONOf(t *testing.T) {
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`),
 		})
 
-	// operator shortcut
+	// $^Operator
+	checkError(t, "never tested",
+		td.SubJSONOf(`[1, $^bad%]`),
+		expectedError{
+			Message: mustBe("bad usage of SubJSONOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`JSON unmarshal error: $^ must be followed by an operator name at line 1:4 (pos 4)`),
+		})
+
 	checkError(t, "never tested",
 		td.SubJSONOf(`[1, "$^bad%"]`),
 		expectedError{
 			Message: mustBe("bad usage of SubJSONOf operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe(`JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`),
+			Summary: mustBe(`JSON unmarshal error: $^ must be followed by an operator name at line 1:5 (pos 5)`),
 		})
 
 	// named placeholders
@@ -912,7 +999,7 @@ SubJSONOf({
                                      SubJSONOf({
                                                  "name": "$1" /* HasPrefix("Alice") */
                                                })) */,
-            "zip": "$^NotZero"
+            "zip": NotZero()
           })`[1:])
 
 	// Erroneous op
@@ -964,12 +1051,24 @@ func TestSuperJSONOf(t *testing.T) {
 			td.Tag("name", td.Re(`^Bob`)),
 			td.Tag("gender", td.NotEmpty())))
 
-	// Mixed placeholders + operator shortcut
-	checkOK(t, got,
-		td.SuperJSONOf(
-			`{"name":"$name","age":$1,"gender":$^NotEmpty}`,
-			td.Tag("age", td.Between(40, 45)),
-			td.Tag("name", td.Re(`^Bob`))))
+	// Mixed placeholders + operator
+	for _, op := range []string{
+		"NotEmpty",
+		"NotEmpty()",
+		"$^NotEmpty",
+		"$^NotEmpty()",
+		`"$^NotEmpty"`,
+		`"$^NotEmpty()"`,
+		`r<$^NotEmpty>`,
+		`r<$^NotEmpty()>`,
+	} {
+		checkOK(t, got,
+			td.SuperJSONOf(
+				`{"name":"$name","age":$1,"gender":`+op+`}`,
+				td.Tag("age", td.Between(40, 45)),
+				td.Tag("name", td.Re(`^Bob`))),
+			"using operator %s", op)
+	}
 
 	// …with comments…
 	checkOK(t, got,
@@ -1044,13 +1143,21 @@ func TestSuperJSONOf(t *testing.T) {
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`),
 		})
 
-	// operator shortcut
+	// $^Operator
+	checkError(t, "never tested",
+		td.SuperJSONOf(`[1, $^bad%]`),
+		expectedError{
+			Message: mustBe("bad usage of SuperJSONOf operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe(`JSON unmarshal error: $^ must be followed by an operator name at line 1:4 (pos 4)`),
+		})
+
 	checkError(t, "never tested",
 		td.SuperJSONOf(`[1, "$^bad%"]`),
 		expectedError{
 			Message: mustBe("bad usage of SuperJSONOf operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe(`JSON unmarshal error: bad operator shortcut "$^bad%" at line 1:5 (pos 5)`),
+			Summary: mustBe(`JSON unmarshal error: $^ must be followed by an operator name at line 1:5 (pos 5)`),
 		})
 
 	// named placeholders
@@ -1108,7 +1215,7 @@ SuperJSONOf({
                                        SuperJSONOf({
                                                      "name": "$1" /* HasPrefix("Alice") */
                                                    })) */,
-              "zip": "$^NotZero"
+              "zip": NotZero()
             })`[1:])
 
 	// Erroneous op

@@ -1,5 +1,5 @@
 %{
-// Copyright (c) 2020, 2021, Maxime Soulé
+// Copyright (c) 2020-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -37,7 +37,7 @@ func finalize(l yyLexer, value any) {
 
 %start json
 
-%token <value>   TRUE FALSE NULL NUMBER PLACEHOLDER OPERATOR_SHORTCUT
+%token <value>   TRUE FALSE NULL NUMBER PLACEHOLDER SUB_PARSER
 %token <string>  STRING OPERATOR
 
 %type <object>   object members
@@ -57,6 +57,7 @@ value:
     object      { $$ = $1 }
   | array       { $$ = $1 }
   | operator    { $$ = $1 }
+  | SUB_PARSER  { $$ = $1 }
   | STRING      { $$ = $1 }
   | NUMBER
   | TRUE
@@ -134,14 +135,18 @@ op_params: '(' ')'
                 }
 
 operator:
-    OPERATOR_SHORTCUT
-  | OPERATOR op_params
+  OPERATOR op_params
                 {
-                  j := yylex.(*json)
-                  opPos := j.popPos()
-                  op, err := j.getOperator(Operator{Name: $1, Params: $2}, opPos)
-                  if err != nil {
-                    j.fatal(err.Error(), opPos)
+                  op := yylex.(*json).newOperator($1, $2)
+                   if op == nil {
+                    return 1
+                  }
+                  $$ = op
+                }
+  | OPERATOR
+                {
+                  op := yylex.(*json).newOperator($1, nil)
+                  if op == nil {
                     return 1
                   }
                   $$ = op
