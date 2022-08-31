@@ -1,4 +1,4 @@
-// Copyright (c) 2020, 2021, Maxime Soulé
+// Copyright (c) 2020-2022, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -18,6 +18,8 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/util"
 )
+
+const delimiters = " \t\r\n,}]()"
 
 type Position struct {
 	bpos int
@@ -57,7 +59,6 @@ type json struct {
 type ParseOpts struct {
 	Placeholders       []any
 	PlaceholdersByName map[string]any
-	OpShortcutFn       func(string, Position) (any, bool)
 	OpFn               func(Operator, Position) (any, error)
 }
 
@@ -71,13 +72,11 @@ func Parse(buf []byte, opts ...ParseOpts) (any, error) {
 	if len(opts) > 0 {
 		j.opts = opts[0]
 	}
-	yyParse(&j)
 
-	if len(j.errs) > 0 {
+	if !j.parse() {
 		if len(j.errs) == 1 {
 			return nil, j.errs[0]
 		}
-
 		errStr := bytes.NewBufferString(j.errs[0].Error())
 		for _, err := range j.errs[1:] {
 			errStr.WriteByte('\n')
@@ -85,8 +84,13 @@ func Parse(buf []byte, opts ...ParseOpts) (any, error) {
 		}
 		return nil, errors.New(errStr.String())
 	}
-
 	return j.value, nil
+}
+
+// parse returns true if no errors occurred during parsing.
+func (j *json) parse() bool {
+	yyParse(j)
+	return len(j.errs) == 0
 }
 
 // Lex implements yyLexer interface.
@@ -114,6 +118,19 @@ func (j *json) Error(s string) {
 	}
 }
 
+func (j *json) newOperator(name string, params []any) any {
+	if name == "" {
+		return nil // an operator error is in progress
+	}
+	opPos := j.popPos()
+	op, err := j.getOperator(Operator{Name: name, Params: params}, opPos)
+	if err != nil {
+		j.fatal(err.Error(), opPos)
+		return nil
+	}
+	return op
+}
+
 func (j *json) pushPos(pos Position) {
 	j.stackPos = append(j.stackPos, pos)
 }
@@ -128,13 +145,6 @@ func (j *json) popPos() Position {
 func (j *json) moveHoriz(bytes int, runes ...int) {
 	j.pos = j.pos.incHoriz(bytes, runes...)
 	j.curSize = 0
-}
-
-func (j *json) getOperatorShortcut(operator string, opPos Position) (any, bool) {
-	if j.opts.OpShortcutFn == nil {
-		return nil, false
-	}
-	return j.opts.OpShortcutFn(operator, opPos)
 }
 
 func (j *json) getOperator(operator Operator, opPos Position) (any, error) {
@@ -160,23 +170,20 @@ func (j *json) nextToken(lval *yySymType) int {
 		if !ok {
 			return 0
 		}
+		return j.analyzeStringContent(s, firstPos, lval)
 
-		// Check for placeholder ($1 or $name) or operator shortcut ($^Nil)
-		if len(s) <= 1 || !strings.HasPrefix(s, "$") {
-			lval.string = s
-			return STRING
-		}
-		// Double $$ at start of strings escape a $
-		if strings.HasPrefix(s[1:], "$") {
-			lval.string = s[1:]
-			return STRING
+	case 'r': // raw string, aka r!str! or r<str> (ws possible bw r & start delim)
+		if !j.skipWs() {
+			j.fatal("cannot find r start delimiter")
+			return 0
 		}
 
-		token, value := j.parseDollarToken(s[1:], firstPos)
-		if token != 0 {
-			lval.value = value
+		firstPos := j.pos.incHoriz(1)
+		s, ok := j.parseRawString()
+		if !ok {
+			return 0
 		}
-		return token
+		return j.analyzeStringContent(s, firstPos, lval)
 
 	case 'n': // null
 		if j.remain() >= 4 && bytes.Equal(j.buf[j.pos.bpos+1:j.pos.bpos+4], []byte(`ull`)) {
@@ -210,7 +217,7 @@ func (j *json) nextToken(lval *yySymType) int {
 
 	case '$':
 		var dollarToken string
-		end := bytes.IndexAny(j.buf[j.pos.bpos+1:], " \t\r\n,}])")
+		end := bytes.IndexAny(j.buf[j.pos.bpos+1:], delimiters)
 		if end >= 0 {
 			dollarToken = string(j.buf[j.pos.bpos+1 : j.pos.bpos+1+end])
 		} else {
@@ -221,10 +228,12 @@ func (j *json) nextToken(lval *yySymType) int {
 			return '$'
 		}
 
-		token, value := j.parseDollarToken(dollarToken, j.pos)
-		if token != 0 {
-			lval.value = value
+		token, value := j.parseDollarToken(dollarToken, j.pos, false)
+		if token == OPERATOR {
+			lval.string = value.(string)
+			return OPERATOR
 		}
+		lval.value = value
 		j.moveHoriz(1+len(dollarToken), 1+utf8.RuneCountInString(dollarToken))
 		return token
 
@@ -325,11 +334,14 @@ str:
 				return "", false
 			}
 
-		default:
+		default: //nolint: gocritic
 			if r < ' ' || r > utf8.MaxRune {
 				j.fatal("invalid character in string")
 				return "", false
 			}
+			fallthrough
+
+		case '\n', '\r', '\t': // not normally accepted by JSON spec
 			if b != nil {
 				b.WriteRune(r)
 			}
@@ -338,6 +350,89 @@ str:
 
 	j.fatal("unterminated string", savePos)
 	return "", false
+}
+
+func (j *json) parseRawString() (string, bool) {
+	// j.buf[j.pos.bpos] == first non-ws rune after 'r' → caller responsibility
+
+	savePos := j.pos
+	startDelim, _ := j.getRune() // cannot fail, caller called j.skipWs()
+
+	var endDelim rune
+	switch startDelim {
+	case '(':
+		endDelim = ')'
+	case '{':
+		endDelim = '}'
+	case '[':
+		endDelim = ']'
+	case '<':
+		endDelim = '>'
+	default:
+		if startDelim == '_' ||
+			(!unicode.IsPunct(startDelim) && !unicode.IsSymbol(startDelim)) {
+			j.fatal(fmt.Sprintf("invalid r delimiter %q, should be either a punctuation or a symbol rune, excluding '_'",
+				startDelim))
+			return "", false
+		}
+		endDelim = startDelim
+	}
+
+	from := j.pos.bpos + j.curSize
+
+	for innerDelim := 0; ; {
+		r, ok := j.getRune()
+		if !ok {
+			break
+		}
+
+		switch r {
+		case startDelim:
+			if startDelim == endDelim {
+				return string(j.buf[from:j.pos.bpos]), true
+			}
+			innerDelim++
+
+		case endDelim:
+			if innerDelim == 0 {
+				return string(j.buf[from:j.pos.bpos]), true
+			}
+			innerDelim--
+
+		case '\n', '\r', '\t': // accept these raw bytes
+		default:
+			if r < ' ' || r > utf8.MaxRune {
+				j.fatal("invalid character in raw string")
+				return "", false
+			}
+		}
+	}
+
+	j.fatal("unterminated raw string", savePos)
+	return "", false
+}
+
+// analyzeStringContent checks whether s contains $ prefix or not. If
+// yes, it tries to parse it.
+func (j *json) analyzeStringContent(s string, strPos Position, lval *yySymType) int {
+	if len(s) <= 1 || !strings.HasPrefix(s, "$") {
+		lval.string = s
+		return STRING
+	}
+	// Double $$ at start of strings escape a $
+	if strings.HasPrefix(s[1:], "$") {
+		lval.string = s[1:]
+		return STRING
+	}
+
+	// Check for placeholder ($1 or $name) or operator call as $^Empty
+	// or $^Re(q<\d+>)
+	token, value := j.parseDollarToken(s[1:], strPos, true)
+	// in string, j.parseDollarToken can never return an OPERATOR
+	// token. In case an operator is embedded in string, a SUB_PARSER is
+	// returned instead.
+	lval.value = value
+	return token
 }
 
 const (
@@ -416,10 +511,10 @@ func (j *json) parseNumber() (float64, bool) {
 	return f, true
 }
 
-// parseDollarToken parses a $123 or $tag or $^Shortcut token.
-// dollarToken is never empty, does not contain '$' and dollarPos
-// is the '$' position.
-func (j *json) parseDollarToken(dollarToken string, dollarPos Position) (int, any) {
+// parseDollarToken parses a $123 or $tag or $^Operator or
+// $^Operator(PARAMS…) token. dollarToken is never empty, does not
+// contain '$' and dollarPos is the '$' position.
+func (j *json) parseDollarToken(dollarToken string, dollarPos Position, inString bool) (int, any) {
 	firstRune, _ := utf8.DecodeRuneInString(dollarToken)
 
 	// Test for $123
@@ -456,16 +551,42 @@ func (j *json) parseDollarToken(dollarToken string, dollarPos Position) (int, an
 		return PLACEHOLDER, j.opts.Placeholders[np-1]
 	}
 
-	// Test for operator shortcut
+	// Test for operator call $^Operator or $^Operator(…)
 	if firstRune == '^' {
-		op, ok := j.getOperatorShortcut(dollarToken[1:], dollarPos)
-		if !ok {
-			j.error(
-				fmt.Sprintf(`bad operator shortcut "$%s"`, dollarToken),
-				dollarPos)
-			// continue parsing
+		nextRune, _ := utf8.DecodeRuneInString(dollarToken[1:])
+		if nextRune < 'A' || nextRune > 'Z' {
+			j.error(`$^ must be followed by an operator name`, dollarPos)
+			if inString {
+				return SUB_PARSER, nil // continue parsing
+			}
+			return OPERATOR, "" // continue parsing
 		}
-		return OPERATOR_SHORTCUT, op
+
+		if inString {
+			jr := json{
+				buf: []byte(dollarToken[1:]),
+				pos: Position{
+					Pos:  dollarPos.Pos + 2,
+					Line: dollarPos.Line,
+					Col:  dollarPos.Col + 2,
+				},
+				opts: j.opts,
+			}
+			if !jr.parse() {
+				j.errs = append(j.errs, jr.errs...)
+				return SUB_PARSER, nil // continue parsing
+			}
+			return SUB_PARSER, jr.value
+		}
+
+		j.moveHoriz(2)
+		j.lastTokenPos = j.pos
+		operator, ok := j.parseOperator()
+		if !ok {
+			return OPERATOR, ""
+		}
+		j.pushPos(j.lastTokenPos)
+		return OPERATOR, operator
 	}
 
 	// Test for $tag
@@ -491,17 +612,14 @@ func (j *json) parseOperator() (string, bool) {
 
 	i := j.pos.bpos + 1
 	l := len(j.buf)
-operator:
 	for ; i < l; i++ {
-		switch r := j.buf[i]; r {
-		case ' ', '\t', '\r', '\n', ',', '}', ']', '(':
-			break operator
-
-		default:
-			if (r < 'A' || r > 'Z') && (r < 'a' || r > 'z') {
-				j.fatal(fmt.Sprintf(`invalid operator name %q`, string(j.buf[j.pos.bpos:i+1])))
-				return "", false
-			}
+		if bytes.ContainsAny(j.buf[i:i+1], delimiters) {
+			break
+		}
+		if r := j.buf[i]; (r < 'A' || r > 'Z') && (r < 'a' || r > 'z') {
+			j.fatal(fmt.Sprintf(`invalid operator name %q`, string(j.buf[j.pos.bpos:i+1])))
+			j.moveHoriz(i - j.pos.bpos)
+			return "", false
 		}
 	}
 
