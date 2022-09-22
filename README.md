@@ -305,6 +305,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`ContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/
 [`Delay`]: https://go-testdeep.zetta.rocks/operators/delay/
 [`Empty`]: https://go-testdeep.zetta.rocks/operators/empty/
+[`ErrorIs`]: https://go-testdeep.zetta.rocks/operators/erroris/
 [`First`]: https://go-testdeep.zetta.rocks/operators/first/
 [`Grep`]: https://go-testdeep.zetta.rocks/operators/grep/
 [`Gt`]: https://go-testdeep.zetta.rocks/operators/gt/
@@ -370,6 +371,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpContains`]: https://go-testdeep.zetta.rocks/operators/contains/#cmpcontains-shortcut
 [`CmpContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/#cmpcontainskey-shortcut
 [`CmpEmpty`]: https://go-testdeep.zetta.rocks/operators/empty/#cmpempty-shortcut
+[`CmpErrorIs`]: https://go-testdeep.zetta.rocks/operators/erroris/#cmperroris-shortcut
 [`CmpFirst`]: https://go-testdeep.zetta.rocks/operators/first/#cmpfirst-shortcut
 [`CmpGrep`]: https://go-testdeep.zetta.rocks/operators/grep/#cmpgrep-shortcut
 [`CmpGt`]: https://go-testdeep.zetta.rocks/operators/gt/#cmpgt-shortcut
@@ -433,6 +435,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.Contains`]: https://go-testdeep.zetta.rocks/operators/contains/#tcontains-shortcut
 [`T.ContainsKey`]: https://go-testdeep.zetta.rocks/operators/containskey/#tcontainskey-shortcut
 [`T.Empty`]: https://go-testdeep.zetta.rocks/operators/empty/#tempty-shortcut
+[`T.CmpErrorIs`]: https://go-testdeep.zetta.rocks/operators/erroris/#tcmperroris-shortcut
 [`T.First`]: https://go-testdeep.zetta.rocks/operators/first/#tfirst-shortcut
 [`T.Grep`]: https://go-testdeep.zetta.rocks/operators/grep/#tgrep-shortcut
 [`T.Gt`]: https://go-testdeep.zetta.rocks/operators/gt/#tgt-shortcut

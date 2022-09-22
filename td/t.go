@@ -225,6 +225,25 @@ func (t *T) Empty(got any, args ...any) bool {
 	return t.Cmp(got, Empty(), args...)
 }
 
+// CmpErrorIs is a shortcut for:
+//
+//	t.Cmp(got, td.ErrorIs(expected), args...)
+//
+// See [ErrorIs] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) CmpErrorIs(got any, expected error, args ...any) bool {
+	t.Helper()
+	return t.Cmp(got, ErrorIs(expected), args...)
+}
+
 // First is a shortcut for:
 //
 //	t.Cmp(got, td.First(filter, expectedValue), args...)

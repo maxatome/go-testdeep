@@ -726,6 +726,29 @@ func ExampleT_Empty_pointers() {
 	// false
 }
 
+func ExampleT_CmpErrorIs() {
+	t := td.NewT(&testing.T{})
+
+	err1 := fmt.Errorf("failure1")
+	err2 := fmt.Errorf("failure2: %w", err1)
+	err3 := fmt.Errorf("failure3: %w", err2)
+	err := fmt.Errorf("failure4: %w", err3)
+
+	ok := t.CmpErrorIs(err, err)
+	fmt.Println("error is itself:", ok)
+
+	ok = t.CmpErrorIs(err, err1)
+	fmt.Println("error is also err1:", ok)
+
+	ok = t.CmpErrorIs(err1, err)
+	fmt.Println("err1 is err:", ok)
+
+	// Output:
+	// error is itself: true
+	// error is also err1: true
+	// err1 is err: false
+}
+
 func ExampleT_First_classic() {
 	t := td.NewT(&testing.T{})
 

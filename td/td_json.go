@@ -34,6 +34,7 @@ var forbiddenOpsInJSON = map[string]string{
 	"Catch":        "",
 	"Code":         "",
 	"Delay":        "",
+	"ErrorIs":      "",
 	"Isa":          "",
 	"JSON":         "literal JSON",
 	"Lax":          "",
