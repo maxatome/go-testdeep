@@ -112,7 +112,8 @@ my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
 my %SMUGGLER_OPERATORS;
 
 # These operators should be renamed when used as *T method
-my %RENAME_METHOD = (Lax => 'CmpLax');
+my %RENAME_METHOD = (Lax     => 'CmpLax',
+                     ErrorIs => 'CmpErrorIs');
 
 # These operators do not have *T method nor Cmp shortcut
 my %ONLY_OPERATORS = map { $_ => 1 } qw(Catch Delay Ignore Tag);
