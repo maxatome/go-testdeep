@@ -121,6 +121,16 @@ func server() *http.ServeMux {
 		}
 	})
 
+	mux.HandleFunc("/any/trailer", func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Set("Trailer", "X-TestDeep-Method")
+		w.Header().Add("Trailer", "X-TestDeep-Foo")
+
+		io.WriteString(w, "Hey!") //nolint: errcheck
+
+		w.Header().Set("X-TestDeep-Method", req.Method)
+		w.Header().Set("X-TestDeep-Foo", "bar")
+	})
+
 	return mux
 }
 
@@ -140,6 +150,11 @@ func TestNewTestAPI(t *testing.T) {
 					"X-Testdeep-Method": td.Bag(td.Re(`(?i)^head\z`)),
 				})).
 				NoBody().
+				CmpResponse(td.Code(func(assert *td.T, resp *http.Response) {
+					assert.Cmp(resp.StatusCode, 200)
+					assert.Cmp(resp.Header, containsKey)
+					assert.Smuggle(resp.Body, io.ReadAll, td.Empty())
+				})).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 
@@ -150,6 +165,11 @@ func TestNewTestAPI(t *testing.T) {
 				CmpStatus(200).
 				CmpHeader(containsKey).
 				CmpBody(td.Empty()).
+				CmpResponse(td.Code(func(assert *td.T, resp *http.Response) {
+					assert.Cmp(resp.StatusCode, 200)
+					assert.Cmp(resp.Header, containsKey)
+					assert.Smuggle(resp.Body, io.ReadAll, td.Empty())
+				})).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 
@@ -160,6 +180,11 @@ func TestNewTestAPI(t *testing.T) {
 				CmpStatus(200).
 				CmpHeader(containsKey).
 				CmpBody("GET!").
+				CmpResponse(td.Code(func(assert *td.T, resp *http.Response) {
+					assert.Cmp(resp.StatusCode, 200)
+					assert.Cmp(resp.Header, containsKey)
+					assert.Smuggle(resp.Body, io.ReadAll, td.String("GET!"))
+				})).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 
@@ -170,6 +195,11 @@ func TestNewTestAPI(t *testing.T) {
 				CmpStatus(200).
 				CmpHeader(containsKey).
 				CmpBody(td.Contains("GET")).
+				CmpResponse(td.Code(func(assert *td.T, resp *http.Response) {
+					assert.Cmp(resp.StatusCode, 200)
+					assert.Cmp(resp.Header, containsKey)
+					assert.Smuggle(resp.Body, io.ReadAll, td.Contains("GET"))
+				})).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 
@@ -180,6 +210,11 @@ func TestNewTestAPI(t *testing.T) {
 				CmpStatus(200).
 				CmpHeader(containsKey).
 				CmpBody("OPTIONS!\n---\nOPTIONS body").
+				CmpResponse(td.Code(func(assert *td.T, resp *http.Response) {
+					assert.Cmp(resp.StatusCode, 200)
+					assert.Cmp(resp.Header, containsKey)
+					assert.Smuggle(resp.Body, io.ReadAll, td.String("OPTIONS!\n---\nOPTIONS body"))
+				})).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 
@@ -190,6 +225,11 @@ func TestNewTestAPI(t *testing.T) {
 				CmpStatus(200).
 				CmpHeader(containsKey).
 				CmpBody("POST!\n---\nPOST body").
+				CmpResponse(td.Code(func(assert *td.T, resp *http.Response) {
+					assert.Cmp(resp.StatusCode, 200)
+					assert.Cmp(resp.Header, containsKey)
+					assert.Smuggle(resp.Body, io.ReadAll, td.String("POST!\n---\nPOST body"))
+				})).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 
@@ -200,6 +240,11 @@ func TestNewTestAPI(t *testing.T) {
 				CmpStatus(200).
 				CmpHeader(containsKey).
 				CmpBody("POST!\n---\np1=v1&p2=v2").
+				CmpResponse(td.Code(func(assert *td.T, resp *http.Response) {
+					assert.Cmp(resp.StatusCode, 200)
+					assert.Cmp(resp.Header, containsKey)
+					assert.Smuggle(resp.Body, io.ReadAll, td.String("POST!\n---\np1=v1&p2=v2"))
+				})).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 
@@ -599,8 +644,84 @@ bingo%CR
 		td.CmpTrue(t, ta.Failed())
 		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: request is sent'\n")
 		td.CmpContains(t, mockT.LogBuf(), "Request not sent!\n")
-		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header or body\n")
+		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header, body or full response\n")
 		td.CmpNot(t, mockT.LogBuf(), td.Contains("No response received yet\n"))
+	})
+
+	t.Run("Trailer", func(t *testing.T) {
+		mockT := tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any").
+				CmpStatus(200).
+				CmpTrailer(nil). // No trailer at all
+				Failed())
+
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/trailer").
+				CmpStatus(200).
+				CmpTrailer(containsKey).
+				Failed())
+
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/trailer").
+				CmpStatus(200).
+				CmpTrailer(http.Header{
+					"X-Testdeep-Method": {"GET"},
+					"X-Testdeep-Foo":    {"bar"},
+				}).
+				Failed())
+
+		// AutoDumpResponse
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				AutoDumpResponse().
+				Get("/any/trailer").
+				Name("my test").
+				CmpTrailer(http.Header{}).
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(),
+			"Failed test 'my test: trailer should match'")
+		td.Cmp(t, mockT.LogBuf(), td.Contains("Received response:\n"))
+
+		// OrDumpResponse
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any/trailer").
+				Name("my test").
+				CmpTrailer(http.Header{}).
+				OrDumpResponse().
+				OrDumpResponse(). // only one log
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(),
+			"Failed test 'my test: trailer should match'")
+		logPos := strings.Index(mockT.LogBuf(), "Received response:\n")
+		if td.Cmp(t, logPos, td.Gte(0)) {
+			// Only one occurrence
+			td.Cmp(t,
+				strings.Index(mockT.LogBuf()[logPos+1:], "Received response:\n"),
+				-1)
+		}
+
+		mockT = tdutil.NewT("test")
+		ta := tdhttp.NewTestAPI(mockT, mux).
+			Name("my test").
+			CmpTrailer(http.Header{})
+		td.CmpTrue(t, ta.Failed())
+		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: request is sent'\n")
+		td.CmpContains(t, mockT.LogBuf(), "Request not sent!\n")
+		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header, body or full response\n")
+		td.CmpNot(t, mockT.LogBuf(), td.Contains("No response received yet\n"))
+
+		end := len(mockT.LogBuf())
+		ta.OrDumpResponse()
+		td.CmpContains(t, mockT.LogBuf()[end:], "No response received yet\n")
 	})
 
 	t.Run("Status error", func(t *testing.T) {
@@ -675,11 +796,12 @@ bingo%CR
 		td.CmpTrue(t, ta.Failed())
 		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: request is sent'\n")
 		td.CmpContains(t, mockT.LogBuf(), "Request not sent!\n")
-		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header or body\n")
+		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header, body or full response\n")
 		td.CmpNot(t, mockT.LogBuf(), td.Contains("No response received yet\n"))
 
+		end := len(mockT.LogBuf())
 		ta.OrDumpResponse()
-		td.CmpContains(t, mockT.LogBuf(), "No response received yet\n")
+		td.CmpContains(t, mockT.LogBuf()[end:], "No response received yet\n")
 	})
 
 	t.Run("Header error", func(t *testing.T) {
@@ -735,7 +857,7 @@ bingo%CR
 				Failed())
 		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: request is sent'\n")
 		td.CmpContains(t, mockT.LogBuf(), "Request not sent!\n")
-		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header or body\n")
+		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header, body or full response\n")
 	})
 
 	t.Run("Body error", func(t *testing.T) {
@@ -759,6 +881,7 @@ bingo%CR
 				CmpBody(td.Ignore()). // succeeds
 				Failed())
 
+		// Without AutoDumpResponse
 		mockT = tdutil.NewT("test")
 		td.CmpTrue(t,
 			tdhttp.NewTestAPI(mockT, mux).
@@ -789,7 +912,7 @@ bingo%CR
 				Failed())
 		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: request is sent'\n")
 		td.CmpContains(t, mockT.LogBuf(), "Request not sent!\n")
-		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header or body\n")
+		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header, body or full response\n")
 
 		// NoBody
 		mockT = tdutil.NewT("test")
@@ -800,7 +923,7 @@ bingo%CR
 				Failed())
 		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: request is sent'\n")
 		td.CmpContains(t, mockT.LogBuf(), "Request not sent!\n")
-		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header or body\n")
+		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header, body or full response\n")
 		td.CmpNot(t, mockT.LogBuf(), td.Contains("Received response:\n"))
 
 		// Error followed by a success: Failed() should return true anyway
@@ -867,6 +990,61 @@ bingo%CR
 		td.CmpContains(t, mockT.LogBuf(), "Body cannot be empty when using CmpXMLBody")
 	})
 
+	t.Run("Response error", func(t *testing.T) {
+		mockT := tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any").
+				CmpResponse(nil).
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(), "Failed test 'full response should match'")
+		td.CmpContains(t, mockT.LogBuf(), "Response: values differ")
+		td.CmpContains(t, mockT.LogBuf(), "got: (*http.Response)(")
+		td.CmpContains(t, mockT.LogBuf(), "expected: nil")
+
+		// Error followed by a success: Failed() should return true anyway
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any").
+				CmpResponse(nil).         // fails
+				CmpResponse(td.Ignore()). // succeeds
+				Failed())
+
+		// Without AutoDumpResponse
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Get("/any").
+				Name("my test").
+				CmpResponse(nil).
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: full response should match'")
+		td.CmpNot(t, mockT.LogBuf(), td.Contains("Received response:\n"))
+
+		// AutoDumpResponse
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				AutoDumpResponse().
+				Get("/any").
+				Name("my test").
+				CmpResponse(nil).
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: full response should match'")
+		td.Cmp(t, mockT.LogBuf(), td.Contains("Received response:\n"))
+
+		mockT = tdutil.NewT("test")
+		td.CmpTrue(t,
+			tdhttp.NewTestAPI(mockT, mux).
+				Name("my test").
+				CmpResponse(nil).
+				Failed())
+		td.CmpContains(t, mockT.LogBuf(), "Failed test 'my test: request is sent'\n")
+		td.CmpContains(t, mockT.LogBuf(), "Request not sent!\n")
+		td.CmpContains(t, mockT.LogBuf(), "A request must be sent before testing status, header, body or full response\n")
+	})
+
 	t.Run("Request error", func(t *testing.T) {
 		var ta *tdhttp.TestAPI
 		checkFatal := func(fn func()) {
@@ -922,7 +1100,7 @@ func TestWith(t *testing.T) {
 
 	td.CmpTrue(t, nta.CmpStatus(200).Failed()) // as no request sent yet
 	td.CmpContains(t, nt.LogBuf(),
-		"A request must be sent before testing status, header or body")
+		"A request must be sent before testing status, header, body or full response")
 
 	td.CmpFalse(t, ta.CmpStatus(200).Failed()) // request already sent, so OK
 
