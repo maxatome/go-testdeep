@@ -7,8 +7,8 @@
 package td
 
 import (
-	"bytes"
 	"reflect"
+	"strings"
 	"sync"
 	"testing"
 
@@ -783,12 +783,12 @@ func (t *T) RunT(name string, f func(t *T)) bool {
 }
 
 func getTrace(args ...any) string {
-	var b bytes.Buffer
+	var b strings.Builder
 	tdutil.FbuildTestName(&b, args...)
 
 	if b.Len() == 0 {
 		b.WriteString("Stack trace:\n")
-	} else if !bytes.HasSuffix(b.Bytes(), []byte{'\n'}) {
+	} else if !strings.HasSuffix(b.String(), "\n") {
 		b.WriteByte('\n')
 	}
 

@@ -11,7 +11,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"math"
 	"os"
 	"regexp"
@@ -1478,14 +1477,14 @@ func ExampleJSON_file() {
 		Gender:   "male",
 	}
 
-	tmpDir, err := ioutil.TempDir("", "")
+	tmpDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(tmpDir) // clean up
 
 	filename := tmpDir + "/test.json"
-	if err = ioutil.WriteFile(filename, []byte(`
+	if err = os.WriteFile(filename, []byte(`
 {
   "fullname": "$name",
   "age":      "$age",
@@ -4108,14 +4107,14 @@ func ExampleSubJSONOf_file() {
 		Gender:   "male",
 	}
 
-	tmpDir, err := ioutil.TempDir("", "")
+	tmpDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(tmpDir) // clean up
 
 	filename := tmpDir + "/test.json"
-	if err = ioutil.WriteFile(filename, []byte(`
+	if err = os.WriteFile(filename, []byte(`
 {
   "fullname": "$name",
   "age":      "$age",
@@ -4364,14 +4363,14 @@ func ExampleSuperJSONOf_file() {
 		Zip:      666,
 	}
 
-	tmpDir, err := ioutil.TempDir("", "")
+	tmpDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(tmpDir) // clean up
 
 	filename := tmpDir + "/test.json"
-	if err = ioutil.WriteFile(filename, []byte(`
+	if err = os.WriteFile(filename, []byte(`
 {
   "fullname": "$name",
   "age":      "$age",

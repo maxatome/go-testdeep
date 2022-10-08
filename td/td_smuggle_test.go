@@ -727,6 +727,23 @@ func TestSmuggleFieldsPath(t *testing.T) {
 
 	checkOK(t, x, td.Lax(td.Smuggle("PppA", nil)))
 	checkOK(t, x, td.Smuggle("PppA", td.Nil()))
+
+	//
+	type D struct {
+		Iface any
+	}
+
+	got := D{
+		Iface: []any{
+			map[complex64]any{complex(42, 0): []string{"pipo"}},
+			map[complex128]any{complex(42, 0): []string{"pipo"}},
+		},
+	}
+
+	for i := 0; i < 2; i++ {
+		checkOK(t, got, td.Smuggle(fmt.Sprintf("Iface[%d][42][0]", i), "pipo"))
+		checkOK(t, got, td.Smuggle(fmt.Sprintf("Iface[%d][42][0]", i-2), "pipo"))
+	}
 }
 
 func TestSmuggleTypeBehind(t *testing.T) {

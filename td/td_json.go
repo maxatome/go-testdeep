@@ -12,7 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"os"
 	"reflect"
 	"strings"
 
@@ -110,7 +110,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 		// a JSON content)
 		if strings.HasSuffix(data, ".json") {
 			// It could be a file name, try to read from it
-			b, err = ioutil.ReadFile(data)
+			b, err = os.ReadFile(data)
 			if err != nil {
 				return nil, ctxerr.OpBad(u.Func, "JSON file %s cannot be read: %s", data, err)
 			}
@@ -122,7 +122,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 		b = data
 
 	case io.Reader:
-		b, err = ioutil.ReadAll(data)
+		b, err = io.ReadAll(data)
 		if err != nil {
 			return nil, ctxerr.OpBad(u.Func, "JSON read error: %s", err)
 		}
@@ -489,9 +489,9 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 //
 //   - string containing JSON data like `{"fullname":"Bob","age":42}`
 //   - string containing a JSON filename, ending with ".json" (its
-//     content is [ioutil.ReadFile] before unmarshaling)
+//     content is [os.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
-//   - [io.Reader] stream containing JSON data (is [ioutil.ReadAll]
+//   - [io.Reader] stream containing JSON data (is [io.ReadAll]
 //     before unmarshaling)
 //
 // expectedJSON JSON value can contain placeholders. The params
@@ -740,9 +740,9 @@ var _ TestDeep = &tdMapJSON{}
 //
 //   - string containing JSON data like `{"fullname":"Bob","age":42}`
 //   - string containing a JSON filename, ending with ".json" (its
-//     content is [ioutil.ReadFile] before unmarshaling)
+//     content is [os.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
-//   - [io.Reader] stream containing JSON data (is [ioutil.ReadAll] before
+//   - [io.Reader] stream containing JSON data (is [io.ReadAll] before
 //     unmarshaling)
 //
 // JSON data contained in expectedJSON must be a JSON object/map
@@ -962,9 +962,9 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 //
 //   - string containing JSON data like `{"fullname":"Bob","age":42}`
 //   - string containing a JSON filename, ending with ".json" (its
-//     content is [ioutil.ReadFile] before unmarshaling)
+//     content is [os.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
-//   - [io.Reader] stream containing JSON data (is [ioutil.ReadAll] before
+//   - [io.Reader] stream containing JSON data (is [io.ReadAll] before
 //     unmarshaling)
 //
 // JSON data contained in expectedJSON must be a JSON object/map

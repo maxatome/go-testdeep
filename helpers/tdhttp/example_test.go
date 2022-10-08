@@ -10,7 +10,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -103,7 +103,7 @@ func Example() {
 				return
 			}
 		case "application/x-www-form-urlencoded":
-			b, err := ioutil.ReadAll(req.Body)
+			b, err := io.ReadAll(req.Body)
 			if err != nil {
 				http.Error(w, "Bad request", http.StatusBadRequest)
 				return

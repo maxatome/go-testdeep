@@ -147,7 +147,8 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...any) {
 }
 
 func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected any,
-	args ...any) bool {
+	args ...any,
+) bool {
 	err := deepValueEqualFinal(ctx,
 		reflect.ValueOf(got), reflect.ValueOf(expected))
 	if err == nil {

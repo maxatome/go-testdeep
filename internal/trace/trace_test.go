@@ -8,7 +8,6 @@ package trace_test
 
 import (
 	"go/build"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -38,7 +37,7 @@ func TestIgnorePackage(t *testing.T) {
 }
 
 func TestFindGoModDir(t *testing.T) {
-	tmp, err := ioutil.TempDir("", "go-testdeep")
+	tmp, err := os.MkdirTemp("", "go-testdeep")
 	if err != nil {
 		t.Fatalf("TempDir() failed: %s", err)
 	}
@@ -55,7 +54,7 @@ func TestFindGoModDir(t *testing.T) {
 	t.Run("/tmp/.../a/b/c/go.mod", func(t *testing.T) {
 		goMod := filepath.Join(tmp, "a", "b", "c", "go.mod")
 
-		err := ioutil.WriteFile(goMod, nil, 0644)
+		err := os.WriteFile(goMod, nil, 0644)
 		if err != nil {
 			t.Fatalf("WriteFile(%s) failed: %s", goMod, err)
 		}
@@ -74,7 +73,7 @@ func TestFindGoModDir(t *testing.T) {
 			if !os.IsNotExist(err) {
 				t.Fatalf("Stat(%s) failed: %s", goMod, err)
 			}
-			err := ioutil.WriteFile(goMod, nil, 0644)
+			err := os.WriteFile(goMod, nil, 0644)
 			if err != nil {
 				t.Fatalf("WriteFile(%s) failed: %s", goMod, err)
 			}
@@ -86,7 +85,7 @@ func TestFindGoModDir(t *testing.T) {
 }
 
 func TestFindGoModDirLinks(t *testing.T) {
-	tmp, err := ioutil.TempDir("", "go-testdeep")
+	tmp, err := os.MkdirTemp("", "go-testdeep")
 	if err != nil {
 		t.Fatalf("TempDir() failed: %s", err)
 	}
@@ -108,7 +107,7 @@ func TestFindGoModDirLinks(t *testing.T) {
 
 	goMod := filepath.Join(goModDir, "go.mod")
 
-	err = ioutil.WriteFile(goMod, nil, 0644)
+	err = os.WriteFile(goMod, nil, 0644)
 	if err != nil {
 		t.Fatalf("WriteFile(%s) failed: %s", goMod, err)
 	}

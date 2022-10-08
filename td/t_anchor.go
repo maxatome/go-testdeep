@@ -289,7 +289,7 @@ func (t *T) initAnchors() {
 		// Do not record a finalizer if no name (should not happen
 		// except perhaps in tests)
 		if name != "" {
-			cleanupTB(t.TB, func() {
+			t.Cleanup(func() {
 				allAnchorsMu.Lock()
 				defer allAnchorsMu.Unlock()
 				delete(allAnchors, name)
