@@ -128,13 +128,10 @@ func TestBuildFieldsPathFn(t *testing.T) {
 				`field "Iface[str]", "str" is not a float and so cannot match float32 map key type`)
 		}
 
-		// go1.15 min
-		if parseComplex != nil {
-			_, err = fn(Build{Iface: map[complex128]Build{}})
-			if test.Error(t, err) {
-				test.EqualStr(t, err.Error(),
-					`field "Iface[str]", "str" is not a complex number and so cannot match complex128 map key type`)
-			}
+		_, err = fn(Build{Iface: map[complex128]Build{}})
+		if test.Error(t, err) {
+			test.EqualStr(t, err.Error(),
+				`field "Iface[str]", "str" is not a complex number and so cannot match complex128 map key type`)
 		}
 
 		_, err = fn(Build{Iface: map[struct{ A int }]Build{}})
@@ -180,25 +177,5 @@ func TestBuildFieldsPathFn(t *testing.T) {
 		_, err = fn(42)
 		test.EqualStr(t, err.Error(),
 			`it is a int, but a map, array or slice is expected`)
-	}
-
-	// Complex map keys are not supported for go<1.15
-	saveParseComplex := parseComplex
-	defer func() { parseComplex = saveParseComplex }()
-	parseComplex = nil
-
-	fn, err = buildFieldsPathFn("Iface[18].Field")
-	if test.NoError(t, err) {
-		_, err = fn(Build{Iface: map[complex64]Build{}})
-		if test.Error(t, err) {
-			test.EqualStr(t, err.Error(),
-				`field "Iface[18]", "18" cannot match unsupported complex64 map key type`)
-		}
-
-		_, err = fn(Build{Iface: map[complex128]Build{}})
-		if test.Error(t, err) {
-			test.EqualStr(t, err.Error(),
-				`field "Iface[18]", "18" cannot match unsupported complex128 map key type`)
-		}
 	}
 }

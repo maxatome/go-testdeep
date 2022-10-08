@@ -7,9 +7,9 @@
 package td
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
@@ -403,7 +403,7 @@ func (m *tdMap) String() string {
 		return m.stringError()
 	}
 
-	buf := &bytes.Buffer{}
+	var buf strings.Builder
 
 	if m.kind != allMap {
 		buf.WriteString(m.GetLocation().Func)
@@ -418,7 +418,7 @@ func (m *tdMap) String() string {
 		buf.WriteString("{\n")
 
 		for _, entryInfo := range m.expectedEntries {
-			fmt.Fprintf(buf, "  %s: %s,\n", //nolint: errcheck
+			fmt.Fprintf(&buf, "  %s: %s,\n", //nolint: errcheck
 				util.ToString(entryInfo.key),
 				util.ToString(entryInfo.expected))
 		}

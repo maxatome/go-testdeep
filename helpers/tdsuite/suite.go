@@ -24,10 +24,9 @@ var tType = reflect.TypeOf((*td.T)(nil))
 // tests suite, Setup method is called once before any test runs. If
 // Setup returns an error, the tests suite aborts: no tests are run.
 //
-// Starting go1.14, t.Cleanup() can be called in Setup method. It can
-// replace the definition of a [Destroy] method. It can also be used
-// together, in this case cleanup registered functions are called
-// after [Destroy].
+// t.Cleanup() can be called in Setup method. It can replace the
+// definition of a [Destroy] method. It can also be used together, in
+// this case cleanup registered functions are called after [Destroy].
 type Setup interface {
 	Setup(t *td.T) error
 }
@@ -37,10 +36,9 @@ type Setup interface {
 // itself. If PreTest returns an error, the subtest aborts: the test
 // is not run.
 //
-// Starting go1.14, t.Cleanup() can be called in PreTest method. It can
-// replace the definition of a [PostTest] method. It can also be used
-// together, in this case cleanup registered functions are called
-// after [PostTest].
+// t.Cleanup() can be called in PreTest method. It can replace the
+// definition of a [PostTest] method. It can also be used together, in
+// this case cleanup registered functions are called after [PostTest].
 type PreTest interface {
 	PreTest(t *td.T, testName string) error
 }

@@ -7,9 +7,9 @@
 package ctxerr
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/types"
 )
@@ -17,7 +17,7 @@ import (
 // OpBadUsage returns a string to notice the user he passed a bad
 // parameter to an operator constructor.
 func OpBadUsage(op, usage string, param any, pos int, kind bool) *Error {
-	var b bytes.Buffer
+	var b strings.Builder
 	fmt.Fprintf(&b, "usage: %s%s, but received ", op, usage)
 
 	if param == nil {

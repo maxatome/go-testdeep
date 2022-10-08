@@ -9,7 +9,6 @@ package tdhttp_test
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -38,7 +37,7 @@ func TestMultipartPart(t *testing.T) {
 	}
 
 	// Full empty
-	b, err := ioutil.ReadAll(&tdhttp.MultipartPart{})
+	b, err := io.ReadAll(&tdhttp.MultipartPart{})
 	assert.CmpNoError(err)
 	assert.Len(b, 0)
 
@@ -143,11 +142,11 @@ hey!
 yo!`)
 
 	// With file name
-	dir, err := ioutil.TempDir("", "multipart")
+	dir, err := os.MkdirTemp("", "multipart")
 	require.CmpNoError(err)
 	defer os.RemoveAll(dir)
 	filePath := filepath.Join(dir, "body.txt")
-	require.CmpNoError(ioutil.WriteFile(filePath, []byte("hey!\nyo!"), 0666))
+	require.CmpNoError(os.WriteFile(filePath, []byte("hey!\nyo!"), 0666))
 
 	check(tdhttp.NewMultipartPartFile("pipo", filePath),
 		`Content-Disposition: form-data; name="pipo"; filename="body.txt"%CR
@@ -165,7 +164,7 @@ hey!
 yo!`)
 
 	// Error during os.Open
-	_, err = ioutil.ReadAll(
+	_, err = io.ReadAll(
 		tdhttp.NewMultipartPartFile("pipo", filepath.Join(dir, "unknown.xxx")),
 	)
 	assert.CmpError(err)
@@ -174,11 +173,11 @@ yo!`)
 func TestMultipartBody(t *testing.T) {
 	assert, require := td.AssertRequire(t)
 
-	dir, err := ioutil.TempDir("", "multipart")
+	dir, err := os.MkdirTemp("", "multipart")
 	require.CmpNoError(err)
 	defer os.RemoveAll(dir)
 	filePath := filepath.Join(dir, "body.txt")
-	require.CmpNoError(ioutil.WriteFile(filePath, []byte("hey!\nyo!"), 0666))
+	require.CmpNoError(os.WriteFile(filePath, []byte("hey!\nyo!"), 0666))
 
 	for _, boundary := range []struct{ in, out string }{
 		{in: "", out: "go-testdeep-42"},
@@ -251,7 +250,7 @@ Content-Disposition: form-data; name="io"%CR
 		if assert.CmpNoError(err) {
 			assert.Cmp(part.FormName(), "pipo")
 			assert.Cmp(part.FileName(), "")
-			assert.Smuggle(part, ioutil.ReadAll, td.String("pipo!\nbingo!"))
+			assert.Smuggle(part, io.ReadAll, td.String("pipo!\nbingo!"))
 		}
 
 		// 1
@@ -259,7 +258,7 @@ Content-Disposition: form-data; name="io"%CR
 		if assert.CmpNoError(err) {
 			assert.Cmp(part.FormName(), "file")
 			assert.Cmp(part.FileName(), "body.txt")
-			assert.Smuggle(part, ioutil.ReadAll, td.String("hey!\nyo!"))
+			assert.Smuggle(part, io.ReadAll, td.String("hey!\nyo!"))
 		}
 
 		// 2
@@ -267,7 +266,7 @@ Content-Disposition: form-data; name="io"%CR
 		if assert.CmpNoError(err) {
 			assert.Cmp(part.FormName(), "string")
 			assert.Cmp(part.FileName(), "")
-			assert.Smuggle(part, ioutil.ReadAll, td.String("zip!\nzap!"))
+			assert.Smuggle(part, io.ReadAll, td.String("zip!\nzap!"))
 		}
 
 		// 3
@@ -275,7 +274,7 @@ Content-Disposition: form-data; name="io"%CR
 		if assert.CmpNoError(err) {
 			assert.Cmp(part.FormName(), "bytes")
 			assert.Cmp(part.FileName(), "")
-			assert.Smuggle(part, ioutil.ReadAll, td.String(`{"ola":"hello"}`))
+			assert.Smuggle(part, io.ReadAll, td.String(`{"ola":"hello"}`))
 		}
 
 		// 4
@@ -283,7 +282,7 @@ Content-Disposition: form-data; name="io"%CR
 		if assert.CmpNoError(err) {
 			assert.Cmp(part.FormName(), "io")
 			assert.Cmp(part.FileName(), "")
-			assert.Smuggle(part, ioutil.ReadAll, td.String(""))
+			assert.Smuggle(part, io.ReadAll, td.String(""))
 		}
 
 		// 5
@@ -291,7 +290,7 @@ Content-Disposition: form-data; name="io"%CR
 		if assert.CmpNoError(err) {
 			assert.Cmp(part.FormName(), "")
 			assert.Cmp(part.FileName(), "")
-			assert.Smuggle(part, ioutil.ReadAll, td.String(""))
+			assert.Smuggle(part, io.ReadAll, td.String(""))
 		}
 
 		// EOF

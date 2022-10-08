@@ -8,7 +8,7 @@ package internal_test
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -28,7 +28,7 @@ func newResponse(body string) *http.Response {
 			"A": []string{"foo"},
 			"B": []string{"bar"},
 		},
-		Body: ioutil.NopCloser(bytes.NewBufferString(body)),
+		Body: io.NopCloser(bytes.NewBufferString(body)),
 	}
 }
 

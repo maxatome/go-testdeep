@@ -9,7 +9,6 @@ package td_test
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"os"
 	"reflect"
 	"testing"
@@ -190,14 +189,10 @@ func TestJSON(t *testing.T) {
 
 	//
 	// Loading a file
-	tmpDir, err := ioutil.TempDir("", "")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.RemoveAll(tmpDir) // clean up
+	tmpDir := t.TempDir()
 
 	filename := tmpDir + "/test.json"
-	err = ioutil.WriteFile(
+	err := os.WriteFile(
 		filename, []byte(`{"name":$name,"age":$1,"gender":$^NotEmpty}`), 0644)
 	if err != nil {
 		t.Fatal(err)

@@ -7,7 +7,6 @@
 package tdutil
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"strings"
@@ -22,7 +21,7 @@ func BuildTestName(args ...any) string {
 		return ""
 	}
 
-	var b bytes.Buffer
+	var b strings.Builder
 	FbuildTestName(&b, args...)
 	return b.String()
 }

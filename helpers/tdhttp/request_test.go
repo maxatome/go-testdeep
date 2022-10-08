@@ -7,7 +7,7 @@
 package tdhttp_test
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"testing"
@@ -251,7 +251,7 @@ func TestNewRequest(tt *testing.T) {
 			td.StructFields{
 				"URL": td.String("/path"),
 				"Body": td.Smuggle(
-					ioutil.ReadAll,
+					io.ReadAll,
 					[]byte("param1=val1&param1=val2&param2=zip"),
 				),
 			}))
@@ -336,7 +336,7 @@ func TestNewJSONRequest(tt *testing.T) {
 		t.String(req.Header.Get("Foo"), "Bar")
 		t.String(req.Header.Get("Zip"), "Test")
 
-		body, err := ioutil.ReadAll(req.Body)
+		body, err := io.ReadAll(req.Body)
 		if t.CmpNoError(err, "read request body") {
 			t.String(string(body), `{"name":"Bob"}`)
 		}
@@ -445,7 +445,7 @@ func TestNewXMLRequest(tt *testing.T) {
 		t.String(req.Header.Get("Foo"), "Bar")
 		t.String(req.Header.Get("Zip"), "Test")
 
-		body, err := ioutil.ReadAll(req.Body)
+		body, err := io.ReadAll(req.Body)
 		if t.CmpNoError(err, "read request body") {
 			t.String(string(body), `<TestStruct><name>Bob</name></TestStruct>`)
 		}

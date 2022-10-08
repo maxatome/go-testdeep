@@ -12,7 +12,7 @@ go-testdeep
 
 **Extremely flexible golang deep comparison, extends the go testing package.**
 
-Currently supports go 1.9 → 1.19.
+Currently supports go 1.16 → 1.19.
 
 - [Latest news](#latest-news)
 - [Synopsis](#synopsis)
@@ -203,7 +203,7 @@ details.**
 ## Installation
 
 ```sh
-$ go get -u github.com/maxatome/go-testdeep
+$ go get github.com/maxatome/go-testdeep
 ```
 
 
