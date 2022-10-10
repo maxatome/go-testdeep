@@ -200,6 +200,14 @@ func (r *tdRecv) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		}
 
 		chosen, recv, recvOK := reflect.Select(cases[:])
+		if chosen == 1 && timer != nil {
+			// check quickly both timeout & expected case didn't occur
+			// concurrently and timeout masked the expected case
+			cases[1] = reflect.SelectCase{
+				Dir: reflect.SelectDefault,
+			}
+			chosen, recv, recvOK = reflect.Select(cases[:])
+		}
 		if chosen == 0 {
 			if !recvOK {
 				recv = reflect.ValueOf(RecvClosed)
