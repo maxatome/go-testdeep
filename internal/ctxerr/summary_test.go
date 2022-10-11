@@ -7,7 +7,6 @@
 package ctxerr_test
 
 import (
-	"bytes"
 	"strings"
 	"testing"
 
@@ -17,7 +16,7 @@ import (
 )
 
 func errorSummaryToString(s ctxerr.ErrorSummary, prefix string) string {
-	var buf bytes.Buffer
+	var buf strings.Builder
 	s.AppendSummary(&buf, prefix)
 	return buf.String()
 }

@@ -7,8 +7,8 @@
 package td
 
 import (
-	"bytes"
 	"reflect"
+	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/flat"
 	"github.com/maxatome/go-testdeep/internal/util"
@@ -27,6 +27,8 @@ func newList(items ...any) tdList {
 }
 
 func (l *tdList) String() string {
-	return util.SliceToBuffer(bytes.NewBufferString(l.GetLocation().Func), l.items).
+	var b strings.Builder
+	b.WriteString(l.GetLocation().Func)
+	return util.SliceToString(&b, l.items).
 		String()
 }

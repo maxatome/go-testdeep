@@ -7,8 +7,8 @@
 package color_test
 
 import (
-	"bytes"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/internal/color"
@@ -27,7 +27,7 @@ func TestColor(t *testing.T) {
 		test.EqualStr(t, bold, "")
 		test.EqualStr(t, off, "")
 
-		var b bytes.Buffer
+		var b strings.Builder
 		color.AppendTestNameOn(&b)
 		test.EqualInt(t, b.Len(), 0)
 		color.AppendTestNameOff(&b)
@@ -77,7 +77,7 @@ func TestColor(t *testing.T) {
 
 		// Color test name
 		_, color.TestNameOn, color.TestNameOff = color.FromEnv(color.EnvColorTitle, "yellow")
-		var b bytes.Buffer
+		var b strings.Builder
 		color.AppendTestNameOn(&b)
 		test.EqualStr(t, b.String(), "\x1b[1;33m")
 		color.AppendTestNameOff(&b)

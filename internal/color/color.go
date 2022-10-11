@@ -7,7 +7,6 @@
 package color
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"reflect"
@@ -182,13 +181,13 @@ func FromEnv(env, defaultColor string) (string, string, string) {
 }
 
 // AppendTestNameOn enables test name color in b.
-func AppendTestNameOn(b *bytes.Buffer) {
+func AppendTestNameOn(b *strings.Builder) {
 	Init()
 	b.WriteString(TestNameOn)
 }
 
 // AppendTestNameOff disables test name color in b.
-func AppendTestNameOff(b *bytes.Buffer) {
+func AppendTestNameOff(b *strings.Builder) {
 	Init()
 	b.WriteString(TestNameOff)
 }
@@ -211,7 +210,7 @@ func Bad(s string, args ...any) string {
 func BadUsage(usage string, param any, pos int, kind bool) string {
 	Init()
 
-	var b bytes.Buffer
+	var b strings.Builder
 	fmt.Fprintf(&b, "%susage: %s, but received ", BadOnBold, usage)
 
 	if param == nil {

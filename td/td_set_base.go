@@ -7,8 +7,8 @@
 package td
 
 import (
-	"bytes"
 	"reflect"
+	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/flat"
@@ -162,8 +162,9 @@ func (s *tdSetBase) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 }
 
 func (s *tdSetBase) String() string {
-	return util.SliceToBuffer(
-		bytes.NewBufferString(s.GetLocation().Func), s.expectedItems).String()
+	var b strings.Builder
+	b.WriteString(s.GetLocation().Func)
+	return util.SliceToString(&b, s.expectedItems).String()
 }
 
 func (s *tdSetBase) TypeBehind() reflect.Type {

@@ -7,7 +7,6 @@
 package ctxerr
 
 import (
-	"bytes"
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/color"
@@ -17,7 +16,7 @@ import (
 // ErrorSummary is the interface used to render error summaries. See
 // Error.Summary.
 type ErrorSummary interface {
-	AppendSummary(buf *bytes.Buffer, prefix string)
+	AppendSummary(buf *strings.Builder, prefix string)
 }
 
 // ErrorSummaryItem implements the [ErrorSummary] interface and allows
@@ -40,7 +39,7 @@ type ErrorSummaryItem struct {
 var _ ErrorSummary = ErrorSummaryItem{}
 
 // AppendSummary implements the [ErrorSummary] interface.
-func (s ErrorSummaryItem) AppendSummary(buf *bytes.Buffer, prefix string) {
+func (s ErrorSummaryItem) AppendSummary(buf *strings.Builder, prefix string) {
 	color.Init()
 
 	buf.WriteString(prefix)
@@ -72,7 +71,7 @@ type ErrorSummaryItems []ErrorSummaryItem
 var _ ErrorSummary = (ErrorSummaryItems)(nil)
 
 // AppendSummary implements [ErrorSummary] interface.
-func (s ErrorSummaryItems) AppendSummary(buf *bytes.Buffer, prefix string) {
+func (s ErrorSummaryItems) AppendSummary(buf *strings.Builder, prefix string) {
 	maxLen := 0
 	for _, item := range s {
 		if len(item.Label) > maxLen {
@@ -95,7 +94,7 @@ type errorSummaryString string
 
 var _ ErrorSummary = errorSummaryString("")
 
-func (s errorSummaryString) AppendSummary(buf *bytes.Buffer, prefix string) {
+func (s errorSummaryString) AppendSummary(buf *strings.Builder, prefix string) {
 	color.Init()
 
 	buf.WriteString(prefix)
