@@ -126,8 +126,9 @@ items:
 			}
 		}
 
-		buf := bytes.NewBufferString(curTest.BufInit)
-		test.EqualStr(t, util.SliceToBuffer(buf, items).String(),
+		var buf strings.Builder
+		buf.WriteString(curTest.BufInit)
+		test.EqualStr(t, util.SliceToString(&buf, items).String(),
 			curTest.Expected)
 	}
 }

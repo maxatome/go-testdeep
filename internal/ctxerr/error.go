@@ -7,7 +7,6 @@
 package ctxerr
 
 import (
-	"bytes"
 	"reflect"
 	"strings"
 
@@ -92,7 +91,7 @@ func TypeMismatch(got, expected reflect.Type) *Error {
 
 // Error implements error interface.
 func (e *Error) Error() string {
-	buf := bytes.Buffer{}
+	buf := strings.Builder{}
 
 	e.Append(&buf, "")
 
@@ -101,7 +100,7 @@ func (e *Error) Error() string {
 
 // Append appends the a contents to buf using prefix prefix for each
 // line.
-func (e *Error) Append(buf *bytes.Buffer, prefix string) {
+func (e *Error) Append(buf *strings.Builder, prefix string) {
 	if e == BooleanError {
 		return
 	}
@@ -209,7 +208,7 @@ func (e *Error) SummaryString() string {
 		return ""
 	}
 
-	var buf bytes.Buffer
+	var buf strings.Builder
 	e.Summary.AppendSummary(&buf, "")
 	return buf.String()
 }

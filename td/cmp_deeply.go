@@ -7,7 +7,6 @@
 package td
 
 import (
-	"bytes"
 	"reflect"
 	"strings"
 
@@ -119,7 +118,7 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...any) {
 
 	args = flat.Interfaces(args...)
 
-	var buf bytes.Buffer
+	var buf strings.Builder
 	color.AppendTestNameOn(&buf)
 	if len(args) == 0 {
 		buf.WriteString(failedTest)

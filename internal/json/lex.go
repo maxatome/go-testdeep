@@ -264,14 +264,15 @@ func hex(b []byte) (rune, bool) {
 func (j *json) parseString() (string, bool) {
 	// j.buf[j.pos.bpos] == '"' → caller responsibility
 
-	var b *bytes.Buffer
+	var b *strings.Builder
 
 	from := j.pos.bpos + 1
 	savePos := j.pos
 
 	appendBuffer := func(r rune) {
 		if b == nil {
-			b = bytes.NewBuffer(j.buf[from : j.pos.bpos-1])
+			b = &strings.Builder{}
+			b.Write(j.buf[from : j.pos.bpos-1])
 		}
 		b.WriteRune(r)
 	}
