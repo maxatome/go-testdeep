@@ -31,7 +31,7 @@ func TestMultipartPart(t *testing.T) {
 		if assert.CmpNoError(err) {
 			_, err := io.Copy(&final, part)
 			if assert.CmpNoError(err) {
-				assert.Cmp(final.String(), strings.Replace(expected, "%CR", "\r", -1)) //nolint: gocritic
+				assert.Cmp(final.String(), strings.ReplaceAll(expected, "%CR", "\r"))
 			}
 		}
 	}
@@ -239,7 +239,7 @@ Content-Disposition: form-data; name="io"%CR
 		if !assert.CmpNoError(err) {
 			continue
 		}
-		if !assert.Cmp(final.String(), strings.Replace(expected, "%CR", "\r", -1)) { //nolint: gocritic
+		if !assert.Cmp(final.String(), strings.ReplaceAll(expected, "%CR", "\r")) {
 			continue
 		}
 

@@ -300,8 +300,8 @@ func TestJSON(t *testing.T) {
 		} {
 			for j, s := range []string{
 				js,
-				strings.Replace(js, "\n", "\r", -1),   //nolint: gocritic
-				strings.Replace(js, "\n", "\r\n", -1), //nolint: gocritic
+				strings.ReplaceAll(js, "\n", "\r"),
+				strings.ReplaceAll(js, "\n", "\r\n"),
 			} {
 				got, err := json.Parse([]byte(s))
 				if !test.NoError(t, err, "#%d/%d, json.Parse succeeds", i, j) {

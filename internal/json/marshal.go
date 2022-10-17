@@ -129,7 +129,7 @@ func (m *marshaler) marshal(v any) error {
 		}
 		repl := bytes.Repeat([]byte(" "), 1+m.indent)
 		repl[0] = '\n'
-		m.buf.Write(bytes.Replace(b, []byte("\n"), repl, -1)) //nolint: gocritic
+		m.buf.Write(bytes.ReplaceAll(b, []byte("\n"), repl))
 
 	default:
 		return fmt.Errorf("Cannot marshal %T", vt)
