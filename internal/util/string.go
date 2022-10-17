@@ -67,7 +67,7 @@ func ToString(val any) string {
 // IndentString indents str lines (from 2nd one = 1st line is not
 // indented) by indent.
 func IndentString(str, indent string) string {
-	return strings.Replace(str, "\n", "\n"+indent, -1) //nolint: gocritic
+	return strings.ReplaceAll(str, "\n", "\n"+indent)
 }
 
 // IndentStringIn indents str lines (from 2nd one = 1st line is not

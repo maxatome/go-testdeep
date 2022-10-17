@@ -83,12 +83,13 @@ func mustContain(str string) expectedErrorMatch {
 }
 
 func indent(str string, numSpc int) string {
-	return strings.Replace(str, "\n", "\n\t"+strings.Repeat(" ", numSpc), -1) //nolint: gocritic
+	return strings.ReplaceAll(str, "\n", "\n\t"+strings.Repeat(" ", numSpc))
 }
 
 func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	got string, expected expectedErrorMatch, fieldName string,
-	args ...any) bool {
+	args ...any,
+) bool {
 	t.Helper()
 
 	if expected.Exact != "" && got != expected.Exact {
@@ -99,7 +100,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	> %s`,
 			tdutil.BuildTestName(args...),
 			fieldName, indent(got, 10), indent(expected.Exact, 10),
-			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1)) //nolint: gocritic
+			strings.ReplaceAll(err.Error(), "\n\t", "\n\t> "))
 		return false
 	}
 
@@ -112,7 +113,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 			tdutil.BuildTestName(args...),
 			fieldName,
 			indent(got, 16), indent(expected.Contain, 16),
-			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1)) //nolint: gocritic
+			strings.ReplaceAll(err.Error(), "\n\t", "\n\t> "))
 		return false
 	}
 
@@ -125,7 +126,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 			tdutil.BuildTestName(args...),
 			fieldName,
 			indent(got, 14), indent(expected.Match.String(), 14),
-			strings.Replace(err.Error(), "\n\t", "\n\t> ", -1)) //nolint: gocritic
+			strings.ReplaceAll(err.Error(), "\n\t", "\n\t> "))
 		return false
 	}
 
@@ -133,7 +134,8 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 }
 
 func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
-	expectedIsTestDeep bool, args ...any) bool {
+	expectedIsTestDeep bool, args ...any,
+) bool {
 	t.Helper()
 
 	if !cmpErrorStr(t, err, err.Message, expectedError.Message,
@@ -201,7 +203,8 @@ func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 }
 
 func _checkError(t *testing.T, got, expected any,
-	expectedError expectedError, args ...any) bool {
+	expectedError expectedError, args ...any,
+) bool {
 	t.Helper()
 
 	err := td.EqDeeplyError(got, expected)
@@ -247,7 +250,8 @@ func ifaceExpectedError(t *testing.T, expectedError expectedError) expectedError
 // checkError calls _checkError twice. The first time with the same
 // parameters, the second time in an any context.
 func checkError(t *testing.T, got, expected any,
-	expectedError expectedError, args ...any) bool {
+	expectedError expectedError, args ...any,
+) bool {
 	t.Helper()
 
 	if ok := _checkError(t, got, expected, expectedError, args...); !ok {
@@ -270,7 +274,8 @@ func checkError(t *testing.T, got, expected any,
 
 func checkErrorForEach(t *testing.T,
 	gotList []any, expected any,
-	expectedError expectedError, args ...any) (ret bool) {
+	expectedError expectedError, args ...any,
+) (ret bool) {
 	t.Helper()
 
 	globalTestName := tdutil.BuildTestName(args...)
@@ -314,7 +319,8 @@ func customCheckOK(t *testing.T,
 }
 
 func _checkOK(t *testing.T, got, expected any,
-	args ...any) bool {
+	args ...any,
+) bool {
 	t.Helper()
 
 	if !td.Cmp(t, got, expected, args...) {
@@ -340,13 +346,15 @@ func _checkOK(t *testing.T, got, expected any,
 // checkOK calls _checkOK twice. The first time with the same
 // parameters, the second time in an any context.
 func checkOK(t *testing.T, got, expected any,
-	args ...any) bool {
+	args ...any,
+) bool {
 	t.Helper()
 	return customCheckOK(t, _checkOK, got, expected, args...)
 }
 
 func checkOKOrPanicIfUnsafeDisabled(t *testing.T, got, expected any,
-	args ...any) bool {
+	args ...any,
+) bool {
 	t.Helper()
 
 	var ret bool
@@ -366,7 +374,8 @@ func checkOKOrPanicIfUnsafeDisabled(t *testing.T, got, expected any,
 }
 
 func checkOKForEach(t *testing.T, gotList []any, expected any,
-	args ...any) (ret bool) {
+	args ...any,
+) (ret bool) {
 	t.Helper()
 
 	globalTestName := tdutil.BuildTestName(args...)
@@ -383,7 +392,8 @@ func checkOKForEach(t *testing.T, gotList []any, expected any,
 }
 
 func equalTypes(t *testing.T, got td.TestDeep, expected any,
-	args ...any) bool {
+	args ...any,
+) bool {
 	gotType := got.TypeBehind()
 
 	expectedType, ok := expected.(reflect.Type)

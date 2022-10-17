@@ -259,7 +259,7 @@ func TestNewTestAPI(t *testing.T) {
 				}).
 				CmpStatus(200).
 				CmpHeader(containsKey).
-				CmpBody(strings.Replace( //nolint: gocritic
+				CmpBody(strings.ReplaceAll(
 					`POST!
 ---
 --BoUnDaRy%CR
@@ -269,7 +269,7 @@ Content-Type: text/plain; charset=utf-8%CR
 bingo%CR
 --BoUnDaRy--%CR
 `,
-					"%CR", "\r", -1)).
+					"%CR", "\r")).
 				Failed())
 		td.CmpEmpty(t, mockT.LogBuf())
 
