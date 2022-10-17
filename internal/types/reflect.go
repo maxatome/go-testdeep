@@ -62,15 +62,21 @@ func IsTypeOrConvertible(v reflect.Value, target reflect.Type) (bool, bool) {
 // false otherwise.
 //
 // It handles go 1.17 slice to array pointer convertibility.
+// It handles go 1.20 slice to array convertibility.
 func IsConvertible(v reflect.Value, target reflect.Type) bool {
 	if v.Type().ConvertibleTo(target) {
-		// Since go 1.17, a slice can be convertible to a pointer to an
-		// array, but Convert() may still panic if the slice length is lesser
-		// than array pointed one
+		tk := target.Kind()
 		if v.Kind() != reflect.Slice ||
-			target.Kind() != reflect.Ptr ||
-			target.Elem().Kind() != reflect.Array ||
-			v.Len() >= target.Elem().Len() {
+			(tk != reflect.Ptr && tk != reflect.Array) ||
+			// Since go 1.17, a slice can be convertible to a pointer to an
+			// array, but Convert() may still panic if the slice length is lesser
+			// than array pointed one
+			(tk == reflect.Ptr && (target.Elem().Kind() != reflect.Array ||
+				v.Len() >= target.Elem().Len())) ||
+			// Since go 1.20, a slice can also be convertible to an array, but
+			// Convert() may still panic if the slice length is lesser than
+			// array one
+			(tk == reflect.Array && v.Len() >= target.Len()) {
 			return true
 		}
 	}
