@@ -37,6 +37,8 @@ import (
 //   - pointer on any type above, plus any or any other pointer
 type Q map[string]any
 
+var _ URLValuesEncoder = Q(nil)
+
 // AddTo adds the q contents to qp.
 func (q Q) AddTo(qp url.Values) error {
 	for param, value := range q {

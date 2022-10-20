@@ -251,6 +251,21 @@ func TestNewTestAPI(t *testing.T) {
 		mockT = tdutil.NewT("test")
 		td.CmpFalse(t,
 			tdhttp.NewTestAPI(mockT, mux).
+				PostForm("/any", tdhttp.Q{"p1": "v1", "p2": "v2"}).
+				CmpStatus(200).
+				CmpHeader(containsKey).
+				CmpBody("POST!\n---\np1=v1&p2=v2").
+				CmpResponse(td.Code(func(assert *td.T, resp *http.Response) {
+					assert.Cmp(resp.StatusCode, 200)
+					assert.Cmp(resp.Header, containsKey)
+					assert.Smuggle(resp.Body, io.ReadAll, td.String("POST!\n---\np1=v1&p2=v2"))
+				})).
+				Failed())
+		td.CmpEmpty(t, mockT.LogBuf())
+
+		mockT = tdutil.NewT("test")
+		td.CmpFalse(t,
+			tdhttp.NewTestAPI(mockT, mux).
 				PostMultipartFormData("/any", &tdhttp.MultipartBody{
 					Boundary: "BoUnDaRy",
 					Parts: []*tdhttp.MultipartPart{
