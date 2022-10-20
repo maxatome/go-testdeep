@@ -13,7 +13,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"reflect"
 	"runtime"
 	"strings"
@@ -262,7 +261,7 @@ func (ta *TestAPI) Post(target string, body io.Reader, headersQueryParams ...any
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PostForm(target string, data url.Values, headersQueryParams ...any) *TestAPI {
+func (ta *TestAPI) PostForm(target string, data URLValuesEncoder, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
 	req, err := postForm(target, data, headersQueryParams...)
 	if err != nil {

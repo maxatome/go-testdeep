@@ -141,9 +141,14 @@ func post(target string, body io.Reader, headersQueryParams ...any) (*http.Reque
 	return newRequest(http.MethodPost, target, body, headersQueryParams)
 }
 
-func postForm(target string, data url.Values, headersQueryParams ...any) (*http.Request, error) {
+func postForm(target string, data URLValuesEncoder, headersQueryParams ...any) (*http.Request, error) {
+	var body string
+	if data != nil {
+		body = data.Encode()
+	}
+
 	return newRequest(
-		http.MethodPost, target, strings.NewReader(data.Encode()),
+		http.MethodPost, target, strings.NewReader(body),
 		append(headersQueryParams, "Content-Type", "application/x-www-form-urlencoded"),
 	)
 }
@@ -336,6 +341,16 @@ func Post(target string, body io.Reader, headersQueryParams ...any) *http.Reques
 	return req
 }
 
+// URLValuesEncoder is an interface [PostForm] and [TestAPI.PostForm] data
+// must implement.
+// Encode can be called to generate a "URL encoded" form such as
+// ("bar=baz&foo=quux") sorted by key.
+//
+// [url.Values] and [Q] implement this interface.
+type URLValuesEncoder interface {
+	Encode() string
+}
+
 // PostForm creates a HTTP POST with data's keys and values
 // URL-encoded as the request body. "Content-Type" header is
 // automatically set to "application/x-www-form-urlencoded". Other
@@ -351,7 +366,7 @@ func Post(target string, body io.Reader, headersQueryParams ...any) *http.Reques
 //	)
 //
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PostForm(target string, data url.Values, headersQueryParams ...any) *http.Request {
+func PostForm(target string, data URLValuesEncoder, headersQueryParams ...any) *http.Request {
 	req, err := postForm(target, data, headersQueryParams...)
 	if err != nil {
 		panic(err)

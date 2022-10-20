@@ -232,7 +232,7 @@ func TestNewRequest(tt *testing.T) {
 				"URL": td.String("/path"),
 			}))
 
-	// PostForm
+	// PostForm - url.Values
 	t.Cmp(
 		tdhttp.PostForm("/path",
 			url.Values{
@@ -253,6 +253,49 @@ func TestNewRequest(tt *testing.T) {
 				"Body": td.Smuggle(
 					io.ReadAll,
 					[]byte("param1=val1&param1=val2&param2=zip"),
+				),
+			}))
+
+	// PostForm - td.Q
+	t.Cmp(
+		tdhttp.PostForm("/path",
+			tdhttp.Q{
+				"param1": "val1",
+				"param2": "val2",
+			},
+			"Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "POST",
+				Header: http.Header{
+					"Content-Type": []string{"application/x-www-form-urlencoded"},
+					"Foo":          []string{"Bar"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+				"Body": td.Smuggle(
+					io.ReadAll,
+					[]byte("param1=val1&param2=val2"),
+				),
+			}))
+
+	// PostForm - nil data
+	t.Cmp(
+		tdhttp.PostForm("/path", nil, "Foo", "Bar"),
+		td.Struct(
+			&http.Request{
+				Method: "POST",
+				Header: http.Header{
+					"Content-Type": []string{"application/x-www-form-urlencoded"},
+					"Foo":          []string{"Bar"},
+				},
+			},
+			td.StructFields{
+				"URL": td.String("/path"),
+				"Body": td.Smuggle(
+					io.ReadAll,
+					[]byte{},
 				),
 			}))
 
