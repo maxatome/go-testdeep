@@ -21,6 +21,10 @@ import (
 
 const delimiters = " \t\r\n,}]()"
 
+func init() {
+	yyErrorVerbose = true
+}
+
 type Position struct {
 	bpos int
 	Pos  int
@@ -63,8 +67,6 @@ type ParseOpts struct {
 }
 
 func Parse(buf []byte, opts ...ParseOpts) (any, error) {
-	yyErrorVerbose = true
-
 	j := json{
 		buf: buf,
 		pos: Position{Line: 1},
