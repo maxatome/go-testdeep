@@ -75,6 +75,11 @@ type ContextConfig struct {
 	// See (*T).IgnoreUnexported method to only apply this property to some
 	// specific types.
 	IgnoreUnexported bool
+	// TestDeepInGotOK allows to accept TestDeep operator in got Cmp*
+	// parameter. By default it is forbidden and a panic occurs, because
+	// most of the time it is a mistake to compare (expected, got)
+	// instead of official (got, expected).
+	TestDeepInGotOK bool
 }
 
 // Equal returns true if both c and o are equal. Only public fields
@@ -85,7 +90,8 @@ func (c ContextConfig) Equal(o ContextConfig) bool {
 		c.FailureIsFatal == o.FailureIsFatal &&
 		c.UseEqual == o.UseEqual &&
 		c.BeLax == o.BeLax &&
-		c.IgnoreUnexported == o.IgnoreUnexported
+		c.IgnoreUnexported == o.IgnoreUnexported &&
+		c.TestDeepInGotOK == o.TestDeepInGotOK
 }
 
 // OriginalPath returns the current path when the [ContextConfig] has
@@ -126,6 +132,7 @@ var DefaultContextConfig = ContextConfig{
 	UseEqual:         false,
 	BeLax:            false,
 	IgnoreUnexported: false,
+	TestDeepInGotOK:  false,
 }
 
 func (c *ContextConfig) sanitize() {
@@ -163,6 +170,7 @@ func newContextWithConfig(tb testing.TB, config ContextConfig) (ctx ctxerr.Conte
 		UseEqual:         config.UseEqual,
 		BeLax:            config.BeLax,
 		IgnoreUnexported: config.IgnoreUnexported,
+		TestDeepInGotOK:  config.TestDeepInGotOK,
 	}
 
 	ctx.InitErrors()
@@ -177,5 +185,6 @@ func newBooleanContext() ctxerr.Context {
 		UseEqual:         DefaultContextConfig.UseEqual,
 		BeLax:            DefaultContextConfig.BeLax,
 		IgnoreUnexported: DefaultContextConfig.IgnoreUnexported,
+		TestDeepInGotOK:  DefaultContextConfig.TestDeepInGotOK,
 	}
 }

@@ -125,10 +125,12 @@ func resolveAnchor(ctx ctxerr.Context, v reflect.Value) (reflect.Value, bool) {
 }
 
 func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxerr.Error) {
-	// got must not implement testDeeper
-	if got.IsValid() && got.Type().Implements(testDeeper) {
-		panic(color.Bad("Found a TestDeep operator in got param, " +
-			"can only use it in expected one!"))
+	if !ctx.TestDeepInGotOK {
+		// got must not implement testDeeper
+		if got.IsValid() && got.Type().Implements(testDeeper) {
+			panic(color.Bad("Found a TestDeep operator in got param, " +
+				"can only use it in expected one!"))
+		}
 	}
 
 	// Try to see if a TestDeep operator is anchored in expected

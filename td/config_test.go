@@ -29,11 +29,12 @@ func TestContext(t *testing.T) {
 		}
 	}
 
-	nctx = newContext(Require(t).UseEqual())
+	nctx = newContext(Require(t).UseEqual().TestDeepInGotOK())
 	_, ok := nctx.OriginalTB.(*T)
 	test.IsTrue(t, ok)
 	test.IsTrue(t, nctx.FailureIsFatal)
 	test.IsTrue(t, nctx.UseEqual)
+	test.IsTrue(t, nctx.TestDeepInGotOK)
 	test.EqualStr(t, nctx.Path.String(), "DATA")
 
 	nctx = newBooleanContext()

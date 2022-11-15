@@ -546,6 +546,28 @@ func TestIgnoreUnexported(tt *testing.T) {
 		"IgnoreUnexported expects type int be a struct, not a int (@0)")
 }
 
+func TestTestDeepInGotOK(tt *testing.T) {
+	ttt := test.NewTestingTB(tt.Name())
+
+	var t *td.T
+	cmp := func() bool { return t.Cmp(td.Ignore(), td.Ignore()) }
+
+	// Using default config
+	t = td.NewT(ttt)
+	test.CheckPanic(tt, func() { cmp() },
+		"Found a TestDeep operator in got param, can only use it in expected one!")
+
+	t = td.NewT(ttt).TestDeepInGotOK()
+	test.IsTrue(tt, cmp())
+
+	t = t.TestDeepInGotOK(false)
+	test.CheckPanic(tt, func() { cmp() },
+		"Found a TestDeep operator in got param, can only use it in expected one!")
+
+	t = t.TestDeepInGotOK(true)
+	test.IsTrue(tt, cmp())
+}
+
 func TestLogTrace(tt *testing.T) {
 	ttt := test.NewTestingTB(tt.Name())
 

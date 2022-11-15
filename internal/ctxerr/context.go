@@ -44,6 +44,8 @@ type Context struct {
 	BeLax bool
 	// See ContextConfig.IgnoreUnexported for details.
 	IgnoreUnexported bool
+	// See ContextConfig.TestDeepInGotOK for details.
+	TestDeepInGotOK bool
 }
 
 // InitErrors initializes [Context] *Errors slice, if MaxErrors < 0 or
