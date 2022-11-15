@@ -436,6 +436,20 @@ func (t *T) IgnoreUnexported(types ...any) *T {
 	return t
 }
 
+// TestDeepInGotOK tells go-testdeep to not panic when a [TestDeep]
+// operator is found on got side. By default it is forbidden because
+// most of the time it is a mistake to compare (expected, got) instead
+// of official (got, expected).
+//
+// It returns a new instance of [*T] so does not alter the original t.
+//
+// Note that t.TestDeepInGotOK() acts as t.TestDeepInGotOK(true).
+func (t *T) TestDeepInGotOK(enable ...bool) *T {
+	new := *t
+	new.Config.TestDeepInGotOK = len(enable) == 0 || enable[0]
+	return &new
+}
+
 // Cmp is mostly a shortcut for:
 //
 //	Cmp(t.TB, got, expected, args...)

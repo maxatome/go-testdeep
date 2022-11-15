@@ -678,6 +678,21 @@ func TestEqualPanic(t *testing.T) {
 			td.EqDeeply(td.Ignore(), td.Ignore())
 		},
 		"Found a TestDeep operator in got param, can only use it in expected one!")
+
+	type tdInside struct {
+		Operator td.TestDeep
+	}
+	test.CheckPanic(t,
+		func() {
+			td.EqDeeply(&tdInside{}, &tdInside{})
+		},
+		"Found a TestDeep operator in got param, can only use it in expected one!")
+
+	t.Cleanup(func() { td.DefaultContextConfig.TestDeepInGotOK = false })
+	td.DefaultContextConfig.TestDeepInGotOK = true
+
+	test.IsTrue(t, td.EqDeeply(td.Ignore(), td.Ignore()))
+	test.IsTrue(t, td.EqDeeply(&tdInside{}, &tdInside{}))
 }
 
 type AssignableType1 struct{ x, Ignore int }
