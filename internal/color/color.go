@@ -100,6 +100,16 @@ func SaveState(on ...bool) func() {
 	}
 }
 
+// On returns true if coloring feature is enabled.
+func On() bool {
+	switch os.Getenv(EnvColor) {
+	case "on", "":
+		return true
+	default: // "off" or any other value
+		return false
+	}
+}
+
 var colors = map[string]byte{
 	"black":   '0',
 	"red":     '1',
@@ -119,15 +129,12 @@ var colors = map[string]byte{
 // If coloring is disabled, returns "", "", "".
 func FromEnv(env, defaultColor string) (string, string, string) {
 	var color string
-	switch os.Getenv(EnvColor) {
-	case "on", "":
+	if On() {
 		if curColor := os.Getenv(env); curColor != "" {
 			color = curColor
 		} else {
 			color = defaultColor
 		}
-	default: // "off" or any other value
-		color = ""
 	}
 
 	if color == "" {
