@@ -130,7 +130,7 @@ func formatError(t TestingT, isFatal bool, err *ctxerr.Error, args ...any) {
 	color.AppendTestNameOff(&buf)
 	buf.WriteString("\n")
 
-	err.Append(&buf, "")
+	err.Append(&buf, "", true)
 
 	// Stask trace
 	if s := stripTrace(trace.Retrieve(0, "testing.tRunner")); s.IsRelevant() {

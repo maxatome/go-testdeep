@@ -71,12 +71,27 @@ func IndentString(str, indent string) string {
 }
 
 // IndentStringIn indents str lines (from 2nd one = 1st line is not
-// indented) by indent and write it to w. Before each end of line,
-// colOff is inserted, and after each indent on new line, colOn is
-// inserted.
-func IndentStringIn(w io.Writer, str, indent, colOn, colOff string) {
-	repl := strings.NewReplacer("\n", colOff+"\n"+indent+colOn)
+// indented) by indent and write it to w.
+func IndentStringIn(w io.Writer, str, indent string) {
+	repl := strings.NewReplacer("\n", "\n"+indent)
 	repl.WriteString(w, str) //nolint: errcheck
+}
+
+// IndentColorizeStringIn indents str lines (from 2nd one = 1st line
+// is not indented) by indent and write it to w. Before each end of
+// line, colOff is inserted, and after each indent on new line, colOn
+// is inserted.
+func IndentColorizeStringIn(w io.Writer, str, indent, colOn, colOff string) {
+	if str != "" {
+		if colOn == "" && colOff == "" {
+			IndentStringIn(w, str, indent)
+			return
+		}
+		repl := strings.NewReplacer("\n", colOff+"\n"+indent+colOn)
+		io.WriteString(w, colOn)  //nolint: errcheck
+		repl.WriteString(w, str)  //nolint: errcheck
+		io.WriteString(w, colOff) //nolint: errcheck
+	}
 }
 
 // SliceToString stringifies items slice into buf then returns buf.
