@@ -76,6 +76,14 @@ func TestIndentString(t *testing.T) {
 		{ParamGot: "pipo\nbingo\nzip", Expected: "pipo\n-bingo\n-zip"},
 	} {
 		test.EqualStr(t, util.IndentString(curTest.ParamGot, "-"), curTest.Expected)
+
+		var buf bytes.Buffer
+		util.IndentStringIn(&buf, curTest.ParamGot, "-")
+		test.EqualStr(t, buf.String(), curTest.Expected)
+
+		buf.Reset()
+		util.IndentColorizeStringIn(&buf, curTest.ParamGot, "-", "", "")
+		test.EqualStr(t, buf.String(), curTest.Expected)
 	}
 
 	for _, curTest := range []struct {
@@ -83,11 +91,11 @@ func TestIndentString(t *testing.T) {
 		Expected string
 	}{
 		{ParamGot: "", Expected: ""},
-		{ParamGot: "pipo", Expected: "pipo"},
-		{ParamGot: "pipo\nbingo\nzip", Expected: "pipo>>\n-<<bingo>>\n-<<zip"},
+		{ParamGot: "pipo", Expected: "<<pipo>>"},
+		{ParamGot: "pipo\nbingo\nzip", Expected: "<<pipo>>\n-<<bingo>>\n-<<zip>>"},
 	} {
 		var buf bytes.Buffer
-		util.IndentStringIn(&buf, curTest.ParamGot, "-", "<<", ">>")
+		util.IndentColorizeStringIn(&buf, curTest.ParamGot, "-", "<<", ">>")
 		test.EqualStr(t, buf.String(), curTest.Expected)
 	}
 }

@@ -16,7 +16,7 @@ import (
 // ErrorSummary is the interface used to render error summaries. See
 // Error.Summary.
 type ErrorSummary interface {
-	AppendSummary(buf *strings.Builder, prefix string)
+	AppendSummary(buf *strings.Builder, prefix string, colorized bool)
 }
 
 // ErrorSummaryItem implements the [ErrorSummary] interface and allows
@@ -39,26 +39,25 @@ type ErrorSummaryItem struct {
 var _ ErrorSummary = ErrorSummaryItem{}
 
 // AppendSummary implements the [ErrorSummary] interface.
-func (s ErrorSummaryItem) AppendSummary(buf *strings.Builder, prefix string) {
-	color.Init()
-
+func (s ErrorSummaryItem) AppendSummary(buf *strings.Builder, prefix string, colorized bool) {
 	buf.WriteString(prefix)
-	buf.WriteString(color.BadOnBold)
+
+	badOn, badOff := "", ""
+	if colorized {
+		color.Init()
+		badOn, badOff = color.BadOn, color.BadOff
+		buf.WriteString(color.BadOnBold)
+	}
 	buf.WriteString(s.Label)
 	buf.WriteString(": ")
 
-	buf.WriteString(color.BadOn)
-	util.IndentStringIn(buf, s.Value, prefix+strings.Repeat(" ", len(s.Label)+2), color.BadOn, color.BadOff)
+	util.IndentColorizeStringIn(buf, s.Value, prefix+strings.Repeat(" ", len(s.Label)+2), badOn, badOff)
 
 	if s.Explanation != "" {
-		buf.WriteString(color.BadOff)
 		buf.WriteByte('\n')
 		buf.WriteString(prefix)
-		buf.WriteString(color.BadOn)
-		util.IndentStringIn(buf, s.Explanation, prefix, color.BadOn, color.BadOff)
+		util.IndentColorizeStringIn(buf, s.Explanation, prefix, badOn, badOff)
 	}
-
-	buf.WriteString(color.BadOff)
 }
 
 // ErrorSummaryItems implements the [ErrorSummary] interface and
@@ -71,7 +70,7 @@ type ErrorSummaryItems []ErrorSummaryItem
 var _ ErrorSummary = (ErrorSummaryItems)(nil)
 
 // AppendSummary implements [ErrorSummary] interface.
-func (s ErrorSummaryItems) AppendSummary(buf *strings.Builder, prefix string) {
+func (s ErrorSummaryItems) AppendSummary(buf *strings.Builder, prefix string, colorized bool) {
 	maxLen := 0
 	for _, item := range s {
 		if len(item.Label) > maxLen {
@@ -86,7 +85,7 @@ func (s ErrorSummaryItems) AppendSummary(buf *strings.Builder, prefix string) {
 		if len(item.Label) < maxLen {
 			item.Label = strings.Repeat(" ", maxLen-len(item.Label)) + item.Label
 		}
-		item.AppendSummary(buf, prefix)
+		item.AppendSummary(buf, prefix, colorized)
 	}
 }
 
@@ -94,13 +93,15 @@ type errorSummaryString string
 
 var _ ErrorSummary = errorSummaryString("")
 
-func (s errorSummaryString) AppendSummary(buf *strings.Builder, prefix string) {
-	color.Init()
+func (s errorSummaryString) AppendSummary(buf *strings.Builder, prefix string, colorized bool) {
+	badOn, badOff := "", ""
+	if colorized {
+		color.Init()
+		badOn, badOff = color.BadOn, color.BadOff
+	}
 
 	buf.WriteString(prefix)
-	buf.WriteString(color.BadOn)
-	util.IndentStringIn(buf, string(s), prefix, color.BadOn, color.BadOff)
-	buf.WriteString(color.BadOff)
+	util.IndentColorizeStringIn(buf, string(s), prefix, badOn, badOff)
 }
 
 // NewSummary returns an ErrorSummary composed by the simple string s.

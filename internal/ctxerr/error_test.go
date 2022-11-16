@@ -20,6 +20,13 @@ import (
 func TestError(t *testing.T) {
 	defer color.SaveState()()
 
+	checkWithoutColors := func(err *ctxerr.Error) {
+		t.Helper()
+		test.EqualStr(t, err.ErrorWithoutColors(), err.Error())
+		defer color.SaveState(true)()
+		test.IsTrue(t, err.ErrorWithoutColors() != err.Error())
+	}
+
 	err := ctxerr.Error{
 		Context: ctxerr.Context{
 			Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field"),
@@ -32,6 +39,7 @@ func TestError(t *testing.T) {
 		`DATA[12].Field: error message
 	     got: 1
 	expected: 2`)
+	checkWithoutColors(&err)
 	test.EqualStr(t, err.GotString(), "1")
 	test.EqualStr(t, err.ExpectedString(), "2")
 	test.EqualStr(t, err.SummaryString(), "")
@@ -41,18 +49,21 @@ func TestError(t *testing.T) {
 		`Value of DATA[12].Field differ
 	     got: 1
 	expected: 2`)
+	checkWithoutColors(&err)
 
 	err.Message = "Path at end: %%"
 	test.EqualStr(t, err.Error(),
 		`Path at end: DATA[12].Field
 	     got: 1
 	expected: 2`)
+	checkWithoutColors(&err)
 
 	err.Message = "%% <- the path!"
 	test.EqualStr(t, err.Error(),
 		`DATA[12].Field <- the path!
 	     got: 1
 	expected: 2`)
+	checkWithoutColors(&err)
 
 	err = ctxerr.Error{
 		Context: ctxerr.Context{
@@ -72,6 +83,7 @@ func TestError(t *testing.T) {
 	     got: 1
 	expected: 2
 [under operator Operator at file.go:23]`)
+	checkWithoutColors(&err)
 
 	err = ctxerr.Error{
 		Context: ctxerr.Context{
@@ -105,6 +117,7 @@ Originates from following error:
 		42
 	[under operator SubOperator at file2.go:236]
 [under operator Operator at file.go:23]`)
+	checkWithoutColors(&err)
 	test.EqualStr(t, err.GotString(), "")
 	test.EqualStr(t, err.ExpectedString(), "")
 	test.EqualStr(t, err.SummaryString(), "666")
@@ -156,6 +169,7 @@ Originates from following error:
 DATA[13].Field: error message
 	888
 [under operator Operator at file.go:23]`)
+	checkWithoutColors(&err)
 
 	err = ctxerr.Error{
 		Context: ctxerr.Context{Path: ctxerr.NewPath("DATA").AddArrayIndex(12).AddField("Field")},
@@ -203,6 +217,7 @@ Originates from following error:
 DATA[13].Field: error message
 	888
 [under operator Operator at file.go:24]`)
+	checkWithoutColors(&err)
 
 	//
 	// ErrTooManyErrors
