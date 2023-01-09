@@ -23,7 +23,7 @@ func timeParse(t *testing.T, s string) time.Time {
 	return dt
 }
 
-func TestAnchor(tt *testing.T) {
+func TestT_Anchor(tt *testing.T) {
 	ttt := test.NewTestingTB(tt.Name())
 	t := td.NewT(ttt)
 	type MyStruct struct {
@@ -140,7 +140,7 @@ func TestAddAnchorableStructType(tt *testing.T) {
 		"usage: AddAnchorableStructType(func (nextAnchor int) STRUCT_TYPE)")
 }
 
-func TestAnchorsPersist(tt *testing.T) {
+func TestT_AnchorsPersist(tt *testing.T) {
 	ttt := test.NewTestingTB(tt.Name())
 
 	t1 := td.NewT(ttt)
