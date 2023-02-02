@@ -212,20 +212,16 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 			break
 		}
 
-		var bt tdBetweenTime
+		// fmt.Printf("=== %s %s %t %t\n", b.expectedMin.Type().String(), types.Time.String(), ok, convertible)
+
+		bt := tdBetweenTime{
+			tdBetween:    *b,
+			expectedType: b.expectedMin.Type(),
+			mustConvert:  convertible,
+		}
 		if convertible {
-			bt = tdBetweenTime{
-				tdBetween:    *b,
-				expectedType: b.expectedMin.Type(),
-				mustConvert:  true,
-			}
 			bt.expectedMin = b.expectedMin.Convert(types.Time)
 			bt.expectedMax = b.expectedMax.Convert(types.Time)
-		} else {
-			bt = tdBetweenTime{
-				tdBetween:    *b,
-				expectedType: types.Time,
-			}
 		}
 
 		if bt.expectedMin.Interface().(time.Time).
@@ -570,17 +566,16 @@ func (b *tdBetween) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	if got.Type() != b.expectedMin.Type() {
-		if ctx.BeLax && types.IsConvertible(b.expectedMin, got.Type()) {
-			nb := *b
-			nb.expectedMin = b.expectedMin.Convert(got.Type())
-			nb.expectedMax = b.expectedMax.Convert(got.Type())
-			b = &nb
-		} else {
+		if !ctx.BeLax || !types.IsConvertible(b.expectedMin, got.Type()) {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
 			return ctx.CollectError(ctxerr.TypeMismatch(got.Type(), b.expectedMin.Type()))
 		}
+		nb := *b
+		nb.expectedMin = b.expectedMin.Convert(got.Type())
+		nb.expectedMax = b.expectedMax.Convert(got.Type())
+		b = &nb
 	}
 
 	var ok bool
@@ -664,14 +659,13 @@ func (b *tdBetweenTime) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	// built, there is never an error
 
 	if got.Type() != b.expectedType {
-		if ctx.BeLax && types.IsConvertible(got, b.expectedType) {
-			got = got.Convert(b.expectedType)
-		} else {
+		if !ctx.BeLax || !types.IsConvertible(got, b.expectedType) {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
 			return ctx.CollectError(ctxerr.TypeMismatch(got.Type(), b.expectedType))
 		}
+		got = got.Convert(b.expectedType)
 	}
 
 	cmpGot, err := getTime(ctx, got, b.mustConvert)

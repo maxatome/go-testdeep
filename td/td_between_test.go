@@ -366,6 +366,8 @@ func TestN(t *testing.T) {
 }
 
 func TestLGt(t *testing.T) {
+	type MyTime time.Time
+
 	checkOK(t, 12, td.Gt(11))
 	checkOK(t, 12, td.Gte(12))
 	checkOK(t, 12, td.Lt(13))
@@ -448,6 +450,8 @@ func TestLGt(t *testing.T) {
 	expectedDate := gotDate
 	checkOK(t, gotDate, td.Gte(expectedDate))
 	checkOK(t, gotDate, td.Lte(expectedDate))
+	checkOK(t, gotDate, td.Lax(td.Gte(MyTime(expectedDate))))
+	checkOK(t, gotDate, td.Lax(td.Lte(MyTime(expectedDate))))
 
 	checkError(t, gotDate, td.Gt(expectedDate),
 		expectedError{
@@ -550,6 +554,11 @@ func TestBetweenTime(t *testing.T) {
 		td.Lax(td.Between(
 			MyTime(now.Add(-time.Second)),
 			2*time.Second)))
+	checkOK(t, now,
+		td.Lax(td.Between(
+			MyTime(now.Add(-time.Second)),
+			2*time.Second,
+			td.BoundsOutOut)))
 
 	date := time.Date(2018, time.March, 4, 0, 0, 0, 0, time.UTC)
 	checkError(t, date,
@@ -561,6 +570,18 @@ func TestBetweenTime(t *testing.T) {
 			Expected: mustBe("(time.Time) 2018-03-03 23:59:58 +0000 UTC" +
 				" ≤ got ≤ " +
 				"(time.Time) 2018-03-03 23:59:59 +0000 UTC"),
+		})
+
+	checkError(t, MyTime(date),
+		td.Between(MyTime(date.Add(-2*time.Second)), MyTime(date.Add(-time.Second))),
+		expectedError{
+			Message: mustBe("values differ"),
+			Path:    mustBe("DATA"),
+			Got:     mustContain("(td_test.MyTime) "),
+			Expected: mustBe(
+				"(time.Time) 2018-03-03 23:59:58 +0000 UTC" +
+					" ≤ got ≤ " +
+					"(time.Time) 2018-03-03 23:59:59 +0000 UTC"),
 		})
 
 	checkError(t, date,
