@@ -212,8 +212,6 @@ func (b *tdBetween) initBetween(usage string) TestDeep {
 			break
 		}
 
-		// fmt.Printf("=== %s %s %t %t\n", b.expectedMin.Type().String(), types.Time.String(), ok, convertible)
-
 		bt := tdBetweenTime{
 			tdBetween:    *b,
 			expectedType: b.expectedMin.Type(),
