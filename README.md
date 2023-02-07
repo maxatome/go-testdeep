@@ -131,7 +131,7 @@ func TestMyApi(t *testing.T) {
   "created_at": "$createdAt",    // set by the API/DB
 }`,
       td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ⑤
-      td.Tag("created_at", td.All(                      // ← ⑥
+      td.Tag("createdAt", td.All(                       // ← ⑥
         td.HasSuffix("Z"),                              // ← ⑦
         td.Smuggle(func(s string) (time.Time, error) {  // ← ⑧
           return time.Parse(time.RFC3339Nano, s)
