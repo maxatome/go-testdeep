@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2021, Maxime Soulé
+// Copyright (c) 2018-2023, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -19,6 +19,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 // SmuggledGot can be returned by a [Smuggle] function to name the
@@ -56,6 +57,7 @@ type tdSmuggle struct {
 	tdSmugglerBase
 	function reflect.Value
 	argType  reflect.Type
+	str      string
 }
 
 var _ TestDeep = &tdSmuggle{}
@@ -640,11 +642,13 @@ func Smuggle(fn, expectedValue any) TestDeep {
 
 		default:
 			vfn = getCaster(rfn)
+			s.str = "type:" + rfn.String()
 		}
 
 	case string:
 		if rfn == "" {
 			vfn = getCaster(reflect.TypeOf(fn))
+			s.str = "type:string"
 			break
 		}
 		var err error
@@ -653,11 +657,13 @@ func Smuggle(fn, expectedValue any) TestDeep {
 			s.err = ctxerr.OpBad("Smuggle", "Smuggle%s: %s", usage, err)
 			return &s
 		}
+		s.str = strconv.Quote(rfn)
 
 	default:
 		vfn = reflect.ValueOf(fn)
 		switch vfn.Kind() {
 		case reflect.Func:
+			s.str = vfn.Type().String()
 			// nothing to check
 
 		case reflect.Invalid, reflect.Interface:
@@ -666,7 +672,9 @@ func Smuggle(fn, expectedValue any) TestDeep {
 			return &s
 
 		default:
-			vfn = getCaster(vfn.Type())
+			typ := vfn.Type()
+			vfn = getCaster(typ)
+			s.str = "type:" + typ.String()
 		}
 	}
 
@@ -823,7 +831,7 @@ func (s *tdSmuggle) String() string {
 	if s.err != nil {
 		return s.stringError()
 	}
-	return "Smuggle(" + s.function.Type().String() + ")"
+	return "Smuggle(" + s.str + ", " + util.ToString(s.expectedValue) + ")"
 }
 
 func (s *tdSmuggle) TypeBehind() reflect.Type {

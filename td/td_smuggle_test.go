@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2021, Maxime Soulé
+// Copyright (c) 2018-2023, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -545,20 +545,36 @@ func TestSmuggle(t *testing.T) {
 	// String
 	test.EqualStr(t,
 		td.Smuggle(func(n int) int { return 0 }, 12).String(),
-		"Smuggle(func(int) int)")
+		"Smuggle(func(int) int, 12)")
 
 	test.EqualStr(t,
 		td.Smuggle(func(n int) (int, bool) { return 23, false }, 12).String(),
-		"Smuggle(func(int) (int, bool))")
+		"Smuggle(func(int) (int, bool), 12)")
 
 	test.EqualStr(t,
 		td.Smuggle(func(n int) (int, error) { return 23, nil }, 12).String(),
-		"Smuggle(func(int) (int, error))")
+		"Smuggle(func(int) (int, error), 12)")
 
 	test.EqualStr(t,
 		td.Smuggle(func(n int) (int, MyBool, MyString) { return 23, false, "" }, 12).
 			String(),
-		"Smuggle(func(int) (int, td_test.MyBool, td_test.MyString))")
+		"Smuggle(func(int) (int, td_test.MyBool, td_test.MyString), 12)")
+
+	test.EqualStr(t,
+		td.Smuggle(reflect.TypeOf(42), 23).String(),
+		"Smuggle(type:int, 23)")
+
+	test.EqualStr(t,
+		td.Smuggle(666, 23).String(),
+		"Smuggle(type:int, 23)")
+
+	test.EqualStr(t,
+		td.Smuggle("", 23).String(),
+		"Smuggle(type:string, 23)")
+
+	test.EqualStr(t,
+		td.Smuggle("name", "bob").String(),
+		`Smuggle("name", "bob")`)
 
 	// Erroneous op
 	test.EqualStr(t,
