@@ -1,4 +1,4 @@
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020-2023, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -95,7 +95,7 @@ var _ TestDeep = &tdJSONPointer{}
 // TypeBehind method always returns nil as the expected type cannot be
 // guessed from a JSON pointer.
 //
-// See also [JSON], [SubJSONOf], [SuperJSONOf] and [Smuggle].
+// See also [JSON], [SubJSONOf], [SuperJSONOf], [Smuggle] and [Flatten].
 //
 // [RFC 6901]: https://tools.ietf.org/html/rfc6901
 func JSONPointer(ptr string, expectedValue any) TestDeep {
