@@ -619,7 +619,7 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 // fn. For the case where fn is a fields-path, it is always
 // any, as the type can not be known in advance.
 //
-// See also [Code] and [JSONPointer].
+// See also [Code], [JSONPointer] and [Flatten].
 //
 // [json.RawMessage]: https://pkg.go.dev/encoding/json#RawMessage
 func Smuggle(fn, expectedValue any) TestDeep {

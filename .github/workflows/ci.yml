@@ -63,6 +63,7 @@ jobs:
         continue-on-error: ${{ matrix.go-version == 'tip' }}
         run: |
           go version
+          go env
           if [ ${{ matrix.full-tests }} = true ]; then
               cover_flags="-covermode=atomic -coverprofile=coverage"
               GO_TEST_FLAGS="$cover_flags.out"

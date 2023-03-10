@@ -1,4 +1,4 @@
-// Copyright (c) 2022, Maxime Soulé
+// Copyright (c) 2022-2023, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -190,7 +190,7 @@ var _ TestDeep = &tdGrep{}
 //	td.Cmp(t, got, td.Grep(td.Gt(0), td.Nil()))     // succeeds
 //	td.Cmp(t, got, td.Grep(td.Gt(0), []int{}))      // fails
 //
-// See also [First] and [Last].
+// See also [First], [Last] and [Flatten].
 func Grep(filter, expectedValue any) TestDeep {
 	g := tdGrep{}
 	g.initGrepBase(filter, expectedValue)
