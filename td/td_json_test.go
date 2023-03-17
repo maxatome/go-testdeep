@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2022, Maxime Soulé
+// Copyright (c) 2019-2023, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -199,6 +199,13 @@ func TestJSON(t *testing.T) {
 			td.Tag("name", td.Re(`^Bob`))))
 
 	//
+	// json.RawMessage
+	checkOK(t, got,
+		td.JSON(json.RawMessage(`{"name":"$name","age":$1,"gender":"male"}`),
+			td.Tag("age", td.Between(40, 45)),
+			td.Tag("name", td.Re(`^Bob`))))
+
+	//
 	// nil++
 	checkOK(t, nil, td.JSON(`$1`, nil))
 	checkOK(t, (*int)(nil), td.JSON(`$1`, td.Nil()))
@@ -297,7 +304,7 @@ func TestJSON(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...), but received int as 1st parameter"),
+			Summary: mustBe("usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|json.RawMessage|io.Reader, ...), but received int as 1st parameter"),
 		})
 
 	checkError(t, "never tested",
