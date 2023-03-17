@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2022, Maxime Soulé
+// Copyright (c) 2019-2023, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -108,6 +108,9 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 	case []byte:
 		b = data
 
+	case ejson.RawMessage:
+		b = data
+
 	case io.Reader:
 		b, err = io.ReadAll(data)
 		if err != nil {
@@ -116,7 +119,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 
 	default:
 		return nil, ctxerr.OpBadUsage(
-			u.Func, "(STRING_JSON|STRING_FILENAME|[]byte|io.Reader, ...)",
+			u.Func, "(STRING_JSON|STRING_FILENAME|[]byte|json.RawMessage|io.Reader, ...)",
 			expectedJSON, 1, false)
 	}
 
@@ -455,6 +458,7 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 //   - string containing a JSON filename, ending with ".json" (its
 //     content is [os.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
+//   - [encoding/json.RawMessage] containing JSON data
 //   - [io.Reader] stream containing JSON data (is [io.ReadAll]
 //     before unmarshaling)
 //
@@ -748,6 +752,7 @@ var _ TestDeep = &tdMapJSON{}
 //   - string containing a JSON filename, ending with ".json" (its
 //     content is [os.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
+//   - [encoding/json.RawMessage] containing JSON data
 //   - [io.Reader] stream containing JSON data (is [io.ReadAll] before
 //     unmarshaling)
 //
@@ -1012,6 +1017,7 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 //   - string containing a JSON filename, ending with ".json" (its
 //     content is [os.ReadFile] before unmarshaling)
 //   - []byte containing JSON data
+//   - [encoding/json.RawMessage] containing JSON data
 //   - [io.Reader] stream containing JSON data (is [io.ReadAll] before
 //     unmarshaling)
 //
