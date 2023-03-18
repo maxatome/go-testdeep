@@ -506,7 +506,8 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []any, map[string]any or simply nil).
 //
-// Note expectedJSON can be a []byte, a JSON filename or a [io.Reader]:
+// Note expectedJSON can be a []byte, an [encoding/json.RawMessage], a
+// JSON filename or a [io.Reader]:
 //
 //	td.Cmp(t, gotValue, td.JSON("file.json", td.Between(12, 34)))
 //	td.Cmp(t, gotValue, td.JSON([]byte(`[1, $1, 3]`), td.Between(12, 34)))
@@ -659,6 +660,19 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 //
 // As for placeholders, there is no differences between $^NotZero and
 // "$^NotZero".
+//
+// Tip: when an [io.Reader] is expected to contain JSON data, it
+// cannot be tested directly, but using the [Smuggle] operator simply
+// solves the problem:
+//
+//	var body io.Reader
+//	// …
+//	td.Cmp(t, body, td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
+//	// or equally
+//	td.Cmp(t, body, td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
+//
+// [Smuggle] reads from body into an [encoding/json.RawMessage] then
+// this buffer is unmarshaled by JSON operator before the comparison.
 //
 // TypeBehind method returns the [reflect.Type] of the expectedJSON
 // once JSON unmarshaled. So it can be bool, string, float64, []any,
@@ -818,7 +832,8 @@ var _ TestDeep = &tdMapJSON{}
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []any, map[string]any or simply nil).
 //
-// Note expectedJSON can be a []byte, JSON filename or [io.Reader]:
+// Note expectedJSON can be a []byte, an [encoding/json.RawMessage], a
+// JSON filename or a [io.Reader]:
 //
 //	td.Cmp(t, gotValue, td.SubJSONOf("file.json", td.Between(12, 34)))
 //	td.Cmp(t, gotValue, td.SubJSONOf([]byte(`[1, $1, 3]`), td.Between(12, 34)))
@@ -973,6 +988,19 @@ var _ TestDeep = &tdMapJSON{}
 // As for placeholders, there is no differences between $^NotZero and
 // "$^NotZero".
 //
+// Tip: when an [io.Reader] is expected to contain JSON data, it
+// cannot be tested directly, but using the [Smuggle] operator simply
+// solves the problem:
+//
+//	var body io.Reader
+//	// …
+//	td.Cmp(t, body, td.Smuggle(json.RawMessage{}, td.SubJSONOf(`{"foo":1,"bar":2}`)))
+//	// or equally
+//	td.Cmp(t, body, td.Smuggle(json.RawMessage(nil), td.SubJSONOf(`{"foo":1,"bar":2}`)))
+//
+// [Smuggle] reads from body into an [encoding/json.RawMessage] then
+// this buffer is unmarshaled by SubJSONOf operator before the comparison.
+//
 // TypeBehind method returns the map[string]any type.
 //
 // See also [JSON], [JSONPointer] and [SuperJSONOf].
@@ -1085,7 +1113,8 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 // as is, in its freshly unmarshaled JSON form (so as bool, float64,
 // string, []any, map[string]any or simply nil).
 //
-// Note expectedJSON can be a []byte, JSON filename or [io.Reader]:
+// Note expectedJSON can be a []byte, an [encoding/json.RawMessage], a
+// JSON filename or a [io.Reader]:
 //
 //	td.Cmp(t, gotValue, td.SuperJSONOf("file.json", td.Between(12, 34)))
 //	td.Cmp(t, gotValue, td.SuperJSONOf([]byte(`[1, $1, 3]`), td.Between(12, 34)))
@@ -1238,6 +1267,19 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 //
 // As for placeholders, there is no differences between $^NotZero and
 // "$^NotZero".
+//
+// Tip: when an [io.Reader] is expected to contain JSON data, it
+// cannot be tested directly, but using the [Smuggle] operator simply
+// solves the problem:
+//
+//	var body io.Reader
+//	// …
+//	td.Cmp(t, body, td.Smuggle(json.RawMessage{}, td.SuperJSONOf(`{"foo":1}`)))
+//	// or equally
+//	td.Cmp(t, body, td.Smuggle(json.RawMessage(nil), td.SuperJSONOf(`{"foo":1}`)))
+//
+// [Smuggle] reads from body into an [encoding/json.RawMessage] then
+// this buffer is unmarshaled by SuperJSONOf operator before the comparison.
 //
 // TypeBehind method returns the map[string]any type.
 //

@@ -1,4 +1,4 @@
-// Copyright (c) 2019, Maxime Soulé
+// Copyright (c) 2019-2023, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -256,7 +256,7 @@ func TestNewRequest(tt *testing.T) {
 				),
 			}))
 
-	// PostForm - td.Q
+	// PostForm - tdhttp.Q
 	t.Cmp(
 		tdhttp.PostForm("/path",
 			tdhttp.Q{
