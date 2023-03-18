@@ -4,8 +4,8 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-//go:build go1.19
-// +build go1.19
+//go:build go1.18
+// +build go1.18
 
 package td
 
