@@ -154,10 +154,12 @@ while (readdir $dh)
                 if ($pkg =~ /^\s*(\w+)\s+\"([^"]+)/)
                 {
                     $imports{$1} = $2;
+                    $imports{$2} = $2;
                 }
                 elsif ($pkg =~ m,^\s*"((?:.+/)?([^/"]+)),)
                 {
                     $imports{$2} = $1;
+                    $imports{$1} = $1;
                 }
                 else
                 {
@@ -1095,7 +1097,7 @@ sub process_doc
                    qq![`$inner`]($URL_GODOC/td#$1)!;
                }
                # imported package
-               elsif ($inner =~ /^\*?([a-z]\w*)(?:\.([A-Z]\w*(?:\.[A-Z]\w*)?))?\z/
+               elsif ($inner =~ m,^\*?([a-z][\w/]*)(?:\.([A-Z]\w*(?:\.[A-Z]\w*)?))?\z,
                       and my $full = $op->{imports}{$1})
                {
                    qq![`$inner`]($URL_GODEV/$full! . ($2 ? "#$2" : '') . ')';
