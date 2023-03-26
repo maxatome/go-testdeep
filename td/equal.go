@@ -55,7 +55,9 @@ func nilHandler(ctx ctxerr.Context, got, expected reflect.Value) *ctxerr.Error {
 	if expected.IsValid() { // here: !got.IsValid()
 		if expected.Type().Implements(testDeeper) {
 			curOperator := dark.MustGetInterface(expected).(TestDeep)
-			ctx.CurOperator = curOperator
+			if curOperator.GetLocation().IsInitialized() {
+				ctx.CurOperator = curOperator
+			}
 			if curOperator.HandleInvalid() {
 				return curOperator.Match(ctx, got)
 			}
@@ -201,7 +203,9 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 				}
 			}
 
-			ctx.CurOperator = curOperator
+			if curOperator.GetLocation().IsInitialized() {
+				ctx.CurOperator = curOperator
+			}
 			return curOperator.Match(ctx, got)
 		}
 

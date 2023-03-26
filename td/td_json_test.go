@@ -25,6 +25,11 @@ func (r errReader) Read(p []byte) (int, error) {
 	return 0, errors.New("an error occurred")
 }
 
+const (
+	insideOpJSON = " inside operator JSON at td_json_test.go:"
+	underOpJSON  = "under operator JSON at td_json_test.go:"
+)
+
 func TestJSON(t *testing.T) {
 	type MyStruct struct {
 		Name   string `json:"name"`
@@ -268,6 +273,7 @@ func TestJSON(t *testing.T) {
 		expectedError{
 			Message: mustBe("json.Marshal failed"),
 			Summary: mustContain("json: unsupported type"),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, map[string]string{"zip": "pipo"},
@@ -280,13 +286,69 @@ func TestJSON(t *testing.T) {
 }`),
 			Expected: mustBe(`JSON(SuperMapOf(map[string]interface {}{
        "zip": "bingo",
-     }))`),
+     }))`,
+			),
+			Under: mustContain("under operator All at "),
 			Origin: &expectedError{
 				Path:     mustBe(`DATA<All#1/1>["zip"]`),
 				Message:  mustBe(`values differ`),
 				Got:      mustBe(`"pipo"`),
 				Expected: mustBe(`"bingo"`),
+				Under:    mustContain("under operator SuperMapOf at line 1:0 (pos 0)" + insideOpJSON),
 			},
+		})
+
+	checkError(t, map[string]string{"zip": "pipo"},
+		td.JSON(`SuperMapOf({"zip":$1})`, "bingo"),
+		expectedError{
+			Path:     mustBe(`DATA["zip"]`),
+			Message:  mustBe("values differ"),
+			Got:      mustBe(`"pipo"`),
+			Expected: mustBe(`"bingo"`),
+			Under:    mustContain("under operator SuperMapOf at line 1:0 (pos 0)" + insideOpJSON),
+		})
+
+	checkError(t, json.RawMessage(`"pipo:bingo"`),
+		td.JSON(`Re(r;^pipo:(\w+);, ["bad"])`),
+		expectedError{
+			Path:     mustBe(`(DATA =~ ^pipo:(\w+))[0]`),
+			Got:      mustBe(`"bingo"`),
+			Expected: mustBe(`"bad"`),
+			Under:    mustContain("under operator Re at line 1:0 (pos 0)" + insideOpJSON),
+		})
+
+	checkError(t, json.RawMessage(`"pipo:bingo"`),
+		td.JSON(`Re(r;^pipo:(\w+);, [$1])`, "bad"),
+		expectedError{
+			Path:     mustBe(`(DATA =~ ^pipo:(\w+))[0]`),
+			Got:      mustBe(`"bingo"`),
+			Expected: mustBe(`"bad"`),
+			Under:    mustContain("under operator Re at line 1:0 (pos 0)" + insideOpJSON),
+		})
+
+	checkError(t, json.RawMessage(`"pipo:bingo"`),
+		td.JSON(`Re(r;^pipo:(\w+);, [$param])`, td.Tag("param", "bad")),
+		expectedError{
+			Path:     mustBe(`(DATA =~ ^pipo:(\w+))[0]`),
+			Got:      mustBe(`"bingo"`),
+			Expected: mustBe(`"bad"`),
+			Under:    mustContain("under operator Re at line 1:0 (pos 0)" + insideOpJSON),
+		})
+
+	checkError(t, json.RawMessage(`"pipo:bingo"`),
+		td.JSON(`Re(r;^pipo:(\w+);, Bag($1))`, "bad"),
+		expectedError{
+			Path:    mustBe(`(DATA =~ ^pipo:(\w+))`),
+			Summary: mustBe(`Missing item: ("bad")` + "\n" + `  Extra item: ("bingo")`),
+			Under:   mustContain("under operator Bag at line 1:19 (pos 19)" + insideOpJSON),
+		})
+
+	checkError(t, json.RawMessage(`"pipo:bingo"`),
+		td.JSON(`Re(r;^pipo:(\w+);, Bag($param))`, td.Tag("param", "bad")),
+		expectedError{
+			Path:    mustBe(`(DATA =~ ^pipo:(\w+))`),
+			Summary: mustBe(`Missing item: ("bad")` + "\n" + `  Extra item: ("bingo")`),
+			Under:   mustContain("under operator Bag at line 1:19 (pos 19)" + insideOpJSON),
 		})
 
 	//
@@ -297,6 +359,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("JSON file uNkNoWnFiLe.json cannot be read: "),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -305,6 +368,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("usage: JSON(STRING_JSON|STRING_FILENAME|[]byte|json.RawMessage|io.Reader, ...), but received int as 1st parameter"),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -313,6 +377,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe("JSON read error: an error occurred"),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -321,6 +386,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustContain("JSON unmarshal error: "),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -331,6 +397,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`2 params have the same tag "foo"`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, []int{42},
@@ -339,6 +406,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("an error occurred while unmarshalling JSON into func()"),
 			Path:    mustBe("DATA[0]"),
 			Summary: mustBe("json: cannot unmarshal number into Go value of type func()"),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, []int{42},
@@ -347,6 +415,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("an error occurred while unmarshalling JSON into func()"),
 			Path:    mustBe("DATA[0]"),
 			Summary: mustBe("json: cannot unmarshal number into Go value of type func()"),
+			Under:   mustContain(underOpJSON),
 		})
 
 	// numeric placeholders
@@ -356,6 +425,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: invalid numeric placeholder at line 1:5 (pos 5)`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -364,6 +434,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: invalid numeric placeholder "$000", it should start at "$1" at line 1:4 (pos 4)`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -372,6 +443,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$1", but no params given at line 1:4 (pos 4)`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -380,6 +452,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: numeric placeholder "$3", but only one param given at line 1:7 (pos 7)`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	// $^Operator
@@ -389,6 +462,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: $^ must be followed by an operator name at line 1:4 (pos 4)`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -397,6 +471,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: $^ must be followed by an operator name at line 1:5 (pos 5)`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	// named placeholders
@@ -409,6 +484,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: bad placeholder "$bad%" at line 3:3 (pos 10)`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	checkError(t, "never tested",
@@ -417,6 +493,7 @@ func TestJSON(t *testing.T) {
 			Message: mustBe("bad usage of JSON operator"),
 			Path:    mustBe("DATA"),
 			Summary: mustBe(`JSON unmarshal error: unknown placeholder "$unknown" at line 1:4 (pos 4)`),
+			Under:   mustContain(underOpJSON),
 		})
 
 	//
@@ -532,8 +609,19 @@ func TestJSONInside(t *testing.T) {
 					Path:     mustBe(`DATA["val2"]`),
 					Got:      mustBe("2.0"),
 					Expected: mustBe("1.0 ≤ got < 2.0"),
+					Under:    mustContain("under operator Between at line 1:32 (pos 32)" + insideOpJSON),
 				})
 		}
+
+		checkError(t, json.RawMessage(`123`),
+			td.JSON(`Between(0, 2)`),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe(`DATA`),
+				Got:      mustBe("123.0"),
+				Expected: mustBe("0.0 ≤ got ≤ 2.0"),
+				Under:    mustContain("under operator Between at line 1:0 (pos 0)" + insideOpJSON),
+			})
 
 		checkOK(t, got,
 			td.JSON(`{"val1": Between(1, 1), "val2": Between(2, 2, "[]")}`))
@@ -552,6 +640,7 @@ func TestJSONInside(t *testing.T) {
 					Path:     mustBe(`DATA["val2"]`),
 					Got:      mustBe("2.0"),
 					Expected: mustBe("2.0 < got ≤ 3.0"),
+					Under:    mustContain("under operator Between at line 1:20 (pos 20)" + insideOpJSON),
 				})
 		}
 		for _, bounds := range []string{"][", "BoundsOutOut"} {
@@ -562,6 +651,7 @@ func TestJSONInside(t *testing.T) {
 					Path:     mustBe(`DATA["val2"]`),
 					Got:      mustBe("2.0"),
 					Expected: mustBe("2.0 < got < 3.0"),
+					Under:    mustContain("under operator Between at line 1:20 (pos 20)" + insideOpJSON),
 				},
 				"using bounds %q", bounds)
 			checkError(t, got,
@@ -571,6 +661,7 @@ func TestJSONInside(t *testing.T) {
 					Path:     mustBe(`DATA["val2"]`),
 					Got:      mustBe("2.0"),
 					Expected: mustBe("1.0 < got < 2.0"),
+					Under:    mustContain("under operator Between at line 1:20 (pos 20)" + insideOpJSON),
 				},
 				"using bounds %q", bounds)
 		}
@@ -584,6 +675,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Between() bad 3rd parameter, use "[]", "[[", "]]" or "][" at line 2:10 (pos 12)`),
+				Under:   mustContain(underOpJSON),
 			})
 		checkError(t, "never tested",
 			td.JSON(`{
@@ -593,6 +685,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Between() bad 3rd parameter, use "[]", "[[", "]]" or "][" at line 2:10 (pos 12)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -601,6 +694,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Between() requires 2 or 3 parameters at line 1:9 (pos 9)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -609,6 +703,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Between() requires 2 or 3 parameters at line 1:9 (pos 9)`),
+				Under:   mustContain(underOpJSON),
 			})
 	})
 
@@ -625,6 +720,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: N() requires 1 or 2 parameters at line 1:9 (pos 9)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -633,6 +729,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: N() requires 1 or 2 parameters at line 1:9 (pos 9)`),
+				Under:   mustContain(underOpJSON),
 			})
 	})
 
@@ -650,6 +747,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Re() requires 1 or 2 parameters at line 1:9 (pos 9)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -658,6 +756,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Re() requires 1 or 2 parameters at line 1:9 (pos 9)`),
+				Under:   mustContain(underOpJSON),
 			})
 	})
 
@@ -673,6 +772,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: SubMapOf() requires only one parameter at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -681,6 +781,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: SubMapOf() requires only one parameter at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 	})
 
@@ -696,6 +797,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: SuperMapOf() requires only one parameter at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -704,6 +806,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: SuperMapOf() requires only one parameter at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 	})
 
@@ -715,6 +818,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: unknown operator UnknownOp() at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -723,6 +827,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Catch() is not usable in JSON() at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -731,6 +836,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: JSON() is not usable in JSON(), use literal JSON instead at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -739,6 +845,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: All() requires at least one parameter at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -747,6 +854,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: Empty() requires no parameters at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -755,6 +863,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: HasPrefix() requires only one parameter at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -763,6 +872,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: JSONPointer() requires 2 parameters at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		checkError(t, "never tested",
@@ -771,6 +881,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of JSON operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`JSON unmarshal error: JSONPointer() bad #1 parameter type: string required but float64 received at line 1:2 (pos 2)`),
+				Under:   mustContain(underOpJSON),
 			})
 
 		// This one is not caught by JSON, but by Re itself, as the number
@@ -781,6 +892,7 @@ func TestJSONInside(t *testing.T) {
 				Message: mustBe("bad usage of Re operator"),
 				Path:    mustBe("DATA"),
 				Summary: mustBe(`usage: Re(STRING|*regexp.Regexp[, NON_NIL_CAPTURE]), but received float64 as 1st parameter`),
+				Under:   mustContain("under operator Re at line 1:0 (pos 0)" + insideOpJSON),
 			})
 	})
 }

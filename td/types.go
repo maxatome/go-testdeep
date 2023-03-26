@@ -87,6 +87,9 @@ func pkgFunc(full string) (string, string) {
 
 // setLocation sets location using the stack trace going callDepth levels up.
 func (t *base) setLocation(callDepth int) {
+	if callDepth < 0 {
+		return
+	}
 	var ok bool
 	t.location, ok = location.New(callDepth)
 	if !ok {
