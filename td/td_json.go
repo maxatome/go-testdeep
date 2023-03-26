@@ -330,7 +330,7 @@ type tdJSONPlaceholder struct {
 func newJSONNamedPlaceholder(name string, expectedValue any) TestDeep {
 	p := tdJSONPlaceholder{
 		tdJSONSmuggler: tdJSONSmuggler{
-			tdSmugglerBase: newSmugglerBase(expectedValue, 1),
+			tdSmugglerBase: newSmugglerBase(expectedValue, -100), // without location
 		},
 		name: name,
 	}
@@ -344,7 +344,7 @@ func newJSONNamedPlaceholder(name string, expectedValue any) TestDeep {
 func newJSONNumPlaceholder(num uint64, expectedValue any) TestDeep {
 	p := tdJSONPlaceholder{
 		tdJSONSmuggler: tdJSONSmuggler{
-			tdSmugglerBase: newSmugglerBase(expectedValue, 1),
+			tdSmugglerBase: newSmugglerBase(expectedValue, -100), // without location
 		},
 		num: num,
 	}
@@ -397,11 +397,12 @@ type tdJSONEmbedded struct {
 }
 
 func newJSONEmbedded(tdOp TestDeep) TestDeep {
-	return &tdJSONEmbedded{
+	e := tdJSONEmbedded{
 		tdJSONSmuggler: tdJSONSmuggler{
-			tdSmugglerBase: newSmugglerBase(tdOp, 1),
+			tdSmugglerBase: newSmugglerBase(tdOp, -100), // without location
 		},
 	}
+	return &e
 }
 
 func (e *tdJSONEmbedded) MarshalJSON() ([]byte, error) {
