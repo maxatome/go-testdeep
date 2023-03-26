@@ -61,6 +61,7 @@ type expectedError struct {
 	Expected expectedErrorMatch
 	Summary  expectedErrorMatch
 	Located  bool
+	Under    expectedErrorMatch
 	Origin   *expectedError
 }
 
@@ -86,6 +87,10 @@ func indent(str string, numSpc int) string {
 	return strings.ReplaceAll(str, "\n", "\n\t"+strings.Repeat(" ", numSpc))
 }
 
+func fullError(err *ctxerr.Error) string {
+	return strings.ReplaceAll(err.Error(), "\n", "\n\t> ")
+}
+
 func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	got string, expected expectedErrorMatch, fieldName string,
 	args ...any,
@@ -100,7 +105,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 	> %s`,
 			tdutil.BuildTestName(args...),
 			fieldName, indent(got, 10), indent(expected.Exact, 10),
-			strings.ReplaceAll(err.Error(), "\n\t", "\n\t> "))
+			fullError(err))
 		return false
 	}
 
@@ -113,7 +118,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 			tdutil.BuildTestName(args...),
 			fieldName,
 			indent(got, 16), indent(expected.Contain, 16),
-			strings.ReplaceAll(err.Error(), "\n\t", "\n\t> "))
+			fullError(err))
 		return false
 	}
 
@@ -126,7 +131,7 @@ func cmpErrorStr(t *testing.T, err *ctxerr.Error,
 			tdutil.BuildTestName(args...),
 			fieldName,
 			indent(got, 14), indent(expected.Match.String(), 14),
-			strings.ReplaceAll(err.Error(), "\n\t", "\n\t> "))
+			fullError(err))
 		return false
 	}
 
@@ -159,6 +164,16 @@ func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 
 	if !cmpErrorStr(t, err,
 		err.SummaryString(), expectedError.Summary, "Summary", args...) {
+		return false
+	}
+
+	// under
+	serr, under := err.Error(), ""
+	if pos := strings.Index(serr, "\n[under operator "); pos > 0 {
+		under = serr[pos+2:]
+		under = under[:strings.IndexByte(under, ']')]
+	}
+	if !cmpErrorStr(t, err, under, expectedError.Under, "[under operator …]", args...) {
 		return false
 	}
 
