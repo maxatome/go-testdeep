@@ -322,7 +322,7 @@ func (m *tdMap) match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error)
 		}
 
 		err = deepValueEqual(ctx.AddMapKey(entryInfo.key),
-			got.MapIndex(entryInfo.key), entryInfo.expected)
+			gotValue, entryInfo.expected)
 		if err != nil {
 			return err
 		}
