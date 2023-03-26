@@ -64,6 +64,10 @@ jobs:
         run: |
           go version
           go env
+          if [ -z "$(go env GOPROXY)" ]; then
+              echo "Fix empty GOPROXY"
+              export GOPROXY=https://proxy.golang.org,direct
+          fi
           if [ ${{ matrix.full-tests }} = true ]; then
               cover_flags="-covermode=atomic -coverprofile=coverage"
               GO_TEST_FLAGS="$cover_flags.out"
