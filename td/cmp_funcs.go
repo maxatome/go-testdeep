@@ -321,7 +321,7 @@ func CmpEmpty(t TestingT, got any, args ...any) bool {
 
 // CmpErrorIs is a shortcut for:
 //
-//	td.Cmp(t, got, td.ErrorIs(expected), args...)
+//	td.Cmp(t, got, td.ErrorIs(expectedError), args...)
 //
 // See [ErrorIs] for details.
 //
@@ -335,9 +335,9 @@ func CmpEmpty(t TestingT, got any, args ...any) bool {
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpErrorIs(t TestingT, got any, expected error, args ...any) bool {
+func CmpErrorIs(t TestingT, got, expectedError any, args ...any) bool {
 	t.Helper()
-	return Cmp(t, got, ErrorIs(expected), args...)
+	return Cmp(t, got, ErrorIs(expectedError), args...)
 }
 
 // CmpFirst is a shortcut for:

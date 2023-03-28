@@ -17,8 +17,8 @@ import (
 )
 
 type tdErrorIs struct {
-	baseOKNil
-	expected error
+	tdSmugglerBase
+	typeBehind reflect.Type
 }
 
 var _ TestDeep = &tdErrorIs{}
@@ -33,8 +33,8 @@ func errorToRawString(err error) types.RawString {
 // summary(ErrorIs): checks the data is an error and matches a wrapped error
 // input(ErrorIs): if(error)
 
-// ErrorIs operator reports whether any error in an error's chain
-// matches expected.
+// ErrorIs is a smuggler operator. It reports whether any error in an
+// error's chain matches expectedError.
 //
 //	_, err := os.Open("/unknown/file")
 //	td.Cmp(t, err, os.ErrNotExist)             // fails
@@ -48,27 +48,62 @@ func errorToRawString(err error) types.RawString {
 //	td.Cmp(t, err, td.ErrorIs(err1)) // succeeds
 //	td.Cmp(t, err1, td.ErrorIs(err)) // fails
 //
-// Behind the scene it uses [errors.Is] function.
+//	var cerr myError
+//	td.Cmp(t, err, td.ErrorIs(td.Catch(&cerr, td.String("my error..."))))
 //
-// Note that like [errors.Is], expected can be nil: in this case the
-// comparison succeeds when got is nil too.
+//	td.Cmp(t, err, td.ErrorIs(td.All(
+//	  td.Isa(myError{}),
+//	  td.String("my error..."),
+//	)))
+//
+// Behind the scene it uses [errors.Is] function if expectedError is
+// an [error] and [errors.As] function if expectedError is a
+// [TestDeep] operator.
+//
+// Note that like [errors.Is], expectedError can be nil: in this case
+// the comparison succeeds only when got is nil too.
 //
 // See also [CmpError] and [CmpNoError].
-func ErrorIs(expected error) TestDeep {
-	return &tdErrorIs{
-		baseOKNil: newBaseOKNil(3),
-		expected:  expected,
+func ErrorIs(expectedError any) TestDeep {
+	e := tdErrorIs{
+		tdSmugglerBase: newSmugglerBase(expectedError),
 	}
+
+	switch expErr := expectedError.(type) {
+	case nil:
+	case error:
+		e.expectedValue = reflect.ValueOf(expectedError)
+	case TestDeep:
+		e.typeBehind = expErr.TypeBehind()
+		if e.typeBehind == nil {
+			e.typeBehind = types.Interface
+			break
+		}
+		if !e.typeBehind.Implements(types.Error) &&
+			e.typeBehind.Kind() != reflect.Interface {
+			e.err = ctxerr.OpBad("ErrorIs",
+				"ErrorIs(%[1]s): type %[2]s behind %[1]s operator is not an interface or does not implement error",
+				expErr.GetLocation().Func, e.typeBehind)
+		}
+	default:
+		e.err = ctxerr.OpBadUsage("ErrorIs",
+			"(error|TESTDEEP_OPERATOR)", expectedError, 1, false)
+	}
+
+	return &e
 }
 
 func (e *tdErrorIs) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
+	if e.err != nil {
+		return ctx.CollectError(e.err)
+	}
+
 	// nil case
 	if !got.IsValid() {
 		// Special case
-		if e.expected == nil {
+		if !e.expectedValue.IsValid() {
 			return nil
 		}
-
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
@@ -96,23 +131,63 @@ func (e *tdErrorIs) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		})
 	}
 
-	if errors.Is(gotErr, e.expected) {
-		return nil
+	if e.isTestDeeper {
+		target := reflect.New(e.typeBehind)
+
+		if !errors.As(gotErr, target.Interface()) {
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+			return ctx.CollectError(&ctxerr.Error{
+				Message:  "type is not found in err's tree",
+				Got:      gotIf,
+				Expected: types.RawString(e.typeBehind.String()),
+			})
+		}
+
+		return deepValueEqual(ctx.AddCustomLevel(S(".ErrorIs(%s)", e.typeBehind)),
+			target.Elem(), e.expectedValue)
+	}
+
+	var expErr error
+	if e.expectedValue.IsValid() {
+		expErr = e.expectedValue.Interface().(error)
+		if errors.Is(gotErr, expErr) {
+			return nil
+		}
+		if ctx.BooleanError {
+			return ctxerr.BooleanError
+		}
+		return ctx.CollectError(&ctxerr.Error{
+			Message:  "is not found in err's tree",
+			Got:      errorToRawString(gotErr),
+			Expected: errorToRawString(expErr),
+		})
 	}
 
 	if ctx.BooleanError {
 		return ctxerr.BooleanError
 	}
 	return ctx.CollectError(&ctxerr.Error{
-		Message:  "is not the error",
+		Message:  "is not nil",
 		Got:      errorToRawString(gotErr),
-		Expected: errorToRawString(e.expected),
+		Expected: errorToRawString(expErr),
 	})
 }
 
 func (e *tdErrorIs) String() string {
-	if e.expected == nil {
+	if e.err != nil {
+		return e.stringError()
+	}
+	if e.isTestDeeper {
+		return "ErrorIs(" + e.expectedValue.Interface().(TestDeep).String() + ")"
+	}
+	if !e.expectedValue.IsValid() {
 		return "ErrorIs(nil)"
 	}
-	return "ErrorIs(" + e.expected.Error() + ")"
+	return "ErrorIs(" + e.expectedValue.Interface().(error).Error() + ")"
+}
+
+func (e *tdErrorIs) HandleInvalid() bool {
+	return true
 }
