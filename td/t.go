@@ -227,7 +227,7 @@ func (t *T) Empty(got any, args ...any) bool {
 
 // CmpErrorIs is a shortcut for:
 //
-//	t.Cmp(got, td.ErrorIs(expected), args...)
+//	t.Cmp(got, td.ErrorIs(expectedError), args...)
 //
 // See [ErrorIs] for details.
 //
@@ -239,9 +239,9 @@ func (t *T) Empty(got any, args ...any) bool {
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func (t *T) CmpErrorIs(got any, expected error, args ...any) bool {
+func (t *T) CmpErrorIs(got, expectedError any, args ...any) bool {
 	t.Helper()
-	return t.Cmp(got, ErrorIs(expected), args...)
+	return t.Cmp(got, ErrorIs(expectedError), args...)
 }
 
 // First is a shortcut for:
