@@ -78,8 +78,8 @@ func isTest(name string) bool {
 	if len(name) == 4 { // "Test" is ok
 		return true
 	}
-	rune, _ := utf8.DecodeRuneInString(name[4:])
-	return !unicode.IsLower(rune)
+	r, _ := utf8.DecodeRuneInString(name[4:])
+	return !unicode.IsLower(r)
 }
 
 // shouldContinue returns true if the tests suite should continue

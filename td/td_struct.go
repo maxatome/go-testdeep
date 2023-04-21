@@ -147,11 +147,11 @@ func canonStructField(name string) string {
 
 	// Overwrite a field
 	if strings.HasPrefix(name, ">") {
-		new := strings.TrimSpace(name[1:])
-		if 1+len(new) == len(name) {
+		nn := strings.TrimSpace(name[1:])
+		if 1+len(nn) == len(name) {
 			return name // already canonicalized
 		}
-		return ">" + new
+		return ">" + nn
 	}
 
 	// Matcher

@@ -247,12 +247,12 @@ func AssertRequire(t testing.TB, config ...ContextConfig) (assert, require *T) {
 //
 // If "" is passed the name is set to "DATA", the default value.
 func (t *T) RootName(rootName string) *T {
-	new := *t
+	nt := *t
 	if rootName == "" {
 		rootName = contextDefaultRootName
 	}
-	new.Config.RootName = rootName
-	return &new
+	nt.Config.RootName = rootName
+	return &nt
 }
 
 // FailureIsFatal allows to choose whether t.TB.Fatal() or
@@ -285,9 +285,9 @@ func (t *T) RootName(rootName string) *T {
 //
 // See also [T.Assert] and [T.Require].
 func (t *T) FailureIsFatal(enable ...bool) *T {
-	new := *t
-	new.Config.FailureIsFatal = len(enable) == 0 || enable[0]
-	return &new
+	nt := *t
+	nt.Config.FailureIsFatal = len(enable) == 0 || enable[0]
+	return &nt
 }
 
 // Assert returns a new [*T] instance inheriting the t config but with
@@ -348,17 +348,17 @@ func (t *T) Require() *T {
 func (t *T) UseEqual(types ...any) *T {
 	// special case: UseEqual()
 	if len(types) == 0 {
-		new := *t
-		new.Config.UseEqual = true
-		return &new
+		nt := *t
+		nt.Config.UseEqual = true
+		return &nt
 	}
 
 	// special cases: UseEqual(true) or UseEqual(false)
 	if len(types) == 1 {
 		if ignore, ok := types[0].(bool); ok {
-			new := *t
-			new.Config.UseEqual = ignore
-			return &new
+			nt := *t
+			nt.Config.UseEqual = ignore
+			return &nt
 		}
 	}
 
@@ -385,9 +385,9 @@ func (t *T) UseEqual(types ...any) *T {
 //
 // Note that t.BeLax() acts as t.BeLax(true).
 func (t *T) BeLax(enable ...bool) *T {
-	new := *t
-	new.Config.BeLax = len(enable) == 0 || enable[0]
-	return &new
+	nt := *t
+	nt.Config.BeLax = len(enable) == 0 || enable[0]
+	return &nt
 }
 
 // IgnoreUnexported tells go-testdeep to ignore unexported fields of
@@ -410,17 +410,17 @@ func (t *T) BeLax(enable ...bool) *T {
 func (t *T) IgnoreUnexported(types ...any) *T {
 	// special case: IgnoreUnexported()
 	if len(types) == 0 {
-		new := *t
-		new.Config.IgnoreUnexported = true
-		return &new
+		nt := *t
+		nt.Config.IgnoreUnexported = true
+		return &nt
 	}
 
 	// special cases: IgnoreUnexported(true) or IgnoreUnexported(false)
 	if len(types) == 1 {
 		if ignore, ok := types[0].(bool); ok {
-			new := *t
-			new.Config.IgnoreUnexported = ignore
-			return &new
+			nt := *t
+			nt.Config.IgnoreUnexported = ignore
+			return &nt
 		}
 	}
 
@@ -445,9 +445,9 @@ func (t *T) IgnoreUnexported(types ...any) *T {
 //
 // Note that t.TestDeepInGotOK() acts as t.TestDeepInGotOK(true).
 func (t *T) TestDeepInGotOK(enable ...bool) *T {
-	new := *t
-	new.Config.TestDeepInGotOK = len(enable) == 0 || enable[0]
-	return &new
+	nt := *t
+	nt.Config.TestDeepInGotOK = len(enable) == 0 || enable[0]
+	return &nt
 }
 
 // Cmp is mostly a shortcut for:
