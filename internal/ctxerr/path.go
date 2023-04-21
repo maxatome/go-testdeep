@@ -62,9 +62,9 @@ func (p Path) Equal(o Path) bool {
 }
 
 func (p Path) addLevel(level pathLevel) Path {
-	new := make(Path, len(p), len(p)+1)
-	copy(new, p)
-	return append(new, level)
+	np := make(Path, len(p), len(p)+1)
+	copy(np, p)
+	return append(np, level)
 }
 
 // Copy returns a new [Path], exact but independent copy of p.
@@ -73,9 +73,9 @@ func (p Path) Copy() Path {
 		return nil
 	}
 
-	new := make(Path, len(p))
-	copy(new, p)
-	return new
+	np := make(Path, len(p))
+	copy(np, p)
+	return np
 }
 
 // AddField adds a level corresponding to a struct field.
@@ -84,16 +84,16 @@ func (p Path) AddField(field string) Path {
 		return nil
 	}
 
-	new := p.addLevel(pathLevel{
+	np := p.addLevel(pathLevel{
 		Kind:    levelStruct,
 		Content: field,
 	})
 
-	if len(new) > 1 && new[len(new)-2].Pointers > 0 {
-		new[len(new)-2].Pointers--
+	if len(np) > 1 && np[len(np)-2].Pointers > 0 {
+		np[len(np)-2].Pointers--
 	}
 
-	return new
+	return np
 }
 
 // AddArrayIndex adds a level corresponding to an array index.
@@ -126,10 +126,10 @@ func (p Path) AddPtr(num int) Path {
 		return nil
 	}
 
-	new := p.Copy()
-	// Do not check len(new) > 0, as it should
-	new[len(new)-1].Pointers += num
-	return new
+	np := p.Copy()
+	// Do not check len(np) > 0, as it should
+	np[len(np)-1].Pointers += num
+	return np
 }
 
 // AddFunctionCall adds a level corresponding to a function call.

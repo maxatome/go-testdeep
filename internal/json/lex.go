@@ -496,10 +496,10 @@ func (j *json) parseNumber() (float64, bool) {
 			f, _ = bf.Float64()
 		}
 	} else { // numInt and/or numGoExt
-		var int int64
-		int, err = strconv.ParseInt(s, 0, 64)
+		var i64 int64
+		i64, err = strconv.ParseInt(s, 0, 64)
 		if err == nil {
-			f = float64(int)
+			f = float64(i64)
 		}
 	}
 

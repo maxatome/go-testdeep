@@ -58,9 +58,9 @@ func (c *Context) InitErrors() {
 }
 
 // ResetErrors returns a new [Context] without any Error set.
-func (c Context) ResetErrors() (new Context) {
-	new = c
-	new.InitErrors()
+func (c Context) ResetErrors() (newc Context) {
+	newc = c
+	newc.InitErrors()
 	return
 }
 
@@ -130,60 +130,60 @@ func (c Context) CannotCompareError() *Error {
 }
 
 // AddCustomLevel creates a new [Context] from current one plus pathAdd.
-func (c Context) AddCustomLevel(pathAdd string) (new Context) {
-	new = c
-	new.Path = new.Path.AddCustomLevel(pathAdd)
-	new.Depth++
+func (c Context) AddCustomLevel(pathAdd string) (newc Context) {
+	newc = c
+	newc.Path = newc.Path.AddCustomLevel(pathAdd)
+	newc.Depth++
 	return
 }
 
 // AddField creates a new [Context] from current one plus "." + field.
-func (c Context) AddField(field string) (new Context) {
-	new = c
-	new.Path = new.Path.AddField(field)
-	new.Depth++
+func (c Context) AddField(field string) (newc Context) {
+	newc = c
+	newc.Path = newc.Path.AddField(field)
+	newc.Depth++
 	return
 }
 
 // AddArrayIndex creates a new [Context] from current one plus an array
 // dereference for index-th item.
-func (c Context) AddArrayIndex(index int) (new Context) {
-	new = c
-	new.Path = new.Path.AddArrayIndex(index)
-	new.Depth++
+func (c Context) AddArrayIndex(index int) (newc Context) {
+	newc = c
+	newc.Path = newc.Path.AddArrayIndex(index)
+	newc.Depth++
 	return
 }
 
 // AddMapKey creates a new [Context] from current one plus a map
 // dereference for key key.
-func (c Context) AddMapKey(key any) (new Context) {
-	new = c
-	new.Path = new.Path.AddMapKey(key)
-	new.Depth++
+func (c Context) AddMapKey(key any) (newc Context) {
+	newc = c
+	newc.Path = newc.Path.AddMapKey(key)
+	newc.Depth++
 	return
 }
 
 // AddPtr creates a new [Context] from current one plus a pointer dereference.
-func (c Context) AddPtr(num int) (new Context) {
-	new = c
-	new.Path = new.Path.AddPtr(num)
-	new.Depth++
+func (c Context) AddPtr(num int) (newc Context) {
+	newc = c
+	newc.Path = newc.Path.AddPtr(num)
+	newc.Depth++
 	return
 }
 
 // AddFunctionCall creates a new [Context] from current one inside a
 // function call.
-func (c Context) AddFunctionCall(fn string) (new Context) {
-	new = c
-	new.Path = new.Path.AddFunctionCall(fn)
-	new.Depth++
+func (c Context) AddFunctionCall(fn string) (newc Context) {
+	newc = c
+	newc.Path = newc.Path.AddFunctionCall(fn)
+	newc.Depth++
 	return
 }
 
 // ResetPath creates a new [Context] from current one but reinitializing Path.
-func (c Context) ResetPath(newRoot string) (new Context) {
-	new = c
-	new.Path = NewPath(newRoot)
-	new.Depth++
+func (c Context) ResetPath(newRoot string) (newc Context) {
+	newc = c
+	newc.Path = NewPath(newRoot)
+	newc.Depth++
 	return
 }

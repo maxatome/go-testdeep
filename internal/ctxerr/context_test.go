@@ -39,13 +39,13 @@ func TestContext(t *testing.T) {
 
 		*ctx.Errors = append(*ctx.Errors, &ctxerr.Error{})
 
-		new := ctx.ResetErrors()
-		if new.Errors == nil {
+		newc := ctx.ResetErrors()
+		if newc.Errors == nil {
 			t.Errorf("after ResetErrors, new Errors is nil for MaxErrors %d",
 				maxErrors)
 			continue
 		}
-		if len(*new.Errors) > 0 {
+		if len(*newc.Errors) > 0 {
 			t.Errorf("after ResetErrors, new Errors is not empty for MaxErrors %d",
 				maxErrors)
 		}
