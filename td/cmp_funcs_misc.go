@@ -203,7 +203,8 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...any) bool {
 			Message:  "should NOT have panicked",
 			Got:      stackTrace,
 			Expected: types.RawString("not panicking at all"),
-		})
+		},
+		args...)
 	return false
 }
 
