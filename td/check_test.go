@@ -369,10 +369,9 @@ func checkOK(t *testing.T, got, expected any,
 
 func checkOKOrPanicIfUnsafeDisabled(t *testing.T, got, expected any,
 	args ...any,
-) bool {
+) (ret bool) {
 	t.Helper()
 
-	var ret bool
 	cmp := func() {
 		t.Helper()
 		ret = _checkOK(t, got, expected, args...)
@@ -385,7 +384,7 @@ func checkOKOrPanicIfUnsafeDisabled(t *testing.T, got, expected any,
 	}
 
 	cmp()
-	return ret
+	return
 }
 
 func checkOKForEach(t *testing.T, gotList []any, expected any,
@@ -406,9 +405,7 @@ func checkOKForEach(t *testing.T, gotList []any, expected any,
 	return
 }
 
-func equalTypes(t *testing.T, got td.TestDeep, expected any,
-	args ...any,
-) bool {
+func equalTypes(t *testing.T, got td.TestDeep, expected any, args ...any) bool {
 	gotType := got.TypeBehind()
 
 	expectedType, ok := expected.(reflect.Type)

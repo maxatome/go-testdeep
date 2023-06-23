@@ -200,7 +200,7 @@ func mergeStructFields(sfs ...StructFields) StructFields {
 	}
 }
 
-func newStruct(model any, strict bool) (*tdStruct, reflect.Value) {
+func newStruct(model any) (*tdStruct, reflect.Value) {
 	vmodel := reflect.ValueOf(model)
 
 	st := tdStruct{
@@ -237,7 +237,7 @@ func newStruct(model any, strict bool) (*tdStruct, reflect.Value) {
 }
 
 func anyStruct(model any, expectedFields StructFields, strict bool) *tdStruct {
-	st, vmodel := newStruct(model, strict)
+	st, vmodel := newStruct(model)
 	if st.err != nil {
 		return st
 	}
