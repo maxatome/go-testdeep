@@ -200,12 +200,10 @@ func mergeStructFields(sfs ...StructFields) StructFields {
 	}
 }
 
-func newStruct(model any) (*tdStruct, reflect.Value) {
-	vmodel := reflect.ValueOf(model)
-
+func newStruct(base base, vmodel reflect.Value) (*tdStruct, reflect.Value) {
 	st := tdStruct{
 		tdExpectedType: tdExpectedType{
-			base: newBase(5),
+			base: base,
 		},
 	}
 
@@ -231,13 +229,24 @@ func newStruct(model any) (*tdStruct, reflect.Value) {
 	}
 
 	st.err = ctxerr.OpBadUsage(st.location.Func,
-		"(STRUCT|&STRUCT, EXPECTED_FIELDS)",
-		model, 1, true)
+		"(STRUCT|&STRUCT|nil, EXPECTED_FIELDS)",
+		vmodel.Interface(), 1, true)
 	return &st, reflect.Value{}
 }
 
-func anyStruct(model any, expectedFields StructFields, strict bool) *tdStruct {
-	st, vmodel := newStruct(model)
+// structTypeString returns stringified t. It is the caller
+// responsibility to check t is a struct type.
+//   - struct{}   → "struct {}"
+//   - pkg.MyType → "struct pkg.MyType"
+func structTypeString(t reflect.Type) string {
+	if t.Name() == "" {
+		return t.String()
+	}
+	return "struct " + t.String()
+}
+
+func anyStruct(base base, model reflect.Value, expectedFields StructFields, strict bool) *tdStruct {
+	st, vmodel := newStruct(base, model)
 	if st.err != nil {
 		return st
 	}
@@ -265,7 +274,7 @@ func anyStruct(model any, expectedFields StructFields, strict bool) *tdStruct {
 			field, found = stType.FieldByName(name)
 			if !found {
 				st.err = ctxerr.OpBad(st.location.Func,
-					"struct %s has no field %q (from %q)", stType, name, fieldName)
+					"%s has no field %q (from %q)", structTypeString(stType), name, fieldName)
 				return st
 			}
 			st.addExpectedValue(
@@ -284,7 +293,7 @@ func anyStruct(model any, expectedFields StructFields, strict bool) *tdStruct {
 		if err != nil {
 			if err == errNotAMatcher {
 				st.err = ctxerr.OpBad(st.location.Func,
-					"struct %s has no field %q", stType, fieldName)
+					"%s has no field %q", structTypeString(stType), fieldName)
 			} else {
 				st.err = ctxerr.OpBad(st.location.Func, err.Error())
 			}
@@ -450,7 +459,10 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 // values of expectedFields. See [SStruct] to compares against zero
 // fields without specifying them in expectedFields.
 //
-// model must be the same type as compared data.
+// model must be the same type as compared data. If the expected type
+// is anonymous or private, model can be nil. In this case it is
+// considered lazy and determined each time the operator is involved
+// in a match, see below.
 //
 // expectedFields can be omitted, if no zero entries are expected
 // and no [TestDeep] operators are involved. If expectedFields
@@ -554,14 +566,33 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 //	  }),
 //	)
 //
+// If the expected type is private to the current package, it cannot
+// be passed as model. To overcome this limitation, model can be nil,
+// it is then considered as lazy. This way, the model is automatically
+// set during each match to the same type (still requiring struct or
+// struct pointer) of the compared data. Similarly, testing an
+// anonymous struct can be boring as all fields have to be re-declared
+// to define model. A nil model avoids that:
+//
+//	got := struct {
+//	  name string
+//	  age  int
+//	}{"Bob", 42}
+//	td.Cmp(t, got, td.Struct(nil, td.StructFields{"age": td.Between(40, 42)}))
+//
 // During a match, all expected fields must be found to
-// succeed. Non-expected fields are ignored.
+// succeed. Non-expected fields (and so zero model fields) are
+// ignored.
 //
 // TypeBehind method returns the [reflect.Type] of model.
 //
 // See also [SStruct].
 func Struct(model any, expectedFields ...StructFields) TestDeep {
-	return anyStruct(model, mergeStructFields(expectedFields...), false)
+	ef := mergeStructFields(expectedFields...)
+	if model == nil {
+		return newStructLazy(ef, false)
+	}
+	return anyStruct(newBase(3), reflect.ValueOf(model), ef, false)
 }
 
 // summary(SStruct): strictly compares the contents of a struct or a
@@ -574,7 +605,10 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 // too even if they are omitted from expectedFields: that is the
 // difference with [Struct] operator.
 //
-// model must be the same type as compared data.
+// model must be the same type as compared data. If the expected type
+// is private or anonymous, model can be nil. In this case it is
+// considered lazy and determined each time the operator is involved
+// in a match, see below.
 //
 // expectedFields can be omitted, if no [TestDeep] operators are
 // involved. If expectedFields contains more than one item, all
@@ -680,6 +714,23 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 //	  }),
 //	)
 //
+// If the expected type is private to the current package, it cannot
+// be passed as model. To overcome this limitation, model can be nil,
+// it is then considered as lazy. This way, the model is automatically
+// set during each match to the same type (still requiring struct or
+// struct pointer) of the compared data. Similarly, testing an
+// anonymous struct can be boring as all fields have to be re-declared
+// to define model. A nil model avoids that:
+//
+//	got := struct {
+//	  name string
+//	  age  int
+//	}{"Bob", 42}
+//	td.Cmp(t, got, td.SStruct(nil, td.StructFields{
+//	  "name": "Bob",
+//	  "age":  td.Between(40, 42),
+//	}))
+//
 // During a match, all expected and zero fields must be found to
 // succeed.
 //
@@ -687,7 +738,11 @@ func Struct(model any, expectedFields ...StructFields) TestDeep {
 //
 // See also [SStruct].
 func SStruct(model any, expectedFields ...StructFields) TestDeep {
-	return anyStruct(model, mergeStructFields(expectedFields...), true)
+	ef := mergeStructFields(expectedFields...)
+	if model == nil {
+		return newStructLazy(ef, false)
+	}
+	return anyStruct(newBase(3), reflect.ValueOf(model), ef, true)
 }
 
 func (s *tdStruct) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {

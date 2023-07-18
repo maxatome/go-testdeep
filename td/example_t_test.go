@@ -3249,6 +3249,34 @@ func ExampleT_SStruct_patterns() {
 	// Ordered patterns match only remaining fields: true
 }
 
+func ExampleT_SStruct_lazy_model() {
+	t := td.NewT(&testing.T{})
+
+	got := struct {
+		name string
+		age  int
+	}{
+		name: "Foobar",
+		age:  42,
+	}
+
+	ok := t.SStruct(got, nil, td.StructFields{
+		"name": "Foobar",
+		"age":  td.Between(40, 45),
+	})
+	fmt.Println("Lazy model:", ok)
+
+	ok = t.SStruct(got, nil, td.StructFields{
+		"name": "Foobar",
+		"zip":  666,
+	})
+	fmt.Println("Lazy model with unknown field:", ok)
+
+	// Output:
+	// Lazy model: true
+	// Lazy model with unknown field: false
+}
+
 func ExampleT_String() {
 	t := td.NewT(&testing.T{})
 
@@ -3429,6 +3457,34 @@ func ExampleT_Struct_patterns() {
 	// Output:
 	// Patterns match only remaining fields: true
 	// Ordered patterns match only remaining fields: true
+}
+
+func ExampleT_Struct_lazy_model() {
+	t := td.NewT(&testing.T{})
+
+	got := struct {
+		name string
+		age  int
+	}{
+		name: "Foobar",
+		age:  42,
+	}
+
+	ok := t.Struct(got, nil, td.StructFields{
+		"name": "Foobar",
+		"age":  td.Between(40, 45),
+	})
+	fmt.Println("Lazy model:", ok)
+
+	ok = t.Struct(got, nil, td.StructFields{
+		"name": "Foobar",
+		"zip":  666,
+	})
+	fmt.Println("Lazy model with unknown field:", ok)
+
+	// Output:
+	// Lazy model: true
+	// Lazy model with unknown field: false
 }
 
 func ExampleT_SubBagOf() {
