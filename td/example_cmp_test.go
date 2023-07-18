@@ -3249,6 +3249,34 @@ func ExampleCmpSStruct_patterns() {
 	// Ordered patterns match only remaining fields: true
 }
 
+func ExampleCmpSStruct_lazy_model() {
+	t := &testing.T{}
+
+	got := struct {
+		name string
+		age  int
+	}{
+		name: "Foobar",
+		age:  42,
+	}
+
+	ok := td.CmpSStruct(t, got, nil, td.StructFields{
+		"name": "Foobar",
+		"age":  td.Between(40, 45),
+	})
+	fmt.Println("Lazy model:", ok)
+
+	ok = td.CmpSStruct(t, got, nil, td.StructFields{
+		"name": "Foobar",
+		"zip":  666,
+	})
+	fmt.Println("Lazy model with unknown field:", ok)
+
+	// Output:
+	// Lazy model: true
+	// Lazy model with unknown field: false
+}
+
 func ExampleCmpString() {
 	t := &testing.T{}
 
@@ -3429,6 +3457,34 @@ func ExampleCmpStruct_patterns() {
 	// Output:
 	// Patterns match only remaining fields: true
 	// Ordered patterns match only remaining fields: true
+}
+
+func ExampleCmpStruct_lazy_model() {
+	t := &testing.T{}
+
+	got := struct {
+		name string
+		age  int
+	}{
+		name: "Foobar",
+		age:  42,
+	}
+
+	ok := td.CmpStruct(t, got, nil, td.StructFields{
+		"name": "Foobar",
+		"age":  td.Between(40, 45),
+	})
+	fmt.Println("Lazy model:", ok)
+
+	ok = td.CmpStruct(t, got, nil, td.StructFields{
+		"name": "Foobar",
+		"zip":  666,
+	})
+	fmt.Println("Lazy model with unknown field:", ok)
+
+	// Output:
+	// Lazy model: true
+	// Lazy model with unknown field: false
 }
 
 func ExampleCmpSubBagOf() {

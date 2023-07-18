@@ -3854,6 +3854,34 @@ func ExampleStruct_struct_fields() { // only operator
 	// Merge several StructFields: true
 }
 
+func ExampleStruct_lazy_model() {
+	t := &testing.T{}
+
+	got := struct {
+		name string
+		age  int
+	}{
+		name: "Foobar",
+		age:  42,
+	}
+
+	ok := td.Cmp(t, got, td.Struct(nil, td.StructFields{
+		"name": "Foobar",
+		"age":  td.Between(40, 45),
+	}))
+	fmt.Println("Lazy model:", ok)
+
+	ok = td.Cmp(t, got, td.Struct(nil, td.StructFields{
+		"name": "Foobar",
+		"zip":  666,
+	}))
+	fmt.Println("Lazy model with unknown field:", ok)
+
+	// Output:
+	// Lazy model: true
+	// Lazy model with unknown field: false
+}
+
 func ExampleSStruct() {
 	t := &testing.T{}
 
@@ -4059,6 +4087,34 @@ func ExampleSStruct_struct_fields() { // only operator
 	// Output:
 	// Without any StructFields: true
 	// Merge several StructFields: true
+}
+
+func ExampleSStruct_lazy_model() {
+	t := &testing.T{}
+
+	got := struct {
+		name string
+		age  int
+	}{
+		name: "Foobar",
+		age:  42,
+	}
+
+	ok := td.Cmp(t, got, td.SStruct(nil, td.StructFields{
+		"name": "Foobar",
+		"age":  td.Between(40, 45),
+	}))
+	fmt.Println("Lazy model:", ok)
+
+	ok = td.Cmp(t, got, td.SStruct(nil, td.StructFields{
+		"name": "Foobar",
+		"zip":  666,
+	}))
+	fmt.Println("Lazy model with unknown field:", ok)
+
+	// Output:
+	// Lazy model: true
+	// Lazy model with unknown field: false
 }
 
 func ExampleSubBagOf() {

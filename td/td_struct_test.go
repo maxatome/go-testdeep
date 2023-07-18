@@ -300,7 +300,7 @@ func TestStruct(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter"),
+			Summary: mustBe("usage: Struct(STRUCT|&STRUCT|nil, EXPECTED_FIELDS), but received string as 1st parameter"),
 		})
 
 	i := 12
@@ -309,7 +309,7 @@ func TestStruct(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of Struct operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: Struct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter"),
+			Summary: mustBe("usage: Struct(STRUCT|&STRUCT|nil, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter"),
 		})
 
 	checkError(t, "never tested",
@@ -989,7 +989,7 @@ func TestSStruct(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received string as 1st parameter"),
+			Summary: mustBe("usage: SStruct(STRUCT|&STRUCT|nil, EXPECTED_FIELDS), but received string as 1st parameter"),
 		})
 
 	i := 12
@@ -998,7 +998,7 @@ func TestSStruct(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of SStruct operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: SStruct(STRUCT|&STRUCT, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter"),
+			Summary: mustBe("usage: SStruct(STRUCT|&STRUCT|nil, EXPECTED_FIELDS), but received *int (ptr) as 1st parameter"),
 		})
 
 	checkError(t, "never tested",
