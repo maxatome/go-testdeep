@@ -11,7 +11,6 @@ import (
 
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
-	"github.com/maxatome/go-testdeep/internal/types"
 	"github.com/maxatome/go-testdeep/internal/util"
 )
 
@@ -77,11 +76,7 @@ func (k *tdKeys) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "bad kind",
-			Got:      types.RawString(got.Kind().String()),
-			Expected: types.RawString(reflect.Map.String()),
-		})
+		return ctx.CollectError(ctxerr.BadKind(got, reflect.Map.String()))
 	}
 
 	// Build a sorted slice of keys
@@ -145,11 +140,7 @@ func (v *tdValues) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "bad kind",
-			Got:      types.RawString(got.Kind().String()),
-			Expected: types.RawString(reflect.Map.String()),
-		})
+		return ctx.CollectError(ctxerr.BadKind(got, reflect.Map.String()))
 	}
 
 	// Build a sorted slice of values
