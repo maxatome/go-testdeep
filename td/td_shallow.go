@@ -107,11 +107,7 @@ func (s *tdShallow) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		if ctx.BooleanError {
 			return ctxerr.BooleanError
 		}
-		return ctx.CollectError(&ctxerr.Error{
-			Message:  "bad kind",
-			Got:      types.RawString(got.Kind().String()),
-			Expected: types.RawString(s.expectedKind.String()),
-		})
+		return ctx.CollectError(ctxerr.BadKind(got, s.expectedKind.String()))
 	}
 
 	var ptr uintptr
