@@ -739,9 +739,16 @@ func (s *tdStruct) String() string {
 	} else {
 		buf.WriteString("{\n")
 
+		maxLen := 0
 		for _, fieldInfo := range s.expectedFields {
-			fmt.Fprintf(buf, "  %s: %s\n", //nolint: errcheck
-				fieldInfo.name, util.ToString(fieldInfo.expected))
+			if len(fieldInfo.name) > maxLen {
+				maxLen = len(fieldInfo.name)
+			}
+		}
+		maxLen++
+		for _, fieldInfo := range s.expectedFields {
+			fmt.Fprintf(buf, "  %-*s %s\n", //nolint: errcheck
+				maxLen, fieldInfo.name+":", util.ToString(fieldInfo.expected))
 		}
 
 		buf.WriteString("})")

@@ -381,8 +381,8 @@ func TestStruct(t *testing.T) {
 			}).String(),
 		`Struct(td_test.MyStruct{
   ValBool: false
-  ValInt: 123
-  ValStr: "foobar"
+  ValInt:  123
+  ValStr:  "foobar"
 })`)
 
 	test.EqualStr(t,
@@ -397,8 +397,20 @@ func TestStruct(t *testing.T) {
 			}).String(),
 		`Struct(*td_test.MyStruct{
   ValBool: false
-  ValInt: 123
-  ValStr: "foobar"
+  ValInt:  123
+  ValStr:  "foobar"
+})`)
+
+	test.EqualStr(t,
+		td.Struct(&MyStruct{},
+			td.StructFields{
+				"ValBool": false,
+				"= Val*":  td.NotZero(),
+			}).String(),
+		`Struct(*td_test.MyStruct{
+  ValBool: false
+  ValInt:  NotZero()
+  ValStr:  NotZero()
 })`)
 
 	test.EqualStr(t,
@@ -1057,10 +1069,10 @@ func TestSStruct(t *testing.T) {
 				"ValBool": false,
 			}).String(),
 		`SStruct(td_test.MyStruct{
-  Ptr: (*int)(<nil>)
+  Ptr:     (*int)(<nil>)
   ValBool: false
-  ValInt: 123
-  ValStr: "foobar"
+  ValInt:  123
+  ValStr:  "foobar"
 })`)
 
 	test.EqualStr(t,
@@ -1074,19 +1086,19 @@ func TestSStruct(t *testing.T) {
 				"ValBool": false,
 			}).String(),
 		`SStruct(*td_test.MyStruct{
-  Ptr: (*int)(<nil>)
+  Ptr:     (*int)(<nil>)
   ValBool: false
-  ValInt: 123
-  ValStr: "foobar"
+  ValInt:  123
+  ValStr:  "foobar"
 })`)
 
 	test.EqualStr(t,
 		td.SStruct(&MyStruct{}, td.StructFields{}).String(),
 		`SStruct(*td_test.MyStruct{
-  Ptr: (*int)(<nil>)
+  Ptr:     (*int)(<nil>)
   ValBool: false
-  ValInt: 0
-  ValStr: ""
+  ValInt:  0
+  ValStr:  ""
 })`)
 
 	// Erroneous op
