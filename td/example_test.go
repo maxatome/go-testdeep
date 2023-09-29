@@ -4563,7 +4563,7 @@ func ExampleSuperMapOf_map() {
 
 	ok := td.Cmp(t, got,
 		td.SuperMapOf(map[string]int{"bar": 42}, td.MapEntries{"foo": td.Lt(15)}),
-		"checks map %v contains at leat all expected keys/values", got)
+		"checks map %v contains at least all expected keys/values", got)
 	fmt.Println(ok)
 
 	// Output:
@@ -4579,12 +4579,12 @@ func ExampleSuperMapOf_typedMap() {
 
 	ok := td.Cmp(t, got,
 		td.SuperMapOf(MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15)}),
-		"checks typed map %v contains at leat all expected keys/values", got)
+		"checks typed map %v contains at least all expected keys/values", got)
 	fmt.Println(ok)
 
 	ok = td.Cmp(t, &got,
 		td.SuperMapOf(&MyMap{"bar": 42}, td.MapEntries{"foo": td.Lt(15)}),
-		"checks pointed typed map %v contains at leat all expected keys/values",
+		"checks pointed typed map %v contains at least all expected keys/values",
 		got)
 	fmt.Println(ok)
 
