@@ -565,8 +565,12 @@ func (t *T) CmpNoError(got error, args ...any) bool {
 // expectedPanic parameter. It returns true only if both conditions
 // are fulfilled.
 //
-// Note that calling panic(nil) in fn body is detected as a panic
-// (in this case expectedPanic has to be nil).
+// Note that calling panic(nil) in fn body is always detected as a
+// panic. [runtime] package says: before Go 1.21, programs that called
+// panic(nil) observed recover returning nil. Starting in Go 1.21,
+// programs that call panic(nil) observe recover returning a
+// [*runtime.PanicNilError]. Programs can change back to the old
+// behavior by setting GODEBUG=panicnil=1.
 //
 //	t.CmpPanic(func() { panic("I am panicking!") },
 //	  "I am panicking!",
@@ -596,7 +600,12 @@ func (t *T) CmpPanic(fn func(), expected any, args ...any) bool {
 // occurred false is returned then the panic() parameter and the stack
 // trace appear in the test report.
 //
-// Note that calling panic(nil) in fn body is detected as a panic.
+// Note that calling panic(nil) in fn body is always detected as a
+// panic. [runtime] package says: before Go 1.21, programs that called
+// panic(nil) observed recover returning nil. Starting in Go 1.21,
+// programs that call panic(nil) observe recover returning a
+// [*runtime.PanicNilError]. Programs can change back to the old
+// behavior by setting GODEBUG=panicnil=1.
 //
 //	t.CmpNotPanic(func() {}) // succeeds as function does not panic
 //

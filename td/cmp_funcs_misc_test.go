@@ -92,6 +92,11 @@ func ExampleCmpPanic() {
 	fmt.Println("checks panic() sub-string:", ok)
 
 	// Can detect panic(nil)
+	// Before Go 1.21, programs that called panic(nil) observed recover
+	// returning nil. Starting in Go 1.21, programs that call panic(nil)
+	// observe recover returning a *PanicNilError. Programs can change
+	// back to the old behavior by setting GODEBUG=panicnil=1.
+	// See https://pkg.go.dev/runtime#PanicNilError
 	ok = td.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)")
 	fmt.Println("checks for panic(nil):", ok)
 
