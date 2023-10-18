@@ -28,6 +28,8 @@ import (
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
+//
+// See also [CmpFalse].
 func CmpTrue(t TestingT, got bool, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, true, args...)
@@ -47,6 +49,8 @@ func CmpTrue(t TestingT, got bool, args ...any) bool {
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
+//
+// See also [CmpTrue].
 func CmpFalse(t TestingT, got bool, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, false, args...)
@@ -103,6 +107,8 @@ func cmpNoError(ctx ctxerr.Context, t TestingT, got error, args ...any) bool {
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
+//
+// See also [CmpNoError].
 func CmpError(t TestingT, got error, args ...any) bool {
 	t.Helper()
 	return cmpError(newContext(t), t, got, args...)
@@ -121,6 +127,8 @@ func CmpError(t TestingT, got error, args ...any) bool {
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
+//
+// See also [CmpError].
 func CmpNoError(t TestingT, got error, args ...any) bool {
 	t.Helper()
 	return cmpNoError(newContext(t), t, got, args...)
@@ -212,8 +220,12 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...any) bool {
 // expectedPanic parameter. It returns true only if both conditions
 // are fulfilled.
 //
-// Note that calling panic(nil) in fn body is detected as a panic
-// (in this case expectedPanic has to be nil).
+// Note that calling panic(nil) in fn body is always detected as a
+// panic. [runtime] package says: before Go 1.21, programs that called
+// panic(nil) observed recover returning nil. Starting in Go 1.21,
+// programs that call panic(nil) observe recover returning a
+// [*runtime.PanicNilError]. Programs can change back to the old
+// behavior by setting GODEBUG=panicnil=1.
 //
 //	td.CmpPanic(t,
 //	  func() { panic("I am panicking!") },
@@ -233,8 +245,9 @@ func cmpNotPanic(ctx ctxerr.Context, t TestingT, fn func(), args ...any) bool {
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
-func CmpPanic(t TestingT, fn func(), expectedPanic any,
-	args ...any) bool {
+//
+// See also [CmpNotPanic].
+func CmpPanic(t TestingT, fn func(), expectedPanic any, args ...any) bool {
 	t.Helper()
 	return cmpPanic(newContext(t), t, fn, expectedPanic, args...)
 }
@@ -243,7 +256,12 @@ func CmpPanic(t TestingT, fn func(), expectedPanic any,
 // occurred false is returned then the panic() parameter and the stack
 // trace appear in the test report.
 //
-// Note that calling panic(nil) in fn body is detected as a panic.
+// Note that calling panic(nil) in fn body is always detected as a
+// panic. [runtime] package says: before Go 1.21, programs that called
+// panic(nil) observed recover returning nil. Starting in Go 1.21,
+// programs that call panic(nil) observe recover returning a
+// [*runtime.PanicNilError]. Programs can change back to the old
+// behavior by setting GODEBUG=panicnil=1.
 //
 //	td.CmpNotPanic(t, func() {}) // succeeds as function does not panic
 //
@@ -256,6 +274,8 @@ func CmpPanic(t TestingT, fn func(), expectedPanic any,
 // [fmt.Fprintf] is used to compose the name, else args are passed to
 // [fmt.Fprint]. Do not forget it is the name of the test, not the
 // reason of a potential failure.
+//
+// See also [CmpPanic].
 func CmpNotPanic(t TestingT, fn func(), args ...any) bool {
 	t.Helper()
 	return cmpNotPanic(newContext(t), t, fn, args...)
