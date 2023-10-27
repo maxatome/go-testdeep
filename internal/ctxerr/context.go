@@ -93,6 +93,13 @@ func (c Context) CollectError(err *Error) *Error {
 		return err
 	}
 
+	// Skip it if already encountered as Re in JSON(`[$1,$1]`, Re(123))
+	for _, cur := range *c.Errors {
+		if cur == err {
+			return nil
+		}
+	}
+
 	// Else, accumulate...
 	*c.Errors = append(*c.Errors, err)
 	if c.MaxErrors >= 0 && len(*c.Errors) >= c.MaxErrors {
