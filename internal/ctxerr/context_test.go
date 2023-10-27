@@ -206,6 +206,24 @@ func TestContextCollectError(t *testing.T) {
 	if len(errors) != 100 {
 		t.Errorf("Only %d errors accumulated instead of 100", len(errors))
 	}
+
+	//
+	// Do not collect 2 times the same error
+	errors = nil
+	ctx = ctxerr.Context{
+		Errors:    &errors,
+		MaxErrors: -1,
+	}
+	ctx.CollectError(&ctxerr.Error{}) //nolint: errcheck
+	x := &ctxerr.Error{}
+	ctx.CollectError(x)               //nolint: errcheck
+	ctx.CollectError(&ctxerr.Error{}) //nolint: errcheck
+	ctx.CollectError(x)               //nolint: errcheck
+	ctx.CollectError(x)               //nolint: errcheck
+	ctx.CollectError(&ctxerr.Error{}) //nolint: errcheck
+	if len(errors) != 4 {
+		t.Errorf("%d errors accumulated instead of 4", len(errors))
+	}
 }
 
 func TestCannotCompareError(t *testing.T) {
