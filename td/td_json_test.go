@@ -105,6 +105,16 @@ func TestJSON(t *testing.T) {
 			td.Tag("age", td.Between(40, 45)),
 			td.Tag("gender", td.NotEmpty())))
 
+	// Tag placeholders + numeric placeholders
+	checkOK(t, []MyStruct{got, got},
+		td.JSON(`[
+				{"name":"$1","age":$age,"gender":"$3"},
+				{"name":"$1","age":$2,"gender":"$3"}
+			]`,
+			td.Re(`^Bo`),                      // $1
+			td.Tag("age", td.Between(40, 45)), // $2
+			"male"))                           // $3
+
 	// Tag placeholders + operators are not JSON marshallable
 	checkOK(t, got,
 		td.JSON(`$all`, td.Tag("all", map[string]any{
@@ -112,6 +122,15 @@ func TestJSON(t *testing.T) {
 			"age":    42,
 			"gender": td.NotEmpty(),
 		})))
+
+	checkError(t, got,
+		td.JSON(`{"name":$1, "age":$1, "gender":$1}`,
+			td.Tag("!!", td.Ignore())),
+		expectedError{
+			Message: mustBe("bad usage of Tag operator"),
+			Summary: mustBe("Invalid tag, should match (Letter|_)(Letter|_|Number)*"),
+			Under:   mustContain("under operator Tag"),
+		})
 
 	// Tag placeholders + nil
 	checkOK(t, nil, td.JSON(`$all`, td.Tag("all", nil)))

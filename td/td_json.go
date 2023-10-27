@@ -127,8 +127,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 	var byTag map[string]any
 
 	for i, p := range params {
-		switch op := p.(type) {
-		case *tdTag:
+		if op, ok := p.(*tdTag); ok && op.err == nil {
 			if byTag[op.tag] != nil {
 				return nil, ctxerr.OpBad(u.Func, `2 params have the same tag "%s"`, op.tag)
 			}
@@ -141,10 +140,8 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 				p = op.expectedValue.Interface()
 			}
 			byTag[op.tag] = newJSONNamedPlaceholder(op.tag, p)
-
-		default:
-			params[i] = newJSONNumPlaceholder(uint64(i+1), p)
 		}
+		params[i] = newJSONNumPlaceholder(uint64(i+1), p)
 	}
 
 	final, err := json.Parse(b, json.ParseOpts{
