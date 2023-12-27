@@ -178,7 +178,8 @@ func TestRun(t *testing.T) {
 	t.Run("Without ptr: only non-ptr methods", func(t *testing.T) {
 		defer traceFullNoPtr.clean()
 		suite := FullNoPtr{}
-		td.CmpTrue(t, tdsuite.Run(t, suite)) // non-ptr
+		tb := test.NewTestingTB("TestWithoutPtr")
+		td.CmpTrue(t, tdsuite.Run(tb, suite)) // non-ptr
 		ok := td.Cmp(t, traceFullNoPtr.calls, []string{
 			"Setup",
 			/**/ "PreTest+Test1",
@@ -207,8 +208,7 @@ func TestRun(t *testing.T) {
 			}
 		}
 		// Yes it is a bit ugly
-		td.Cmp(t, t, td.Smuggle("output",
-			td.Contains("Run(): several methods are not accessible as suite is not a pointer but tdsuite_test.FullNoPtr: PostTest, Test2")))
+		td.CmpEmpty(t, tb.ContainsMessages("Run(): several methods are not accessible as suite is not a pointer but tdsuite_test.FullNoPtr: PostTest, Test2"))
 	})
 
 	t.Run("With ptr: all ptr & non-ptr methods", func(t *testing.T) {
