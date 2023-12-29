@@ -436,7 +436,7 @@ func (t *T) IgnoreUnexported(types ...any) *T {
 	return t
 }
 
-// TestDeepInGotOK tells go-testdeep to not panic when a [TestDeep]
+// TestDeepInGotOK tells go-testdeep not to panic when a [TestDeep]
 // operator is found on got side. By default it is forbidden because
 // most of the time it is a mistake to compare (expected, got) instead
 // of official (got, expected).

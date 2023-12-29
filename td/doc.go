@@ -112,7 +112,7 @@
 // with a value included between the date before CreateRecord() call
 // and the date just after.
 //
-// Note that if Id and CreateAt could be known in advance, we could
+// Note that if Id and CreatedAt could be known in advance, we could
 // simply do:
 //
 //	import (
@@ -136,7 +136,7 @@
 //	  }
 //	}
 //
-// But unfortunately, it is common to not know exactly the value of some
+// But unfortunately, it is common not to know exactly the value of some
 // fields…
 //
 // # Using advanced go-testdeep technique

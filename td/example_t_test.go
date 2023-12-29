@@ -2731,7 +2731,7 @@ func ExampleT_Set() {
 		"checks all items are present, in any order")
 	fmt.Println(ok)
 
-	// Tries its best to not raise an error when a value can be matched
+	// Tries its best not to raise an error when a value can be matched
 	// by several Set entries
 	ok = t.Set(got, []any{td.Between(1, 4), 3, td.Between(2, 10)},
 		"checks all items are present, in any order")
@@ -3688,7 +3688,7 @@ func ExampleT_SubSetOf() {
 		"checks at least all items are present, in any order, ignoring duplicates")
 	fmt.Println(ok)
 
-	// Tries its best to not raise an error when a value can be matched
+	// Tries its best not to raise an error when a value can be matched
 	// by several SubSetOf entries
 	ok = t.SubSetOf(got, []any{td.Between(1, 4), 3, td.Between(2, 10), td.Gt(100)},
 		"checks at least all items are present, in any order, ignoring duplicates")

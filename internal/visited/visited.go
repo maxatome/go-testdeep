@@ -19,7 +19,7 @@ type visitedKey struct {
 }
 
 // Visited allows to remember couples of same type pointers, typically
-// to not do the same action twice if the couple has already been seen.
+// not to do the same action twice if the couple has already been seen.
 type Visited map[visitedKey]bool
 
 // NewVisited returns a new [Visited] instance.

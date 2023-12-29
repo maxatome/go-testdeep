@@ -207,7 +207,6 @@ func TestRun(t *testing.T) {
 				}
 			}
 		}
-		// Yes it is a bit ugly
 		td.CmpEmpty(t, tb.ContainsMessages("Run(): several methods are not accessible as suite is not a pointer but tdsuite_test.FullNoPtr: PostTest, Test2"))
 	})
 
