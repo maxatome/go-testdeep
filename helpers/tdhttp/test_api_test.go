@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -1251,4 +1252,163 @@ func TestRun(t *testing.T) {
 		td.CmpTrue(t, ta.Get("/any").CmpStatus(123).Failed())
 	})
 	td.CmpFalse(t, ok)
+}
+
+func TestPrevJSONPointer(t *testing.T) {
+	mux := server()
+
+	ta := tdhttp.NewTestAPI(tdutil.NewT("test1"), mux)
+
+	assert, require := td.AssertRequire(t)
+
+	require.False(
+		ta.PostJSON("/mirror/json",
+			json.RawMessage(`[{"name":"Bob"},{"name":"Alice"}]`)).
+			RecordAs("test1").
+			CmpStatus(200).
+			CmpJSONBody(td.JSON(`[{"name":"Bob"},{"name":"Alice"}]`)).
+			Failed())
+
+	assert.Run("Basic", func(assert *td.T) {
+		assert.Cmp(ta.PrevJSONPointer("test1", "/0/name"), "Bob")
+		assert.Cmp(ta.LastJSONPointer("/0/name"), "Bob")
+	})
+
+	assert.Run("With model", func(assert *td.T) {
+		assert.Cmp(ta.PrevJSONPointer("test1", "/0/name", "model"), "Bob")
+		assert.Cmp(ta.LastJSONPointer("/0/name", "model"), "Bob")
+
+		type name string
+		assert.Cmp(ta.PrevJSONPointer("test1", "/0/name", name("")), name("Bob"))
+		assert.Cmp(ta.PrevJSONPointer("test1", "/0/name", reflect.TypeOf(name(""))), name("Bob"))
+		assert.Cmp(ta.LastJSONPointer("/0/name", name("")), name("Bob"))
+		assert.Cmp(ta.LastJSONPointer("/0/name", reflect.TypeOf(name(""))), name("Bob"))
+
+		assert.Cmp(
+			ta.PrevJSONPointer("test1", "/1", map[string]string(nil)),
+			map[string]string{"name": "Alice"})
+		assert.Cmp(
+			ta.LastJSONPointer("/1", map[string]string(nil)),
+			map[string]string{"name": "Alice"})
+
+		type personMap map[string]string
+		assert.Cmp(
+			ta.PrevJSONPointer("test1", "/1", personMap(nil)),
+			personMap{"name": "Alice"})
+		assert.Cmp(
+			ta.LastJSONPointer("/1", personMap(nil)),
+			personMap{"name": "Alice"})
+
+		type personStruct struct {
+			Name string `json:"name"`
+		}
+		assert.Cmp(
+			ta.PrevJSONPointer("test1", "/1", personStruct{}),
+			personStruct{Name: "Alice"})
+		assert.Cmp(
+			ta.PrevJSONPointer("test1", "/1", (*personStruct)(nil)),
+			&personStruct{Name: "Alice"})
+		assert.Cmp(
+			ta.LastJSONPointer("/1", personStruct{}),
+			personStruct{Name: "Alice"})
+		assert.Cmp(
+			ta.LastJSONPointer("/1", (*personStruct)(nil)),
+			&personStruct{Name: "Alice"})
+	})
+}
+
+func TestRecordAs(t *testing.T) {
+	mux := server()
+
+	mockT := tdutil.NewT("test")
+	td.CmpTrue(t, mockT.CatchFailNow(func() {
+		tdhttp.NewTestAPI(mockT, mux).Get("/any").RecordAs("")
+	}))
+	td.CmpContains(t, mockT.LogBuf(), "RecordAs(NAME), NAME cannot be empty")
+
+	mockT = tdutil.NewT("test")
+	ta := tdhttp.NewTestAPI(mockT, mux).Get("/any").RecordAs("first")
+	td.CmpTrue(t, mockT.CatchFailNow(func() { ta.RecordAs("again") }))
+	td.CmpContains(t,
+		mockT.LogBuf(),
+		`Cannot record last response as "again": last response is already recorded as "first"`)
+}
+
+func TestTemplate(t *testing.T) {
+	mux := server()
+
+	require := td.Require(t)
+
+	ta := tdhttp.NewTestAPI(require, mux)
+
+	ta.PostJSON("/mirror/json",
+		json.RawMessage(`[{"name":"Bob"},{"name":"Alice"}]`)).
+		RecordAs("xxx").
+		CmpStatus(200).
+		CmpJSONBody(td.JSON(`[{"name":"Bob"},{"name":"Alice"}]`))
+
+	ta.PostJSON("/mirror/json", ta.TmplJSON(`[
+  {{ (index . 0).name | printf "%q" }},
+  {{ (index (json "xxx") 1).name | quote }}
+]`)).
+		CmpStatus(200).
+		CmpJSONBody(td.JSON(`["Bob","Alice"]`))
+
+	ta.PostJSON("/mirror/json",
+		json.RawMessage(`[{"name":"Bob"},{"name":"Alice"}]`)).
+		RecordAs("test1").
+		CmpStatus(200).
+		CmpJSONBody(td.JSON(`[{"name":"Bob"},{"name":"Alice"}]`))
+
+	ta.PostJSON("/mirror/json", ta.TmplJSON(`[
+  {{ jsonp "/0/name" | printf "%q" }},
+  {{ jsonp "/1/name" | quote }}
+]`)).
+		RecordAs("test2").
+		CmpStatus(200).
+		CmpJSONBody(td.JSON(`["Bob","Alice"]`))
+
+	ta.PostJSON("/mirror/json", ta.TmplJSON(`[
+  {{ jsonp "/1/name" "test1" | quote }},
+  {{ jsonp "/0/name" "test1" | quote }}
+]`)).
+		RecordAs("test3").
+		CmpStatus(200).
+		CmpJSONBody(td.JSON(`["Alice","Bob"]`))
+
+	ta.PostJSON("/mirror/json", ta.TmplJSON(`[
+  {"first_name": "{{ jsonp "/0/name" "test1" }}"},
+  {"first_name": "{{ jsonp "/1/name" "test1" }}"}
+]`)).
+		RecordAs("test4").
+		CmpStatus(200).
+		CmpJSONBody(td.JSON(`[{"first_name":"Bob"},{"first_name":"Alice"}]`))
+
+	ta.PutJSON("/mirror/json", ta.TmplJSON(`[
+{{ range . }}
+{{ .first_name | quote }},
+{{ end }}
+"last"
+]`)).
+		RecordAs("test5").
+		CmpStatus(200).
+		CmpJSONBody(td.JSON(`["Bob","Alice","last"]`))
+
+	ta.PatchJSON("/mirror/json", ta.TmplJSON(`{
+  "persons": [
+{{ $all := jsonp "" "test4" }}
+{{ range $i, $person := $all }}
+{{ $person.first_name | quote }}{{ if (lt $i (sub (len $all) 1)) }},{{ end }}
+{{ end }}
+  ],
+  "method_last": {{ header "X-TestDeep-Method" | quote }},
+  "method_test4": {{ header "X-TestDeep-Method" "test4" | quote }}
+}`)).
+		RecordAs("test6").
+		CmpStatus(200).
+		CmpJSONBody(td.JSON(`{
+  "persons":      ["Bob","Alice"],
+  "method_last":  "PUT",
+  "method_test4": "POST",
+}`))
 }

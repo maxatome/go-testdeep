@@ -9,6 +9,7 @@ package tdhttp
 import (
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -24,6 +25,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/color"
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 	"github.com/maxatome/go-testdeep/td"
 )
 
@@ -52,6 +54,11 @@ type TestAPI struct {
 	// autoDumpResponse dumps the received response when a test fails.
 	autoDumpResponse bool
 	responseDumped   bool
+
+	autoTmplJSONTarget bool
+	autoTmplJSONBody   bool
+
+	responses *internal.ResponseList
 }
 
 // NewTestAPI creates a [TestAPI] that can be used to test routes of the
@@ -77,8 +84,9 @@ type TestAPI struct {
 // Note that tb can be a [*testing.T] as well as a [*td.T].
 func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 	return &TestAPI{
-		t:       td.NewT(tb),
-		handler: handler,
+		t:         td.NewT(tb),
+		handler:   handler,
+		responses: internal.NewResponseList(),
 	}
 }
 
@@ -113,6 +121,7 @@ func (ta *TestAPI) With(tb testing.TB) *TestAPI {
 		t:                td.NewT(tb),
 		handler:          ta.handler,
 		autoDumpResponse: ta.autoDumpResponse,
+		responses:        internal.NewResponseList(),
 	}
 }
 
@@ -140,6 +149,22 @@ func (ta *TestAPI) AutoDumpResponse(enable ...bool) *TestAPI {
 	return ta
 }
 
+func (ta *TestAPI) AutoTmplJSON(enable ...bool) *TestAPI {
+	ta.AutoTmplJSONBody(enable...)
+	ta.AutoTmplJSONTarget(enable...)
+	return ta
+}
+
+func (ta *TestAPI) AutoTmplJSONBody(enable ...bool) *TestAPI {
+	ta.autoTmplJSONBody = len(enable) == 0 || enable[0]
+	return ta
+}
+
+func (ta *TestAPI) AutoTmplJSONTarget(enable ...bool) *TestAPI {
+	ta.autoTmplJSONTarget = len(enable) == 0 || enable[0]
+	return ta
+}
+
 // Name allows to name the series of tests that follow. This name is
 // used as a prefix for all following tests, in case of failure to
 // qualify each test. If len(args) > 1 and the first item of args is
@@ -149,6 +174,20 @@ func (ta *TestAPI) Name(args ...any) *TestAPI {
 	ta.name = tdutil.BuildTestName(args...)
 	if ta.name != "" {
 		ta.name += ": "
+	}
+	return ta
+}
+
+// RecordAs records the last response as name.
+func (ta *TestAPI) RecordAs(name string) *TestAPI {
+	ta.t.Helper()
+
+	if name == "" {
+		ta.t.Fatalf(color.Bad("RecordAs(NAME), NAME cannot be empty"))
+	}
+
+	if err := ta.responses.RecordLast(name); err != nil {
+		ta.t.Fatalf(color.Bad("Cannot record last response as %q: %s", name, err))
 	}
 	return ta
 }
@@ -164,7 +203,18 @@ func (ta *TestAPI) Request(req *http.Request) *TestAPI {
 	ta.sentAt = time.Now().Truncate(0)
 	ta.responseDumped = false
 
+	if ta.autoTmplJSONBody && req.Body != nil && ta.responses.Last() != nil {
+		b, err := io.ReadAll(req.Body)
+		if err != nil {
+			ta.t.Helper()
+			ta.t.Fatalf("Cannot apply template: %s", err)
+		}
+		req.Body = ta.TmplJSON(string(b))
+	}
+
 	ta.handler.ServeHTTP(ta.response, req)
+
+	ta.responses.SetLast(internal.NewResponse(ta.response))
 
 	return ta
 }
@@ -193,6 +243,13 @@ func (ta *TestAPI) Failed() bool {
 	return ta.failed != 0
 }
 
+func (ta *TestAPI) autoTmplTarget(target string) string {
+	if ta.autoTmplJSONTarget && ta.responses.Last() != nil {
+		return ta.TmplJSON(target).String()
+	}
+	return target
+}
+
 // Get sends a HTTP GET to the tested API. Any Cmp* or [TestAPI.NoBody] methods
 // can now be called.
 //
@@ -201,7 +258,7 @@ func (ta *TestAPI) Failed() bool {
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) Get(target string, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := get(target, headersQueryParams...)
+	req, err := get(ta.autoTmplTarget(target), headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -216,7 +273,7 @@ func (ta *TestAPI) Get(target string, headersQueryParams ...any) *TestAPI {
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) Head(target string, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := head(target, headersQueryParams...)
+	req, err := head(ta.autoTmplTarget(target), headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -231,7 +288,7 @@ func (ta *TestAPI) Head(target string, headersQueryParams ...any) *TestAPI {
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) Options(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := options(target, body, headersQueryParams...)
+	req, err := options(ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -246,7 +303,7 @@ func (ta *TestAPI) Options(target string, body io.Reader, headersQueryParams ...
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) Post(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := post(target, body, headersQueryParams...)
+	req, err := post(ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -263,7 +320,7 @@ func (ta *TestAPI) Post(target string, body io.Reader, headersQueryParams ...any
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) PostForm(target string, data URLValuesEncoder, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := postForm(target, data, headersQueryParams...)
+	req, err := postForm(ta.autoTmplTarget(target), data, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -294,7 +351,7 @@ func (ta *TestAPI) PostForm(target string, data URLValuesEncoder, headersQueryPa
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) PostMultipartFormData(target string, data *MultipartBody, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := postMultipartFormData(target, data, headersQueryParams...)
+	req, err := postMultipartFormData(ta.autoTmplTarget(target), data, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -309,7 +366,7 @@ func (ta *TestAPI) PostMultipartFormData(target string, data *MultipartBody, hea
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) Put(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := put(target, body, headersQueryParams...)
+	req, err := put(ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -324,7 +381,7 @@ func (ta *TestAPI) Put(target string, body io.Reader, headersQueryParams ...any)
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) Patch(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := patch(target, body, headersQueryParams...)
+	req, err := patch(ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -339,7 +396,7 @@ func (ta *TestAPI) Patch(target string, body io.Reader, headersQueryParams ...an
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) Delete(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := del(target, body, headersQueryParams...)
+	req, err := del(ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -355,7 +412,7 @@ func (ta *TestAPI) Delete(target string, body io.Reader, headersQueryParams ...a
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) NewJSONRequest(method, target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(method, target, body, headersQueryParams...)
+	req, err := newJSONRequest(method, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -371,7 +428,7 @@ func (ta *TestAPI) NewJSONRequest(method, target string, body any, headersQueryP
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) PostJSON(target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(http.MethodPost, target, body, headersQueryParams...)
+	req, err := newJSONRequest(http.MethodPost, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -387,7 +444,7 @@ func (ta *TestAPI) PostJSON(target string, body any, headersQueryParams ...any) 
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) PutJSON(target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(http.MethodPut, target, body, headersQueryParams...)
+	req, err := newJSONRequest(http.MethodPut, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -403,7 +460,7 @@ func (ta *TestAPI) PutJSON(target string, body any, headersQueryParams ...any) *
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) PatchJSON(target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(http.MethodPatch, target, body, headersQueryParams...)
+	req, err := newJSONRequest(http.MethodPatch, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -419,7 +476,7 @@ func (ta *TestAPI) PatchJSON(target string, body any, headersQueryParams ...any)
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) DeleteJSON(target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(http.MethodDelete, target, body, headersQueryParams...)
+	req, err := newJSONRequest(http.MethodDelete, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -435,7 +492,7 @@ func (ta *TestAPI) DeleteJSON(target string, body any, headersQueryParams ...any
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) NewXMLRequest(method, target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(method, target, body, headersQueryParams...)
+	req, err := newXMLRequest(method, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -451,7 +508,7 @@ func (ta *TestAPI) NewXMLRequest(method, target string, body any, headersQueryPa
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) PostXML(target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(http.MethodPost, target, body, headersQueryParams...)
+	req, err := newXMLRequest(http.MethodPost, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -467,7 +524,7 @@ func (ta *TestAPI) PostXML(target string, body any, headersQueryParams ...any) *
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) PutXML(target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(http.MethodPut, target, body, headersQueryParams...)
+	req, err := newXMLRequest(http.MethodPut, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -483,7 +540,7 @@ func (ta *TestAPI) PutXML(target string, body any, headersQueryParams ...any) *T
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) PatchXML(target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(http.MethodPatch, target, body, headersQueryParams...)
+	req, err := newXMLRequest(http.MethodPatch, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -499,7 +556,7 @@ func (ta *TestAPI) PatchXML(target string, body any, headersQueryParams ...any) 
 // See [NewRequest] for all possible formats accepted in headersQueryParams.
 func (ta *TestAPI) DeleteXML(target string, body any, headersQueryParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(http.MethodDelete, target, body, headersQueryParams...)
+	req, err := newXMLRequest(http.MethodDelete, ta.autoTmplTarget(target), body, headersQueryParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -1239,4 +1296,106 @@ func (ta *TestAPI) A(operator td.TestDeep, model ...any) any {
 // request has been sent, and the time when the comparison occurs.
 func (ta *TestAPI) SentAt() time.Time {
 	return ta.sentAt
+}
+
+func (ta *TestAPI) respJSONPointer(resp *internal.Response, pointer string, model ...any) (any, bool, error) {
+	body, err := resp.UnmarshalJSON()
+	if err != nil {
+		return nil, false, fmt.Errorf("Response cannot be json.Unmarshal'ed: %s", err)
+	}
+
+	val, err := util.JSONPointer(body, pointer)
+	if err != nil {
+		return nil, false, fmt.Errorf("JSON pointer error: %s", err)
+	}
+
+	if len(model) == 0 {
+		return val, false, nil
+	}
+
+	typ, ok := model[0].(reflect.Type)
+	if !ok {
+		typ = reflect.TypeOf(model[0])
+		if typ == nil {
+			return nil, true, errors.New("Untyped nil value is not valid as model")
+		}
+	}
+
+	if reflect.TypeOf(val) == typ {
+		return val, false, nil
+	}
+
+	vval := reflect.ValueOf(val)
+	if types.IsConvertible(vval, typ) {
+		return vval.Convert(typ).Interface(), false, nil
+	}
+
+	b, _ := json.Marshal(val) // cannot fail
+
+	vval = reflect.New(typ)
+	if err := json.Unmarshal(b, vval.Interface()); err != nil {
+		return nil, false, fmt.Errorf("Cannot json.Unmarshal JSON value pointed by %q into %s", pointer, typ)
+	}
+
+	return vval.Elem().Interface(), false, nil
+}
+
+// PrevJSONPointer returns the value corresponding to JSON pointer
+// pointer in response recorded as name. If model is passed and
+// len(model) == 1, the value is extracted in the same type as
+// model[0]. Note that if model[0] is a [reflect.Type], the target type
+// is the one represented by this [reflect.Type].
+func (ta *TestAPI) PrevJSONPointer(name string, pointer string, model ...any) any {
+	ta.t.Helper()
+
+	if len(model) > 1 {
+		ta.t.Fatal(color.TooManyParams("PrevJSONPointer(NAME, JSON_POINTER[, MODEL])"))
+	}
+
+	resp := ta.responses.Get(name)
+	if resp == nil {
+		ta.t.Error(color.Bad("There is no response recorded as %q", name))
+		return nil
+	}
+
+	val, fatal, err := ta.respJSONPointer(resp, pointer, model...)
+	if err != nil {
+		if fatal {
+			ta.t.Fatal(color.Bad(err.Error()))
+		}
+		ta.t.Error(color.Bad(err.Error()))
+	}
+	return val
+}
+
+// LastJSONPointer returns the value corresponding to JSON pointer
+// pointer in the last response. If model is passed and
+// len(model) == 1, the value is extracted in the same type as
+// model[0]. Note that if model[0] is a [reflect.Type], the target
+// type is the one represented by this [reflect.Type].
+func (ta *TestAPI) LastJSONPointer(pointer string, model ...any) any {
+	ta.t.Helper()
+
+	if len(model) > 1 {
+		ta.t.Fatal(color.TooManyParams("LastJSONPointer(JSON_POINTER[, MODEL])"))
+	}
+
+	resp := ta.responses.Last()
+	if resp == nil {
+		ta.t.Error(color.Bad("There is no last response"))
+		return nil
+	}
+
+	val, fatal, err := ta.respJSONPointer(resp, pointer, model...)
+	if err != nil {
+		if fatal {
+			ta.t.Fatal(color.Bad(err.Error()))
+		}
+		ta.t.Error(color.Bad(err.Error()))
+	}
+	return val
+}
+
+func (ta *TestAPI) TmplJSON(s string) TemplateJSON {
+	return newTemplateJSON(ta, s)
 }
