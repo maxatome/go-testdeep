@@ -24,56 +24,9 @@ import (
 )
 
 func newRequest(method string, target string, body io.Reader, headersQueryParams []any) (*http.Request, error) {
-	header := http.Header{}
-	qp := url.Values{}
-	var cookies []*http.Cookie
-
-	headersQueryParams = flat.Interfaces(headersQueryParams...)
-	for i := 0; i < len(headersQueryParams); i++ {
-		switch cur := headersQueryParams[i].(type) {
-		case string:
-			i++
-			var val string
-			if i < len(headersQueryParams) {
-				var ok bool
-				if val, ok = headersQueryParams[i].(string); !ok {
-					return nil, errors.New(color.Bad(
-						`header "%s" should have a string value, not a %T (@ headersQueryParams[%d])`,
-						cur, headersQueryParams[i], i))
-				}
-			}
-			header.Add(cur, val)
-
-		case http.Header:
-			for k, v := range cur {
-				k = http.CanonicalHeaderKey(k)
-				header[k] = append(header[k], v...)
-			}
-
-		case *http.Cookie:
-			cookies = append(cookies, cur)
-
-		case http.Cookie:
-			cookies = append(cookies, &cur)
-
-		case url.Values:
-			for k, v := range cur {
-				qp[k] = append(qp[k], v...)
-			}
-
-		case Q:
-			err := cur.AddTo(qp)
-			if err != nil {
-				return nil, errors.New(color.Bad(
-					"headersQueryParams... tdhttp.Q bad parameter: %s (@ headersQueryParams[%d])",
-					err, i))
-			}
-
-		default:
-			return nil, errors.New(color.Bad(
-				"headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not %T (@ headersQueryParams[%d])",
-				cur, i))
-		}
+	header, qp, cookies, err := requestParams(headersQueryParams)
+	if err != nil {
+		return nil, err
 	}
 
 	// Parse path even when no query params to have consistent error
@@ -101,6 +54,70 @@ func newRequest(method string, target string, body io.Reader, headersQueryParams
 	}
 
 	return req, nil
+}
+
+func requestParams(headersQueryParams []any) (http.Header, url.Values, []*http.Cookie, error) {
+	header := http.Header{}
+	qp := url.Values{}
+	var cookies []*http.Cookie
+
+	headersQueryParams = flat.Interfaces(headersQueryParams...)
+	for i := 0; i < len(headersQueryParams); i++ {
+		switch cur := headersQueryParams[i].(type) {
+		case string:
+			i++
+			var val string
+			if i < len(headersQueryParams) {
+				var ok bool
+				if val, ok = headersQueryParams[i].(string); !ok {
+					return nil, nil, nil, errors.New(color.Bad(
+						`header "%s" should have a string value, not a %T (@ headersQueryParams[%d])`,
+						cur, headersQueryParams[i], i))
+				}
+			}
+			header.Add(cur, val)
+
+		case http.Header:
+			for k, v := range cur {
+				k = http.CanonicalHeaderKey(k)
+				header[k] = append(header[k], v...)
+			}
+
+		case *http.Cookie:
+			cookies = append(cookies, cur)
+
+		case http.Cookie:
+			cookies = append(cookies, &cur)
+
+		case []*http.Cookie:
+			cookies = append(cookies, cur...)
+
+		case url.Values:
+			for k, v := range cur {
+				qp[k] = append(qp[k], v...)
+			}
+
+		case Q:
+			err := cur.AddTo(qp)
+			if err != nil {
+				return nil, nil, nil, errors.New(color.Bad(
+					"headersQueryParams... tdhttp.Q bad parameter: %s (@ headersQueryParams[%d])",
+					err, i))
+			}
+
+		default:
+			return nil, nil, nil, errors.New(color.Bad(
+				"headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not %T (@ headersQueryParams[%d])",
+				cur, i))
+		}
+	}
+	if len(header) == 0 {
+		header = nil
+	}
+	if len(qp) == 0 {
+		qp = nil
+	}
+	return header, qp, cookies, nil
 }
 
 // BasicAuthHeader returns a new [http.Header] with only Authorization
