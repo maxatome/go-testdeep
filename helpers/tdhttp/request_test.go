@@ -19,7 +19,7 @@ import (
 func TestBasicAuthHeader(t *testing.T) {
 	td.Cmp(t,
 		tdhttp.BasicAuthHeader("max", "5ecr3T"),
-		http.Header{"Authorization": []string{"Basic bWF4OjVlY3IzVA=="}})
+		http.Header{"Authorization": {"Basic bWF4OjVlY3IzVA=="}})
 }
 
 func TestNewRequest(tt *testing.T) {
@@ -31,8 +31,8 @@ func TestNewRequest(tt *testing.T) {
 			"Zip", "Test")
 
 		t.Cmp(req.Header, http.Header{
-			"Foo": []string{"Bar"},
-			"Zip": []string{"Test"},
+			"Foo": {"Bar"},
+			"Zip": {"Test"},
 		})
 	})
 
@@ -42,21 +42,21 @@ func TestNewRequest(tt *testing.T) {
 			"Zip")
 
 		t.Cmp(req.Header, http.Header{
-			"Foo": []string{"Bar"},
-			"Zip": []string{""},
+			"Foo": {"Bar"},
+			"Zip": {""},
 		})
 	})
 
 	t.Run("NewRequest header http.Header", func(t *td.T) {
 		req := tdhttp.NewRequest("GET", "/path", nil,
 			http.Header{
-				"Foo": []string{"Bar"},
-				"Zip": []string{"Test"},
+				"Foo": {"Bar"},
+				"Zip": {"Test"},
 			})
 
 		t.Cmp(req.Header, http.Header{
-			"Foo": []string{"Bar"},
-			"Zip": []string{"Test"},
+			"Foo": {"Bar"},
+			"Zip": {"Test"},
 		})
 	})
 
@@ -82,10 +82,10 @@ func TestNewRequest(tt *testing.T) {
 		)
 
 		t.Cmp(req.Header, http.Header{
-			"Foo":  []string{"Bar"},
-			"Zip":  []string{"Test"},
-			"Pipo": []string{"Bingo"},
-			"Hey":  []string{"Yo"},
+			"Foo":  {"Bar"},
+			"Zip":  {"Test"},
+			"Pipo": {"Bingo"},
+			"Hey":  {"Yo"},
 		})
 	})
 
@@ -93,8 +93,8 @@ func TestNewRequest(tt *testing.T) {
 		req := tdhttp.NewRequest("GET", "/path", nil,
 			"H1", "V1",
 			http.Header{
-				"H1": []string{"V2"},
-				"H2": []string{"V1", "V2"},
+				"H1": {"V2"},
+				"H2": {"V1", "V2"},
 			},
 			"H2", "V3",
 			td.Flatten([]string{
@@ -109,16 +109,16 @@ func TestNewRequest(tt *testing.T) {
 		)
 
 		t.Cmp(req.Header, http.Header{
-			"H1": []string{"V1", "V2"},
-			"H2": []string{"V1", "V2", "V3", "V4", "V5"},
-			"H3": []string{"V1", "V2", "V3"},
+			"H1": {"V1", "V2"},
+			"H2": {"V1", "V2", "V3", "V4", "V5"},
+			"H3": {"V1", "V2", "V3"},
 		})
 	})
 
 	t.Run("NewRequest and query params", func(t *td.T) {
 		req := tdhttp.NewRequest("GET", "/path", nil,
-			url.Values{"p1": []string{"a", "b"}},
-			url.Values{"p2": []string{"a", "b"}},
+			url.Values{"p1": {"a", "b"}},
+			url.Values{"p2": {"a", "b"}},
 			tdhttp.Q{"p1": "c", "p2": []string{"c", "d"}},
 			tdhttp.Q{"p1": 123, "p3": true},
 		)
@@ -193,7 +193,7 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "GET",
-				Header: http.Header{"Foo": []string{"Bar"}},
+				Header: http.Header{"Foo": {"Bar"}},
 			},
 			td.StructFields{
 				"URL": td.String("/path"),
@@ -204,7 +204,7 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "HEAD",
-				Header: http.Header{"Foo": []string{"Bar"}},
+				Header: http.Header{"Foo": {"Bar"}},
 			},
 			td.StructFields{
 				"URL": td.String("/path"),
@@ -215,7 +215,7 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "OPTIONS",
-				Header: http.Header{"Foo": []string{"Bar"}},
+				Header: http.Header{"Foo": {"Bar"}},
 			},
 			td.StructFields{
 				"URL": td.String("/path"),
@@ -226,7 +226,7 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "POST",
-				Header: http.Header{"Foo": []string{"Bar"}},
+				Header: http.Header{"Foo": {"Bar"}},
 			},
 			td.StructFields{
 				"URL": td.String("/path"),
@@ -236,16 +236,16 @@ func TestNewRequest(tt *testing.T) {
 	t.Cmp(
 		tdhttp.PostForm("/path",
 			url.Values{
-				"param1": []string{"val1", "val2"},
-				"param2": []string{"zip"},
+				"param1": {"val1", "val2"},
+				"param2": {"zip"},
 			},
 			"Foo", "Bar"),
 		td.Struct(
 			&http.Request{
 				Method: "POST",
 				Header: http.Header{
-					"Content-Type": []string{"application/x-www-form-urlencoded"},
-					"Foo":          []string{"Bar"},
+					"Content-Type": {"application/x-www-form-urlencoded"},
+					"Foo":          {"Bar"},
 				},
 			},
 			td.StructFields{
@@ -268,8 +268,8 @@ func TestNewRequest(tt *testing.T) {
 			&http.Request{
 				Method: "POST",
 				Header: http.Header{
-					"Content-Type": []string{"application/x-www-form-urlencoded"},
-					"Foo":          []string{"Bar"},
+					"Content-Type": {"application/x-www-form-urlencoded"},
+					"Foo":          {"Bar"},
 				},
 			},
 			td.StructFields{
@@ -287,8 +287,8 @@ func TestNewRequest(tt *testing.T) {
 			&http.Request{
 				Method: "POST",
 				Header: http.Header{
-					"Content-Type": []string{"application/x-www-form-urlencoded"},
-					"Foo":          []string{"Bar"},
+					"Content-Type": {"application/x-www-form-urlencoded"},
+					"Foo":          {"Bar"},
 				},
 			},
 			td.StructFields{
@@ -314,8 +314,8 @@ func TestNewRequest(tt *testing.T) {
 			&http.Request{
 				Method: "POST",
 				Header: http.Header{
-					"Content-Type": []string{`multipart/form-data; boundary="BoUnDaRy"`},
-					"Foo":          []string{"Bar"},
+					"Content-Type": {`multipart/form-data; boundary="BoUnDaRy"`},
+					"Foo":          {"Bar"},
 				},
 			},
 			td.StructFields{
@@ -331,7 +331,7 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "PUT",
-				Header: http.Header{"Foo": []string{"Bar"}},
+				Header: http.Header{"Foo": {"Bar"}},
 			},
 			td.StructFields{
 				"URL": td.String("/path"),
@@ -342,7 +342,7 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "PATCH",
-				Header: http.Header{"Foo": []string{"Bar"}},
+				Header: http.Header{"Foo": {"Bar"}},
 			},
 			td.StructFields{
 				"URL": td.String("/path"),
@@ -353,7 +353,7 @@ func TestNewRequest(tt *testing.T) {
 		td.Struct(
 			&http.Request{
 				Method: "DELETE",
-				Header: http.Header{"Foo": []string{"Bar"}},
+				Header: http.Header{"Foo": {"Bar"}},
 			},
 			td.StructFields{
 				"URL": td.String("/path"),
@@ -422,8 +422,8 @@ func TestNewJSONRequest(tt *testing.T) {
 			&http.Request{
 				Method: "POST",
 				Header: http.Header{
-					"Foo":          []string{"Bar"},
-					"Content-Type": []string{"application/json"},
+					"Foo":          {"Bar"},
+					"Content-Type": {"application/json"},
 				},
 			},
 			td.StructFields{
@@ -436,8 +436,8 @@ func TestNewJSONRequest(tt *testing.T) {
 			&http.Request{
 				Method: "PUT",
 				Header: http.Header{
-					"Foo":          []string{"Bar"},
-					"Content-Type": []string{"application/json"},
+					"Foo":          {"Bar"},
+					"Content-Type": {"application/json"},
 				},
 			},
 			td.StructFields{
@@ -450,8 +450,8 @@ func TestNewJSONRequest(tt *testing.T) {
 			&http.Request{
 				Method: "PATCH",
 				Header: http.Header{
-					"Foo":          []string{"Bar"},
-					"Content-Type": []string{"application/json"},
+					"Foo":          {"Bar"},
+					"Content-Type": {"application/json"},
 				},
 			},
 			td.StructFields{
@@ -464,8 +464,8 @@ func TestNewJSONRequest(tt *testing.T) {
 			&http.Request{
 				Method: "DELETE",
 				Header: http.Header{
-					"Foo":          []string{"Bar"},
-					"Content-Type": []string{"application/json"},
+					"Foo":          {"Bar"},
+					"Content-Type": {"application/json"},
 				},
 			},
 			td.StructFields{
@@ -522,8 +522,8 @@ func TestNewXMLRequest(tt *testing.T) {
 			&http.Request{
 				Method: "POST",
 				Header: http.Header{
-					"Foo":          []string{"Bar"},
-					"Content-Type": []string{"application/xml"},
+					"Foo":          {"Bar"},
+					"Content-Type": {"application/xml"},
 				},
 			},
 			td.StructFields{
@@ -536,8 +536,8 @@ func TestNewXMLRequest(tt *testing.T) {
 			&http.Request{
 				Method: "PUT",
 				Header: http.Header{
-					"Foo":          []string{"Bar"},
-					"Content-Type": []string{"application/xml"},
+					"Foo":          {"Bar"},
+					"Content-Type": {"application/xml"},
 				},
 			},
 			td.StructFields{
@@ -550,8 +550,8 @@ func TestNewXMLRequest(tt *testing.T) {
 			&http.Request{
 				Method: "PATCH",
 				Header: http.Header{
-					"Foo":          []string{"Bar"},
-					"Content-Type": []string{"application/xml"},
+					"Foo":          {"Bar"},
+					"Content-Type": {"application/xml"},
 				},
 			},
 			td.StructFields{
@@ -564,8 +564,8 @@ func TestNewXMLRequest(tt *testing.T) {
 			&http.Request{
 				Method: "DELETE",
 				Header: http.Header{
-					"Foo":          []string{"Bar"},
-					"Content-Type": []string{"application/xml"},
+					"Foo":          {"Bar"},
+					"Content-Type": {"application/xml"},
 				},
 			},
 			td.StructFields{
