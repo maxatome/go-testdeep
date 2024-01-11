@@ -236,7 +236,7 @@ func TestNewTestAPI(t *testing.T) {
 		mockT = tdutil.NewT("test")
 		td.CmpFalse(t,
 			tdhttp.NewTestAPI(mockT, mux).
-				PostForm("/any", url.Values{"p1": []string{"v1"}, "p2": []string{"v2"}}).
+				PostForm("/any", url.Values{"p1": {"v1"}, "p2": {"v2"}}).
 				CmpStatus(200).
 				CmpHeader(containsKey).
 				CmpBody("POST!\n---\np1=v1&p2=v2").
