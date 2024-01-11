@@ -76,6 +76,20 @@ func server() *http.ServeMux {
 		io.Copy(w, req.Body) //nolint: errcheck
 	})
 
+	mux.HandleFunc("/hq/json", func(w http.ResponseWriter, req *http.Request) {
+		if req.Method == "HEAD" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		m := map[string]any{
+			"header":       req.Header,
+			"query_params": req.URL.Query(),
+		}
+		json.NewEncoder(w).Encode(m) //nolint: errcheck
+	})
+
 	mux.HandleFunc("/any/xml", func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("X-TestDeep-Method", req.Method)
 		if req.Method == "HEAD" {
@@ -1070,7 +1084,7 @@ bingo%CR
 			}))
 			td.Cmp(t,
 				mockT.LogBuf(),
-				td.Contains("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool"),
+				td.Contains("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool"),
 			)
 		}
 
@@ -1097,6 +1111,69 @@ bingo%CR
 		checkFatal(func() { ta.PutXML("/path", nil, true) })
 		checkFatal(func() { ta.PatchXML("/path", nil, true) })
 		checkFatal(func() { ta.DeleteXML("/path", nil, true) })
+	})
+
+	t.Run("Request params", func(t *testing.T) {
+		ta := tdhttp.NewTestAPI(t, mux)
+
+		ta.Get("/hq/json",
+			"X-Test", "pipo",
+			tdhttp.Q{"a": "b"},
+			http.Cookie{Name: "cook1", Value: "val1"}).
+			CmpJSONBody(td.JSON(`{
+				"header": SuperMapOf({
+					"X-Test": ["pipo"]
+				}),
+				"query_params": {
+					"a": ["b"]
+				}
+			}`))
+
+		ta.DefaultRequestParams(
+			"X-Zip", "test",
+			tdhttp.Q{"x": "y"},
+			http.Cookie{Name: "cook9", Value: "val9"})
+
+		ta.Get("/hq/json").
+			CmpJSONBody(td.JSON(`{
+				"header": SuperMapOf({
+					"X-Zip":  ["test"],
+					"Cookie": ["cook9=val9"]
+				}),
+				"query_params": {
+					"x": ["y"]
+				}
+			}`))
+
+		ta.Get("/hq/json",
+			"X-Test", "pipo",
+			tdhttp.Q{"a": "b"},
+			http.Cookie{Name: "cook1", Value: "val1"}).
+			CmpJSONBody(td.JSON(`{
+				"header": SuperMapOf({
+					"X-Test": ["pipo"],
+					"X-Zip":  ["test"],
+					"Cookie": ["cook1=val1; cook9=val9"]
+				}),
+				"query_params": {
+					"x": ["y"],
+					"a": ["b"]
+				}
+			}`))
+
+		ta.Get("/hq/json",
+			"X-Zip", "override",
+			tdhttp.Q{"x": "override"},
+			http.Cookie{Name: "cook9", Value: "override"}).
+			CmpJSONBody(td.JSON(`{
+				"header": SuperMapOf({
+					"X-Zip":  ["override"],
+					"Cookie": ["cook9=override"]
+				}),
+				"query_params": {
+					"x": ["override"]
+				}
+			}`))
 	})
 }
 
@@ -1128,6 +1205,112 @@ func TestWith(t *testing.T) {
 		Failed())
 	td.CmpContains(t, nt.LogBuf(), "Response.Status: values differ")
 	td.CmpContains(t, nt.LogBuf(), "X-Testdeep-Method: HEAD") // Header dumped
+}
+
+func TestDefaultRequestParams(t *testing.T) {
+	mux := server()
+
+	ta := tdhttp.NewTestAPI(tdutil.NewT("test1"), mux)
+
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  nil,
+		"defaultQParams": nil,
+		"defaultCookies": nil,
+	}))
+
+	ta.DefaultRequestParams("X-Test", "pipo")
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  http.Header{"X-Test": {"pipo"}},
+		"defaultQParams": nil,
+		"defaultCookies": nil,
+	}))
+
+	ta.DefaultRequestParams(tdhttp.Q{"a": "zip"})
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  nil,
+		"defaultQParams": url.Values{"a": {"zip"}},
+		"defaultCookies": nil,
+	}))
+
+	ta.DefaultRequestParams(http.Cookie{Name: "cook1", Value: "val1"})
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  nil,
+		"defaultQParams": nil,
+		"defaultCookies": []*http.Cookie{{Name: "cook1", Value: "val1"}},
+	}))
+
+	ta.DefaultRequestParams()
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  nil,
+		"defaultQParams": nil,
+		"defaultCookies": nil,
+	}))
+
+	ta.DefaultRequestParams(
+		"X-Test", "pipo",
+		tdhttp.Q{"a": "zip"},
+		http.Cookie{Name: "cook1", Value: "val1"})
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  http.Header{"X-Test": {"pipo"}},
+		"defaultQParams": url.Values{"a": {"zip"}},
+		"defaultCookies": []*http.Cookie{{Name: "cook1", Value: "val1"}},
+	}))
+
+	ta.AddDefaultRequestParams()
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  http.Header{"X-Test": {"pipo"}},
+		"defaultQParams": url.Values{"a": {"zip"}},
+		"defaultCookies": []*http.Cookie{{Name: "cook1", Value: "val1"}},
+	}))
+
+	ta.AddDefaultRequestParams(
+		"X-Zip", "OK",
+		tdhttp.Q{"b": "kiss"},
+		http.Cookie{Name: "cook2", Value: "val2"})
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  http.Header{"X-Test": {"pipo"}, "X-Zip": {"OK"}},
+		"defaultQParams": url.Values{"a": {"zip"}, "b": {"kiss"}},
+		"defaultCookies": []*http.Cookie{
+			{Name: "cook2", Value: "val2"},
+			{Name: "cook1", Value: "val1"},
+		},
+	}))
+
+	ta.AddDefaultRequestParams(
+		"X-Test", "bingo", "X-Zip", "OK",
+		tdhttp.Q{"a": "pizza", "b": "kiss"},
+		http.Cookie{Name: "cook1", Value: "VAL1"},
+		http.Cookie{Name: "cook2", Value: "val2"})
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  http.Header{"X-Test": {"bingo"}, "X-Zip": {"OK"}},
+		"defaultQParams": url.Values{"a": {"pizza"}, "b": {"kiss"}},
+		"defaultCookies": []*http.Cookie{
+			{Name: "cook1", Value: "VAL1"},
+			{Name: "cook2", Value: "val2"},
+		},
+	}))
+
+	t.Run("DefaultRequestParams fatal", func(t *testing.T) {
+		mockT := tdutil.NewT("test")
+		td.CmpTrue(t, mockT.CatchFailNow(func() {
+			ta = tdhttp.NewTestAPI(mockT, mux)
+			ta.DefaultRequestParams(123)
+		}))
+		td.Cmp(t,
+			mockT.LogBuf(),
+			td.Contains("headersQueryParams... can only contains"))
+	})
+
+	t.Run("AddDefaultRequestParams fatal", func(t *testing.T) {
+		mockT := tdutil.NewT("test")
+		td.CmpTrue(t, mockT.CatchFailNow(func() {
+			ta = tdhttp.NewTestAPI(mockT, mux)
+			ta.AddDefaultRequestParams(123)
+		}))
+		td.Cmp(t,
+			mockT.LogBuf(),
+			td.Contains("headersQueryParams... can only contains"))
+	})
 }
 
 func TestOr(t *testing.T) {

@@ -64,9 +64,15 @@ func TestNewRequest(tt *testing.T) {
 		req := tdhttp.NewRequest("GET", "/path", nil,
 			&http.Cookie{Name: "cook1", Value: "val1"},
 			http.Cookie{Name: "cook2", Value: "val2"},
+			[]*http.Cookie{
+				{Name: "cook3", Value: "val3"},
+				{Name: "cook4", Value: "val4"},
+			},
 		)
 
-		t.Cmp(req.Header, http.Header{"Cookie": []string{"cook1=val1; cook2=val2"}})
+		t.Cmp(req.Header, http.Header{
+			"Cookie": {"cook1=val1; cook2=val2; cook3=val3; cook4=val4"},
+		})
 	})
 
 	t.Run("NewRequest header flattened", func(t *td.T) {
@@ -135,7 +141,7 @@ func TestNewRequest(tt *testing.T) {
 	t.Run("NewRequest panics", func(t *td.T) {
 		t.CmpPanic(
 			func() { tdhttp.NewRequest("GET", "/path", nil, "H", "V", true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[2])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[2])"))
 
 		t.CmpPanic(
 			func() { tdhttp.NewRequest("GET", "/path", nil, "H1", true) },
@@ -143,39 +149,39 @@ func TestNewRequest(tt *testing.T) {
 
 		t.CmpPanic(
 			func() { tdhttp.Get("/path", true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
 			func() { tdhttp.Head("/path", true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
 			func() { tdhttp.Options("/path", nil, true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
 			func() { tdhttp.Post("/path", nil, true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
 			func() { tdhttp.PostForm("/path", nil, true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
 			func() { tdhttp.PostMultipartFormData("/path", &tdhttp.MultipartBody{}, true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
 			func() { tdhttp.Patch("/path", nil, true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
 			func() { tdhttp.Put("/path", nil, true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		t.CmpPanic(
 			func() { tdhttp.Delete("/path", nil, true) },
-			td.HasPrefix("headersQueryParams... can only contains string, http.Header, http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
+			td.HasPrefix("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool (@ headersQueryParams[0])"))
 
 		// Bad target
 		t.CmpPanic(
