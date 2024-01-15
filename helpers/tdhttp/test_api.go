@@ -113,9 +113,9 @@ func (ta *TestAPI) Clone() *TestAPI {
 		ta.defaultHeader, ta.defaultQParams, ta.defaultCookies)
 }
 
-// With creates a new [*TestAPI] instance copied from t, but resetting
+// With creates a new [*TestAPI] instance copied from ta, but resetting
 // the [testing.TB] instance the tests are based on to tb. The
-// returned instance is independent from t, sharing only the same
+// returned instance is independent from ta, sharing only the same
 // handler. The header values, query params and cookies defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are also copied.
