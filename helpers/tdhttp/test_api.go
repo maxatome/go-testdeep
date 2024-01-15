@@ -87,6 +87,32 @@ func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 	}
 }
 
+// Clone creates a new [*TestAPI] instance copied from ta. The
+// returned instance is independent from ta, sharing only the same
+// handler. The header values, query params and cookies defined using
+// [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
+// are also copied.
+//
+// It is typically used when the [TestAPI] instance is “reused” with
+// additionnal configuration, as in:
+//
+//	func TestMyAPI(t *testing.T) {
+//	  ta := tdhttp.NewTestAPI(t, MyAPIHandler())
+//	  taWithHeaders := ta.Clone().DefaultRequestParams("X-Header", "value")
+//
+//	  ta.Get("/test").CmpStatus(400)
+//	  taWithHeaders.Get("/test").CmpStatus(200)
+//	}
+func (ta *TestAPI) Clone() *TestAPI {
+	nta := &TestAPI{
+		t:                ta.t,
+		handler:          ta.handler,
+		autoDumpResponse: ta.autoDumpResponse,
+	}
+	return nta.DefaultRequestParams(
+		ta.defaultHeader, ta.defaultQParams, ta.defaultCookies)
+}
+
 // With creates a new [*TestAPI] instance copied from t, but resetting
 // the [testing.TB] instance the tests are based on to tb. The
 // returned instance is independent from t, sharing only the same
@@ -116,13 +142,9 @@ func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 //
 // See [TestAPI.Run] for another way to handle subtests.
 func (ta *TestAPI) With(tb testing.TB) *TestAPI {
-	nta := &TestAPI{
-		t:                td.NewT(tb),
-		handler:          ta.handler,
-		autoDumpResponse: ta.autoDumpResponse,
-	}
-	return nta.DefaultRequestParams(
-		ta.defaultHeader, ta.defaultQParams, ta.defaultCookies)
+	nta := ta.Clone()
+	nta.t = td.NewT(tb)
+	return nta
 }
 
 // T returns the internal instance of [*td.T].

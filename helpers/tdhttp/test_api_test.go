@@ -1207,6 +1207,31 @@ func TestWith(t *testing.T) {
 	td.CmpContains(t, nt.LogBuf(), "X-Testdeep-Method: HEAD") // Header dumped
 }
 
+func TestClone(t *testing.T) {
+	mux := server()
+
+	ta := tdhttp.NewTestAPI(t, mux)
+	nta := ta.Clone().DefaultRequestParams(
+		"X-Test", "bingo", "X-Zip", "OK",
+		tdhttp.Q{"a": "pizza", "b": "kiss"},
+		http.Cookie{Name: "cook1", Value: "VAL1"},
+	)
+
+	td.Cmp(t, nta.T(), td.Shallow(ta.T()), "ta and nta share the same testing.TB")
+	td.Cmp(t, nta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  http.Header{"X-Test": {"bingo"}, "X-Zip": {"OK"}},
+		"defaultQParams": url.Values{"a": {"pizza"}, "b": {"kiss"}},
+		"defaultCookies": []*http.Cookie{
+			{Name: "cook1", Value: "VAL1"},
+		},
+	}), "nta modified successfully")
+	td.Cmp(t, ta, td.Struct(nil, td.StructFields{
+		"defaultHeader":  nil,
+		"defaultQParams": nil,
+		"defaultCookies": nil,
+	}), "ta was not modified")
+}
+
 func TestDefaultRequestParams(t *testing.T) {
 	mux := server()
 
