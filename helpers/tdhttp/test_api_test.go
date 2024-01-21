@@ -1084,7 +1084,7 @@ bingo%CR
 			}))
 			td.Cmp(t,
 				mockT.LogBuf(),
-				td.Contains("headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not bool"),
+				td.Contains("newRequestParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values, tdhttp.Q and func(*http.Request) error, not bool"),
 			)
 		}
 
@@ -1132,11 +1132,20 @@ bingo%CR
 		ta.DefaultRequestParams(
 			"X-Zip", "test",
 			tdhttp.Q{"x": "y"},
-			http.Cookie{Name: "cook9", Value: "val9"})
+			http.Cookie{Name: "cook9", Value: "val9"},
+			func(r *http.Request) error {
+				r.Header.Add("X-Hook", "1")
+				return nil
+			},
+			func(r *http.Request) error {
+				r.Header.Add("X-Hook", "2")
+				return nil
+			})
 
 		ta.Get("/hq/json").
 			CmpJSONBody(td.JSON(`{
 				"header": SuperMapOf({
+					"X-Hook":  ["1", "2"],
 					"X-Zip":  ["test"],
 					"Cookie": ["cook9=val9"]
 				}),
@@ -1151,6 +1160,7 @@ bingo%CR
 			http.Cookie{Name: "cook1", Value: "val1"}).
 			CmpJSONBody(td.JSON(`{
 				"header": SuperMapOf({
+					"X-Hook":  ["1", "2"],
 					"X-Test": ["pipo"],
 					"X-Zip":  ["test"],
 					"Cookie": ["cook1=val1; cook9=val9"]
@@ -1164,9 +1174,14 @@ bingo%CR
 		ta.Get("/hq/json",
 			"X-Zip", "override",
 			tdhttp.Q{"x": "override"},
-			http.Cookie{Name: "cook9", Value: "override"}).
+			http.Cookie{Name: "cook9", Value: "override"},
+			func(r *http.Request) error {
+				r.Header.Add("X-Hook", "3")
+				return nil
+			}).
 			CmpJSONBody(td.JSON(`{
 				"header": SuperMapOf({
+					"X-Hook":  ["3", "1", "2"],
 					"X-Zip":  ["override"],
 					"Cookie": ["cook9=override"]
 				}),
@@ -1174,6 +1189,24 @@ bingo%CR
 					"x": ["override"]
 				}
 			}`))
+
+		t.Run("hook failures", func(t *testing.T) {
+			tt := tdutil.NewT("test")
+			ta := tdhttp.NewTestAPI(tt, mux)
+
+			hook := func(r *http.Request) error {
+				return fmt.Errorf("hook failure")
+			}
+
+			if td.CmpTrue(t, tt.CatchFailNow(func() { ta.Get("/hq/json", hook) })) {
+				td.CmpContains(t, tt.LogBuf(), "hook failed: hook failure")
+			}
+
+			ta = ta.DefaultRequestParams(hook)
+			if td.CmpTrue(t, tt.CatchFailNow(func() { ta.Get("/hq/json") })) {
+				td.CmpContains(t, tt.LogBuf(), "hook failed: hook failure")
+			}
+		})
 	})
 }
 
@@ -1323,7 +1356,7 @@ func TestDefaultRequestParams(t *testing.T) {
 		}))
 		td.Cmp(t,
 			mockT.LogBuf(),
-			td.Contains("headersQueryParams... can only contains"))
+			td.Contains("newRequestParams... can only contains"))
 	})
 
 	t.Run("AddDefaultRequestParams fatal", func(t *testing.T) {
@@ -1334,7 +1367,7 @@ func TestDefaultRequestParams(t *testing.T) {
 		}))
 		td.Cmp(t,
 			mockT.LogBuf(),
-			td.Contains("headersQueryParams... can only contains"))
+			td.Contains("newRequestParams... can only contains"))
 	})
 }
 

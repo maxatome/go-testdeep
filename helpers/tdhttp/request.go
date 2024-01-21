@@ -23,8 +23,8 @@ import (
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
-func newRequest(method string, target string, body io.Reader, headersQueryParams []any) (*http.Request, error) {
-	header, qp, cookies, err := requestParams(headersQueryParams)
+func newRequest(method string, target string, body io.Reader, params []any) (*http.Request, error) {
+	header, qp, cookies, hook, err := collateRequestParams(params)
 	if err != nil {
 		return nil, err
 	}
@@ -63,26 +63,33 @@ func newRequest(method string, target string, body io.Reader, headersQueryParams
 		req.AddCookie(c)
 	}
 
+	if hook != nil {
+		if err = hook(req); err != nil {
+			return nil, errors.New(color.Bad("hook failed: %s", err))
+		}
+	}
+
 	return req, nil
 }
 
-func requestParams(headersQueryParams []any) (http.Header, url.Values, []*http.Cookie, error) {
+func collateRequestParams(newRequestParams []any) (http.Header, url.Values, []*http.Cookie, func(*http.Request) error, error) {
 	header := http.Header{}
 	qp := url.Values{}
 	var cookies []*http.Cookie
+	var hook func(*http.Request) error
 
-	headersQueryParams = flat.Interfaces(headersQueryParams...)
-	for i := 0; i < len(headersQueryParams); i++ {
-		switch cur := headersQueryParams[i].(type) {
+	newRequestParams = flat.Interfaces(newRequestParams...)
+	for i := 0; i < len(newRequestParams); i++ {
+		switch cur := newRequestParams[i].(type) {
 		case string:
 			i++
 			var val string
-			if i < len(headersQueryParams) {
+			if i < len(newRequestParams) {
 				var ok bool
-				if val, ok = headersQueryParams[i].(string); !ok {
-					return nil, nil, nil, errors.New(color.Bad(
-						`header "%s" should have a string value, not a %T (@ headersQueryParams[%d])`,
-						cur, headersQueryParams[i], i))
+				if val, ok = newRequestParams[i].(string); !ok {
+					return nil, nil, nil, nil, errors.New(color.Bad(
+						`header "%s" should have a string value, not a %T (@ newRequestParams[%d])`,
+						cur, newRequestParams[i], i))
 				}
 			}
 			header.Add(cur, val)
@@ -110,14 +117,17 @@ func requestParams(headersQueryParams []any) (http.Header, url.Values, []*http.C
 		case Q:
 			err := cur.AddTo(qp)
 			if err != nil {
-				return nil, nil, nil, errors.New(color.Bad(
-					"headersQueryParams... tdhttp.Q bad parameter: %s (@ headersQueryParams[%d])",
+				return nil, nil, nil, nil, errors.New(color.Bad(
+					"newRequestParams... tdhttp.Q bad parameter: %s (@ newRequestParams[%d])",
 					err, i))
 			}
 
+		case func(*http.Request) error:
+			hook = mergeHooks(cur, hook)
+
 		default:
-			return nil, nil, nil, errors.New(color.Bad(
-				"headersQueryParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values and tdhttp.Q, not %T (@ headersQueryParams[%d])",
+			return nil, nil, nil, nil, errors.New(color.Bad(
+				"newRequestParams... can only contains string, http.Header, ([]*|*|)http.Cookie, url.Values, tdhttp.Q and func(*http.Request) error, not %T (@ newRequestParams[%d])",
 				cur, i))
 		}
 	}
@@ -127,7 +137,7 @@ func requestParams(headersQueryParams []any) (http.Header, url.Values, []*http.C
 	if len(qp) == 0 {
 		qp = nil
 	}
-	return header, qp, cookies, nil
+	return header, qp, cookies, hook, nil
 }
 
 // BasicAuthHeader returns a new [http.Header] with only Authorization
@@ -152,23 +162,23 @@ func BasicAuthHeader(user, password string) http.Header {
 	}
 }
 
-func get(target string, headersQueryParams ...any) (*http.Request, error) {
-	return newRequest(http.MethodGet, target, nil, headersQueryParams)
+func get(target string, newRequestParams ...any) (*http.Request, error) {
+	return newRequest(http.MethodGet, target, nil, newRequestParams)
 }
 
-func head(target string, headersQueryParams ...any) (*http.Request, error) {
-	return newRequest(http.MethodHead, target, nil, headersQueryParams)
+func head(target string, newRequestParams ...any) (*http.Request, error) {
+	return newRequest(http.MethodHead, target, nil, newRequestParams)
 }
 
-func options(target string, body io.Reader, headersQueryParams ...any) (*http.Request, error) {
-	return newRequest(http.MethodOptions, target, body, headersQueryParams)
+func options(target string, body io.Reader, newRequestParams ...any) (*http.Request, error) {
+	return newRequest(http.MethodOptions, target, body, newRequestParams)
 }
 
-func post(target string, body io.Reader, headersQueryParams ...any) (*http.Request, error) {
-	return newRequest(http.MethodPost, target, body, headersQueryParams)
+func post(target string, body io.Reader, newRequestParams ...any) (*http.Request, error) {
+	return newRequest(http.MethodPost, target, body, newRequestParams)
 }
 
-func postForm(target string, data URLValuesEncoder, headersQueryParams ...any) (*http.Request, error) {
+func postForm(target string, data URLValuesEncoder, newRequestParams ...any) (*http.Request, error) {
 	var body string
 	if data != nil {
 		body = data.Encode()
@@ -176,32 +186,32 @@ func postForm(target string, data URLValuesEncoder, headersQueryParams ...any) (
 
 	return newRequest(
 		http.MethodPost, target, strings.NewReader(body),
-		append(headersQueryParams, "Content-Type", "application/x-www-form-urlencoded"),
+		append(newRequestParams, "Content-Type", "application/x-www-form-urlencoded"),
 	)
 }
 
-func postMultipartFormData(target string, data *MultipartBody, headersQueryParams ...any) (*http.Request, error) {
+func postMultipartFormData(target string, data *MultipartBody, newRequestParams ...any) (*http.Request, error) {
 	return newRequest(
 		http.MethodPost, target, data,
-		append(headersQueryParams, "Content-Type", data.ContentType()),
+		append(newRequestParams, "Content-Type", data.ContentType()),
 	)
 }
 
-func put(target string, body io.Reader, headersQueryParams ...any) (*http.Request, error) {
-	return newRequest(http.MethodPut, target, body, headersQueryParams)
+func put(target string, body io.Reader, newRequestParams ...any) (*http.Request, error) {
+	return newRequest(http.MethodPut, target, body, newRequestParams)
 }
 
-func patch(target string, body io.Reader, headersQueryParams ...any) (*http.Request, error) {
-	return newRequest(http.MethodPatch, target, body, headersQueryParams)
+func patch(target string, body io.Reader, newRequestParams ...any) (*http.Request, error) {
+	return newRequest(http.MethodPatch, target, body, newRequestParams)
 }
 
-func del(target string, body io.Reader, headersQueryParams ...any) (*http.Request, error) {
-	return newRequest(http.MethodDelete, target, body, headersQueryParams)
+func del(target string, body io.Reader, newRequestParams ...any) (*http.Request, error) {
+	return newRequest(http.MethodDelete, target, body, newRequestParams)
 }
 
 // NewRequest creates a new HTTP request as [httptest.NewRequest]
-// does, with the ability to immediately add some headers and/or some
-// query parameters.
+// does, with the ability to immediately add some header values, some
+// query parameters, some cookies and/or some hooks.
 //
 // Headers can be added using string pairs as in:
 //
@@ -308,8 +318,27 @@ func del(target string, body io.Reader, headersQueryParams ...any) (*http.Reques
 // use [url.Values] nor [Q] instances, but compose target by yourself.
 //
 // See [Q] documentation to learn how values are stringified.
-func NewRequest(method, target string, body io.Reader, headersQueryParams ...any) *http.Request {
-	req, err := newRequest(method, target, body, headersQueryParams)
+//
+// Last but not least, request hooks can be passed as
+// func(*http.Request) error instances. These functions are called
+// just before returning the [*http.Request]:
+//
+//	req := tdhttp.NewRequest("GET", "/pdf", func (r *http.Request) error {
+//	  a := req.Header.Get("X-A")
+//	  b := req.Header.Get("X-A")
+//	  if a != "" && b != "" {
+//	    req.Header.Set("X-A-B", a+"-"+b)
+//	  }
+//	})
+//
+// If several hooks are passed, they are called in the same order as
+// they appear in parameters. If a hook returns an error, then
+// NewRequest panics.
+//
+// Hooks are useful when used with [TestAPI.DefaultRequestParams] or
+// [TestAPI.AddDefaultRequestParams].
+func NewRequest(method, target string, body io.Reader, newRequestParams ...any) *http.Request {
+	req, err := newRequest(method, target, body, newRequestParams)
 	if err != nil {
 		panic(err)
 	}
@@ -318,11 +347,11 @@ func NewRequest(method, target string, body io.Reader, headersQueryParams ...any
 
 // Get creates a new HTTP GET. It is a shortcut for:
 //
-//	tdhttp.NewRequest(http.MethodGet, target, nil, headersQueryParams...)
+//	tdhttp.NewRequest(http.MethodGet, target, nil, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func Get(target string, headersQueryParams ...any) *http.Request {
-	req, err := get(target, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func Get(target string, newRequestParams ...any) *http.Request {
+	req, err := get(target, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -331,11 +360,11 @@ func Get(target string, headersQueryParams ...any) *http.Request {
 
 // Head creates a new HTTP HEAD. It is a shortcut for:
 //
-//	tdhttp.NewRequest(http.MethodHead, target, nil, headersQueryParams...)
+//	tdhttp.NewRequest(http.MethodHead, target, nil, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func Head(target string, headersQueryParams ...any) *http.Request {
-	req, err := head(target, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func Head(target string, newRequestParams ...any) *http.Request {
+	req, err := head(target, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -344,11 +373,11 @@ func Head(target string, headersQueryParams ...any) *http.Request {
 
 // Options creates a HTTP OPTIONS. It is a shortcut for:
 //
-//	tdhttp.NewRequest(http.MethodOptions, target, body, headersQueryParams...)
+//	tdhttp.NewRequest(http.MethodOptions, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func Options(target string, body io.Reader, headersQueryParams ...any) *http.Request {
-	req, err := options(target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func Options(target string, body io.Reader, newRequestParams ...any) *http.Request {
+	req, err := options(target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -357,11 +386,11 @@ func Options(target string, body io.Reader, headersQueryParams ...any) *http.Req
 
 // Post creates a HTTP POST. It is a shortcut for:
 //
-//	tdhttp.NewRequest(http.MethodPost, target, body, headersQueryParams...)
+//	tdhttp.NewRequest(http.MethodPost, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func Post(target string, body io.Reader, headersQueryParams ...any) *http.Request {
-	req, err := post(target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func Post(target string, body io.Reader, newRequestParams ...any) *http.Request {
+	req, err := post(target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -381,7 +410,7 @@ type URLValuesEncoder interface {
 // PostForm creates a HTTP POST with data's keys and values
 // URL-encoded as the request body. "Content-Type" header is
 // automatically set to "application/x-www-form-urlencoded". Other
-// headers can be added via headersQueryParams, as in:
+// headers can be added via newRequestParams, as in:
 //
 //	req := tdhttp.PostForm("/data",
 //	  url.Values{
@@ -392,9 +421,9 @@ type URLValuesEncoder interface {
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PostForm(target string, data URLValuesEncoder, headersQueryParams ...any) *http.Request {
-	req, err := postForm(target, data, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func PostForm(target string, data URLValuesEncoder, newRequestParams ...any) *http.Request {
+	req, err := postForm(target, data, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -406,7 +435,7 @@ func PostForm(target string, data URLValuesEncoder, headersQueryParams ...any) *
 // details. "Content-Type" header is automatically set depending on
 // data.MediaType (defaults to "multipart/form-data") and data.Boundary
 // (defaults to "go-testdeep-42"). Other headers can be added via
-// headersQueryParams, as in:
+// newRequestParams, as in:
 //
 //	req := tdhttp.PostMultipartFormData("/data",
 //	  &tdhttp.MultipartBody{
@@ -434,9 +463,9 @@ func PostForm(target string, data URLValuesEncoder, headersQueryParams ...any) *
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PostMultipartFormData(target string, data *MultipartBody, headersQueryParams ...any) *http.Request {
-	req, err := postMultipartFormData(target, data, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func PostMultipartFormData(target string, data *MultipartBody, newRequestParams ...any) *http.Request {
+	req, err := postMultipartFormData(target, data, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -445,11 +474,11 @@ func PostMultipartFormData(target string, data *MultipartBody, headersQueryParam
 
 // Put creates a HTTP PUT. It is a shortcut for:
 //
-//	tdhttp.NewRequest(http.MethodPut, target, body, headersQueryParams...)
+//	tdhttp.NewRequest(http.MethodPut, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func Put(target string, body io.Reader, headersQueryParams ...any) *http.Request {
-	req, err := put(target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func Put(target string, body io.Reader, newRequestParams ...any) *http.Request {
+	req, err := put(target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -458,11 +487,11 @@ func Put(target string, body io.Reader, headersQueryParams ...any) *http.Request
 
 // Patch creates a HTTP PATCH. It is a shortcut for:
 //
-//	tdhttp.NewRequest(http.MethodPatch, target, body, headersQueryParams...)
+//	tdhttp.NewRequest(http.MethodPatch, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func Patch(target string, body io.Reader, headersQueryParams ...any) *http.Request {
-	req, err := patch(target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func Patch(target string, body io.Reader, newRequestParams ...any) *http.Request {
+	req, err := patch(target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -471,18 +500,18 @@ func Patch(target string, body io.Reader, headersQueryParams ...any) *http.Reque
 
 // Delete creates a HTTP DELETE. It is a shortcut for:
 //
-//	tdhttp.NewRequest(http.MethodDelete, target, body, headersQueryParams...)
+//	tdhttp.NewRequest(http.MethodDelete, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func Delete(target string, body io.Reader, headersQueryParams ...any) *http.Request {
-	req, err := del(target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func Delete(target string, body io.Reader, newRequestParams ...any) *http.Request {
+	req, err := del(target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
 	return req
 }
 
-func newJSONRequest(method, target string, body any, headersQueryParams ...any) (*http.Request, error) {
+func newJSONRequest(method, target string, body any, newRequestParams ...any) (*http.Request, error) {
 	b, err := json.Marshal(body)
 	if err != nil {
 		if opErr, ok := types.AsOperatorNotJSONMarshallableError(err); ok {
@@ -498,22 +527,22 @@ func newJSONRequest(method, target string, body any, headersQueryParams ...any) 
 
 	return newRequest(
 		method, target, bytes.NewReader(b),
-		append(headersQueryParams, "Content-Type", "application/json"),
+		append(newRequestParams, "Content-Type", "application/json"),
 	)
 }
 
 // NewJSONRequest creates a new HTTP request with body marshaled to
 // JSON. "Content-Type" header is automatically set to
-// "application/json". Other headers can be added via headersQueryParams, as in:
+// "application/json". Other headers can be added via newRequestParams, as in:
 //
 //	req := tdhttp.NewJSONRequest("POST", "/data", body,
 //	  "X-Foo", "Foo-value",
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func NewJSONRequest(method, target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newJSONRequest(method, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func NewJSONRequest(method, target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newJSONRequest(method, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -524,11 +553,11 @@ func NewJSONRequest(method, target string, body any, headersQueryParams ...any) 
 // JSON. "Content-Type" header is automatically set to
 // "application/json". It is a shortcut for:
 //
-//	tdhttp.NewJSONRequest(http.MethodPost, target, body, headersQueryParams...)
+//	tdhttp.NewJSONRequest(http.MethodPost, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PostJSON(target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newJSONRequest(http.MethodPost, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func PostJSON(target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newJSONRequest(http.MethodPost, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -539,11 +568,11 @@ func PostJSON(target string, body any, headersQueryParams ...any) *http.Request 
 // JSON. "Content-Type" header is automatically set to
 // "application/json". It is a shortcut for:
 //
-//	tdhttp.NewJSONRequest(http.MethodPut, target, body, headersQueryParams...)
+//	tdhttp.NewJSONRequest(http.MethodPut, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PutJSON(target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newJSONRequest(http.MethodPut, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func PutJSON(target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newJSONRequest(http.MethodPut, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -554,11 +583,11 @@ func PutJSON(target string, body any, headersQueryParams ...any) *http.Request {
 // JSON. "Content-Type" header is automatically set to
 // "application/json". It is a shortcut for:
 //
-//	tdhttp.NewJSONRequest(http.MethodPatch, target, body, headersQueryParams...)
+//	tdhttp.NewJSONRequest(http.MethodPatch, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PatchJSON(target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newJSONRequest(http.MethodPatch, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func PatchJSON(target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newJSONRequest(http.MethodPatch, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -569,18 +598,18 @@ func PatchJSON(target string, body any, headersQueryParams ...any) *http.Request
 // JSON. "Content-Type" header is automatically set to
 // "application/json". It is a shortcut for:
 //
-//	tdhttp.NewJSONRequest(http.MethodDelete, target, body, headersQueryParams...)
+//	tdhttp.NewJSONRequest(http.MethodDelete, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func DeleteJSON(target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newJSONRequest(http.MethodDelete, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func DeleteJSON(target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newJSONRequest(http.MethodDelete, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
 	return req
 }
 
-func newXMLRequest(method, target string, body any, headersQueryParams ...any) (*http.Request, error) {
+func newXMLRequest(method, target string, body any, newRequestParams ...any) (*http.Request, error) {
 	b, err := xml.Marshal(body)
 	if err != nil {
 		return nil, errors.New(color.Bad("XML encoding failed: %s", err))
@@ -588,22 +617,22 @@ func newXMLRequest(method, target string, body any, headersQueryParams ...any) (
 
 	return newRequest(
 		method, target, bytes.NewReader(b),
-		append(headersQueryParams, "Content-Type", "application/xml"),
+		append(newRequestParams, "Content-Type", "application/xml"),
 	)
 }
 
 // NewXMLRequest creates a new HTTP request with body marshaled to
 // XML. "Content-Type" header is automatically set to
-// "application/xml". Other headers can be added via headersQueryParams, as in:
+// "application/xml". Other headers can be added via newRequestParams, as in:
 //
 //	req := tdhttp.NewXMLRequest("POST", "/data", body,
 //	  "X-Foo", "Foo-value",
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func NewXMLRequest(method, target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newXMLRequest(method, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func NewXMLRequest(method, target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newXMLRequest(method, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -614,11 +643,11 @@ func NewXMLRequest(method, target string, body any, headersQueryParams ...any) *
 // XML. "Content-Type" header is automatically set to
 // "application/xml". It is a shortcut for:
 //
-//	tdhttp.NewXMLRequest(http.MethodPost, target, body, headersQueryParams...)
+//	tdhttp.NewXMLRequest(http.MethodPost, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PostXML(target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newXMLRequest(http.MethodPost, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func PostXML(target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newXMLRequest(http.MethodPost, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -629,11 +658,11 @@ func PostXML(target string, body any, headersQueryParams ...any) *http.Request {
 // XML. "Content-Type" header is automatically set to
 // "application/xml". It is a shortcut for:
 //
-//	tdhttp.NewXMLRequest(http.MethodPut, target, body, headersQueryParams...)
+//	tdhttp.NewXMLRequest(http.MethodPut, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PutXML(target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newXMLRequest(http.MethodPut, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func PutXML(target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newXMLRequest(http.MethodPut, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -644,11 +673,11 @@ func PutXML(target string, body any, headersQueryParams ...any) *http.Request {
 // XML. "Content-Type" header is automatically set to
 // "application/xml". It is a shortcut for:
 //
-//	tdhttp.NewXMLRequest(http.MethodPatch, target, body, headersQueryParams...)
+//	tdhttp.NewXMLRequest(http.MethodPatch, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func PatchXML(target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newXMLRequest(http.MethodPatch, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func PatchXML(target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newXMLRequest(http.MethodPatch, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
@@ -659,11 +688,11 @@ func PatchXML(target string, body any, headersQueryParams ...any) *http.Request 
 // XML. "Content-Type" header is automatically set to
 // "application/xml". It is a shortcut for:
 //
-//	tdhttp.NewXMLRequest(http.MethodDelete, target, body, headersQueryParams...)
+//	tdhttp.NewXMLRequest(http.MethodDelete, target, body, newRequestParams...)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func DeleteXML(target string, body any, headersQueryParams ...any) *http.Request {
-	req, err := newXMLRequest(http.MethodDelete, target, body, headersQueryParams...)
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func DeleteXML(target string, body any, newRequestParams ...any) *http.Request {
+	req, err := newXMLRequest(http.MethodDelete, target, body, newRequestParams...)
 	if err != nil {
 		panic(err)
 	}
