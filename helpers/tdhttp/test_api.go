@@ -57,6 +57,7 @@ type TestAPI struct {
 	defaultHeader  http.Header
 	defaultQParams url.Values
 	defaultCookies []*http.Cookie
+	defaultHook    func(*http.Request) error
 }
 
 // NewTestAPI creates a [TestAPI] that can be used to test routes of the
@@ -89,9 +90,9 @@ func NewTestAPI(tb testing.TB, handler http.Handler) *TestAPI {
 
 // Clone creates a new [*TestAPI] instance copied from ta. The
 // returned instance is independent from ta, sharing only the same
-// handler. The header values, query params and cookies defined using
-// [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
-// are also copied.
+// handler. The header values, query params, cookies and hooks defined
+// using [TestAPI.DefaultRequestParams] or
+// [TestAPI.AddDefaultRequestParams] are also copied.
 //
 // It is typically used when the [TestAPI] instance is “reused” with
 // additionnal configuration, as in:
@@ -110,15 +111,15 @@ func (ta *TestAPI) Clone() *TestAPI {
 		autoDumpResponse: ta.autoDumpResponse,
 	}
 	return nta.DefaultRequestParams(
-		ta.defaultHeader, ta.defaultQParams, ta.defaultCookies)
+		ta.defaultHeader, ta.defaultQParams, ta.defaultCookies, ta.defaultHook)
 }
 
-// With creates a new [*TestAPI] instance copied from ta, but resetting
-// the [testing.TB] instance the tests are based on to tb. The
-// returned instance is independent from ta, sharing only the same
-// handler. The header values, query params and cookies defined using
-// [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
-// are also copied.
+// With creates a new [*TestAPI] instance copied from ta, but
+// resetting the [testing.TB] instance the tests are based on to
+// tb. The returned instance is independent from ta, sharing only the
+// same handler. The header values, query params, cookies and hooks
+// defined using [TestAPI.DefaultRequestParams] or
+// [TestAPI.AddDefaultRequestParams] are also copied.
 //
 // It is typically used when the [TestAPI] instance is “reused” in
 // sub-tests, as in:
@@ -171,16 +172,16 @@ func (ta *TestAPI) AutoDumpResponse(enable ...bool) *TestAPI {
 	return ta
 }
 
-// DefaultRequestParams allows to define header values, query params
-// and cookies to automatically set in each future requests sent by
-// [TestAPI.Request], [TestAPI.Get], [TestAPI.Head],
+// DefaultRequestParams allows to define header values, query params,
+// cookies and hooks to automatically set in each future requests sent
+// by [TestAPI.Request], [TestAPI.Get], [TestAPI.Head],
 // [TestAPI.Options], [TestAPI.Post], [TestAPI.PostForm],
 // [TestAPI.PostMultipartFormData], [TestAPI.Put], [TestAPI.Path],
 // [TestAPI.Delete] and all derived JSON and XML methods.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in newRequestParams.
 //
-// The passed headersQueryParams resets existing default params, so
+// The passed newRequestParams resets existing default params, so
 // calling
 //
 //	ta.DefaultRequestParams()
@@ -189,36 +190,37 @@ func (ta *TestAPI) AutoDumpResponse(enable ...bool) *TestAPI {
 //
 // See [TestAPI.AddDefaultRequestParams] to add new default params
 // instead of entirely replacing them.
-func (ta *TestAPI) DefaultRequestParams(headersQueryParams ...any) *TestAPI {
+func (ta *TestAPI) DefaultRequestParams(newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	header, qp, cookies, err := requestParams(headersQueryParams)
+	header, qp, cookies, hook, err := collateRequestParams(newRequestParams)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
 	ta.defaultHeader = header
 	ta.defaultQParams = qp
 	ta.defaultCookies = cookies
+	ta.defaultHook = hook
 	return ta
 }
 
 // AddDefaultRequestParams allows to define header values, query
-// params and cookies to automatically set in each future requests
-// sent by [TestAPI.Request], [TestAPI.Get], [TestAPI.Head],
+// params, cookies and hooks to automatically set in each future
+// requests sent by [TestAPI.Request], [TestAPI.Get], [TestAPI.Head],
 // [TestAPI.Options], [TestAPI.Post], [TestAPI.PostForm],
 // [TestAPI.PostMultipartFormData], [TestAPI.Put], [TestAPI.Path],
 // [TestAPI.Delete] and all derived JSON and XML methods.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
+// See [NewRequest] for all possible formats accepted in newRequestParams.
 //
-// The passed headersQueryParams are merged with already existing
+// The passed newRequestParams are merged with already existing
 // default params, set by a previous call of this method or
 // of [TestAPI.DefaultRequestParams], replacing the common ones.
 //
 // See [TestAPI.DefaultRequestParams] to entirely replace default
 // params instead of modifying them.
-func (ta *TestAPI) AddDefaultRequestParams(headersQueryParams ...any) *TestAPI {
+func (ta *TestAPI) AddDefaultRequestParams(newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	header, qp, cookies, err := requestParams(headersQueryParams)
+	header, qp, cookies, hook, err := collateRequestParams(newRequestParams)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -234,6 +236,7 @@ default_cookie:
 		cookies = append(cookies, dflt)
 	}
 	ta.defaultCookies = cookies
+	ta.defaultHook = mergeHooks(hook, ta.defaultHook)
 	return ta
 }
 
@@ -276,15 +279,32 @@ func mergeQParams(cur, dflt url.Values) (url.Values, bool) {
 	return cur, altered
 }
 
+func mergeHooks(cur, dflt func(*http.Request) error) func(*http.Request) error {
+	if cur == nil {
+		return dflt
+	}
+	if dflt == nil {
+		return cur
+	}
+	return func(req *http.Request) error {
+		err := dflt(req)
+		if err == nil {
+			err = cur(req)
+		}
+		return err
+	}
+}
+
 // Request sends a new HTTP request to the tested API. Any Cmp* or
 // [TestAPI.NoBody] methods can now be called.
 //
-// It merges header values, query params and cookies defined using
-// [TestAPI.DefaultRequestParams] only if each of them does not
+// It merges header values, query params, cookies and hooks defined
+// using [TestAPI.DefaultRequestParams] only if each of them does not
 // already exist in req.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 func (ta *TestAPI) Request(req *http.Request) *TestAPI {
+	ta.t.Helper()
 	req.Header = mergeHeader(req.Header, ta.defaultHeader)
 	if len(ta.defaultQParams) > 0 && req.URL != nil {
 		qv, altered := mergeQParams(req.URL.Query(), ta.defaultQParams)
@@ -295,6 +315,11 @@ func (ta *TestAPI) Request(req *http.Request) *TestAPI {
 	for _, c := range ta.defaultCookies {
 		if _, err := req.Cookie(c.Name); err != nil {
 			req.AddCookie(c)
+		}
+	}
+	if ta.defaultHook != nil {
+		if err := ta.defaultHook(req); err != nil {
+			ta.t.Fatalf("hook failed: %s", err)
 		}
 	}
 
@@ -336,17 +361,17 @@ func (ta *TestAPI) Failed() bool {
 // Get sends a HTTP GET to the tested API. Any Cmp* or [TestAPI.NoBody] methods
 // can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) Get(target string, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) Get(target string, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := get(target, headersQueryParams...)
+	req, err := get(target, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -356,17 +381,17 @@ func (ta *TestAPI) Get(target string, headersQueryParams ...any) *TestAPI {
 // Head sends a HTTP HEAD to the tested API. Any Cmp* or
 // [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) Head(target string, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) Head(target string, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := head(target, headersQueryParams...)
+	req, err := head(target, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -376,17 +401,17 @@ func (ta *TestAPI) Head(target string, headersQueryParams ...any) *TestAPI {
 // Options sends a HTTP OPTIONS to the tested API. Any Cmp* or
 // [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) Options(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) Options(target string, body io.Reader, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := options(target, body, headersQueryParams...)
+	req, err := options(target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -396,17 +421,17 @@ func (ta *TestAPI) Options(target string, body io.Reader, headersQueryParams ...
 // Post sends a HTTP POST to the tested API. Any Cmp* or
 // [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) Post(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) Post(target string, body io.Reader, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := post(target, body, headersQueryParams...)
+	req, err := post(target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -418,17 +443,17 @@ func (ta *TestAPI) Post(target string, body io.Reader, headersQueryParams ...any
 // automatically set to "application/x-www-form-urlencoded". Any Cmp*
 // or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PostForm(target string, data URLValuesEncoder, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) PostForm(target string, data URLValuesEncoder, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := postForm(target, data, headersQueryParams...)
+	req, err := postForm(target, data, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -442,10 +467,10 @@ func (ta *TestAPI) PostForm(target string, data URLValuesEncoder, headersQueryPa
 // data.Boundary (defaults to "go-testdeep-42"). Any Cmp* or
 // [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
@@ -461,10 +486,10 @@ func (ta *TestAPI) PostForm(target string, data URLValuesEncoder, headersQueryPa
 //	  "X-Zip", "Zip-value",
 //	)
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PostMultipartFormData(target string, data *MultipartBody, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) PostMultipartFormData(target string, data *MultipartBody, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := postMultipartFormData(target, data, headersQueryParams...)
+	req, err := postMultipartFormData(target, data, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -474,17 +499,17 @@ func (ta *TestAPI) PostMultipartFormData(target string, data *MultipartBody, hea
 // Put sends a HTTP PUT to the tested API. Any Cmp* or [TestAPI.NoBody] methods
 // can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) Put(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) Put(target string, body io.Reader, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := put(target, body, headersQueryParams...)
+	req, err := put(target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -494,17 +519,17 @@ func (ta *TestAPI) Put(target string, body io.Reader, headersQueryParams ...any)
 // Patch sends a HTTP PATCH to the tested API. Any Cmp* or
 // [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) Patch(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) Patch(target string, body io.Reader, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := patch(target, body, headersQueryParams...)
+	req, err := patch(target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -514,17 +539,17 @@ func (ta *TestAPI) Patch(target string, body io.Reader, headersQueryParams ...an
 // Delete sends a HTTP DELETE to the tested API. Any Cmp* or
 // [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) Delete(target string, body io.Reader, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) Delete(target string, body io.Reader, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := del(target, body, headersQueryParams...)
+	req, err := del(target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -535,17 +560,17 @@ func (ta *TestAPI) Delete(target string, body io.Reader, headersQueryParams ...a
 // JSON. "Content-Type" header is automatically set to
 // "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) NewJSONRequest(method, target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) NewJSONRequest(method, target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(method, target, body, headersQueryParams...)
+	req, err := newJSONRequest(method, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -556,17 +581,17 @@ func (ta *TestAPI) NewJSONRequest(method, target string, body any, headersQueryP
 // JSON. "Content-Type" header is automatically set to
 // "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PostJSON(target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) PostJSON(target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(http.MethodPost, target, body, headersQueryParams...)
+	req, err := newJSONRequest(http.MethodPost, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -577,17 +602,17 @@ func (ta *TestAPI) PostJSON(target string, body any, headersQueryParams ...any) 
 // JSON. "Content-Type" header is automatically set to
 // "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PutJSON(target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) PutJSON(target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(http.MethodPut, target, body, headersQueryParams...)
+	req, err := newJSONRequest(http.MethodPut, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -598,17 +623,17 @@ func (ta *TestAPI) PutJSON(target string, body any, headersQueryParams ...any) *
 // JSON. "Content-Type" header is automatically set to
 // "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PatchJSON(target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) PatchJSON(target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(http.MethodPatch, target, body, headersQueryParams...)
+	req, err := newJSONRequest(http.MethodPatch, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -619,17 +644,17 @@ func (ta *TestAPI) PatchJSON(target string, body any, headersQueryParams ...any)
 // JSON. "Content-Type" header is automatically set to
 // "application/json". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) DeleteJSON(target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) DeleteJSON(target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newJSONRequest(http.MethodDelete, target, body, headersQueryParams...)
+	req, err := newJSONRequest(http.MethodDelete, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -640,17 +665,17 @@ func (ta *TestAPI) DeleteJSON(target string, body any, headersQueryParams ...any
 // XML. "Content-Type" header is automatically set to
 // "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) NewXMLRequest(method, target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) NewXMLRequest(method, target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(method, target, body, headersQueryParams...)
+	req, err := newXMLRequest(method, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -661,17 +686,17 @@ func (ta *TestAPI) NewXMLRequest(method, target string, body any, headersQueryPa
 // XML. "Content-Type" header is automatically set to
 // "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PostXML(target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) PostXML(target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(http.MethodPost, target, body, headersQueryParams...)
+	req, err := newXMLRequest(http.MethodPost, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -682,17 +707,17 @@ func (ta *TestAPI) PostXML(target string, body any, headersQueryParams ...any) *
 // XML. "Content-Type" header is automatically set to
 // "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PutXML(target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) PutXML(target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(http.MethodPut, target, body, headersQueryParams...)
+	req, err := newXMLRequest(http.MethodPut, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -703,17 +728,17 @@ func (ta *TestAPI) PutXML(target string, body any, headersQueryParams ...any) *T
 // XML. "Content-Type" header is automatically set to
 // "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) PatchXML(target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) PatchXML(target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(http.MethodPatch, target, body, headersQueryParams...)
+	req, err := newXMLRequest(http.MethodPatch, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
@@ -724,17 +749,17 @@ func (ta *TestAPI) PatchXML(target string, body any, headersQueryParams ...any) 
 // XML. "Content-Type" header is automatically set to
 // "application/xml". Any Cmp* or [TestAPI.NoBody] methods can now be called.
 //
-// The header values, query params and cookies defined using
+// The header values, query params, cookies and hooks defined using
 // [TestAPI.DefaultRequestParams] or [TestAPI.AddDefaultRequestParams]
 // are merged only if each of them does not already exist in
-// headersQueryParams.
+// newRequestParams.
 //
 // Note that [TestAPI.Failed] status is reset just after this call.
 //
-// See [NewRequest] for all possible formats accepted in headersQueryParams.
-func (ta *TestAPI) DeleteXML(target string, body any, headersQueryParams ...any) *TestAPI {
+// See [NewRequest] for all possible formats accepted in newRequestParams.
+func (ta *TestAPI) DeleteXML(target string, body any, newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
-	req, err := newXMLRequest(http.MethodDelete, target, body, headersQueryParams...)
+	req, err := newXMLRequest(http.MethodDelete, target, body, newRequestParams...)
 	if err != nil {
 		ta.t.Fatal(err)
 	}
