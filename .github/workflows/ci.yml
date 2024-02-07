@@ -98,5 +98,5 @@ jobs:
                      coverage-safe.out \
                      coverage-race.out \
                      coverage-race-safe.out |
-              egrep -v '^github\.com/maxatome/go-testdeep/internal/json/parser\.go:' > coverage.out
+              egrep -v '^github\.com/maxatome/go-testdeep/internal/(json/parser\.go:|test/)' > coverage.out
           goveralls -coverprofile=coverage.out -service=github

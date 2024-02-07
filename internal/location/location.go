@@ -42,11 +42,7 @@ func New(callDepth int) (loc Location, ok bool) {
 		loc.File = loc.File[index+1:]
 	}
 
-	pc, _, _, ok := runtime.Caller(callDepth)
-	if !ok {
-		return
-	}
-
+	pc, _, _, _ := runtime.Caller(callDepth)
 	loc.Func = runtime.FuncForPC(pc).Name()
 	return
 }
