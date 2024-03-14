@@ -138,6 +138,22 @@ func TestNewRequest(tt *testing.T) {
 		t.Cmp(req.URL.String(), "/path?already=true&p1=123&p3=true")
 	})
 
+	t.Run("NewRequest host", func(t *td.T) {
+		req := tdhttp.NewRequest("GET", "https://pipo.com:123/path", nil)
+		td.Cmp(t, req.Host, "pipo.com:123")
+		td.Cmp(t, req.URL, td.String("/path"))
+
+		req = tdhttp.NewRequest("GET", "/path", nil, "Host", "pipo.com:456")
+		td.Cmp(t, req.Host, "pipo.com:456")
+		td.Cmp(t, req.URL, td.String("/path"))
+
+		req = tdhttp.NewRequest(
+			"GET", "https://pipo.com:123/path", nil,
+			"Host", "bingo.com:456")
+		td.Cmp(t, req.Host, "pipo.com:123", "URL wins")
+		td.Cmp(t, req.URL, td.String("/path"))
+	})
+
 	t.Run("NewRequest panics", func(t *td.T) {
 		t.CmpPanic(
 			func() { tdhttp.NewRequest("GET", "/path", nil, "H", "V", true) },

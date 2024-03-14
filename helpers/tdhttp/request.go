@@ -35,18 +35,28 @@ func newRequest(method string, target string, body io.Reader, headersQueryParams
 	if err != nil {
 		return nil, errors.New(color.Bad("target is not a valid path: %s", err))
 	}
+	host := u.Host
+	u.Host = ""
+	u.Scheme = ""
 	if len(qp) > 0 {
 		if u.RawQuery != "" {
 			u.RawQuery += "&"
 		}
 		u.RawQuery += qp.Encode()
-		target = u.String()
 	}
+	target = u.String()
 
 	req := httptest.NewRequest(method, target, body)
 
 	for k, v := range header {
 		req.Header[k] = append(req.Header[k], v...)
+	}
+
+	if host == "" {
+		host = req.Header.Get("Host")
+	}
+	if host != "" {
+		req.Host = host
 	}
 
 	for _, c := range cookies {
