@@ -162,6 +162,14 @@ func TestWithSmuggleHooks(tt *testing.T) {
 			got:      "1234",
 			expected: 1234,
 		},
+		{
+			name: "reflect2any",
+			cmp: func(v reflect.Value) any {
+				return v.Interface()
+			},
+			got:      reflect.ValueOf(123),
+			expected: 123,
+		},
 	} {
 		tt.Run(tst.name, func(tt *testing.T) {
 			ttt := test.NewTestingTB(tt.Name())

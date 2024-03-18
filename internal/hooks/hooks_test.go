@@ -218,16 +218,6 @@ func TestAddSmuggleHooks(t *testing.T) {
 			smuggle: func(a int) (int, int) { return 0, 0 },
 			err:     "expects: func (A) (B[, error]) not func(int) (int, int) (@1)",
 		},
-		{
-			name:    "return interface",
-			smuggle: func(a int) any { return 0 },
-			err:     "expects: func (A) (B[, error]) not func(int) interface {} (@1)",
-		},
-		{
-			name:    "return interface, error",
-			smuggle: func(a int) (any, error) { return 0, nil },
-			err:     "expects: func (A) (B[, error]) not func(int) (interface {}, error) (@1)",
-		},
 	} {
 		i := hooks.NewInfo()
 
