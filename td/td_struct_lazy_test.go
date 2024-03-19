@@ -82,9 +82,10 @@ func TestStructLazy(t *testing.T) {
 
 			checkError(t, got, op.new(nil, td.StructFields{"ValInt": "zip"}),
 				expectedError{
-					Message: badUsage,
-					Path:    mustBe("DATA"),
-					Summary: mustBe("type string of field expected value ValInt differs from struct one (int)"),
+					Message:  mustBe("type mismatch"),
+					Path:     mustBe("DATA.ValInt"),
+					Got:      mustBe("int"),
+					Expected: mustBe("string"),
 				})
 
 			checkError(t, 123,

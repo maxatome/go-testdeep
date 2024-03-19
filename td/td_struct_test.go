@@ -328,28 +328,31 @@ func TestStruct(t *testing.T) {
 			Summary: mustBe(`struct td_test.MyStruct has no field "UnknownField" (from ">\tUnknownField")`),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, &MyStruct{},
 		td.Struct(&MyStruct{}, td.StructFields{"ValBool": 123}),
 		expectedError{
-			Message: mustBe("bad usage of Struct operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("type int of field expected value ValBool differs from struct one (bool)"),
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA.ValBool"),
+			Got:      mustBe("bool"),
+			Expected: mustBe("int"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, &MyStruct{},
 		td.Struct(&MyStruct{}, td.StructFields{">ValBool": 123}),
 		expectedError{
-			Message: mustBe("bad usage of Struct operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe(`type int of field expected value ValBool (from ">ValBool") differs from struct one (bool)`),
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA.ValBool"),
+			Got:      mustBe("bool"),
+			Expected: mustBe("int"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, &MyStruct{},
 		td.Struct(&MyStruct{}, td.StructFields{"ValBool": nil}),
 		expectedError{
-			Message: mustBe("bad usage of Struct operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("expected value of field ValBool cannot be nil as it is a bool"),
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.ValBool"),
+			Got:      mustBe("false"),
+			Expected: mustBe("nil"),
 		})
 
 	checkError(t, "never tested",
@@ -647,11 +650,13 @@ func TestStructPatterns(t *testing.T) {
 				Summary: mustContain("bad shell pattern field `= al[pha`: "),
 			})
 
-		checkError(t, "never tested",
-			td.Struct(paTest{Num: 666}, td.StructFields{"= alpha*": nil}), expectedError{
-				Message: mustBe("bad usage of Struct operator"),
-				Path:    mustBe("DATA"),
-				Summary: mustBe("expected value of field alphaNum (from pattern `= alpha*`) cannot be nil as it is a int"),
+		checkError(t, paTest{Num: 666},
+			td.Struct(paTest{Num: 666}, td.StructFields{"= alpha*": nil}),
+			expectedError{
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA.alphaNum"),
+				Got:      mustBe("0"),
+				Expected: mustBe("nil"),
 			})
 	})
 
@@ -696,12 +701,13 @@ func TestStructPatterns(t *testing.T) {
 				Summary: mustContain("bad regexp field `=~ al(*`: "),
 			})
 
-		checkError(t, "never tested",
+		checkError(t, paTest{Num: 666},
 			td.Struct(paTest{Num: 666}, td.StructFields{"=~ alpha": nil}),
 			expectedError{
-				Message: mustBe("bad usage of Struct operator"),
-				Path:    mustBe("DATA"),
-				Summary: mustBe("expected value of field alphaNum (from pattern `=~ alpha`) cannot be nil as it is a int"),
+				Message:  mustBe("values differ"),
+				Path:     mustBe("DATA.alphaNum"),
+				Got:      mustBe("0"),
+				Expected: mustBe("nil"),
 			})
 	})
 }
@@ -1017,28 +1023,31 @@ func TestSStruct(t *testing.T) {
 			Summary: mustBe(`struct td_test.MyStruct has no field "UnknownField" (from ">\tUnknownField")`),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, &MyStruct{},
 		td.SStruct(&MyStruct{}, td.StructFields{"ValBool": 123}),
 		expectedError{
-			Message: mustBe("bad usage of SStruct operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("type int of field expected value ValBool differs from struct one (bool)"),
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA.ValBool"),
+			Got:      mustBe("bool"),
+			Expected: mustBe("int"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, &MyStruct{},
 		td.SStruct(&MyStruct{}, td.StructFields{">ValBool": 123}),
 		expectedError{
-			Message: mustBe("bad usage of SStruct operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe(`type int of field expected value ValBool (from ">ValBool") differs from struct one (bool)`),
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA.ValBool"),
+			Got:      mustBe("bool"),
+			Expected: mustBe("int"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, &MyStruct{},
 		td.SStruct(&MyStruct{}, td.StructFields{"ValBool": nil}),
 		expectedError{
-			Message: mustBe("bad usage of SStruct operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("expected value of field ValBool cannot be nil as it is a bool"),
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA.ValBool"),
+			Got:      mustBe("false"),
+			Expected: mustBe("nil"),
 		})
 
 	checkError(t, "never tested",
