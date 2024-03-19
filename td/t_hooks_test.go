@@ -219,6 +219,47 @@ func TestWithSmuggleHooks(tt *testing.T) {
 		ttt.ResetMessages()
 	})
 
+	tt.Run("Map", func(tt *testing.T) {
+		ttt := test.NewTestingTB(tt.Name())
+
+		t := td.NewT(ttt).WithSmuggleHooks(func(got reflect.Value) any {
+			if got.IsValid() {
+				return got.Interface()
+			}
+			return nil
+		})
+
+		got := map[string]reflect.Value{
+			"pipo":  reflect.ValueOf(42),
+			"bingo": reflect.ValueOf(666),
+			"zip":   {},
+		}
+
+		td.CmpTrue(tt, td.Cmp(t, got, td.Map(map[string]reflect.Value{}, td.MapEntries{
+			"pipo":  42,
+			"bingo": 666,
+			"zip":   nil,
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+
+		td.CmpTrue(tt, td.Cmp(t, got, td.SubMapOf(map[string]reflect.Value{}, td.MapEntries{
+			"pipo":  42,
+			"bingo": 666,
+			"zip":   nil,
+			"test":  "more",
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+
+		td.CmpTrue(tt, td.Cmp(t, got, td.SuperMapOf(map[string]reflect.Value{}, td.MapEntries{
+			"pipo": 42,
+			"zip":  nil,
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+	})
+
 	tt.Run("Error", func(tt *testing.T) {
 		ttt := test.NewTestingTB(tt.Name())
 

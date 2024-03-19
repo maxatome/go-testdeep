@@ -115,27 +115,14 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 				reflect.Ptr, reflect.Slice:
 				entryInfo.expected = reflect.Zero(valueType) // change to a typed nil
 			default:
-				m.err = ctxerr.OpBad(
-					m.GetLocation().Func,
-					"expected key %s value cannot be nil as entries value type is %s",
-					util.ToString(key),
-					valueType)
-				return
+				entryInfo.expected = reflect.Value{}
+				// Don't raise an error if map value cannot be nil as a
+				// smuggle hook can change it at fly during the comparison
 			}
 		} else {
 			entryInfo.expected = reflect.ValueOf(expectedValue)
-
-			if _, ok := expectedValue.(TestDeep); !ok {
-				if !entryInfo.expected.Type().AssignableTo(valueType) {
-					m.err = ctxerr.OpBad(
-						m.GetLocation().Func,
-						"expected key %s value type mismatch: %s != model key type (%s)",
-						util.ToString(key),
-						entryInfo.expected.Type(),
-						valueType)
-					return
-				}
-			}
+			// Don't check vexpectedValue type against map value one as a
+			// smuggle hook can change it at fly during the comparison
 		}
 
 		entryInfo.key = vkey
