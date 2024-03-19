@@ -197,20 +197,22 @@ func TestArray(t *testing.T) {
 			Summary: mustBe("array length is 1, so cannot have #1 expected index"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, [3]int{},
 		td.Array([3]int{}, td.ArrayEntries{1: nil}),
 		expectedError{
-			Message: mustBe("bad usage of Array operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("expected value of #1 cannot be nil as items type is int"),
+			Message:  mustBe("values differ"),
+			Path:     mustBe("DATA[1]"),
+			Got:      mustBe("0"),
+			Expected: mustBe("nil"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, [3]int{},
 		td.Array([3]int{}, td.ArrayEntries{1: "bad"}),
 		expectedError{
-			Message: mustBe("bad usage of Array operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("type string of #1 expected value differs from array contents (int)"),
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA[1]"),
+			Got:      mustBe("int"),
+			Expected: mustBe("string"),
 		})
 
 	checkError(t, "never tested",
@@ -247,9 +249,7 @@ func TestArray(t *testing.T) {
 		`Array([0]int{})`)
 
 	// Erroneous op
-	test.EqualStr(t,
-		td.Array([3]int{}, td.ArrayEntries{1: "bad"}).String(),
-		"Array(<ERROR>)")
+	test.EqualStr(t, td.Array(12, nil).String(), "Array(<ERROR>)")
 }
 
 func TestArrayTypeBehind(t *testing.T) {
@@ -260,7 +260,7 @@ func TestArrayTypeBehind(t *testing.T) {
 	equalTypes(t, td.Array(&MyArray{}, nil), &MyArray{})
 
 	// Erroneous op
-	equalTypes(t, td.Array([3]int{}, td.ArrayEntries{1: "bad"}), nil)
+	equalTypes(t, td.Array(12, nil), nil)
 }
 
 func TestSlice(t *testing.T) {
@@ -476,12 +476,13 @@ func TestSlice(t *testing.T) {
 			Summary: mustBe("usage: Slice(SLICE|&SLICE, EXPECTED_ENTRIES), but received [0]int (array) as 1st parameter"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, []int{0, 5},
 		td.Slice([]int{}, td.ArrayEntries{1: "bad"}),
 		expectedError{
-			Message: mustBe("bad usage of Slice operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("type string of #1 expected value differs from slice contents (int)"),
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA[1]"),
+			Got:      mustBe("int"),
+			Expected: mustBe("string"),
 		})
 
 	checkError(t, "never tested",
@@ -514,9 +515,7 @@ func TestSlice(t *testing.T) {
 		`Slice(*td_test.MySlice{})`)
 
 	// Erroneous op
-	test.EqualStr(t,
-		td.Slice([]int{}, td.ArrayEntries{1: "bad"}).String(),
-		"Slice(<ERROR>)")
+	test.EqualStr(t, td.Slice(12, nil).String(), "Slice(<ERROR>)")
 }
 
 func TestSliceTypeBehind(t *testing.T) {
@@ -527,7 +526,7 @@ func TestSliceTypeBehind(t *testing.T) {
 	equalTypes(t, td.Slice(&MySlice{}, nil), &MySlice{})
 
 	// Erroneous op
-	equalTypes(t, td.Slice([]int{}, td.ArrayEntries{1: "bad"}), nil)
+	equalTypes(t, td.Slice(12, nil), nil)
 }
 
 func TestSuperSliceOf(t *testing.T) {
@@ -714,12 +713,13 @@ func TestSuperSliceOf(t *testing.T) {
 			Summary: mustBe("usage: SuperSliceOf(ARRAY|&ARRAY|SLICE|&SLICE, EXPECTED_ENTRIES), but received *td_test.MyStruct (ptr) as 1st parameter"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, []int{0, 1},
 		td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}),
 		expectedError{
-			Message: mustBe("bad usage of SuperSliceOf operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe("type string of #1 expected value differs from slice contents (int)"),
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe("DATA[1]"),
+			Got:      mustBe("int"),
+			Expected: mustBe("string"),
 		})
 
 	checkError(t, "never tested",
@@ -731,9 +731,7 @@ func TestSuperSliceOf(t *testing.T) {
 		})
 
 	// Erroneous op
-	test.EqualStr(t,
-		td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}).String(),
-		"SuperSliceOf(<ERROR>)")
+	test.EqualStr(t, td.SuperSliceOf(12, nil).String(), "SuperSliceOf(<ERROR>)")
 }
 
 func TestSuperSliceOfTypeBehind(t *testing.T) {
@@ -750,5 +748,5 @@ func TestSuperSliceOfTypeBehind(t *testing.T) {
 	equalTypes(t, td.SuperSliceOf(&MyArray{}, nil), &MyArray{})
 
 	// Erroneous op
-	equalTypes(t, td.SuperSliceOf([]int{}, td.ArrayEntries{1: "bad"}), nil)
+	equalTypes(t, td.SuperSliceOf(12, nil), nil)
 }

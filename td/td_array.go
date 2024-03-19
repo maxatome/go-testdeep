@@ -242,28 +242,14 @@ func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expected
 				reflect.Ptr, reflect.Slice:
 				vexpectedValue = reflect.Zero(elemType) // change to a typed nil
 			default:
-				a.err = ctxerr.OpBad(
-					a.GetLocation().Func,
-					"expected value of #%d cannot be nil as items type is %s",
-					index,
-					elemType)
-				return
+				// Don't raise an error if item cannot be nil as a smuggle hook can
+				// change it at fly during the comparison
+				vexpectedValue = reflect.Value{}
 			}
 		} else {
 			vexpectedValue = reflect.ValueOf(expectedValue)
-
-			if _, ok := expectedValue.(TestDeep); !ok {
-				if !vexpectedValue.Type().AssignableTo(elemType) {
-					a.err = ctxerr.OpBad(
-						a.GetLocation().Func,
-						"type %s of #%d expected value differs from %s contents (%s)",
-						vexpectedValue.Type(),
-						index,
-						util.TernStr(array, "array", "slice"),
-						elemType)
-					return
-				}
-			}
+			// Don't check vexpectedValue type against slice/array item one as a
+			// smuggle hook can change it at fly during the comparison
 		}
 
 		a.expectedEntries[index] = vexpectedValue
