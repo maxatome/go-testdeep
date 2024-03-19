@@ -260,6 +260,45 @@ func TestWithSmuggleHooks(tt *testing.T) {
 		ttt.ResetMessages()
 	})
 
+	tt.Run("Struct", func(tt *testing.T) {
+		ttt := test.NewTestingTB(tt.Name())
+
+		t := td.NewT(ttt).WithSmuggleHooks(func(got reflect.Value) any {
+			if got.IsValid() {
+				return got.Interface()
+			}
+			return nil
+		})
+
+		type Rstruct struct {
+			V1 reflect.Value
+			V2 reflect.Value
+		}
+
+		got := Rstruct{V1: reflect.ValueOf(42)}
+
+		td.CmpTrue(tt, td.Cmp(t, got, td.Struct(Rstruct{}, td.StructFields{
+			"V1": 42,
+			"V2": nil,
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+
+		td.CmpTrue(tt, td.Cmp(t, got, td.SStruct(Rstruct{}, td.StructFields{
+			"V1": 42,
+			"V2": nil,
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+
+		td.CmpTrue(tt, td.Cmp(t, got, td.Struct(nil, td.StructFields{
+			"V1": 42,
+			"V2": nil,
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+	})
+
 	tt.Run("Error", func(tt *testing.T) {
 		ttt := test.NewTestingTB(tt.Name())
 

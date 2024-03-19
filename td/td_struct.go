@@ -261,9 +261,6 @@ func anyStruct(base base, model reflect.Value, expectedFields StructFields, stri
 		field, found := stType.FieldByName(fieldName)
 		if found {
 			st.addExpectedValue(field, expectedValue, "")
-			if st.err != nil {
-				return st
-			}
 			checkedFields[fieldName] = false
 			continue
 		}
@@ -279,11 +276,7 @@ func anyStruct(base base, model reflect.Value, expectedFields StructFields, stri
 			}
 			st.addExpectedValue(
 				field, expectedValue,
-				fmt.Sprintf(" (from %q)", fieldName),
-			)
-			if st.err != nil {
-				return st
-			}
+				fmt.Sprintf(" (from %q)", fieldName))
 			checkedFields[name] = true
 			continue
 		}
@@ -377,11 +370,7 @@ func anyStruct(base base, model reflect.Value, expectedFields StructFields, stri
 				if ok == m.ok {
 					st.addExpectedValue(
 						field, m.expected,
-						fmt.Sprintf(" (from pattern %#q)", m.name),
-					)
-					if st.err != nil {
-						return st
-					}
+						fmt.Sprintf(" (from pattern %#q)", m.name))
 					checkedFields[fieldName] = true
 				}
 			}
@@ -421,25 +410,14 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 		case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
 			reflect.Ptr, reflect.Slice:
 			vexpectedValue = reflect.Zero(field.Type) // change to a typed nil
-		default:
-			s.err = ctxerr.OpBad(s.location.Func,
-				"expected value of field %s%s cannot be nil as it is a %s",
-				field.Name, ctxInfo, field.Type)
-			return
+			// default:
+			//   Don't raise an error if field cannot be nil as a smuggle hook can
+			//   change it at fly during the comparison
 		}
 	} else {
 		vexpectedValue = reflect.ValueOf(expectedValue)
-		if _, ok := expectedValue.(TestDeep); !ok {
-			if !vexpectedValue.Type().AssignableTo(field.Type) {
-				s.err = ctxerr.OpBad(s.location.Func,
-					"type %s of field expected value %s%s differs from struct one (%s)",
-					vexpectedValue.Type(),
-					field.Name,
-					ctxInfo,
-					field.Type)
-				return
-			}
-		}
+		// Don't check vexpectedValue type against field one as a
+		// smuggle hook can change it at fly during the comparison
 	}
 
 	s.expectedFields = append(s.expectedFields, fieldInfo{
