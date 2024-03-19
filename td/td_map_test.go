@@ -374,20 +374,22 @@ func TestMap(t *testing.T) {
 			Summary: mustBe("expected key 1 type mismatch: int != model key type (string)"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, &MyMap{"foo": 42},
 		td.Map(&MyMap{}, td.MapEntries{"foo": nil}),
 		expectedError{
-			Message: mustBe("bad usage of Map operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe(`expected key "foo" value cannot be nil as entries value type is int`),
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA["foo"]`),
+			Got:      mustBe("42"),
+			Expected: mustBe("nil"),
 		})
 
-	checkError(t, "never tested",
+	checkError(t, &MyMap{"foo": 12},
 		td.Map(&MyMap{}, td.MapEntries{"foo": uint16(2)}),
 		expectedError{
-			Message: mustBe("bad usage of Map operator"),
-			Path:    mustBe("DATA"),
-			Summary: mustBe(`expected key "foo" value type mismatch: uint16 != model key type (int)`),
+			Message:  mustBe("type mismatch"),
+			Path:     mustBe(`DATA["foo"]`),
+			Got:      mustBe("int"),
+			Expected: mustBe("uint16"),
 		})
 
 	checkError(t, "never tested",
