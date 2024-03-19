@@ -184,6 +184,41 @@ func TestWithSmuggleHooks(tt *testing.T) {
 		})
 	}
 
+	tt.Run("Array", func(tt *testing.T) {
+		ttt := test.NewTestingTB(tt.Name())
+
+		t := td.NewT(ttt).WithSmuggleHooks(func(got reflect.Value) any {
+			if got.IsValid() {
+				return got.Interface()
+			}
+			return nil
+		})
+
+		got := [3]reflect.Value{1: reflect.ValueOf(42)}
+
+		td.CmpTrue(tt, td.Cmp(t, got, td.Array([3]reflect.Value{}, td.ArrayEntries{
+			0: nil, // if omitted, td.Array sets it to reflect.Value{}
+			1: 42,
+			2: nil, // if omitted, td.Array sets it to reflect.Value{}
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+
+		td.CmpTrue(tt, td.Cmp(t, got[:], td.Slice([]reflect.Value{}, td.ArrayEntries{
+			0: nil, // if omitted, td.Array sets it to reflect.Value{}
+			1: 42,
+			2: nil, // if omitted, td.Array sets it to reflect.Value{}
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+
+		td.CmpTrue(tt, td.Cmp(t, got[:], td.SuperSliceOf([]reflect.Value{}, td.ArrayEntries{
+			1: 42,
+		})))
+		test.EqualStr(tt, ttt.LastMessage(), "")
+		ttt.ResetMessages()
+	})
+
 	tt.Run("Error", func(tt *testing.T) {
 		ttt := test.NewTestingTB(tt.Name())
 
