@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2023, Maxime Soulé
+// Copyright (c) 2018-2024, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -645,6 +645,7 @@ func TestSmuggleFieldsPath(t *testing.T) {
 	checkOK(t, gotStruct,
 		td.Smuggle("MyStructMid.MyStructBase.ValBool", true))
 	checkOK(t, gotStruct, td.Smuggle("ValBool", true)) // thanks to composition
+	checkOK(t, gotStruct, td.Smuggle("Ptr", td.Ptr(42)))
 
 	// OK across pointers
 	checkOK(t, b, td.Smuggle("PA.Num", 2))
@@ -760,6 +761,79 @@ func TestSmuggleFieldsPath(t *testing.T) {
 		checkOK(t, got, td.Smuggle(fmt.Sprintf("Iface[%d][42][0]", i), "pipo"))
 		checkOK(t, got, td.Smuggle(fmt.Sprintf("Iface[%d][42][0]", i-2), "pipo"))
 	}
+}
+
+func TestSmuggleFieldsPathMethod(t *testing.T) {
+	pipo := td.SmuggleBuild{Field: struct{ Path string }{"pipo"}}
+
+	checkOK(t, td.SmuggleBuild{Next: &pipo},
+		td.Smuggle(`FollowNext().Field.Path`, "pipo"))
+
+	checkOK(t, &td.SmuggleBuild{Next: &pipo},
+		td.Smuggle(`FollowNext().Field.Path`, "pipo"))
+
+	checkOK(t, &td.SmuggleBuild{Next: &pipo},
+		td.Smuggle(`PtrFollowNext().Field.Path`, "pipo"))
+
+	checkOK(t, td.SmuggleBuild{Iface: pipo},
+		td.Smuggle(`FollowIface().Field.Path`, "pipo"))
+
+	checkOK(t, &td.SmuggleBuild{Iface: pipo},
+		td.Smuggle(`FollowIface().Field.Path`, "pipo"))
+
+	checkOK(t, &td.SmuggleBuild{Iface: &pipo},
+		td.Smuggle(`PtrFollowIface().Field.Path`, "pipo"))
+
+	checkOK(t, td.SmuggleBuild{Iface: pipo},
+		td.Smuggle(`MayFollowIface().Field.Path`, "pipo"))
+
+	// Method call on typed nil is OK as PNum() is a method on *td.SmuggleBuild
+	checkOK(t, td.SmuggleBuild{}, td.Smuggle(`Next.PNum()`, 42))
+	checkOK(t, td.SmuggleBuild{Iface: (*td.SmuggleBuild)(nil)},
+		td.Smuggle(`Iface.PNum()`, 42))
+
+	// Method call on typed nil is KO as Num() is a method on td.SmuggleBuild
+	checkError(t, td.SmuggleBuild{}, td.Smuggle(`Next.Num()`, 42),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustMatch(`
+it failed coz: method Next.Num\(\) panicked: value method .+/td.SmuggleBuild.Num called using nil \*SmuggleBuild pointer`),
+		})
+
+	checkError(t, td.SmuggleBuild{Next: &pipo},
+		td.Smuggle(`Next.Panic()`, "dummy"),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain(`
+it failed coz: method Next.Panic() panicked: oops!`),
+		})
+
+	checkError(t, td.SmuggleBuild{Next: &td.SmuggleBuild{}},
+		td.Smuggle(`Next.MayFollowNext().Field.Path`, "pipo"),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain(`
+it failed coz: method Next.MayFollowNext() returned an error: Next is nil`),
+		})
+
+	checkError(t, td.SmuggleBuild{Next: &td.SmuggleBuild{}},
+		td.Smuggle(`Next.MayFollowIface().Field.Path`, "pipo"),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain(`
+it failed coz: method Next.MayFollowIface() returned an error: Iface is nil`),
+		})
+
+	// Test with reflect
+	checkOK(t, reflect.ValueOf(pipo),
+		td.Smuggle(`Interface().Field.Path`, "pipo"))
+
+	checkOK(t, reflect.ValueOf(reflect.ValueOf(&pipo)),
+		td.Smuggle(`Interface().Elem().Interface().Field.Path`, "pipo"))
 }
 
 func TestSmuggleTypeBehind(t *testing.T) {
