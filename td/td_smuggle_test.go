@@ -762,6 +762,10 @@ func TestSmuggleFieldsPath(t *testing.T) {
 	}
 }
 
+func TestSmuggleFieldsPathMethod(t *testing.T) {
+	// XXXX
+}
+
 func TestSmuggleTypeBehind(t *testing.T) {
 	// Type behind is the smuggle function parameter one
 
