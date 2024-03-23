@@ -44,9 +44,17 @@ func TestToString(t *testing.T) {
 		{paramGot: "foo\n\"`bar", expected: "(string) (len=9) \"foo\\n\\\"`bar\""},
 		{paramGot: reflect.ValueOf("foobar"), expected: `"foobar"`},
 		{
+			paramGot: reflect.ValueOf(reflect.ValueOf(42)),
+			expected: `(reflect.Value) <int Value>`,
+		},
+		{
 			paramGot: []reflect.Value{reflect.ValueOf("foo"), reflect.ValueOf("bar")},
 			expected: `("foo",
  "bar")`,
+		},
+		{
+			paramGot: reflect.ValueOf([]reflect.Value{}),
+			expected: "([]reflect.Value) {\n}",
 		},
 		{paramGot: types.RawString("test"), expected: "test"},
 		{paramGot: types.RawInt(42), expected: "42"},
