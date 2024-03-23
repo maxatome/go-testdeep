@@ -19,20 +19,27 @@ import (
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
-// ToString does its best to stringify val.
-func ToString(val any) string {
+// ToString does its best to stringify val. inReflectValue is used
+// internally to avoid treating specifically reflect.Value type.
+func ToString(val any, inReflectValue ...bool) string {
 	if val == nil {
 		return "nil"
 	}
 
 	switch tval := val.(type) {
 	case reflect.Value:
+		if len(inReflectValue) > 0 && inReflectValue[0] {
+			break
+		}
 		newVal, ok := dark.GetInterface(tval, true)
 		if ok {
-			return ToString(newVal)
+			return ToString(newVal, true)
 		}
 
 	case []reflect.Value:
+		if len(inReflectValue) > 0 && inReflectValue[0] {
+			break
+		}
 		var buf strings.Builder
 		SliceToString(&buf, tval)
 		return buf.String()
@@ -55,7 +62,10 @@ func ToString(val any) string {
 
 		// no "(bool) " prefix for booleans
 	case bool:
-		return TernStr(tval, "true", "false")
+		if tval {
+			return "true"
+		}
+		return "false"
 
 	case types.TestDeepStringer:
 		return tval.String()
