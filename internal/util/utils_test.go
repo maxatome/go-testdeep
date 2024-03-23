@@ -14,9 +14,6 @@ import (
 )
 
 func TestTern(t *testing.T) {
-	test.EqualStr(t, util.TernStr(true, "A", "B"), "A")
-	test.EqualStr(t, util.TernStr(false, "A", "B"), "B")
-
 	test.EqualInt(t, int(util.TernRune(true, 'A', 'B')), int('A'))
 	test.EqualInt(t, int(util.TernRune(false, 'A', 'B')), int('B'))
 }
