@@ -140,16 +140,9 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 		expected = op
 	}
 
-	if !got.IsValid() || !expected.IsValid() {
-		if got.IsValid() == expected.IsValid() {
-			return
-		}
-		return nilHandler(ctx, got, expected)
-	}
-
-	// Check if a Smuggle hook matches got type
-	if handled, e := ctx.Hooks.Smuggle(&got); handled {
-		if e != nil {
+	if got.IsValid() {
+		// Check if a Smuggle hook matches got type
+		if handled, e := ctx.Hooks.Smuggle(&got); handled && e != nil {
 			// ctx.BooleanError is always false here as hooks cannot be set globally
 			return ctx.CollectError(&ctxerr.Error{
 				Message:  e.Error(),
@@ -157,6 +150,13 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 				Expected: expected,
 			})
 		}
+	}
+
+	if !got.IsValid() || !expected.IsValid() {
+		if got.IsValid() == expected.IsValid() {
+			return
+		}
+		return nilHandler(ctx, got, expected)
 	}
 
 	// Check if a Cmp hook matches got & expected types
