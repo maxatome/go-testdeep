@@ -173,8 +173,8 @@ func (ta *TestAPI) AutoDumpResponse(enable ...bool) *TestAPI {
 }
 
 // DefaultRequestParams allows to define header values, query params,
-// cookies and hooks to automatically set in each future requests sent
-// by [TestAPI.Request], [TestAPI.Get], [TestAPI.Head],
+// cookies and hooks to be automatically set for each future requests
+// sent by [TestAPI.Request], [TestAPI.Get], [TestAPI.Head],
 // [TestAPI.Options], [TestAPI.Post], [TestAPI.PostForm],
 // [TestAPI.PostMultipartFormData], [TestAPI.Put], [TestAPI.Path],
 // [TestAPI.Delete] and all derived JSON and XML methods.
@@ -190,6 +190,8 @@ func (ta *TestAPI) AutoDumpResponse(enable ...bool) *TestAPI {
 //
 // See [TestAPI.AddDefaultRequestParams] to add new default params
 // instead of entirely replacing them.
+//
+// See also [TestAPI.DefaultHook] and [TestAPI.DefaultHeader].
 func (ta *TestAPI) DefaultRequestParams(newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
 	header, qp, cookies, hook, err := collateRequestParams(newRequestParams)
@@ -203,8 +205,41 @@ func (ta *TestAPI) DefaultRequestParams(newRequestParams ...any) *TestAPI {
 	return ta
 }
 
+// DefaultHook allows to define a hook to be automatically called for
+// each future requests sent by [TestAPI.Request], [TestAPI.Get],
+// [TestAPI.Head], [TestAPI.Options], [TestAPI.Post],
+// [TestAPI.PostForm], [TestAPI.PostMultipartFormData], [TestAPI.Put],
+// [TestAPI.Path], [TestAPI.Delete] and all derived JSON and XML
+// methods.
+//
+// Previously defined hooks are discarded.
+//
+// See also [TestAPI.DefaultRequestParams] and
+// [TestAPI.AddDefaultRequestParams].
+func (ta *TestAPI) DefaultHook(hook func(*http.Request) error) *TestAPI {
+	ta.defaultHook = hook
+	return ta
+}
+
+// DefaultHeader allows to define header values to be automatically
+// set for each future requests sent by [TestAPI.Request],
+// [TestAPI.Get], [TestAPI.Head], [TestAPI.Options], [TestAPI.Post],
+// [TestAPI.PostForm], [TestAPI.PostMultipartFormData], [TestAPI.Put],
+// [TestAPI.Path], [TestAPI.Delete] and all derived JSON and XML
+// methods.
+//
+// Previously defined header values are discarded.
+//
+// See also [TestAPI.DefaultRequestParams] and
+// [TestAPI.AddDefaultRequestParams].
+func (ta *TestAPI) DefaultHeader(h http.Header) *TestAPI {
+	header, _, _, _, _ := collateRequestParams([]any{h})
+	ta.defaultHeader = header
+	return ta
+}
+
 // AddDefaultRequestParams allows to define header values, query
-// params, cookies and hooks to automatically set in each future
+// params, cookies and hooks to be automatically set for each future
 // requests sent by [TestAPI.Request], [TestAPI.Get], [TestAPI.Head],
 // [TestAPI.Options], [TestAPI.Post], [TestAPI.PostForm],
 // [TestAPI.PostMultipartFormData], [TestAPI.Put], [TestAPI.Path],
@@ -218,6 +253,8 @@ func (ta *TestAPI) DefaultRequestParams(newRequestParams ...any) *TestAPI {
 //
 // See [TestAPI.DefaultRequestParams] to entirely replace default
 // params instead of modifying them.
+//
+// See also [TestAPI.DefaultHook] and [TestAPI.DefaultHeader].
 func (ta *TestAPI) AddDefaultRequestParams(newRequestParams ...any) *TestAPI {
 	ta.t.Helper()
 	header, qp, cookies, hook, err := collateRequestParams(newRequestParams)
