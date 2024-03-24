@@ -1190,6 +1190,42 @@ bingo%CR
 				}
 			}`))
 
+		// Replace previously defined hooks
+		ta.DefaultHook(func(r *http.Request) error {
+			r.Header.Add("X-Hook", "4")
+			return nil
+		})
+		ta.Get("/hq/json",
+			func(r *http.Request) error {
+				r.Header.Add("X-Hook", "3")
+				return nil
+			}).
+			CmpJSONBody(td.JSON(`{
+				"header": SuperMapOf({
+					"X-Hook":  ["3", "4"],
+					"X-Zip":  ["test"],
+					"Cookie": ["cook9=val9"]
+				}),
+				"query_params": {
+					"x": ["y"]
+				}
+			}`))
+
+		// Replace previously defined header values
+		ta.DefaultHeader(http.Header{"x-zip": {"new"}, "x-test": {"yo"}})
+		ta.Get("/hq/json").
+			CmpJSONBody(td.JSON(`{
+				"header": SuperMapOf({
+					"X-Hook": ["4"],
+					"X-Zip":  ["new"],
+					"X-Test": ["yo"],
+					"Cookie": ["cook9=val9"]
+				}),
+				"query_params": {
+					"x": ["y"]
+				}
+			}`))
+
 		t.Run("hook failures", func(t *testing.T) {
 			tt := tdutil.NewT("test")
 			ta := tdhttp.NewTestAPI(tt, mux)
