@@ -216,10 +216,10 @@ func (g *tdGrep) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	case reflect.Slice, reflect.Array:
 		const grepped = "<grepped>"
 
-		if got.Kind() == reflect.Slice && got.IsNil() {
+		if got.Kind() == reflect.Slice && got.IsNil() { // got.Len() == 0 ??????
 			return deepValueEqual(
 				ctx.AddCustomLevel(grepped),
-				reflect.New(got.Type()).Elem(),
+				reflect.New(got.Type()).Elem(), // got ??????
 				g.expectedValue,
 			)
 		}

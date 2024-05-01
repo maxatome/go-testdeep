@@ -9,6 +9,7 @@ package td
 import (
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 
 	"github.com/maxatome/go-testdeep/internal/compare"
@@ -17,10 +18,11 @@ import (
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
-const sortUsage = "(SORT_FUNC|INT|STRING|[]string, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
+const sortUsage = "(SORT_FUNC|int|string|[]string, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
 
 type tdSort struct {
 	tdSmugglerBase
+	how      any
 	mkSortFn func(reflect.Type) (reflect.Value, error)
 }
 
@@ -171,24 +173,72 @@ func Sort(how any, expectedValue any) TestDeep {
 
 	var err error
 	s.mkSortFn, err = sortFunc(how)
-	if err == nil {
+	if err != nil {
 		s.err = ctxerr.OpBad("Sort", "usage: Sort%s, %s", sortUsage, err)
-	} else if !s.isTestDeeper && s.expectedValue.Kind() != reflect.Slice {
-		s.err = ctxerr.OpBad("Sort",
-			"usage: Sort%s, EXPECTED_VALUE must be a slice not a %s",
-			sortUsage, types.KindType(s.expectedValue))
+	} else if !s.isTestDeeper {
+		switch s.expectedValue.Kind() {
+		case reflect.Slice, reflect.Array:
+		default:
+			s.err = ctxerr.OpBad("Sort",
+				"usage: Sort%s, EXPECTED_VALUE must be a slice not a %s",
+				sortUsage, types.KindType(s.expectedValue))
+		}
 	}
+	s.how = how
 	return &s
 }
 
 func (s *tdSort) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
-	return nil
+	if s.err != nil {
+		return ctx.CollectError(s.err)
+	}
+
+	if rErr := grepResolvePtr(ctx, &got); rErr != nil {
+		return rErr
+	}
+
+	switch got.Kind() {
+	case reflect.Slice, reflect.Array:
+		const sorted = "<sorted>"
+
+		l := got.Len()
+		if l <= 1 {
+			return deepValueEqual(ctx.AddCustomLevel(sorted), got, s.expectedValue)
+		}
+		itemType := got.Type().Elem()
+		fn, err := s.mkSortFn(itemType)
+		if err != nil {
+			if ctx.BooleanError {
+				return ctxerr.BooleanError
+			}
+			return ctx.CollectError(&ctxerr.Error{
+				Message:  "incompatible parameter type",
+				Got:      types.RawString(itemType.String()),
+				Expected: types.RawString(fn.Type().In(0).String()),
+			})
+		}
+
+		out := reflect.MakeSlice(reflect.SliceOf(itemType), 0, l)
+		for idx := 0; idx < l; idx++ {
+			out = reflect.Append(out, got.Index(idx))
+		}
+
+		sort.SliceStable(out.Interface(), func(i, j int) bool {
+			return fn.Call([]reflect.Value{out.Index(i), out.Index(j)})[0].Bool()
+		})
+		return deepValueEqual(ctx.AddCustomLevel(sorted), out, s.expectedValue)
+	}
+
+	return grepBadKind(ctx, got)
 }
 
 func (s *tdSort) String() string {
 	if s.err != nil {
 		return s.stringError()
 	}
-	// XXXX
-	return "XXXX"
+	how, typ := s.how, reflect.TypeOf(s.how)
+	if typ.Kind() == reflect.Func {
+		how = typ.String()
+	}
+	return fmt.Sprintf("Sort(%v)", how)
 }
