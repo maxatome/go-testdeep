@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"sort"
 
+	"github.com/maxatome/go-testdeep/internal/compare"
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
@@ -24,10 +25,12 @@ import (
 // documentation.
 //
 // Sorting rules are as follows:
+//   - invalid value is always lower
 //   - nil is always lower
 //   - different types are sorted by their name
+//   - if method TYPE.Compare(TYPE) int exits, calls it
 //   - false is lesser than true
-//   - float and int numbers are sorted by their value
+//   - float and int numbers are sorted by their value, NaN is always lower
 //   - complex numbers are sorted by their real, then by their imaginary parts
 //   - strings are sorted by their value
 //   - map: shorter length is lesser, then sorted by address
@@ -59,7 +62,7 @@ func (v *rValues) Len() int {
 }
 
 func (v *rValues) Less(i, j int) bool {
-	return cmp(v.Visited, v.Slice[i], v.Slice[j]) < 0
+	return compare.Compare(v.Visited, v.Slice[i], v.Slice[j]) < 0
 }
 
 func (v *rValues) Swap(i, j int) {

@@ -1,17 +1,20 @@
-// Copyright (c) 2019, Maxime Soulé
+// Copyright (c) 2019-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package tdutil
+package compare
 
 import (
 	"math"
 	"reflect"
+	"sync"
 
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
+
+var intType = reflect.TypeOf(0)
 
 func cmpRet(less, gt bool) int {
 	if less {
@@ -33,8 +36,27 @@ func cmpFloat(a, b float64) int {
 	return cmpRet(a < b, a > b)
 }
 
-// cmp returns -1 if a < b, 1 if a > b, 0 if a == b.
-func cmp(v visited.Visited, a, b reflect.Value) int {
+var methodCache sync.Map
+
+func methodCompare(typ reflect.Type) reflect.Value {
+	if m, ok := methodCache.Load(typ); ok {
+		return m.(reflect.Value)
+	}
+	m, ok := typ.MethodByName("Compare")
+	if !ok ||
+		m.Type.IsVariadic() ||
+		m.Type.NumIn() != 2 ||
+		m.Type.In(1) != typ ||
+		m.Type.NumOut() != 1 ||
+		m.Type.Out(0) != intType {
+		m.Func = reflect.Value{}
+	}
+	methodCache.Store(typ, m.Func)
+	return m.Func
+}
+
+// Compare returns -1 if a < b, 1 if a > b, 0 if a == b.
+func Compare(v visited.Visited, a, b reflect.Value) int {
 	if !a.IsValid() {
 		if !b.IsValid() {
 			return 0
@@ -45,7 +67,8 @@ func cmp(v visited.Visited, a, b reflect.Value) int {
 		return 1
 	}
 
-	if at, bt := a.Type(), b.Type(); at != bt {
+	at, bt := a.Type(), b.Type()
+	if at != bt {
 		sat, sbt := at.String(), bt.String()
 		return cmpRet(sat < sbt, sat > sbt)
 	}
@@ -53,6 +76,21 @@ func cmp(v visited.Visited, a, b reflect.Value) int {
 	// Avoid looping forever on cyclic references
 	if v.Record(a, b) {
 		return 0
+	}
+
+	if a.Kind() != reflect.Interface {
+		if cmpFn := methodCompare(at); cmpFn.IsValid() {
+			ok, cmp := false, 0
+			func() {
+				defer recover() //nolint: errcheck
+				cmp = int(cmpFn.Call([]reflect.Value{a, b})[0].Int())
+				ok = true
+			}()
+			if ok {
+				return cmp
+			}
+			// When a panic occurs, fallback on generic comparison
+		}
 	}
 
 	switch a.Kind() {
@@ -94,7 +132,7 @@ func cmp(v visited.Visited, a, b reflect.Value) int {
 
 	case reflect.Array:
 		for i := 0; i < a.Len(); i++ {
-			if r := cmp(v, a.Index(i), b.Index(i)); r != 0 {
+			if r := Compare(v, a.Index(i), b.Index(i)); r != 0 {
 				return r
 			}
 		}
@@ -107,7 +145,7 @@ func cmp(v visited.Visited, a, b reflect.Value) int {
 			maxl = bl
 		}
 		for i := 0; i < maxl; i++ {
-			if r := cmp(v, a.Index(i), b.Index(i)); r != 0 {
+			if r := Compare(v, a.Index(i), b.Index(i)); r != 0 {
 				return r
 			}
 		}
@@ -123,11 +161,11 @@ func cmp(v visited.Visited, a, b reflect.Value) int {
 		if b.IsNil() {
 			return 1
 		}
-		return cmp(v, a.Elem(), b.Elem())
+		return Compare(v, a.Elem(), b.Elem())
 
 	case reflect.Struct:
 		for i, m := 0, a.NumField(); i < m; i++ {
-			if r := cmp(v, a.Field(i), b.Field(i)); r != 0 {
+			if r := Compare(v, a.Field(i), b.Field(i)); r != 0 {
 				return r
 			}
 		}
@@ -143,7 +181,7 @@ func cmp(v visited.Visited, a, b reflect.Value) int {
 		if b.IsNil() {
 			return 1
 		}
-		return cmp(v, a.Elem(), b.Elem())
+		return Compare(v, a.Elem(), b.Elem())
 
 	case reflect.Map:
 		// consider shorter maps are before longer ones
