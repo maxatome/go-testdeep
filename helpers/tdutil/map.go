@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"sort"
 
+	"github.com/maxatome/go-testdeep/internal/compare"
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
@@ -44,7 +45,7 @@ func newKvSlice(l int) *kvSlice {
 
 func (s *kvSlice) Len() int { return len(s.s) }
 func (s *kvSlice) Less(i, j int) bool {
-	return cmp(s.v, s.s[i].key, s.s[j].key) < 0
+	return compare.Compare(s.v, s.s[i].key, s.s[j].key) < 0
 }
 func (s *kvSlice) Swap(i, j int) { s.s[i], s.s[j] = s.s[j], s.s[i] }
 
