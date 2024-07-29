@@ -3101,6 +3101,42 @@ func ExampleCmpSmuggle_field_path() {
 	// check fields-path including maps/slices: true
 }
 
+func ExampleCmpSort_basic() {
+	t := &testing.T{}
+
+	got := []int{-1, 1, 2, -3, 3, -2, 0}
+
+	ok := td.CmpSort(t, got, 1, []int{-3, -2, -1, 0, 1, 2, 3})
+	fmt.Println("asc order:", ok)
+
+	ok = td.CmpSort(t, got, -1, []int{3, 2, 1, 0, -1, -2, -3})
+	fmt.Println("desc order:", ok)
+
+	// Output:
+	// asc order: true
+	// desc order: true
+}
+
+func ExampleCmpSorted_basic() {
+	t := &testing.T{}
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := td.CmpSorted(t, got, nil)
+	fmt.Println("is asc order (default):", ok)
+
+	ok = td.CmpSorted(t, got, 1)
+	fmt.Println("is asc order:", ok)
+
+	ok = td.CmpSorted(t, got, -1)
+	fmt.Println("is desc order:", ok)
+
+	// Output:
+	// is asc order (default): true
+	// is asc order: true
+	// is desc order: false
+}
+
 func ExampleCmpSStruct() {
 	t := &testing.T{}
 
