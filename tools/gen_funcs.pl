@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Copyright (c) 2018-2022, Maxime Soulé
+# Copyright (c) 2018-2025, Maxime Soulé
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -72,7 +72,7 @@ my $URL_GODEV = 'https://pkg.go.dev';
 my $URL_GODOC = "$URL_GODEV/github.com/maxatome/go-testdeep";
 
 my $HEADER = <<'EOH';
-// Copyright (c) 2018-2022, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -103,6 +103,7 @@ my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        Re        => 'nil',
                        Recv      => 0,
                        TruncTime => 0,
+                       Sorted    => 'nil',
                        # These operators accept several StructFields,
                        # but we want only one here
                        Struct    => 'nil',
@@ -245,7 +246,7 @@ while (readdir $dh)
                 }
             }
 
-	    $funcs{$func}{args} = \@args unless $ONLY_OPERATORS{$func};
+            $funcs{$func}{args} = \@args unless $ONLY_OPERATORS{$func};
 
             # "//<TAB>" is OK, otherwise TAB is not allowed
             die "TAB detected in $func operator documentation\n" if $doc =~ m,(?<!^//)\t,m;
@@ -526,6 +527,19 @@ foreach my $func (@sorted_funcs)
                   for (my $i = 0; $i < @$args; $i++)
                   {
                       $repl .= ', ';
+                      if ($func eq 'Sorted') # very special case
+                      {
+                          my $num = @params - $i;
+                          if ($num == 0)    { $repl .= 'nil' }
+                          elsif ($num == 1) { $repl .= $params[$i] }
+                          else
+                          {
+                              $repl .= '[]string{'
+                                     . join(', ', @params[$i .. $#params])
+                                     . '}'
+                          }
+                          last
+                      }
                       if ($args->[$i]{variadic})
                       {
                           if (defined $params[$i])
@@ -533,11 +547,9 @@ foreach my $func (@sorted_funcs)
                               $repl .= '[]' . $args->[$i]{type} . '{'
                                      . join(', ', @params[$i .. $#params])
                                      . '}';
+                              last
                           }
-                          else
-                          {
-                              $repl .= 'nil';
-                          }
+                          $repl .= 'nil';
                           last
                       }
                       $repl .= $params[$i]
