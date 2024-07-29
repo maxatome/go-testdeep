@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2022, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// allOperators lists the 67 operators.
+// allOperators lists the 69 operators.
 // nil means not usable in JSON().
 var allOperators = map[string]any{
 	"All":          All,
@@ -67,6 +67,8 @@ var allOperators = map[string]any{
 	"Shallow":      nil,
 	"Slice":        nil,
 	"Smuggle":      nil,
+	"Sort":         Sort,
+	"Sorted":       Sorted,
 	"String":       nil,
 	"Struct":       nil,
 	"SubBagOf":     SubBagOf,
@@ -1106,6 +1108,52 @@ func CmpSlice(t TestingT, got, model any, expectedEntries ArrayEntries, args ...
 func CmpSmuggle(t TestingT, got, fn, expectedValue any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Smuggle(fn, expectedValue), args...)
+}
+
+// CmpSort is a shortcut for:
+//
+//	td.Cmp(t, got, td.Sort(how, expectedValue), args...)
+//
+// See [Sort] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// If t is a [*T] then its Config field is inherited.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpSort(t TestingT, got, how, expectedValue any, args ...any) bool {
+	t.Helper()
+	return Cmp(t, got, Sort(how, expectedValue), args...)
+}
+
+// CmpSorted is a shortcut for:
+//
+//	td.Cmp(t, got, td.Sorted(how), args...)
+//
+// See [Sorted] for details.
+//
+// [Sorted] optional parameter how is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [Sorted] call.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// If t is a [*T] then its Config field is inherited.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpSorted(t TestingT, got, how any, args ...any) bool {
+	t.Helper()
+	return Cmp(t, got, Sorted(how), args...)
 }
 
 // CmpSStruct is a shortcut for:

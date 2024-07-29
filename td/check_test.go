@@ -74,6 +74,12 @@ type expectedErrorMatch struct {
 	Contain string
 }
 
+func ptr(x any) any {
+	v := reflect.New(reflect.TypeOf(x))
+	v.Elem().Set(reflect.ValueOf(x))
+	return v.Interface()
+}
+
 func mustBe(str string) expectedErrorMatch {
 	return expectedErrorMatch{Exact: str}
 }

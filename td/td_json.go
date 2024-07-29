@@ -217,6 +217,8 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, 
 			}
 		case "N", "Re":
 			min, max = 1, 2
+		case "Sorted":
+			min, max = 0, -1
 		case "SubMapOf", "SuperMapOf":
 			min, max, addNilParam = 1, 1, true
 		default:

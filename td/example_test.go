@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2022, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -3139,6 +3139,177 @@ func ExampleSlice_typedSlice() {
 	// true
 	// true
 	// true
+}
+
+func ExampleSort_basic() {
+	t := &testing.T{}
+
+	got := []int{-1, 1, 2, -3, 3, -2, 0}
+
+	// Generic ascending order (≥0 or nil)
+	ok := td.Cmp(t, got, td.Sort(1, []int{-3, -2, -1, 0, 1, 2, 3}))
+	fmt.Println("asc order:", ok)
+
+	ok = td.Cmp(t, got, td.Sort(0, []int{-3, -2, -1, 0, 1, 2, 3}))
+	fmt.Println("asc order:", ok)
+
+	ok = td.Cmp(t, got, td.Sort(nil, []int{-3, -2, -1, 0, 1, 2, 3}))
+	fmt.Println("asc order:", ok)
+
+	// Generic descending order (< 0)
+	ok = td.Cmp(t, got, td.Sort(-1, []int{3, 2, 1, 0, -1, -2, -3}))
+	fmt.Println("desc order:", ok)
+
+	evenHigher := func(a, b int) bool {
+		if (a%2 == 0) != (b%2 == 0) {
+			return a%2 != 0
+		}
+		return a < b
+	}
+	ok = td.Cmp(t, got, td.Sort(evenHigher, []int{-3, -1, 1, 3, -2, 0, 2}))
+	fmt.Println("even higher order:", ok)
+
+	// Output:
+	// asc order: true
+	// asc order: true
+	// asc order: true
+	// desc order: true
+	// even higher order: true
+}
+
+func ExampleSort_fields_path() {
+	t := &testing.T{}
+
+	type Person struct {
+		Name string
+		Age  int
+	}
+
+	brian := Person{Name: "Brian", Age: 22}
+	bob := Person{Name: "Bob", Age: 19}
+	stephen := Person{Name: "Stephen", Age: 19}
+	alice := Person{Name: "Alice", Age: 20}
+	marcel := Person{Name: "Marcel", Age: 25}
+	got := []Person{brian, bob, stephen, alice, marcel}
+
+	ok := td.Cmp(t, got,
+		td.Sort("Name", []Person{alice, bob, brian, marcel, stephen}))
+	fmt.Println("by name asc:", ok)
+
+	ok = td.Cmp(t, got,
+		td.Sort("-Name", []Person{stephen, marcel, brian, bob, alice}))
+	fmt.Println("by name desc:", ok)
+
+	ok = td.Cmp(t, got,
+		td.Sort([]string{"-Age", "Name"}, []Person{marcel, brian, alice, bob, stephen}))
+	fmt.Println("by age desc, then by name asc:", ok)
+
+	type A struct{ props map[string]int }
+	p12 := A{props: map[string]int{"priority": 12}}
+	p23 := A{props: map[string]int{"priority": 23}}
+	p34 := A{props: map[string]int{"priority": 34}}
+	got2 := []A{p23, p12, p34}
+	ok = td.Cmp(t, got2, td.Sort(`-props[priority]`, []A{p34, p23, p12}))
+	fmt.Println("by priority desc:", ok)
+
+	ok = td.Cmp(t, got2, td.Sort(`props.priority`, []A{p12, p23, p34}))
+	fmt.Println("by priority asc:", ok)
+
+	// Output:
+	// by name asc: true
+	// by name desc: true
+	// by age desc, then by name asc: true
+	// by priority desc: true
+	// by priority asc: true
+}
+
+func ExampleSorted_basic() {
+	t := &testing.T{}
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := td.Cmp(t, got, td.Sorted())
+	fmt.Println("is asc order (default):", ok)
+
+	ok = td.Cmp(t, got, td.Sorted(1))
+	fmt.Println("is asc order (1):", ok)
+
+	ok = td.Cmp(t, got, td.Sorted(0))
+	fmt.Println("is asc order (0):", ok)
+
+	ok = td.Cmp(t, got, td.Sorted(nil))
+	fmt.Println("is asc order (nil):", ok)
+
+	ok = td.Cmp(t, got, td.Sorted(-1))
+	fmt.Println("is desc order:", ok)
+
+	got = []int{-3, -1, 1, 3, -2, 0, 2}
+	evenHigher := func(a, b int) bool {
+		if (a%2 == 0) != (b%2 == 0) {
+			return a%2 != 0
+		}
+		return a < b
+	}
+	ok = td.Cmp(t, got, td.Sorted(evenHigher))
+	fmt.Println("is even higher order:", ok)
+
+	// Output:
+	// is asc order (default): true
+	// is asc order (1): true
+	// is asc order (0): true
+	// is asc order (nil): true
+	// is desc order: false
+	// is even higher order: true
+}
+
+func ExampleSorted_fields_path() {
+	t := &testing.T{}
+
+	type Person struct {
+		Name string
+		Age  int
+	}
+
+	alice := Person{Name: "Alice", Age: 20}
+	bob := Person{Name: "Bob", Age: 19}
+	brian := Person{Name: "Brian", Age: 22}
+	marcel := Person{Name: "Marcel", Age: 25}
+	stephen := Person{Name: "Stephen", Age: 19}
+
+	got := []Person{alice, bob, brian, marcel, stephen}
+	ok := td.Cmp(t, got, td.Sorted("Name"))
+	fmt.Println("is sorted by name asc:", ok)
+
+	got = []Person{stephen, marcel, brian, bob, alice}
+	ok = td.Cmp(t, got, td.Sorted("-Name"))
+	fmt.Println("is sorted by name desc:", ok)
+
+	got = []Person{marcel, brian, alice, bob, stephen}
+	ok = td.Cmp(t, got, td.Sorted("-Age", "Name"))
+	fmt.Println("is sorted by age desc, then by name asc 1:", ok)
+
+	got = []Person{marcel, brian, alice, stephen, bob}
+	ok = td.Cmp(t, got, td.Sorted("-Age", "Name"))
+	fmt.Println("is sorted by age desc, then by name asc 2:", ok)
+
+	type A struct{ props map[string]int }
+	p12 := A{props: map[string]int{"priority": 12}}
+	p23 := A{props: map[string]int{"priority": 23}}
+	p34 := A{props: map[string]int{"priority": 34}}
+	got2 := []A{p34, p23, p12}
+	ok = td.Cmp(t, got2, td.Sorted(`-props[priority]`))
+	fmt.Println("is sorted by priority desc:", ok)
+
+	ok = td.Cmp(t, got2, td.Sorted(`props.priority`))
+	fmt.Println("is sorted by priority asc:", ok)
+
+	// Output:
+	// is sorted by name asc: true
+	// is sorted by name desc: true
+	// is sorted by age desc, then by name asc 1: true
+	// is sorted by age desc, then by name asc 2: false
+	// is sorted by priority desc: true
+	// is sorted by priority asc: false
 }
 
 func ExampleSuperSliceOf_array() {
