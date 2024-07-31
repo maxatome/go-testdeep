@@ -9,9 +9,10 @@ package color
 import (
 	"fmt"
 	"os"
-	"reflect"
 	"strings"
 	"sync"
+
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 const (
@@ -212,47 +213,17 @@ func Bad(s string, args ...any) string {
 }
 
 // BadUsage returns a string surrounded by BAD color to notice the
-// user he passes a bad parameter to a function. Typically used in a
+// user she/he passes a bad parameter to a function. Typically used in a
 // panic().
 func BadUsage(usage string, param any, pos int, kind bool) string {
-	Init()
-
-	var b strings.Builder
-	fmt.Fprintf(&b, "%susage: %s, but received ", BadOnBold, usage)
-
-	if param == nil {
-		b.WriteString("nil")
-	} else {
-		t := reflect.TypeOf(param)
-		if kind && t.String() != t.Kind().String() {
-			fmt.Fprintf(&b, "%s (%s)", t, t.Kind())
-		} else {
-			b.WriteString(t.String())
-		}
-	}
-
-	b.WriteString(" as ")
-	switch pos {
-	case 1:
-		b.WriteString("1st")
-	case 2:
-		b.WriteString("2nd")
-	case 3:
-		b.WriteString("3rd")
-	default:
-		fmt.Fprintf(&b, "%dth", pos)
-	}
-	b.WriteString(" parameter")
-	b.WriteString(BadOff)
-	return b.String()
+	return Bad("usage: %s, %s", usage, util.BadParam(param, pos, kind))
 }
 
 // TooManyParams returns a string surrounded by BAD color to notice
-// the user he called a variadic function with too many
+// the user she/he called a variadic function with too many
 // parameters. Typically used in a panic().
 func TooManyParams(usage string) string {
-	Init()
-	return BadOnBold + "usage: " + usage + ", too many parameters" + BadOff
+	return Bad("usage: " + usage + ", too many parameters")
 }
 
 // UnBad returns s with bad color prefix & suffix removed.
