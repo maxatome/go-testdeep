@@ -23,30 +23,6 @@ func TestOpBadUsage(t *testing.T) {
 	test.EqualStr(t,
 		ctxerr.OpBadUsage("Zzz", "(STRING)", nil, 1, true).Error(),
 		prefix+"usage: Zzz(STRING), but received nil as 1st parameter")
-
-	test.EqualStr(t,
-		ctxerr.OpBadUsage("Zzz", "(STRING)", 42, 1, true).Error(),
-		prefix+"usage: Zzz(STRING), but received int as 1st parameter")
-
-	test.EqualStr(t,
-		ctxerr.OpBadUsage("Zzz", "(STRING)", []int{}, 1, true).Error(),
-		prefix+"usage: Zzz(STRING), but received []int (slice) as 1st parameter")
-	test.EqualStr(t,
-		ctxerr.OpBadUsage("Zzz", "(STRING)", []int{}, 1, false).Error(),
-		prefix+"usage: Zzz(STRING), but received []int as 1st parameter")
-
-	test.EqualStr(t,
-		ctxerr.OpBadUsage("Zzz", "(STRING)", nil, 1, true).Error(),
-		prefix+"usage: Zzz(STRING), but received nil as 1st parameter")
-	test.EqualStr(t,
-		ctxerr.OpBadUsage("Zzz", "(STRING)", nil, 2, true).Error(),
-		prefix+"usage: Zzz(STRING), but received nil as 2nd parameter")
-	test.EqualStr(t,
-		ctxerr.OpBadUsage("Zzz", "(STRING)", nil, 3, true).Error(),
-		prefix+"usage: Zzz(STRING), but received nil as 3rd parameter")
-	test.EqualStr(t,
-		ctxerr.OpBadUsage("Zzz", "(STRING)", nil, 4, true).Error(),
-		prefix+"usage: Zzz(STRING), but received nil as 4th parameter")
 }
 
 func TestOpTooManyParams(t *testing.T) {

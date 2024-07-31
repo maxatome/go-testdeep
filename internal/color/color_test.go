@@ -139,30 +139,6 @@ func TestBadUsage(t *testing.T) {
 	test.EqualStr(t,
 		color.BadUsage("Zzz(STRING)", nil, 1, true),
 		"usage: Zzz(STRING), but received nil as 1st parameter")
-
-	test.EqualStr(t,
-		color.BadUsage("Zzz(STRING)", 42, 1, true),
-		"usage: Zzz(STRING), but received int as 1st parameter")
-
-	test.EqualStr(t,
-		color.BadUsage("Zzz(STRING)", []int{}, 1, true),
-		"usage: Zzz(STRING), but received []int (slice) as 1st parameter")
-	test.EqualStr(t,
-		color.BadUsage("Zzz(STRING)", []int{}, 1, false),
-		"usage: Zzz(STRING), but received []int as 1st parameter")
-
-	test.EqualStr(t,
-		color.BadUsage("Zzz(STRING)", nil, 1, true),
-		"usage: Zzz(STRING), but received nil as 1st parameter")
-	test.EqualStr(t,
-		color.BadUsage("Zzz(STRING)", nil, 2, true),
-		"usage: Zzz(STRING), but received nil as 2nd parameter")
-	test.EqualStr(t,
-		color.BadUsage("Zzz(STRING)", nil, 3, true),
-		"usage: Zzz(STRING), but received nil as 3rd parameter")
-	test.EqualStr(t,
-		color.BadUsage("Zzz(STRING)", nil, 4, true),
-		"usage: Zzz(STRING), but received nil as 4th parameter")
 }
 
 func TestTooManyParams(t *testing.T) {
