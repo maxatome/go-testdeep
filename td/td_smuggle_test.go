@@ -467,7 +467,7 @@ func TestSmuggle(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe(usage + `cannot find final ']' in FIELD_PATH "bad[path"`),
+			Summary: mustBe(usage + `cannot find final ']' in FIELDS_PATH "bad[path"`),
 		})
 
 	// Bad number of args
