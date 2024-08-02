@@ -95,7 +95,7 @@ func joinFieldsPath(path []smuggleField) string {
 
 func splitFieldsPath(origPath string) ([]smuggleField, error) {
 	if origPath == "" {
-		return nil, fmt.Errorf("FIELD_PATH cannot be empty")
+		return nil, fmt.Errorf("FIELDS_PATH cannot be empty")
 	}
 
 	privateField := ""
@@ -107,22 +107,22 @@ func splitFieldsPath(origPath string) ([]smuggleField, error) {
 			path = path[1:]
 			end := strings.IndexByte(path, ']')
 			if end < 0 {
-				return nil, fmt.Errorf("cannot find final ']' in FIELD_PATH %q", origPath)
+				return nil, fmt.Errorf("cannot find final ']' in FIELDS_PATH %q", origPath)
 			}
 			res = append(res, smuggleField{Name: path[:end], Indexed: true})
 			path = path[end+1:]
 
 		case '.':
 			if len(res) == 0 {
-				return nil, fmt.Errorf("'.' cannot be the first rune in FIELD_PATH %q", origPath)
+				return nil, fmt.Errorf("'.' cannot be the first rune in FIELDS_PATH %q", origPath)
 			}
 			path = path[1:]
 			if path == "" {
-				return nil, fmt.Errorf("final '.' in FIELD_PATH %q is not allowed", origPath)
+				return nil, fmt.Errorf("final '.' in FIELDS_PATH %q is not allowed", origPath)
 			}
 			r, _ = utf8.DecodeRuneInString(path)
 			if r == '.' || r == '[' {
-				return nil, fmt.Errorf("unexpected %q after '.' in FIELD_PATH %q", r, origPath)
+				return nil, fmt.Errorf("unexpected %q after '.' in FIELDS_PATH %q", r, origPath)
 			}
 			fallthrough
 

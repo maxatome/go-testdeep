@@ -68,19 +68,19 @@ func TestFieldsPath(t *testing.T) {
 		}
 	}
 
-	checkErr("", "FIELD_PATH cannot be empty")
-	checkErr(".test", `'.' cannot be the first rune in FIELD_PATH ".test"`)
-	checkErr("foo.bar.", `final '.' in FIELD_PATH "foo.bar." is not allowed`)
-	checkErr("foo..bar", `unexpected '.' after '.' in FIELD_PATH "foo..bar"`)
-	checkErr("foo.[bar]", `unexpected '[' after '.' in FIELD_PATH "foo.[bar]"`)
-	checkErr("foo[bar", `cannot find final ']' in FIELD_PATH "foo[bar"`)
+	checkErr("", "FIELDS_PATH cannot be empty")
+	checkErr(".test", `'.' cannot be the first rune in FIELDS_PATH ".test"`)
+	checkErr("foo.bar.", `final '.' in FIELDS_PATH "foo.bar." is not allowed`)
+	checkErr("foo..bar", `unexpected '.' after '.' in FIELDS_PATH "foo..bar"`)
+	checkErr("foo.[bar]", `unexpected '[' after '.' in FIELDS_PATH "foo.[bar]"`)
+	checkErr("foo[bar", `cannot find final ']' in FIELDS_PATH "foo[bar"`)
 	checkErr("test.%foo", `unexpected '%' in field name "%foo" in FIELDS_PATH "test.%foo"`)
 	checkErr("test.f%oo", `unexpected '%' in field name "f%oo" in FIELDS_PATH "test.f%oo"`)
 	checkErr("Foo().()", `missing method name before () in FIELDS_PATH "Foo().()"`)
 	checkErr("abc.foo()", `method name "foo()" is not public in FIELDS_PATH "abc.foo()"`)
 	checkErr("Fo%o().abc", `unexpected '%' in method name "Fo%o()" in FIELDS_PATH "Fo%o().abc"`)
 	checkErr("Pipo.bingo.zzz.Foo.Zip().abc", `cannot call method Zip() as it is based on an unexported field "bingo" in FIELDS_PATH "Pipo.bingo.zzz.Foo.Zip().abc"`)
-	checkErr("foo[bar", `cannot find final ']' in FIELD_PATH "foo[bar"`)
+	checkErr("foo[bar", `cannot find final ']' in FIELDS_PATH "foo[bar"`)
 }
 
 type SmuggleBuild struct {
