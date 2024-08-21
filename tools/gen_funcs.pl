@@ -103,6 +103,7 @@ my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        Re        => 'nil',
                        Recv      => 0,
                        TruncTime => 0,
+                       Sorted    => 'nil',
                        # These operators accept several StructFields,
                        # but we want only one here
                        Struct    => 'nil',
@@ -245,7 +246,7 @@ while (readdir $dh)
                 }
             }
 
-	    $funcs{$func}{args} = \@args unless $ONLY_OPERATORS{$func};
+            $funcs{$func}{args} = \@args unless $ONLY_OPERATORS{$func};
 
             # "//<TAB>" is OK, otherwise TAB is not allowed
             die "TAB detected in $func operator documentation\n" if $doc =~ m,(?<!^//)\t,m;

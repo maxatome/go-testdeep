@@ -3139,6 +3139,42 @@ func ExampleSlice_typedSlice() {
 	// true
 }
 
+func ExampleSort_basic() {
+	t := &testing.T{}
+
+	got := []int{-1, 1, 2, -3, 3, -2, 0}
+
+	ok := td.Cmp(t, got, td.Sort(1, []int{-3, -2, -1, 0, 1, 2, 3}))
+	fmt.Println("asc order:", ok)
+
+	ok = td.Cmp(t, got, td.Sort(-1, []int{3, 2, 1, 0, -1, -2, -3}))
+	fmt.Println("desc order:", ok)
+
+	// Output:
+	// asc order: true
+	// desc order: true
+}
+
+func ExampleSorted_basic() {
+	t := &testing.T{}
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := td.Cmp(t, got, td.Sorted())
+	fmt.Println("is asc order (default):", ok)
+
+	ok = td.Cmp(t, got, td.Sorted(1))
+	fmt.Println("is asc order:", ok)
+
+	ok = td.Cmp(t, got, td.Sorted(-1))
+	fmt.Println("is desc order:", ok)
+
+	// Output:
+	// is asc order (default): true
+	// is asc order: true
+	// is desc order: false
+}
+
 func ExampleSuperSliceOf_array() {
 	t := &testing.T{}
 
