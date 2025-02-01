@@ -3101,6 +3101,42 @@ func ExampleT_Smuggle_field_path() {
 	// check fields-path including maps/slices: true
 }
 
+func ExampleT_Sort_basic() {
+	t := td.NewT(&testing.T{})
+
+	got := []int{-1, 1, 2, -3, 3, -2, 0}
+
+	ok := t.Sort(got, 1, []int{-3, -2, -1, 0, 1, 2, 3})
+	fmt.Println("asc order:", ok)
+
+	ok = t.Sort(got, -1, []int{3, 2, 1, 0, -1, -2, -3})
+	fmt.Println("desc order:", ok)
+
+	// Output:
+	// asc order: true
+	// desc order: true
+}
+
+func ExampleT_Sorted_basic() {
+	t := td.NewT(&testing.T{})
+
+	got := []int{-3, -2, -1, 0, 1, 2, 3}
+
+	ok := t.Sorted(got, nil)
+	fmt.Println("is asc order (default):", ok)
+
+	ok = t.Sorted(got, 1)
+	fmt.Println("is asc order:", ok)
+
+	ok = t.Sorted(got, -1)
+	fmt.Println("is desc order:", ok)
+
+	// Output:
+	// is asc order (default): true
+	// is asc order: true
+	// is desc order: false
+}
+
 func ExampleT_SStruct() {
 	t := td.NewT(&testing.T{})
 

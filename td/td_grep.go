@@ -214,34 +214,36 @@ func (g *tdGrep) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 
 	switch got.Kind() {
 	case reflect.Slice, reflect.Array:
-		const grepped = "<grepped>"
-
-		if got.Kind() == reflect.Slice && got.IsNil() {
-			return deepValueEqual(
-				ctx.AddCustomLevel(grepped),
-				reflect.New(got.Type()).Elem(),
-				g.expectedValue,
-			)
-		}
-
-		l := got.Len()
-		out := reflect.MakeSlice(reflect.SliceOf(got.Type().Elem()), 0, l)
-
-		for idx := 0; idx < l; idx++ {
-			item := got.Index(idx)
-			ok, rErr := g.matchItem(ctx, idx, item)
-			if rErr != nil {
-				return rErr
-			}
-			if ok {
-				out = reflect.Append(out, item)
-			}
-		}
-
-		return deepValueEqual(ctx.AddCustomLevel(grepped), out, g.expectedValue)
+	default:
+		return grepBadKind(ctx, got)
 	}
 
-	return grepBadKind(ctx, got)
+	const grepped = "<grepped>"
+
+	l := got.Len()
+	if l == 0 {
+		return deepValueEqual(ctx.AddCustomLevel(grepped), got, g.expectedValue)
+	}
+
+	outType := got.Type()
+	if got.Kind() == reflect.Array {
+		outType = reflect.SliceOf(outType.Elem())
+	}
+
+	out := reflect.MakeSlice(outType, 0, l)
+
+	for idx := 0; idx < l; idx++ {
+		item := got.Index(idx)
+		ok, rErr := g.matchItem(ctx, idx, item)
+		if rErr != nil {
+			return rErr
+		}
+		if ok {
+			out = reflect.Append(out, item)
+		}
+	}
+
+	return deepValueEqual(ctx.AddCustomLevel(grepped), out, g.expectedValue)
 }
 
 type tdFirst struct {

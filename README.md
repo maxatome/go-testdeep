@@ -342,6 +342,8 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`Shallow`]: https://go-testdeep.zetta.rocks/operators/shallow/
 [`Slice`]: https://go-testdeep.zetta.rocks/operators/slice/
 [`Smuggle`]: https://go-testdeep.zetta.rocks/operators/smuggle/
+[`Sort`]: https://go-testdeep.zetta.rocks/operators/sort/
+[`Sorted`]: https://go-testdeep.zetta.rocks/operators/sorted/
 [`SStruct`]: https://go-testdeep.zetta.rocks/operators/sstruct/
 [`String`]: https://go-testdeep.zetta.rocks/operators/string/
 [`Struct`]: https://go-testdeep.zetta.rocks/operators/struct/
@@ -407,6 +409,8 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpShallow`]: https://go-testdeep.zetta.rocks/operators/shallow/#cmpshallow-shortcut
 [`CmpSlice`]: https://go-testdeep.zetta.rocks/operators/slice/#cmpslice-shortcut
 [`CmpSmuggle`]: https://go-testdeep.zetta.rocks/operators/smuggle/#cmpsmuggle-shortcut
+[`CmpSort`]: https://go-testdeep.zetta.rocks/operators/sort/#cmpsort-shortcut
+[`CmpSorted`]: https://go-testdeep.zetta.rocks/operators/sorted/#cmpsorted-shortcut
 [`CmpSStruct`]: https://go-testdeep.zetta.rocks/operators/sstruct/#cmpsstruct-shortcut
 [`CmpString`]: https://go-testdeep.zetta.rocks/operators/string/#cmpstring-shortcut
 [`CmpStruct`]: https://go-testdeep.zetta.rocks/operators/struct/#cmpstruct-shortcut
@@ -471,6 +475,8 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.Shallow`]: https://go-testdeep.zetta.rocks/operators/shallow/#tshallow-shortcut
 [`T.Slice`]: https://go-testdeep.zetta.rocks/operators/slice/#tslice-shortcut
 [`T.Smuggle`]: https://go-testdeep.zetta.rocks/operators/smuggle/#tsmuggle-shortcut
+[`T.Sort`]: https://go-testdeep.zetta.rocks/operators/sort/#tsort-shortcut
+[`T.Sorted`]: https://go-testdeep.zetta.rocks/operators/sorted/#tsorted-shortcut
 [`T.SStruct`]: https://go-testdeep.zetta.rocks/operators/sstruct/#tsstruct-shortcut
 [`T.String`]: https://go-testdeep.zetta.rocks/operators/string/#tstring-shortcut
 [`T.Struct`]: https://go-testdeep.zetta.rocks/operators/struct/#tstruct-shortcut

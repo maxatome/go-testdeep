@@ -940,6 +940,48 @@ func (t *T) Smuggle(got, fn, expectedValue any, args ...any) bool {
 	return t.Cmp(got, Smuggle(fn, expectedValue), args...)
 }
 
+// Sort is a shortcut for:
+//
+//	t.Cmp(got, td.Sort(how, expectedValue), args...)
+//
+// See [Sort] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Sort(got, how, expectedValue any, args ...any) bool {
+	t.Helper()
+	return t.Cmp(got, Sort(how, expectedValue), args...)
+}
+
+// Sorted is a shortcut for:
+//
+//	t.Cmp(got, td.Sorted(how), args...)
+//
+// See [Sorted] for details.
+//
+// [Sorted] optional parameter how is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [Sorted] call.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func (t *T) Sorted(got, how any, args ...any) bool {
+	t.Helper()
+	return t.Cmp(got, Sorted(how), args...)
+}
+
 // SStruct is a shortcut for:
 //
 //	t.Cmp(got, td.SStruct(model, expectedFields), args...)
