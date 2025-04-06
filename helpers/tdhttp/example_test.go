@@ -66,7 +66,7 @@ func Example() {
 		case "application/xml":
 			xml.NewEncoder(w).Encode(body) //nolint: errcheck
 		default: // text/plain
-			fmt.Fprintf(w, "%+v", body)
+			fmt.Fprintf(w, "%+v", body) //nolint: errcheck
 		}
 	}
 
@@ -84,7 +84,7 @@ func Example() {
 			http.Error(w, "Bad request", http.StatusBadRequest)
 			return
 		}
-		defer req.Body.Close()
+		defer req.Body.Close() //nolint: errcheck
 
 		var in Person
 		var contentType string

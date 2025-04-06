@@ -128,7 +128,7 @@ func TestJSON(t *testing.T) {
 			td.Tag("!!", td.Ignore())),
 		expectedError{
 			Message: mustBe("bad usage of Tag operator"),
-			Summary: mustBe("Invalid tag, should match (Letter|_)(Letter|_|Number)*"),
+			Summary: mustBe("invalid tag, should match (Letter|_)(Letter|_|Number)*"),
 			Under:   mustContain("under operator Tag"),
 		})
 
@@ -280,7 +280,7 @@ func TestJSON(t *testing.T) {
 		td.JSON(tmpfile,
 			td.Tag("age", td.Between(40, 45)),
 			td.Tag("name", td.Re(`^Bob`))))
-	tmpfile.Close()
+	tmpfile.Close() //nolint: errcheck
 
 	//
 	// Escaping $ in strings

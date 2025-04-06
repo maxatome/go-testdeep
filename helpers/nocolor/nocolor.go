@@ -15,5 +15,5 @@ package nocolor
 import "os"
 
 func init() {
-	os.Setenv("TESTDEEP_COLOR", "off")
+	os.Setenv("TESTDEEP_COLOR", "off") //nolint: errcheck
 }

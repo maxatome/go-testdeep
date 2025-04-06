@@ -194,7 +194,7 @@ func (f *fileReader) Read(b []byte) (n int, err error) {
 	n, err = f.file.Read(b)
 	if err != nil { // At EOF, (*os.File).Read() returns 0, io.EOF
 		f.err = err
-		f.file.Close()
+		f.file.Close() //nolint: errcheck
 		f.file = nil
 	}
 	return

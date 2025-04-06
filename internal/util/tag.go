@@ -12,10 +12,10 @@ import (
 )
 
 // ErrTagEmpty is the error returned by [CheckTag] for an empty tag.
-var ErrTagEmpty = errors.New("A tag cannot be empty")
+var ErrTagEmpty = errors.New("a tag cannot be empty")
 
 // ErrTagInvalid is the error returned by [CheckTag] for an invalid tag.
-var ErrTagInvalid = errors.New("Invalid tag, should match (Letter|_)(Letter|_|Number)*")
+var ErrTagInvalid = errors.New("invalid tag, should match (Letter|_)(Letter|_|Number)*")
 
 // CheckTag checks that tag is a valid tag (see operator [Tag]) or not.
 //
@@ -26,7 +26,7 @@ func CheckTag(tag string) error {
 	}
 
 	for i, r := range tag {
-		if !(unicode.IsLetter(r) || r == '_' || (i > 0 && unicode.IsNumber(r))) {
+		if !unicode.IsLetter(r) && r != '_' && (i == 0 || !unicode.IsNumber(r)) {
 			return ErrTagInvalid
 		}
 	}

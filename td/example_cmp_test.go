@@ -1372,7 +1372,7 @@ func ExampleCmpJSON_file() {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir) // clean up
+	defer os.RemoveAll(tmpDir) //nolint: errcheck // clean up
 
 	filename := tmpDir + "/test.json"
 	if err = os.WriteFile(filename, []byte(`
@@ -2007,6 +2007,7 @@ func ExampleCmpNaN_float64() {
 
 	fmt.Println("float64(12) is not-a-number:", ok)
 
+	// Output:
 	// math.NaN() is not-a-number: true
 	// float64(12) is not-a-number: false
 }
@@ -2224,17 +2225,18 @@ func ExampleCmpNotNaN_float64() {
 	got := math.NaN()
 
 	ok := td.CmpNotNaN(t, got,
-		"checks %v is not-a-number", got)
+		"checks %v is NOT not-a-number", got)
 
-	fmt.Println("math.NaN() is not-a-number:", ok)
+	fmt.Println("math.NaN() is NOT not-a-number:", ok)
 
 	got = 12
 
 	ok = td.CmpNotNaN(t, got,
-		"checks %v is not-a-number", got)
+		"checks %v is NOT not-a-number", got)
 
-	fmt.Println("float64(12) is not-a-number:", ok)
+	fmt.Println("float64(12) is NOT not-a-number:", ok)
 
+	// Output:
 	// math.NaN() is NOT not-a-number: false
 	// float64(12) is NOT not-a-number: true
 }
@@ -3064,12 +3066,12 @@ func ExampleCmpSmuggle_field_path() {
 	}
 
 	// Want to check whether Num is between 100 and 200?
-	ok := td.CmpSmuggle(t, got, func(t *Transaction) (int, error) {
-		if t.Request.Body == nil ||
-			t.Request.Body.Value == nil {
+	ok := td.CmpSmuggle(t, got, func(tr *Transaction) (int, error) {
+		if tr.Body == nil ||
+			tr.Body.Value == nil {
 			return 0, errors.New("Request.Body or Request.Body.Value is nil")
 		}
-		if v, ok := t.Request.Body.Value.(*ValueNum); ok && v != nil {
+		if v, ok := tr.Body.Value.(*ValueNum); ok && v != nil {
 			return v.Num, nil
 		}
 		return 0, errors.New("Request.Body.Value isn't *ValueNum or nil")
@@ -3086,7 +3088,7 @@ func ExampleCmpSmuggle_field_path() {
 	fmt.Println("check Num using an other fields-path:", ok)
 
 	// Note that maps and array/slices are supported
-	got.Request.Body.Value = map[string]any{
+	got.Body.Value = map[string]any{
 		"foo": []any{
 			3: map[int]string{666: "bar"},
 		},
@@ -3612,7 +3614,7 @@ func ExampleCmpSubJSONOf_file() {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir) // clean up
+	defer os.RemoveAll(tmpDir) //nolint: errcheck // clean up
 
 	filename := tmpDir + "/test.json"
 	if err = os.WriteFile(filename, []byte(`
@@ -3841,7 +3843,7 @@ func ExampleCmpSuperJSONOf_file() {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir) // clean up
+	defer os.RemoveAll(tmpDir) //nolint: errcheck // clean up
 
 	filename := tmpDir + "/test.json"
 	if err = os.WriteFile(filename, []byte(`

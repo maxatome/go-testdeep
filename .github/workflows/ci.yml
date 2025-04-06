@@ -11,10 +11,10 @@ jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.16.x, 1.17.x, 1.18.x, 1.19.x, 1.20.x, 1.21.x,  1.22.x, tip]
+        go-version: [1.16.x, 1.17.x, 1.18.x, 1.19.x, 1.20.x, 1.21.x,  1.22.x, 1.23.x, tip]
         full-tests: [false]
         include:
-          - go-version: 1.23.x
+          - go-version: 1.24.x
             full-tests: true
 
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Setup go
         run: |
-          curl -sL https://raw.githubusercontent.com/maxatome/install-go/v3.5/install-go.pl |
+          curl -sL https://raw.githubusercontent.com/maxatome/install-go/v3.7/install-go.pl |
               perl - ${{ matrix.go-version }} $HOME/go
 
       - name: Checkout code
@@ -42,24 +42,8 @@ jobs:
         if: matrix.full-tests
         run: |
           curl -sL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
-              sh -s -- -b $HOME/go/bin v1.60.1
-          $HOME/go/bin/golangci-lint run --max-issues-per-linter 0 \
-                                         --max-same-issues 0 \
-                                         --exclude="unused-parameter: parameter '[^']+' seems to be unused, consider removing or renaming it as _" \
-                                         -E asciicheck \
-                                         -E bidichk \
-                                         -E durationcheck \
-                                         -E exportloopref \
-                                         -E gocritic \
-                                         -E godot \
-                                         -E goimports \
-                                         -E govet \
-                                         -E misspell \
-                                         -E prealloc \
-                                         -E revive \
-                                         -E unconvert \
-                                         -E whitespace \
-                                         ./...
+              sh -s -- -b $HOME/go/bin v2.0.2
+          $HOME/go/bin/golangci-lint run
 
       - name: Testing
         continue-on-error: ${{ matrix.go-version == 'tip' }}
@@ -71,7 +55,7 @@ jobs:
               export GOPROXY=https://proxy.golang.org,direct
           fi
           if [ ${{ matrix.full-tests }} = true ]; then
-              cover_flags="-covermode=atomic -coverprofile=coverage"
+              cover_flags="-coverpkg=./... -covermode=atomic -coverprofile=coverage"
               GO_TEST_FLAGS="$cover_flags.out"
               GO_TEST_SAFE_FLAGS="$cover_flags-safe.out"
               GO_TEST_RACE_FLAGS="$cover_flags-race.out"
@@ -93,7 +77,7 @@ jobs:
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          go install github.com/mattn/goveralls@v0.0.11
+          go install github.com/mattn/goveralls@v0.0.12
           go install github.com/wadey/gocovmerge@latest
           gocovmerge coverage.out \
                      coverage-safe.out \

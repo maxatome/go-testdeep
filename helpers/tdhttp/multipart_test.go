@@ -144,7 +144,7 @@ yo!`)
 	// With file name
 	dir, err := os.MkdirTemp("", "multipart")
 	require.CmpNoError(err)
-	defer os.RemoveAll(dir)
+	defer os.RemoveAll(dir) //nolint: errcheck
 	filePath := filepath.Join(dir, "body.txt")
 	require.CmpNoError(os.WriteFile(filePath, []byte("hey!\nyo!"), 0666))
 
@@ -175,7 +175,7 @@ func TestMultipartBody(t *testing.T) {
 
 	dir, err := os.MkdirTemp("", "multipart")
 	require.CmpNoError(err)
-	defer os.RemoveAll(dir)
+	defer os.RemoveAll(dir) //nolint: errcheck
 	filePath := filepath.Join(dir, "body.txt")
 	require.CmpNoError(os.WriteFile(filePath, []byte("hey!\nyo!"), 0666))
 
