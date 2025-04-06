@@ -141,7 +141,7 @@ func TestMarshal(t *testing.T) {
 
 	_, err := json.Marshal(123, 0)
 	if test.Error(t, err) {
-		test.EqualStr(t, err.Error(), "Cannot marshal int")
+		test.EqualStr(t, err.Error(), "cannot marshal int")
 	}
 }
 

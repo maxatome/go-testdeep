@@ -1,2 +1,48 @@
+version: "2"
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
 run:
   go: '1.16'
+linters:
+  default: none
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - durationcheck
+    - errcheck
+    - gocritic
+    - godot
+    - govet
+    - importas
+    - ineffassign
+    - misspell
+    - prealloc
+    - revive
+    - staticcheck
+    - testableexamples
+    - unconvert
+    - unused
+    - wastedassign
+    - whitespace
+  settings:
+    revive:
+      rules:
+        - name: unused-parameter
+          disabled: true
+  exclusions:
+    rules:
+      - path: internal/dark/bypass.go
+        text: "const \\w+ is unused"
+formatters:
+  enable:
+    - gci
+    - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - localmodule
+      custom-order: true

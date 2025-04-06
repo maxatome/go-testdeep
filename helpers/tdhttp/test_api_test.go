@@ -34,7 +34,7 @@ func server() *http.ServeMux {
 		w.Header().Set("Content-Type", "text/plain")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, "%s!", req.Method)
+		fmt.Fprintf(w, "%s!", req.Method) //nolint: errcheck
 		if req.ContentLength != 0 {
 			w.Write([]byte("\n---\n")) //nolint: errcheck
 			io.Copy(w, req.Body)       //nolint: errcheck
@@ -99,7 +99,7 @@ func server() *http.ServeMux {
 		w.Header().Set("Content-Type", "application/xml")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, `<XResp><method>%s</method>`, req.Method)
+		fmt.Fprintf(w, `<XResp><method>%s</method>`, req.Method) //nolint: errcheck
 		if req.ContentLength != 0 {
 			io.Copy(w, req.Body) //nolint: errcheck
 		}
@@ -128,7 +128,7 @@ func server() *http.ServeMux {
 
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, "%s!", req.Method)
+		fmt.Fprintf(w, "%s!", req.Method) //nolint: errcheck
 		if req.ContentLength != 0 {
 			w.Write([]byte("\n---\n")) //nolint: errcheck
 			io.Copy(w, req.Body)       //nolint: errcheck

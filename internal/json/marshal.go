@@ -132,7 +132,7 @@ func (m *marshaler) marshal(v any) error {
 		m.buf.Write(bytes.ReplaceAll(b, []byte("\n"), repl))
 
 	default:
-		return fmt.Errorf("Cannot marshal %T", vt)
+		return fmt.Errorf("cannot marshal %T", vt)
 	}
 
 	return nil

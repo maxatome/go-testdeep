@@ -69,18 +69,18 @@ func TestGetMaxErrorsFromEnv(t *testing.T) {
 	oldEnv, set := os.LookupEnv(envMaxErrors)
 	defer func() {
 		if set {
-			os.Setenv(envMaxErrors, oldEnv)
+			os.Setenv(envMaxErrors, oldEnv) //nolint: errcheck
 		} else {
-			os.Unsetenv(envMaxErrors)
+			os.Unsetenv(envMaxErrors) //nolint: errcheck
 		}
 	}()
 
-	os.Setenv(envMaxErrors, "")
+	os.Setenv(envMaxErrors, "") //nolint: errcheck
 	test.EqualInt(t, getMaxErrorsFromEnv(), 10)
 
-	os.Setenv(envMaxErrors, "aaa")
+	os.Setenv(envMaxErrors, "aaa") //nolint: errcheck
 	test.EqualInt(t, getMaxErrorsFromEnv(), 10)
 
-	os.Setenv(envMaxErrors, "-8")
+	os.Setenv(envMaxErrors, "-8") //nolint: errcheck
 	test.EqualInt(t, getMaxErrorsFromEnv(), -8)
 }

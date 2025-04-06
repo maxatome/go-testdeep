@@ -76,7 +76,7 @@ func (s Stack) Dump(w io.Writer) {
 
 	nl := ""
 	for _, level := range s {
-		fmt.Fprintf(w, "%s\t%-*s %s", nl, fnMaxLen, level.Func+"()", level.FileLine)
+		fmt.Fprintf(w, "%s\t%-*s %s", nl, fnMaxLen, level.Func+"()", level.FileLine) //nolint: errcheck
 		nl = "\n"
 	}
 }

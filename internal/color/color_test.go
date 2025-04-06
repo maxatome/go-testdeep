@@ -20,8 +20,8 @@ func TestColor(t *testing.T) {
 
 	// off
 	for _, flag := range []string{"off", "xxbad"} {
-		os.Setenv("TESTDEEP_COLOR", flag)
-		os.Setenv("MY_TEST_COLOR", "green")
+		os.Setenv("TESTDEEP_COLOR", flag)   //nolint: errcheck
+		os.Setenv("MY_TEST_COLOR", "green") //nolint: errcheck
 		light, bold, off := color.FromEnv("MY_TEST_COLOR", "red")
 		test.EqualStr(t, light, "")
 		test.EqualStr(t, bold, "")
@@ -40,36 +40,36 @@ func TestColor(t *testing.T) {
 		color.TestNameOn, color.TestNameOff = colorTestNameOnSave, colorTestNameOffSave
 	}()
 	for _, flag := range []string{"on", ""} {
-		os.Setenv("TESTDEEP_COLOR", flag)
-		os.Setenv("MY_TEST_COLOR", "")
+		os.Setenv("TESTDEEP_COLOR", flag) //nolint: errcheck
+		os.Setenv("MY_TEST_COLOR", "")    //nolint: errcheck
 		light, bold, off := color.FromEnv("MY_TEST_COLOR", "red")
 		test.EqualStr(t, light, "\x1b[0;31m")
 		test.EqualStr(t, bold, "\x1b[1;31m")
 		test.EqualStr(t, off, "\x1b[0m")
 
 		// on + override
-		os.Setenv("MY_TEST_COLOR", "green")
+		os.Setenv("MY_TEST_COLOR", "green") //nolint: errcheck
 		light, bold, off = color.FromEnv("MY_TEST_COLOR", "red")
 		test.EqualStr(t, light, "\x1b[0;32m")
 		test.EqualStr(t, bold, "\x1b[1;32m")
 		test.EqualStr(t, off, "\x1b[0m")
 
 		// on + override including background
-		os.Setenv("MY_TEST_COLOR", "green:magenta")
+		os.Setenv("MY_TEST_COLOR", "green:magenta") //nolint: errcheck
 		light, bold, off = color.FromEnv("MY_TEST_COLOR", "red")
 		test.EqualStr(t, light, "\x1b[0;32m\x1b[45m")
 		test.EqualStr(t, bold, "\x1b[1;32m\x1b[45m")
 		test.EqualStr(t, off, "\x1b[0m")
 
 		// on + override including background only
-		os.Setenv("MY_TEST_COLOR", ":magenta")
+		os.Setenv("MY_TEST_COLOR", ":magenta") //nolint: errcheck
 		light, bold, off = color.FromEnv("MY_TEST_COLOR", "red")
 		test.EqualStr(t, light, "\x1b[45m")
 		test.EqualStr(t, bold, "\x1b[45m")
 		test.EqualStr(t, off, "\x1b[0m")
 
 		// on + bad colors
-		os.Setenv("MY_TEST_COLOR", "foo:bar")
+		os.Setenv("MY_TEST_COLOR", "foo:bar") //nolint: errcheck
 		light, bold, off = color.FromEnv("MY_TEST_COLOR", "red")
 		test.EqualStr(t, light, "\x1b[0;31m") // red
 		test.EqualStr(t, bold, "\x1b[1;31m")  // bold red
@@ -106,7 +106,7 @@ func TestSaveState(t *testing.T) {
 	}()
 	check("off")
 
-	os.Unsetenv("TESTDEEP_COLOR")
+	os.Unsetenv("TESTDEEP_COLOR") //nolint: errcheck
 	checkDoesNotExist := func() {
 		t.Helper()
 		_, exists := os.LookupEnv("TESTDEEP_COLOR")

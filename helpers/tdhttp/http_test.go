@@ -38,7 +38,7 @@ func TestCmpResponse(tt *testing.T) {
 	handlerNonEmpty := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("X-TestDeep", "foobar")
 		w.WriteHeader(242)
-		fmt.Fprintln(w, "text response")
+		fmt.Fprintln(w, "text response") //nolint: errcheck
 	})
 
 	cookie := http.Cookie{Name: "Cookies-Testdeep", Value: "foobar"}
@@ -267,7 +267,7 @@ func TestCmpJSONResponse(tt *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("X-TestDeep", "foobar")
 		w.WriteHeader(242)
-		fmt.Fprintln(w, `{"name":"Bob"}`)
+		fmt.Fprintln(w, `{"name":"Bob"}`) //nolint: errcheck
 	})
 
 	type JResp struct {
@@ -337,7 +337,7 @@ func TestCmpJSONResponseAnchor(tt *testing.T) {
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(242)
-		fmt.Fprintln(w, `{"name":"Bob"}`)
+		fmt.Fprintln(w, `{"name":"Bob"}`) //nolint: errcheck
 	})
 	req := httptest.NewRequest("GET", "/path", nil)
 
@@ -414,7 +414,7 @@ func TestCmpXMLResponse(tt *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("X-TestDeep", "foobar")
 		w.WriteHeader(242)
-		fmt.Fprintln(w, `<XResp><name>Bob</name></XResp>`)
+		fmt.Fprintln(w, `<XResp><name>Bob</name></XResp>`) //nolint: errcheck
 	})
 
 	type XResp struct {
@@ -570,7 +570,7 @@ func TestMux(t *testing.T) {
 		}
 		w.Header().Set("Content-Type", "text/plain")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "Text result!")
+		fmt.Fprintf(w, "Text result!") //nolint: errcheck
 	})
 
 	// GET /json
@@ -578,10 +578,10 @@ func TestMux(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		if req.Method != "GET" {
-			fmt.Fprintf(w, `{"code":404,"message":"Not found"}`)
+			fmt.Fprintf(w, `{"code":404,"message":"Not found"}`) //nolint: errcheck
 			return
 		}
-		fmt.Fprintf(w, `{"comment":"JSON result!"}`)
+		fmt.Fprintf(w, `{"comment":"JSON result!"}`) //nolint: errcheck
 	})
 
 	// GET /xml
@@ -592,7 +592,7 @@ func TestMux(t *testing.T) {
 		}
 		w.Header().Set("Content-Type", "application/xml")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, `<XResp><comment>XML result!</comment></XResp>`)
+		fmt.Fprintf(w, `<XResp><comment>XML result!</comment></XResp>`) //nolint: errcheck
 	})
 
 	//

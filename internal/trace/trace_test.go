@@ -47,7 +47,7 @@ func TestFindGoModDir(t *testing.T) {
 	if err != nil {
 		t.Fatalf("MkdirAll(%s) failed: %s", final, err)
 	}
-	defer os.RemoveAll(tmp)
+	defer os.RemoveAll(tmp) //nolint: errcheck
 
 	test.EqualStr(t, trace.FindGoModDir(final), "")
 
@@ -58,7 +58,7 @@ func TestFindGoModDir(t *testing.T) {
 		if err != nil {
 			t.Fatalf("WriteFile(%s) failed: %s", goMod, err)
 		}
-		defer os.Remove(goMod)
+		defer os.Remove(goMod) //nolint: errcheck
 
 		test.EqualStr(t,
 			trace.FindGoModDir(final),
@@ -77,7 +77,7 @@ func TestFindGoModDir(t *testing.T) {
 			if err != nil {
 				t.Fatalf("WriteFile(%s) failed: %s", goMod, err)
 			}
-			defer os.Remove(goMod)
+			defer os.Remove(goMod) //nolint: errcheck
 		}
 
 		test.EqualStr(t, trace.FindGoModDir(final), "")
@@ -98,7 +98,7 @@ func TestFindGoModDirLinks(t *testing.T) {
 	if err != nil {
 		t.Fatalf("MkdirAll(%s) failed: %s", truePath, err)
 	}
-	defer os.RemoveAll(tmp)
+	defer os.RemoveAll(tmp) //nolint: errcheck
 
 	err = os.Symlink(truePath, linkPath)
 	if err != nil {
@@ -111,7 +111,7 @@ func TestFindGoModDirLinks(t *testing.T) {
 	if err != nil {
 		t.Fatalf("WriteFile(%s) failed: %s", goMod, err)
 	}
-	defer os.Remove(goMod)
+	defer os.Remove(goMod) //nolint: errcheck
 
 	goModDir += string(filepath.Separator)
 
