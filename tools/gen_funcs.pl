@@ -636,17 +636,17 @@ my @sorted_operators = sort { lc($a) cmp lc($b) } keys %operators;
 my $md_links = do
 {
     $common_links
-        . join("\n", map qq([`$_`]: {{< ref "$_" >}}), @sorted_operators)
+        . join("\n", map qq([`$_`]: {{% ref "$_" %}}), @sorted_operators)
         . "\n\n"
         # Cmp* functions
-        . join("\n", map qq([`Cmp$_`]: {{< ref "$_#cmp\L$_\E-shortcut" >}}),
+        . join("\n", map qq([`Cmp$_`]: {{% ref "$_#cmp\L$_\E-shortcut" %}}),
                      @sorted_funcs)
         . "\n\n"
         # T.Cmp* methods
         . join("\n", map
                {
                    my $m = $RENAME_METHOD{$_} // $_;
-                   qq([`T.$m`]: {{< ref "$_#t\L$m\E-shortcut" >}})
+                   qq([`T.$m`]: {{% ref "$_#t\L$m\E-shortcut" %}})
                }
                @sorted_funcs);
 };
@@ -822,7 +822,7 @@ EOE
                      {
                          "$1\n"
                              . join('',
-                                    map qq![`$_`]({{< ref "$_" >}})\n: $operators{$_}{summary}\n\n!,
+                                    map qq![`$_`]({{% ref "$_" %}})\n: $operators{$_}{summary}\n\n!,
                                     @sorted_operators)
                              . $2
                      }se or die "operators tags not found in $op_list_file\n";
@@ -831,7 +831,7 @@ EOE
                      {
                          "$1\n"
                              . join('',
-                                    map qq![`$_`]({{< ref "$_" >}})\n: $operators{$_}{summary}\n\n!,
+                                    map qq![`$_`]({{% ref "$_" %}})\n: $operators{$_}{summary}\n\n!,
                                     sort { lc($a) cmp lc($b) }
                                     keys %SMUGGLER_OPERATORS)
                              . "$md_links\n$2"
@@ -1038,6 +1038,8 @@ sub process_doc
                     else                   { $inEx = $indent; "$nl```go\n$beg" }
                 }
              >gemx;
+    # Special case for: "=~" or "!~"
+    $doc =~ s/"=~" or "!~"/"=\\~" or "!\\~"/g;
     $doc .= "```\n" if $inEx;
 
     # Get & remove links at the end of comment
@@ -1079,7 +1081,7 @@ sub process_doc
            }
            elsif ($+{operator})
            {
-               qq![TestDeep$+{operator}]({{< ref "operators" >}})!;
+               qq![TestDeep$+{operator}]({{% ref "operators" %}})!;
            }
            elsif (my $inner = $+{link})
            {
@@ -1089,7 +1091,7 @@ sub process_doc
                }
                elsif ($operators{$inner})
                {
-                   qq![`$inner`]({{< ref "$inner" >}})!;
+                   qq![`$inner`]({{% ref "$inner" %}})!;
                }
                # local exported identifier
                elsif ($inner =~ /^\*?([A-Z]\w*(?:\.[A-Z]\w*)?)\z/)
@@ -1117,11 +1119,11 @@ sub process_doc
            }
            elsif ($+{type_behind})
            {
-               qq![`$+{type_behind}`]({{< ref "operators#typebehind-method" >}})!
+               qq![`$+{type_behind}`]({{% ref "operators#typebehind-method" %}})!
            }
            elsif ($+{smuggler})
            {
-               qq![$+{smuggler}]({{< ref "operators#smuggler-operators" >}})!
+               qq![$+{smuggler}]({{% ref "operators#smuggler-operators" %}})!
            }
            elsif ($+{belax})
            {
