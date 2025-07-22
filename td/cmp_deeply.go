@@ -160,7 +160,7 @@ func cmpDeeply(ctx ctxerr.Context, t TestingT, got, expected any,
 }
 
 // S returns a string based on args as Cmp* functions do with their
-// own args parameter to name their test. So behind the scene,
+// own args parameter to name their test. So behind the scenes,
 // [tdutil.BuildTestName] is used.
 //
 // If len(args) > 1 and the first item of args is a string and
