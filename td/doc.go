@@ -12,7 +12,7 @@
 //
 // In golang, comparing data structure is usually done using
 // [reflect.DeepEqual] or using a package that uses this function
-// behind the scene.
+// behind the scenes.
 //
 // This function works very well, but it is not flexible. Both
 // compared structures must match exactly.
