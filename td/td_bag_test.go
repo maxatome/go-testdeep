@@ -74,6 +74,15 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
+		checkError(t, got, td.Bag(1, td.JSON("{")),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe(`DATA`),
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			testName+": erroneous operator expected")
+
 		// Lax
 		checkOK(t, got, td.Lax(td.Bag(float64(5), 4, 1, 4, 3)), testName)
 
@@ -90,6 +99,15 @@ func TestBag(t *testing.T) {
 			},
 			testName)
 
+		checkError(t, got, td.SubBagOf(1, td.JSON("{")),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe(`DATA`),
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			testName+": erroneous operator expected")
+
 		// Lax
 		checkOK(t, got, td.Lax(td.SubBagOf(float64(5), 4, 1, 4, 3)), testName)
 
@@ -105,6 +123,15 @@ func TestBag(t *testing.T) {
 				Summary: mustBe("Missing item: (66)"),
 			},
 			testName)
+
+		checkError(t, got, td.SuperBagOf(1, td.JSON("{")),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe(`DATA`),
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			testName+": erroneous operator expected")
 
 		// Lax
 		checkOK(t, got, td.Lax(td.SuperBagOf(float64(5), 4, 1, 4, 3)), testName)

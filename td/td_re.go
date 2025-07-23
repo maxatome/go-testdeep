@@ -61,6 +61,7 @@ func newRe(regIf any, capture ...any) *tdRe {
 			r.err = &ctxerr.Error{
 				Message: "invalid regexp given to " + r.location.Func + " operator",
 				Summary: ctxerr.NewSummary(err.Error()),
+				User:    true,
 			}
 		}
 	default:

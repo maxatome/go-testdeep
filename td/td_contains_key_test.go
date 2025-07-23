@@ -39,6 +39,15 @@ func TestContainsKey(t *testing.T) {
 		// Lax
 		checkOK(t, got, td.Lax(td.ContainsKey(float64(34))), testName)
 	}
+
+	checkError(t, map[int]bool{12: false}, td.ContainsKey(td.JSON("{")),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustBe(`DATA`),
+			Summary: mustContain("JSON unmarshal error"),
+			Under:   mustContain("under operator JSON at "),
+		},
+		"erroneous operator expected")
 }
 
 // nil case.

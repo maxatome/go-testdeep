@@ -42,6 +42,15 @@ func TestNone(t *testing.T) {
 			Expected: mustBe("None(6,\n     7)"),
 		})
 
+	checkError(t, 123, td.None(1, td.JSON("{")),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustBe(`DATA`),
+			Summary: mustContain("JSON unmarshal error"),
+			Under:   mustContain("under operator JSON at "),
+		},
+		"erroneous operator expected")
+
 	//
 	// String
 	test.EqualStr(t, td.None(6).String(), "None(6)")
@@ -67,6 +76,15 @@ func TestNot(t *testing.T) {
 			Got:      mustBe("nil"),
 			Expected: mustBe("Not(nil)"),
 		})
+
+	checkError(t, 123, td.Not(td.JSON("{")),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustBe(`DATA`),
+			Summary: mustContain("JSON unmarshal error"),
+			Under:   mustContain("under operator JSON at "),
+		},
+		"erroneous operator expected")
 
 	//
 	// String

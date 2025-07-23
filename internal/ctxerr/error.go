@@ -35,6 +35,8 @@ type Error struct {
 	Origin *Error
 	// If defined, points to the next Error
 	Next *Error
+	// true if the error is a user mistake
+	User bool
 }
 
 // BooleanError is the [*Error] returned when an error occurs in a

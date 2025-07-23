@@ -74,8 +74,8 @@ func (c Context) CollectError(err *Error) *Error {
 		return nil
 	}
 
-	// The boolean error must not be altered!
-	if c.BooleanError {
+	// The boolean error must not be altered! user errors are never replaced
+	if c.BooleanError && !err.User {
 		return BooleanError
 	}
 

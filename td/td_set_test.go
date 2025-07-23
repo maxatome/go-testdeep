@@ -81,6 +81,15 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
+		checkError(t, got, td.Set(1, td.JSON("{")),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe(`DATA`),
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			testName+": erroneous operator expected")
+
 		// Lax
 		checkOK(t, got, td.Lax(td.Set(5, float64(4), 1, 3)), testName)
 
@@ -96,6 +105,15 @@ func TestSet(t *testing.T) {
 				Summary: mustBe("Extra item: (1)"),
 			},
 			testName)
+
+		checkError(t, got, td.SubSetOf(1, td.JSON("{")),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe(`DATA`),
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			testName+": erroneous operator expected")
 
 		// Lax
 		checkOK(t, got, td.Lax(td.SubSetOf(5, float64(4), 1, 3)), testName)
@@ -113,6 +131,15 @@ func TestSet(t *testing.T) {
 			},
 			testName)
 
+		checkError(t, got, td.SuperSetOf(1, td.JSON("{")),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe(`DATA`),
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			testName+": erroneous operator expected")
+
 		// Lax
 		checkOK(t, got, td.Lax(td.SuperSetOf(5, float64(4), 1, 3)), testName)
 
@@ -127,6 +154,15 @@ func TestSet(t *testing.T) {
 				Summary: mustBe("Extra item: (3)"),
 			},
 			testName)
+
+		checkError(t, got, td.NotAny(10, td.JSON("{")),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe(`DATA`),
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			testName+": erroneous operator expected")
 
 		// Lax
 		checkOK(t, got, td.NotAny(float64(3)), testName)

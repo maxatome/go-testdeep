@@ -64,6 +64,24 @@ func TestContains(t *testing.T) {
 				Expected: mustBe(fmt.Sprintf("Contains((int32) %d ≤ got ≤ (int32) %d)", 'y', 'z')),
 			}, testName)
 	}
+
+	checkError(t, [...]any{1, 2, 3}, td.Contains(td.JSON("{")),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustBe(`DATA`),
+			Summary: mustContain("JSON unmarshal error"),
+			Under:   mustContain("under operator JSON at "),
+		},
+		"erroneous operator expected")
+
+	checkError(t, map[string]any{"foo": 123}, td.Contains(td.JSON("{")),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustBe(`DATA`),
+			Summary: mustContain("JSON unmarshal error"),
+			Under:   mustContain("under operator JSON at "),
+		},
+		"erroneous operator expected")
 }
 
 // nil case.
@@ -256,6 +274,15 @@ func TestContainsString(t *testing.T) {
 			Got:      mustBe("int"),
 			Expected: mustBe("rune"),
 		})
+
+	checkError(t, "pipo", td.Contains(td.JSON("{")),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustBe(`DATA`),
+			Summary: mustContain("JSON unmarshal error"),
+			Under:   mustContain("under operator JSON at "),
+		},
+		"erroneous operator expected")
 }
 
 func TestContainsSlice(t *testing.T) {
@@ -294,6 +321,15 @@ func TestContainsSlice(t *testing.T) {
 			Got:      mustContain(`([]int) (len=6 `),
 			Expected: mustContain(`Contains(([]int) (len=3 `),
 		})
+
+	checkError(t, []any{1, 2, 3}, td.Contains([]any{1, td.JSON("{")}),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustMatch(`DATA\[1\]`), // always without .Iface
+			Summary: mustContain("JSON unmarshal error"),
+			Under:   mustContain("under operator JSON at "),
+		},
+		"erroneous operator expected")
 }
 
 func TestContainsTypeBehind(t *testing.T) {

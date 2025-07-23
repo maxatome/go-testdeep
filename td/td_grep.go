@@ -62,7 +62,7 @@ func (g *tdGrepBase) initGrepBase(filter, expectedValue any) {
 func (g *tdGrepBase) matchItem(ctx ctxerr.Context, idx int, item reflect.Value) (bool, *ctxerr.Error) {
 	if g.argType == nil {
 		// g.filter is a TestDeep operator
-		return deepValueEqualFinalOK(ctx, item, g.filter), nil
+		return deepValueEqualFinalOK(ctx, item, g.filter)
 	}
 
 	// item is an interface, but the filter function does not expect an
