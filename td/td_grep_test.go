@@ -244,6 +244,24 @@ func TestGrep(t *testing.T) {
 				Got:      mustBe("nil"),
 				Expected: mustBe("slice OR array OR *slice OR *array"),
 			})
+
+		checkError(t, []any{1, 2, 3}, td.Grep(td.JSON("{"), td.Ignore()),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustBe(`DATA`),
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			"erroneous operator expected")
+
+		checkError(t, []any{1, 2, 3}, td.Grep(td.Ignore(), td.JSON("{")),
+			expectedError{
+				Message: mustBe("bad usage of JSON operator"),
+				Path:    mustMatch(`DATA<grepped>`), // always without .Iface
+				Summary: mustContain("JSON unmarshal error"),
+				Under:   mustContain("under operator JSON at "),
+			},
+			"erroneous operator expected")
 	})
 }
 

@@ -64,7 +64,11 @@ func Not(notExpected any) TestDeep {
 
 func (n *tdNone) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	for idx, item := range n.items {
-		if deepValueEqualFinalOK(ctx, got, item) {
+		ok, err := deepValueEqualFinalOK(ctx, got, item)
+		if err != nil {
+			return err
+		}
+		if ok {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}

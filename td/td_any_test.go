@@ -42,6 +42,15 @@ func TestAny(t *testing.T) {
 			Expected: mustBe("Any(6)"),
 		})
 
+	checkError(t, 123, td.Any(td.JSON("{")),
+		expectedError{
+			Message: mustBe("bad usage of JSON operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain("JSON unmarshal error"),
+			Under:   mustContain("under operator JSON at "),
+		},
+		"erroneous operator expected")
+
 	// Lax
 	checkOK(t, float64(123), td.Lax(td.Any(122, 123, 124)))
 

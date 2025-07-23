@@ -47,6 +47,7 @@ func OpBadUsage(op, usage string, param any, pos int, kind bool) *Error {
 	return &Error{
 		Message: "bad usage of " + op + " operator",
 		Summary: NewSummary(b.String()),
+		User:    true,
 	}
 }
 
@@ -56,6 +57,7 @@ func OpTooManyParams(op, usage string) *Error {
 	return &Error{
 		Message: "bad usage of " + op + " operator",
 		Summary: NewSummary("usage: " + op + usage + ", too many parameters"),
+		User:    true,
 	}
 }
 
@@ -69,6 +71,7 @@ func OpBad(op, s string, args ...any) *Error {
 	return &Error{
 		Message: "bad usage of " + op + " operator",
 		Summary: NewSummary(s),
+		User:    true,
 	}
 }
 

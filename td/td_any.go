@@ -54,8 +54,9 @@ func Any(expectedValues ...any) TestDeep {
 
 func (a *tdAny) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	for _, item := range a.items {
-		if deepValueEqualFinalOK(ctx, got, item) {
-			return nil
+		ok, err := deepValueEqualFinalOK(ctx, got, item)
+		if err != nil || ok {
+			return err
 		}
 	}
 

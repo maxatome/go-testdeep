@@ -203,18 +203,13 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 				if expectedLen > gotLen {
 					return c.doesNotContainErr(ctx, got)
 				}
-				if expectedLen == gotLen {
-					if deepValueEqualOK(got, c.expectedValue) {
-						return nil
-					}
-					return c.doesNotContainErr(ctx, got)
-				}
-
 				for i := 0; i <= gotLen-expectedLen; i++ {
-					if deepValueEqualOK(got.Slice(i, i+expectedLen), c.expectedValue) {
-						return nil
+					ok, err := deepValueEqualFinalOK(ctx, got.Slice(i, i+expectedLen), c.expectedValue)
+					if err != nil || ok {
+						return err
 					}
 				}
+				return c.doesNotContainErr(ctx, got)
 			}
 		}
 		fallthrough
@@ -222,18 +217,22 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 	case reflect.Array:
 		expectedValue := c.getExpectedValue(got)
 		for index := got.Len() - 1; index >= 0; index-- {
-			if deepValueEqualFinalOK(ctx, got.Index(index), expectedValue) {
-				return nil
+			ok, err := deepValueEqualFinalOK(ctx, got.Index(index), expectedValue)
+			if err != nil || ok {
+				return err
 			}
 		}
 		return c.doesNotContainErr(ctx, got)
 
 	case reflect.Map:
 		expectedValue := c.getExpectedValue(got)
+		var err *ctxerr.Error
+		var ok bool
 		if !tdutil.MapEachValue(got, func(v reflect.Value) bool {
-			return !deepValueEqualFinalOK(ctx, v, expectedValue)
+			ok, err = deepValueEqualFinalOK(ctx, v, expectedValue)
+			return err == nil && !ok
 		}) {
-			return nil
+			return err
 		}
 		return c.doesNotContainErr(ctx, got)
 	}
@@ -262,8 +261,9 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 		}
 
 		for _, chr := range str {
-			if deepValueEqualFinalOK(ctx, reflect.ValueOf(chr), c.expectedValue) {
-				return nil
+			ok, err := deepValueEqualFinalOK(ctx, reflect.ValueOf(chr), c.expectedValue)
+			if err != nil || ok {
+				return err
 			}
 		}
 		return c.doesNotContainErr(ctx, got)

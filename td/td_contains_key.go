@@ -105,8 +105,9 @@ func (c *tdContainsKey) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 		// If expected value is a TestDeep operator OR BeLax, check each key
 		if c.isTestDeeper || ctx.BeLax {
 			for _, k := range got.MapKeys() {
-				if deepValueEqualFinalOK(ctx, k, expectedValue) {
-					return nil
+				ok, err := deepValueEqualFinalOK(ctx, k, expectedValue)
+				if err != nil || ok {
+					return err
 				}
 			}
 		} else if expectedValue.IsValid() &&
