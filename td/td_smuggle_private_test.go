@@ -53,6 +53,9 @@ func TestFieldsPath(t *testing.T) {
 		t.Errorf("Failed:\n       got: %v\n  expected: %v", got, fp)
 	}
 
+	check("[foo][bar]", "foo", "bar")
+	check("[0][foo][bar]", "0", "foo", "bar")
+
 	//
 	// Errors
 	checkErr := func(in, expectedErr string) {
