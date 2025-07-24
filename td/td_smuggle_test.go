@@ -745,6 +745,24 @@ func TestSmuggleFieldsPath(t *testing.T) {
 	checkOK(t, x, td.Lax(td.Smuggle("PppA", nil)))
 	checkOK(t, x, td.Smuggle("PppA", td.Nil()))
 
+	checkOK(t, x.Iface, td.Smuggle("[test][1]", 3))
+	checkError(t, x.Iface, td.Smuggle("[unknown][1]", 42),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain(`
+it failed coz: field "[unknown]", "unknown" map key not found`),
+		})
+
+	checkOK(t, x.C.Iface1, td.Smuggle("[0][66][1]", "bar"))
+	checkError(t, x.C.Iface1, td.Smuggle("[42][66][1]", "bar"),
+		expectedError{
+			Message: mustBe("ran smuggle code with %% as argument"),
+			Path:    mustBe("DATA"),
+			Summary: mustContain(`
+it failed coz: field "[42]", 42 is out of slice/array range (len 13)`),
+		})
+
 	//
 	type D struct {
 		Iface any
