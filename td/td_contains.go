@@ -239,7 +239,7 @@ func (c *tdContains) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error 
 
 	str, err := getString(ctx, got)
 	if err != nil {
-		return err
+		return ctx.CollectError(err)
 	}
 
 	// If a TestDeep operator is expected, applies this operator on

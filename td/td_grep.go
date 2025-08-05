@@ -59,7 +59,7 @@ func (g *tdGrepBase) initGrepBase(filter, expectedValue any) {
 	g.filter = vfilter
 }
 
-func (g *tdGrepBase) matchItem(ctx ctxerr.Context, idx int, item reflect.Value) (bool, *ctxerr.Error) {
+func (g *tdGrepBase) matchItem(ctx ctxerr.Context, item reflect.Value) (bool, *ctxerr.Error) {
 	if g.argType == nil {
 		// g.filter is a TestDeep operator
 		return deepValueEqualFinalOK(ctx, item, g.filter)
@@ -76,11 +76,11 @@ func (g *tdGrepBase) matchItem(ctx ctxerr.Context, idx int, item reflect.Value) 
 			if ctx.BooleanError {
 				return false, ctxerr.BooleanError
 			}
-			return false, ctx.AddArrayIndex(idx).CollectError(&ctxerr.Error{
+			return false, &ctxerr.Error{
 				Message:  "incompatible parameter type",
 				Got:      types.RawString(item.Type().String()),
 				Expected: types.RawString(g.argType.String()),
-			})
+			}
 		}
 		item = item.Convert(g.argType)
 	}
@@ -136,7 +136,7 @@ func grepResolvePtr(ctx ctxerr.Context, got *reflect.Value) *ctxerr.Error {
 			if ctx.BooleanError {
 				return ctxerr.BooleanError
 			}
-			return ctx.CollectError(ctxerr.NilPointer(*got, "non-nil *slice OR *array"))
+			return ctxerr.NilPointer(*got, "non-nil *slice OR *array")
 		}
 		switch gotElem.Kind() {
 		case reflect.Slice, reflect.Array:
@@ -209,7 +209,7 @@ func (g *tdGrep) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	if rErr := grepResolvePtr(ctx, &got); rErr != nil {
-		return rErr
+		return ctx.CollectError(rErr)
 	}
 
 	switch got.Kind() {
@@ -234,9 +234,12 @@ func (g *tdGrep) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 
 	for idx := 0; idx < l; idx++ {
 		item := got.Index(idx)
-		ok, rErr := g.matchItem(ctx, idx, item)
+		ok, rErr := g.matchItem(ctx, item)
 		if rErr != nil {
-			return rErr
+			if !rErr.User {
+				ctx = ctx.AddArrayIndex(idx)
+			}
+			return ctx.CollectError(rErr)
 		}
 		if ok {
 			out = reflect.Append(out, item)
@@ -292,16 +295,19 @@ func (g *tdFirst) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	if rErr := grepResolvePtr(ctx, &got); rErr != nil {
-		return rErr
+		return ctx.CollectError(rErr)
 	}
 
 	switch got.Kind() {
 	case reflect.Slice, reflect.Array:
 		for idx, l := 0, got.Len(); idx < l; idx++ {
 			item := got.Index(idx)
-			ok, rErr := g.matchItem(ctx, idx, item)
+			ok, rErr := g.matchItem(ctx, item)
 			if rErr != nil {
-				return rErr
+				if !rErr.User {
+					ctx = ctx.AddArrayIndex(idx)
+				}
+				return ctx.CollectError(rErr)
 			}
 			if ok {
 				return deepValueEqual(
@@ -367,16 +373,19 @@ func (g *tdLast) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	}
 
 	if rErr := grepResolvePtr(ctx, &got); rErr != nil {
-		return rErr
+		return ctx.CollectError(rErr)
 	}
 
 	switch got.Kind() {
 	case reflect.Slice, reflect.Array:
 		for idx := got.Len() - 1; idx >= 0; idx-- {
 			item := got.Index(idx)
-			ok, rErr := g.matchItem(ctx, idx, item)
+			ok, rErr := g.matchItem(ctx, item)
 			if rErr != nil {
-				return rErr
+				if !rErr.User {
+					ctx = ctx.AddArrayIndex(idx)
+				}
+				return ctx.CollectError(rErr)
 			}
 			if ok {
 				return deepValueEqual(

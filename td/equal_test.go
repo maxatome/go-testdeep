@@ -42,127 +42,57 @@ func TestEqualArray(t *testing.T) {
 		func(t *testing.T) {
 			td.DefaultContextConfig.MaxErrors = 2
 			err := td.EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
-
-			// First error
-			ok := t.Run("First error",
-				func(t *testing.T) {
-					if err == nil {
-						t.Errorf("An Error should have occurred")
-						return
-					}
-					if !matchError(t, err.(*ctxerr.Error),
-						expectedError{
-							Message:  mustBe("values differ"),
-							Path:     mustBe("DATA[1]"),
-							Got:      mustBe("2"),
-							Expected: mustBe("42"),
-						}, false) {
-						return
-					}
-				})
-			if !ok {
+			if err == nil {
+				t.Errorf("An Error should have occurred")
 				return
 			}
-
-			// Second error
-			eErr := err.(*ctxerr.Error).Next
-			t.Run("Second error",
-				func(t *testing.T) {
-					if eErr == nil {
-						t.Errorf("A second Error should have occurred")
-						return
-					}
-					if !matchError(t, eErr,
-						expectedError{
-							Message:  mustBe("values differ"),
-							Path:     mustBe("DATA[2]"),
-							Got:      mustBe("3"),
-							Expected: mustBe("43"),
-						}, false) {
-						return
-					}
-					if eErr.Next != ctxerr.ErrTooManyErrors {
-						if eErr.Next == nil {
-							t.Error("ErrTooManyErrors should follow the 2 errors")
-						} else {
-							t.Errorf("Only 2 Errors should have occurred. Found 3rd: %s",
-								eErr.Next)
-						}
-						return
-					}
-				})
+			matchError(t, err.(*ctxerr.Error),
+				expectedError{
+					Message:  mustBe("values differ"),
+					Path:     mustBe("DATA[1]"),
+					Got:      mustBe("2"),
+					Expected: mustBe("42"),
+					Next: &expectedError{
+						Message:  mustBe("values differ"),
+						Path:     mustBe("DATA[2]"),
+						Got:      mustBe("3"),
+						Expected: mustBe("43"),
+						Next: &expectedError{
+							Message: mustBe(ctxerr.ErrTooManyErrors.Message),
+						},
+					},
+				}, false)
 		})
 
 	t.Run("DefaultContextConfig.MaxErrors = -1 (aka all errors)",
 		func(t *testing.T) {
 			td.DefaultContextConfig.MaxErrors = -1
 			err := td.EqDeeplyError([8]int{1, 2, 3, 4}, [8]int{1, 42, 43, 44})
-
-			// First error
-			ok := t.Run("First error",
-				func(t *testing.T) {
-					if err == nil {
-						t.Errorf("An Error should have occurred")
-						return
-					}
-					if !matchError(t, err.(*ctxerr.Error),
-						expectedError{
-							Message:  mustBe("values differ"),
-							Path:     mustBe("DATA[1]"),
-							Got:      mustBe("2"),
-							Expected: mustBe("42"),
-						}, false) {
-						return
-					}
-				})
-			if !ok {
+			if err == nil {
+				t.Errorf("An Error should have occurred")
 				return
 			}
-
-			// Second error
-			eErr := err.(*ctxerr.Error).Next
-			ok = t.Run("Second error",
-				func(t *testing.T) {
-					if eErr == nil {
-						t.Errorf("A second Error should have occurred")
-						return
-					}
-					if !matchError(t, eErr,
-						expectedError{
-							Message:  mustBe("values differ"),
-							Path:     mustBe("DATA[2]"),
-							Got:      mustBe("3"),
-							Expected: mustBe("43"),
-						}, false) {
-						return
-					}
-				})
-			if !ok {
-				return
-			}
-
-			// Third error
-			eErr = eErr.Next
-			t.Run("Third error",
-				func(t *testing.T) {
-					if eErr == nil {
-						t.Errorf("A third Error should have occurred")
-						return
-					}
-					if !matchError(t, eErr,
-						expectedError{
+			if !matchError(t, err.(*ctxerr.Error),
+				expectedError{
+					Message:  mustBe("values differ"),
+					Path:     mustBe("DATA[1]"),
+					Got:      mustBe("2"),
+					Expected: mustBe("42"),
+					Next: &expectedError{
+						Message:  mustBe("values differ"),
+						Path:     mustBe("DATA[2]"),
+						Got:      mustBe("3"),
+						Expected: mustBe("43"),
+						Next: &expectedError{
 							Message:  mustBe("values differ"),
 							Path:     mustBe("DATA[3]"),
 							Got:      mustBe("4"),
 							Expected: mustBe("44"),
-						}, false) {
-						return
-					}
-					if eErr.Next != nil {
-						t.Errorf("Only 3 Errors should have occurred")
-						return
-					}
-				})
+						},
+					},
+				}, false) {
+				return
+			}
 		})
 }
 

@@ -63,7 +63,10 @@ type expectedError struct {
 	Located  bool
 	Under    expectedErrorMatch
 	Origin   *expectedError
+	Next     *expectedError
 }
+
+var ignoreExpectedError = &expectedError{}
 
 type expectedErrorMatch struct {
 	Exact   string
@@ -199,18 +202,43 @@ func matchError(t *testing.T, err *ctxerr.Error, expectedError expectedError,
 	}
 
 	if expectedError.Origin != nil {
-		if err.Origin == nil {
-			t.Errorf(`%sError should originate from another Error`,
-				tdutil.BuildTestName(args...))
-			return false
-		}
+		if expectedError.Origin != ignoreExpectedError {
+			if err.Origin == nil {
+				t.Errorf(`%sError should originate from another Error`,
+					tdutil.BuildTestName(args...))
+				return false
+			}
 
-		return matchError(t, err.Origin, *expectedError.Origin,
-			expectedIsTestDeep, args...)
-	}
-	if err.Origin != nil {
+			if !matchError(t, err.Origin, *expectedError.Origin,
+				expectedIsTestDeep, args...) {
+				return false
+			}
+		}
+	} else if err.Origin != nil {
 		t.Errorf(`%sError should NOT originate from another Error`,
 			tdutil.BuildTestName(args...))
+		return false
+	}
+
+	if expectedError.Next != nil {
+		if expectedError.Next != ignoreExpectedError {
+			if err.Next == nil {
+				t.Errorf(`%sError should have a next Error`,
+					tdutil.BuildTestName(args...))
+				return false
+			}
+
+			if !matchError(t, err.Next, *expectedError.Next,
+				expectedIsTestDeep, args...) {
+				return false
+			}
+		}
+	} else if err.Next != nil {
+		t.Errorf(`%sError should NOT have a next Error
+	Full error:
+	> %s`,
+			tdutil.BuildTestName(args...),
+			fullError(err))
 		return false
 	}
 

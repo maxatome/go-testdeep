@@ -559,6 +559,11 @@ func TestStructPrivateFields(t *testing.T) {
 				Message: mustBe("cannot compare"),
 				Path:    mustBe("DATA.birth"),
 				Summary: mustBe("unexported field that cannot be overridden"),
+				Next: &expectedError{
+					Message: mustBe("cannot compare"),
+					Path:    mustMatch(`DATA\.(?:Iface\.)?birth2`),
+					Summary: mustBe("unexported field that cannot be overridden"),
+				},
 			})
 	}
 
