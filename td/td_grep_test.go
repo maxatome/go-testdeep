@@ -276,9 +276,9 @@ func TestGrepTypeBehind(t *testing.T) {
 func TestGrepString(t *testing.T) {
 	test.EqualStr(t,
 		td.Grep(func(n int) bool { return true }, []int{}).String(),
-		"Grep(func(int) bool)")
+		"Grep(func(int) bool, ([]int) {\n})")
 
-	test.EqualStr(t, td.Grep(td.Gt(0), []int{}).String(), "Grep(> 0)")
+	test.EqualStr(t, td.Grep(td.Gt(0), []int{}).String(), "Grep(> 0, ([]int) {\n})")
 
 	// Erroneous op
 	test.EqualStr(t, td.Grep(42, []int{}).String(), "Grep(<ERROR>)")
@@ -323,7 +323,7 @@ func TestFirst(t *testing.T) {
 						Message:  mustBe("item not found"),
 						Path:     mustBe("DATA"),
 						Got:      mustContain(`]int) (len=7 `),
-						Expected: mustBe("First(> 666)"),
+						Expected: mustBe(`First(> 666, "never reached")`),
 					})
 			})
 		}
@@ -444,7 +444,7 @@ func TestFirst(t *testing.T) {
 						Message:  mustBe("item not found"),
 						Path:     mustBe("DATA"),
 						Got:      mustBe("([]int) <nil>"),
-						Expected: mustBe("First(> 666)"),
+						Expected: mustBe(`First(> 666, "never reached")`),
 					})
 			})
 		}
@@ -530,9 +530,9 @@ func TestFirst(t *testing.T) {
 func TestFirstString(t *testing.T) {
 	test.EqualStr(t,
 		td.First(func(n int) bool { return true }, 33).String(),
-		"First(func(int) bool)")
+		"First(func(int) bool, 33)")
 
-	test.EqualStr(t, td.First(td.Gt(0), 33).String(), "First(> 0)")
+	test.EqualStr(t, td.First(td.Gt(0), 33).String(), "First(> 0, 33)")
 
 	// Erroneous op
 	test.EqualStr(t, td.First(42, 33).String(), "First(<ERROR>)")
@@ -585,7 +585,7 @@ func TestLast(t *testing.T) {
 						Message:  mustBe("item not found"),
 						Path:     mustBe("DATA"),
 						Got:      mustContain(`]int) (len=7 `),
-						Expected: mustBe("Last(> 666)"),
+						Expected: mustBe(`Last(> 666, "never reached")`),
 					})
 			})
 		}
@@ -706,7 +706,7 @@ func TestLast(t *testing.T) {
 						Message:  mustBe("item not found"),
 						Path:     mustBe("DATA"),
 						Got:      mustBe("([]int) <nil>"),
-						Expected: mustBe("Last(> 666)"),
+						Expected: mustBe(`Last(> 666, "never reached")`),
 					})
 			})
 		}
@@ -792,9 +792,9 @@ func TestLast(t *testing.T) {
 func TestLastString(t *testing.T) {
 	test.EqualStr(t,
 		td.Last(func(n int) bool { return true }, 33).String(),
-		"Last(func(int) bool)")
+		"Last(func(int) bool, 33)")
 
-	test.EqualStr(t, td.Last(td.Gt(0), 33).String(), "Last(> 0)")
+	test.EqualStr(t, td.Last(td.Gt(0), 33).String(), "Last(> 0, 33)")
 
 	// Erroneous op
 	test.EqualStr(t, td.Last(42, 33).String(), "Last(<ERROR>)")
