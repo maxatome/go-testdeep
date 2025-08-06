@@ -11,6 +11,7 @@ import (
 
 	"github.com/maxatome/go-testdeep/internal/ctxerr"
 	"github.com/maxatome/go-testdeep/internal/types"
+	"github.com/maxatome/go-testdeep/internal/util"
 )
 
 const grepUsage = "(FILTER_FUNC|FILTER_TESTDEEP_OPERATOR, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
@@ -97,9 +98,15 @@ func (g *tdGrepBase) String() string {
 		return g.stringError()
 	}
 	if g.argType == nil {
-		return S("%s(%s)", g.GetLocation().Func, g.filter.Interface().(TestDeep))
+		return S("%s(%s, %s)",
+			g.GetLocation().Func,
+			g.filter.Interface().(TestDeep),
+			util.ToString(g.expectedValue))
 	}
-	return S("%s(%s)", g.GetLocation().Func, g.filter.Type())
+	return S("%s(%s, %s)",
+		g.GetLocation().Func,
+		g.filter.Type(),
+		util.ToString(g.expectedValue))
 }
 
 func (g *tdGrepBase) TypeBehind() reflect.Type {
