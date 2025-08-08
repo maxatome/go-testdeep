@@ -662,7 +662,7 @@ func TestSmuggleFieldsPath(t *testing.T) {
 		expectedError{
 			Message: mustBe("ran smuggle code with %% as argument"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("        value: 12\nit failed coz: it is a int and should be a struct"),
+			Summary: mustBe("        value: 12\nit failed coz: it is a int and should be a struct or a map[string]…"),
 		})
 	checkError(t, gotStruct, td.Smuggle("ValInt.bar", 23),
 		expectedError{
@@ -733,6 +733,7 @@ func TestSmuggleFieldsPath(t *testing.T) {
 		},
 	}
 	checkOK(t, x, td.Smuggle("Iface[test][1]", 3))
+	checkOK(t, x, td.Smuggle("Iface.test[1]", 3)) // shortcut for map[string]…
 	checkOK(t, x, td.Smuggle("C.Iface1[0][66][1]", "bar"))
 	for i := 0; i < 12; i++ {
 		checkOK(t, x,
