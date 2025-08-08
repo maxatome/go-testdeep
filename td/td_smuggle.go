@@ -260,22 +260,27 @@ func buildFieldsPathFn(path string) (func(any) (smuggleValue, error), error) {
 					}
 					continue
 				}
-				deref := ""
-				if origKind != vgot.Kind() {
-					deref = " (after dereferencing)"
-				}
-				if idxPart == 0 {
-					return smuggleValue{},
-						fmt.Errorf("it is a %s%s and should be a struct", vgot.Kind(), deref)
-				}
-				if parts[idxPart-1].Method {
+				// Accept map but only map[string]…
+				if vgot.Kind() != reflect.Map ||
+					vgot.Type().Key().Kind() != reflect.String {
+					deref := ""
+					if origKind != vgot.Kind() {
+						deref = " (after dereferencing)"
+					}
+					if idxPart == 0 {
+						return smuggleValue{}, fmt.Errorf(
+							"it is a %s%s and should be a struct or a map[string]…",
+							vgot.Kind(), deref)
+					}
+					if parts[idxPart-1].Method {
+						return smuggleValue{}, fmt.Errorf(
+							"method %s returned a %s%s and should be a struct or a map[string]…",
+							joinFieldsPath(parts[:idxPart]), vgot.Kind(), deref)
+					}
 					return smuggleValue{}, fmt.Errorf(
-						"method %s returned a %s%s and should be a struct",
+						"field %q is a %s%s and should be a struct or a map[string]…",
 						joinFieldsPath(parts[:idxPart]), vgot.Kind(), deref)
 				}
-				return smuggleValue{}, fmt.Errorf(
-					"field %q is a %s%s and should be a struct",
-					joinFieldsPath(parts[:idxPart]), vgot.Kind(), deref)
 			}
 
 			switch vgot.Kind() {
@@ -654,6 +659,11 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //
 //	// Tests that got.B.As["foo"].Num is 12
 //	td.Cmp(t, got, td.Smuggle("B.As[foo].Num", 12))
+//
+// For convenience, if a map[string]… is addressed, it can be done
+// like a struct field as "foo" key in:
+//
+//	td.Cmp(t, got, td.Smuggle("B.As.foo.Num", 12))
 //
 // In addition, simple public methods can also be called like in:
 //

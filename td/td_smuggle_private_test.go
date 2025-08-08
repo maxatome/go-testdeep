@@ -151,12 +151,13 @@ func TestBuildFieldsPathFn(t *testing.T) {
 			_, err = fn(SmuggleBuild{})
 			if test.Error(t, err) {
 				test.EqualStr(t, err.Error(),
-					`field "Field.Path" is a string and should be a struct`)
+					`field "Field.Path" is a string and should be a struct or a map[string]…`)
 			}
 
 			_, err = fn(123)
 			if test.Error(t, err) {
-				test.EqualStr(t, err.Error(), "it is a int and should be a struct")
+				test.EqualStr(t, err.Error(),
+					"it is a int and should be a struct or a map[string]…")
 			}
 		}
 
@@ -165,14 +166,14 @@ func TestBuildFieldsPathFn(t *testing.T) {
 			_, err = fn(SmuggleBuild{Iface: 42})
 			if test.Error(t, err) {
 				test.EqualStr(t, err.Error(),
-					`field "Iface" is a int (after dereferencing) and should be a struct`)
+					`field "Iface" is a int (after dereferencing) and should be a struct or a map[string]…`)
 			}
 
 			num := 42
 			_, err = fn(&num)
 			if test.Error(t, err) {
 				test.EqualStr(t, err.Error(),
-					`it is a int (after dereferencing) and should be a struct`)
+					`it is a int (after dereferencing) and should be a struct or a map[string]…`)
 			}
 		}
 
@@ -317,7 +318,7 @@ func TestBuildFieldsPathFn(t *testing.T) {
 			_, err = fn(SmuggleBuild{})
 			if test.Error(t, err) {
 				test.EqualStr(t, err.Error(),
-					`method Num() returned a int and should be a struct`)
+					`method Num() returned a int and should be a struct or a map[string]…`)
 			}
 		}
 
@@ -326,7 +327,7 @@ func TestBuildFieldsPathFn(t *testing.T) {
 			_, err = fn(SmuggleBuild{Iface: 42})
 			if test.Error(t, err) {
 				test.EqualStr(t, err.Error(),
-					`method FollowIface() returned a int (after dereferencing) and should be a struct`)
+					`method FollowIface() returned a int (after dereferencing) and should be a struct or a map[string]…`)
 			}
 		}
 	})
