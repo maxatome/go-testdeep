@@ -8,7 +8,13 @@ package dark
 
 import (
 	"reflect"
+
+	"github.com/maxatome/go-testdeep/internal/spew"
 )
+
+// UnsafeDisabled is a build-time constant which specifies whether or
+// not access to the unsafe package is available.
+const UnsafeDisabled = spew.UnsafeDisabled
 
 // GetInterface does its best to return the data behind val. If force
 // is true, it tries to bypass golang protections using the unsafe
@@ -26,7 +32,7 @@ var GetInterface = func(val reflect.Value, force bool) (any, bool) {
 	}
 
 	if force {
-		val = unsafeReflectValue(val)
+		val = spew.UnsafeReflectValue(val)
 		if val.CanInterface() {
 			return val.Interface(), true
 		}

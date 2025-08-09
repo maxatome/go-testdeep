@@ -147,7 +147,7 @@ while (readdir $dh)
             @consts{$1 =~ /^\t([A-Z]\w+)/mg} = ();
         }
 
-        my %imports = map { ($_ => $_) } qw(fmt io ioutil os reflect testing);
+        my %imports = map { ($_ => $_) } qw(fmt io os reflect testing);
         if ($contents =~ /^import \(\n(.+?)\s*\)\n/ms)
         {
             foreach my $pkg (split(/\n+/, $1))
