@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/spew"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -53,7 +54,7 @@ func TestGetInterface(t *testing.T) {
 	}
 
 	_, ok = GetInterface(reflect.ValueOf(s).Field(0), true)
-	if UnsafeDisabled {
+	if spew.UnsafeDisabled {
 		test.IsFalse(t, ok, "unsafe package is disabled, GetInterface should fail")
 	} else {
 		test.IsTrue(t, ok,
@@ -68,7 +69,7 @@ func TestGetInterface(t *testing.T) {
 		test.EqualInt(t, valInt, 123)
 	}
 
-	if UnsafeDisabled {
+	if spew.UnsafeDisabled {
 		test.CheckPanic(t,
 			func() {
 				MustGetInterface(reflect.ValueOf(s).Field(0))

@@ -14,7 +14,7 @@ import (
 	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
-var intType = reflect.TypeOf(0)
+var intType = reflect.TypeOf(0) // avoid an import cycle if using internal/types
 
 func cmpRet(less, gt bool) int {
 	if less {
