@@ -27,7 +27,7 @@ type ErrorSummary interface {
 //	Label: value
 //	Explanation
 //
-// With an empty explantion:
+// With an empty explanation:
 //
 //	Label: value
 type ErrorSummaryItem struct {
