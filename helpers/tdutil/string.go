@@ -10,7 +10,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/davecgh/go-spew/spew"
+	"github.com/maxatome/go-testdeep/internal/spew"
 )
 
 // FormatString formats s to a printable string, trying to enclose it

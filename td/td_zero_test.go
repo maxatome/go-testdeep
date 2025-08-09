@@ -82,7 +82,7 @@ func TestZero(t *testing.T) {
 			Message: mustBe("values differ"),
 			Path:    mustBe("*DATA"),
 			// in fact, pointer on 0'ed struct contents
-			Got:      mustContain(`ValInt: (int) 0`),
+			Got:      mustBe("(td_test.MyStruct) {\n}"),
 			Expected: mustBe("nil"),
 		})
 	checkError(t, true, td.Zero(),
@@ -164,7 +164,7 @@ func TestNotZero(t *testing.T) {
 		expectedError{
 			Message:  mustBe("zero value"),
 			Path:     mustBe("DATA"),
-			Got:      mustContain(`ValInt: (int) 0`),
+			Got:      mustBe("(td_test.MyStruct) {\n}"),
 			Expected: mustBe("NotZero()"),
 		})
 	checkError(t, &MyStruct{}, td.Ptr(td.NotZero()),
@@ -172,7 +172,7 @@ func TestNotZero(t *testing.T) {
 			Message: mustBe("zero value"),
 			Path:    mustBe("*DATA"),
 			// in fact, pointer on 0'ed struct contents
-			Got:      mustContain(`ValInt: (int) 0`),
+			Got:      mustBe("(td_test.MyStruct) {\n}"),
 			Expected: mustBe("NotZero()"),
 		})
 	checkError(t, false, td.NotZero(),

@@ -11,9 +11,8 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/davecgh/go-spew/spew"
-
 	"github.com/maxatome/go-testdeep/helpers/tdutil"
+	"github.com/maxatome/go-testdeep/internal/spew"
 )
 
 // EqualErrorMessage prints a test error message of the form:
@@ -23,7 +22,8 @@ import (
 //	       got: got_value
 //	  expected: expected_value
 func EqualErrorMessage(t *testing.T, got, expected any,
-	args ...any) {
+	args ...any,
+) {
 	t.Helper()
 
 	testName := tdutil.BuildTestName(args...)

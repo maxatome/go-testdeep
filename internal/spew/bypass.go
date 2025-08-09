@@ -1,6 +1,3 @@
-// DO NOT EDIT!!! AUTOMATICALLY COPIED FROM
-// https://github.com/davecgh/go-spew/blob/master/spew/bypass.go
-
 // Copyright (c) 2015-2016 Dave Collins <dave@davec.name>
 //
 // Permission to use, copy, modify, and distribute this software for any
@@ -19,12 +16,11 @@
 // when the code is not running on Google App Engine, compiled by GopherJS, and
 // "-tags safe" is not added to the go build command line.  The "disableunsafe"
 // tag is deprecated and thus should not be used.
-// Go versions prior to 1.4 are disabled because they use a different layout
-// for interfaces which make the implementation of unsafeReflectValue more complex.
-//go:build !js && !appengine && !safe && !disableunsafe && go1.4
-// +build !js,!appengine,!safe,!disableunsafe,go1.4
 
-package dark
+//go:build !js && !appengine && !safe && !disableunsafe
+// +build !js,!appengine,!safe,!disableunsafe
+
+package spew
 
 import (
 	"reflect"
@@ -35,9 +31,6 @@ const (
 	// UnsafeDisabled is a build-time constant which specifies whether or
 	// not access to the unsafe package is available.
 	UnsafeDisabled = false
-
-	// ptrSize is the size of a pointer on the current arch.
-	ptrSize = unsafe.Sizeof((*byte)(nil))
 )
 
 type flag uintptr
@@ -60,17 +53,13 @@ const flagKindMask = flag(0x1f)
 // Different versions of Go have used different
 // bit layouts for the flags type. This table
 // records the known combinations.
-var okFlags = []struct {
+var okFlags = struct {
 	ro, addr flag
-}{{
-	// From Go 1.4 to 1.5
-	ro:   1 << 5,
-	addr: 1 << 7,
-}, {
-	// Up to Go tip.
+}{
+	// From Go 1.6 to Go tip.
 	ro:   1<<5 | 1<<6,
 	addr: 1 << 8,
-}}
+}
 
 var flagValOffset = func() uintptr {
 	field, ok := reflect.TypeOf(reflect.Value{}).FieldByName("flag")
@@ -85,7 +74,7 @@ func flagField(v *reflect.Value) *flag {
 	return (*flag)(unsafe.Pointer(uintptr(unsafe.Pointer(v)) + flagValOffset))
 }
 
-// unsafeReflectValue converts the passed reflect.Value into a one that bypasses
+// UnsafeReflectValue converts the passed reflect.Value into a one that bypasses
 // the typical safety restrictions preventing access to unaddressable and
 // unexported data.  It works by digging the raw pointer to the underlying
 // value out of the protected value and generating a new unprotected (unsafe)
@@ -94,7 +83,7 @@ func flagField(v *reflect.Value) *flag {
 // This allows us to check for implementations of the Stringer and error
 // interfaces to be used for pretty printing ordinarily unaddressable and
 // inaccessible values such as unexported struct fields.
-func unsafeReflectValue(v reflect.Value) reflect.Value {
+func UnsafeReflectValue(v reflect.Value) reflect.Value {
 	if !v.IsValid() || (v.CanInterface() && v.CanAddr()) {
 		return v
 	}
@@ -139,11 +128,8 @@ func init() {
 	flagPtr := *flagField(&vPtrA)
 	flagAddr = flagNoPtr ^ flagPtr
 
-	// Check that the inferred flags tally with one of the known versions.
-	for _, f := range okFlags {
-		if flagRO == f.ro && flagAddr == f.addr {
-			return
-		}
+	// Check that the inferred flags tally with the known version
+	if flagRO != okFlags.ro || flagAddr != okFlags.addr {
+		panic("reflect.Value read-only flag has changed semantics")
 	}
-	panic("reflect.Value read-only flag has changed semantics")
 }

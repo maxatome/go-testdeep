@@ -261,9 +261,10 @@ Internal function `deepValueEqual` is based on `deepValueEqual` from
 under the BSD-style license found in the [`LICENSE` file in the golang
 repository](https://github.com/golang/go/blob/master/LICENSE).
 
-Uses two files (`bypass.go` & `bypasssafe.go`) from
-[Go-spew](https://github.com/davecgh/go-spew) which is licensed under
-the [copyfree](http://copyfree.org) ISC License.
+[Go-spew](https://github.com/davecgh/go-spew) has been imported into
+[internal/spew/](internal/spew) directory, then modified to fit
+go-testdeep needs. It is licensed under the [copyfree](http://copyfree.org)
+[ISC License](internal/spew/LICENSE).
 
 [Public Domain Gopher](https://github.com/egonelbre/gophers) provided
 by [Egon Elbre](http://egonelbre.com/). The Go gopher was designed by
