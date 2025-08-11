@@ -25,13 +25,13 @@ package spew
 import (
 	"reflect"
 	"unsafe"
+
+	"github.com/maxatome/go-testdeep/internal/or"
 )
 
-const (
-	// UnsafeDisabled is a build-time constant which specifies whether or
-	// not access to the unsafe package is available.
-	UnsafeDisabled = false
-)
+// UnsafeDisabled is a build-time constant which specifies whether or
+// not access to the unsafe package is available.
+const UnsafeDisabled = false
 
 type flag uintptr
 
@@ -50,22 +50,18 @@ var (
 // it is in the lower 5 bits.
 const flagKindMask = flag(0x1f)
 
-// Different versions of Go have used different
-// bit layouts for the flags type. This table
-// records the known combinations.
+// Different versions of Go have used different bit layouts for the
+// flags type. This layout is OK since go 1.6.
 var okFlags = struct {
 	ro, addr flag
 }{
-	// From Go 1.6 to Go tip.
 	ro:   1<<5 | 1<<6,
 	addr: 1 << 8,
 }
 
 var flagValOffset = func() uintptr {
 	field, ok := reflect.TypeOf(reflect.Value{}).FieldByName("flag")
-	if !ok {
-		panic("reflect.Value has no flag field")
-	}
+	or.Panic(ok, "reflect.Value has no flag field")
 	return field.Offset
 }()
 
@@ -80,16 +76,15 @@ func flagField(v *reflect.Value) *flag {
 // value out of the protected value and generating a new unprotected (unsafe)
 // reflect.Value to it.
 //
-// This allows us to check for implementations of the Stringer and error
+// This allows us to check for implementations of the fmt.Stringer and error
 // interfaces to be used for pretty printing ordinarily unaddressable and
 // inaccessible values such as unexported struct fields.
 func UnsafeReflectValue(v reflect.Value) reflect.Value {
-	if !v.IsValid() || (v.CanInterface() && v.CanAddr()) {
-		return v
+	if v.IsValid() && (!v.CanInterface() || !v.CanAddr()) {
+		flagFieldPtr := flagField(&v)
+		*flagFieldPtr &^= flagRO
+		*flagFieldPtr |= flagAddr
 	}
-	flagFieldPtr := flagField(&v)
-	*flagFieldPtr &^= flagRO
-	*flagFieldPtr |= flagAddr
 	return v
 }
 
@@ -97,12 +92,11 @@ func UnsafeReflectValue(v reflect.Value) reflect.Value {
 // to the type or semantics of the Value.flag field.
 func init() {
 	field, ok := reflect.TypeOf(reflect.Value{}).FieldByName("flag")
-	if !ok {
-		panic("reflect.Value has no flag field")
-	}
-	if field.Type.Kind() != reflect.TypeOf(flag(0)).Kind() {
-		panic("reflect.Value flag field has changed kind")
-	}
+	or.Panic(ok, "reflect.Value has no flag field")
+
+	or.Panic(field.Type.Kind() == reflect.TypeOf(flag(0)).Kind(),
+		"reflect.Value flag field has changed kind")
+
 	type t0 int
 	var t struct {
 		A t0
@@ -129,7 +123,6 @@ func init() {
 	flagAddr = flagNoPtr ^ flagPtr
 
 	// Check that the inferred flags tally with the known version
-	if flagRO != okFlags.ro || flagAddr != okFlags.addr {
-		panic("reflect.Value read-only flag has changed semantics")
-	}
+	or.Panic(flagRO == okFlags.ro && flagAddr == okFlags.addr,
+		"reflect.Value read-only flag has changed semantics")
 }

@@ -29,8 +29,8 @@ which are not possible via the public interface since they should never happen.
 package spew
 
 import (
-	"bytes"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -52,20 +52,17 @@ func changeKind(v *reflect.Value, readOnly bool) {
 // falls back to the standard fmt library for new types that might get added to
 // the language.
 func TestAddedReflectValue(t *testing.T) {
-	i := 1
-
 	// Dump using a reflect.Value that is exported.
 	v := reflect.ValueOf(int8(5))
 	changeKind(&v, false)
-	buf := new(bytes.Buffer)
-	d := dumpState{w: buf, cs: &Config}
+	var buf strings.Builder
+	d := dumpState{w: &buf, cs: &Config}
 	d.dump(v)
 	s := buf.String()
 	want := "(int8) 5"
 	if s != want {
-		t.Errorf("TestAddedReflectValue #%d\n got: %s want: %s", i, s, want)
+		t.Errorf("TestAddedReflectValue\n got: %s want: %s", s, want)
 	}
-	i++
 
 	// Dump using a reflect.Value that is not exported.
 	changeKind(&v, true)
@@ -74,30 +71,6 @@ func TestAddedReflectValue(t *testing.T) {
 	s = buf.String()
 	want = "(int8) <int8 Value>"
 	if s != want {
-		t.Errorf("TestAddedReflectValue #%d\n got: %s want: %s", i, s, want)
-	}
-	i++
-
-	// Formatter using a reflect.Value that is exported.
-	changeKind(&v, false)
-	buf2 := new(dummyFmtState)
-	f := formatState{value: v, cs: &Config, fs: buf2}
-	f.format(v)
-	s = buf2.String()
-	want = "5"
-	if s != want {
-		t.Errorf("TestAddedReflectValue #%d got: %s want: %s", i, s, want)
-	}
-	i++
-
-	// Formatter using a reflect.Value that is not exported.
-	changeKind(&v, true)
-	buf2.Reset()
-	f = formatState{value: v, cs: &Config, fs: buf2}
-	f.format(v)
-	s = buf2.String()
-	want = "<int8 Value>"
-	if s != want {
-		t.Errorf("TestAddedReflectValue #%d got: %s want: %s", i, s, want)
+		t.Errorf("TestAddedReflectValue\n got: %s want: %s", s, want)
 	}
 }

@@ -25,59 +25,18 @@ https://pkg.go.dev/github.com/maxatome/go-testdeep/internal/spew
 
 Add this import line to the file you're working in:
 
-```Go
+```go
 import "github.com/maxatome/go-testdeep/internal/spew"
 ```
 
-To dump a variable with full newlines, indentation, type, and pointer
-information use Dump, Fdump, or Sdump:
+To dump a variable with full newlines, indentation, type and pointer
+information use Sdump:
 
-```Go
-spew.Dump(myVar1, myVar2, ...)
-spew.Fdump(someWriter, myVar1, myVar2, ...)
-str := spew.Sdump(myVar1, myVar2, ...)
+```go
+str := spew.Sdump(myVar1)
 ```
 
-Alternatively, if you would prefer to use format strings with a
-compacted inline printing style, use the convenience wrappers Printf,
-Fprintf, etc with `%v` (most compact), `%+v` (adds pointer addresses),
-`%#v` (adds types), or `%#+v` (adds types and pointer addresses):
-
-```Go
-spew.Printf("myVar1: %v -- myVar2: %+v", myVar1, myVar2)
-spew.Printf("myVar3: %#v -- myVar4: %#+v", myVar3, myVar4)
-spew.Fprintf(someWriter, "myVar1: %v -- myVar2: %+v", myVar1, myVar2)
-spew.Fprintf(someWriter, "myVar3: %#v -- myVar4: %#+v", myVar3, myVar4)
-```
-
-## Debugging a Web Application Example
-
-Here is an example of how you can use `spew.Sdump()` to help debug a web application. Please be sure to wrap your output using the `html.EscapeString()` function for safety reasons. You should also only use this debugging technique in a development environment, never in production.
-
-```Go
-package main
-
-import (
-    "fmt"
-    "html"
-    "net/http"
-
-    "github.com/maxatome/go-testdeep/internal/spew"
-)
-
-func handler(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "text/html")
-    fmt.Fprintf(w, "Hi there, %s!", r.URL.Path[1:])
-    fmt.Fprintf(w, "<!--\n" + html.EscapeString(spew.Sdump(w)) + "\n-->")
-}
-
-func main() {
-    http.HandleFunc("/", handler)
-    http.ListenAndServe(":8080", nil)
-}
-```
-
-## Sample Dump Output
+## Sample Sdump Output
 
 ```
 (main.Foo) {
@@ -96,24 +55,6 @@ func main() {
 }
 ```
 
-## Sample Formatter Output
-
-Double pointer to a uint8:
-```
-	  %v: <**>5
-	 %+v: <**>(0xf8400420d0->0xf8400420c8)5
-	 %#v: (**uint8)5
-	%#+v: (**uint8)(0xf8400420d0->0xf8400420c8)5
-```
-
-Pointer to circular struct with a uint8 field and a pointer to itself:
-```
-	  %v: <*>{1 <*><shown>}
-	 %+v: <*>(0xf84003e260){ui8:1 c:<*>(0xf84003e260)<shown>}
-	 %#v: (*main.circular){ui8:(uint8)1 c:(*main.circular)<shown>}
-	%#+v: (*main.circular)(0xf84003e260){ui8:(uint8)1 c:(*main.circular)(0xf84003e260)<shown>}
-```
-
 ## Configuration Options
 
 Configuration of spew is handled by fields in the ConfigState type. For
@@ -126,7 +67,7 @@ options. See the ConfigState documentation for more details.
 
 ```
 * Indent
-	String to use for each indentation level for Dump functions.
+	String to use for each indentation level for Sdump function.
 	It is a single space by default.  A popular alternative is "\t".
 
 * MaxDepth
@@ -134,11 +75,11 @@ options. See the ConfigState documentation for more details.
 	There is no limit by default.
 
 * DisableMethods
-	Disables invocation of error and Stringer interface methods.
+	Disables invocation of error and fmt.Stringer interface methods.
 	Method invocation is enabled by default.
 
 * DisablePointerMethods
-	Disables invocation of error and Stringer interface methods on types
+	Disables invocation of error and fmt.Stringer interface methods on types
 	which only accept pointer receivers from non-pointer variables.  This option
 	relies on access to the unsafe package, so it will not have any effect when
 	running in environments without access to the unsafe package such as Google
@@ -149,29 +90,9 @@ options. See the ConfigState documentation for more details.
 	DisablePointerAddresses specifies whether to disable the printing of
 	pointer addresses. This is useful when diffing data structures in tests.
 
-* DisableCapacities
-	DisableCapacities specifies whether to disable the printing of capacities
-	for arrays, slices, maps and channels. This is useful when diffing data
-	structures in tests.
-
-* ContinueOnMethod
-	Enables recursion into types after invoking error and Stringer interface
-	methods. Recursion after method invocation is disabled by default.
-
-* SortKeys
-	Specifies map keys should be sorted before being printed. Use
-	this to have a more deterministic, diffable output.  Note that
-	only native types (bool, int, uint, floats, uintptr and string)
-	and types which implement error or Stringer interfaces are supported,
-	with other types sorted according to the reflect.Value.String() output
-	which guarantees display stability.  Natural map order is used by
-	default.
-
-* SpewKeys
-	SpewKeys specifies that, as a last resort attempt, map keys should be
-	spewed to strings and sorted by those strings.  This is only considered
-	if SortKeys is true.
-
+* EnableCapacities
+	EnableCapacities specifies whether to enable the printing of capacities
+	for arrays, slices and channels.
 ```
 
 ## Unsafe Package Dependency

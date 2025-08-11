@@ -40,7 +40,7 @@ func EqualErrorMessage(t *testing.T, got, expected any,
 func spewIfNeeded(s string) string {
 	for _, chr := range s {
 		if !unicode.IsPrint(chr) {
-			return strings.TrimRight(spew.Sdump(s), "\n")
+			return spew.Sdump(s)
 		}
 	}
 	return s

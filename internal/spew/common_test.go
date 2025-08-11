@@ -18,16 +18,12 @@ package spew_test
 
 import (
 	"fmt"
-	"reflect"
-	"testing"
-
-	"github.com/maxatome/go-testdeep/internal/spew"
 )
 
 // custom type to test Stinger interface on non-pointer receiver.
 type stringer string
 
-// String implements the Stringer interface for testing invocation of custom
+// String implements the fmt.Stringer interface for testing invocation of custom
 // stringers on types with non-pointer receivers.
 func (s stringer) String() string {
 	return "stringer " + string(s)
@@ -36,7 +32,7 @@ func (s stringer) String() string {
 // custom type to test Stinger interface on pointer receiver.
 type pstringer string
 
-// String implements the Stringer interface for testing invocation of custom
+// String implements the fmt.Stringer interface for testing invocation of custom
 // stringers on types with only pointer receivers.
 func (s *pstringer) String() string {
 	return "stringer " + string(*s)
@@ -95,7 +91,7 @@ func stringizeWants(wants []string) string {
 	s := ""
 	for i, want := range wants {
 		if i > 0 {
-			s += fmt.Sprintf("want%d: %s", i+1, want)
+			s += fmt.Sprintf("\nwant%d: %s", i+1, want)
 		} else {
 			s += "want: " + want
 		}
@@ -112,187 +108,4 @@ func testFailed(result string, wants []string) bool {
 		}
 	}
 	return true
-}
-
-type sortableStruct struct {
-	x int
-}
-
-func (ss sortableStruct) String() string {
-	return fmt.Sprintf("ss.%d", ss.x)
-}
-
-type unsortableStruct struct {
-	x int
-}
-
-type sortTestCase struct {
-	input    []reflect.Value
-	expected []reflect.Value
-}
-
-func helpTestSortValues(tests []sortTestCase, cs *spew.ConfigState, t *testing.T) {
-	getInterfaces := func(values []reflect.Value) []interface{} {
-		interfaces := []interface{}{}
-		for _, v := range values {
-			interfaces = append(interfaces, v.Interface())
-		}
-		return interfaces
-	}
-
-	for _, test := range tests {
-		spew.SortValues(test.input, cs)
-		// reflect.DeepEqual cannot really make sense of reflect.Value,
-		// probably because of all the pointer tricks. For instance,
-		// v(2.0) != v(2.0) on a 32-bits system. Turn them into interface{}
-		// instead.
-		input := getInterfaces(test.input)
-		expected := getInterfaces(test.expected)
-		if !reflect.DeepEqual(input, expected) {
-			t.Errorf("Sort mismatch:\n %v != %v", input, expected)
-		}
-	}
-}
-
-// TestSortValues ensures the sort functionality for relect.Value based sorting
-// works as intended.
-func TestSortValues(t *testing.T) {
-	v := reflect.ValueOf
-
-	a := v("a")
-	b := v("b")
-	c := v("c")
-	embedA := v(embed{"a"})
-	embedB := v(embed{"b"})
-	embedC := v(embed{"c"})
-	tests := []sortTestCase{
-		// No values.
-		{
-			[]reflect.Value{},
-			[]reflect.Value{},
-		},
-		// Bools.
-		{
-			[]reflect.Value{v(false), v(true), v(false)},
-			[]reflect.Value{v(false), v(false), v(true)},
-		},
-		// Ints.
-		{
-			[]reflect.Value{v(2), v(1), v(3)},
-			[]reflect.Value{v(1), v(2), v(3)},
-		},
-		// Uints.
-		{
-			[]reflect.Value{v(uint8(2)), v(uint8(1)), v(uint8(3))},
-			[]reflect.Value{v(uint8(1)), v(uint8(2)), v(uint8(3))},
-		},
-		// Floats.
-		{
-			[]reflect.Value{v(2.0), v(1.0), v(3.0)},
-			[]reflect.Value{v(1.0), v(2.0), v(3.0)},
-		},
-		// Strings.
-		{
-			[]reflect.Value{b, a, c},
-			[]reflect.Value{a, b, c},
-		},
-		// Array
-		{
-			[]reflect.Value{v([3]int{3, 2, 1}), v([3]int{1, 3, 2}), v([3]int{1, 2, 3})},
-			[]reflect.Value{v([3]int{1, 2, 3}), v([3]int{1, 3, 2}), v([3]int{3, 2, 1})},
-		},
-		// Uintptrs.
-		{
-			[]reflect.Value{v(uintptr(2)), v(uintptr(1)), v(uintptr(3))},
-			[]reflect.Value{v(uintptr(1)), v(uintptr(2)), v(uintptr(3))},
-		},
-		// SortableStructs.
-		{
-			// Note: not sorted - DisableMethods is set.
-			[]reflect.Value{v(sortableStruct{2}), v(sortableStruct{1}), v(sortableStruct{3})},
-			[]reflect.Value{v(sortableStruct{2}), v(sortableStruct{1}), v(sortableStruct{3})},
-		},
-		// UnsortableStructs.
-		{
-			// Note: not sorted - SpewKeys is false.
-			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
-			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
-		},
-		// Invalid.
-		{
-			[]reflect.Value{embedB, embedA, embedC},
-			[]reflect.Value{embedB, embedA, embedC},
-		},
-	}
-	cs := spew.ConfigState{DisableMethods: true, SpewKeys: false}
-	helpTestSortValues(tests, &cs, t)
-}
-
-// TestSortValuesWithMethods ensures the sort functionality for relect.Value
-// based sorting works as intended when using string methods.
-func TestSortValuesWithMethods(t *testing.T) {
-	v := reflect.ValueOf
-
-	a := v("a")
-	b := v("b")
-	c := v("c")
-	tests := []sortTestCase{
-		// Ints.
-		{
-			[]reflect.Value{v(2), v(1), v(3)},
-			[]reflect.Value{v(1), v(2), v(3)},
-		},
-		// Strings.
-		{
-			[]reflect.Value{b, a, c},
-			[]reflect.Value{a, b, c},
-		},
-		// SortableStructs.
-		{
-			[]reflect.Value{v(sortableStruct{2}), v(sortableStruct{1}), v(sortableStruct{3})},
-			[]reflect.Value{v(sortableStruct{1}), v(sortableStruct{2}), v(sortableStruct{3})},
-		},
-		// UnsortableStructs.
-		{
-			// Note: not sorted - SpewKeys is false.
-			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
-			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
-		},
-	}
-	cs := spew.ConfigState{DisableMethods: false, SpewKeys: false}
-	helpTestSortValues(tests, &cs, t)
-}
-
-// TestSortValuesWithSpew ensures the sort functionality for relect.Value
-// based sorting works as intended when using spew to stringify keys.
-func TestSortValuesWithSpew(t *testing.T) {
-	v := reflect.ValueOf
-
-	a := v("a")
-	b := v("b")
-	c := v("c")
-	tests := []sortTestCase{
-		// Ints.
-		{
-			[]reflect.Value{v(2), v(1), v(3)},
-			[]reflect.Value{v(1), v(2), v(3)},
-		},
-		// Strings.
-		{
-			[]reflect.Value{b, a, c},
-			[]reflect.Value{a, b, c},
-		},
-		// SortableStructs.
-		{
-			[]reflect.Value{v(sortableStruct{2}), v(sortableStruct{1}), v(sortableStruct{3})},
-			[]reflect.Value{v(sortableStruct{1}), v(sortableStruct{2}), v(sortableStruct{3})},
-		},
-		// UnsortableStructs.
-		{
-			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
-			[]reflect.Value{v(unsortableStruct{1}), v(unsortableStruct{2}), v(unsortableStruct{3})},
-		},
-	}
-	cs := spew.ConfigState{DisableMethods: true, SpewKeys: true}
-	helpTestSortValues(tests, &cs, t)
 }

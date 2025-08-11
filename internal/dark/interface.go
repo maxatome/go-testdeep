@@ -9,6 +9,7 @@ package dark
 import (
 	"reflect"
 
+	"github.com/maxatome/go-testdeep/internal/or"
 	"github.com/maxatome/go-testdeep/internal/spew"
 )
 
@@ -53,9 +54,7 @@ var GetInterface = func(val reflect.Value, force bool) (any, bool) {
 // fails (struct private + non-copyable field), it panics.
 func MustGetInterface(val reflect.Value) any {
 	ret, ok := GetInterface(val, true)
-	if ok {
-		return ret
-	}
-	panic("dark.GetInterface() does not handle private " +
-		val.Kind().String() + " kind")
+	or.Panic(ok,
+		"dark.GetInterface() does not handle private ", val.Kind(), " kind")
+	return ret
 }

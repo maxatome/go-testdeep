@@ -322,7 +322,7 @@ func TestFirst(t *testing.T) {
 					expectedError{
 						Message:  mustBe("item not found"),
 						Path:     mustBe("DATA"),
-						Got:      mustContain(`]int) (len=7 `),
+						Got:      mustContain(`]int) (len=7)`),
 						Expected: mustBe(`First(> 666, "never reached")`),
 					})
 			})
@@ -584,7 +584,7 @@ func TestLast(t *testing.T) {
 					expectedError{
 						Message:  mustBe("item not found"),
 						Path:     mustBe("DATA"),
-						Got:      mustContain(`]int) (len=7 `),
+						Got:      mustContain(`]int) (len=7)`),
 						Expected: mustBe(`Last(> 666, "never reached")`),
 					})
 			})
