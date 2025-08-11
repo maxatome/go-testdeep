@@ -93,11 +93,6 @@ type ConfigState struct {
 	// enabled) are supported, with other types sorted according to the
 	// reflect.Value.String() output which guarantees display stability.
 	SortKeys bool
-
-	// SpewKeys specifies that, as a last resort attempt, map keys should
-	// be spewed to strings and sorted by those strings.  This is only
-	// considered if SortKeys is true.
-	SpewKeys bool
 }
 
 // Config is the active configuration of the top-level functions.

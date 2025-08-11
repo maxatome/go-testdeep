@@ -214,7 +214,7 @@ func TestSortValues(t *testing.T) {
 		},
 		// UnsortableStructs.
 		{
-			// Note: not sorted - SpewKeys is false.
+			// Note: not sorted
 			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
 			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
 		},
@@ -224,7 +224,7 @@ func TestSortValues(t *testing.T) {
 			[]reflect.Value{embedB, embedA, embedC},
 		},
 	}
-	cs := spew.ConfigState{DisableMethods: true, SpewKeys: false}
+	cs := spew.ConfigState{DisableMethods: true}
 	helpTestSortValues(tests, &cs, t)
 }
 
@@ -254,45 +254,11 @@ func TestSortValuesWithMethods(t *testing.T) {
 		},
 		// UnsortableStructs.
 		{
-			// Note: not sorted - SpewKeys is false.
+			// Note: not sorted
 			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
 			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
 		},
 	}
-	cs := spew.ConfigState{DisableMethods: false, SpewKeys: false}
-	helpTestSortValues(tests, &cs, t)
-}
-
-// TestSortValuesWithSpew ensures the sort functionality for relect.Value
-// based sorting works as intended when using spew to stringify keys.
-func TestSortValuesWithSpew(t *testing.T) {
-	v := reflect.ValueOf
-
-	a := v("a")
-	b := v("b")
-	c := v("c")
-	tests := []sortTestCase{
-		// Ints.
-		{
-			[]reflect.Value{v(2), v(1), v(3)},
-			[]reflect.Value{v(1), v(2), v(3)},
-		},
-		// Strings.
-		{
-			[]reflect.Value{b, a, c},
-			[]reflect.Value{a, b, c},
-		},
-		// SortableStructs.
-		{
-			[]reflect.Value{v(sortableStruct{2}), v(sortableStruct{1}), v(sortableStruct{3})},
-			[]reflect.Value{v(sortableStruct{1}), v(sortableStruct{2}), v(sortableStruct{3})},
-		},
-		// UnsortableStructs.
-		{
-			[]reflect.Value{v(unsortableStruct{2}), v(unsortableStruct{1}), v(unsortableStruct{3})},
-			[]reflect.Value{v(unsortableStruct{1}), v(unsortableStruct{2}), v(unsortableStruct{3})},
-		},
-	}
-	cs := spew.ConfigState{DisableMethods: true, SpewKeys: true}
+	cs := spew.ConfigState{DisableMethods: false}
 	helpTestSortValues(tests, &cs, t)
 }

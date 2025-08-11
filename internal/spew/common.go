@@ -225,14 +225,13 @@ func printHexPtr(w io.Writer, p uintptr) {
 type valuesSorter struct {
 	values  []reflect.Value
 	strings []string // either nil or same len and values
-	cs      *ConfigState
 }
 
 // newValuesSorter initializes a valuesSorter instance, which holds a set of
 // surrogate keys on which the data should be sorted.  It uses flags in
 // ConfigState to decide if and how to populate those surrogate keys.
 func newValuesSorter(values []reflect.Value, cs *ConfigState) sort.Interface {
-	vs := &valuesSorter{values: values, cs: cs}
+	vs := &valuesSorter{values: values}
 	if canSortSimply(vs.values[0].Kind()) {
 		return vs
 	}
@@ -245,12 +244,6 @@ func newValuesSorter(values []reflect.Value, cs *ConfigState) sort.Interface {
 				break
 			}
 			vs.strings[i] = b.String()
-		}
-	}
-	if vs.strings == nil && cs.SpewKeys {
-		vs.strings = make([]string, len(values))
-		for i := range vs.values {
-			vs.strings[i] = Sprintf("%#v", vs.values[i].Interface())
 		}
 	}
 	return vs
