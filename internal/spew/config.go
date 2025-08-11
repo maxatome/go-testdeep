@@ -85,14 +85,6 @@ type ConfigState struct {
 	// NOTE: This flag does not have any effect if method invocation is disabled
 	// via the DisableMethods or DisablePointerMethods options.
 	ContinueOnMethod bool
-
-	// SortKeys specifies map keys should be sorted before being printed. Use
-	// this to have a more deterministic, diffable output.  Note that only
-	// native types (bool, int, uint, floats, uintptr and string) and types
-	// that support the error or Stringer interfaces (if methods are
-	// enabled) are supported, with other types sorted according to the
-	// reflect.Value.String() output which guarantees display stability.
-	SortKeys bool
 }
 
 // Config is the active configuration of the top-level functions.
@@ -295,7 +287,6 @@ func (c *ConfigState) convertArgs(args []interface{}) (formatters []interface{})
 //	DisableMethods: false
 //	DisablePointerMethods: false
 //	ContinueOnMethod: false
-//	SortKeys: false
 func NewDefaultConfig() *ConfigState {
 	return &ConfigState{Indent: " "}
 }

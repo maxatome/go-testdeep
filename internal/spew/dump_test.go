@@ -992,7 +992,7 @@ func TestDump(t *testing.T) {
 }
 
 func TestDumpSortedKeys(t *testing.T) {
-	cfg := spew.ConfigState{SortKeys: true}
+	cfg := spew.ConfigState{}
 	s := cfg.Sdump(map[int]string{1: "1", 3: "3", 2: "2"})
 	expected := "(map[int]string) (len=3) {\n(int) 1: (string) (len=1) " +
 		"\"1\",\n(int) 2: (string) (len=1) \"2\",\n(int) 3: (string) " +

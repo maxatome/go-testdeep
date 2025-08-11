@@ -310,9 +310,7 @@ func (f *formatState) format(v reflect.Value) {
 			f.fs.Write(maxShortBytes)
 		} else {
 			keys := v.MapKeys()
-			if f.cs.SortKeys {
-				sortValues(keys, f.cs)
-			}
+			sortValues(keys, f.cs)
 			for i, key := range keys {
 				if i > 0 {
 					f.fs.Write(spaceBytes)
