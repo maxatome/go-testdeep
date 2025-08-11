@@ -15,6 +15,8 @@ import (
 	"reflect"
 	"testing"
 	"unsafe"
+
+	"github.com/maxatome/go-testdeep/internal/or"
 )
 
 var testingT = reflect.TypeOf(testing.T{})
@@ -97,9 +99,8 @@ func (t *T) CatchFailNow(fn func()) (failNowOccurred bool) {
 }
 
 func (t *T) prepareForLogs() {
-	if _, ok := testingT.FieldByName("output"); !ok {
-		panic("testing.T.output field not found!")
-	}
+	_, ok := testingT.FieldByName("output")
+	or.Panic(ok, "testing.T.output field not found!")
 
 	// o is a new go1.25 testing.common field
 	if o, ok := testingT.FieldByName("o"); ok {
@@ -112,11 +113,11 @@ func (t *T) prepareForLogs() {
 		}
 		owt := reflect.TypeOf(outputWriter{})
 
-		if ot.NumField() != owt.NumField() ||
-			ot.Field(0).Name != owt.Field(0).Name || // ot.c is *testing.common
-			ot.Field(1).Type != owt.Field(1).Type {
-			panic("testing.T.outputWriter changed")
-		}
+		or.Panic(
+			ot.NumField() == owt.NumField() &&
+				ot.Field(0).Name == owt.Field(0).Name && // ot.c is *testing.common
+				ot.Field(1).Type == owt.Field(1).Type,
+			"testing.T.outputWriter changed")
 
 		// Use ptrAdd to support go1.16 & go1.17, but starting go1.18 we can use:
 		// oAddr := (**outputWriter)(unsafe.Add(unsafe.Pointer(&t.T), o.Offset))

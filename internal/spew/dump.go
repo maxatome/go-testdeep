@@ -21,11 +21,11 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"os"
 	"reflect"
-	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/maxatome/go-testdeep/internal/sort"
 )
 
 var (
@@ -33,18 +33,18 @@ var (
 	// convert cgo types to uint8 slices for hexdumping.
 	uint8Type = reflect.TypeOf(uint8(0))
 
-	// cCharRE is a regular expression that matches a cgo char.
+	// cCharSuffix is the suffix that matches a cgo char.
 	// It is used to detect character arrays to hexdump them.
-	cCharRE = regexp.MustCompile(`^.*\._Ctype_char$`)
+	cCharSuffix = `._Ctype_char`
 
-	// cUnsignedCharRE is a regular expression that matches a cgo unsigned
+	// cUnsignedCharSuffix is the suffix that matches a cgo unsigned
 	// char.  It is used to detect unsigned character arrays to hexdump
 	// them.
-	cUnsignedCharRE = regexp.MustCompile(`^.*\._Ctype_unsignedchar$`)
+	cUnsignedCharSuffix = `._Ctype_unsignedchar`
 
-	// cUint8tCharRE is a regular expression that matches a cgo uint8_t.
+	// cUint8tCharSuffix is the suffix that matches a cgo uint8_t.
 	// It is used to detect uint8_t arrays to hexdump them.
-	cUint8tCharRE = regexp.MustCompile(`^.*\._Ctype_uint8_t$`)
+	cUint8tCharSuffix = `._Ctype_uint8_t`
 )
 
 // dumpState contains information about the state of a dump operation.
@@ -165,24 +165,23 @@ func (d *dumpState) dumpSlice(v reflect.Value) {
 	// for types which should be hexdumped, try to use the underlying data
 	// first, then fall back to trying to convert them to a uint8 slice.
 	var buf []uint8
-	doConvert := false
 	doHexDump := false
 	numEntries := v.Len()
 	if numEntries > 0 {
 		vt := v.Index(0).Type()
 		vts := vt.String()
-		switch {
 		// C types that need to be converted.
-		case cCharRE.MatchString(vts):
-			fallthrough
-		case cUnsignedCharRE.MatchString(vts):
-			fallthrough
-		case cUint8tCharRE.MatchString(vts):
-			doConvert = true
+		doConvert := strings.HasSuffix(vts, cCharSuffix) ||
+			strings.HasSuffix(vts, cUnsignedCharSuffix) ||
+			strings.HasSuffix(vts, cUint8tCharSuffix)
 
 		// Try to use existing uint8 slices and fall back to converting
 		// and copying if that fails.
-		case vt.Kind() == reflect.Uint8:
+		if !doConvert && vt.Kind() == reflect.Uint8 {
+			// The underlying data needs to be converted if it can't
+			// be type asserted to a uint8 slice.
+			doConvert = true
+
 			// We need an addressable interface to convert the type
 			// to a byte slice.  However, the reflect package won't
 			// give us an interface on certain things like
@@ -197,19 +196,13 @@ func (d *dumpState) dumpSlice(v reflect.Value) {
 			if !UnsafeDisabled {
 				vs = vs.Slice(0, numEntries)
 
-				// Use the existing uint8 slice if it can be
-				// type asserted.
-				iface := vs.Interface()
-				if slice, ok := iface.([]uint8); ok {
+				// Use the existing uint8 slice if it can be type asserted.
+				if slice, ok := vs.Interface().([]uint8); ok {
 					buf = slice
 					doHexDump = true
-					break
+					doConvert = false
 				}
 			}
-
-			// The underlying data needs to be converted if it can't
-			// be type asserted to a uint8 slice.
-			doConvert = true
 		}
 
 		// Copy and convert the underlying type if needed.
@@ -285,13 +278,13 @@ func (d *dumpState) dump(v reflect.Value) {
 	case reflect.Map, reflect.String:
 		valueLen = v.Len()
 	}
-	if valueLen != 0 || !d.cs.DisableCapacities && valueCap != 0 {
+	if valueLen != 0 || d.cs.EnableCapacities && valueCap != 0 {
 		d.w.Write(openParenBytes)
 		if valueLen != 0 {
 			d.w.Write(lenEqualsBytes)
 			printInt(d.w, int64(valueLen), 10)
 		}
-		if !d.cs.DisableCapacities && valueCap != 0 {
+		if d.cs.EnableCapacities && valueCap != 0 {
 			if valueLen != 0 {
 				d.w.Write(spaceBytes)
 			}
@@ -302,20 +295,19 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write(spaceBytes)
 	}
 
-	// Call Stringer/error interfaces if they exist and the handle methods flag
-	// is enabled
-	if !d.cs.DisableMethods {
-		if (kind != reflect.Invalid) && (kind != reflect.Interface) {
-			if handled := handleMethods(d.cs, d.w, v); handled {
-				return
-			}
+	// Call fmt.Stringer/error interfaces if they exist and the handle
+	// methods flag is enabled
+	if !d.cs.DisableMethods &&
+		kind != reflect.Invalid && kind != reflect.Interface {
+		if handled := handleMethods(d.cs, d.w, v); handled {
+			return
 		}
 	}
 
 	switch kind {
-	case reflect.Invalid:
-		// Do nothing.  We should never get here since invalid has already
-		// been handled above.
+	case reflect.Invalid, reflect.Ptr:
+		// Do nothing.  We should never get here since invalid & pointers
+		// have already been handled above.
 
 	case reflect.Bool:
 		printBool(d.w, v.Bool())
@@ -348,7 +340,7 @@ func (d *dumpState) dump(v reflect.Value) {
 	case reflect.Array:
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
-		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
+		if d.cs.MaxDepth != 0 && d.depth > d.cs.MaxDepth {
 			d.indent()
 			d.w.Write(maxNewlineBytes)
 		} else {
@@ -368,10 +360,6 @@ func (d *dumpState) dump(v reflect.Value) {
 			d.w.Write(nilAngleBytes)
 		}
 
-	case reflect.Ptr:
-		// Do nothing.  We should never get here since pointers have already
-		// been handled above.
-
 	case reflect.Map:
 		// nil maps should be indicated as different than empty maps
 		if v.IsNil() {
@@ -381,26 +369,24 @@ func (d *dumpState) dump(v reflect.Value) {
 
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
-		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
+		if d.cs.MaxDepth != 0 && d.depth > d.cs.MaxDepth {
 			d.indent()
 			d.w.Write(maxNewlineBytes)
 		} else {
-			numEntries := v.Len()
-			keys := v.MapKeys()
-			if d.cs.SortKeys {
-				sortValues(keys, d.cs)
-			}
-			for i, key := range keys {
+			i := v.Len()
+			sort.MapEach(v, func(key reflect.Value, val reflect.Value) bool {
 				d.dump(d.unpackValue(key))
 				d.w.Write(colonSpaceBytes)
 				d.ignoreNextIndent = true
-				d.dump(d.unpackValue(v.MapIndex(key)))
-				if i < (numEntries - 1) {
+				d.dump(d.unpackValue(val))
+				i--
+				if i > 0 {
 					d.w.Write(commaNewlineBytes)
 				} else {
 					d.w.Write(newlineBytes)
 				}
-			}
+				return true
+			})
 		}
 		d.depth--
 		d.indent()
@@ -409,19 +395,23 @@ func (d *dumpState) dump(v reflect.Value) {
 	case reflect.Struct:
 		d.w.Write(openBraceNewlineBytes)
 		d.depth++
-		if (d.cs.MaxDepth != 0) && (d.depth > d.cs.MaxDepth) {
+		if d.cs.MaxDepth != 0 && d.depth > d.cs.MaxDepth {
 			d.indent()
 			d.w.Write(maxNewlineBytes)
 		} else {
 			vt := v.Type()
 			numFields := v.NumField()
 			for i := 0; i < numFields; i++ {
+				vf := v.Field(i)
+				if vf.IsZero() {
+					continue
+				}
 				d.indent()
 				vtf := vt.Field(i)
 				d.w.Write([]byte(vtf.Name))
 				d.w.Write(colonSpaceBytes)
 				d.ignoreNextIndent = true
-				d.dump(d.unpackValue(v.Field(i)))
+				d.dump(d.unpackValue(vf))
 				if i < (numFields - 1) {
 					d.w.Write(commaNewlineBytes)
 				} else {
@@ -454,60 +444,28 @@ func (d *dumpState) dump(v reflect.Value) {
 // fdump is a helper function to consolidate the logic from the various public
 // methods which take varying writers and config states.
 // nolint: errcheck
-func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
-	for _, arg := range a {
-		if arg == nil {
-			w.Write(interfaceBytes)
-			w.Write(spaceBytes)
-			w.Write(nilAngleBytes)
-			w.Write(newlineBytes)
-			continue
-		}
-
-		d := dumpState{w: w, cs: cs}
-		d.pointers = make(map[uintptr]int)
-		d.dump(reflect.ValueOf(arg))
-		d.w.Write(newlineBytes)
+func fdump(cs *ConfigState, w io.Writer, arg any) {
+	if arg == nil {
+		w.Write(interfaceBytes)
+		w.Write(spaceBytes)
+		w.Write(nilAngleBytes)
+		w.Write(newlineBytes)
+		return
 	}
+
+	d := dumpState{w: w, cs: cs}
+	d.pointers = make(map[uintptr]int)
+	d.dump(reflect.ValueOf(arg))
+	d.w.Write(newlineBytes)
 }
 
-// Fdump formats and displays the passed arguments to io.Writer w.  It formats
-// exactly the same as Dump.
-func Fdump(w io.Writer, a ...interface{}) {
-	fdump(&Config, w, a...)
-}
-
-// Sdump returns a string with the passed arguments formatted exactly the same
-// as Dump.
-func Sdump(a ...interface{}) string {
-	var buf bytes.Buffer
-	fdump(&Config, &buf, a...)
-	return buf.String()
-}
-
-/*
-Dump displays the passed parameters to standard out with newlines, customizable
-indentation, and additional debug information such as complete types and all
-pointer addresses used to indirect to the final value.  It provides the
-following features over the built-in printing facilities provided by the fmt
-package:
-
-  - Pointers are dereferenced and followed
-  - Circular data structures are detected and handled properly
-  - Custom Stringer/error interfaces are optionally invoked, including
-    on unexported types
-  - Custom types which only implement the Stringer/error interfaces via
-    a pointer receiver are optionally invoked when passing non-pointer
-    variables
-  - Byte arrays and slices are dumped like the hexdump -C command which
-    includes offsets, byte values in hex, and ASCII output
-
-The configuration options are controlled by an exported package global,
-spew.Config.  See ConfigState for options documentation.
-
-See Fdump if you would prefer dumping to an arbitrary io.Writer or Sdump to
-get the formatted result as a string.
-*/
-func Dump(a ...interface{}) {
-	fdump(&Config, os.Stdout, a...)
+// Sdump returns the string representation of a using config[0] if passed.
+func Sdump(a any, config ...ConfigState) string {
+	var buf strings.Builder
+	cs := Config
+	if len(config) > 0 {
+		cs = config[0]
+	}
+	fdump(&cs, &buf, a)
+	return strings.TrimRight(buf.String(), "\n")
 }

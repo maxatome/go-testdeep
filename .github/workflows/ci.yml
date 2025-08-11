@@ -60,6 +60,7 @@ jobs:
               GO_TEST_SAFE_FLAGS="$cover_flags-safe.out"
               GO_TEST_RACE_FLAGS="$cover_flags-race.out"
               GO_TEST_RACE_SAFE_FLAGS="$cover_flags-race-safe.out"
+              GO_TEST_RACE_CGO_FLAGS="$cover_flags-cgo.out"
           fi
 
           export GORACE="halt_on_error=1"
@@ -71,6 +72,9 @@ jobs:
           go test -race            $GO_TEST_RACE_FLAGS      ./...
           echo "RACE + SAFE ======================================="
           go test -race -tags safe $GO_TEST_RACE_SAFE_FLAGS ./...
+          echo "RACE + CGO (internal/spew only) ==================="
+          CGO_ENABLED=1 \
+              go test -race -tags testcgo $GO_TEST_RACE_CGO_FLAGS ./internal/spew
 
       - name: Reporting
         if: matrix.full-tests
@@ -79,9 +83,6 @@ jobs:
         run: |
           go install github.com/mattn/goveralls@v0.0.12
           go install github.com/wadey/gocovmerge@latest
-          gocovmerge coverage.out \
-                     coverage-safe.out \
-                     coverage-race.out \
-                     coverage-race-safe.out |
+          gocovmerge coverage*.out |
               egrep -v '^github\.com/maxatome/go-testdeep/internal/(json/parser\.go:|test/)' > coverage.out
           goveralls -coverprofile=coverage.out -service=github

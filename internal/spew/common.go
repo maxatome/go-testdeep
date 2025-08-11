@@ -17,11 +17,9 @@
 package spew
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"reflect"
-	"sort"
 	"strconv"
 )
 
@@ -36,11 +34,9 @@ var (
 	interfaceBytes        = []byte("(interface {})")
 	commaNewlineBytes     = []byte(",\n")
 	newlineBytes          = []byte("\n")
-	openBraceBytes        = []byte("{")
 	openBraceNewlineBytes = []byte("{\n")
 	closeBraceBytes       = []byte("}")
 	asteriskBytes         = []byte("*")
-	colonBytes            = []byte(":")
 	colonSpaceBytes       = []byte(": ")
 	openParenBytes        = []byte("(")
 	closeParenBytes       = []byte(")")
@@ -48,18 +44,8 @@ var (
 	pointerChainBytes     = []byte("->")
 	nilAngleBytes         = []byte("<nil>")
 	maxNewlineBytes       = []byte("<max depth reached>\n")
-	maxShortBytes         = []byte("<max>")
 	circularBytes         = []byte("<already shown>")
-	circularShortBytes    = []byte("<shown>")
 	invalidAngleBytes     = []byte("<invalid>")
-	openBracketBytes      = []byte("[")
-	closeBracketBytes     = []byte("]")
-	percentBytes          = []byte("%")
-	precisionBytes        = []byte(".")
-	openAngleBytes        = []byte("<")
-	closeAngleBytes       = []byte(">")
-	openMapBytes          = []byte("map[")
-	closeMapBytes         = []byte("]")
 	lenEqualsBytes        = []byte("len=")
 	capEqualsBytes        = []byte("cap=")
 )
@@ -69,7 +55,7 @@ var hexDigits = "0123456789abcdef"
 
 // catchPanic handles any panics that might occur during the handleMethods
 // calls.
-func catchPanic(w io.Writer, v reflect.Value) {
+func catchPanic(w io.Writer) {
 	if err := recover(); err != nil {
 		w.Write(panicBytes)       //nolint: errcheck
 		fmt.Fprintf(w, "%v", err) //nolint: errcheck
@@ -84,7 +70,7 @@ func catchPanic(w io.Writer, v reflect.Value) {
 // as the formatted value.
 func handleMethods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool) {
 	// We need an interface to check if the type implements the error or
-	// Stringer interface.  However, the reflect package won't give us an
+	// fmt.Stringer interface.  However, the reflect package won't give us an
 	// interface on certain things like unexported struct fields in order
 	// to enforce visibility rules.  We use unsafe, when it's available,
 	// to bypass these restrictions since this package does not mutate the
@@ -97,12 +83,13 @@ func handleMethods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool)
 		v = UnsafeReflectValue(v)
 	}
 
-	// Choose whether or not to do error and Stringer interface lookups against
-	// the base type or a pointer to the base type depending on settings.
-	// Technically calling one of these methods with a pointer receiver can
-	// mutate the value, however, types which choose to satisify an error or
-	// Stringer interface with a pointer receiver should not be mutating their
-	// state inside these interface methods.
+	// Choose whether or not to do error and fmt.Stringer interface
+	// lookups against the base type or a pointer to the base type
+	// depending on settings.  Technically calling one of these methods
+	// with a pointer receiver can mutate the value, however, types
+	// which choose to satisify an error or fmt.Stringer interface with
+	// a pointer receiver should not be mutating their state inside
+	// these interface methods.
 	if !cs.DisablePointerMethods && !UnsafeDisabled && !v.CanAddr() {
 		v = UnsafeReflectValue(v)
 	}
@@ -110,30 +97,15 @@ func handleMethods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool)
 		v = v.Addr()
 	}
 
-	// Is it an error or Stringer?
+	// Is it an error or fmt.Stringer?
 	switch iface := v.Interface().(type) {
 	case error:
-		defer catchPanic(w, v)
-		if cs.ContinueOnMethod {
-			w.Write(openParenBytes)        //nolint: errcheck
-			w.Write([]byte(iface.Error())) //nolint: errcheck
-			w.Write(closeParenBytes)       //nolint: errcheck
-			w.Write(spaceBytes)            //nolint: errcheck
-			return false
-		}
-
+		defer catchPanic(w)
 		w.Write([]byte(iface.Error())) //nolint: errcheck
 		return true
 
 	case fmt.Stringer:
-		defer catchPanic(w, v)
-		if cs.ContinueOnMethod {
-			w.Write(openParenBytes)         //nolint: errcheck
-			w.Write([]byte(iface.String())) //nolint: errcheck
-			w.Write(closeParenBytes)        //nolint: errcheck
-			w.Write(spaceBytes)             //nolint: errcheck
-			return false
-		}
+		defer catchPanic(w)
 		w.Write([]byte(iface.String())) //nolint: errcheck
 		return true
 	}
@@ -218,130 +190,4 @@ func printHexPtr(w io.Writer, p uintptr) {
 	// Strip unused leading bytes.
 	buf = buf[i:]
 	w.Write(buf)
-}
-
-// valuesSorter implements sort.Interface to allow a slice of reflect.Value
-// elements to be sorted.
-type valuesSorter struct {
-	values  []reflect.Value
-	strings []string // either nil or same len and values
-	cs      *ConfigState
-}
-
-// newValuesSorter initializes a valuesSorter instance, which holds a set of
-// surrogate keys on which the data should be sorted.  It uses flags in
-// ConfigState to decide if and how to populate those surrogate keys.
-func newValuesSorter(values []reflect.Value, cs *ConfigState) sort.Interface {
-	vs := &valuesSorter{values: values, cs: cs}
-	if canSortSimply(vs.values[0].Kind()) {
-		return vs
-	}
-	if !cs.DisableMethods {
-		vs.strings = make([]string, len(values))
-		for i := range vs.values {
-			b := bytes.Buffer{}
-			if !handleMethods(cs, &b, vs.values[i]) {
-				vs.strings = nil
-				break
-			}
-			vs.strings[i] = b.String()
-		}
-	}
-	if vs.strings == nil && cs.SpewKeys {
-		vs.strings = make([]string, len(values))
-		for i := range vs.values {
-			vs.strings[i] = Sprintf("%#v", vs.values[i].Interface())
-		}
-	}
-	return vs
-}
-
-// canSortSimply tests whether a reflect.Kind is a primitive that can be sorted
-// directly, or whether it should be considered for sorting by surrogate keys
-// (if the ConfigState allows it).
-func canSortSimply(kind reflect.Kind) bool {
-	// This switch parallels valueSortLess, except for the default case.
-	switch kind {
-	case reflect.Bool:
-		return true
-	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
-		return true
-	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uint:
-		return true
-	case reflect.Float32, reflect.Float64:
-		return true
-	case reflect.String:
-		return true
-	case reflect.Uintptr:
-		return true
-	case reflect.Array:
-		return true
-	}
-	return false
-}
-
-// Len returns the number of values in the slice.  It is part of the
-// sort.Interface implementation.
-func (s *valuesSorter) Len() int {
-	return len(s.values)
-}
-
-// Swap swaps the values at the passed indices.  It is part of the
-// sort.Interface implementation.
-func (s *valuesSorter) Swap(i, j int) {
-	s.values[i], s.values[j] = s.values[j], s.values[i]
-	if s.strings != nil {
-		s.strings[i], s.strings[j] = s.strings[j], s.strings[i]
-	}
-}
-
-// valueSortLess returns whether the first value should sort before the second
-// value.  It is used by valueSorter.Less as part of the sort.Interface
-// implementation.
-func valueSortLess(a, b reflect.Value) bool {
-	switch a.Kind() {
-	case reflect.Bool:
-		return !a.Bool() && b.Bool()
-	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
-		return a.Int() < b.Int()
-	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uint:
-		return a.Uint() < b.Uint()
-	case reflect.Float32, reflect.Float64:
-		return a.Float() < b.Float()
-	case reflect.String:
-		return a.String() < b.String()
-	case reflect.Uintptr:
-		return a.Uint() < b.Uint()
-	case reflect.Array:
-		// Compare the contents of both arrays.
-		l := a.Len()
-		for i := 0; i < l; i++ {
-			av := a.Index(i)
-			bv := b.Index(i)
-			if av.Interface() == bv.Interface() {
-				continue
-			}
-			return valueSortLess(av, bv)
-		}
-	}
-	return a.String() < b.String()
-}
-
-// Less returns whether the value at index i should sort before the
-// value at index j.  It is part of the sort.Interface implementation.
-func (s *valuesSorter) Less(i, j int) bool {
-	if s.strings == nil {
-		return valueSortLess(s.values[i], s.values[j])
-	}
-	return s.strings[i] < s.strings[j]
-}
-
-// sortValues is a sort function that handles both native types and any type that
-// can be converted to error or Stringer.  Other inputs are sorted according to
-// their Value.String() value to ensure display stability.
-func sortValues(values []reflect.Value, cs *ConfigState) {
-	if len(values) == 0 {
-		return
-	}
-	sort.Sort(newValuesSorter(values, cs))
 }

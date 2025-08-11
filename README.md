@@ -10,7 +10,8 @@ go-testdeep
 
 ![go-testdeep](https://github.com/maxatome/go-testdeep-site/raw/master/docs_src/static/images/logo.png)
 
-**Extremely flexible golang deep comparison, extends the go testing package.**
+**Extremely flexible golang deep comparison, extends the go testing
+package, dependency free.**
 
 Currently supports go 1.16 → 1.24.
 

@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/spew"
 	"github.com/maxatome/go-testdeep/internal/json"
+	"github.com/maxatome/go-testdeep/internal/spew"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 
@@ -33,8 +33,8 @@ func checkJSON(t *testing.T, gotJSON, expectedJSON string) {
 	}
 	if !reflect.DeepEqual(got, expected) {
 		test.EqualErrorMessage(t,
-			strings.TrimRight(spew.Sdump(got), "\n"),
-			strings.TrimRight(spew.Sdump(expected), "\n"),
+			spew.Sdump(got),
+			spew.Sdump(expected),
 			"got matches expected",
 		)
 	}
@@ -95,8 +95,8 @@ func TestJSON(t *testing.T) {
 
 			if !reflect.DeepEqual(got, expected) {
 				test.EqualErrorMessage(t,
-					strings.TrimRight(spew.Sdump(got), "\n"),
-					strings.TrimRight(spew.Sdump(expected), "\n"),
+					spew.Sdump(got),
+					spew.Sdump(expected),
 					"#%d is OK", i,
 				)
 			}
@@ -247,8 +247,8 @@ func TestJSON(t *testing.T) {
 
 			if !reflect.DeepEqual(got, tst.expected) {
 				test.EqualErrorMessage(t,
-					strings.TrimRight(spew.Sdump(got), "\n"),
-					strings.TrimRight(spew.Sdump(tst.expected), "\n"),
+					spew.Sdump(got),
+					spew.Sdump(tst.expected),
 					"#%d is OK", i,
 				)
 			}
@@ -277,8 +277,8 @@ func TestJSON(t *testing.T) {
 
 			if !reflect.DeepEqual(got, `bar`) {
 				test.EqualErrorMessage(t,
-					strings.TrimRight(spew.Sdump(got), "\n"),
-					strings.TrimRight(spew.Sdump(`bar`), "\n"),
+					spew.Sdump(got),
+					spew.Sdump(`bar`),
 					"#%d is OK", i,
 				)
 			}

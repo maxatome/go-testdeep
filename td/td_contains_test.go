@@ -296,8 +296,8 @@ func TestContainsSlice(t *testing.T) {
 		expectedError{
 			Message:  mustBe("does not contain"),
 			Path:     mustBe("DATA"),
-			Got:      mustContain(`([]int) (len=6 `),
-			Expected: mustContain(`Contains(([]int) (len=7 `),
+			Got:      mustContain(`([]int) (len=6)`),
+			Expected: mustContain(`Contains(([]int) (len=7)`),
 		})
 
 	// Same length
@@ -306,8 +306,8 @@ func TestContainsSlice(t *testing.T) {
 		expectedError{
 			Message:  mustBe("does not contain"),
 			Path:     mustBe("DATA"),
-			Got:      mustContain(`([]int) (len=6 `),
-			Expected: mustContain(`Contains(([]int) (len=6 `),
+			Got:      mustContain(`([]int) (len=6)`),
+			Expected: mustContain(`Contains(([]int) (len=6)`),
 		})
 
 	checkOK(t, got, td.Contains([]int{1, 2, 3}))
@@ -318,8 +318,8 @@ func TestContainsSlice(t *testing.T) {
 		expectedError{
 			Message:  mustBe("does not contain"),
 			Path:     mustBe("DATA"),
-			Got:      mustContain(`([]int) (len=6 `),
-			Expected: mustContain(`Contains(([]int) (len=3 `),
+			Got:      mustContain(`([]int) (len=6)`),
+			Expected: mustContain(`Contains(([]int) (len=3)`),
 		})
 
 	checkError(t, []any{1, 2, 3}, td.Contains([]any{1, td.JSON("{")}),

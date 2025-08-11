@@ -7,7 +7,6 @@
 package tdutil
 
 import (
-	"strings"
 	"unicode"
 
 	"github.com/maxatome/go-testdeep/internal/spew"
@@ -51,5 +50,5 @@ func FormatString(s string) string {
 
 // SpewString uses [spew.Sdump] to format val.
 func SpewString(val any) string {
-	return strings.TrimRight(spew.Sdump(val), "\n")
+	return spew.Sdump(val)
 }
