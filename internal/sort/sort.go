@@ -1,23 +1,24 @@
-// Copyright (c) 2019-2025, Maxime Soulé
+// Copyright (c) 2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package tdutil
+package sort
 
 import (
 	"reflect"
 	"sort"
 
-	tdsort "github.com/maxatome/go-testdeep/internal/sort"
+	"github.com/maxatome/go-testdeep/internal/compare"
+	"github.com/maxatome/go-testdeep/internal/visited"
 )
 
-// SortableValues is used to allow the sorting of a [][reflect.Value]
+// Values is used to allow the sorting of a [][reflect.Value]
 // slice. It is used with the standard sort package:
 //
 //	vals := []reflect.Value{a, b, c, d}
-//	sort.Sort(SortableValues(vals))
+//	sort.Sort(Values(vals))
 //	// vals contents now sorted
 //
 // Replace [sort.Sort] by [sort.Stable] for a stable sort. See [sort]
@@ -42,25 +43,42 @@ import (
 //
 // Cyclic references are correctly handled.
 //
-// See also [CmpValuesFunc].
-func SortableValues(s []reflect.Value) sort.Interface {
-	return tdsort.Values(s)
+// See also [Func].
+func Values(s []reflect.Value) sort.Interface {
+	r := &rValues{
+		Slice: s,
+	}
+	if len(s) > 1 {
+		r.Visited = visited.NewVisited()
+	}
+	return r
 }
 
-// CmpValuesFunc returns a function able to compare 2 [reflect.Value] values.
+type rValues struct {
+	Visited visited.Visited
+	Slice   []reflect.Value
+}
+
+func (v *rValues) Len() int {
+	return len(v.Slice)
+}
+
+func (v *rValues) Less(i, j int) bool {
+	return compare.Compare(v.Visited, v.Slice[i], v.Slice[j]) < 0
+}
+
+func (v *rValues) Swap(i, j int) {
+	v.Slice[i], v.Slice[j] = v.Slice[j], v.Slice[i]
+}
+
+// Func returns a function able to compare 2 [reflect.Value] values.
 //
 // The sorting rules are listed in [SortableValues] documentation.
 //
-//	values := s := []reflect.Value{
-//	  reflect.ValueOf(4),
-//	  reflect.ValueOf(3),
-//	  reflect.ValueOf(1),
-//	}
-//	slices.SortFunc(s, tdutil.CmpValuesFunc())
-//
 // Cyclic references are correctly handled.
-//
-// See also [SortableValues].
-func CmpValuesFunc() func(a, b reflect.Value) int {
-	return tdsort.Func()
+func Func() func(a, b reflect.Value) int {
+	var v visited.Visited
+	return func(a, b reflect.Value) int {
+		return compare.Compare(v, a, b)
+	}
 }
