@@ -193,7 +193,6 @@ func initSpewTests() {
 		{scsNoPmethods, fCSFprint, "", &tps, "<*>stringer test"},
 		{scsMaxDepth, fCSFprint, "", dt, "{{<max>} [<max>] [<max>] map[<max>]}"},
 		{scsMaxDepth, fCSFdump, "", dt, "(spew_test.depthTester) {\n" +
-			" ic: (spew_test.indirCir1) {\n  <max depth reached>\n },\n" +
 			" arr: ([1]string) (len=1 cap=1) {\n  <max depth reached>\n },\n" +
 			" slice: ([]string) (len=1 cap=1) {\n  <max depth reached>\n },\n" +
 			" m: (map[string]int) (len=1) {\n  <max depth reached>\n }\n}\n"},

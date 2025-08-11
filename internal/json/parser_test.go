@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/maxatome/go-testdeep/internal/spew"
 	"github.com/maxatome/go-testdeep/internal/json"
+	"github.com/maxatome/go-testdeep/internal/spew"
 	"github.com/maxatome/go-testdeep/internal/test"
 )
 

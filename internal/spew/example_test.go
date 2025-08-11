@@ -84,7 +84,7 @@ func ExampleDump() {
 	*/
 
 	// Setup some sample data structures for the example.
-	bar := Bar{uintptr(0)}
+	bar := Bar{uintptr(0x1234)}
 	s1 := Foo{bar, map[interface{}]interface{}{"one": true}}
 	f := Flag(5)
 	b := []byte{
@@ -101,7 +101,7 @@ func ExampleDump() {
 	// Output:
 	// (spew_test.Foo) {
 	//  unexportedField: (spew_test.Bar) {
-	//   data: (uintptr) <nil>
+	//   data: (uintptr) 0x1234
 	//  },
 	//  ExportedField: (map[interface {}]interface {}) (len=1) {
 	//   (string) (len=3) "one": (bool) true
@@ -170,7 +170,7 @@ func ExampleConfigState_Dump() {
 	scs2 := spew.ConfigState{Indent: " "}
 
 	// Setup some sample data structures for the example.
-	bar := Bar{uintptr(0)}
+	bar := Bar{uintptr(0x1234)}
 	s1 := Foo{bar, map[interface{}]interface{}{"one": true}}
 
 	// Dump using the ConfigState instances.
@@ -180,7 +180,7 @@ func ExampleConfigState_Dump() {
 	// Output:
 	// (spew_test.Foo) {
 	// 	unexportedField: (spew_test.Bar) {
-	// 		data: (uintptr) <nil>
+	// 		data: (uintptr) 0x1234
 	// 	},
 	// 	ExportedField: (map[interface {}]interface {}) (len=1) {
 	//		(string) (len=3) "one": (bool) true
@@ -188,7 +188,7 @@ func ExampleConfigState_Dump() {
 	// }
 	// (spew_test.Foo) {
 	//  unexportedField: (spew_test.Bar) {
-	//   data: (uintptr) <nil>
+	//   data: (uintptr) 0x1234
 	//  },
 	//  ExportedField: (map[interface {}]interface {}) (len=1) {
 	//   (string) (len=3) "one": (bool) true

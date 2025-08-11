@@ -416,12 +416,16 @@ func (d *dumpState) dump(v reflect.Value) {
 			vt := v.Type()
 			numFields := v.NumField()
 			for i := 0; i < numFields; i++ {
+				vf := v.Field(i)
+				if vf.IsZero() {
+					continue
+				}
 				d.indent()
 				vtf := vt.Field(i)
 				d.w.Write([]byte(vtf.Name))
 				d.w.Write(colonSpaceBytes)
 				d.ignoreNextIndent = true
-				d.dump(d.unpackValue(v.Field(i)))
+				d.dump(d.unpackValue(vf))
 				if i < (numFields - 1) {
 					d.w.Write(commaNewlineBytes)
 				} else {
