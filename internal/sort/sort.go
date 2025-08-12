@@ -73,7 +73,7 @@ func (v *rValues) Swap(i, j int) {
 
 // Func returns a function able to compare 2 [reflect.Value] values.
 //
-// The sorting rules are listed in [SortableValues] documentation.
+// The sorting rules are listed in [Values] documentation.
 //
 // Cyclic references are correctly handled.
 func Func() func(a, b reflect.Value) int {
