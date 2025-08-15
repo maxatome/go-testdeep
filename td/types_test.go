@@ -19,7 +19,7 @@ import (
 func TestSetlocation(t *testing.T) {
 	//nolint: gocritic
 //line types_test.go:10
-	tt := &tdutil.T{}
+	tt := tdutil.NewT("test")
 	ok := td.Cmp(tt, 12, 13)
 	if !ok {
 		test.EqualStr(t, tt.LogBuf(), `    types_test.go:11: Failed test
@@ -33,7 +33,7 @@ func TestSetlocation(t *testing.T) {
 
 	//nolint: gocritic
 //line types_test.go:20
-	tt = &tdutil.T{}
+	tt = tdutil.NewT("test")
 	ok = td.Cmp(tt,
 		12,
 		td.Any(13, 14, 15))
@@ -52,7 +52,7 @@ func TestSetlocation(t *testing.T) {
 
 	//nolint: gocritic
 //line types_test.go:30
-	tt = &tdutil.T{}
+	tt = tdutil.NewT("test")
 	ok = td.CmpAny(tt,
 		12,
 		[]any{13, 14, 15})
@@ -70,7 +70,7 @@ func TestSetlocation(t *testing.T) {
 
 	//nolint: gocritic
 //line types_test.go:40
-	tt = &tdutil.T{}
+	tt = tdutil.NewT("test")
 	ttt := td.NewT(tt)
 	ok = ttt.Cmp(
 		12,
@@ -90,7 +90,7 @@ func TestSetlocation(t *testing.T) {
 
 	//nolint: gocritic
 //line types_test.go:50
-	tt = &tdutil.T{}
+	tt = tdutil.NewT("test")
 	ttt = td.NewT(tt)
 	ok = ttt.Any(
 		12,
@@ -108,7 +108,7 @@ func TestSetlocation(t *testing.T) {
 	}
 
 //line /a/full/path/types_test.go:50
-	tt = &tdutil.T{}
+	tt = tdutil.NewT("test")
 	ttt = td.NewT(tt)
 	ok = ttt.Any(
 		12,
