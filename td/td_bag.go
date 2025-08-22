@@ -46,7 +46,7 @@ package td
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
 //
-// See also [SubBagOf], [SuperBagOf] and [Set].
+// See also [SubBagOf], [SuperBagOf], [Set] and [Sort].
 func Bag(expectedItems ...any) TestDeep {
 	return newSetBase(allSet, false, expectedItems)
 }
