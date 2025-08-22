@@ -589,9 +589,9 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 //     [HasPrefix], [HasSuffix], [Ignore], [JSONPointer], [Keys],
 //     [Last], [Len], [Lt], [Lte], [MapEach], [N], [NaN], [Nil],
 //     [None], [Not], [NotAny], [NotEmpty], [NotNaN], [NotNil],
-//     [NotZero], [Re], [ReAll], [Set], [SubBagOf], [SubMapOf],
-//     [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf], [Values]
-//     and [Zero].
+//     [NotZero], [Re], [ReAll], [Set], [Sort], [Sorted], [SubBagOf],
+//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf],
+//     [SuperSetOf], [Values] and [Zero].
 //
 // It is also possible to embed operators in JSON strings. This way,
 // the JSON specification can be fulfilled. To avoid collision with
@@ -916,9 +916,9 @@ var _ TestDeep = &tdMapJSON{}
 //     [HasPrefix], [HasSuffix], [Ignore], [JSONPointer], [Keys],
 //     [Last], [Len], [Lt], [Lte], [MapEach], [N], [NaN], [Nil],
 //     [None], [Not], [NotAny], [NotEmpty], [NotNaN], [NotNil],
-//     [NotZero], [Re], [ReAll], [Set], [SubBagOf], [SubMapOf],
-//     [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf], [Values]
-//     and [Zero].
+//     [NotZero], [Re], [ReAll], [Set], [Sort], [Sorted], [SubBagOf],
+//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf],
+//     [SuperSetOf], [Values] and [Zero].
 //
 // It is also possible to embed operators in JSON strings. This way,
 // the JSON specification can be fulfilled. To avoid collision with
@@ -1196,9 +1196,9 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 //     [HasPrefix], [HasSuffix], [Ignore], [JSONPointer], [Keys],
 //     [Last], [Len], [Lt], [Lte], [MapEach], [N], [NaN], [Nil],
 //     [None], [Not], [NotAny], [NotEmpty], [NotNaN], [NotNil],
-//     [NotZero], [Re], [ReAll], [Set], [SubBagOf], [SubMapOf],
-//     [SubSetOf], [SuperBagOf], [SuperMapOf], [SuperSetOf], [Values]
-//     and [Zero].
+//     [NotZero], [Re], [ReAll], [Set], [Sort], [Sorted], [SubBagOf],
+//     [SubMapOf], [SubSetOf], [SuperBagOf], [SuperMapOf],
+//     [SuperSetOf], [Values] and [Zero].
 //
 // It is also possible to embed operators in JSON strings. This way,
 // the JSON specification can be fulfilled. To avoid collision with
