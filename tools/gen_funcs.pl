@@ -960,6 +960,22 @@ $2>rs or die "tdhttp example not found in $md_file!";
         rename "$md_file.new", $md_file;
     }
 
+    # Update _index.md go lines
+    {
+        my $lines = cloc_go(".")
+                  - cloc_go("internal/json/parser.go", "internal/spew");
+
+        my $index = "$SITE_REPO_DIR/docs_src/content/_index.md";
+        my $contents = slurp($index);
+        $contents =~ s,/\d+-lines_of_go-,/$lines-lines_of_go-,
+            or die "Cannot update 'lines of go' badge in $index\n";
+
+        open(my $out, '>', "$index.new");
+        print $out $contents;
+        close $out;
+        rename "$index.new", $index;
+    }
+
     # Final publish
     if ($ENV{PROD_SITE})
     {
@@ -1227,4 +1243,21 @@ sub slurp
     local $/;
     open(my $fh, '<', shift);
     <$fh>
+}
+
+sub cloc_go
+{
+    open(my $fh, '-|', 'cloc', @_);
+    while (defined(my $line = <$fh>))
+    {
+        # Language    files          blank        comment           code
+        # --------------------------------------------------------------
+        # Go              3             77            149           1019
+        if ($line =~ /^Go\s+(?:\d+\s+){3}(\d+)$/)
+        {
+            return $1;
+        }
+    }
+    close $fh;
+    die "`cloc @_` doesn't find any Go file\n";
 }
