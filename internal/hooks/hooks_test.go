@@ -388,7 +388,7 @@ func (badEqualVariadic) Equal(a ...badEqualVariadic) bool { return false }
 
 type badEqualNumIn struct{}
 
-func (badEqualNumIn) Equal(a badEqualNumIn, b badEqualNumIn) bool { return false }
+func (badEqualNumIn) Equal(a, b badEqualNumIn) bool { return false }
 
 type badEqualNumOut struct{}
 
