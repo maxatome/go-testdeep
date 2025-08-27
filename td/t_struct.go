@@ -624,7 +624,8 @@ func (t *T) CmpNoError(got error, args ...any) bool {
 //	  Contains("panicking!"),
 //	  "The function should panic with a string containing `panicking!`")
 //
-//	t.CmpPanic(t, func() { panic(nil) }, nil, "Checks for panic(nil)")
+//	expected := &runtime.PanicNilError{} // should be nil if GODEBUG=panicnil=1
+//	t.CmpPanic(t, func() { panic(nil) }, expected, "Checks for panic(nil)")
 //
 // args... are optional and allow to name the test. This name is
 // used in case of failure to qualify the test. If len(args) > 1 and
@@ -832,7 +833,7 @@ func (t *T) RunAssertRequire(name string, f func(assert, require *T)) bool {
 		reflect.ValueOf(name),
 		reflect.MakeFunc(vfuncs.fnt,
 			func(args []reflect.Value) (results []reflect.Value) {
-				f(AssertRequire(NewT(args[0].Interface().(testing.TB), conf)))
+				f(AssertRequire(args[0].Interface().(testing.TB), conf))
 				return nil
 			}),
 	})
