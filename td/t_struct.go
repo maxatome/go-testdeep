@@ -133,6 +133,12 @@ var _ testing.TB = T{}
 // Of course t can already be a [*T], in this special case if config
 // is omitted, the Config of the new instance is a copy of the t
 // Config, including hooks.
+//
+// See also other constructors [Assert], [Require] and [AssertRequire].
+//
+// See also configurators [T.Assert], [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax], [T.IgnoreUnexported]
+// and [T.TestDeepInGotOK].
 func NewT(t testing.TB, config ...ContextConfig) *T {
 	var newT T
 
@@ -179,7 +185,11 @@ func NewT(t testing.TB, config ...ContextConfig) *T {
 //
 // See [NewT] documentation for usefulness of config optional parameter.
 //
-// See also [Require], [AssertRequire] and [T.Assert].
+// See also other constructors [Require] and [AssertRequire].
+//
+// See also configurators [T.Assert], [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax], [T.IgnoreUnexported]
+// and [T.TestDeepInGotOK].
 func Assert(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal(false)
 }
@@ -195,7 +205,11 @@ func Assert(t testing.TB, config ...ContextConfig) *T {
 //
 // See [NewT] documentation for usefulness of config optional parameter.
 //
-// See also [Assert], [AssertRequire] and [T.Require].
+// See also other constructors [Assert] and [AssertRequire].
+//
+// See also configurators [T.Assert], [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax], [T.IgnoreUnexported]
+// and [T.TestDeepInGotOK].
 func Require(t testing.TB, config ...ContextConfig) *T {
 	return NewT(t, config...).FailureIsFatal()
 }
@@ -212,7 +226,11 @@ func Require(t testing.TB, config ...ContextConfig) *T {
 //
 // See [NewT] documentation for usefulness of config optional parameter.
 //
-// See also [Assert] and [Require].
+// See also other constructors [Assert] and [Require].
+//
+// See also configurators [T.Assert], [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax], [T.IgnoreUnexported]
+// and [T.TestDeepInGotOK].
 func AssertRequire(t testing.TB, config ...ContextConfig) (assert, require *T) {
 	assert = Assert(t, config...)
 	require = assert.FailureIsFatal()
@@ -246,6 +264,10 @@ func AssertRequire(t testing.TB, config ...ContextConfig) (assert, require *T) {
 //	DATA.Age: values differ
 //
 // If "" is passed the name is set to "DATA", the default value.
+//
+// See also other configurators [T.Assert], [T.Require],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax], [T.IgnoreUnexported]
+// and [T.TestDeepInGotOK].
 func (t *T) RootName(rootName string) *T {
 	nt := *t
 	if rootName == "" {
@@ -283,7 +305,9 @@ func (t *T) RootName(rootName string) *T {
 //
 // Note that t.FailureIsFatal() acts as t.FailureIsFatal(true).
 //
-// See also [T.Assert] and [T.Require].
+// See also other configurators [T.Assert], [T.Require], [T.RootName],
+// [T.UseEqual], [T.BeLax], [T.IgnoreUnexported] and
+// [T.TestDeepInGotOK].
 func (t *T) FailureIsFatal(enable ...bool) *T {
 	nt := *t
 	nt.Config.FailureIsFatal = len(enable) == 0 || enable[0]
@@ -299,7 +323,9 @@ func (t *T) FailureIsFatal(enable ...bool) *T {
 //
 //	t.FailureIsFatal(false)
 //
-// See also [T.FailureIsFatal] and [T.Require].
+// See also other configurators [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax], [T.IgnoreUnexported]
+// and [T.TestDeepInGotOK].
 func (t *T) Assert() *T {
 	return t.FailureIsFatal(false)
 }
@@ -313,7 +339,9 @@ func (t *T) Assert() *T {
 //
 //	t.FailureIsFatal(true)
 //
-// See also [T.FailureIsFatal] and [T.Assert].
+// See also other configurators [T.Assert], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax], [T.IgnoreUnexported]
+// and [T.TestDeepInGotOK].
 func (t *T) Require() *T {
 	return t.FailureIsFatal(true)
 }
@@ -345,6 +373,10 @@ func (t *T) Require() *T {
 // mechanism. t.UseEqual(false) returns an instance not using Equal()
 // method anymore, except for types already recorded using a previous
 // UseEqual call.
+//
+// See also other configurators [T.Assert], [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.BeLax], [T.IgnoreUnexported] and
+// [T.TestDeepInGotOK].
 func (t *T) UseEqual(types ...any) *T {
 	// special case: UseEqual()
 	if len(types) == 0 {
@@ -384,6 +416,10 @@ func (t *T) UseEqual(types ...any) *T {
 // It returns a new instance of [*T] so does not alter the original t.
 //
 // Note that t.BeLax() acts as t.BeLax(true).
+//
+// See also other configurators [T.Assert], [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.IgnoreUnexported] and
+// [T.TestDeepInGotOK].
 func (t *T) BeLax(enable ...bool) *T {
 	nt := *t
 	nt.Config.BeLax = len(enable) == 0 || enable[0]
@@ -407,6 +443,10 @@ func (t *T) BeLax(enable ...bool) *T {
 // fields globally, for all struct types. t.IgnoreUnexported(false)
 // returns an instance not ignoring unexported fields anymore, except
 // for types already recorded using a previous IgnoreUnexported call.
+//
+// See also other configurators [T.Assert], [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax] and
+// [T.TestDeepInGotOK].
 func (t *T) IgnoreUnexported(types ...any) *T {
 	// special case: IgnoreUnexported()
 	if len(types) == 0 {
@@ -444,6 +484,10 @@ func (t *T) IgnoreUnexported(types ...any) *T {
 // It returns a new instance of [*T] so does not alter the original t.
 //
 // Note that t.TestDeepInGotOK() acts as t.TestDeepInGotOK(true).
+//
+// See also other configurators [T.Assert], [T.Require], [T.RootName],
+// [T.FailureIsFatal], [T.UseEqual], [T.BeLax] and
+// [T.IgnoreUnexported].
 func (t *T) TestDeepInGotOK(enable ...bool) *T {
 	nt := *t
 	nt.Config.TestDeepInGotOK = len(enable) == 0 || enable[0]
