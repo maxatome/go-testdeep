@@ -24,6 +24,7 @@ Currently supports go 1.16 → 1.24.
 - [Helpers](#helpers)
   - [`tdhttp` or HTTP API testing helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp)
   - [`tdsuite` or testing suite helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdsuite)
+  - [`tdsynctest` or `testing/synctest` helper](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdsynctest)
   - [`tdutil` aka the helper of helpers](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil)
 - [See also](#see-also)
 - [License](#license)
@@ -231,9 +232,17 @@ suite feature to go-testdeep in a non-intrusive way, but easily and powerfully.
 A tests suite is a set of tests run sequentially that share some data.
 
 Some hooks can be set to be automatically called before the suite is run,
-before, after and/or between each test, and at the end of the suite. 
+before, after and/or between each test, and at the end of the suite.
 
 See [`tdsuite`] documentation for details.
+
+### `tdsynctest` or `testing/synctest` helper
+
+The package `github.com/maxatome/go-testdeep/helpers/tdsynctest`
+allows to use [`testing/synctest`](https://pkg.go.dev/testing/synctest)
+on steroids thanks to go-testdeep.
+
+See [`tdsynctest`] documentation for details.
 
 ### `tdutil` aka the helper of helpers
 
@@ -241,9 +250,7 @@ The package `github.com/maxatome/go-testdeep/helpers/tdutil` allows to
 write unit tests for go-testdeep helpers and so provides some helpful
 functions.
 
-See
-[`tdutil`](https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil)
-for details.
+See [`tdutil`] documentation for details.
 
 
 ## See also
@@ -284,6 +291,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 
 [`tdhttp`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdhttp
 [`tdsuite`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdsuite
+[`tdsynctest`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdsynctest
 [`tdutil`]: https://pkg.go.dev/github.com/maxatome/go-testdeep/helpers/tdutil
 
 [`BeLax` config flag]: https://pkg.go.dev/github.com/maxatome/go-testdeep/td#ContextConfig.BeLax

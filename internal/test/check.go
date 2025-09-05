@@ -7,6 +7,7 @@
 package test
 
 import (
+	"regexp"
 	"strings"
 	"testing"
 	"unicode"
@@ -54,6 +55,18 @@ func EqualStr(t *testing.T, got, expected string, args ...any) bool {
 
 	t.Helper()
 	EqualErrorMessage(t, spewIfNeeded(got), spewIfNeeded(expected), args...)
+	return false
+}
+
+// MatchStr checks that got matches expected regexp.
+func MatchStr(t *testing.T, got, expectedRe string, args ...any) bool {
+	re := regexp.MustCompile(expectedRe)
+	if re.MatchString(got) {
+		return true
+	}
+
+	t.Helper()
+	EqualErrorMessage(t, spewIfNeeded(got), spewIfNeeded(expectedRe), args...)
 	return false
 }
 
