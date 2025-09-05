@@ -629,7 +629,7 @@ my $common_links = do
         . "\n\n"
         # Helpers
         . join("\n", map "[`$_`]: $URL_GODOC/helpers/$_",
-               qw(tdhttp tdsuite tdutil))
+               qw(tdhttp tdsuite tdsynctest tdutil))
         . "\n\n"
         # Specific links
         . "[`BeLax` config flag]: $td_url#ContextConfig.BeLax\n"

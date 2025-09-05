@@ -761,7 +761,9 @@ func (t *T) getRunFunc() (runtFuncs, bool) {
 //
 // The t param of f inherits the configuration of the self-reference.
 //
-// See also [T.RunAssertRequire].
+// See also [T.RunAssertRequire],
+// [github.com/maxatome/go-testdeep/helpers/tdsynctest.Run] and
+// [github.com/maxatome/go-testdeep/helpers/tdsynctest.RunAssertRequire].
 func (t *T) Run(name string, f func(t *T)) bool {
 	t.Helper()
 
@@ -815,7 +817,9 @@ func (t *T) Run(name string, f func(t *T)) bool {
 // of the self-reference, except that a failure is never fatal using
 // assert and always fatal using require.
 //
-// See also [T.Run].
+// See also [T.Run],
+// [github.com/maxatome/go-testdeep/helpers/tdsynctest.RunAssertRequire]
+// and [github.com/maxatome/go-testdeep/helpers/tdsynctest.Run].
 func (t *T) RunAssertRequire(name string, f func(assert, require *T)) bool {
 	t.Helper()
 
