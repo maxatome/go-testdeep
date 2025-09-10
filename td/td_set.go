@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -45,7 +45,7 @@ package td
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from [Isa]) and they are equal.
 //
-// See also [NotAny], [SubSetOf], [SuperSetOf] and [Bag].
+// See also [NotAny], [SubSetOf], [SuperSetOf], [Bag] and [List].
 func Set(expectedItems ...any) TestDeep {
 	return newSetBase(allSet, true, expectedItems)
 }

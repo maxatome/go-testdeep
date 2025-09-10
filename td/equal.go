@@ -314,31 +314,30 @@ func deepValueEqual(ctx ctxerr.Context, got, expected reflect.Value) (err *ctxer
 				return
 			}
 		}
-
-		if gotLen != expectedLen {
-			res := tdSetResult{
-				Kind: itemsSetResult,
-				// do not sort Extra/Mising here
-			}
-
-			if gotLen > expectedLen {
-				res.Extra = make([]reflect.Value, gotLen-expectedLen)
-				for i := expectedLen; i < gotLen; i++ {
-					res.Extra[i-expectedLen] = got.Index(i)
-				}
-			} else {
-				res.Missing = make([]reflect.Value, expectedLen-gotLen)
-				for i := gotLen; i < expectedLen; i++ {
-					res.Missing[i-gotLen] = expected.Index(i)
-				}
-			}
-
-			return ctx.CollectError(&ctxerr.Error{
-				Message: fmt.Sprintf("comparing slices, from index #%d", maxLen),
-				Summary: res.Summary(),
-			})
+		if gotLen == expectedLen {
+			return
 		}
-		return
+
+		res := tdSetResult{
+			Kind: itemsSetResult,
+			// do not sort Extra/Mising here
+		}
+
+		if gotLen > expectedLen {
+			res.Extra = make([]reflect.Value, gotLen-expectedLen)
+			for i := expectedLen; i < gotLen; i++ {
+				res.Extra[i-expectedLen] = got.Index(i)
+			}
+		} else {
+			res.Missing = make([]reflect.Value, expectedLen-gotLen)
+			for i := gotLen; i < expectedLen; i++ {
+				res.Missing[i-gotLen] = expected.Index(i)
+			}
+		}
+		return ctx.CollectError(&ctxerr.Error{
+			Message: fmt.Sprintf("comparing slices, from index #%d", maxLen),
+			Summary: res.Summary(),
+		})
 
 	case reflect.Interface:
 		return deepValueEqual(ctx, got.Elem(), expected.Elem())

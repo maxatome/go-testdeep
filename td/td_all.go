@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -14,7 +14,7 @@ import (
 )
 
 type tdAll struct {
-	tdList
+	tdListBase
 }
 
 var _ TestDeep = &tdAll{}
@@ -60,11 +60,11 @@ var _ TestDeep = &tdAll{}
 // See also [Any] and [None].
 func All(expectedValues ...any) TestDeep {
 	return &tdAll{
-		tdList: newList(expectedValues...),
+		tdListBase: newListBase(expectedValues...),
 	}
 }
 
-func (a *tdAll) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {
+func (a *tdAll) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 	var origErr *ctxerr.Error
 	for idx, item := range a.items {
 		// Use deepValueEqualFinal here instead of deepValueEqual as we

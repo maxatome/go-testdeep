@@ -123,9 +123,9 @@ import (
 // and "/PATH" can really be.
 //
 // Flatten with an fn can be useful when testing some fields of
-// structs in a slice with [Set] or [Bag] operators families. As an
-// example, here we test only "Name" field for each item of a person
-// slice:
+// structs in a slice with [Bag] or [Set] operators families as well
+// as [List]. As an example, here we test only "Name" field for each
+// item of a person slice:
 //
 //	type person struct {
 //	  Name string `json:"name"`
@@ -249,84 +249,3 @@ func Flatten(sliceOrMap any, fn ...any) flat.Slice {
 
 	return flat.Slice{Slice: final}
 }
-
-// Flatten allows to flatten any slice, array or map in
-// parameters of operators expecting ...any after applying a function
-// on each item to exclude or transform it.
-//
-// fn must be a non-nil function with a signature like:
-//
-//	func(T) V
-//	func(T) (V, bool)
-//
-// T can be the same as V but it is not mandatory. The (V, bool)
-// returned case allows to exclude some items when returning false.
-//
-// If fn signature does not match these cases, Flatten panics.
-//
-// If the type of an item of sliceOrMap is not convertible to T, the
-// item is dropped silently, as if fn returned false.
-//
-// fn can also be a string among:
-//
-//	"Smuggle:FIELD"
-//	"JSONPointer:/PATH"
-//
-// that are shortcuts for respectively:
-//
-//	func(in any) any { return td.Smuggle("FIELD", in) }
-//	func(in any) any { return td.JSONPointer("/PATH", in) }
-//
-// See [Smuggle] and [JSONPointer] for a description of what "FIELD"
-// and "/PATH" can really be.
-//
-// Flatten can be useful when testing some fields of structs in
-// a slice with [Set] or [Bag] operators families. As an example, here
-// we test only "Name" field for each item of a person slice:
-//
-//	type person struct {
-//	  Name string `json:"name"`
-//	  Age  int    `json:"age"`
-//	}
-//	got := []person{{"alice", 22}, {"bob", 18}, {"brian", 34}, {"britt", 32}}
-//
-//	td.Cmp(t, got,
-//	  td.Bag(td.Flatten(
-//	    func(name string) any { return td.Smuggle("Name", name) },
-//	    []string{"alice", "britt", "brian", "bob"})))
-//	// distributes td.Smuggle for each Name, so is equivalent of:
-//	td.Cmp(t, got, td.Bag(
-//	  td.Smuggle("Name", "alice"),
-//	  td.Smuggle("Name", "britt"),
-//	  td.Smuggle("Name", "brian"),
-//	  td.Smuggle("Name", "bob")))
-//
-//	// Same here using Smuggle string shortcut
-//	td.Cmp(t, got,
-//	  td.Bag(td.Flatten(
-//	    "Smuggle:Name", []string{"alice", "britt", "brian", "bob"})))
-//
-//	// Same here, but using JSONPointer operator
-//	td.Cmp(t, got,
-//	  td.Bag(td.Flatten(
-//	    func(name string) any { return td.JSONPointer("/name", name) },
-//	    []string{"alice", "britt", "brian", "bob"})))
-//
-//	// Same here using JSONPointer string shortcut
-//	td.Cmp(t, got,
-//	  td.Bag(td.Flatten(
-//	    "JSONPointer:/name", []string{"alice", "britt", "brian", "bob"})))
-//
-//	// Same here, but using SuperJSONOf operator
-//	td.Cmp(t, got,
-//	  td.Bag(td.Flatten(
-//	    func(name string) any { return td.SuperJSONOf(`{"name":$1}`, name) },
-//	    []string{"alice", "britt", "brian", "bob"})))
-//
-//	// Same here, but using Struct operator
-//	td.Cmp(t, got,
-//	  td.Bag(td.Flatten(
-//	    func(name string) any { return td.Struct(person{Name: name}) },
-//	    []string{"alice", "britt", "brian", "bob"})))
-//
-// See also [Flatten] and [Grep].

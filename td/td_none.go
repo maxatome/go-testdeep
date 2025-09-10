@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -14,7 +14,7 @@ import (
 )
 
 type tdNone struct {
-	tdList
+	tdListBase
 }
 
 var _ TestDeep = &tdNone{}
@@ -38,7 +38,7 @@ var _ TestDeep = &tdNone{}
 // See also [All], [Any] and [Not].
 func None(notExpectedValues ...any) TestDeep {
 	return &tdNone{
-		tdList: newList(notExpectedValues...),
+		tdListBase: newListBase(notExpectedValues...),
 	}
 }
 
@@ -58,7 +58,7 @@ func None(notExpectedValues ...any) TestDeep {
 // See also [None].
 func Not(notExpected any) TestDeep {
 	return &tdNone{
-		tdList: newList(notExpected),
+		tdListBase: newListBase(notExpected),
 	}
 }
 

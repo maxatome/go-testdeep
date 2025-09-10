@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2021, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -123,7 +123,7 @@ func newArray(kind uint, model any, expectedEntries ArrayEntries) *tdArray {
 //
 // TypeBehind method returns the [reflect.Type] of model.
 //
-// See also [Slice] and [SuperSliceOf].
+// See also [List], [Slice] and [SuperSliceOf].
 func Array(model any, expectedEntries ArrayEntries) TestDeep {
 	return newArray(arrayArray, model, expectedEntries)
 }
@@ -152,7 +152,7 @@ func Array(model any, expectedEntries ArrayEntries) TestDeep {
 //
 // TypeBehind method returns the [reflect.Type] of model.
 //
-// See also [Array] and [SuperSliceOf].
+// See also [Array], [List] and [SuperSliceOf].
 func Slice(model any, expectedEntries ArrayEntries) TestDeep {
 	return newArray(arraySlice, model, expectedEntries)
 }

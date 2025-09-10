@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// allOperators lists the 69 operators.
+// allOperators lists the 70 operators.
 // nil means not usable in JSON().
 var allOperators = map[string]any{
 	"All":          All,
@@ -43,6 +43,7 @@ var allOperators = map[string]any{
 	"Last":         Last,
 	"Lax":          nil,
 	"Len":          Len,
+	"List":         nil,
 	"Lt":           Lt,
 	"Lte":          Lte,
 	"Map":          nil,
@@ -613,6 +614,27 @@ func CmpLax(t TestingT, got, expectedValue any, args ...any) bool {
 func CmpLen(t TestingT, got, expectedLen any, args ...any) bool {
 	t.Helper()
 	return Cmp(t, got, Len(expectedLen), args...)
+}
+
+// CmpList is a shortcut for:
+//
+//	td.Cmp(t, got, td.List(expectedValues...), args...)
+//
+// See [List] for details.
+//
+// Returns true if the test is OK, false if it fails.
+//
+// If t is a [*T] then its Config field is inherited.
+//
+// args... are optional and allow to name the test. This name is
+// used in case of failure to qualify the test. If len(args) > 1 and
+// the first item of args is a string and contains a '%' rune then
+// [fmt.Fprintf] is used to compose the name, else args are passed to
+// [fmt.Fprint]. Do not forget it is the name of the test, not the
+// reason of a potential failure.
+func CmpList(t TestingT, got any, expectedValues []any, args ...any) bool {
+	t.Helper()
+	return Cmp(t, got, List(expectedValues...), args...)
 }
 
 // CmpLt is a shortcut for:

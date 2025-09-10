@@ -329,6 +329,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`Last`]: https://go-testdeep.zetta.rocks/operators/last/
 [`Lax`]: https://go-testdeep.zetta.rocks/operators/lax/
 [`Len`]: https://go-testdeep.zetta.rocks/operators/len/
+[`List`]: https://go-testdeep.zetta.rocks/operators/list/
 [`Lt`]: https://go-testdeep.zetta.rocks/operators/lt/
 [`Lte`]: https://go-testdeep.zetta.rocks/operators/lte/
 [`Map`]: https://go-testdeep.zetta.rocks/operators/map/
@@ -396,6 +397,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`CmpLast`]: https://go-testdeep.zetta.rocks/operators/last/#cmplast-shortcut
 [`CmpLax`]: https://go-testdeep.zetta.rocks/operators/lax/#cmplax-shortcut
 [`CmpLen`]: https://go-testdeep.zetta.rocks/operators/len/#cmplen-shortcut
+[`CmpList`]: https://go-testdeep.zetta.rocks/operators/list/#cmplist-shortcut
 [`CmpLt`]: https://go-testdeep.zetta.rocks/operators/lt/#cmplt-shortcut
 [`CmpLte`]: https://go-testdeep.zetta.rocks/operators/lte/#cmplte-shortcut
 [`CmpMap`]: https://go-testdeep.zetta.rocks/operators/map/#cmpmap-shortcut
@@ -462,6 +464,7 @@ See [FAQ](https://go-testdeep.zetta.rocks/faq/).
 [`T.Last`]: https://go-testdeep.zetta.rocks/operators/last/#tlast-shortcut
 [`T.CmpLax`]: https://go-testdeep.zetta.rocks/operators/lax/#tcmplax-shortcut
 [`T.Len`]: https://go-testdeep.zetta.rocks/operators/len/#tlen-shortcut
+[`T.List`]: https://go-testdeep.zetta.rocks/operators/list/#tlist-shortcut
 [`T.Lt`]: https://go-testdeep.zetta.rocks/operators/lt/#tlt-shortcut
 [`T.Lte`]: https://go-testdeep.zetta.rocks/operators/lte/#tlte-shortcut
 [`T.Map`]: https://go-testdeep.zetta.rocks/operators/map/#tmap-shortcut
