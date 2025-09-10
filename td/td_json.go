@@ -38,6 +38,7 @@ var forbiddenOpsInJSON = map[string]string{
 	"Isa":          "",
 	"JSON":         "literal JSON",
 	"Lax":          "",
+	"List":         "literal []",
 	"Map":          "literal {}",
 	"PPtr":         "",
 	"Ptr":          "",

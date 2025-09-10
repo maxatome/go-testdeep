@@ -1797,6 +1797,32 @@ func ExampleCmpLen_operatorMap() {
 	// true
 }
 
+func ExampleCmpList() {
+	t := &testing.T{}
+
+	got := []int{1, 33, 8, 2}
+
+	// Matches as all items are present
+	ok := td.CmpList(t, got, []any{1, td.Between(32, 34), td.Gt(7), 2})
+	fmt.Println("checks all items match, in this order:", ok)
+
+	// Does not match as got does not use the same order as expected
+	ok = td.CmpList(t, got, []any{1, td.Gt(7), 2, td.Between(32, 34)})
+	fmt.Println("checks all items match, in wrong order:", ok)
+
+	// When expected is already a non-[]any slice, it cannot be
+	// flattened directly using expected... without copying it to a new
+	// []any slice, then use td.Flatten!
+	expected := []int{1, 33, 8}
+	ok = td.CmpList(t, got, []any{td.Flatten(expected), td.Lte(2)})
+	fmt.Println("checks all expected items are present + last one ≤ 2:", ok)
+
+	// Output:
+	// checks all items match, in this order: true
+	// checks all items match, in wrong order: false
+	// checks all expected items are present + last one ≤ 2: true
+}
+
 func ExampleCmpLt_int() {
 	t := &testing.T{}
 

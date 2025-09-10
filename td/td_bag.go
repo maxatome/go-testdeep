@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -46,7 +46,7 @@ package td
 // known non-interface types are equal, or if only interface types
 // are found (mostly issued from Isa()) and they are equal.
 //
-// See also [SubBagOf], [SuperBagOf], [Set] and [Sort].
+// See also [SubBagOf], [SuperBagOf], [Set], [List] and [Sort].
 func Bag(expectedItems ...any) TestDeep {
 	return newSetBase(allSet, false, expectedItems)
 }

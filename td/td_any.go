@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -13,7 +13,7 @@ import (
 )
 
 type tdAny struct {
-	tdList
+	tdListBase
 }
 
 var _ TestDeep = &tdAny{}
@@ -48,7 +48,7 @@ var _ TestDeep = &tdAny{}
 // See also [All] and [None].
 func Any(expectedValues ...any) TestDeep {
 	return &tdAny{
-		tdList: newList(expectedValues...),
+		tdListBase: newListBase(expectedValues...),
 	}
 }
 
