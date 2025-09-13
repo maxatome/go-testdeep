@@ -2442,6 +2442,48 @@ func ExampleT_Re_capture() {
 	// false
 }
 
+func ExampleT_Re_multilines() {
+	t := td.NewT(&testing.T{})
+
+	got := `multi
+lines
+probably
+more
+than 4
+`
+	expectedRe := `^multi
+lines?
+(probably|possibly)
+more
+than \d+
+\z`
+
+	ok := t.Re(got, expectedRe, nil)
+	fmt.Println("Raw multi-lines string matches:", ok)
+
+	// But for strings with many, many, many lines, when the regexp
+	// doesn't match, it is sometimes difficult to see where the regexp
+	// failed in the string. Here td.List & td.Flatten can help to apply
+	// regexp line per line (note expectedRe is not anchored anymore):
+	expectedRe = `multi
+lines?
+(probably|possibly)
+more
+than \d+
+`
+	ok = t.Cmp(
+		strings.Split(got, "\n"),
+		td.List(td.Flatten(strings.Split(expectedRe, "\n"),
+			func(line string) any {
+				return td.Re(`^` + line + `\z`)
+			})))
+	fmt.Println("All string lines match:", ok)
+
+	// Output:
+	// Raw multi-lines string matches: true
+	// All string lines match: true
+}
+
 func ExampleT_Re_compiled() {
 	t := td.NewT(&testing.T{})
 

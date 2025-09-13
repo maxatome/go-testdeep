@@ -15,6 +15,13 @@ import (
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
+func flattenFuncIsValid(typ reflect.Type) bool {
+	return typ.Kind() == reflect.Func &&
+		(typ.NumIn() == 1 && !typ.IsVariadic() ||
+			typ.NumIn() == 2 && typ.IsVariadic()) &&
+		(typ.NumOut() == 1 || typ.NumOut() == 2 && typ.Out(1) == types.Bool)
+}
+
 // Flatten allows to flatten any slice, array or map in parameters of
 // operators expecting ...any. fn parameter allows to filter and/or
 // transform items before flattening and is described below.
@@ -100,9 +107,13 @@ import (
 //
 //	func(T) V
 //	func(T) (V, bool)
+//	func(T, X...) V
+//	func(T, X...) (V, bool)
 //
 // T can be the same as V, but it is not mandatory. The (V, bool)
-// returned case allows to exclude some items when returning false.
+// returned cases allow to exclude some items when returning
+// false. For the variadic cases, X does not matter as the function is
+// always called without any variadic argument.
 //
 // If the function signature does not match these cases, Flatten panics.
 //
@@ -221,9 +232,7 @@ func Flatten(sliceOrMap any, fn ...any) flat.Slice {
 	fnType := reflect.TypeOf(f)
 	vfn := reflect.ValueOf(f)
 
-	if fnType.Kind() != reflect.Func ||
-		fnType.NumIn() != 1 || fnType.IsVariadic() ||
-		(fnType.NumOut() != 1 && (fnType.NumOut() != 2 || fnType.Out(1) != types.Bool)) {
+	if !flattenFuncIsValid(fnType) {
 		panic(color.BadUsage(usageFunc, f, 2, false))
 	}
 	if vfn.IsNil() {

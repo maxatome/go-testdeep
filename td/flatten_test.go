@@ -129,6 +129,14 @@ func TestFlatten(t *testing.T) {
 					int8(15), int8(18), int8(21), int8(24), int8(27),
 				},
 			},
+			{
+				name: "any+variadic",
+				fn: func(a any, opts ...bool) int {
+					x, _ := a.(int)
+					return x
+				},
+				expected: []any{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+			},
 		}
 		for _, tc := range testCases {
 			t.Run(tc.name, func(t *testing.T) {
