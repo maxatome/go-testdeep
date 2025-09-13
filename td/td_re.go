@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -92,6 +92,20 @@ func newRe(regIf any, capture ...any) *tdRe {
 //	  td.Re(`^(\w+) (\w+)`, []string{"John", "Doe"})) // succeeds
 //	td.Cmp(t, "John Doe",
 //	  td.Re(`^(\w+) (\w+)`, td.Bag("Doe", "John"))) // succeeds
+//
+// When matching many, many lines with a single regexp, it is
+// sometimes difficult to see where the regexp failed in the input
+// string. To avoid that, the regexp can be split by lines and so the
+// failure is easier to locate, thanks to [List] operator and [Flatten]:
+//
+//	td.Cmp(t,
+//	  strings.Split(got, "\n"),
+//	  td.List(td.Flatten(strings.Split(expectedRe, "\n"),
+//	    func(line string) any {
+//	      return `^` + td.Re(line) + `\z`
+//	    })))
+//
+// See also the multilines example.
 //
 // See also [ReAll].
 func Re(reg any, capture ...any) TestDeep {
