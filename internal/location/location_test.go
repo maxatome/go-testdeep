@@ -53,7 +53,7 @@ func TestString(t *testing.T) {
 			expected: "main  inside somethingat main.go:5",
 		},
 		{
-			loc:      Location{File: "pkg/utils.go", Func: "utils.Helper", Line: 42, Inside: " in map"},
+			loc:      Location{File: "pkg/utils.go", Func: "utils.Helper", Line: 42, Inside: "in map "},
 			expected: "utils.Helper  in mapat pkg/utils.go:42",
 		},
 	} {
