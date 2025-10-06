@@ -49,7 +49,7 @@ func TestString(t *testing.T) {
 			expected: "TestFunc at test.go:10",
 		},
 		{
-			loc:      Location{File: "main.go", Func: "main", Line: 5, Inside: " inside something"},
+			loc:      Location{File: "main.go", Func: "main", Line: 5, Inside: "inside something "},
 			expected: "main  inside somethingat main.go:5",
 		},
 		{
