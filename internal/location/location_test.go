@@ -50,11 +50,11 @@ func TestString(t *testing.T) {
 		},
 		{
 			loc:      Location{File: "main.go", Func: "main", Line: 5, Inside: "inside something "},
-			expected: "main  inside somethingat main.go:5",
+			expected: "main inside something at main.go:5",
 		},
 		{
 			loc:      Location{File: "pkg/utils.go", Func: "utils.Helper", Line: 42, Inside: "in map "},
-			expected: "utils.Helper  in mapat pkg/utils.go:42",
+			expected: "utils.Helper in map at pkg/utils.go:42",
 		},
 	} {
 		test.EqualStr(t, curTest.loc.String(), curTest.expected, "loc=%+v", curTest.loc)
