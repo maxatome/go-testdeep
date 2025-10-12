@@ -22,9 +22,10 @@ func flattenFuncIsValid(typ reflect.Type) bool {
 		(typ.NumOut() == 1 || typ.NumOut() == 2 && typ.Out(1) == types.Bool)
 }
 
-// Flatten allows to flatten any slice, array or map in parameters of
-// operators expecting ...any. fn parameter allows to filter and/or
-// transform items before flattening and is described below.
+// Flatten allows to flatten any slice, array, map or int range in
+// parameters of operators expecting ...any. fn parameter allows to
+// filter and/or transform items before flattening and is described
+// below.
 //
 // For example the [Set] operator is defined as:
 //
@@ -78,6 +79,7 @@ func flattenFuncIsValid(typ reflect.Type) bool {
 //	td.Cmp(t, got,
 //	  td.Set(
 //	    td.Flatten([]any{
+//	      td.Flatten(5),
 //	      11,
 //	      td.Flatten([]int{22, 33}),
 //	      td.Flatten([]int{44, 55, 66}),
@@ -87,13 +89,19 @@ func flattenFuncIsValid(typ reflect.Type) bool {
 //
 // is exactly the same as:
 //
-//	td.Cmp(t, got, td.Set(11, 22, 33, 44, 55, 66, 77))
+//	td.Cmp(t, got, td.Set(0, 1, 2, 3, 4, 11, 22, 33, 44, 55, 66, 77))
 //
 // Maps can be flattened too, keeping in mind there is no particular order:
 //
 //	td.Flatten(map[int]int{1: 2, 3: 4})
 //
 // is flattened as 1, 2, 3, 4 or 3, 4, 1, 2.
+//
+// As seen in the example above, int range:
+//
+//	td.Flatten(5)
+//
+// is flattened as 0, 1, 2, 3, 4.
 //
 // Optional fn parameter can be used to filter and/or transform items
 // before flattening. If passed, it has to be one element length and
@@ -117,8 +125,8 @@ func flattenFuncIsValid(typ reflect.Type) bool {
 //
 // If the function signature does not match these cases, Flatten panics.
 //
-// If the type of an item of sliceOrMap is not convertible to T, the
-// item is dropped silently, as if fn returned false.
+// If the type of an item of sliceOrMapOrInt is not convertible to T,
+// the item is dropped silently, as if fn returns false.
 //
 // This single element can also be a string among:
 //
@@ -185,18 +193,20 @@ func flattenFuncIsValid(typ reflect.Type) bool {
 //	    func(name string) any { return td.Struct(person{Name: name}) })))
 //
 // See also [Grep].
-func Flatten(sliceOrMap any, fn ...any) flat.Slice {
+func Flatten(sliceOrMapOrInt any, fn ...any) flat.Slice {
 	const (
 		smugglePrefix     = "Smuggle:"
 		jsonPointerPrefix = "JSONPointer:"
-		usage             = "Flatten(SLICE|ARRAY|MAP[, FUNC])"
+		usage             = "Flatten(SLICE|ARRAY|MAP|int[, FUNC])"
 		usageFunc         = usage + `, FUNC should be non-nil func(T) V or func(T) (V, bool) or a string "` + smugglePrefix + `…" or "` + jsonPointerPrefix + `…"`
 	)
 
-	switch reflect.ValueOf(sliceOrMap).Kind() {
-	case reflect.Slice, reflect.Array, reflect.Map:
-	default:
-		panic(color.BadUsage(usage, sliceOrMap, 1, true))
+	if _, isInt := sliceOrMapOrInt.(int); !isInt {
+		switch reflect.ValueOf(sliceOrMapOrInt).Kind() {
+		case reflect.Slice, reflect.Array, reflect.Map:
+		default:
+			panic(color.BadUsage(usage, sliceOrMapOrInt, 1, true))
+		}
 	}
 
 	switch len(fn) {
@@ -206,7 +216,7 @@ func Flatten(sliceOrMap any, fn ...any) flat.Slice {
 		}
 		fallthrough
 	case 0:
-		return flat.Slice{Slice: sliceOrMap}
+		return flat.Slice{Slice: sliceOrMapOrInt}
 	default:
 		panic(color.TooManyParams(usage))
 	}
@@ -242,7 +252,7 @@ func Flatten(sliceOrMap any, fn ...any) flat.Slice {
 	inType := fnType.In(0)
 
 	var final []any
-	for _, v := range flat.Values([]any{flat.Slice{Slice: sliceOrMap}}) {
+	for _, v := range flat.Values([]any{flat.Slice{Slice: sliceOrMapOrInt}}) {
 		if v.Type() != inType {
 			if !v.Type().ConvertibleTo(inType) {
 				continue
