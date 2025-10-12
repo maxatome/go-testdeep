@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023, Maxime Soulé
+// Copyright (c) 2020-2025, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/maxatome/go-testdeep/internal/flat"
 	"github.com/maxatome/go-testdeep/internal/test"
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -18,79 +19,86 @@ import (
 func TestFlatten(t *testing.T) {
 	t.Run("ok", func(t *testing.T) {
 		testCases := []struct {
-			name         string
-			sliceOrMap   any
-			fn           []any
-			expectedType reflect.Type
-			expectedLen  int
+			name            string
+			sliceOrMapOrInt any
+			fn              []any
+			expectedType    reflect.Type
+			expectedLen     int
 		}{
 			{
-				name:         "slice",
-				sliceOrMap:   []int{1, 2, 3},
-				expectedType: reflect.TypeOf([]int{}),
-				expectedLen:  3,
+				name:            "slice",
+				sliceOrMapOrInt: []int{1, 2, 3},
+				expectedType:    reflect.TypeOf([]int{}),
+				expectedLen:     3,
 			},
 			{
-				name:         "array",
-				sliceOrMap:   [3]int{1, 2, 3},
-				expectedType: reflect.TypeOf([3]int{}),
-				expectedLen:  3,
+				name:            "array",
+				sliceOrMapOrInt: [3]int{1, 2, 3},
+				expectedType:    reflect.TypeOf([3]int{}),
+				expectedLen:     3,
 			},
 			{
-				name:         "map",
-				sliceOrMap:   map[int]int{1: 2, 3: 4},
-				expectedType: reflect.TypeOf(map[int]int{}),
-				expectedLen:  2,
+				name:            "map",
+				sliceOrMapOrInt: map[int]int{1: 2, 3: 4},
+				expectedType:    reflect.TypeOf(map[int]int{}),
+				expectedLen:     4,
 			},
 			{
-				name:         "slice+untyped nil fn",
-				sliceOrMap:   []int{1, 2, 3},
-				fn:           []any{nil},
-				expectedType: reflect.TypeOf([]int{}),
-				expectedLen:  3,
+				name:            "slice+untyped nil fn",
+				sliceOrMapOrInt: []int{1, 2, 3},
+				fn:              []any{nil},
+				expectedType:    reflect.TypeOf([]int{}),
+				expectedLen:     3,
+			},
+			{
+				name:            "int",
+				sliceOrMapOrInt: 5,
+				expectedType:    reflect.TypeOf(42),
+				expectedLen:     5,
 			},
 		}
 		for _, tc := range testCases {
 			t.Run(tc.name, func(t *testing.T) {
-				s := td.Flatten(tc.sliceOrMap, tc.fn...)
+				s := td.Flatten(tc.sliceOrMapOrInt, tc.fn...)
 				if reflect.TypeOf(s.Slice) != tc.expectedType {
 					t.Errorf("types differ: got=%s, expected=%s",
 						reflect.TypeOf(s.Slice), tc.expectedType)
 					return
 				}
-				test.EqualInt(t, reflect.ValueOf(s.Slice).Len(), tc.expectedLen)
+				l, _ := flat.Len([]any{s})
+				test.EqualInt(t, l, tc.expectedLen)
 			})
 		}
 	})
 
-	t.Run("ok+func", func(t *testing.T) {
-		cmp := func(t *testing.T, got, expected []any) {
-			t.Helper()
+	cmp := func(t *testing.T, got, expected []any) {
+		t.Helper()
 
-			if (got == nil) != (expected == nil) {
-				t.Errorf("nil mismatch: got=%#v, expected=%#v", got, expected)
-				return
-			}
-
-			lg, le := len(got), len(expected)
-			l := lg
-			if l > le {
-				l = le
-			}
-			i := 0
-			for ; i < l; i++ {
-				if got[i] != expected[i] {
-					t.Errorf("#%d item differ, got=%v, expected=%v", i, got[i], expected[i])
-				}
-			}
-			for ; i < lg; i++ {
-				t.Errorf("#%d item is extra, got=%v", i, got[i])
-			}
-			for ; i < le; i++ {
-				t.Errorf("#%d item is missing, expected=%v", i, expected[i])
-			}
+		if (got == nil) != (expected == nil) {
+			t.Errorf("nil mismatch: got=%#v, expected=%#v", got, expected)
+			return
 		}
 
+		lg, le := len(got), len(expected)
+		l := lg
+		if l > le {
+			l = le
+		}
+		i := 0
+		for ; i < l; i++ {
+			if got[i] != expected[i] {
+				t.Errorf("#%d item differ, got=%v, expected=%v", i, got[i], expected[i])
+			}
+		}
+		for ; i < lg; i++ {
+			t.Errorf("#%d item is extra, got=%v", i, got[i])
+		}
+		for ; i < le; i++ {
+			t.Errorf("#%d item is missing, expected=%v", i, expected[i])
+		}
+	}
+
+	t.Run("ok+func", func(t *testing.T) {
 		testCases := []struct {
 			name     string
 			fn       any
@@ -148,6 +156,46 @@ func TestFlatten(t *testing.T) {
 		}
 	})
 
+	t.Run("int", func(t *testing.T) {
+		testCases := []struct {
+			name     string
+			input    int
+			fn       any
+			expected []any
+		}{
+			{
+				name:     "classic",
+				input:    5,
+				fn:       func(a int) int { return -a },
+				expected: []any{0, -1, -2, -3, -4},
+			},
+			{
+				name:     "convertible to int64",
+				input:    5,
+				fn:       func(a int64) int64 { return a * 1000 },
+				expected: []any{int64(0), int64(1000), int64(2000), int64(3000), int64(4000)},
+			},
+			{
+				name:  "empty",
+				input: 0,
+				fn:    func(a int) int { return a },
+			},
+			{
+				name:  "empty coz neg",
+				input: -42,
+				fn:    func(a int) int { return a },
+			},
+		}
+		for _, tc := range testCases {
+			t.Run(tc.name, func(t *testing.T) {
+				s := td.Flatten(tc.input, tc.fn)
+				if sa, ok := s.Slice.([]any); test.IsTrue(t, ok) {
+					cmp(t, sa, tc.expected)
+				}
+			})
+		}
+	})
+
 	t.Run("complex", func(t *testing.T) {
 		type person struct {
 			Name string `json:"name"`
@@ -187,82 +235,82 @@ func TestFlatten(t *testing.T) {
 
 	t.Run("errors", func(t *testing.T) {
 		const (
-			usage     = `usage: Flatten(SLICE|ARRAY|MAP[, FUNC])`
+			usage     = `usage: Flatten(SLICE|ARRAY|MAP|int[, FUNC])`
 			usageFunc = usage + `, FUNC should be non-nil func(T) V or func(T) (V, bool) or a string "Smuggle:…" or "JSONPointer:…"`
 		)
 		testCases := []struct {
-			name       string
-			fn         []any
-			sliceOrMap any
-			expected   string
+			name            string
+			fn              []any
+			sliceOrMapOrInt any
+			expected        string
 		}{
 			{
-				name:       "too many params",
-				sliceOrMap: []int{},
-				fn:         []any{1, 2},
-				expected:   usage + ", too many parameters",
+				name:            "too many params",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{1, 2},
+				expected:        usage + ", too many parameters",
 			},
 			{
-				name:     "nil sliceOrMap",
+				name:     "nil sliceOrMapOrInt",
 				expected: usage + ", but received nil as 1st parameter",
 			},
 			{
-				name:       "bad sliceOrMap type",
-				sliceOrMap: 42,
-				expected:   usage + ", but received int as 1st parameter",
+				name:            "bad sliceOrMapOrInt type",
+				sliceOrMapOrInt: "42",
+				expected:        usage + ", but received string as 1st parameter",
 			},
 			{
-				name:       "not func",
-				sliceOrMap: []int{},
-				fn:         []any{42},
-				expected:   usageFunc + ", but received int as 2nd parameter",
+				name:            "not func",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{42},
+				expected:        usageFunc + ", but received int as 2nd parameter",
 			},
 			{
-				name:       "func w/0 inputs",
-				sliceOrMap: []int{},
-				fn:         []any{func() int { return 0 }},
-				expected:   usageFunc + ", but received func() int as 2nd parameter",
+				name:            "func w/0 inputs",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{func() int { return 0 }},
+				expected:        usageFunc + ", but received func() int as 2nd parameter",
 			},
 			{
-				name:       "func w/2 inputs",
-				sliceOrMap: []int{},
-				fn:         []any{func(a, b int) int { return 0 }},
-				expected:   usageFunc + ", but received func(int, int) int as 2nd parameter",
+				name:            "func w/2 inputs",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{func(a, b int) int { return 0 }},
+				expected:        usageFunc + ", but received func(int, int) int as 2nd parameter",
 			},
 			{
-				name:       "variadic func",
-				sliceOrMap: []int{},
-				fn:         []any{func(a ...int) int { return 0 }},
-				expected:   usageFunc + ", but received func(...int) int as 2nd parameter",
+				name:            "variadic func",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{func(a ...int) int { return 0 }},
+				expected:        usageFunc + ", but received func(...int) int as 2nd parameter",
 			},
 			{
-				name:       "func w/0 output",
-				sliceOrMap: []int{},
-				fn:         []any{func(a int) {}},
-				expected:   usageFunc + ", but received func(int) as 2nd parameter",
+				name:            "func w/0 output",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{func(a int) {}},
+				expected:        usageFunc + ", but received func(int) as 2nd parameter",
 			},
 			{
-				name:       "func w/2 out without bool",
-				sliceOrMap: []int{},
-				fn:         []any{func(a int) (int, int) { return 0, 0 }},
-				expected:   usageFunc + ", but received func(int) (int, int) as 2nd parameter",
+				name:            "func w/2 out without bool",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{func(a int) (int, int) { return 0, 0 }},
+				expected:        usageFunc + ", but received func(int) (int, int) as 2nd parameter",
 			},
 			{
-				name:       "bad shortcut",
-				sliceOrMap: []int{},
-				fn:         []any{"Pipo"},
-				expected:   usageFunc + `, but received "Pipo" as 2nd parameter`,
+				name:            "bad shortcut",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{"Pipo"},
+				expected:        usageFunc + `, but received "Pipo" as 2nd parameter`,
 			},
 			{
-				name:       "typed nil func",
-				sliceOrMap: []int{},
-				fn:         []any{(func(a int) int)(nil)},
-				expected:   usageFunc,
+				name:            "typed nil func",
+				sliceOrMapOrInt: []int{},
+				fn:              []any{(func(a int) int)(nil)},
+				expected:        usageFunc,
 			},
 		}
 		for _, tc := range testCases {
 			t.Run(tc.name, func(t *testing.T) {
-				test.CheckPanic(t, func() { td.Flatten(tc.sliceOrMap, tc.fn...) }, tc.expected)
+				test.CheckPanic(t, func() { td.Flatten(tc.sliceOrMapOrInt, tc.fn...) }, tc.expected)
 			})
 		}
 	})
