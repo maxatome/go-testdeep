@@ -55,34 +55,38 @@ jobs:
               export GOPROXY=https://proxy.golang.org,direct
           fi
           if [ ${{ matrix.full-tests }} = true ]; then
-              cover_flags="-coverpkg=./... -covermode=atomic -coverprofile=coverage"
-              GO_TEST_FLAGS="$cover_flags.out"
-              GO_TEST_SAFE_FLAGS="$cover_flags-safe.out"
-              GO_TEST_RACE_FLAGS="$cover_flags-race.out"
-              GO_TEST_RACE_SAFE_FLAGS="$cover_flags-race-safe.out"
-              GO_TEST_RACE_CGO_FLAGS="$cover_flags-cgo.out"
+              cover_flags="-coverpkg=./... -covermode=atomic -test.gocoverdir=$(pwd)/cov/"
+              GO_TEST_BASE_FLAGS="$cover_flags"base
+              GO_TEST_SAFE_FLAGS="$cover_flags"safe
+              GO_TEST_RACE_FLAGS="$cover_flags"race
+              GO_TEST_RACE_SAFE_FLAGS="$cover_flags"race-safe
+              GO_TEST_RACE_CGO_FLAGS="$cover_flags"cgo
+              mkdir -p cov/base cov/safe cov/race cov/race-safe cov/cgo
           fi
 
           export GORACE="halt_on_error=1"
-          echo "CLASSIC ==========================================="
-          go test                  $GO_TEST_FLAGS           ./...
+          echo "BASE ==========================================="
+          go test                  ./... $GO_TEST_BASE_FLAGS
           echo "SAFE =============================================="
-          go test       -tags safe $GO_TEST_SAFE_FLAGS      ./...
+          go test       -tags safe ./... $GO_TEST_SAFE_FLAGS
           echo "RACE =============================================="
-          go test -race            $GO_TEST_RACE_FLAGS      ./...
+          go test -race            ./... $GO_TEST_RACE_FLAGS
           echo "RACE + SAFE ======================================="
-          go test -race -tags safe $GO_TEST_RACE_SAFE_FLAGS ./...
+          go test -race -tags safe ./... $GO_TEST_RACE_SAFE_FLAGS
           echo "RACE + CGO (internal/spew only) ==================="
           CGO_ENABLED=1 \
-              go test -race -tags testcgo $GO_TEST_RACE_CGO_FLAGS ./internal/spew
+              go test -race -tags testcgo ./internal/spew $GO_TEST_RACE_CGO_FLAGS
 
       - name: Reporting
         if: matrix.full-tests
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          go install github.com/mattn/goveralls@v0.0.12
-          go install github.com/wadey/gocovmerge@latest
-          gocovmerge coverage*.out |
+          dirs=
+          for d in cov/*; do
+              [ -d $d ] && dirs="${dirs:+"$dirs,"}$d"
+          done
+          go tool covdata textfmt -i="$dirs" -o /dev/fd/1 |
               egrep -v '^github\.com/maxatome/go-testdeep/internal/(json/parser\.go:|test/)' > coverage.out
+          go install github.com/mattn/goveralls@v0.0.12
           goveralls -coverprofile=coverage.out -service=github
