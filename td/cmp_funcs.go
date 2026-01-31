@@ -135,6 +135,10 @@ func CmpAny(t TestingT, got any, expectedValues []any, args ...any) bool {
 //
 // See [Array] for details.
 //
+// [Array] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [Array] call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // If t is a [*T] then its Config field is inherited.
@@ -1100,6 +1104,10 @@ func CmpShallow(t TestingT, got, expectedPtr any, args ...any) bool {
 //
 // See [Slice] for details.
 //
+// [Slice] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [Slice] call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // If t is a [*T] then its Config field is inherited.
@@ -1434,6 +1442,10 @@ func CmpSuperSetOf(t TestingT, got any, expectedItems []any, args ...any) bool {
 //	td.Cmp(t, got, td.SuperSliceOf(model, expectedEntries), args...)
 //
 // See [SuperSliceOf] for details.
+//
+// [SuperSliceOf] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [SuperSliceOf] call.
 //
 // Returns true if the test is OK, false if it fails.
 //

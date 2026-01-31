@@ -32,13 +32,30 @@ var _ TestDeep = &tdArray{}
 // value).
 type ArrayEntries map[int]any
 
+func mergeArrayEntries(aes ...ArrayEntries) ArrayEntries {
+	switch len(aes) {
+	case 0:
+		return nil
+	case 1:
+		return aes[0]
+	}
+
+	ret := make(ArrayEntries, len(aes[0]))
+	for _, me := range aes {
+		for k, v := range me {
+			ret[k] = v
+		}
+	}
+	return ret
+}
+
 const (
 	arrayArray uint = iota
 	arraySlice
 	arraySuper
 )
 
-func newArray(kind uint, model any, expectedEntries ArrayEntries) *tdArray {
+func newArray(kind uint, model any, aes ...ArrayEntries) *tdArray {
 	vmodel := reflect.ValueOf(model)
 
 	a := tdArray{
@@ -46,6 +63,8 @@ func newArray(kind uint, model any, expectedEntries ArrayEntries) *tdArray {
 			base: newBase(4),
 		},
 	}
+
+	expectedEntries := mergeArrayEntries(aes...)
 
 	if kind == arraySuper {
 		a.onlyIndexes = make([]int, 0, len(expectedEntries))
@@ -113,8 +132,10 @@ func newArray(kind uint, model any, expectedEntries ArrayEntries) *tdArray {
 //
 // model must be the same type as compared data.
 //
-// expectedEntries can be nil, if no zero entries are expected and
-// no [TestDeep] operators are involved.
+// expectedEntries can be omitted, if no zero entries are expected and
+// no [TestDeep] operators are involved. If expectedEntries contains
+// more than one item, all items are merged before their use, from
+// left to right.
 //
 //	got := [3]int{12, 14, 17}
 //	td.Cmp(t, got, td.Array([3]int{0, 14}, td.ArrayEntries{0: 12, 2: 17})) // succeeds
@@ -124,8 +145,8 @@ func newArray(kind uint, model any, expectedEntries ArrayEntries) *tdArray {
 // TypeBehind method returns the [reflect.Type] of model.
 //
 // See also [List], [Slice] and [SuperSliceOf].
-func Array(model any, expectedEntries ArrayEntries) TestDeep {
-	return newArray(arrayArray, model, expectedEntries)
+func Array(model any, expectedEntries ...ArrayEntries) TestDeep {
+	return newArray(arrayArray, model, expectedEntries...)
 }
 
 // summary(Slice): compares the contents of a slice or a pointer on a slice
@@ -142,8 +163,10 @@ func Array(model any, expectedEntries ArrayEntries) TestDeep {
 //
 // model must be the same type as compared data.
 //
-// expectedEntries can be nil, if no zero entries are expected and
-// no [TestDeep] operators are involved.
+// expectedEntries can be omitted, if no zero entries are expected and
+// no [TestDeep] operators are involved. If expectedEntries contains
+// more than one item, all items are merged before their use, from
+// left to right.
 //
 //	got := []int{12, 14, 17}
 //	td.Cmp(t, got, td.Slice([]int{0, 14}, td.ArrayEntries{0: 12, 2: 17})) // succeeds
@@ -153,8 +176,8 @@ func Array(model any, expectedEntries ArrayEntries) TestDeep {
 // TypeBehind method returns the [reflect.Type] of model.
 //
 // See also [Array], [List] and [SuperSliceOf].
-func Slice(model any, expectedEntries ArrayEntries) TestDeep {
-	return newArray(arraySlice, model, expectedEntries)
+func Slice(model any, expectedEntries ...ArrayEntries) TestDeep {
+	return newArray(arraySlice, model, expectedEntries...)
 }
 
 // summary(SuperSliceOf): compares the contents of a slice, a pointer
@@ -176,26 +199,28 @@ func Slice(model any, expectedEntries ArrayEntries) TestDeep {
 //
 // model must be the same type as compared data.
 //
-// expectedEntries can be nil, if no zero entries are expected and
-// no [TestDeep] operators are involved.
+// expectedEntries can be omitted, if no zero entries are expected and
+// no [TestDeep] operators are involved. If expectedEntries contains
+// more than one item, all items are merged before their use, from
+// left to right.
 //
 // Works with slices:
 //
 //	got := []int{12, 14, 17}
-//	td.Cmp(t, got, td.SuperSliceOf([]int{12}, nil))                                // succeeds
+//	td.Cmp(t, got, td.SuperSliceOf([]int{12}))                                     // succeeds
 //	td.Cmp(t, got, td.SuperSliceOf([]int{12}, td.ArrayEntries{2: 17}))             // succeeds
 //	td.Cmp(t, &got, td.SuperSliceOf(&[]int{0, 14}, td.ArrayEntries{2: td.Gt(16)})) // succeeds
 //
 // and arrays:
 //
 //	got := [5]int{12, 14, 17, 26, 56}
-//	td.Cmp(t, got, td.SuperSliceOf([5]int{12}, nil))                                // succeeds
+//	td.Cmp(t, got, td.SuperSliceOf([5]int{12}))                                     // succeeds
 //	td.Cmp(t, got, td.SuperSliceOf([5]int{12}, td.ArrayEntries{2: 17}))             // succeeds
 //	td.Cmp(t, &got, td.SuperSliceOf(&[5]int{0, 14}, td.ArrayEntries{2: td.Gt(16)})) // succeeds
 //
 // See also [Array] and [Slice].
-func SuperSliceOf(model any, expectedEntries ArrayEntries) TestDeep {
-	return newArray(arraySuper, model, expectedEntries)
+func SuperSliceOf(model any, expectedEntries ...ArrayEntries) TestDeep {
+	return newArray(arraySuper, model, expectedEntries...)
 }
 
 func (a *tdArray) populateExpectedEntries(expectedEntries ArrayEntries, expectedModel reflect.Value) {

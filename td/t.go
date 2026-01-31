@@ -56,6 +56,10 @@ func (t *T) Any(got any, expectedValues []any, args ...any) bool {
 //
 // See [Array] for details.
 //
+// [Array] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [Array] call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
@@ -931,6 +935,10 @@ func (t *T) Shallow(got, expectedPtr any, args ...any) bool {
 //
 // See [Slice] for details.
 //
+// [Slice] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [Slice] call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
@@ -1235,6 +1243,10 @@ func (t *T) SuperSetOf(got any, expectedItems []any, args ...any) bool {
 //	t.Cmp(got, td.SuperSliceOf(model, expectedEntries), args...)
 //
 // See [SuperSliceOf] for details.
+//
+// [SuperSliceOf] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [SuperSliceOf] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
