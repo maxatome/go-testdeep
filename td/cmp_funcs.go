@@ -685,6 +685,10 @@ func CmpLte(t TestingT, got, maxExpectedValue any, args ...any) bool {
 //
 // See [Map] for details.
 //
+// [Map] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [Map] call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // If t is a [*T] then its Config field is inherited.
@@ -1297,6 +1301,10 @@ func CmpSubJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any) 
 //
 // See [SubMapOf] for details.
 //
+// [SubMapOf] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [SubMapOf] call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // If t is a [*T] then its Config field is inherited.
@@ -1380,6 +1388,10 @@ func CmpSuperJSONOf(t TestingT, got, expectedJSON any, params []any, args ...any
 //	td.Cmp(t, got, td.SuperMapOf(model, expectedEntries), args...)
 //
 // See [SuperMapOf] for details.
+//
+// [SuperMapOf] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [SuperMapOf] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
