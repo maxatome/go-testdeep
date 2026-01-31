@@ -341,7 +341,7 @@ func TestStruct(t *testing.T) {
 		td.Struct(&MyStruct{}, td.StructFields{">ValBool": 123}),
 		expectedError{
 			Message:  mustBe("type mismatch"),
-			Path:     mustBe("DATA.ValBool"),
+			Path:     mustBe(`DATA.ValBool (from ">ValBool")`),
 			Got:      mustBe("bool"),
 			Expected: mustBe("int"),
 		})
@@ -411,9 +411,9 @@ func TestStruct(t *testing.T) {
 				"= Val*":  td.NotZero(),
 			}).String(),
 		`Struct(*td_test.MyStruct{
-  ValBool: false
-  ValInt:  NotZero()
-  ValStr:  NotZero()
+  ValBool:                        false
+  ValInt (from pattern `+"`= Val*`"+`): NotZero()
+  ValStr (from pattern `+"`= Val*`"+`): NotZero()
 })`)
 
 	test.EqualStr(t,
@@ -659,7 +659,7 @@ func TestStructPatterns(t *testing.T) {
 			td.Struct(paTest{Num: 666}, td.StructFields{"= alpha*": nil}),
 			expectedError{
 				Message:  mustBe("values differ"),
-				Path:     mustBe("DATA.alphaNum"),
+				Path:     mustBe("DATA.alphaNum (from pattern `= alpha*`)"),
 				Got:      mustBe("0"),
 				Expected: mustBe("nil"),
 			})
@@ -710,7 +710,7 @@ func TestStructPatterns(t *testing.T) {
 			td.Struct(paTest{Num: 666}, td.StructFields{"=~ alpha": nil}),
 			expectedError{
 				Message:  mustBe("values differ"),
-				Path:     mustBe("DATA.alphaNum"),
+				Path:     mustBe("DATA.alphaNum (from pattern `=~ alpha`)"),
 				Got:      mustBe("0"),
 				Expected: mustBe("nil"),
 			})
@@ -1041,7 +1041,7 @@ func TestSStruct(t *testing.T) {
 		td.SStruct(&MyStruct{}, td.StructFields{">ValBool": 123}),
 		expectedError{
 			Message:  mustBe("type mismatch"),
-			Path:     mustBe("DATA.ValBool"),
+			Path:     mustBe(`DATA.ValBool (from ">ValBool")`),
 			Got:      mustBe("bool"),
 			Expected: mustBe("int"),
 		})

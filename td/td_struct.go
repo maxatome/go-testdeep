@@ -421,7 +421,7 @@ func (s *tdStruct) addExpectedValue(field reflect.StructField, expectedValue any
 	}
 
 	s.expectedFields = append(s.expectedFields, fieldInfo{
-		name:       field.Name,
+		name:       field.Name + ctxInfo,
 		expected:   vexpectedValue,
 		index:      field.Index,
 		unexported: field.PkgPath != "",
