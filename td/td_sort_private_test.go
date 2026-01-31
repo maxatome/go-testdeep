@@ -113,7 +113,7 @@ func TestInitSortBase(t *testing.T) {
 			how:  []string{"-b"},
 			slice: func() []any {
 				sl := newSortA()
-				var res []any
+				var res []any //nolint: prealloc
 				for _, v := range sl {
 					a := v
 					b := &a

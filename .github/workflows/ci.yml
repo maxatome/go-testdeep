@@ -42,7 +42,7 @@ jobs:
         if: matrix.full-tests
         run: |
           curl -sL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
-              sh -s -- -b $HOME/go/bin v2.4.0
+              sh -s -- -b $HOME/go/bin v2.8.0
           $HOME/go/bin/golangci-lint run
 
       - name: Testing
