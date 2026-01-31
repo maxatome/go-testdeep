@@ -185,7 +185,6 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, 
 
 		// Special cases
 		var min, max int
-		addNilParam := false
 		switch jop.Name {
 		case "Between":
 			min, max = 2, 3
@@ -221,7 +220,7 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, 
 		case "Sorted":
 			min, max = 0, -1
 		case "SubMapOf", "SuperMapOf":
-			min, max, addNilParam = 1, 1, true
+			min, max = 1, 1
 		default:
 			min = tfn.NumIn()
 			if tfn.IsVariadic() {
@@ -252,9 +251,6 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, 
 			in = make([]reflect.Value, len(jop.Params))
 			for i, p := range jop.Params {
 				in[i] = reflect.ValueOf(p)
-			}
-			if addNilParam {
-				in = append(in, reflect.ValueOf(MapEntries(nil)))
 			}
 
 			// If the function is variadic, no need to check each param as all

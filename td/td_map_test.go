@@ -30,6 +30,7 @@ func TestMap(t *testing.T) {
 
 	gotMap := map[string]int{"foo": 1, "bar": 2}
 
+	checkOK(t, gotMap, td.Map(map[string]int{"foo": 1, "bar": 2}))
 	checkOK(t, gotMap, td.Map(map[string]int{"foo": 1, "bar": 2}, nil))
 	checkOK(t, gotMap,
 		td.Map(map[string]int{"foo": 1}, td.MapEntries{"bar": 2}))
@@ -37,6 +38,13 @@ func TestMap(t *testing.T) {
 		td.Map(map[string]int{}, td.MapEntries{"foo": 1, "bar": 2}))
 	checkOK(t, gotMap,
 		td.Map((map[string]int)(nil), td.MapEntries{"foo": 1, "bar": 2}))
+
+	checkOK(t, gotMap,
+		td.Map((map[string]int)(nil),
+			td.MapEntries{"foo": 66, "bar": 0},
+			td.MapEntries{"foo": 42, "bar": 1},
+			td.MapEntries{"foo": 1, "bar": 2},
+		))
 
 	one := 1
 	checkOK(t, map[string]*int{"foo": nil, "bar": &one},
@@ -235,11 +243,28 @@ func TestMap(t *testing.T) {
 
 	//
 	// SuperMapOf
+	checkOK(t, gotMap, td.SuperMapOf(map[string]int{"foo": 1}))
 	checkOK(t, gotMap, td.SuperMapOf(map[string]int{"foo": 1}, nil))
 	checkOK(t, gotMap,
 		td.SuperMapOf(map[string]int{"foo": 1}, td.MapEntries{"bar": 2}))
 	checkOK(t, gotMap,
 		td.SuperMapOf(map[string]int{}, td.MapEntries{"foo": 1, "bar": 2}))
+
+	checkOK(t, gotMap,
+		td.SuperMapOf(map[string]int{"foo": 1},
+			td.MapEntries{"bar": 0},
+			td.MapEntries{"bar": 1},
+			td.MapEntries{"bar": 2},
+		))
+
+	checkError(t, gotMap,
+		td.SuperMapOf(map[string]int{"foo": 1, "bar": 3}),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA["bar"]`),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
+		})
 
 	checkError(t, gotMap,
 		td.SuperMapOf(map[string]int{"foo": 1, "bar": 3}, nil),
@@ -250,7 +275,7 @@ func TestMap(t *testing.T) {
 			Expected: mustBe("3"),
 		})
 
-	checkError(t, gotMap, td.SuperMapOf(map[string]int{"test": 2}, nil),
+	checkError(t, gotMap, td.SuperMapOf(map[string]int{"test": 2}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),
@@ -271,11 +296,29 @@ func TestMap(t *testing.T) {
 	//
 	// SubMapOf
 	checkOK(t, gotMap,
+		td.SubMapOf(map[string]int{"foo": 1, "bar": 2, "tst": 3}))
+	checkOK(t, gotMap,
 		td.SubMapOf(map[string]int{"foo": 1, "bar": 2, "tst": 3}, nil))
 	checkOK(t, gotMap,
 		td.SubMapOf(map[string]int{"foo": 1, "tst": 3}, td.MapEntries{"bar": 2}))
 	checkOK(t, gotMap,
 		td.SubMapOf(map[string]int{}, td.MapEntries{"foo": 1, "bar": 2, "tst": 3}))
+
+	checkOK(t, gotMap,
+		td.SubMapOf(map[string]int{"foo": 1, "tst": 3},
+			td.MapEntries{"bar": 0},
+			td.MapEntries{"bar": 1},
+			td.MapEntries{"bar": 2},
+		))
+
+	checkError(t, gotMap,
+		td.SubMapOf(map[string]int{"foo": 1, "bar": 3}),
+		expectedError{
+			Message:  mustBe("values differ"),
+			Path:     mustBe(`DATA["bar"]`),
+			Got:      mustBe("2"),
+			Expected: mustBe("3"),
+		})
 
 	checkError(t, gotMap,
 		td.SubMapOf(map[string]int{"foo": 1, "bar": 3}, nil),
@@ -286,7 +329,7 @@ func TestMap(t *testing.T) {
 			Expected: mustBe("3"),
 		})
 
-	checkError(t, gotMap, td.SubMapOf(map[string]int{"foo": 1}, nil),
+	checkError(t, gotMap, td.SubMapOf(map[string]int{"foo": 1}),
 		expectedError{
 			Message: mustBe("comparing hash keys of %%"),
 			Path:    mustBe("DATA"),

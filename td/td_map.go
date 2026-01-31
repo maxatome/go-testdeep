@@ -44,7 +44,24 @@ type mapEntryInfo struct {
 // value (which can be a [TestDeep] operator as well as a zero value.)
 type MapEntries map[any]any
 
-func newMap(model any, entries MapEntries, kind mapKind) *tdMap {
+func mergeMapEntries(mes ...MapEntries) MapEntries {
+	switch len(mes) {
+	case 0:
+		return nil
+	case 1:
+		return mes[0]
+	}
+
+	ret := make(MapEntries, len(mes[0]))
+	for _, me := range mes {
+		for k, v := range me {
+			ret[k] = v
+		}
+	}
+	return ret
+}
+
+func newMap(model any, kind mapKind, mes ...MapEntries) *tdMap {
 	vmodel := reflect.ValueOf(model)
 
 	m := tdMap{
@@ -64,7 +81,7 @@ func newMap(model any, entries MapEntries, kind mapKind) *tdMap {
 
 		if vmodel.IsNil() {
 			m.expectedType = vmodel.Type().Elem()
-			m.populateExpectedEntries(entries, reflect.Value{})
+			m.populateExpectedEntries(mergeMapEntries(mes...), reflect.Value{})
 			return &m
 		}
 
@@ -73,7 +90,7 @@ func newMap(model any, entries MapEntries, kind mapKind) *tdMap {
 
 	case reflect.Map:
 		m.expectedType = vmodel.Type()
-		m.populateExpectedEntries(entries, vmodel)
+		m.populateExpectedEntries(mergeMapEntries(mes...), vmodel)
 		return &m
 	}
 
@@ -160,8 +177,9 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 //
 // model must be the same type as compared data.
 //
-// expectedEntries can be nil, if no zero entries are expected and
-// no [TestDeep] operators are involved.
+// expectedEntries can be omitted, if no [TestDeep] operators are
+// involved. If expectedEntries contains more than one item, all items
+// are merged before their use, from left to right.
 //
 // During a match, all expected entries must be found and all data
 // entries must be expected to succeed.
@@ -184,8 +202,8 @@ func (m *tdMap) populateExpectedEntries(entries MapEntries, expectedModel reflec
 // TypeBehind method returns the [reflect.Type] of model.
 //
 // See also [SubMapOf] and [SuperMapOf].
-func Map(model any, expectedEntries MapEntries) TestDeep {
-	return newMap(model, expectedEntries, allMap)
+func Map(model any, expectedEntries ...MapEntries) TestDeep {
+	return newMap(model, allMap, expectedEntries...)
 }
 
 // summary(SubMapOf): compares the contents of a map but with
@@ -197,8 +215,9 @@ func Map(model any, expectedEntries MapEntries) TestDeep {
 //
 // model must be the same type as compared data.
 //
-// expectedEntries can be nil, if no zero entries are expected and
-// no [TestDeep] operators are involved.
+// expectedEntries can be omitted, if no [TestDeep] operators are
+// involved. If expectedEntries contains more than one item, all items
+// are merged before their use, from left to right.
 //
 // During a match, each map entry should be matched by an expected
 // entry to succeed. But some expected entries can be missing from the
@@ -230,8 +249,8 @@ func Map(model any, expectedEntries MapEntries) TestDeep {
 // TypeBehind method returns the [reflect.Type] of model.
 //
 // See also [Map] and [SuperMapOf].
-func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
-	return newMap(model, expectedEntries, subMap)
+func SubMapOf(model any, expectedEntries ...MapEntries) TestDeep {
+	return newMap(model, subMap, expectedEntries...)
 }
 
 // summary(SuperMapOf): compares the contents of a map but with
@@ -243,8 +262,9 @@ func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
 //
 // model must be the same type as compared data.
 //
-// expectedEntries can be nil, if no zero entries are expected and
-// no [TestDeep] operators are involved.
+// expectedEntries can be omitted, if no [TestDeep] operators are
+// involved. If expectedEntries contains more than one item, all items
+// are merged before their use, from left to right.
 //
 // During a match, each expected entry should match in the compared
 // map. But some entries in the compared map may not be expected.
@@ -275,8 +295,8 @@ func SubMapOf(model any, expectedEntries MapEntries) TestDeep {
 // TypeBehind method returns the [reflect.Type] of model.
 //
 // See also [SuperMapOf] and [SubMapOf].
-func SuperMapOf(model any, expectedEntries MapEntries) TestDeep {
-	return newMap(model, expectedEntries, superMap)
+func SuperMapOf(model any, expectedEntries ...MapEntries) TestDeep {
+	return newMap(model, superMap, expectedEntries...)
 }
 
 func (m *tdMap) Match(ctx ctxerr.Context, got reflect.Value) (err *ctxerr.Error) {

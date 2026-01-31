@@ -107,7 +107,12 @@ my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        # These operators accept several StructFields,
                        # but we want only one here
                        Struct    => 'nil',
-                       SStruct   => 'nil');
+                       SStruct   => 'nil',
+                       # These operators accept several MapEntries,
+                       # but we want only one here
+                       Map        => 'nil',
+                       SubMapOf   => 'nil',
+                       SuperMapOf => 'nil');
 
 # Smuggler operators (automatically filled)
 my %SMUGGLER_OPERATORS;

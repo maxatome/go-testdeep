@@ -554,6 +554,10 @@ func (t *T) Lte(got, maxExpectedValue any, args ...any) bool {
 //
 // See [Map] for details.
 //
+// [Map] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [Map] call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
@@ -1110,6 +1114,10 @@ func (t *T) SubJSONOf(got, expectedJSON any, params []any, args ...any) bool {
 //
 // See [SubMapOf] for details.
 //
+// [SubMapOf] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [SubMapOf] call.
+//
 // Returns true if the test is OK, false if it fails.
 //
 // args... are optional and allow to name the test. This name is
@@ -1185,6 +1193,10 @@ func (t *T) SuperJSONOf(got, expectedJSON any, params []any, args ...any) bool {
 //	t.Cmp(got, td.SuperMapOf(model, expectedEntries), args...)
 //
 // See [SuperMapOf] for details.
+//
+// [SuperMapOf] optional parameter expectedEntries is here mandatory.
+// nil value should be passed to mimic its absence in
+// original [SuperMapOf] call.
 //
 // Returns true if the test is OK, false if it fails.
 //
