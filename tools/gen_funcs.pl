@@ -112,7 +112,12 @@ my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        # but we want only one here
                        Map        => 'nil',
                        SubMapOf   => 'nil',
-                       SuperMapOf => 'nil');
+                       SuperMapOf => 'nil',
+                       # These operators accept several ArrayEntries,
+                       # but we want only one here
+                       Array        => 'nil',
+                       Slice        => 'nil',
+                       SuperSliceOf => 'nil');
 
 # Smuggler operators (automatically filled)
 my %SMUGGLER_OPERATORS;
