@@ -13,7 +13,7 @@ go-testdeep
 **Extremely flexible golang deep comparison, extends the go testing
 package, dependency free.**
 
-Currently supports go 1.16 → 1.24.
+Currently supports go 1.16 → 1.26.
 
 - [Latest news](#latest-news)
 - [Synopsis](#synopsis)
