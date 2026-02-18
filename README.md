@@ -33,9 +33,9 @@ Currently supports go 1.16 → 1.26.
 
 ## Latest news
 
+- 2025/02/18: [v1.15.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.15.0);
 - 2023/12/27: [v1.14.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.14.0);
 - 2023/03/18: [v1.13.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.13.0);
-- 2022/08/07: [v1.12.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.12.0);
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
 
