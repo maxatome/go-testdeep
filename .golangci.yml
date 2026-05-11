@@ -33,8 +33,14 @@ linters:
           disabled: true
   exclusions:
     rules:
-      - path: internal/dark/bypass.go
-        text: "const \\w+ is unused"
+      - path: internal/dark/bypass\.go
+        text: const \w+ is unused
+      # reflect.Ptr deprecated but still needed for older go
+      - path: .
+        text: 'inline: Constant reflect\.Ptr should be inlined'
+      # reflect.PtrTo deprecated but still needed for go<1.18
+      - path: .
+        text: 'inline: cannot inline call to reflect\.PtrTo'
 formatters:
   enable:
     - gci
