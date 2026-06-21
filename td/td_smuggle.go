@@ -703,8 +703,9 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //	// or equally
 //	td.Cmp(t, `{"foo":1}`, td.Smuggle(json.RawMessage(nil), td.JSON(`{"foo":1}`)))
 //
-// converts on the fly a string to a [json.RawMessage] so [JSON] operator
-// can parse it as JSON. This is mostly a shortcut for:
+// converts on the fly a string to a [json.RawMessage] (alias to
+// [jsontext.Value] starting go1.27) so [JSON] operator can parse it
+// as JSON. This is mostly a shortcut for:
 //
 //	td.Cmp(t, `{"foo":1}`, td.Smuggle(
 //	  func(r json.RawMessage) json.RawMessage { return r },
@@ -739,6 +740,7 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 // See also [Code], [JSONPointer] and [Flatten].
 //
 // [json.RawMessage]: https://pkg.go.dev/encoding/json#RawMessage
+// [jsontext.Value]: https://pkg.go.dev/encoding/json/jsontext#Value
 func Smuggle(fn, expectedValue any) TestDeep {
 	s := tdSmuggle{
 		tdSmugglerBase: newSmugglerBase(expectedValue),

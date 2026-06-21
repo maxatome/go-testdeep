@@ -213,13 +213,17 @@ func TestSmuggle(t *testing.T) {
 	checkOK(t, newReArmReader([]byte(`{"foo":1}`)), // io.Reader first
 		td.Smuggle(json.RawMessage{}, td.JSON(`{"foo":1}`)))
 
+	// Use %T as starting go1.27, json.RawMessage is now an alias to
+	// jsontext.Value
+	jsonRawMessageType := fmt.Sprintf("%T", json.RawMessage{})
+
 	checkError(t, nil,
 		td.Smuggle(json.RawMessage{}, td.JSON(`{}`)),
 		expectedError{
 			Message:  mustBe("incompatible parameter type"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("nil"),
-			Expected: mustBe("json.RawMessage or convertible or io.Reader"),
+			Expected: mustBe(jsonRawMessageType + " or convertible or io.Reader"),
 		})
 
 	checkError(t, MyStruct{},
@@ -228,7 +232,7 @@ func TestSmuggle(t *testing.T) {
 			Message:  mustBe("incompatible parameter type"),
 			Path:     mustBe("DATA"),
 			Got:      mustBe("td_test.MyStruct"),
-			Expected: mustBe("json.RawMessage or convertible or io.Reader"),
+			Expected: mustBe(jsonRawMessageType + " or convertible or io.Reader"),
 		})
 
 	checkError(t, errReader{}, // erroneous io.Reader
