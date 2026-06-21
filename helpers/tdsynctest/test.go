@@ -1,4 +1,4 @@
-// Copyright (c) 2025, Maxime Soulé
+// Copyright (c) 2025-2026, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -12,6 +12,7 @@ package tdsynctest
 import (
 	"testing"
 	"testing/synctest"
+	"time"
 
 	"github.com/maxatome/go-testdeep/td"
 )
@@ -22,6 +23,8 @@ import (
 //
 // t.TB (set by [td.NewT], [td.Assert], [td.Require], …) must be a
 // [*testing.T] instance.
+//
+// See also [TestAssertRequire].
 func Test(t *td.T, f func(t *td.T)) {
 	tt, ok := t.TB.(*testing.T)
 	if !ok {
@@ -42,6 +45,8 @@ func Test(t *td.T, f func(t *td.T)) {
 //
 // t.TB (set by [td.NewT], [td.Assert], [td.Require], …) must be a
 // [*testing.T] instance.
+//
+// See also [Test].
 func TestAssertRequire(t *td.T, f func(assert, require *td.T)) {
 	tt, ok := t.TB.(*testing.T)
 	if !ok {
@@ -54,8 +59,61 @@ func TestAssertRequire(t *td.T, f func(assert, require *td.T)) {
 	})
 }
 
+// Subtest runs f in a bubble as a subtest of t called name.
+//
+// The t param of f inherits the configuration of t.
+//
+// t.TB (set by [td.NewT], [td.Assert], [td.Require], …) must be a
+// [*testing.T] instance.
+//
+// See also [SubtestAssertRequire].
+func Subtest(t *td.T, name string, f func(t *td.T)) {
+	t.Helper()
+	tt, ok := t.TB.(*testing.T)
+	if !ok {
+		t.Fatalf("tdsynctest.Subtest only works if underlying T.TB field is a *testing.T, so not a %T", t.TB)
+	}
+	conf := t.Config
+	tt.Run(name, func(t *testing.T) {
+		synctest.Test(t, func(t *testing.T) {
+			f(td.NewT(t, conf))
+		})
+	})
+}
+
+// SubtestAssertRequire runs f in a bubble as a subtest of t called name.
+//
+// The assert and require params of f inherit the configuration of t,
+// except that a failure is never fatal using assert and always fatal
+// using require.
+//
+// t.TB (set by [td.NewT], [td.Assert], [td.Require], …) must be a
+// [*testing.T] instance.
+//
+// See also [Subtest].
+func SubtestAssertRequire(t *td.T, name string, f func(assert, require *td.T)) {
+	t.Helper()
+	tt, ok := t.TB.(*testing.T)
+	if !ok {
+		t.Fatalf("tdsynctest.SubtestAssertRequire only works if underlying T.TB field is a *testing.T, so not a %T", t.TB)
+	}
+	conf := t.Config
+	tt.Run(name, func(t *testing.T) {
+		synctest.Test(t, func(t *testing.T) {
+			f(td.AssertRequire(t, conf))
+		})
+	})
+}
+
 // Wait simply calls [synctest.Wait]. It only exists to avoid to
 // import [testing/synctest].
 func Wait() {
 	synctest.Wait()
+}
+
+// Sleep does the same as go1.27 [synctest.Sleep]. It only exists to avoid to
+// import [testing/synctest] and/or when go version is lesser than 1.27.
+func Sleep(d time.Duration) {
+	time.Sleep(d)
+	Wait()
 }
