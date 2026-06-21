@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021, Maxime Soulé
+// Copyright (c) 2019-2026, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -16,6 +16,12 @@ import (
 	"github.com/maxatome/go-testdeep/td"
 )
 
+// Starting go1.27, the first file of the stack trace is not
+// types_test.go but module_path/td/types_test.go. So as a "/" is
+// detected in file name, go-testdeep automatically add "This is how
+// we got here" paragraph.
+var thisIsHowWeGotHere = func(line int) string { return "" }
+
 func TestSetlocation(t *testing.T) {
 	//nolint: gocritic
 //line types_test.go:10
@@ -26,7 +32,7 @@ func TestSetlocation(t *testing.T) {
         DATA: values differ
         	     got: 12
         	expected: 13
-`)
+`+thisIsHowWeGotHere(11))
 	} else {
 		t.Error("Cmp returned true!")
 	}
@@ -45,7 +51,7 @@ func TestSetlocation(t *testing.T) {
         	              14,
         	              15)
         [under operator Any at types_test.go:23]
-`)
+`+thisIsHowWeGotHere(21))
 	} else {
 		t.Error("Cmp returned true!")
 	}
@@ -63,7 +69,7 @@ func TestSetlocation(t *testing.T) {
         	expected: Any(13,
         	              14,
         	              15)
-`)
+`+thisIsHowWeGotHere(31))
 	} else {
 		t.Error("CmpAny returned true!")
 	}
@@ -83,7 +89,7 @@ func TestSetlocation(t *testing.T) {
         	              14,
         	              15)
         [under operator Any at types_test.go:44]
-`)
+`+thisIsHowWeGotHere(42))
 	} else {
 		t.Error("Cmp returned true!")
 	}
@@ -102,7 +108,7 @@ func TestSetlocation(t *testing.T) {
         	expected: Any(13,
         	              14,
         	              15)
-`)
+`+thisIsHowWeGotHere(52))
 	} else {
 		t.Error("Cmp returned true!")
 	}
