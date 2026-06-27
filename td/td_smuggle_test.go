@@ -8,11 +8,15 @@ package td_test
 
 import (
 	"bytes"
+	"compress/gzip"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"reflect"
+	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -297,6 +301,17 @@ func TestSmuggle(t *testing.T) {
 	checkOK(t, 123.456, td.Smuggle(reflect.TypeOf(int64(0)), int64(123)))
 
 	//
+	// Chained Smuggle
+	checkOK(t, `123456789`,
+		td.Smuggle(
+			strconv.Atoi,
+			strconv.Itoa,
+			strconv.Atoi,
+			strconv.Itoa,
+			strconv.Atoi,
+			123456789))
+
+	//
 	// Errors
 	checkError(t, "123",
 		td.Smuggle(func(n float64) int { return int(n) }, 123),
@@ -433,13 +448,22 @@ func TestSmuggle(t *testing.T) {
 
 	//
 	// Bad usage
-	const usage = "Smuggle(FUNC|FIELDS_PATH|ANY_TYPE, TESTDEEP_OPERATOR|EXPECTED_VALUE): "
+	const usage = "Smuggle(FUNC|FIELDS_PATH|ANY_TYPE[, FUNC|FIELDS_PATH|ANY_TYPE, ...], TESTDEEP_OPERATOR|EXPECTED_VALUE): "
+
+	checkError(t, "never tested",
+		td.Smuggle("only one param"),
+		expectedError{
+			Message: mustBe("bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", too few parameters"),
+		})
+
 	checkError(t, "never tested",
 		td.Smuggle(nil, 12),
 		expectedError{
 			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE cannot be nil nor Interface"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE cannot be nil nor interface"),
 		})
 
 	checkError(t, nil,
@@ -447,7 +471,15 @@ func TestSmuggle(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE reflect.Type cannot be Func nor Interface"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE reflect.Type cannot be interface"),
+		})
+
+	checkError(t, nil, // error in a chained Smuggle
+		td.Smuggle(reflect.TypeOf((*fmt.Stringer)(nil)).Elem(), "", 1234),
+		expectedError{
+			Message: mustBe("bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE reflect.Type cannot be interface as 1st parameter"),
 		})
 
 	checkError(t, nil,
@@ -455,7 +487,15 @@ func TestSmuggle(t *testing.T) {
 		expectedError{
 			Message: mustBe("bad usage of Smuggle operator"),
 			Path:    mustBe("DATA"),
-			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE reflect.Type cannot be Func nor Interface"),
+			Summary: mustBe("usage: " + usage[:len(usage)-2] + ", ANY_TYPE reflect.Type cannot be func"),
+		})
+
+	checkError(t, "never tested",
+		td.Smuggle((func(string) int)(nil), 12),
+		expectedError{
+			Message: mustBe("bad usage of Smuggle operator"),
+			Path:    mustBe("DATA"),
+			Summary: mustBe("Smuggle(FUNC): FUNC cannot be a nil function"),
 		})
 
 	checkError(t, "never tested",
@@ -882,4 +922,37 @@ func TestSmuggleTypeBehind(t *testing.T) {
 
 	// Erroneous op
 	equalTypes(t, td.Smuggle((func(int) int)(nil), 12), nil)
+}
+
+// Here instead of in example_test.go, as chained Smuggle is not
+// usable with T.Smuggle nor CmpSmuggle.
+func ExampleSmuggle_chained() {
+	t := &testing.T{}
+
+	got := "+123"
+
+	ok := td.Cmp(t, got, td.Smuggle(
+		strconv.Atoi,
+		strconv.Itoa,
+		strconv.Atoi,
+		123))
+	fmt.Printf("chaining Atoi/Itoa: %t\n", ok)
+
+	// echo hello | gzip | perl -nE 'printf "%*v02x\n", " ", $_'
+	got = "1f 8b 08 00 b4 c4 3f 6a 00 03 cb 48 cd c9 c9 e7 02 00 20 30 3a 36 06 00 00 00"
+
+	ok = td.Cmp(t, got, td.Smuggle(
+		strings.NewReplacer(" ", "").Replace, // remove spaces
+		hex.DecodeString,                     // hex string → []byte
+		bytes.NewReader,                      // []byte → io.Reader
+		gzip.NewReader,                       // io.Reader → gunzipped io.Reader
+		io.ReadAll,                           // gunzipped io.Reader → []byte
+		"",                                   // []byte → string
+		"hello\n"))                           // expected
+
+	fmt.Printf("hex decode, gunzip: %t", ok)
+
+	// Output:
+	// chaining Atoi/Itoa: true
+	// hex decode, gunzip: true
 }

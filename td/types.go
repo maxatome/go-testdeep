@@ -16,6 +16,8 @@ import (
 	"github.com/maxatome/go-testdeep/internal/types"
 )
 
+const stringErrorParam = "(<ERROR>)"
+
 var (
 	tType              = reflect.TypeOf((*T)(nil))
 	testDeeper         = reflect.TypeOf((*TestDeep)(nil)).Elem()
@@ -151,7 +153,7 @@ func (t base) Error() error {
 // stringError is a convenience method to call in String()
 // implementations when the operator is in error.
 func (t base) stringError() string {
-	return t.GetLocation().Func + "(<ERROR>)"
+	return t.GetLocation().Func + stringErrorParam
 }
 
 // MarshalJSON implements encoding/json.Marshaler only to returns an

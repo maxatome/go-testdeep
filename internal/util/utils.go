@@ -1,4 +1,4 @@
-// Copyright (c) 2018, Maxime Soulé
+// Copyright (c) 2018-2026, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -35,7 +35,22 @@ func BadParam(param any, pos int, kind bool) string {
 			b.WriteString(t.String())
 		}
 	}
+	asNthParam(&b, pos)
+	return b.String()
+}
 
+// AsNthParam returns a string like:
+//
+//	" as {pos}th parameter"
+//
+// handling 1st, 2nd and 3rd.
+func AsNthParam(pos int) string {
+	var b strings.Builder
+	asNthParam(&b, pos)
+	return b.String()
+}
+
+func asNthParam(b *strings.Builder, pos int) {
 	b.WriteString(" as ")
 	switch pos {
 	case 1:
@@ -45,10 +60,9 @@ func BadParam(param any, pos int, kind bool) string {
 	case 3:
 		b.WriteString("3rd")
 	default:
-		fmt.Fprintf(&b, "%dth", pos)
+		fmt.Fprintf(b, "%dth", pos)
 	}
 	b.WriteString(" parameter")
-	return b.String()
 }
 
 // TernRune returns a if cond is true, b otherwise.

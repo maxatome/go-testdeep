@@ -502,6 +502,135 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 		})
 }
 
+func smuggleParamInfo(depth, lenFnsThenExpectedValue int) string {
+	if depth == 1 && lenFnsThenExpectedValue <= 1 {
+		return ""
+	}
+	return util.AsNthParam(depth)
+}
+
+func smuggle(depth int, fn any, fnsThenExpectedValue []any) TestDeep {
+	const usage = "(FUNC|FIELDS_PATH|ANY_TYPE[, FUNC|FIELDS_PATH|ANY_TYPE, ...], TESTDEEP_OPERATOR|EXPECTED_VALUE)"
+	const fullUsage = "Smuggle" + usage
+
+	var expectedValue any
+	switch len(fnsThenExpectedValue) {
+	case 0:
+		s := tdSmuggle{
+			tdSmugglerBase: newSmugglerBase(nil, depth),
+		}
+		s.err = ctxerr.OpTooFewParams("Smuggle", usage)
+		return &s
+
+	case 1:
+		expectedValue = fnsThenExpectedValue[0]
+
+	default:
+		expectedValue = smuggle(depth+1, fnsThenExpectedValue[0], fnsThenExpectedValue[1:])
+	}
+
+	s := tdSmuggle{
+		tdSmugglerBase: newSmugglerBase(expectedValue, depth),
+	}
+
+	var vfn reflect.Value
+
+	switch rfn := fn.(type) {
+	case reflect.Type:
+		switch rfn.Kind() {
+		case reflect.Func, reflect.Invalid, reflect.Interface:
+			s.err = ctxerr.OpBad("Smuggle",
+				"usage: Smuggle%s, ANY_TYPE reflect.Type cannot be %s%s",
+				usage, rfn.Kind(), smuggleParamInfo(depth, len(fnsThenExpectedValue)))
+			return &s
+
+		default:
+			vfn = getCaster(rfn)
+			s.str = "type:" + rfn.String()
+		}
+
+	case string:
+		if rfn == "" {
+			vfn = getCaster(reflect.TypeOf(fn))
+			s.str = "type:string"
+			break
+		}
+		var err error
+		vfn, err = getFieldsPathFn(rfn)
+		if err != nil {
+			s.err = ctxerr.OpBad("Smuggle", "Smuggle%s: %s%s",
+				usage, err, smuggleParamInfo(depth, len(fnsThenExpectedValue)))
+			return &s
+		}
+		s.str = strconv.Quote(rfn)
+
+	default:
+		vfn = reflect.ValueOf(fn)
+		switch vfn.Kind() {
+		case reflect.Func:
+			s.str = vfn.Type().String()
+			// nothing to check
+
+		case reflect.Invalid, reflect.Interface:
+			s.err = ctxerr.OpBad("Smuggle",
+				"usage: Smuggle%s, ANY_TYPE cannot be nil nor interface%s",
+				usage, smuggleParamInfo(depth, len(fnsThenExpectedValue)))
+			return &s
+
+		default:
+			typ := vfn.Type()
+			vfn = getCaster(typ)
+			s.str = "type:" + typ.String()
+		}
+	}
+
+	fnType := vfn.Type()
+	if fnType.IsVariadic() || fnType.NumIn() != 1 {
+		s.err = ctxerr.OpBad("Smuggle",
+			fullUsage+": FUNC must take only one non-variadic argument"+
+				smuggleParamInfo(depth, len(fnsThenExpectedValue)))
+		return &s
+	}
+
+	switch fnType.NumOut() {
+	case 3: // (value, bool, string)
+		if fnType.Out(2).Kind() != reflect.String {
+			break
+		}
+		fallthrough
+
+	case 2:
+		// (value, *bool*) or (value, *bool*, string)
+		if fnType.Out(1).Kind() != reflect.Bool &&
+			// (value, *error*)
+			(fnType.NumOut() > 2 ||
+				fnType.Out(1) != types.Error) {
+			break
+		}
+		fallthrough
+
+	case 1: // (value)
+		if vfn.IsNil() {
+			s.err = ctxerr.OpBad("Smuggle",
+				"Smuggle(FUNC): FUNC cannot be a nil function"+
+					smuggleParamInfo(depth, len(fnsThenExpectedValue)))
+			return &s
+		}
+
+		s.argType = fnType.In(0)
+		s.function = vfn
+
+		if !s.isTestDeeper {
+			s.expectedValue = reflect.ValueOf(expectedValue)
+		}
+		return &s
+	}
+
+	s.err = ctxerr.OpBad("Smuggle",
+		fullUsage+": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)")
+	return &s
+}
+
 // summary(Smuggle): changes data contents or mutates it into another
 // type via a custom function or a struct fields-path before stepping
 // down in favor of generic comparison process
@@ -517,8 +646,17 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 // fields-path through structs, maps & slices, or any other type, in
 // this case a simple cast is done (see below for details).
 //
-// fn must return at least one value. These value will be compared as is
-// to expectedValue, here integer 28:
+// fnsThenExpectedValue must have a length of 1 or more items. Its
+// last item corresponds to the expectedValue. The previous items, if
+// any, are like fn and are used sequentially after fn allowing to
+// implicitly chain Smuggle calls, so the following [Cmp] calls are
+// strictly equivalent:
+//
+//	td.Cmp(t, "+28", td.Smuggle(FN1, td.Smuggle(FN2, td.Smuggle(FN3, "28"))))
+//	td.Cmp(t, "+28", td.Smuggle(FN1, FN2, FN3, "28"))
+//
+// Each fn must return at least one value. These value will be
+// compared as is to expectedValue, here integer 28:
 //
 //	td.Cmp(t, "0028",
 //	  td.Smuggle(func(value string) int {
@@ -536,8 +674,8 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //	  }, td.Between(28, 30)),
 //	)
 //
-// fn can return a second boolean value, used to tell that a problem
-// occurred and so stop the comparison:
+// Each fn can return a second boolean value, used to tell that a
+// problem occurred and so stop the comparison:
 //
 //	td.Cmp(t, "0029",
 //	  td.Smuggle(func(value string) (int, bool) {
@@ -546,8 +684,8 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //	  }, td.Between(28, 30)),
 //	)
 //
-// fn can return a third string value which is used to describe the
-// test when a problem occurred (false second boolean value):
+// Each fn can return a third string value which is used to describe
+// the test when a problem occurred (false second boolean value):
 //
 //	td.Cmp(t, "0029",
 //	  td.Smuggle(func(value string) (int, bool, string) {
@@ -559,7 +697,7 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //	  }, td.Between(28, 30)),
 //	)
 //
-// Instead of returning (X, bool) or (X, bool, string), fn can
+// Instead of returning (X, bool) or (X, bool, string), each fn can
 // return (X, error). When a problem occurs, the returned error is
 // non-nil, as in:
 //
@@ -741,103 +879,8 @@ func buildCaster(outType reflect.Type, useString bool) reflect.Value {
 //
 // [json.RawMessage]: https://pkg.go.dev/encoding/json#RawMessage
 // [jsontext.Value]: https://pkg.go.dev/encoding/json/jsontext#Value
-func Smuggle(fn, expectedValue any) TestDeep {
-	s := tdSmuggle{
-		tdSmugglerBase: newSmugglerBase(expectedValue),
-	}
-
-	const usage = "(FUNC|FIELDS_PATH|ANY_TYPE, TESTDEEP_OPERATOR|EXPECTED_VALUE)"
-	const fullUsage = "Smuggle" + usage
-
-	var vfn reflect.Value
-
-	switch rfn := fn.(type) {
-	case reflect.Type:
-		switch rfn.Kind() {
-		case reflect.Func, reflect.Invalid, reflect.Interface:
-			s.err = ctxerr.OpBad("Smuggle",
-				"usage: Smuggle%s, ANY_TYPE reflect.Type cannot be Func nor Interface", usage)
-			return &s
-
-		default:
-			vfn = getCaster(rfn)
-			s.str = "type:" + rfn.String()
-		}
-
-	case string:
-		if rfn == "" {
-			vfn = getCaster(reflect.TypeOf(fn))
-			s.str = "type:string"
-			break
-		}
-		var err error
-		vfn, err = getFieldsPathFn(rfn)
-		if err != nil {
-			s.err = ctxerr.OpBad("Smuggle", "Smuggle%s: %s", usage, err)
-			return &s
-		}
-		s.str = strconv.Quote(rfn)
-
-	default:
-		vfn = reflect.ValueOf(fn)
-		switch vfn.Kind() {
-		case reflect.Func:
-			s.str = vfn.Type().String()
-			// nothing to check
-
-		case reflect.Invalid, reflect.Interface:
-			s.err = ctxerr.OpBad("Smuggle",
-				"usage: Smuggle%s, ANY_TYPE cannot be nil nor Interface", usage)
-			return &s
-
-		default:
-			typ := vfn.Type()
-			vfn = getCaster(typ)
-			s.str = "type:" + typ.String()
-		}
-	}
-
-	fnType := vfn.Type()
-	if fnType.IsVariadic() || fnType.NumIn() != 1 {
-		s.err = ctxerr.OpBad("Smuggle", fullUsage+": FUNC must take only one non-variadic argument")
-		return &s
-	}
-
-	switch fnType.NumOut() {
-	case 3: // (value, bool, string)
-		if fnType.Out(2).Kind() != reflect.String {
-			break
-		}
-		fallthrough
-
-	case 2:
-		// (value, *bool*) or (value, *bool*, string)
-		if fnType.Out(1).Kind() != reflect.Bool &&
-			// (value, *error*)
-			(fnType.NumOut() > 2 ||
-				fnType.Out(1) != types.Error) {
-			break
-		}
-		fallthrough
-
-	case 1: // (value)
-		if vfn.IsNil() {
-			s.err = ctxerr.OpBad("Smuggle", "Smuggle(FUNC): FUNC cannot be a nil function")
-			return &s
-		}
-
-		s.argType = fnType.In(0)
-		s.function = vfn
-
-		if !s.isTestDeeper {
-			s.expectedValue = reflect.ValueOf(expectedValue)
-		}
-		return &s
-	}
-
-	s.err = ctxerr.OpBad("Smuggle",
-		fullUsage+": FUNC must return value or (value, bool) or (value, bool, string) or (value, error)")
-	return &s
+func Smuggle(fn any, fnsThenExpectedValue ...any) TestDeep {
+	return smuggle(1, fn, fnsThenExpectedValue)
 }
 
 func (s *tdSmuggle) laxConvert(got reflect.Value) (reflect.Value, bool) {
@@ -948,7 +991,7 @@ func (s *tdSmuggle) HandleInvalid() bool {
 
 func (s *tdSmuggle) String() string {
 	if s.err != nil {
-		return s.stringError()
+		return "Smuggle" + stringErrorParam
 	}
 	return "Smuggle(" + s.str + ", " + util.ToString(s.expectedValue) + ")"
 }

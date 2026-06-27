@@ -32,6 +32,13 @@ func TestOpTooManyParams(t *testing.T) {
 		prefix+"usage: Zzz(PARAM), too many parameters")
 }
 
+func TestOpTooFewParams(t *testing.T) {
+	defer color.SaveState()()
+
+	test.EqualStr(t, ctxerr.OpTooFewParams("Zzz", "(PARAM)").Error(),
+		prefix+"usage: Zzz(PARAM), too few parameters")
+}
+
 func TestBad(t *testing.T) {
 	defer color.SaveState()()
 
