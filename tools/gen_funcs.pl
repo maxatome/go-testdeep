@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Copyright (c) 2018-2025, Maxime Soulé
+# Copyright (c) 2018-2026, Maxime Soulé
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -72,7 +72,7 @@ my $URL_GODEV = 'https://pkg.go.dev';
 my $URL_GODOC = "$URL_GODEV/github.com/maxatome/go-testdeep";
 
 my $HEADER = <<'EOH';
-// Copyright (c) 2018-2025, Maxime Soulé
+// Copyright (c) 2018-2026, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -95,9 +95,11 @@ my $ARGS_COMMENT_GD = doc2godoc($args_comment_src);
 my $ARGS_COMMENT_MD = doc2md($args_comment_src);
 
 
-# These functions are variadics, but with only one possible param. In
-# this case, discard the variadic property and use a default value for
-# this optional parameter.
+# These operators are variadics. The value describes how the variadic
+# param is handled in T.Operator and CmpOperator functions:
+# - if value is defined, it is the value to use to mimic empty
+#   variadic param in Operator;
+# - if value is not defined, variadic param is discarded.
 my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        N         => 0,
                        Re        => 'nil',
@@ -117,7 +119,9 @@ my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        # but we want only one here
                        Array        => 'nil',
                        Slice        => 'nil',
-                       SuperSliceOf => 'nil');
+                       SuperSliceOf => 'nil',
+                       # Discard variadic param
+                       Smuggle => undef);
 
 # Smuggler operators (automatically filled)
 my %SMUGGLER_OPERATORS;
@@ -238,6 +242,10 @@ while (readdir $dh)
                     {
                         $arg{default} = $IGNORE_VARIADIC{$func};
                         delete $arg{variadic};
+
+                        # Smuggle: rename xxxThenExpectedValue to expectedValue
+                        $arg{default}
+                            // $arg{name} =~ s/^\w+ThenE(?=xpectedValue\z)/e/;
                     }
                 }
 
@@ -393,7 +401,7 @@ EOF
 
     my $func_comment;
     my $last_arg = $funcs{$func}{args}[-1];
-    if (exists $last_arg->{default})
+    if (defined $last_arg->{default})
     {
         my $default = $last_arg->{default};
         $default = "[$1]" if $default =~ /^td\.(.+)/ and exists $consts{$1};

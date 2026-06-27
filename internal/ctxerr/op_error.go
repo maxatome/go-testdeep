@@ -36,6 +36,14 @@ func OpTooManyParams(op, usage string) *Error {
 	return OpBad(op, "usage: %s%s, too many parameters", op, usage)
 }
 
+// OpTooFewParams returns an [*Error] to notice the user she/he called a
+// variadic operator constructor with too few parameters.
+//
+//	usage: {op}{usage}, too few parameters
+func OpTooFewParams(op, usage string) *Error {
+	return OpBad(op, "usage: %s%s, too few parameters", op, usage)
+}
+
 // OpBad returns an [*Error] to notice the user a bad operator
 // constructor usage. If len(args) is > 0, s and args are given to
 // [fmt.Sprintf].

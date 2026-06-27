@@ -43,6 +43,13 @@ func TestBadParam(t *testing.T) {
 		"but received nil as 4th parameter")
 }
 
+func TestAsNthParam(t *testing.T) {
+	test.EqualStr(t, util.AsNthParam(1), " as 1st parameter")
+	test.EqualStr(t, util.AsNthParam(2), " as 2nd parameter")
+	test.EqualStr(t, util.AsNthParam(3), " as 3rd parameter")
+	test.EqualStr(t, util.AsNthParam(4), " as 4th parameter")
+}
+
 func TestTern(t *testing.T) {
 	test.EqualInt(t, int(util.TernRune(true, 'A', 'B')), int('A'))
 	test.EqualInt(t, int(util.TernRune(false, 'A', 'B')), int('B'))
