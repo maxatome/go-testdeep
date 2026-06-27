@@ -10,13 +10,19 @@
 package td
 
 // Anchor is a generic shortcut to [T.Anchor].
+//
+// See also [T.AnchorT] method for a generic variant (go1.27 required).
 func Anchor[X any](t *T, operator TestDeep) X {
+	t.Helper()
 	var model X
 	return t.Anchor(operator, model).(X)
 }
 
 // A is a generic shortcut to [T.A].
+//
+// See also [T.AT] method for a generic variant (go1.27 required).
 func A[X any](t *T, operator TestDeep) X {
+	t.Helper()
 	var model X
 	return t.A(operator, model).(X)
 }

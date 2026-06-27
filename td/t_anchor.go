@@ -56,6 +56,8 @@ func AddAnchorableStructType(fn any) {
 // operator operator in a go classic literal like a struct, slice,
 // array or map value.
 //
+// Starting go1.27, you should prefer to use [T.AT].
+//
 // If the TypeBehind method of operator returns non-nil, model can be
 // omitted (like with [Between] operator in the example
 // below). Otherwise, model should contain only one value
@@ -130,7 +132,8 @@ func AddAnchorableStructType(fn any) {
 // next [T.Cmp] or [T.CmpLax] call. To make it persistent across calls,
 // see [T.SetAnchorsPersist] and [T.AnchorsPersistTemporarily] methods.
 //
-// See [T.A] method for a shorter synonym of Anchor.
+// See [T.AT] & [T.AnchorT] methods for generic variants (go1.27
+// required) and [T.A] method for a shorter synonym of Anchor.
 //
 // See also [T.AnchorsPersistTemporarily], [T.DoAnchorsPersist],
 // [T.ResetAnchors], [T.SetAnchorsPersist] and [AddAnchorableStructType].
@@ -182,6 +185,8 @@ func (t *T) Anchor(operator TestDeep, model ...any) any {
 
 // A is a synonym for [T.Anchor].
 //
+// Starting go1.27, you should prefer to use [T.AT].
+//
 //	import (
 //	  "testing"
 //
@@ -200,6 +205,8 @@ func (t *T) Anchor(operator TestDeep, model ...any) any {
 //	    },
 //	  })
 //	}
+//
+// See [T.AT] & [T.AnchorT] methods for generic variants (go1.27 required).
 //
 // See also [T.AnchorsPersistTemporarily], [T.DoAnchorsPersist],
 // [T.ResetAnchors], [T.SetAnchorsPersist] and [AddAnchorableStructType].
