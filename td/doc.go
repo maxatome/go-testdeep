@@ -270,15 +270,19 @@
 //	      &Record{
 //	        Name:      "Bob",
 //	        Age:       23,
-//	        ID:        t.A(td.NotZero(), uint64(0)).(uint64),
-//	        CreatedAt: t.A(td.Between(before, time.Now())).(time.Time),
+//	        ID:        t.AT[uint64](td.NotZero()),
+//	        CreatedAt: t.AT[time.Time](td.Between(before, time.Now())),
+//	        // or if using go<1.27
+//	        ID:        td.A[uint64](t, td.NotZero()),
+//	        CreatedAt: td.A[time.Time](t, td.Between(before, time.Now())),
 //	      },
 //	      "Newly created record")
 //	  }
 //	}
 //
-// See the [T.A] method (or its full name alias [T.Anchor])
-// documentation for details.
+// See the [T.AT] method (or its full name alias [T.AnchorT])
+// documentation for details (if go<1.27, see [A] & [Anchor] functions
+// instead.)
 //
 // [go-testdeep]: https://go-testdeep.zetta.rocks/
 // [Test::Deep]: https://metacpan.org/pod/Test::Deep
