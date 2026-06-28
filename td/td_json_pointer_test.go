@@ -262,7 +262,7 @@ func TestJSONPointer(t *testing.T) {
 			map[string]int{"zzz": 42},
 			td.JSONPointer("/zzz", jsonPtrTest(56)),
 			expectedError{
-				Message: mustBe("an error occurred while unmarshalling JSON into td_test.jsonPtrTest"),
+				Message: mustBe("an error occurred while unmarshaling JSON into td_test.jsonPtrTest"),
 				Path:    mustBe("DATA.JSONPointer</zzz>"),
 				Summary: mustBe("jsonPtrTest unmarshal custom error"),
 			})

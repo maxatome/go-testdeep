@@ -146,7 +146,7 @@ func TestMyApi(t *testing.T) {
 ```
 
 1. the API handler ready to be tested;
-2. the POST request with automatic JSON marshalling;
+2. the POST request with automatic JSON marshaling;
 3. the expected response HTTP status should be `http.StatusCreated`
    and the line just below, the body should match the [`JSON`] operator;
 4. some operators can be embedded, like [`Between`] here;

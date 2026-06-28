@@ -60,11 +60,12 @@ var forbiddenOpsInJSON = map[string]string{
 // and SuperJSONOf first parameter.
 type tdJSONUnmarshaler struct {
 	location.Location // position of the operator
+	options           jsonv2Options
 }
 
 // newJSONUnmarshaler returns a new instance of tdJSONUnmarshaler.
-func newJSONUnmarshaler(pos location.Location) tdJSONUnmarshaler {
-	return tdJSONUnmarshaler{
+func newJSONUnmarshaler(pos location.Location) *tdJSONUnmarshaler {
+	return &tdJSONUnmarshaler{
 		Location: pos,
 	}
 }
@@ -86,7 +87,7 @@ func (u tdJSONUnmarshaler) replaceLocation(tdOp TestDeep, posInJSON json.Positio
 }
 
 // unmarshal unmarshals expectedJSON using placeholder parameters params.
-func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxerr.Error) {
+func (u *tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxerr.Error) {
 	var (
 		err error
 		b   []byte
@@ -124,6 +125,13 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 			expectedJSON, 1, false)
 	}
 
+	// Join all json/v2 options
+	for _, p := range params {
+		if opts, ok := p.(jsonv2Options); ok {
+			u.options = joinOptions(u.options, opts)
+		}
+	}
+
 	params = flat.Interfaces(params...)
 	var byTag map[string]any
 
@@ -140,9 +148,9 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 			if op.expectedValue.IsValid() {
 				p = op.expectedValue.Interface()
 			}
-			byTag[op.tag] = newJSONNamedPlaceholder(op.tag, p)
+			byTag[op.tag] = newJSONNamedPlaceholder(op.tag, p, u.options)
 		}
-		params[i] = newJSONNumPlaceholder(uint64(i+1), p)
+		params[i] = newJSONNumPlaceholder(uint64(i+1), p, u.options)
 	}
 
 	final, err := json.Parse(b, json.ParseOpts{
@@ -158,7 +166,7 @@ func (u tdJSONUnmarshaler) unmarshal(expectedJSON any, params []any) (any, *ctxe
 }
 
 // resolveOp returns a closure usable as json.ParseOpts.OpFn.
-func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, error) {
+func (u *tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, error) {
 	return func(jop json.Operator, posInJSON json.Position) (any, error) {
 		op, exists := allOperators[jop.Name]
 		if !exists {
@@ -185,6 +193,7 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, 
 
 		// Special cases
 		var min, max int
+		jsonPointer := false
 		switch jop.Name {
 		case "Between":
 			min, max = 2, 3
@@ -215,6 +224,8 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, 
 					return nil, errors.New(`Between() bad 3rd parameter, use "[]", "[[", "]]" or "]["`)
 				}
 			}
+		case "JSONPointer":
+			jsonPointer, min, max = true, 2, 2
 		case "N", "Re":
 			min, max = 1, 2
 		case "Sorted":
@@ -252,6 +263,10 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, 
 			for i, p := range jop.Params {
 				in[i] = reflect.ValueOf(p)
 			}
+			// For JSONPointer use the same json/v2 options as the JSON operator one
+			if jsonPointer && u.options != nil {
+				in = append(in, reflect.ValueOf(u.options))
+			}
 
 			// If the function is variadic, no need to check each param as all
 			// variadic operators have always a ...any
@@ -277,22 +292,23 @@ func (u tdJSONUnmarshaler) resolveOp() func(json.Operator, json.Position) (any, 
 
 		// replace the location by the JSON/SubJSONOf/SuperJSONOf one
 		u.replaceLocation(tdOp, posInJSON)
-		return newJSONEmbedded(tdOp), nil
+		return newJSONEmbedded(tdOp, u.options), nil
 	}
 }
 
 // tdJSONSmuggler is the base type for tdJSONPlaceholder & tdJSONEmbedded.
 type tdJSONSmuggler struct {
 	tdSmugglerBase // ignored by tools/gen_funcs.pl
+	options        jsonv2Options
 }
 
 func (s *tdJSONSmuggler) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
-	vgot, _ := jsonify(ctx, got) // Cannot fail
+	vgot, _ := jsonify(ctx, got, s.options) // Cannot fail
 
 	// Here, vgot type is either a bool, float64, string,
 	// []any, a map[string]any or simply nil
 
-	return s.jsonValueEqual(ctx, vgot)
+	return s.jsonValueEqual(ctx, vgot, s.options)
 }
 
 func (s *tdJSONSmuggler) String() string {
@@ -323,10 +339,11 @@ type tdJSONPlaceholder struct {
 	num  uint64
 }
 
-func newJSONNamedPlaceholder(name string, expectedValue any) TestDeep {
+func newJSONNamedPlaceholder(name string, expectedValue any, opts jsonv2Options) TestDeep {
 	p := tdJSONPlaceholder{
 		tdJSONSmuggler: tdJSONSmuggler{
 			tdSmugglerBase: newSmugglerBase(expectedValue, -100), // without location
+			options:        opts,
 		},
 		name: name,
 	}
@@ -337,10 +354,11 @@ func newJSONNamedPlaceholder(name string, expectedValue any) TestDeep {
 	return &p
 }
 
-func newJSONNumPlaceholder(num uint64, expectedValue any) TestDeep {
+func newJSONNumPlaceholder(num uint64, expectedValue any, opts jsonv2Options) TestDeep {
 	p := tdJSONPlaceholder{
 		tdJSONSmuggler: tdJSONSmuggler{
 			tdSmugglerBase: newSmugglerBase(expectedValue, -100), // without location
+			options:        opts,
 		},
 		num: num,
 	}
@@ -357,7 +375,7 @@ func (p *tdJSONPlaceholder) MarshalJSON() ([]byte, error) {
 		if p.expectedValue.IsValid() {
 			expected = p.expectedValue.Interface()
 		}
-		return ejson.Marshal(expected)
+		return jsonMarshal(expected, p.options)
 	}
 
 	var b bytes.Buffer
@@ -392,10 +410,11 @@ type tdJSONEmbedded struct {
 	tdJSONSmuggler
 }
 
-func newJSONEmbedded(tdOp TestDeep) TestDeep {
+func newJSONEmbedded(tdOp TestDeep, opts jsonv2Options) TestDeep {
 	e := tdJSONEmbedded{
 		tdJSONSmuggler: tdJSONSmuggler{
 			tdSmugglerBase: newSmugglerBase(tdOp, -100), // without location
+			options:        opts,
 		},
 	}
 	return &e
@@ -409,12 +428,13 @@ func (e *tdJSONEmbedded) MarshalJSON() ([]byte, error) {
 type tdJSON struct {
 	baseOKNil
 	expected reflect.Value
+	options  jsonv2Options
 }
 
 var _ TestDeep = &tdJSON{}
 
-func gotViaJSON(ctx ctxerr.Context, pGot *reflect.Value) *ctxerr.Error {
-	got, err := jsonify(ctx, *pGot)
+func gotViaJSON(ctx ctxerr.Context, pGot *reflect.Value, opts jsonv2Options) *ctxerr.Error {
+	got, err := jsonify(ctx, *pGot, opts)
 	if err != nil {
 		return err
 	}
@@ -422,13 +442,13 @@ func gotViaJSON(ctx ctxerr.Context, pGot *reflect.Value) *ctxerr.Error {
 	return nil
 }
 
-func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
+func jsonify(ctx ctxerr.Context, got reflect.Value, opts jsonv2Options) (any, *ctxerr.Error) {
 	gotIf, ok := dark.GetInterface(got, true)
 	if !ok {
 		return nil, ctx.CannotCompareError()
 	}
 
-	b, err := ejson.Marshal(gotIf)
+	b, err := jsonMarshal(gotIf, opts)
 	if err != nil {
 		if ctx.BooleanError {
 			return nil, ctxerr.BooleanError
@@ -439,9 +459,16 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 		}
 	}
 
-	// As Marshal succeeded, Unmarshal in an any cannot fail
 	var vgot any
-	ejson.Unmarshal(b, &vgot) //nolint: errcheck
+	if err = jsonUnmarshal(b, &vgot, opts); err != nil {
+		if ctx.BooleanError {
+			return nil, ctxerr.BooleanError
+		}
+		return nil, &ctxerr.Error{
+			Message: "json.Unmarshal failed",
+			Summary: ctxerr.NewSummary(err.Error()),
+		}
+	}
 	return vgot, nil
 }
 
@@ -459,11 +486,12 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 //   - [io.Reader] stream containing JSON data (is [io.ReadAll]
 //     before unmarshaling)
 //
-// expectedJSON JSON value can contain placeholders. The params
-// are for any placeholder parameters in expectedJSON. params can
-// contain [TestDeep] operators as well as raw values. A placeholder can
-// be numeric like $2 or named like $name and always references an
-// item in params.
+// expectedJSON JSON value can contain placeholders. The params are
+// for any placeholder parameters in expectedJSON. params can contain
+// [TestDeep] operators as well as raw values. A placeholder can be
+// numeric like $2 or named like $name and always references an item
+// in params. params can also contains [encoding/json/v2.Options] when
+// [encoding/json/v2] must be used, see jsonv2 example.
 //
 // Numeric placeholders reference the n'th "operators" item (starting
 // at 1). Named placeholders are used with [Tag] operator as follows:
@@ -580,6 +608,10 @@ func jsonify(ctx ctxerr.Context, got reflect.Value) (any, *ctxerr.Error) {
 //   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
+//   - the optional 3rd parameter of [JSONPointer] (opts) is filled by all
+//     [encoding/json/v2.Options] values found in params, so it uses the
+//     same marshal/unmarshal semantics as JSON itself. If that's not
+//     desirable, do not embed [JSONPointer] and use a placeholder instead;
 //   - not all operators are embeddable only the following are: [All],
 //     [Any], [ArrayEach], [Bag], [Between], [Contains],
 //     [ContainsKey], [Empty], [First], [Grep], [Gt], [Gte],
@@ -681,11 +713,14 @@ func JSON(expectedJSON any, params ...any) TestDeep {
 		baseOKNil: newBaseOKNil(3),
 	}
 
-	v, err := newJSONUnmarshaler(j.GetLocation()).unmarshal(expectedJSON, params)
+	ju := newJSONUnmarshaler(j.GetLocation())
+
+	v, err := ju.unmarshal(expectedJSON, params)
 	if err != nil {
 		j.err = err
 	} else {
 		j.expected = reflect.ValueOf(v)
+		j.options = ju.options
 	}
 
 	return j
@@ -696,7 +731,7 @@ func (j *tdJSON) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		return ctx.CollectError(j.err)
 	}
 
-	err := gotViaJSON(ctx, &got)
+	err := gotViaJSON(ctx, &got, j.options)
 	if err != nil {
 		return ctx.CollectError(err)
 	}
@@ -747,6 +782,7 @@ func (j *tdJSON) TypeBehind() reflect.Type {
 type tdMapJSON struct {
 	tdMap
 	expected reflect.Value
+	options  jsonv2Options
 }
 
 var _ TestDeep = &tdMapJSON{}
@@ -783,11 +819,12 @@ var _ TestDeep = &tdMapJSON{}
 //	td.Cmp(t, got, td.SubJSONOf(`{"name": "Bob", "age": 42, "city": "NY"}`)) // succeeds
 //	td.Cmp(t, got, td.SubJSONOf(`{"name": "Bob", "zip": 666}`))              // fails, extra "age"
 //
-// expectedJSON JSON value can contain placeholders. The params
-// are for any placeholder parameters in expectedJSON. params can
-// contain [TestDeep] operators as well as raw values. A placeholder can
-// be numeric like $2 or named like $name and always references an
-// item in params.
+// expectedJSON JSON value can contain placeholders. The params are
+// for any placeholder parameters in expectedJSON. params can contain
+// [TestDeep] operators as well as raw values. A placeholder can be
+// numeric like $2 or named like $name and always references an item
+// in params. params can also contains [encoding/json/v2.Options] when
+// [encoding/json/v2] must be used, see jsonv2 example.
 //
 // Numeric placeholders reference the n'th "operators" item (starting
 // at 1). Named placeholders are used with [Tag] operator as follows:
@@ -907,6 +944,10 @@ var _ TestDeep = &tdMapJSON{}
 //   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
+//   - the optional 3rd parameter of [JSONPointer] (opts) is filled by all
+//     [encoding/json/v2.Options] values found in params, so it uses the
+//     same marshal/unmarshal semantics as JSON itself. If that's not
+//     desirable, do not embed [JSONPointer] and use a placeholder instead;
 //   - not all operators are embeddable only the following are: [All],
 //     [Any], [ArrayEach], [Bag], [Between], [Contains],
 //     [ContainsKey], [Empty], [First], [Grep], [Gt], [Gte],
@@ -1012,7 +1053,9 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 		},
 	}
 
-	v, err := newJSONUnmarshaler(m.GetLocation()).unmarshal(expectedJSON, params)
+	ju := newJSONUnmarshaler(m.GetLocation())
+
+	v, err := ju.unmarshal(expectedJSON, params)
 	if err != nil {
 		m.err = err
 		return m
@@ -1025,6 +1068,7 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 	}
 
 	m.expected = reflect.ValueOf(v)
+	m.options = ju.options
 
 	m.populateExpectedEntries(nil, m.expected)
 	return m
@@ -1068,7 +1112,8 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 // for any placeholder parameters in expectedJSON. params can contain
 // [TestDeep] operators as well as raw values. A placeholder can be
 // numeric like $2 or named like $name and always references an item
-// in params.
+// in params. params can also contains [encoding/json/v2.Options] when
+// [encoding/json/v2] must be used, see jsonv2 example.
 //
 // Numeric placeholders reference the n'th "operators" item (starting
 // at 1). Named placeholders are used with [Tag] operator as follows:
@@ -1187,6 +1232,10 @@ func SubJSONOf(expectedJSON any, params ...any) TestDeep {
 //   - the optional 3rd parameter of [Between] has to be specified as a string
 //     and can be: "[]" or "BoundsInIn" (default), "[[" or "BoundsInOut",
 //     "]]" or "BoundsOutIn", "][" or "BoundsOutOut";
+//   - the optional 3rd parameter of [JSONPointer] (opts) is filled by all
+//     [encoding/json/v2.Options] values found in params, so it uses the
+//     same marshal/unmarshal semantics as JSON itself. If that's not
+//     desirable, do not embed [JSONPointer] and use a placeholder instead;
 //   - not all operators are embeddable only the following are: [All],
 //     [Any], [ArrayEach], [Bag], [Between], [Contains],
 //     [ContainsKey], [Empty], [First], [Grep], [Gt], [Gte],
@@ -1315,7 +1364,7 @@ func (m *tdMapJSON) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Error {
 		return ctx.CollectError(m.err)
 	}
 
-	err := gotViaJSON(ctx, &got)
+	err := gotViaJSON(ctx, &got, m.options)
 	if err != nil {
 		return ctx.CollectError(err)
 	}

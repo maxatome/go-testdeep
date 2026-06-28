@@ -18,6 +18,7 @@ import (
 type tdJSONPointer struct {
 	tdSmugglerBase
 	pointer string
+	options jsonv2Options
 }
 
 var _ TestDeep = &tdJSONPointer{}
@@ -30,6 +31,16 @@ var _ TestDeep = &tdJSONPointer{}
 // representation of data, gets the value corresponding to the JSON
 // pointer ptr (as [RFC 6901] specifies it) and compares it to
 // expectedValue.
+//
+// By default, [encoding/json] is used to marshal and unmarshal
+// data. But if opts are passed using [encoding/json/v2.Options]
+// values, then [encoding/json/v2] is used (go1.27 required). Note
+// that multiple opts are automatically merged using
+// [encoding/json/v2.JoinOptions] before use. So the following calls
+// are equivalent:
+//
+//	td.Cmp(t, got, td.JSONPointer("/a/b", 123))
+//	td.Cmp(t, got, td.JSONPointer("/a/b", 123, json.DefaultOptionsV1()))
 //
 // [Lax] mode is automatically enabled to simplify numeric tests.
 //
@@ -98,10 +109,13 @@ var _ TestDeep = &tdJSONPointer{}
 // See also [JSON], [SubJSONOf], [SuperJSONOf], [Smuggle] and [Flatten].
 //
 // [RFC 6901]: https://tools.ietf.org/html/rfc6901
-func JSONPointer(ptr string, expectedValue any) TestDeep {
+func JSONPointer(ptr string, expectedValue any, opts ...jsonv2Options) TestDeep {
 	p := tdJSONPointer{
 		tdSmugglerBase: newSmugglerBase(expectedValue),
 		pointer:        ptr,
+	}
+	for _, o := range opts {
+		p.options = joinOptions(p.options, o)
 	}
 
 	if !strings.HasPrefix(ptr, "/") && ptr != "" {
@@ -120,7 +134,7 @@ func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 		return ctx.CollectError(p.err)
 	}
 
-	vgot, eErr := jsonify(ctx, got)
+	vgot, eErr := jsonify(ctx, got, p.options)
 	if eErr != nil {
 		return ctx.CollectError(eErr)
 	}
@@ -144,7 +158,7 @@ func (p *tdJSONPointer) Match(ctx ctxerr.Context, got reflect.Value) *ctxerr.Err
 	ctx = jsonPointerContext(ctx, p.pointer)
 	ctx.BeLax = true
 
-	return p.jsonValueEqual(ctx, vgot)
+	return p.jsonValueEqual(ctx, vgot, p.options)
 }
 
 func (p *tdJSONPointer) String() string {

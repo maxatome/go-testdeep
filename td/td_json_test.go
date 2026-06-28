@@ -78,7 +78,7 @@ func TestJSON(t *testing.T) {
 			td.Flatten([]td.TestDeep{td.Between(40, 45), td.NotEmpty()}),
 		))
 
-	// Operators are not JSON marshallable
+	// Operators are not JSON marshalable
 	checkOK(t, got,
 		td.JSON(`$1`, map[string]any{
 			"name":   td.Re(`^Bob`),
@@ -115,7 +115,7 @@ func TestJSON(t *testing.T) {
 			td.Tag("age", td.Between(40, 45)), // $2
 			"male"))                           // $3
 
-	// Tag placeholders + operators are not JSON marshallable
+	// Tag placeholders + operators are not JSON marshalable
 	checkOK(t, got,
 		td.JSON(`$all`, td.Tag("all", map[string]any{
 			"name":   td.Re(`^Bob`),
@@ -422,7 +422,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, []int{42},
 		td.JSON(`[$1]`, func() {}),
 		expectedError{
-			Message: mustBe("an error occurred while unmarshalling JSON into func()"),
+			Message: mustBe("an error occurred while unmarshaling JSON into func()"),
 			Path:    mustBe("DATA[0]"),
 			Summary: mustBe("json: cannot unmarshal number into Go value of type func()"),
 			Under:   mustContain(underOpJSON),
@@ -431,7 +431,7 @@ func TestJSON(t *testing.T) {
 	checkError(t, []int{42},
 		td.JSON(`[$foo]`, td.Tag("foo", func() {})),
 		expectedError{
-			Message: mustBe("an error occurred while unmarshalling JSON into func()"),
+			Message: mustBe("an error occurred while unmarshaling JSON into func()"),
 			Path:    mustBe("DATA[0]"),
 			Summary: mustBe("json: cannot unmarshal number into Go value of type func()"),
 			Under:   mustContain(underOpJSON),

@@ -22,7 +22,7 @@ func (m marshalTest) MarshalJSON() ([]byte, error) {
 	if m {
 		return []byte("marshal\ntest"), nil
 	}
-	return nil, errors.New("marshalling error")
+	return nil, errors.New("marshaling error")
 }
 
 func TestMarshal(t *testing.T) {
@@ -135,7 +135,7 @@ func TestMarshal(t *testing.T) {
 	} {
 		_, err := json.Marshal(in, 0)
 		if test.Error(t, err, "#%d", i) {
-			test.EqualStr(t, err.Error(), "marshalling error", "#%d", i)
+			test.EqualStr(t, err.Error(), "marshaling error", "#%d", i)
 		}
 	}
 

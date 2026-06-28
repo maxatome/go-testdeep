@@ -97,9 +97,10 @@ my $ARGS_COMMENT_MD = doc2md($args_comment_src);
 
 # These operators are variadics. The value describes how the variadic
 # param is handled in T.Operator and CmpOperator functions:
-# - if value is defined, it is the value to use to mimic empty
-#   variadic param in Operator;
-# - if value is not defined, variadic param is discarded.
+# - if value is -discard, variadic param is completely ignored;
+# - if value is -smuggle, special case for Smuggle, variadic param is
+#   changed to expectedValue only;
+# - otherwise, it is the value to use to mimic empty variadic param in Operator.
 my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        N         => 0,
                        Re        => 'nil',
@@ -120,8 +121,9 @@ my %IGNORE_VARIADIC = (Between   => 'td.BoundsInIn',
                        Array        => 'nil',
                        Slice        => 'nil',
                        SuperSliceOf => 'nil',
-                       # Discard variadic param
-                       Smuggle => undef);
+                       # Other cases
+                       JSONPointer => -discard,
+                       Smuggle     => -smuggle);
 
 # Smuggler operators (automatically filled)
 my %SMUGGLER_OPERATORS;
@@ -238,14 +240,21 @@ while (readdir $dh)
                 if (defined $arg{type}
                     and $arg{variadic} = $arg{type} =~ s/^\.{3}//)
                 {
-                    if (exists $IGNORE_VARIADIC{$func})
+                    if (defined(my $default = $IGNORE_VARIADIC{$func}))
                     {
-                        $arg{default} = $IGNORE_VARIADIC{$func};
-                        delete $arg{variadic};
+                        next if $default eq -discard;
 
-                        # Smuggle: rename xxxThenExpectedValue to expectedValue
-                        $arg{default}
-                            // $arg{name} =~ s/^\w+ThenE(?=xpectedValue\z)/e/;
+                        delete $arg{variadic};
+                        if ($default eq -smuggle)
+                        {
+                            # Smuggle: rename variadic param from
+                            # fnsThenExpectedValue to expectedValue
+                            $arg{name} = 'expectedValue';
+                        }
+                        else
+                        {
+                            $arg{default} = $default;
+                        }
                     }
                 }
 
