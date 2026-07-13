@@ -9,7 +9,7 @@
 
 package td
 
-// Must panics if ret is non-nil. Otherwise it returns ret.
+// Must panics if err is non-nil. Otherwise it returns ret.
 //
 //	fn := func() (int, error) { … }
 //	value := td.Must(fn())
@@ -20,9 +20,11 @@ package td
 //	td.Require(t).CmpNoError(err)
 //
 // except that in case of error a panic occurs instead of a clean
-// [testing.T.Fatal] error.
+// [testing.T.Fatal] error like. Starting go1.27, you should prefer to
+// use [T.Must] which does not panic but calls [testing.T.Fatal].
 //
-// See also [Must2], [Must3], [CmpNoError] and [T.CmpNoError].
+// See also [T.Must], [T.Must2], [T.Must3], [Must2], [Must3],
+// [CmpNoError] and [T.CmpNoError].
 func Must[X any](ret X, err error) X {
 	if err != nil {
 		panic("Must: " + err.Error())
@@ -30,7 +32,7 @@ func Must[X any](ret X, err error) X {
 	return ret
 }
 
-// Must2 panics if ret is non-nil. Otherwise it returns ret.
+// Must2 panics if err is non-nil. Otherwise it returns ret1, ret2.
 //
 //	fn := func() (int, string, error) { … }
 //	value1, value2 := td.Must2(fn())
@@ -41,9 +43,11 @@ func Must[X any](ret X, err error) X {
 //	td.Require(t).CmpNoError(err)
 //
 // except that in case of error a panic occurs instead of a clean
-// [testing.T.Fatal] error.
+// [testing.T.Fatal] error. Starting go1.27, you should prefer to
+// use [T.Must2] which does not panic but calls [testing.T.Fatal].
 //
-// See also [Must], [Must3], [CmpNoError] and [T.CmpNoError].
+// See also [T.Must2], [T.Must], [T.Must3], [Must], [Must3],
+// [CmpNoError] and [T.CmpNoError].
 func Must2[X, Y any](ret1 X, ret2 Y, err error) (X, Y) {
 	if err != nil {
 		panic("Must2: " + err.Error())
@@ -51,7 +55,7 @@ func Must2[X, Y any](ret1 X, ret2 Y, err error) (X, Y) {
 	return ret1, ret2
 }
 
-// Must3 panics if ret is non-nil. Otherwise it returns ret.
+// Must3 panics if err is non-nil. Otherwise it returns ret1, ret2, ret3.
 //
 //	fn := func() (int, string, bool, error) { … }
 //	value1, value2, value3 := td.Must3(fn())
@@ -62,9 +66,11 @@ func Must2[X, Y any](ret1 X, ret2 Y, err error) (X, Y) {
 //	td.Require(t).CmpNoError(err)
 //
 // except that in case of error a panic occurs instead of a clean
-// [testing.T.Fatal] error.
+// [testing.T.Fatal] error. Starting go1.27, you should prefer to
+// use [T.Must3] which does not panic but calls [testing.T.Fatal].
 //
-// See also [Must], [Must2], [CmpNoError] and [T.CmpNoError].
+// See also [T.Must3], [T.Must], [T.Must2], [Must], [Must2],
+// [CmpNoError] and [T.CmpNoError].
 func Must3[X, Y, Z any](ret1 X, ret2 Y, ret3 Z, err error) (X, Y, Z) {
 	if err != nil {
 		panic("Must3: " + err.Error())
