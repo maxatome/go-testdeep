@@ -144,4 +144,3 @@ func (t *T) AT[X any](operator TestDeep) X {
 	t.Helper()
 	return A[X](t, operator)
 }
-
