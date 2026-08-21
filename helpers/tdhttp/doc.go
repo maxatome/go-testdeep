@@ -20,7 +20,7 @@
 //	  CmpHeader(td.ContainsKey("X-Custom-Header")).
 //	  CmpCookie(td.SuperBagOf(td.Smuggle("Name", "cookie_session"))).
 //	  CmpXMLBody(Person{
-//	    ID:   ta.Anchor(td.NotZero(), uint64(0)).(uint64),
+//	    ID:   ta.AnchorT[uint64](td.NotZero()),
 //	    Name: "Bob",
 //	    Age:  26,
 //	  })
@@ -30,11 +30,11 @@
 //	  CmpHeader(td.ContainsKey("X-Custom-Header")).
 //	  CmpCookies(td.SuperBagOf(td.Struct(&http.Cookie{Name: "cookie_session"}, nil))).
 //	  CmpJSONBody(td.JSON(`
-//	{
-//	  "id":   $1,
-//	  "name": "Bob",
-//	  "age":  26
-//	}`,
+//	    {
+//	      "id":   $1,
+//	      "name": "Bob",
+//	      "age":  26
+//	    }`,
 //	    td.NotZero()))
 //
 // See the full example below.
