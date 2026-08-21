@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2022, Maxime Soulé
+// Copyright (c) 2020-2026, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -1484,6 +1484,8 @@ func (ta *TestAPI) dumpResponse() {
 // operator operator in a go classic literal like a struct, slice,
 // array or map value.
 //
+// Starting go1.27, you should prefer to use [TestAPI.AnchorT].
+//
 //	ta := tdhttp.NewTestAPI(tt, mux)
 //
 //	ta.Get("/person/42").
@@ -1504,6 +1506,8 @@ func (ta *TestAPI) Anchor(operator td.TestDeep, model ...any) any {
 // A is a synonym for [TestAPI.Anchor]. It returns a typed value allowing to
 // anchor the [td.TestDeep] operator in a go classic literal
 // like a struct, slice, array or map value.
+//
+// Starting go1.27, you should prefer to use [TestAPI.AT].
 //
 //	ta := tdhttp.NewTestAPI(tt, mux)
 //
