@@ -1,8 +1,11 @@
-// Copyright (c) 2020, Maxime Soulé
+// Copyright (c) 2020-2026, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
+
+//go:build go1.27
+// +build go1.27
 
 package tdhttp_test
 
@@ -234,12 +237,27 @@ func Example() {
 		CmpStatus(201).
 		CmpHeader(contentTypeIs("application/xml")).
 		CmpXMLBody(Person{ // using operator anchoring directly in literal
-			ID:        ta.A(td.Catch(&bobID, td.NotZero()), int64(0)).(int64),
+			ID:        ta.AT[int64](td.Catch(&bobID, td.NotZero())),
 			Name:      "Bob",
+			Age:       32,
+			CreatedAt: ta.AT[*time.Time](td.Ptr(td.Between(ta.SentAt(), time.Now()))),
+		})
+	fmt.Printf("POST /person - XML: %t → Bob ID=%d\n", !ta.Failed(), bobID)
+
+	// before go1.27, use TestAPI.A instead of TestAPI.AT
+	var mikeID int64
+	ta.PostXML("/person", Person{Name: "Mike", Age: 32},
+		"Accept", "application/xml").
+		Name("POST /person - XML").
+		CmpStatus(201).
+		CmpHeader(contentTypeIs("application/xml")).
+		CmpXMLBody(Person{ // using operator anchoring directly in literal
+			ID:        ta.A(td.Catch(&mikeID, td.NotZero()), int64(0)).(int64),
+			Name:      "Mike",
 			Age:       32,
 			CreatedAt: ta.A(td.Ptr(td.Between(ta.SentAt(), time.Now()))).(*time.Time),
 		})
-	fmt.Printf("POST /person - XML: %t → Bob ID=%d\n", !ta.Failed(), bobID)
+	fmt.Printf("POST /person - XML (pre go1.27): %t → Mike ID=%d\n", !ta.Failed(), mikeID)
 
 	var aliceID int64
 	ta.PostJSON("/person", Person{Name: "Alice", Age: 35},
@@ -248,12 +266,12 @@ func Example() {
 		CmpStatus(201).
 		CmpHeader(contentTypeIs("application/json")).
 		CmpJSONBody(td.JSON(` // using JSON operator (yes comment allowed in JSON!)
-{
-  "id":         $1,
-  "name":       "Alice",
-  "age":        35,
-  "created_at": $2
-}`,
+			{
+				"id":         $1,
+				"name":       "Alice",
+				"age":        35,
+				"created_at": $2
+			}`,
 			td.Catch(&aliceID, td.NotZero()),
 			td.Smuggle(func(date string) (time.Time, error) {
 				return time.Parse(time.RFC3339Nano, date)
@@ -301,12 +319,12 @@ func Example() {
 		CmpStatus(200).
 		CmpHeader(contentTypeIs("application/json")).
 		CmpJSONBody(td.JSON(` // using JSON operator (yes comment allowed in JSON!)
-{
-  "id":         $1,
-  "name":       "Alice",
-  "age":        35,
-  "created_at": $2
-}`,
+			{
+				"id":         $1,
+				"name":       "Alice",
+				"age":        35,
+				"created_at": $2
+			}`,
 			aliceID,
 			td.Not(td.Re(`^0001-01-01`)), // time is not 0001-01-01… aka zero time.Time
 		))
@@ -328,10 +346,10 @@ func Example() {
 		CmpStatus(404).
 		CmpHeader(contentTypeIs("application/json")).
 		CmpJSONBody(td.JSON(`
-{
-  "message": "Person does not exist",
-  "code":    404
-}`))
+			{
+				"message": "Person does not exist",
+				"code":    404
+			}`))
 	fmt.Println("Alice is not found anymore:", !ta.Failed())
 
 	// Output:
@@ -339,8 +357,9 @@ func Example() {
 	// GET /person/42 - XML: true
 	// GET /person/42 - raw: true
 	// POST /person - XML: true → Bob ID=1
-	// POST /person - JSON: true → Alice ID=2
-	// POST /person - raw: true → Britt ID=3
+	// POST /person - XML (pre go1.27): true → Mike ID=2
+	// POST /person - JSON: true → Alice ID=3
+	// POST /person - raw: true → Britt ID=4
 	// GET XML Alice: true
 	// GET JSON Alice: true
 	// DELETE Alice: true
