@@ -144,17 +144,17 @@ opendir(my $dh, $DIR);
 
 my(%funcs, %operators, %consts, %forbiddenOpsInJSON);
 
-while (readdir $dh)
+while (defined(my $file = readdir $dh))
 {
-    if (/^td_.*\.go\z/ and not /_test.go\z/)
+    if ($file =~ /^td_.*\.go\z/ and $file !~ /_test.go\z/)
     {
-        my $contents = slurp("$DIR/$_");
+        my $contents = slurp("$DIR/$file");
 
         # Load the operators forbidden inside JSON()
-        if ($_ eq 'td_json.go')
+        if ($file eq 'td_json.go')
         {
             $contents =~ /^var forbiddenOpsInJSON = map\[string\]string\{(.*?)^\}/ms
-                or die "$_: forbiddenOpsInJSON map not found\n";
+                or die "$file: forbiddenOpsInJSON map not found\n";
             @forbiddenOpsInJSON{$1 =~ /"([^"]+)":/g} = ();
         }
 
@@ -180,7 +180,7 @@ while (readdir $dh)
                 }
                 else
                 {
-                    die "$_: cannot parse import line <$pkg>\n";
+                    die "$file: cannot parse import line <$pkg>\n";
                 }
             }
         }
@@ -213,7 +213,7 @@ while (readdir $dh)
                 {
                     $inputs{$op}{$in} = '✓';
                 }
-                exists $INPUTS{$in} or die "$_: input($op) unknown input '$in'\n";
+                exists $INPUTS{$in} or die "$file: input($op) unknown input '$in'\n";
                 $inputs{$op}{if} //= '✓'; # interface
             }
         }
@@ -222,10 +222,11 @@ while (readdir $dh)
 
         while ($contents =~ m,^(// ([A-Z]\w*) .*\n(?://.*\n)*)func \2\((.*?)\) TestDeep \{\n,gm)
         {
-            exists $ops{$2} or die "$_: no summary($2) found\n";
-            exists $inputs{$2} or die "$_: no input($2) found\n";
+            exists $ops{$2} or die "$file: no summary($2) found\n";
+            exists $inputs{$2} or die "$file: no input($2) found\n";
 
             my($doc, $func, $params) = ($1, $2, $3);
+            my $line = 1 + ($` =~ tr/\n/\n/);
 
             if ($doc =~ /is a smuggler operator/)
             {
@@ -279,6 +280,8 @@ while (readdir $dh)
             die "TAB detected in $func operator documentation\n" if $doc =~ m,(?<!^//)\t,m;
 
             $operators{$func} = {
+                file      => $file,
+                line      => $line,
                 name      => $func,
                 summary   => delete $ops{$func},
                 input     => delete $inputs{$func},
@@ -291,20 +294,20 @@ while (readdir $dh)
 
         if (%ops)
         {
-            die "$_: summary found without operator definition: "
+            die "$file: summary found without operator definition: "
                 . join(', ', keys %ops) . "\n";
         }
 
         if (%inputs)
         {
-            die "$_: input found without operator definition: "
+            die "$file: input found without operator definition: "
                 . join(', ', keys %inputs) . "\n";
         }
 
         if ($contents =~ m,^\ttdSmugglerBase(?! // ignored),m
             and $num_smugglers == keys %SMUGGLER_OPERATORS)
         {
-            die "$_: this file should contain at least one smuggler operator\n";
+            die "$file: this file should contain at least one smuggler operator\n";
         }
     }
 }
@@ -742,6 +745,7 @@ if (defined $SITE_REPO_DIR)
 ---
 title: "$operator"
 weight: 10
+editURL: "https://github.com/maxatome/go-testdeep/edit/master/td/$operators{$operator}{file}#L$operators{$operator}{line}"
 ---
 
 ```go
