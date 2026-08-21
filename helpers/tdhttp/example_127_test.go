@@ -1,11 +1,11 @@
-// Copyright (c) 2020-2026, Maxime Soulé
+// Copyright (c) 2026, Maxime Soulé
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-//go:build !go1.27
-// +build !go1.27
+//go:build go1.27
+// +build go1.27
 
 package tdhttp_test
 
@@ -237,10 +237,10 @@ func Example() {
 		CmpStatus(201).
 		CmpHeader(contentTypeIs("application/xml")).
 		CmpXMLBody(Person{ // using operator anchoring directly in literal
-			ID:        ta.A(td.Catch(&bobID, td.NotZero()), int64(0)).(int64),
+			ID:        ta.AT[int64](td.Catch(&bobID, td.NotZero())),
 			Name:      "Bob",
 			Age:       32,
-			CreatedAt: ta.A(td.Ptr(td.Between(ta.SentAt(), time.Now()))).(*time.Time),
+			CreatedAt: ta.AT[*time.Time](td.Ptr(td.Between(ta.SentAt(), time.Now()))),
 		})
 	fmt.Printf("POST /person - XML: %t → Bob ID=%d\n", !ta.Failed(), bobID)
 
