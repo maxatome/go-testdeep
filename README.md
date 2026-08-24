@@ -33,7 +33,7 @@ Currently supports go 1.16 → 1.27.
 ## Latest news
 
 - 2026/08/20: [v1.16.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.16.0);
-- 2025/02/18: [v1.15.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.15.0);
+- 2026/02/18: [v1.15.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.15.0);
 - 2023/12/27: [v1.14.0 release](https://github.com/maxatome/go-testdeep/releases/tag/v1.14.0);
 - see [commits history](https://github.com/maxatome/go-testdeep/commits/master)
   for other/older changes.
@@ -123,13 +123,13 @@ func TestMyApi(t *testing.T) {
     Name("Create a new Person").
     CmpStatus(http.StatusCreated). // ← ③
     CmpJSONBody(td.JSON(`
-// Note that comments are allowed
-{
-  "id":         $id,             // set by the API/DB
-  "name":       "Alice",
-  "age":        Between(40, 45), // ← ④
-  "created_at": "$createdAt",    // set by the API/DB
-}`,
+      // Note that comments are allowed
+      {
+        "id":         $id,             // set by the API/DB
+        "name":       "Alice",
+        "age":        Between(40, 45), // ← ④
+        "created_at": "$createdAt",    // set by the API/DB
+      }`,
       td.Tag("id", td.Catch(&id, td.NotZero())),        // ← ⑤
       td.Tag("createdAt", td.All(                       // ← ⑥
         td.HasSuffix("Z"),                              // ← ⑦

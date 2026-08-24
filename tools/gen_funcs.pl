@@ -1001,6 +1001,11 @@ $2>rs or die "tdhttp example not found in $md_file!";
         $contents =~ s,/\d+-lines_of_go-,/$lines-lines_of_go-,
             or die "Cannot update 'lines of go' badge in $index\n";
 
+        # curl -sL -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2026-03-10" https://api.github.com/repos/maxatome/go-testdeep/releases | jq length
+        my $num_releases = 29;
+        $contents =~ s,releases-\K\d+-,$num_releases-,
+            or die "Cannot update '# releases' badge in $index\n";
+
         open(my $out, '>', "$index.new");
         print $out $contents;
         close $out;
