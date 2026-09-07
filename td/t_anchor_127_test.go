@@ -51,4 +51,21 @@ func TestT_AnchorT(tt *testing.T) {
 			Str:  t.AT[string](td.HasPrefix("Pipo")),
 			Time: t.AT[time.Time](td.TruncTime(timeParse(tt, "2019-01-02T11:22:00Z"), time.Minute)),
 		}))
+
+	// Pre go1.27 versions
+	td.CmpTrue(tt,
+		t.Cmp(got, MyStruct{
+			PNum: td.Anchor[*int](t, td.Ptr(td.Between(40, 45))),
+			Num:  td.Anchor[int64](t, td.Between(int64(135), int64(137))),
+			Str:  td.Anchor[string](t, td.HasPrefix("Pipo")),
+			Time: td.Anchor[time.Time](t, td.TruncTime(timeParse(tt, "2019-01-02T11:22:00Z"), time.Minute)),
+		}))
+
+	td.CmpTrue(tt,
+		t.Cmp(got, MyStruct{
+			PNum: td.A[*int](t, td.Ptr(td.Between(40, 45))),
+			Num:  td.A[int64](t, td.Between(int64(135), int64(137))),
+			Str:  td.A[string](t, td.HasPrefix("Pipo")),
+			Time: td.A[time.Time](t, td.TruncTime(timeParse(tt, "2019-01-02T11:22:00Z"), time.Minute)),
+		}))
 }
