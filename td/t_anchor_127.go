@@ -74,7 +74,8 @@ package td
 // [T.ResetAnchors], [T.SetAnchorsPersist] and [AddAnchorableStructType].
 func (t *T) AnchorT[X any](operator TestDeep) X {
 	t.Helper()
-	return Anchor[X](t, operator)
+	var model X
+	return t.Anchor(operator, model).(X)
 }
 
 // AT returns a typed value allowing to anchor the TestDeep
@@ -142,5 +143,24 @@ func (t *T) AnchorT[X any](operator TestDeep) X {
 // [T.ResetAnchors], [T.SetAnchorsPersist] and [AddAnchorableStructType].
 func (t *T) AT[X any](operator TestDeep) X {
 	t.Helper()
-	return A[X](t, operator)
+	var model X
+	return t.A(operator, model).(X)
+}
+
+// Anchor is a generic shortcut to [T.Anchor].
+//
+// See also [T.AnchorT] method for a generic variant (go1.27 required).
+//
+//go:fix inline
+func Anchor[X any](t *T, operator TestDeep) X {
+	return t.AnchorT[X](operator)
+}
+
+// A is a generic shortcut to [T.A].
+//
+// See also [T.AT] method for a generic variant (go1.27 required).
+//
+//go:fix inline
+func A[X any](t *T, operator TestDeep) X {
+	return t.AT[X](operator)
 }
